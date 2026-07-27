@@ -16,7 +16,10 @@ const signOut = $("#sign-out");
 const grid = $("#course-grid");
 const libraryMessage = $("#library-message");
 const welcome = $("#welcome");
+const accountEmail = $("#account-email");
+const activeCount = $("#active-count");
 let mode = "login";
+let currentFilter = "all";
 
 function authHeaders(token) {
   const headers = { apikey: CONFIG.supabaseAnonKey, "Content-Type": "application/json" };
@@ -95,25 +98,46 @@ function setBusy(busy, text = "Verificando tu cuenta…") {
   progress.textContent = text;
 }
 
-function renderLibrary(session) {
-  loginView.hidden = true;
-  dashboardView.hidden = false;
-  const userEmail = session.user?.email || "tu cuenta";
-  welcome.textContent = `Sesión iniciada como ${userEmail}. Tus cursos activos se abren con la misma cuenta.`;
-  grid.innerHTML = CONFIG.courses.map((course) => {
-    const active = course.status === "active" && course.url;
+function courseType(course) {
+  if (course.slug.includes("comunicacion") || course.slug.includes("dolor")) return "CURSO / MASTERCLASS";
+  return "APLICACIÓN KINECHECK";
+}
+
+function renderCourses() {
+  const courses = CONFIG.courses.filter((course) => {
+    if (currentFilter === "active") return course.status === "active";
+    if (currentFilter === "preparing") return course.status !== "active";
+    return true;
+  });
+
+  grid.innerHTML = courses.map((course) => {
+    const available = course.status === "active" && course.url;
     return `
       <article class="course-card">
-        <span class="course-icon" aria-hidden="true">${course.icon}</span>
-        <h2>${course.title}</h2>
+        <div class="course-top">
+          <span class="course-icon" aria-hidden="true">${course.icon}</span>
+          <span class="status-badge ${available ? "" : "preparing"}">${available ? "Disponible" : "Próximamente"}</span>
+        </div>
+        <div class="course-type">${courseType(course)}</div>
+        <h3>${course.title}</h3>
         <p>${course.subtitle}</p>
-        <div class="course-meta">PRODUCTO HOTMART ${course.productId}</div>
-        <button class="course-button" type="button" data-course="${course.slug}" ${active ? "" : "disabled"}>
-          ${active ? "Abrir curso" : "En preparación"}
+        <div class="course-meta">Producto Hotmart ${course.productId}</div>
+        <button class="course-button" type="button" data-course="${course.slug}" ${available ? "" : "disabled"}>
+          ${available ? "Abrir producto" : "En integración"}
         </button>
       </article>
     `;
   }).join("");
+}
+
+function renderLibrary(session) {
+  loginView.hidden = true;
+  dashboardView.hidden = false;
+  const userEmail = session.user?.email || "tu cuenta";
+  welcome.textContent = `Sesión iniciada como ${userEmail}. Tus productos disponibles se abren con esta misma cuenta.`;
+  accountEmail.textContent = userEmail;
+  activeCount.textContent = String(CONFIG.courses.filter((course) => course.status === "active" && course.url).length);
+  renderCourses();
 }
 
 function openCourse(slug) {
@@ -161,6 +185,14 @@ form.addEventListener("submit", async (event) => {
 grid.addEventListener("click", (event) => {
   const button = event.target.closest("[data-course]");
   if (button && !button.disabled) openCourse(button.dataset.course);
+});
+
+document.querySelectorAll("[data-filter]").forEach((button) => {
+  button.addEventListener("click", () => {
+    currentFilter = button.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach((item) => item.classList.toggle("active", item === button));
+    renderCourses();
+  });
 });
 
 signOut.addEventListener("click", async () => {
