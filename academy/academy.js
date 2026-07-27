@@ -15,8 +15,6 @@ const submit = $("#auth-submit");
 const signOut = $("#sign-out");
 const grid = $("#course-grid");
 const libraryMessage = $("#library-message");
-const courseRoot = $("#root");
-const returnLibrary = $("#return-library");
 const welcome = $("#welcome");
 let mode = "login";
 
@@ -98,68 +96,34 @@ function setBusy(busy, text = "Verificando tu cuenta…") {
 }
 
 function renderLibrary(session) {
-  courseRoot.hidden = true;
-  returnLibrary.hidden = true;
   loginView.hidden = true;
   dashboardView.hidden = false;
   const userEmail = session.user?.email || "tu cuenta";
-  welcome.textContent = `Sesión iniciada como ${userEmail}. Abre un producto para validar tu licencia Hotmart.`;
-  grid.innerHTML = CONFIG.courses.map((course) => `
-    <article class="course-card">
-      <span class="course-icon" aria-hidden="true">${course.icon}</span>
-      <h2>${course.title}</h2>
-      <p>${course.subtitle}</p>
-      <div class="course-meta">PRODUCTO HOTMART ${course.productId}</div>
-      <button class="course-button" type="button" data-course="${course.slug}">Validar y abrir</button>
-    </article>
-  `).join("");
+  welcome.textContent = `Sesión iniciada como ${userEmail}. Tus cursos activos se abren con la misma cuenta.`;
+  grid.innerHTML = CONFIG.courses.map((course) => {
+    const active = course.status === "active" && course.url;
+    return `
+      <article class="course-card">
+        <span class="course-icon" aria-hidden="true">${course.icon}</span>
+        <h2>${course.title}</h2>
+        <p>${course.subtitle}</p>
+        <div class="course-meta">PRODUCTO HOTMART ${course.productId}</div>
+        <button class="course-button" type="button" data-course="${course.slug}" ${active ? "" : "disabled"}>
+          ${active ? "Abrir curso" : "En preparación"}
+        </button>
+      </article>
+    `;
+  }).join("");
 }
 
-async function fetchCourse(token, slug) {
-  const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
-    method: "POST",
-    headers: authHeaders(token),
-    body: JSON.stringify({ courseSlug: slug }),
-  });
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    const error = new Error(data.message || "No encontramos una compra activa asociada a este producto.");
-    error.status = response.status;
-    throw error;
-  }
-  return response.text();
-}
-
-async function openCourse(slug, button) {
+function openCourse(slug) {
   libraryMessage.hidden = true;
-  const session = await validSession();
-  if (!session) {
-    dashboardView.hidden = true;
-    loginView.hidden = false;
-    showAuthMessage("Tu sesión venció. Ingresa nuevamente.", true);
+  const course = CONFIG.courses.find((item) => item.slug === slug);
+  if (!course?.url) {
+    showLibraryMessage("Este producto todavía está siendo integrado a KineCheck Academy.");
     return;
   }
-  const original = button.textContent;
-  button.disabled = true;
-  button.textContent = "Validando licencia…";
-  try {
-    const source = await fetchCourse(session.access_token, slug);
-    dashboardView.hidden = true;
-    courseRoot.innerHTML = "";
-    courseRoot.hidden = false;
-    returnLibrary.hidden = false;
-    const url = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
-    try { await import(url); }
-    finally { URL.revokeObjectURL(url); }
-  } catch (error) {
-    dashboardView.hidden = false;
-    courseRoot.hidden = true;
-    returnLibrary.hidden = true;
-    showLibraryMessage(`${error.message} Si necesitas ayuda, escribe a ${CONFIG.supportEmail}.`, true);
-  } finally {
-    button.disabled = false;
-    button.textContent = original;
-  }
+  window.location.href = course.url;
 }
 
 loginTab.addEventListener("click", () => setMode("login"));
@@ -196,7 +160,7 @@ form.addEventListener("submit", async (event) => {
 
 grid.addEventListener("click", (event) => {
   const button = event.target.closest("[data-course]");
-  if (button) openCourse(button.dataset.course, button);
+  if (button && !button.disabled) openCourse(button.dataset.course);
 });
 
 signOut.addEventListener("click", async () => {
@@ -206,15 +170,6 @@ signOut.addEventListener("click", async () => {
   }
   clearSession();
   location.reload();
-});
-
-returnLibrary.addEventListener("click", async () => {
-  courseRoot.innerHTML = "";
-  courseRoot.hidden = true;
-  returnLibrary.hidden = true;
-  const session = await validSession();
-  if (session) renderLibrary(session);
-  else location.reload();
 });
 
 (async () => {
