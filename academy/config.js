@@ -4,6 +4,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   courseKeyFunction: "course-key",
   supportEmail: "emmanuelkine@gmail.com",
   ownerEmails: ["emmanuelkine@gmail.com", "emmanuelkine+owner@gmail.com", "emmanuel_fox@hotmail.com"],
+  betaTesterEmails: ["emmanuelkine+beta@gmail.com"],
+  betaTrialDays: 5,
   courses: [
     { slug: "kinecheck-clinico", title: "KineCheck Clínico", subtitle: "Registro kinésico profesional", productId: "8150019", icon: "CL", status: "active", url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/app?mode=clinico" },
     { slug: "comunicacion-clinica", title: "Comunicación Clínica", subtitle: "El arte de comunicar en salud", productId: "8192814", icon: "CC", status: "active", url: "/kinecheck-comunicacion-clinica/?course=comunicacion-clinica&v=20260727" },
