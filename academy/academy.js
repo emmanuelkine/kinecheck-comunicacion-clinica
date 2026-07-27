@@ -15,7 +15,7 @@ const submit = $("#auth-submit");
 const signOut = $("#sign-out");
 const grid = $("#course-grid");
 const libraryMessage = $("#library-message");
-const courseRoot = $("#course-root");
+const courseRoot = $("#root");
 const returnLibrary = $("#return-library");
 const welcome = $("#welcome");
 let mode = "login";
@@ -98,6 +98,8 @@ function setBusy(busy, text = "Verificando tu cuenta…") {
 }
 
 function renderLibrary(session) {
+  courseRoot.hidden = true;
+  returnLibrary.hidden = true;
   loginView.hidden = true;
   dashboardView.hidden = false;
   const userEmail = session.user?.email || "tu cuenta";
@@ -143,12 +145,16 @@ async function openCourse(slug, button) {
   try {
     const source = await fetchCourse(session.access_token, slug);
     dashboardView.hidden = true;
+    courseRoot.innerHTML = "";
     courseRoot.hidden = false;
     returnLibrary.hidden = false;
     const url = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
     try { await import(url); }
     finally { URL.revokeObjectURL(url); }
   } catch (error) {
+    dashboardView.hidden = false;
+    courseRoot.hidden = true;
+    returnLibrary.hidden = true;
     showLibraryMessage(`${error.message} Si necesitas ayuda, escribe a ${CONFIG.supportEmail}.`, true);
   } finally {
     button.disabled = false;
@@ -202,7 +208,14 @@ signOut.addEventListener("click", async () => {
   location.reload();
 });
 
-returnLibrary.addEventListener("click", () => location.reload());
+returnLibrary.addEventListener("click", async () => {
+  courseRoot.innerHTML = "";
+  courseRoot.hidden = true;
+  returnLibrary.hidden = true;
+  const session = await validSession();
+  if (session) renderLibrary(session);
+  else location.reload();
+});
 
 (async () => {
   const session = await validSession();
