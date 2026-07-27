@@ -1,7 +1,7 @@
-const CONFIG = window.KINECHECK_CONFIG;
+const CONFIG = window.KINECHECK_CONFIG || {};
 const SESSION_KEY = "kinecheck_secure_session_v1";
-
 const $ = (selector) => document.querySelector(selector);
+
 const shell = $("#access-shell");
 const root = $("#root");
 const form = $("#auth-form");
@@ -14,6 +14,11 @@ const loginTab = $("#login-tab");
 const signupTab = $("#signup-tab");
 const submit = $("#auth-submit");
 let mode = "login";
+
+function resolvedCourseSlug() {
+  const querySlug = new URLSearchParams(location.search).get("course");
+  return querySlug || CONFIG.courseSlug || "comunicacion-clinica";
+}
 
 function headers(token) {
   const value = {
@@ -31,7 +36,7 @@ async function api(path, options = {}) {
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = new Error(data.message || data.error_description || data.msg || "Solicitud rechazada");
+    const error = new Error(data.message || data.error_description || data.msg || data.error || "Solicitud rechazada");
     error.status = response.status;
     throw error;
   }
@@ -47,7 +52,8 @@ function showMessage(text, error = false) {
 function setBusy(busy, text = "Verificando tu acceso…") {
   form.hidden = busy;
   progress.hidden = !busy;
-  progress.querySelector("p").textContent = text;
+  const paragraph = progress.querySelector("p");
+  if (paragraph) paragraph.textContent = text;
 }
 
 function saveSession(session) {
@@ -60,31 +66,31 @@ function readSession() {
   catch { return null; }
 }
 
-async function refreshSession(session) {
-  if (!session?.refresh_token) return null;
-  const fresh = await api("/auth/v1/token?grant_type=refresh_token", {
-    method: "POST",
-    body: JSON.stringify({ refresh_token: session.refresh_token }),
-  });
-  saveSession(fresh);
-  return fresh;
-}
-
 async function validSession() {
   let session = readSession();
   if (!session) return null;
   if (Number(session.expires_at || 0) <= Math.floor(Date.now() / 1000) + 60) {
-    try { session = await refreshSession(session); }
-    catch { localStorage.removeItem(SESSION_KEY); return null; }
+    try {
+      session = await api("/auth/v1/token?grant_type=refresh_token", {
+        method: "POST",
+        body: JSON.stringify({ refresh_token: session.refresh_token }),
+      });
+      saveSession(session);
+    } catch {
+      localStorage.removeItem(SESSION_KEY);
+      return null;
+    }
   }
   return session;
 }
 
 async function fetchCourse(token) {
+  const courseSlug = resolvedCourseSlug();
+  if (!courseSlug) throw new Error("No fue posible identificar el curso solicitado.");
   const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
     method: "POST",
     headers: headers(token),
-    body: JSON.stringify({ courseSlug: CONFIG.courseSlug }),
+    body: JSON.stringify({ courseSlug }),
   });
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
@@ -95,16 +101,29 @@ async function fetchCourse(token) {
   return response.text();
 }
 
+async function launchCourse(source) {
+  root.hidden = false;
+  const url = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
+  try {
+    await import(url);
+    shell.hidden = true;
+    signOut.hidden = false;
+  } catch (error) {
+    root.hidden = true;
+    shell.hidden = false;
+    signOut.hidden = true;
+    throw new Error(`El contenido no pudo iniciarse: ${error.message}`);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
 async function authorize(session) {
-  setBusy(true, "Validando tu compra en KineCheck Academy…");
+  setBusy(true, "Validando tu acceso en KineCheck Academy…");
+  message.hidden = true;
   try {
     const source = await fetchCourse(session.access_token);
-    shell.hidden = true;
-    root.hidden = false;
-    signOut.hidden = false;
-    const url = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
-    try { await import(url); }
-    finally { URL.revokeObjectURL(url); }
+    await launchCourse(source);
   } catch (error) {
     setBusy(false);
     if (error.status === 401) localStorage.removeItem(SESSION_KEY);
@@ -117,6 +136,8 @@ function setMode(next) {
   loginTab.classList.toggle("active", mode === "login");
   signupTab.classList.toggle("active", mode === "signup");
   submit.textContent = mode === "login" ? "Ingresar al curso" : "Crear mi cuenta";
+  passwordInput.autocomplete = mode === "login" ? "current-password" : "new-password";
+  message.hidden = true;
 }
 
 loginTab.addEventListener("click", () => setMode("login"));
@@ -139,6 +160,7 @@ form.addEventListener("submit", async (event) => {
     saveSession(session);
     await authorize(session);
   } catch (error) {
+    setBusy(false);
     showMessage(error.message, true);
   }
 });
