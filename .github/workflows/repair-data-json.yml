@@ -1,0 +1,45 @@
+name: Reparar y validar data.json
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Reparar sintaxis y validar JSON
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          path = Path('data.json')
+          text = path.read_text(encoding='utf-8')
+
+          text = text.replace('"checkoutUrl": ",', '"checkoutUrl": "",')
+          text = text.replace('"checkoutUrl": ""https://pay.hotmart.com/T106883983U"",', '"checkoutUrl": "https://pay.hotmart.com/T106883983U",')
+
+          json.loads(text)
+          path.write_text(text, encoding='utf-8')
+          print('data.json es válido.')
+          PY
+
+      - name: Publicar corrección
+        run: |
+          if git diff --quiet -- data.json; then
+            echo "No hay cambios pendientes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Corregir sintaxis de enlaces Hotmart en data.json"
+          git push
