@@ -21,6 +21,7 @@ const activeCount = $("#active-count");
 let mode = "login";
 let currentFilter = "all";
 let licenseState = new Map();
+let ownerMode = false;
 
 function authHeaders(token) {
   const headers = { apikey: CONFIG.supabaseAnonKey, "Content-Type": "application/json" };
@@ -72,6 +73,10 @@ async function validSession() {
   return session;
 }
 
+function isOwnerEmail(email) {
+  return (CONFIG.ownerEmails || []).map((item) => item.toLowerCase()).includes(String(email || "").toLowerCase());
+}
+
 function showAuthMessage(text, error = false) {
   message.textContent = text;
   message.className = error ? "notice error" : "notice";
@@ -101,10 +106,12 @@ function setBusy(busy, text = "Verificando tu cuenta…") {
 
 function courseType(course) {
   if (course.slug.includes("comunicacion") || course.slug.includes("dolor")) return "CURSO / MASTERCLASS";
+  if (course.slug.includes("lab")) return "SIMULADOR CLÍNICO";
   return "APLICACIÓN KINECHECK";
 }
 
 async function validateCourseLicense(token, slug) {
+  if (ownerMode) return true;
   const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
     method: "POST",
     headers: authHeaders(token),
@@ -120,24 +127,27 @@ async function validateCourseLicense(token, slug) {
 }
 
 async function loadLicenses(session) {
-  const activeCourses = CONFIG.courses.filter((course) => course.status === "active" && course.url);
-  licenseState = new Map(activeCourses.map((course) => [course.slug, "checking"]));
+  const availableCourses = CONFIG.courses.filter((course) => course.url && (ownerMode || course.status === "active"));
+  licenseState = new Map(availableCourses.map((course) => [course.slug, ownerMode ? "owned" : "checking"]));
   renderCourses();
 
-  await Promise.all(activeCourses.map(async (course) => {
-    try {
-      await validateCourseLicense(session.access_token, course.slug);
-      licenseState.set(course.slug, "owned");
-    } catch {
-      licenseState.set(course.slug, "locked");
-    }
-  }));
+  if (!ownerMode) {
+    await Promise.all(availableCourses.map(async (course) => {
+      try {
+        await validateCourseLicense(session.access_token, course.slug);
+        licenseState.set(course.slug, "owned");
+      } catch {
+        licenseState.set(course.slug, "locked");
+      }
+    }));
+  }
 
   activeCount.textContent = String([...licenseState.values()].filter((state) => state === "owned").length);
   renderCourses();
 }
 
 function courseAccess(course) {
+  if (ownerMode && course.url) return "owned";
   if (course.status !== "active" || !course.url) return "preparing";
   return licenseState.get(course.slug) || "checking";
 }
@@ -155,9 +165,10 @@ function renderCourses() {
     const owned = access === "owned";
     const checking = access === "checking";
     const preparing = access === "preparing";
-    const badge = owned ? "Disponible" : checking ? "Verificando" : preparing ? "Próximamente" : "No adquirido";
+    const badge = owned ? (ownerMode ? "Acceso propietario" : "Disponible") : checking ? "Verificando" : preparing ? "Próximamente" : "No adquirido";
     const buttonText = owned ? "Abrir producto" : checking ? "Validando compra…" : preparing ? "En integración" : "Sin acceso";
     const badgeClass = owned ? "" : "preparing";
+    const productLabel = course.productId === "PROPIETARIO" ? "Versión de desarrollo" : `Producto Hotmart ${course.productId}`;
 
     return `
       <article class="course-card">
@@ -168,7 +179,7 @@ function renderCourses() {
         <div class="course-type">${courseType(course)}</div>
         <h3>${course.title}</h3>
         <p>${course.subtitle}</p>
-        <div class="course-meta">Producto Hotmart ${course.productId}</div>
+        <div class="course-meta">${productLabel}</div>
         <button class="course-button" type="button" data-course="${course.slug}" ${owned ? "" : "disabled"}>
           ${buttonText}
         </button>
@@ -181,8 +192,11 @@ async function renderLibrary(session) {
   loginView.hidden = true;
   dashboardView.hidden = false;
   const userEmail = session.user?.email || "tu cuenta";
-  welcome.textContent = `Sesión iniciada como ${userEmail}. Solo se habilitan los productos comprados con este correo en Hotmart.`;
-  accountEmail.textContent = userEmail;
+  ownerMode = isOwnerEmail(userEmail);
+  welcome.textContent = ownerMode
+    ? `Sesión de propietario iniciada como ${userEmail}. Tienes acceso completo a todos los productos y versiones en desarrollo.`
+    : `Sesión iniciada como ${userEmail}. Solo se habilitan los productos comprados con este correo en Hotmart.`;
+  accountEmail.textContent = ownerMode ? `${userEmail} · Propietario` : userEmail;
   activeCount.textContent = "0";
   await loadLicenses(session);
 }
@@ -203,6 +217,7 @@ async function openCourse(slug) {
     return;
   }
 
+  ownerMode = isOwnerEmail(session.user?.email);
   try {
     await validateCourseLicense(session.access_token, slug);
     window.location.href = course.url;
