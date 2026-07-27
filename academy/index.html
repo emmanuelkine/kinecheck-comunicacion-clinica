@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Portal unificado de acceso a los cursos y aplicaciones de KineCheck Academy.">
+  <meta name="theme-color" content="#0b2d33">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'">
+  <title>KineCheck Academy</title>
+  <link rel="stylesheet" href="./academy.css">
+  <script src="./config.js" defer></script>
+  <script type="module" src="./academy.js"></script>
+</head>
+<body>
+  <main class="page-shell">
+    <section id="login-view" class="login-card" aria-labelledby="login-title">
+      <div class="brand"><span class="brand-mark">K</span><div><strong>KineCheck Academy</strong><span>Ecosistema clínico protegido</span></div></div>
+      <span class="eyebrow">ACCESO UNIFICADO</span>
+      <h1 id="login-title">Todos tus cursos en un solo lugar</h1>
+      <p class="lead">Ingresa con el mismo correo utilizado en Hotmart.</p>
+      <div class="tabs"><button id="login-tab" class="tab active" type="button">Ingresar</button><button id="signup-tab" class="tab" type="button">Crear cuenta</button></div>
+      <form id="auth-form" novalidate>
+        <label for="email">Correo utilizado en la compra</label>
+        <input id="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
+        <button id="auth-submit" class="primary" type="submit">Ingresar a KineCheck</button>
+      </form>
+      <div id="auth-progress" class="progress" hidden>Verificando tu cuenta…</div>
+      <div id="auth-message" class="notice" hidden></div>
+    </section>
+
+    <section id="dashboard-view" class="dashboard" hidden>
+      <header class="dashboard-header">
+        <div class="brand"><span class="brand-mark">K</span><div><strong>KineCheck Academy</strong><span>Mi biblioteca</span></div></div>
+        <button id="sign-out" class="secondary" type="button">Cerrar sesión</button>
+      </header>
+      <div class="hero">
+        <span class="eyebrow">MI ECOSISTEMA KINECHECK</span>
+        <h1>Mis cursos y aplicaciones</h1>
+        <p id="welcome">Selecciona un producto para validar tu licencia y abrirlo de forma segura.</p>
+      </div>
+      <div id="library-message" class="notice" hidden></div>
+      <div id="course-grid" class="course-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <div id="course-root" hidden></div>
+  <button id="return-library" class="return-library" type="button" hidden>← Volver a mi biblioteca</button>
+  <noscript>Necesitas activar JavaScript para acceder a KineCheck Academy.</noscript>
+</body>
+</html>
