@@ -20,6 +20,7 @@ const accountEmail = $("#account-email");
 const activeCount = $("#active-count");
 let mode = "login";
 let currentFilter = "all";
+let licenseState = new Map();
 
 function authHeaders(token) {
   const headers = { apikey: CONFIG.supabaseAnonKey, "Content-Type": "application/json" };
@@ -103,51 +104,113 @@ function courseType(course) {
   return "APLICACIÓN KINECHECK";
 }
 
+async function validateCourseLicense(token, slug) {
+  const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify({ courseSlug: slug }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    const error = new Error(data.message || "No encontramos una compra activa para este producto.");
+    error.status = response.status;
+    throw error;
+  }
+  return true;
+}
+
+async function loadLicenses(session) {
+  const activeCourses = CONFIG.courses.filter((course) => course.status === "active" && course.url);
+  licenseState = new Map(activeCourses.map((course) => [course.slug, "checking"]));
+  renderCourses();
+
+  await Promise.all(activeCourses.map(async (course) => {
+    try {
+      await validateCourseLicense(session.access_token, course.slug);
+      licenseState.set(course.slug, "owned");
+    } catch {
+      licenseState.set(course.slug, "locked");
+    }
+  }));
+
+  activeCount.textContent = String([...licenseState.values()].filter((state) => state === "owned").length);
+  renderCourses();
+}
+
+function courseAccess(course) {
+  if (course.status !== "active" || !course.url) return "preparing";
+  return licenseState.get(course.slug) || "checking";
+}
+
 function renderCourses() {
   const courses = CONFIG.courses.filter((course) => {
-    if (currentFilter === "active") return course.status === "active";
-    if (currentFilter === "preparing") return course.status !== "active";
+    const access = courseAccess(course);
+    if (currentFilter === "active") return access === "owned";
+    if (currentFilter === "preparing") return access === "preparing";
     return true;
   });
 
   grid.innerHTML = courses.map((course) => {
-    const available = course.status === "active" && course.url;
+    const access = courseAccess(course);
+    const owned = access === "owned";
+    const checking = access === "checking";
+    const preparing = access === "preparing";
+    const badge = owned ? "Disponible" : checking ? "Verificando" : preparing ? "Próximamente" : "No adquirido";
+    const buttonText = owned ? "Abrir producto" : checking ? "Validando compra…" : preparing ? "En integración" : "Sin acceso";
+    const badgeClass = owned ? "" : "preparing";
+
     return `
       <article class="course-card">
         <div class="course-top">
           <span class="course-icon" aria-hidden="true">${course.icon}</span>
-          <span class="status-badge ${available ? "" : "preparing"}">${available ? "Disponible" : "Próximamente"}</span>
+          <span class="status-badge ${badgeClass}">${badge}</span>
         </div>
         <div class="course-type">${courseType(course)}</div>
         <h3>${course.title}</h3>
         <p>${course.subtitle}</p>
         <div class="course-meta">Producto Hotmart ${course.productId}</div>
-        <button class="course-button" type="button" data-course="${course.slug}" ${available ? "" : "disabled"}>
-          ${available ? "Abrir producto" : "En integración"}
+        <button class="course-button" type="button" data-course="${course.slug}" ${owned ? "" : "disabled"}>
+          ${buttonText}
         </button>
       </article>
     `;
   }).join("");
 }
 
-function renderLibrary(session) {
+async function renderLibrary(session) {
   loginView.hidden = true;
   dashboardView.hidden = false;
   const userEmail = session.user?.email || "tu cuenta";
-  welcome.textContent = `Sesión iniciada como ${userEmail}. Tus productos disponibles se abren con esta misma cuenta.`;
+  welcome.textContent = `Sesión iniciada como ${userEmail}. Solo se habilitan los productos comprados con este correo en Hotmart.`;
   accountEmail.textContent = userEmail;
-  activeCount.textContent = String(CONFIG.courses.filter((course) => course.status === "active" && course.url).length);
-  renderCourses();
+  activeCount.textContent = "0";
+  await loadLicenses(session);
 }
 
-function openCourse(slug) {
+async function openCourse(slug) {
   libraryMessage.hidden = true;
   const course = CONFIG.courses.find((item) => item.slug === slug);
   if (!course?.url) {
     showLibraryMessage("Este producto todavía está siendo integrado a KineCheck Academy.");
     return;
   }
-  window.location.href = course.url;
+
+  const session = await validSession();
+  if (!session) {
+    dashboardView.hidden = true;
+    loginView.hidden = false;
+    showAuthMessage("Tu sesión venció. Ingresa nuevamente.", true);
+    return;
+  }
+
+  try {
+    await validateCourseLicense(session.access_token, slug);
+    window.location.href = course.url;
+  } catch (error) {
+    licenseState.set(slug, "locked");
+    renderCourses();
+    showLibraryMessage(`${error.message} El acceso corresponde únicamente al producto comprado con este correo.`, true);
+  }
 }
 
 loginTab.addEventListener("click", () => setMode("login"));
@@ -175,7 +238,7 @@ form.addEventListener("submit", async (event) => {
       return;
     }
     saveSession(session);
-    renderLibrary(session);
+    await renderLibrary(session);
   } catch (error) {
     setBusy(false);
     showAuthMessage(error.message, true);
@@ -206,5 +269,5 @@ signOut.addEventListener("click", async () => {
 
 (async () => {
   const session = await validSession();
-  if (session) renderLibrary(session);
+  if (session) await renderLibrary(session);
 })();
