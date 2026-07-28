@@ -1,11 +1,11 @@
 const PRODUCT_META = {
   CL: { category: "application", label: "APLICACIÓN CLÍNICA", productId: "8150019", checkoutUrl: "https://pay.hotmart.com/L106791841D" },
-  KE: { category: "application", label: "APLICACIÓN PARA ESTUDIANTES", productId: "8154796", checkoutUrl: "https://pay.hotmart.com/T106883983U" },
-  KR: { category: "tool", label: "HERRAMIENTA DE SEGUIMIENTO", productId: "8157431", checkoutUrl: "https://pay.hotmart.com/G106801166S" },
-  CC: { category: "course", label: "CURSO / MASTERCLASS", productId: "8192814", checkoutUrl: "https://pay.hotmart.com/P106806251E" },
-  MD: { category: "course", label: "CURSO / MASTERCLASS", productId: "8194777", checkoutUrl: "https://pay.hotmart.com/B106913952R" },
+  KE: { category: "application", label: "APLICACIÓN PARA ESTUDIANTES", productId: "8154796", checkoutUrl: "https://pay.hotmart.com/G106801166S" },
+  KR: { category: "tool", label: "HERRAMIENTA DE SEGUIMIENTO", productId: "8157431", checkoutUrl: "https://pay.hotmart.com/P106806251E" },
+  CC: { category: "course", label: "CURSO / MASTERCLASS", productId: "8192814", checkoutUrl: "https://pay.hotmart.com/T106883983U" },
+  MD: { category: "course", label: "CURSO / MASTERCLASS", productId: "8194777", checkoutUrl: "https://pay.hotmart.com/W106888386Q" },
   LB: { category: "tool", label: "SIMULADOR CLÍNICO", productId: "PROPIETARIO" },
-  TO: { category: "course", label: "CURSO CLÍNICO", productId: "8205453", checkoutUrl: "https://pay.hotmart.com/W106888386Q", isNew: true },
+  TO: { category: "course", label: "CURSO CLÍNICO", productId: "8205453", checkoutUrl: "https://pay.hotmart.com/B106913952R", isNew: true },
 };
 
 function purchaseLink(title, meta) {
