@@ -1,16 +1,17 @@
 const PRODUCT_META = {
-  CL: { category: "application", label: "APLICACIÓN CLÍNICA", productId: "8150019" },
-  KE: { category: "application", label: "APLICACIÓN PARA ESTUDIANTES", productId: "8154796" },
-  KR: { category: "tool", label: "HERRAMIENTA DE SEGUIMIENTO", productId: "8157431" },
-  CC: { category: "course", label: "CURSO / MASTERCLASS", productId: "8192814" },
-  MD: { category: "course", label: "CURSO / MASTERCLASS", productId: "8194777" },
+  CL: { category: "application", label: "APLICACIÓN CLÍNICA", productId: "8150019", checkoutUrl: "https://pay.hotmart.com/L106791841D" },
+  KE: { category: "application", label: "APLICACIÓN PARA ESTUDIANTES", productId: "8154796", checkoutUrl: "https://pay.hotmart.com/T106883983U" },
+  KR: { category: "tool", label: "HERRAMIENTA DE SEGUIMIENTO", productId: "8157431", checkoutUrl: "https://pay.hotmart.com/G106801166S" },
+  CC: { category: "course", label: "CURSO / MASTERCLASS", productId: "8192814", checkoutUrl: "https://pay.hotmart.com/P106806251E" },
+  MD: { category: "course", label: "CURSO / MASTERCLASS", productId: "8194777", checkoutUrl: "https://pay.hotmart.com/B106913952R" },
   LB: { category: "tool", label: "SIMULADOR CLÍNICO", productId: "PROPIETARIO" },
-  TO: { category: "course", label: "CURSO CLÍNICO", productId: "8205453", isNew: true },
+  TO: { category: "course", label: "CURSO CLÍNICO", productId: "8205453", checkoutUrl: "https://pay.hotmart.com/W106888386Q", isNew: true },
 };
 
-function purchaseLink(title, productId) {
+function purchaseLink(title, meta) {
+  if (meta.checkoutUrl) return meta.checkoutUrl;
   const subject = encodeURIComponent(`Quiero comprar ${title}`);
-  const body = encodeURIComponent(`Hola, quiero recibir el enlace de compra en Hotmart para ${title} (producto ${productId}).`);
+  const body = encodeURIComponent(`Hola, quiero recibir el enlace de compra en Hotmart para ${title} (producto ${meta.productId}).`);
   return `mailto:emmanuelkine@gmail.com?subject=${subject}&body=${body}`;
 }
 
@@ -55,9 +56,13 @@ function enhanceCards() {
     if (locked && !card.querySelector(".purchase-button")) {
       const link = document.createElement("a");
       link.className = "purchase-button";
-      link.href = purchaseLink(title, meta.productId);
-      link.textContent = "Comprar / solicitar enlace";
+      link.href = purchaseLink(title, meta);
+      link.textContent = meta.checkoutUrl ? "Comprar ahora" : "Solicitar enlace";
       link.setAttribute("aria-label", `Comprar ${title}`);
+      if (meta.checkoutUrl) {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
       button.replaceWith(link);
     }
   });
