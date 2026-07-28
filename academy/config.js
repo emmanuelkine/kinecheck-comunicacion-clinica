@@ -13,6 +13,6 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     { slug: "kinecheck-recupera", title: "KineCheck Recupera", subtitle: "Mi plan y progreso", productId: "8157431", icon: "KR", status: "active", url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/app?mode=recupera" },
     { slug: "mas-alla-del-dolor", title: "Más allá del dolor", subtitle: "Evaluación MSK integral", productId: "8194777", icon: "MD", status: "active", url: "/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260727" },
     { slug: "kinecheck-lab-clinico", title: "KineCheck Lab Clínico", subtitle: "Simulador de razonamiento y decisiones clínicas", productId: "PROPIETARIO", icon: "LB", status: "preparing", url: "/kinecheck-comunicacion-clinica/lab/" },
-    { slug: "traumatologia-ortopedia-clinica", title: "Traumatología y Ortopedia Clínica", subtitle: "Del mecanismo lesional a la decisión clínica segura", productId: "PROPIETARIO", icon: "TO", status: "preparing", url: "/kinecheck-comunicacion-clinica/traumatologia/" }
+    { slug: "traumatologia-ortopedia-clinica", title: "Traumatología y Ortopedia Clínica", subtitle: "Del mecanismo lesional a la decisión clínica segura", productId: "8205453", icon: "TO", status: "preparing", url: "/kinecheck-comunicacion-clinica/traumatologia/" }
   ]
 });
