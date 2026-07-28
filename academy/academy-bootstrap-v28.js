@@ -54,36 +54,58 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     TO: { category: "course", label: "CURSO CLÍNICO", checkoutUrl: "https://pay.hotmart.com/B106913952R", isNew: true }
   };
 
+  let enhancementScheduled = false;
+
   function enhanceCards() {
+    enhancementScheduled = false;
+
     document.querySelectorAll(".course-card").forEach((card) => {
       const icon = card.querySelector(".course-icon")?.textContent?.trim();
       const meta = PRODUCT_META[icon];
       if (!meta) return;
-      card.classList.remove("category-application", "category-course", "category-tool");
-      card.classList.add(`category-${meta.category}`);
+
+      const categoryClass = `category-${meta.category}`;
+      if (!card.classList.contains(categoryClass)) {
+        card.classList.remove("category-application", "category-course", "category-tool");
+        card.classList.add(categoryClass);
+      }
+
       const type = card.querySelector(".course-type");
-      if (type) type.textContent = meta.label;
+      if (type && type.textContent !== meta.label) type.textContent = meta.label;
+
       if (meta.isNew && !card.querySelector(".new-badge")) {
         const badge = document.createElement("span");
         badge.className = "new-badge";
         badge.textContent = "NUEVO";
         card.appendChild(badge);
       }
+
       const button = card.querySelector(".course-button");
       if (!button || !button.disabled || button.textContent.trim() !== "Sin acceso" || card.querySelector(".purchase-button")) return;
+
       const link = document.createElement("a");
       link.className = "purchase-button";
       link.href = meta.checkoutUrl || `mailto:emmanuelkine@gmail.com?subject=${encodeURIComponent("Quiero comprar " + (card.querySelector("h3")?.textContent || "KineCheck"))}`;
       link.textContent = meta.checkoutUrl ? "Comprar ahora" : "Solicitar enlace";
-      if (meta.checkoutUrl) { link.target = "_blank"; link.rel = "noopener noreferrer"; }
+      if (meta.checkoutUrl) {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
       button.replaceWith(link);
     });
   }
 
+  function scheduleEnhancement() {
+    if (enhancementScheduled) return;
+    enhancementScheduled = true;
+    window.requestAnimationFrame(enhanceCards);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const grid = document.querySelector("#course-grid");
-    if (grid) new MutationObserver(enhanceCards).observe(grid, { childList: true, subtree: true });
-    if ("requestIdleCallback" in window) requestIdleCallback(enhanceCards, { timeout: 1000 });
-    else setTimeout(enhanceCards, 300);
+    if (grid) {
+      new MutationObserver(scheduleEnhancement).observe(grid, { childList: true });
+    }
+    scheduleEnhancement();
   });
 })();
