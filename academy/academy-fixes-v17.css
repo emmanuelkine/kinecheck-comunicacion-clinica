@@ -1,0 +1,11 @@
+[hidden] {
+  display: none !important;
+}
+
+#auth-progress {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
