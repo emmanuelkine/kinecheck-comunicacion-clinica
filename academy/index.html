@@ -12,16 +12,18 @@
   <style>
     html,body{min-height:100%;margin:0;background:#06191e;color:#f5fbfc}
     [hidden]{display:none!important}
+    .dashboard-header,.header-actions,#sign-out{position:relative;z-index:50}
+    #sign-out{pointer-events:auto!important;touch-action:manipulation;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
     @media(max-width:900px){
       .login-card,.hero-panel,.dashboard-header,.academy-value{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
       .course-card{content-visibility:visible!important;contain:none!important}
     }
   </style>
-  <link rel="stylesheet" href="./academy.css?v=31">
-  <link rel="stylesheet" href="./academy-theme.css?v=31" media="(min-width:901px)">
-  <link rel="stylesheet" href="./academy-catalog.css?v=31" media="(min-width:901px)">
-  <script src="./academy-bootstrap-v28.js?v=31" defer></script>
-  <script src="./academy-v16.js?v=31" defer></script>
+  <link rel="stylesheet" href="./academy.css?v=32">
+  <link rel="stylesheet" href="./academy-theme.css?v=32" media="(min-width:901px)">
+  <link rel="stylesheet" href="./academy-catalog.css?v=32" media="(min-width:901px)">
+  <script src="./academy-bootstrap-v28.js?v=32" defer></script>
+  <script src="./academy-v16.js?v=32" defer></script>
 </head>
 <body>
   <main class="page-shell">
@@ -61,7 +63,7 @@
     <section id="dashboard-view" class="dashboard" hidden>
       <header class="dashboard-header">
         <div class="brand"><span class="brand-mark">K</span><div><strong>KineCheck Academy</strong><span>Biblioteca clínica unificada</span></div></div>
-        <div class="header-actions"><span id="account-email" class="account-chip"></span><button id="sign-out" class="secondary" type="button">Cerrar sesión</button></div>
+        <div class="header-actions"><span id="account-email" class="account-chip"></span><a id="sign-out" class="secondary" href="./salir.html?v=32">Cerrar sesión</a></div>
       </header>
 
       <section class="hero-panel">
