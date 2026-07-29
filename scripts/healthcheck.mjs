@@ -1,10 +1,42 @@
-import { readFile } from "node:fs/promises";
-import { access } from "node:fs/promises";
+import { readFile, access } from "node:fs/promises";
 
 const ROOT = new URL("../", import.meta.url);
 const PUBLIC_BASE = "https://emmanuelkine.github.io/kinecheck-comunicacion-clinica";
 const SUPABASE_BASE = "https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1";
 const TIMEOUT_MS = 20000;
+
+const CHECKOUT_EXPECTATIONS = [
+  {
+    label: "KineCheck Clínico",
+    url: "https://pay.hotmart.com/L106791841D",
+    keywords: ["kinecheck clínico", "kinecheck clinico"],
+  },
+  {
+    label: "Comunicación Clínica",
+    url: "https://pay.hotmart.com/T106883983U",
+    keywords: ["comunicación clínica", "comunicacion clinica"],
+  },
+  {
+    label: "KineCheck Estudiante",
+    url: "https://pay.hotmart.com/G106801166S",
+    keywords: ["kinecheck estudiante"],
+  },
+  {
+    label: "KineCheck Recupera",
+    url: "https://pay.hotmart.com/P106806251E",
+    keywords: ["kinecheck recupera"],
+  },
+  {
+    label: "Más allá del Dolor",
+    url: "https://pay.hotmart.com/W106888386Q",
+    keywords: ["más allá del dolor", "mas alla del dolor"],
+  },
+  {
+    label: "Traumatología y Ortopedia Clínica",
+    url: "https://pay.hotmart.com/B106913952R",
+    keywords: ["traumatología", "traumatologia", "ortopedia clínica", "ortopedia clinica"],
+  },
+];
 
 let failures = 0;
 let warnings = 0;
@@ -21,6 +53,15 @@ function logWarn(message) {
 function logFail(message) {
   failures += 1;
   console.error(`::error::${message}`);
+}
+
+function normalize(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 async function fileText(path) {
@@ -43,7 +84,7 @@ async function fetchWithTimeout(url, options = {}) {
     return await fetch(url, {
       redirect: "manual",
       headers: {
-        "user-agent": "KineCheck-Healthcheck/1.0",
+        "user-agent": "KineCheck-Healthcheck/1.1",
         ...(options.headers || {}),
       },
       ...options,
@@ -74,6 +115,34 @@ async function checkUrl(label, url, options = {}) {
   } catch (error) {
     logFail(`${label} no respondió: ${url} (${error.message})`);
     return false;
+  }
+}
+
+async function checkCheckout(expectation) {
+  try {
+    const response = await fetchWithTimeout(expectation.url, { redirect: "follow" });
+    if (response.status >= 400) {
+      logFail(`Checkout ${expectation.label} respondió HTTP ${response.status}: ${expectation.url}`);
+      return;
+    }
+
+    const finalUrl = response.url || expectation.url;
+    if (!/hotmart\.com/i.test(finalUrl)) {
+      logFail(`Checkout ${expectation.label} terminó fuera de Hotmart: ${finalUrl}`);
+      return;
+    }
+
+    const html = await response.text();
+    const normalizedHtml = normalize(html);
+    const matched = expectation.keywords.some((keyword) => normalizedHtml.includes(normalize(keyword)));
+
+    if (matched) {
+      logOk(`Checkout correcto: ${expectation.label} (HTTP ${response.status})`);
+    } else {
+      logWarn(`El checkout responde, pero Hotmart no expone el nombre de ${expectation.label} en el HTML verificable. Revisar visualmente una vez.`);
+    }
+  } catch (error) {
+    logFail(`Checkout ${expectation.label} no respondió: ${expectation.url} (${error.message})`);
   }
 }
 
@@ -144,9 +213,16 @@ async function main() {
   }
 
   const checkoutUrls = [...new Set(extractCheckoutUrls(landing))];
-  if (!checkoutUrls.length) logFail("No se encontraron checkout de Hotmart en la página pública.");
+  const expectedUrls = new Set(CHECKOUT_EXPECTATIONS.map((item) => item.url));
   for (const url of checkoutUrls) {
-    await checkUrl("Checkout Hotmart", url);
+    if (!expectedUrls.has(url)) logWarn(`Checkout público no incorporado al mapa de pruebas: ${url}`);
+  }
+  for (const expectation of CHECKOUT_EXPECTATIONS) {
+    if (!checkoutUrls.includes(expectation.url)) {
+      logFail(`La página pública no contiene el checkout esperado de ${expectation.label}: ${expectation.url}`);
+    } else {
+      await checkCheckout(expectation);
+    }
   }
 
   await checkUrl("Página pública KineCheck", `${PUBLIC_BASE}/kinecheck/`);
