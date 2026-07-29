@@ -3,85 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="KineCheck Academy: acceso unificado a KineCheck Clínico, Estudiante, Recupera, Comunicación Clínica, Más allá del Dolor, Evidencia Aplicada, Lab Clínico y Traumatología y Ortopedia Clínica.">
-  <meta name="theme-color" content="#071d22">
+  <meta name="description" content="KineCheck Academy: aplicaciones, cursos y simulación clínica para profesionales, estudiantes y pacientes.">
+  <meta name="theme-color" content="#06151f">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'">
   <title>KineCheck Academy</title>
   <link rel="preconnect" href="https://eqhcdclyeoapmqtlduwf.supabase.co" crossorigin>
   <link rel="dns-prefetch" href="//eqhcdclyeoapmqtlduwf.supabase.co">
-  <style>
-    html,body{min-height:100%;margin:0;background:#06191e;color:#f5fbfc}
-    [hidden]{display:none!important}
-    .dashboard-header,.header-actions,#sign-out{position:relative;z-index:50}
-    #sign-out{pointer-events:auto!important;touch-action:manipulation;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
-    @media(max-width:900px){
-      .login-card,.hero-panel,.dashboard-header,.academy-value{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-      .course-card{content-visibility:visible!important;contain:none!important}
-    }
-  </style>
-  <link rel="stylesheet" href="./academy.css?v=37">
-  <link rel="stylesheet" href="./academy-theme.css?v=37" media="(min-width:901px)">
-  <link rel="stylesheet" href="./academy-catalog.css?v=37" media="(min-width:901px)">
-  <link rel="stylesheet" href="./academy-reviews.css?v=37">
-  <script src="./academy-bootstrap-v28.js?v=37" defer></script>
-  <script src="./academy-v16.js?v=37" defer></script>
-  <script src="./academy-reviews.js?v=37" defer></script>
+  <link rel="stylesheet" href="./academy.css?v=38">
+  <link rel="stylesheet" href="./academy-reviews.css?v=38">
+  <script src="./academy-bootstrap-v28.js?v=38" defer></script>
+  <script src="./academy-v16.js?v=38" defer></script>
+  <script src="./academy-reviews.js?v=38" defer></script>
 </head>
 <body>
-  <main class="page-shell">
-    <section id="login-view" class="login-layout" aria-labelledby="login-title">
-      <div class="login-showcase">
-        <div class="brand brand-large"><span class="brand-mark">K</span><div><strong>KineCheck Academy</strong><span>Formación y herramientas clínicas</span></div></div>
-        <span class="eyebrow">ECOSISTEMA DIGITAL PARA KINESIOLOGÍA</span>
-        <h1 id="login-title">Aprende, aplica y fortalece tu práctica clínica.</h1>
-        <p class="lead">Cursos, aplicaciones y herramientas clínicas para estudiantes, profesionales y pacientes, reunidos en una sola plataforma.</p>
-        <div class="trust-row"><span>Acceso protegido</span><span>Compra validada</span><span>8 soluciones integradas</span></div>
-        <div class="login-value-strip" aria-label="Beneficios de KineCheck Academy">
-          <div><strong>Aprendizaje aplicado</strong><span>Contenidos orientados al razonamiento y a la toma de decisiones clínicas.</span></div>
-          <div><strong>Herramientas prácticas</strong><span>Recursos para estudiar, registrar, comunicar y hacer seguimiento.</span></div>
-          <div><strong>Un solo ecosistema</strong><span>Acceso centralizado a todos tus productos KineCheck.</span></div>
+  <section id="login-view" class="login-layout" aria-labelledby="login-title">
+    <div class="login-showcase">
+      <div class="brand brand-large">
+        <span class="brand-mark">K</span>
+        <div><strong>KineCheck Academy</strong><span>Formación y herramientas clínicas</span></div>
+      </div>
+      <span class="eyebrow">ECOSISTEMA DIGITAL PARA KINESIOLOGÍA</span>
+      <h1 id="login-title">Aprende con evidencia.<br><em>Aplica con confianza.</em></h1>
+      <p class="lead">Aplicaciones clínicas, cursos y herramientas reunidos en una sola cuenta protegida.</p>
+      <div class="trust-row" aria-label="Características del acceso">
+        <span>Acceso protegido</span>
+        <span>Licencias validadas</span>
+        <span>8 soluciones integradas</span>
+      </div>
+    </div>
+
+    <div class="login-card">
+      <div class="mobile-brand brand">
+        <span class="brand-mark">K</span>
+        <div><strong>KineCheck Academy</strong><span>Acceso protegido</span></div>
+      </div>
+      <span class="eyebrow compact">BIENVENIDO</span>
+      <h2>Ingresa a tu biblioteca</h2>
+      <p>Usa el mismo correo con el que realizaste tu compra en Hotmart.</p>
+      <div class="tabs">
+        <button id="login-tab" class="tab active" type="button">Ingresar</button>
+        <button id="signup-tab" class="tab" type="button">Crear cuenta</button>
+      </div>
+      <form id="auth-form" novalidate>
+        <label for="email">Correo utilizado en la compra</label>
+        <input id="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
+        <button id="auth-submit" class="primary" type="submit">Ingresar a KineCheck</button>
+      </form>
+      <div id="auth-progress" class="progress" hidden>Verificando tu cuenta…</div>
+      <div id="auth-message" class="notice" hidden></div>
+      <a class="support-link" href="mailto:emmanuelkine@gmail.com">¿Necesitas ayuda? Contactar soporte</a>
+    </div>
+  </section>
+
+  <section id="dashboard-view" class="academy-app" hidden>
+    <div id="sidebar-overlay" class="sidebar-overlay" hidden></div>
+
+    <aside id="academy-sidebar" class="academy-sidebar" aria-label="Navegación principal">
+      <div class="sidebar-brand brand">
+        <span class="brand-mark">K</span>
+        <div><strong>KineCheck</strong><span>ACADEMY</span></div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" href="#inicio"><span class="nav-icon">⌂</span><span>Inicio</span></a>
+        <a class="nav-item" href="#productos"><span class="nav-icon">▣</span><span>Mis productos</span></a>
+        <a class="nav-item" href="#recursos"><span class="nav-icon">□</span><span>Recursos</span></a>
+        <a class="nav-item" href="mailto:emmanuelkine@gmail.com"><span class="nav-icon">?</span><span>Soporte</span></a>
+      </nav>
+
+      <div class="sidebar-account">
+        <span id="sidebar-access" class="sidebar-access">Cuenta activa</span>
+        <small id="sidebar-email"></small>
+      </div>
+
+      <a id="sign-out" class="sign-out" href="./salir.html?v=38">Cerrar sesión</a>
+    </aside>
+
+    <div class="academy-main">
+      <header class="topbar">
+        <button id="mobile-menu" class="menu-button" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <div>
+          <span class="topbar-kicker">KINECHECK ACADEMY</span>
+          <strong id="account-greeting">Hola</strong>
         </div>
-        <div class="login-commerce-note">Explora soluciones diseñadas para acompañarte desde la formación hasta la práctica profesional.</div>
-      </div>
-
-      <div class="login-card">
-        <div class="mobile-brand brand"><span class="brand-mark">K</span><div><strong>KineCheck Academy</strong><span>Acceso protegido</span></div></div>
-        <h2>Bienvenido</h2>
-        <p>Usa el mismo correo con el que realizaste tu compra en Hotmart.</p>
-        <div class="tabs"><button id="login-tab" class="tab active" type="button">Ingresar</button><button id="signup-tab" class="tab" type="button">Crear cuenta</button></div>
-        <form id="auth-form" novalidate>
-          <label for="email">Correo utilizado en la compra</label>
-          <input id="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
-          <label for="password">Contraseña</label>
-          <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
-          <button id="auth-submit" class="primary" type="submit">Ingresar a KineCheck</button>
-        </form>
-        <div id="auth-progress" class="progress" hidden>Verificando tu cuenta…</div>
-        <div id="auth-message" class="notice" hidden></div>
-        <p class="support-copy">Soporte: emmanuelkine@gmail.com</p>
-      </div>
-    </section>
-
-    <section id="dashboard-view" class="dashboard" hidden>
-      <header class="dashboard-header">
-        <div class="brand"><span class="brand-mark">K</span><div><strong>KineCheck Academy</strong><span>Biblioteca clínica unificada</span></div></div>
-        <div class="header-actions"><span id="account-email" class="account-chip"></span><a id="sign-out" class="secondary" href="./salir.html?v=37">Cerrar sesión</a></div>
+        <div class="topbar-account">
+          <span id="account-email" class="account-chip"></span>
+          <span class="account-avatar" aria-hidden="true">K</span>
+        </div>
       </header>
 
-      <section class="hero-panel">
-        <div><span class="eyebrow">TU ECOSISTEMA KINECHECK</span><h1>Aplicaciones, cursos y simulación clínica en un solo lugar.</h1><p id="welcome">Accede a los productos asociados a tu cuenta.</p></div>
-        <div class="hero-stats"><div><strong id="active-count">0</strong><span>productos disponibles</span></div><div><strong>1</strong><span>cuenta unificada</span></div><div><strong>24/7</strong><span>acceso online</span></div></div>
-      </section>
+      <main>
+        <section id="inicio" class="hero-panel">
+          <div class="hero-copy">
+            <span class="eyebrow">BIENVENIDO A KINECHECK ACADEMY</span>
+            <h1>Aprende con evidencia.<br><em>Aplica con confianza.</em></h1>
+            <p id="welcome">Accede a los productos asociados a tu cuenta.</p>
+            <div class="hero-benefits" aria-label="Beneficios de KineCheck">
+              <span>Basado en evidencia</span>
+              <span>Aplicación clínica</span>
+              <span>Acceso flexible</span>
+              <span>Contenido actualizado</span>
+            </div>
+          </div>
 
-      <div class="section-heading">
-        <div><span class="eyebrow compact">MI BIBLIOTECA</span><h2>Todo el ecosistema</h2></div>
-        <div class="filter-tabs" role="group" aria-label="Filtrar productos"><button class="filter active" data-filter="all" type="button">Todos</button><button class="filter" data-filter="active" type="button">Disponibles</button><button class="filter" data-filter="preparing" type="button">Próximamente</button></div>
-      </div>
-      <div id="library-message" class="notice" hidden></div>
-      <div id="course-grid" class="course-grid" aria-live="polite"></div>
-      <section class="academy-value"><div><span class="eyebrow compact">KINECHECK ACADEMY</span><h2>Una ruta continua desde el aprendizaje hasta la práctica.</h2></div><p>Integra evaluación clínica, razonamiento, comunicación, seguimiento del paciente, educación musculoesquelética, evidencia aplicada, traumatología y simulación de decisiones.</p></section>
-    </section>
-  </main>
+          <aside class="continue-panel" aria-labelledby="continue-heading">
+            <span class="continue-label">CONTINÚA DONDE QUEDASTE</span>
+            <h2 id="continue-heading">Explora tu biblioteca</h2>
+            <p id="continue-copy">Tus aplicaciones y cursos disponibles están organizados en un solo lugar.</p>
+            <button id="continue-button" class="continue-button" type="button" hidden>Continuar</button>
+            <div class="access-summary">
+              <strong id="active-count">0</strong>
+              <span>productos disponibles</span>
+            </div>
+          </aside>
+        </section>
+
+        <section id="productos" class="catalog-section">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow compact">MI BIBLIOTECA</span>
+              <h2>Todo el ecosistema</h2>
+              <p>Aplicaciones, cursos y herramientas con acciones adaptadas a cada producto.</p>
+            </div>
+            <label class="search-box" for="course-search">
+              <span>Buscar</span>
+              <input id="course-search" type="search" placeholder="Nombre o categoría" autocomplete="off">
+            </label>
+          </div>
+
+          <div class="filter-tabs" role="group" aria-label="Filtrar productos">
+            <button class="filter active" data-filter="all" type="button">Todos</button>
+            <button class="filter" data-filter="available" type="button">Disponibles</button>
+            <button class="filter" data-filter="application" type="button">Aplicaciones</button>
+            <button class="filter" data-filter="course" type="button">Cursos</button>
+            <button class="filter" data-filter="tool" type="button">Herramientas</button>
+          </div>
+
+          <div id="library-message" class="notice" hidden></div>
+          <div id="course-grid" class="course-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="recursos" class="resource-section">
+          <div class="resource-card">
+            <span class="resource-icon">✓</span>
+            <div><strong>Acceso protegido</strong><p>La cuenta y las licencias se validan antes de abrir cada producto.</p></div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-icon">↻</span>
+            <div><strong>Actualizaciones constantes</strong><p>Los contenidos y herramientas evolucionan sin prometer una frecuencia artificial.</p></div>
+          </div>
+          <a class="resource-card resource-link" href="mailto:emmanuelkine@gmail.com">
+            <span class="resource-icon">?</span>
+            <div><strong>Soporte directo</strong><p>Reporta problemas de acceso, navegación o funcionamiento.</p></div>
+          </a>
+        </section>
+      </main>
+
+      <footer class="academy-footer">
+        <span>© <span id="current-year"></span> KineCheck Academy</span>
+        <span>Formación, aplicaciones y herramientas clínicas.</span>
+      </footer>
+    </div>
+  </section>
+
   <noscript>Necesitas activar JavaScript para acceder a KineCheck Academy.</noscript>
 </body>
 </html>
