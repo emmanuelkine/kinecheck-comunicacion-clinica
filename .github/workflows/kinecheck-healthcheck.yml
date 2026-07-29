@@ -1,0 +1,36 @@
+name: KineCheck healthcheck
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "academy/**"
+      - "kinecheck/**"
+      - "scripts/healthcheck.mjs"
+      - ".github/workflows/kinecheck-healthcheck.yml"
+  schedule:
+    - cron: "17 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  end-to-end-healthcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Wait for GitHub Pages deployment
+        if: github.event_name == 'push'
+        run: sleep 75
+
+      - name: Test KineCheck, Hotmart and Supabase flow
+        run: node scripts/healthcheck.mjs
