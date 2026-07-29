@@ -8,16 +8,17 @@
     catch { return null; }
   }
 
-  function stars(value) {
-    const n = Math.max(0, Math.min(5, Math.round(Number(value) || 0)));
-    return `${"★".repeat(n)}${"☆".repeat(5 - n)}`;
-  }
-
   function addReviewActions() {
     document.querySelectorAll(".course-card").forEach((card) => {
-      if (card.querySelector(".course-rating")) return;
       const courseButton = card.querySelector("[data-course]");
-      if (!courseButton) return;
+      const currentBox = card.querySelector(".course-rating");
+
+      if (!courseButton || courseButton.disabled) {
+        currentBox?.remove();
+        return;
+      }
+
+      if (currentBox) return;
       const slug = courseButton.dataset.course;
       const box = document.createElement("div");
       box.className = "course-rating";
@@ -61,8 +62,10 @@
   }
 
   function openReview(slug) {
+    const trigger = document.querySelector(`[data-review-course="${CSS.escape(slug)}"]`);
+    const accessButton = trigger?.closest(".course-card")?.querySelector("[data-course]");
     state.course = CONFIG.courses.find(c => c.slug === slug);
-    if (!state.course || !session()?.access_token) return;
+    if (!state.course || !session()?.access_token || !accessButton || accessButton.disabled) return;
     document.querySelector("#review-course-name").textContent = state.course.title;
     document.querySelector("#review-form").reset();
     document.querySelector("#review-public").checked = true;
@@ -110,7 +113,7 @@
     createModal();
     addReviewActions();
     const grid = document.querySelector("#course-grid");
-    if (grid) new MutationObserver(addReviewActions).observe(grid, { childList: true });
+    if (grid) new MutationObserver(addReviewActions).observe(grid, { childList: true, subtree: true, attributes: true, attributeFilter: ["disabled"] });
     document.addEventListener("click", (event) => {
       const review = event.target.closest("[data-review-course]");
       if (review) openReview(review.dataset.reviewCourse);
