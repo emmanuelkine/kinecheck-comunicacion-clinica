@@ -32,6 +32,15 @@ const CHECKOUT_EXPECTATIONS = [
     keywords: ["más allá del dolor", "mas alla del dolor"],
   },
   {
+    label: "KineCheck Evidencia Aplicada",
+    url: "https://pay.hotmart.com/F106921972I",
+    keywords: [
+      "kinecheck evidencia aplicada",
+      "razonamiento clínico con evidencia",
+      "razonamiento clinico con evidencia",
+    ],
+  },
+  {
     label: "Traumatología y Ortopedia Clínica",
     url: "https://pay.hotmart.com/B106913952R",
     keywords: ["traumatología", "traumatologia", "ortopedia clínica", "ortopedia clinica"],
