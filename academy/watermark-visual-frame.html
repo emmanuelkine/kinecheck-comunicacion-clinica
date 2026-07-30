@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contenido protegido de prueba</title>
+  <style>
+    :root{font-family:Inter,Arial,sans-serif;color:#edfafa;background:#06151f}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at 80% 0,#13404b 0,transparent 32%),#06151f}
+    button,a{font:inherit}
+    .topbar{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 22px;border-bottom:1px solid rgba(152,217,218,.17);background:rgba(5,24,33,.94)}
+    .brand{display:flex;align-items:center;gap:11px}
+    .mark{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#48d7d0;color:#06222a;font-weight:950}
+    .brand strong,.brand span{display:block}
+    .brand span{margin-top:2px;color:#8fb6bc;font-size:11px}
+    .demo{padding:7px 10px;border:1px solid #2e8189;border-radius:999px;color:#8de4df;font-size:10px;font-weight:900}
+    main{padding:22px}
+    .hero{display:grid;grid-template-columns:1.4fr .6fr;gap:22px;padding:28px;border:1px solid rgba(115,205,204,.24);border-radius:22px;background:linear-gradient(135deg,#113642,#092630)}
+    .eyebrow{color:#5be2da;font-size:10px;font-weight:900;letter-spacing:.14em}
+    h1{margin:12px 0 10px;font-size:clamp(32px,5vw,56px);line-height:1}
+    p{color:#b2cdd1;line-height:1.5}
+    .summary{align-self:stretch;padding:20px;border-radius:17px;background:#08202a}
+    .summary strong{display:block;margin:8px 0;font-size:31px;color:#61ded7}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .card{min-height:210px;padding:18px;border:1px solid rgba(131,203,204,.22);border-radius:18px;background:#0a252f}
+    .card.light{background:#eef8f7;color:#0b3039}
+    .card.light p{color:#3b626a}
+    .card h2{margin:12px 0 8px;font-size:20px}
+    .icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#49d5ce;color:#06232b;font-weight:950}
+    .action{display:inline-flex;align-items:center;justify-content:center;margin-top:12px;padding:10px 13px;border:0;border-radius:10px;background:#49d5ce;color:#06232b;text-decoration:none;font-weight:900;cursor:pointer}
+    .video{display:grid;place-items:center;min-height:98px;margin-top:12px;border:1px solid rgba(116,205,204,.2);border-radius:12px;background:linear-gradient(135deg,#153f49,#091b23)}
+    .video span{display:grid;place-items:center;width:45px;height:45px;border-radius:50%;background:#e7ffff;color:#08313a}
+    #interaction-status{position:relative;z-index:4;margin:16px 0 0;padding:10px 12px;border:1px solid rgba(87,217,210,.26);border-radius:11px;color:#9de5e0;background:#08232c;font-size:12px}
+    @media(max-width:640px){
+      .topbar{padding:12px 13px}
+      .brand span{display:none}
+      main{padding:12px}
+      .hero{grid-template-columns:1fr;padding:20px 16px}
+      .summary{padding:15px}
+      .grid{grid-template-columns:1fr}
+      .card{min-height:0}
+      h1{font-size:38px}
+    }
+  </style>
+  <script src="../watermark.js?v=20260730"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark">K</span><div><strong>KineCheck Academy</strong><span>Contenido protegido</span></div></div>
+    <span class="demo">DATOS DE PRUEBA</span>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <span class="eyebrow">MÓDULO CLÍNICO PROTEGIDO</span>
+        <h1>Aprende. Aplica.<br>Transforma.</h1>
+        <p>Esta pantalla permite comprobar que la marca permanece legible sobre fondos oscuros, claros y contenido audiovisual.</p>
+      </div>
+      <aside class="summary">
+        <span class="eyebrow">PROGRESO</span>
+        <strong>64%</strong>
+        <p>8 de 12 módulos completados</p>
+        <button id="continue-test" class="action" type="button">Continuar módulo</button>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <span class="icon">01</span>
+        <h2>Contenido oscuro</h2>
+        <p>La transparencia mantiene la lectura y deja visible la identidad de uso personal.</p>
+      </article>
+      <article class="card light">
+        <span class="icon">02</span>
+        <h2>Contenido claro</h2>
+        <p>El trazo de la marca conserva contraste sin tapar los textos principales.</p>
+        <a id="resource-test" class="action" href="#interaction-status">Abrir recurso</a>
+      </article>
+      <article class="card">
+        <span class="icon">▶</span>
+        <h2>Video y controles</h2>
+        <div class="video"><span>▶</span></div>
+      </article>
+    </section>
+    <p id="interaction-status">Los controles todavía no han sido activados.</p>
+  </main>
+  <script>
+    const status = document.querySelector("#interaction-status");
+    document.querySelector("#continue-test").addEventListener("click", () => {
+      status.textContent = "Prueba correcta: el botón funciona bajo la marca de agua.";
+    });
+    document.querySelector("#resource-test").addEventListener("click", () => {
+      status.textContent = "Prueba correcta: el enlace funciona bajo la marca de agua.";
+    });
+
+    window.KineCheckWatermark.showVerifiedBuyer({
+      user: {
+        id: "usuario-comprador-ficticio",
+        email: "comprador.demo@kinecheck.cl"
+      },
+      licenseScopes: ["academy", "curso-protegido-demo"]
+    });
+  </script>
+</body>
+</html>

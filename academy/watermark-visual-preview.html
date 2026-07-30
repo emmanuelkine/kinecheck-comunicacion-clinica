@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vista previa de marca de agua | KineCheck Academy</title>
+  <style>
+    :root{color-scheme:dark;font-family:Inter,Arial,sans-serif;background:#031019;color:#efffff}
+    *{box-sizing:border-box}
+    body{margin:0;padding:28px;background:linear-gradient(180deg,#031019,#071c26)}
+    header{max-width:1280px;margin:0 auto 24px}
+    h1{margin:0 0 8px;font-size:clamp(26px,4vw,42px)}
+    p{margin:0;color:#a8c8ce;line-height:1.5}
+    .notice{display:inline-block;margin-top:14px;padding:8px 11px;border:1px solid #2e8890;border-radius:999px;color:#91e4df;font-size:12px;font-weight:800}
+    section{max-width:1280px;margin:22px auto 0}
+    h2{margin:0 0 10px;font-size:20px}
+    .frame-wrap{overflow:auto;border:1px solid #21404a;border-radius:18px;background:#020b10;box-shadow:0 22px 50px rgba(0,0,0,.28)}
+    iframe{display:block;border:0;background:#06151f}
+    .desktop{width:1280px;height:760px}
+    .mobile-wrap{width:392px;max-width:100%}
+    .mobile{width:390px;height:844px;max-width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Marca de agua dinámica</h1>
+    <p>Comparación visual de la misma protección sobre un contenido de prueba, usando las medidas reales de escritorio y celular.</p>
+    <span class="notice">VISTA PREVIA · DATOS FICTICIOS · NO PUBLICADA</span>
+  </header>
+
+  <section>
+    <h2>Escritorio · 1280 × 760</h2>
+    <div class="frame-wrap">
+      <iframe class="desktop" title="Prueba de escritorio" src="./watermark-visual-frame.html?view=desktop"></iframe>
+    </div>
+  </section>
+
+  <section>
+    <h2>Celular · 390 × 844</h2>
+    <div class="frame-wrap mobile-wrap">
+      <iframe class="mobile" title="Prueba móvil" src="./watermark-visual-frame.html?view=mobile"></iframe>
+    </div>
+  </section>
+</body>
+</html>
