@@ -56,6 +56,22 @@ Esta versión:
 - registra auditoría en `public.hotmart_events`;
 - no contiene valores secretos.
 
+### `public.process_hotmart_event`
+
+La definición de producción de la función SQL quedó guardada en:
+
+`supabase/migrations/20260729_process_hotmart_event.sql`
+
+Esta función:
+
+- garantiza idempotencia mediante `public.hotmart_webhook_events`;
+- protege el orden temporal de los eventos y prioriza la revocación en igualdad de fecha;
+- registra y actualiza compras en `public.hotmart_purchases`;
+- procesa todos los cursos asociados a un producto mediante `public.hotmart_product_grants`;
+- evita duplicados concurrentes con bloqueo transaccional por usuario y curso;
+- preserva los accesos de propietario;
+- crea, actualiza o revoca licencias en `public.course_access`.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -75,7 +91,8 @@ Esta versión:
 - Concesiones duplicadas: ninguna
 - Módulos protegidos verificados: 3
 - KineCheck Clínico en producción: versión 20
-- Funciones de producción respaldadas: 3
+- Edge Functions de producción respaldadas: 3
+- Función SQL crítica respaldada: 1
 
 ## Seguridad
 
