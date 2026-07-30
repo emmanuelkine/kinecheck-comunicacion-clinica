@@ -153,10 +153,10 @@ summary:focus-visible {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background-image: url("../academy/academy-bg.png");
+  background-image: url("../academy/academy-hero-clean.jpg");
   background-repeat: no-repeat;
-  background-size: auto 225%;
-  background-position: 76% top;
+  background-size: cover;
+  background-position: center top;
   filter: saturate(0.92) contrast(1.05);
 }
 
@@ -769,9 +769,9 @@ footer {
   }
 
   .hero::before {
-    background-size: auto 150%;
-    background-position: 68% top;
-    opacity: 0.5;
+    background-size: cover;
+    background-position: 63% center;
+    opacity: 0.62;
   }
 
   .hero::after {
