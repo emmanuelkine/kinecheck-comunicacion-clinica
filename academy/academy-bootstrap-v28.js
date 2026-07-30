@@ -2,7 +2,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   supabaseUrl: "https://eqhcdclyeoapmqtlduwf.supabase.co",
   supabaseAnonKey: "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_",
   courseKeyFunction: "course-key",
-  supportEmail: "emmanuelkine@gmail.com",
+  supportEmail: "soporte.kinecheck@gmail.com",
   ownerEmails: ["emmanuelkine@gmail.com", "emmanuelkine+owner@gmail.com", "emmanuel_fox@hotmail.com"],
   betaTesterEmails: ["emmanuelkine+beta@gmail.com"],
   betaTrialDays: 5,
