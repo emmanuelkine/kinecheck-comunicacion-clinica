@@ -94,6 +94,14 @@ Incluye la estructura observada de:
 - `public.hotmart_purchases`
 - `public.hotmart_webhook_events`
 
+### Restricciones e índices
+
+El snapshot de claves primarias e índices de producción quedó guardado en:
+
+`docs/backups/2026-07-29-database-constraints-indexes.csv`
+
+Incluye cinco claves primarias, cinco índices únicos asociados a dichas claves y cuatro índices auxiliares para búsquedas por correo, estado y orden temporal de eventos.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -117,6 +125,8 @@ Incluye la estructura observada de:
 - Función SQL crítica respaldada: 1
 - Configuración de concesiones respaldada: 8 filas
 - Tablas críticas documentadas: 5
+- Restricciones documentadas: 5
+- Índices documentados: 9
 
 ## Seguridad
 
