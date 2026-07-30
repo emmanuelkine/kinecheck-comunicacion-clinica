@@ -1,0 +1,124 @@
+.recommendation-section {
+  padding: 78px clamp(22px, 5vw, 82px);
+  border-top: 1px solid rgba(122, 213, 218, 0.14);
+  border-bottom: 1px solid rgba(122, 213, 218, 0.14);
+  background:
+    radial-gradient(circle at 12% 15%, rgba(46, 210, 207, 0.10), transparent 28rem),
+    linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.006));
+}
+
+.recommendation-heading {
+  max-width: 860px;
+  margin-bottom: 30px;
+}
+
+.recommendation-heading h2 {
+  margin: 10px 0 12px;
+  color: #ffffff;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  line-height: 1.04;
+}
+
+.recommendation-heading p {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1.02rem;
+}
+
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.recommendation-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 255px;
+  padding: 24px;
+  border: 1px solid rgba(107, 214, 218, 0.25);
+  border-radius: 20px;
+  background: linear-gradient(155deg, rgba(13, 48, 59, 0.96), rgba(7, 30, 40, 0.96));
+  color: #ffffff;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
+}
+
+.recommendation-card .recommendation-label {
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.recommendation-card h3 {
+  margin: 13px 0 8px;
+  font-size: 1.28rem;
+}
+
+.recommendation-card p {
+  margin: 0;
+  color: #bfd4d8;
+  font-size: 0.93rem;
+}
+
+.recommendation-card a {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 22px;
+  color: #74e3df;
+  font-weight: 900;
+}
+
+.product-card.pack-card {
+  border-color: rgba(88, 167, 255, 0.55);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(88, 167, 255, 0.20), transparent 44%),
+    linear-gradient(155deg, #0d303b, #08212b);
+}
+
+.product-card.pack-card .product-icon {
+  background: linear-gradient(135deg, #58a7ff, #2ed2cf);
+}
+
+.pack-note {
+  margin: 12px 0 0;
+  color: #c7dce0;
+  font-size: 0.83rem;
+}
+
+.buy.secondary-buy {
+  border: 1px solid rgba(88, 167, 255, 0.55);
+  background: rgba(88, 167, 255, 0.12);
+  color: #eaf4ff;
+}
+
+.faq-intro {
+  max-width: 760px;
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.faq-grid details p strong {
+  color: #ffffff;
+}
+
+@media (max-width: 1050px) {
+  .recommendation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .recommendation-section {
+    padding: 58px 18px;
+  }
+
+  .recommendation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recommendation-card {
+    min-height: 0;
+  }
+}
