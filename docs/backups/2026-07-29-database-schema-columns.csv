@@ -1,0 +1,38 @@
+table_name,ordinal_position,column_name,data_type,udt_name,is_nullable,column_default
+course_access,1,email,text,text,NO,null
+course_access,2,course_slug,text,text,NO,null
+course_access,3,active,boolean,bool,NO,false
+course_access,4,hotmart_product_id,text,text,YES,null
+course_access,5,transaction_id,text,text,YES,null
+course_access,6,last_event,text,text,YES,null
+course_access,7,updated_at,timestamp with time zone,timestamptz,NO,now()
+course_access,8,purchase_date,timestamp with time zone,timestamptz,YES,null
+course_access,9,warranty_date,timestamp with time zone,timestamptz,YES,null
+course_access,10,product_ucode,text,text,YES,null
+course_access,11,access_source,text,text,NO,'manual'::text
+course_access,12,last_event_at,timestamp with time zone,timestamptz,YES,null
+hotmart_events,1,event_id,text,text,NO,null
+hotmart_events,2,event_type,text,text,NO,null
+hotmart_events,3,product_ucode,text,text,YES,null
+hotmart_events,4,buyer_email,text,text,YES,null
+hotmart_events,5,transaction_id,text,text,YES,null
+hotmart_events,6,payload,jsonb,jsonb,NO,null
+hotmart_events,7,processed_at,timestamp with time zone,timestamptz,NO,now()
+hotmart_events,8,event_date,timestamp with time zone,timestamptz,YES,null
+hotmart_product_grants,1,product_id,bigint,int8,NO,null
+hotmart_product_grants,2,course_slug,text,text,NO,null
+hotmart_product_grants,3,product_name,text,text,YES,null
+hotmart_product_grants,4,created_at,timestamp with time zone,timestamptz,NO,now()
+hotmart_purchases,1,transaction_id,text,text,NO,null
+hotmart_purchases,2,product_id,bigint,int8,NO,null
+hotmart_purchases,3,buyer_email,text,text,NO,null
+hotmart_purchases,4,buyer_name,text,text,YES,null
+hotmart_purchases,5,status,text,text,NO,null
+hotmart_purchases,6,event_name,text,text,NO,null
+hotmart_purchases,7,purchased_at,timestamp with time zone,timestamptz,YES,null
+hotmart_purchases,8,last_event_at,timestamp with time zone,timestamptz,NO,now()
+hotmart_purchases,9,raw_event_id,text,text,YES,null
+hotmart_webhook_events,1,event_id,text,text,NO,null
+hotmart_webhook_events,2,event_name,text,text,NO,null
+hotmart_webhook_events,3,transaction_id,text,text,YES,null
+hotmart_webhook_events,4,received_at,timestamp with time zone,timestamptz,NO,now()
