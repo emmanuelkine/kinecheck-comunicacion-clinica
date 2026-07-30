@@ -41,6 +41,21 @@ Esta versión:
 - delega la actualización de accesos a `public.process_hotmart_event`;
 - no contiene valores secretos.
 
+### `evidence-hotmart-webhook`
+
+La función dedicada de Evidencia Aplicada quedó guardada en:
+
+`supabase/functions/evidence-hotmart-webhook/index.ts`
+
+Esta versión:
+
+- valida `EVIDENCE_HOTMART_HOTTOK` y `EVIDENCE_HOTMART_PRODUCT_ID`;
+- acepta el producto real y el producto oficial de prueba de Hotmart;
+- procesa aprobación y revocación de `evidencia-aplicada`;
+- ignora eventos duplicados o cronológicamente obsoletos;
+- registra auditoría en `public.hotmart_events`;
+- no contiene valores secretos.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -60,14 +75,7 @@ Esta versión:
 - Concesiones duplicadas: ninguna
 - Módulos protegidos verificados: 3
 - KineCheck Clínico en producción: versión 20
-
-## Respaldo pendiente
-
-Falta copiar desde Supabase el código exacto desplegado de:
-
-- `evidence-hotmart-webhook`
-
-No debe reconstruirse desde memoria. Debe guardarse únicamente el código exacto exportado desde Supabase.
+- Funciones de producción respaldadas: 3
 
 ## Seguridad
 
