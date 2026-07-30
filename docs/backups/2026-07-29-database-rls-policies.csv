@@ -1,0 +1,6 @@
+object_type,table_name,object_name,definition
+rls_status,course_access,null,rls_enabled=t; rls_forced=f
+rls_status,hotmart_events,null,rls_enabled=t; rls_forced=f
+rls_status,hotmart_product_grants,null,rls_enabled=t; rls_forced=f
+rls_status,hotmart_purchases,null,rls_enabled=t; rls_forced=f
+rls_status,hotmart_webhook_events,null,rls_enabled=t; rls_forced=f
