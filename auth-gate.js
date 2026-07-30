@@ -16,8 +16,7 @@ const submit = $("#auth-submit");
 let mode = "login";
 
 function resolvedCourseSlug() {
-  const querySlug = new URLSearchParams(location.search).get("course");
-  return querySlug || CONFIG.courseSlug || "comunicacion-clinica";
+  return String(CONFIG.courseSlug || "comunicacion-clinica").trim();
 }
 
 function headers(token) {
@@ -66,22 +65,42 @@ function readSession() {
   catch { return null; }
 }
 
+async function validateIdentity(session) {
+  const user = await api("/auth/v1/user", {
+    method: "GET",
+    token: session.access_token,
+  });
+  const verified = { ...session, user };
+  saveSession(verified);
+  return verified;
+}
+
 async function validSession() {
   let session = readSession();
-  if (!session) return null;
-  if (Number(session.expires_at || 0) <= Math.floor(Date.now() / 1000) + 60) {
+  if (!session?.access_token) return null;
+
+  try {
+    if (Number(session.expires_at || 0) <= Math.floor(Date.now() / 1000) + 60) {
+      session = await api("/auth/v1/token?grant_type=refresh_token", {
+        method: "POST",
+        body: JSON.stringify({ refresh_token: session.refresh_token }),
+      });
+      saveSession(session);
+    }
+    return await validateIdentity(session);
+  } catch {
     try {
       session = await api("/auth/v1/token?grant_type=refresh_token", {
         method: "POST",
         body: JSON.stringify({ refresh_token: session.refresh_token }),
       });
       saveSession(session);
+      return await validateIdentity(session);
     } catch {
       localStorage.removeItem(SESSION_KEY);
       return null;
     }
   }
-  return session;
 }
 
 async function fetchCourse(token) {
@@ -98,17 +117,28 @@ async function fetchCourse(token) {
     error.status = response.status;
     throw error;
   }
-  return response.text();
+  return {
+    courseSlug,
+    source: await response.text(),
+  };
 }
 
-async function launchCourse(source) {
+async function launchCourse(source, session, courseSlug) {
   root.hidden = false;
   const url = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
   try {
     await import(url);
+    if (!window.KineCheckWatermark) {
+      throw new Error("No fue posible activar la protección de uso personal.");
+    }
+    await window.KineCheckWatermark.showVerifiedBuyer({
+      user: session.user,
+      licenseScopes: [courseSlug],
+    });
     shell.hidden = true;
     signOut.hidden = false;
   } catch (error) {
+    window.KineCheckWatermark?.hide();
     root.hidden = true;
     shell.hidden = false;
     signOut.hidden = true;
@@ -122,9 +152,10 @@ async function authorize(session) {
   setBusy(true, "Validando tu acceso en KineCheck Academy…");
   message.hidden = true;
   try {
-    const source = await fetchCourse(session.access_token);
-    await launchCourse(source);
+    const course = await fetchCourse(session.access_token);
+    await launchCourse(course.source, session, course.courseSlug);
   } catch (error) {
+    window.KineCheckWatermark?.hide();
     setBusy(false);
     if (error.status === 401) localStorage.removeItem(SESSION_KEY);
     showMessage(`${error.message} Si necesitas ayuda, escribe a ${CONFIG.supportEmail}.`, true);
@@ -150,7 +181,7 @@ form.addEventListener("submit", async (event) => {
   const password = passwordInput.value;
   if (!email || password.length < 8) return showMessage("Ingresa un correo válido y una contraseña de al menos 8 caracteres.", true);
   try {
-    const session = mode === "login"
+    let session = mode === "login"
       ? await api("/auth/v1/token?grant_type=password", { method: "POST", body: JSON.stringify({ email, password }) })
       : await api("/auth/v1/signup", { method: "POST", body: JSON.stringify({ email, password }) });
     if (!session.access_token) {
@@ -158,6 +189,7 @@ form.addEventListener("submit", async (event) => {
       return showMessage("Cuenta creada. Revisa tu correo y confirma la dirección antes de ingresar.");
     }
     saveSession(session);
+    session = await validateIdentity(session);
     await authorize(session);
   } catch (error) {
     setBusy(false);
@@ -166,6 +198,7 @@ form.addEventListener("submit", async (event) => {
 });
 
 signOut.addEventListener("click", () => {
+  window.KineCheckWatermark?.hide();
   localStorage.removeItem(SESSION_KEY);
   location.reload();
 });

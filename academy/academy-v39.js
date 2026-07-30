@@ -521,6 +521,35 @@ async function checkLicenses(session, courses) {
   }));
 }
 
+async function syncBuyerWatermark(session) {
+  const watermark = window.KineCheckWatermark;
+  if (!watermark) return;
+
+  if (hasFullAccess()) {
+    watermark.hide();
+    return;
+  }
+
+  const verifiedLicenseScopes = CONFIG.courses
+    .filter((course) => licenseState.get(course.slug) === "owned")
+    .map((course) => course.slug);
+
+  if (!verifiedLicenseScopes.length) {
+    watermark.hide();
+    return;
+  }
+
+  try {
+    await watermark.showVerifiedBuyer({
+      user: session.user,
+      licenseScopes: ["academy", ...verifiedLicenseScopes],
+    });
+  } catch (error) {
+    watermark.hide();
+    console.error("KineCheck Academy watermark", error);
+  }
+}
+
 async function loadLicenses(session) {
   const activeCourses = CONFIG.courses.filter((course) => course.status === "active" && course.url);
   licenseState = new Map(activeCourses.map((course) => [course.slug, hasFullAccess() ? "owned" : "checking"]));
@@ -531,6 +560,7 @@ async function loadLicenses(session) {
   activeCount.textContent = String([...licenseState.values()].filter((state) => state === "owned").length);
   renderCourses();
   updateContinuePanel();
+  await syncBuyerWatermark(session);
 
   const params = new URLSearchParams(window.location.search);
   if (params.get("purchase") === "approved" && !hasFullAccess()) {
@@ -554,6 +584,7 @@ async function retryPostPurchaseLicenses(session, courses) {
     activeCount.textContent = String([...licenseState.values()].filter((state) => state === "owned").length);
     renderCourses();
     updateContinuePanel();
+    await syncBuyerWatermark(session);
   }
 
   if (locked.length) {
@@ -564,6 +595,7 @@ async function retryPostPurchaseLicenses(session, courses) {
   } else {
     showLibraryMessage("Acceso sincronizado correctamente. Ya puedes abrir tu producto.");
   }
+  await syncBuyerWatermark(session);
 }
 
 function readLastProduct() {
@@ -680,6 +712,7 @@ async function openCourse(slug) {
 
   const session = await validSession();
   if (!session) {
+    window.KineCheckWatermark?.hide();
     dashboardView.hidden = true;
     loginView.hidden = false;
     showAuthMessage("Tu sesión venció. Ingresa nuevamente.", true);
