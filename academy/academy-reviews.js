@@ -1,7 +1,7 @@
 (() => {
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG;
   const SESSION_KEY = "kinecheck_secure_session_v1";
-  const state = { course: null, rating: 0 };
+  const state = { course: null, rating: 0, existing: null };
 
   function session() {
     try {
@@ -28,8 +28,8 @@
       const box = document.createElement("div");
       box.className = "course-rating";
       box.innerHTML = `
-        <span class="course-rating-stars">☆☆☆☆☆</span>
-        <span>Comparte tu experiencia</span>
+        <span class="course-rating-stars" data-rating-stars>☆☆☆☆☆</span>
+        <span data-rating-summary>Comparte tu experiencia</span>
         <button type="button" class="review-button" data-review-course="${slug}">Evaluar curso</button>
       `;
       const meta = card.querySelector(".course-meta");
@@ -74,7 +74,30 @@
     });
   }
 
-  function openReview(slug) {
+  async function loadExistingReview(slug) {
+    const current = session();
+    if (!current?.access_token) return null;
+    try {
+      const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/course-review?courseSlug=${encodeURIComponent(slug)}`, {
+        headers: { apikey: CONFIG.supabaseAnonKey, Authorization: `Bearer ${current.access_token}` },
+      });
+      if (!response.ok) return null;
+      const data = await response.json();
+      return data.review || data;
+    } catch { return null; }
+  }
+
+  function fillExistingReview(review) {
+    if (!review || !Number(review.rating)) return;
+    setRating(review.rating);
+    document.querySelector("#review-recommend").value = review.recommends ? "yes" : "no";
+    document.querySelector("#review-best").value = review.bestPart || review.best_part || "";
+    document.querySelector("#review-improve").value = review.improvement || "";
+    document.querySelector("#review-public").checked = Boolean(review.publicComment ?? review.public_comment);
+    document.querySelector(".review-submit").textContent = "Actualizar evaluación";
+  }
+
+  async function openReview(slug) {
     const trigger = document.querySelector(`[data-review-course="${CSS.escape(slug)}"]`);
     const accessButton = trigger?.closest(".course-card")?.querySelector("[data-course]");
     state.course = CONFIG.courses.find((course) => course.slug === slug && course.kind === "course");
@@ -85,6 +108,9 @@
     document.querySelector("#review-public").checked = true;
     document.querySelector("#review-message").hidden = true;
     setRating(0);
+    document.querySelector(".review-submit").textContent = "Enviar evaluación";
+    state.existing = await loadExistingReview(slug);
+    fillExistingReview(state.existing);
     document.querySelector("#review-modal").hidden = false;
     document.body.classList.add("review-open");
   }
@@ -129,7 +155,11 @@
       : (data.message || "No fue posible registrar la evaluación.");
     reviewMessage.className = response.ok ? "notice" : "notice error";
     reviewMessage.hidden = false;
-    if (response.ok) setTimeout(closeReview, 1600);
+    if (response.ok) {
+      const button = document.querySelector(`[data-review-course="${CSS.escape(state.course.slug)}"]`);
+      if (button) button.textContent = "Editar mi evaluación";
+      setTimeout(closeReview, 1600);
+    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
