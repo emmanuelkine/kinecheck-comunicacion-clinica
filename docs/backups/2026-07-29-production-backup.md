@@ -72,13 +72,27 @@ Esta función:
 - preserva los accesos de propietario;
 - crea, actualiza o revoca licencias en `public.course_access`.
 
-### `public.hotmart_product_grants`
+### Concesiones de productos
 
-La configuración certificada de productos y cursos quedó guardada en:
+La configuración certificada de `public.hotmart_product_grants` quedó guardada en:
 
 `supabase/seeds/20260729_hotmart_product_grants.sql`
 
-El archivo contiene las ocho concesiones verificadas en producción y puede restaurarlas de forma idempotente mediante conflicto por `product_id` y `course_slug`.
+El archivo contiene las ocho concesiones verificadas y puede restaurarlas de forma idempotente mediante `ON CONFLICT`.
+
+### Esquema de columnas de la base de datos
+
+El snapshot de columnas de producción quedó guardado en:
+
+`docs/backups/2026-07-29-database-schema-columns.csv`
+
+Incluye la estructura observada de:
+
+- `public.course_access`
+- `public.hotmart_events`
+- `public.hotmart_product_grants`
+- `public.hotmart_purchases`
+- `public.hotmart_webhook_events`
 
 ## Concesiones esperadas
 
@@ -102,6 +116,7 @@ El archivo contiene las ocho concesiones verificadas en producción y puede rest
 - Edge Functions de producción respaldadas: 3
 - Función SQL crítica respaldada: 1
 - Configuración de concesiones respaldada: 8 filas
+- Tablas críticas documentadas: 5
 
 ## Seguridad
 
