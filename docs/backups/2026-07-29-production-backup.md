@@ -102,6 +102,14 @@ El snapshot de claves primarias e índices de producción quedó guardado en:
 
 Incluye cinco claves primarias, cinco índices únicos asociados a dichas claves y cuatro índices auxiliares para búsquedas por correo, estado y orden temporal de eventos.
 
+### Row Level Security
+
+El estado de RLS de las cinco tablas críticas quedó guardado en:
+
+`docs/backups/2026-07-29-database-rls-policies.csv`
+
+Las cinco tablas tienen RLS habilitado y no forzado. La consulta no devolvió políticas explícitas para estas tablas.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -127,6 +135,8 @@ Incluye cinco claves primarias, cinco índices únicos asociados a dichas claves
 - Tablas críticas documentadas: 5
 - Restricciones documentadas: 5
 - Índices documentados: 9
+- Tablas críticas con RLS habilitado: 5
+- Políticas RLS explícitas encontradas: 0
 
 ## Seguridad
 
