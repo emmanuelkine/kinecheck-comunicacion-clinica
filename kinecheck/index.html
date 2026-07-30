@@ -7,9 +7,10 @@
   <meta name="theme-color" content="#071d22">
   <title>KineCheck | Ecosistema digital de kinesiología</title>
   <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./site.css?v=3">
-  <link rel="stylesheet" href="./site-v3.css?v=3">
-  <script src="./site-v3.js?v=3" defer></script>
+  <link rel="stylesheet" href="./site.css?v=4">
+  <link rel="stylesheet" href="./site-v3.css?v=4">
+  <link rel="stylesheet" href="./site-v4.css?v=4">
+  <script src="./site-v3.js?v=4" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
@@ -20,8 +21,8 @@
     </a>
     <button id="public-menu-button" class="public-menu-button" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="public-nav">☰</button>
     <nav id="public-nav" aria-label="Navegación principal">
+      <a href="#recomendador">Qué comprar</a>
       <a href="#productos">Productos</a>
-      <a href="#audiencias">Para quién</a>
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#preguntas">Preguntas</a>
       <a class="nav-button" href="../academy/?v=40">Ingresar a Academy</a>
@@ -35,7 +36,7 @@
         <h1>Aprende. Aplica.<br><em>Transforma tu práctica.</em></h1>
         <p>Cursos, herramientas y recursos diseñados para profesionales, estudiantes y pacientes que buscan una experiencia clínica más clara y basada en evidencia.</p>
         <div class="hero-actions">
-          <a class="primary" href="#productos">Explorar productos</a>
+          <a class="primary" href="#recomendador">Descubrir qué necesito</a>
           <a class="secondary" href="../academy/?v=40">Ya compré: ingresar</a>
         </div>
         <ul class="hero-benefits">
@@ -49,7 +50,7 @@
         <div class="panel-badge">KINECHECK ACADEMY</div>
         <h2>Tu ecosistema clínico, reunido en una sola cuenta.</h2>
         <div class="panel-grid">
-          <div><strong>7</strong><span>soluciones publicadas</span></div>
+          <div><strong>7 + 1</strong><span>productos y pack</span></div>
           <div><strong>24/7</strong><span>acceso online</span></div>
           <div><strong>1</strong><span>biblioteca unificada</span></div>
           <div><strong>Global</strong><span>ventas por Hotmart</span></div>
@@ -68,6 +69,22 @@
       <a href="#productos" class="audience-card patients" data-public-filter="patients"><span>PAC</span><h3>Pacientes</h3><p>Seguimiento simple del plan, síntomas, adherencia y progreso.</p><b>Ver soluciones →</b></a>
     </section>
 
+    <section id="recomendador" class="recommendation-section" aria-labelledby="recommendation-title">
+      <div class="recommendation-heading">
+        <span class="eyebrow">RECOMENDADOR SIMPLE</span>
+        <h2 id="recommendation-title">¿Cuál KineCheck deberías elegir?</h2>
+        <p>Parte por tu necesidad principal. Cada producto tiene un propósito distinto y no necesitas comprar todo el ecosistema para comenzar.</p>
+      </div>
+      <div class="recommendation-grid">
+        <article class="recommendation-card"><span class="recommendation-label">Soy profesional</span><h3>Quiero registrar y organizar evaluaciones clínicas</h3><p>Elige KineCheck Clínico para estructurar anamnesis, hallazgos, objetivos, plan y seguimiento profesional.</p><a href="#producto-clinico">Ver KineCheck Clínico →</a></article>
+        <article class="recommendation-card"><span class="recommendation-label">Soy estudiante</span><h3>Necesito aprender el proceso de evaluación paso a paso</h3><p>Elige KineCheck Estudiante. Si además quieres profundizar evaluación musculoesquelética, considera el Pack Estudiante.</p><a href="#producto-estudiante">Ver opciones para estudiantes →</a></article>
+        <article class="recommendation-card"><span class="recommendation-label">Evaluación MSK</span><h3>Quiero razonar más allá de pruebas aisladas</h3><p>Elige Más allá del dolor para integrar entrevista, examen físico, contexto y límites de las conclusiones clínicas.</p><a href="#producto-dolor">Ver Más allá del dolor →</a></article>
+        <article class="recommendation-card"><span class="recommendation-label">Comunicación</span><h3>Quiero mejorar la relación y educación clínica</h3><p>Elige Comunicación Clínica para trabajar escucha, empatía, validación y comunicación de información compleja.</p><a href="#producto-comunicacion">Ver Comunicación Clínica →</a></article>
+        <article class="recommendation-card"><span class="recommendation-label">Actualización clínica</span><h3>Quiero aplicar evidencia o fortalecer traumatología</h3><p>Evidencia Aplicada desarrolla búsqueda y lectura crítica; Traumatología y Ortopedia se enfoca en mecanismos, riesgos y decisiones seguras.</p><a href="#producto-evidencia">Comparar cursos clínicos →</a></article>
+        <article class="recommendation-card"><span class="recommendation-label">Soy paciente</span><h3>Quiero registrar mi progreso y comunicarlo mejor</h3><p>Elige KineCheck Recupera para registrar síntomas, función, sueño, ejercicios y adherencia sin reemplazar la atención profesional.</p><a href="#producto-recupera">Ver KineCheck Recupera →</a></article>
+      </div>
+    </section>
+
     <section id="productos" class="products-section">
       <div class="products-heading-row">
         <div class="section-heading"><span class="eyebrow">PRODUCTOS KINECHECK</span><h2>Elige la solución que necesitas</h2><p>Filtra por audiencia. Cada compra se completa en el checkout oficial de Hotmart y luego se activa en Academy.</p></div>
@@ -81,37 +98,37 @@
 
       <div id="product-groups" class="product-groups">
         <section class="product-group" data-audience-group="professionals">
-          <div class="product-group-heading"><div><span class="group-dot professionals"></span><h3>Para profesionales</h3></div><p>Aplicaciones, cursos y simulación para la práctica clínica.</p></div>
+          <div class="product-group-heading"><div><span class="group-dot professionals"></span><h3>Para profesionales</h3></div><p>Aplicaciones y cursos para fortalecer la práctica clínica.</p></div>
           <div class="product-grid">
-            <article class="product-card featured audience-professionals" data-product-id="8150019" data-audiences="professionals">
+            <article id="producto-clinico" class="product-card featured audience-professionals" data-product-id="8150019" data-audiences="professionals">
               <div class="product-top"><span class="product-icon">CL</span><span class="tag">Profesionales</span></div>
               <h3>KineCheck Clínico</h3><p class="subtitle">Registro kinésico profesional</p>
               <ul><li>Evaluación clínica estructurada</li><li>Razonamiento y registro profesional</li><li>Uso en computador, tablet o teléfono</li></ul>
               <a class="buy" href="https://pay.hotmart.com/L106791841D" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
             </article>
 
-            <article class="product-card audience-professionals" data-product-id="8192814" data-audiences="professionals students">
+            <article id="producto-comunicacion" class="product-card audience-professionals" data-product-id="8192814" data-audiences="professionals students">
               <div class="product-top"><span class="product-icon">CC</span><span class="tag">Profesionales y estudiantes</span></div>
               <h3>Comunicación Clínica</h3><p class="subtitle">El arte de comunicar en salud</p>
               <ul><li>Escucha activa y empatía</li><li>Validación y educación clínica</li><li>Experiencia interactiva</li></ul>
               <a class="buy" href="https://pay.hotmart.com/T106883983U" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
             </article>
 
-            <article class="product-card audience-professionals" data-product-id="8194777" data-audiences="professionals students">
+            <article id="producto-dolor" class="product-card audience-professionals" data-product-id="8194777" data-audiences="professionals students">
               <div class="product-top"><span class="product-icon">MD</span><span class="tag">Profesionales y estudiantes</span></div>
               <h3>Más allá del Dolor</h3><p class="subtitle">Evaluación musculoesquelética integral</p>
               <ul><li>Dolor y función</li><li>Contexto biopsicosocial</li><li>Razonamiento clínico crítico</li></ul>
               <a class="buy" href="https://pay.hotmart.com/W106888386Q" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
             </article>
 
-            <article class="product-card audience-professionals" data-product-id="8208817" data-audiences="professionals students">
+            <article id="producto-evidencia" class="product-card audience-professionals" data-product-id="8208817" data-audiences="professionals students">
               <div class="product-top"><span class="product-icon">EA</span><span class="tag">Profesionales y estudiantes</span></div>
               <h3>KineCheck Evidencia Aplicada</h3><p class="subtitle">Razonamiento clínico con evidencia</p>
               <ul><li>Pregunta clínica y búsqueda</li><li>Lectura crítica</li><li>Aplicación a decisiones clínicas</li></ul>
               <a class="buy" href="https://pay.hotmart.com/F106921972I" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
             </article>
 
-            <article class="product-card audience-professionals" data-product-id="8205453" data-audiences="professionals students">
+            <article id="producto-traumatologia" class="product-card audience-professionals" data-product-id="8205453" data-audiences="professionals students">
               <div class="product-top"><span class="product-icon">TO</span><span class="tag">Profesionales y estudiantes</span></div>
               <h3>Traumatología y Ortopedia Clínica</h3><p class="subtitle">Del mecanismo lesional a la decisión clínica segura</p>
               <ul><li>Fundamentos lesionales</li><li>Razonamiento y seguridad</li><li>Abordaje de patologías MSK</li></ul>
@@ -130,11 +147,19 @@
         <section class="product-group" data-audience-group="students">
           <div class="product-group-heading"><div><span class="group-dot students"></span><h3>Para estudiantes</h3></div><p>Una guía estructurada para aprender evaluación y razonamiento clínico.</p></div>
           <div class="product-grid">
-            <article class="product-card audience-students" data-product-id="8154796" data-audiences="students">
+            <article id="producto-estudiante" class="product-card audience-students" data-product-id="8154796" data-audiences="students">
               <div class="product-top"><span class="product-icon">KE</span><span class="tag">Estudiantes</span></div>
               <h3>KineCheck Estudiante</h3><p class="subtitle">Evaluación y razonamiento clínico</p>
               <ul><li>Flujo de evaluación paso a paso</li><li>Apoyo al aprendizaje clínico</li><li>Checklist para la práctica</li></ul>
               <a class="buy" href="https://pay.hotmart.com/G106801166S" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+
+            <article id="producto-pack-estudiante" class="product-card pack-card audience-students" data-product-id="8195982" data-audiences="students">
+              <div class="product-top"><span class="product-icon">PK</span><span class="tag">Pack Estudiante</span></div>
+              <h3>Pack KineCheck Estudiante</h3><p class="subtitle">Aplicación Estudiante + Más allá del dolor</p>
+              <ul><li>KineCheck Estudiante</li><li>Curso Más allá del dolor</li><li>Una ruta más completa para aprender evaluación MSK</li></ul>
+              <p class="pack-note">El enlace directo del pack se confirma por soporte para evitar que compres el producto equivocado.</p>
+              <a class="buy secondary-buy" href="mailto:soporte.kinecheck@gmail.com?subject=Quiero%20comprar%20el%20Pack%20KineCheck%20Estudiante">Solicitar enlace del pack</a>
             </article>
           </div>
         </section>
@@ -142,7 +167,7 @@
         <section class="product-group" data-audience-group="patients">
           <div class="product-group-heading"><div><span class="group-dot patients"></span><h3>Para pacientes</h3></div><p>Seguimiento simple para comunicar mejor el proceso de recuperación.</p></div>
           <div class="product-grid">
-            <article class="product-card audience-patients" data-product-id="8157431" data-audiences="patients">
+            <article id="producto-recupera" class="product-card audience-patients" data-product-id="8157431" data-audiences="patients">
               <div class="product-top"><span class="product-icon">KR</span><span class="tag">Pacientes</span></div>
               <h3>KineCheck Recupera</h3><p class="subtitle">Mi plan y progreso</p>
               <ul><li>Seguimiento de síntomas</li><li>Registro de adherencia</li><li>Visualización del progreso</li></ul>
@@ -161,7 +186,7 @@
     <section id="como-funciona" class="steps-section">
       <div class="section-heading"><span class="eyebrow">ACCESO SIMPLE</span><h2>Compra y comienza en tres pasos</h2></div>
       <div class="steps">
-        <article><strong>1</strong><h3>Elige tu producto</h3><p>Selecciona la aplicación o curso adecuado para ti.</p></article>
+        <article><strong>1</strong><h3>Elige tu producto</h3><p>Selecciona la aplicación, curso o pack adecuado para tu necesidad.</p></article>
         <article><strong>2</strong><h3>Paga en Hotmart</h3><p>Hotmart procesa el pago y confirma el estado de la transacción.</p></article>
         <article><strong>3</strong><h3>Ingresa a Academy</h3><p>Cuando el pago esté aprobado, ingresa o crea tu cuenta con el mismo correo utilizado en Hotmart.</p></article>
       </div>
@@ -169,19 +194,26 @@
     </section>
 
     <section id="preguntas" class="faq-section">
-      <div class="section-heading"><span class="eyebrow">PREGUNTAS FRECUENTES</span><h2>Antes de comprar</h2></div>
+      <div class="section-heading"><span class="eyebrow">PREGUNTAS FRECUENTES</span><h2>Antes y después de comprar</h2><p class="faq-intro">Estas respuestas explican el flujo real de compra, acceso, soporte y reembolso del ecosistema KineCheck.</p></div>
       <div class="faq-grid">
-        <details><summary>¿Puedo comprar desde otro país?</summary><p>Sí. El pago se realiza mediante Hotmart y las opciones disponibles dependen del país del comprador.</p></details>
-        <details><summary>¿Cómo recibo el acceso?</summary><p>Cuando Hotmart apruebe el pago, ingresa a KineCheck Academy usando el mismo correo registrado durante la compra. La sincronización puede tardar algunos segundos.</p></details>
-        <details><summary>¿Qué hago si el producto no aparece?</summary><p>No vuelvas a comprar. Espera uno o dos minutos, vuelve a ingresar y, si continúa, escribe a soporte indicando el correo utilizado y el producto adquirido.</p></details>
-        <details><summary>¿Necesito instalar una aplicación?</summary><p>No. Los productos funcionan online desde un navegador compatible y actualizado.</p></details>
-        <details><summary>¿Dónde solicito soporte?</summary><p>Escribe a soporte.kinecheck@gmail.com indicando el correo usado en la compra y el producto adquirido.</p></details>
+        <details><summary>¿Qué producto debería comprar?</summary><p><strong>Profesional con pacientes:</strong> KineCheck Clínico. <strong>Estudiante:</strong> KineCheck Estudiante o el Pack Estudiante. <strong>Evaluación MSK:</strong> Más allá del dolor. <strong>Comunicación:</strong> Comunicación Clínica. <strong>Evidencia:</strong> Evidencia Aplicada. <strong>Traumatología:</strong> Traumatología y Ortopedia Clínica. <strong>Paciente:</strong> KineCheck Recupera.</p></details>
+        <details><summary>¿Qué incluye el Pack KineCheck Estudiante?</summary><p>El pack concede acceso a KineCheck Estudiante y al curso Más allá del dolor con el mismo correo utilizado en la compra.</p></details>
+        <details><summary>¿Puedo comprar desde otro país?</summary><p>Sí. El pago se realiza mediante Hotmart y los medios disponibles dependen del país del comprador.</p></details>
+        <details><summary>¿Cómo recibo el acceso?</summary><p>Cuando Hotmart apruebe el pago, ingresa a KineCheck Academy con el mismo correo registrado durante la compra. La sincronización normalmente tarda pocos segundos.</p></details>
+        <details><summary>¿Necesito el código de transacción HP?</summary><p>Academy valida automáticamente los cursos protegidos. KineCheck Clínico, Estudiante o Recupera pueden solicitar además el código de transacción de Hotmart que comienza con HP durante la activación.</p></details>
+        <details><summary>¿Por cuánto tiempo tendré acceso?</summary><p>El período aplicable es el que se informa en la oferta y en el checkout de Hotmart de cada producto. Revisa esa información antes de pagar.</p></details>
+        <details><summary>¿Puedo compartir mi cuenta?</summary><p>No. El acceso es personal y está asociado al correo de compra. KineCheck Clínico permite uso individual en hasta dos dispositivos; no compartas credenciales ni información identificable de pacientes.</p></details>
+        <details><summary>¿Necesito instalar una aplicación?</summary><p>No. Los productos funcionan online desde un navegador compatible y actualizado. Algunas funciones pueden ofrecer una experiencia similar a una aplicación web.</p></details>
+        <details><summary>¿Qué hago si el producto no aparece?</summary><p>No vuelvas a comprar. Espera uno o dos minutos, cierra sesión, vuelve a ingresar con el correo exacto usado en Hotmart y, si continúa, escribe a soporte.</p></details>
+        <details><summary>¿Qué sucede si solicito un reembolso?</summary><p>Las solicitudes se gestionan conforme al plazo de garantía informado por Hotmart para la oferta. Cuando el reembolso o reversa queda confirmado, la licencia del producto se desactiva.</p></details>
+        <details><summary>¿Los cursos reemplazan la atención o supervisión profesional?</summary><p>No. Los cursos tienen finalidad educativa y las aplicaciones son herramientas de apoyo. No reemplazan evaluación presencial, juicio profesional, supervisión docente, normativa local ni atención de urgencia.</p></details>
+        <details><summary>¿Dónde solicito soporte?</summary><p>Escribe a <a href="mailto:soporte.kinecheck@gmail.com">soporte.kinecheck@gmail.com</a> indicando el correo usado en la compra, el producto y una descripción breve del problema. No envíes datos clínicos identificables.</p></details>
       </div>
     </section>
 
     <section class="final-cta">
       <span class="eyebrow">KINECHECK</span><h2>Una forma más estructurada de aprender y trabajar en kinesiología.</h2>
-      <div><a class="primary" href="#productos">Ver productos</a><a class="secondary" href="../academy/?v=40">Ingresar a Academy</a></div>
+      <div><a class="primary" href="#recomendador">Elegir mi producto</a><a class="secondary" href="../academy/?v=40">Ingresar a Academy</a></div>
     </section>
   </main>
 
