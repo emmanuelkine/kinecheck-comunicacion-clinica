@@ -1,0 +1,2 @@
+ticket_id,opened_at,status,priority,category,product,buyer_email_masked,transaction_last4,channel,summary,steps_to_reproduce,device_browser,owner,first_response_at,resolved_at,resolution,root_cause,follow_up,notes
+EJEMPLO-000,2026-07-30 12:00,Cerrado,P3,Consulta,KineCheck Academy,e***@example.com,0000,Correo,Fila de ejemplo para mostrar el formato,No aplica,Windows 11 / Edge,Emmanuel,2026-07-30 12:10,2026-07-30 12:20,Orientación entregada,Consulta de uso,Eliminar esta fila al comenzar el registro real,No almacenar contraseñas ni datos clínicos identificables
