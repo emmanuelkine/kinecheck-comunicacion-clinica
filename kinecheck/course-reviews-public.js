@@ -1,7 +1,15 @@
 (() => {
   const SUPABASE_URL = "https://eqhcdclyeoapmqtlduwf.supabase.co";
   const ANON_KEY = "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_";
-  const COURSE_SLUGS = ["comunicacion-clinica","mas-alla-del-dolor","evidencia-aplicada","traumatologia-ortopedia-clinica"];
+  const COURSE_SLUGS = [
+    "kinecheck-clinico",
+    "comunicacion-clinica",
+    "mas-alla-del-dolor",
+    "evidencia-aplicada",
+    "traumatologia-ortopedia-clinica",
+    "kinecheck-estudiante",
+    "kinecheck-recupera"
+  ];
 
   const stars = (rating) => {
     const rounded = Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
