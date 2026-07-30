@@ -525,13 +525,8 @@ async function syncBuyerWatermark(session) {
   const watermark = window.KineCheckWatermark;
   if (!watermark) return;
 
-  if (hasFullAccess()) {
-    watermark.hide();
-    return;
-  }
-
   const verifiedLicenseScopes = CONFIG.courses
-    .filter((course) => licenseState.get(course.slug) === "owned")
+    .filter((course) => hasFullAccess() || licenseState.get(course.slug) === "owned")
     .map((course) => course.slug);
 
   if (!verifiedLicenseScopes.length) {
@@ -543,6 +538,7 @@ async function syncBuyerWatermark(session) {
     await watermark.showVerifiedBuyer({
       user: session.user,
       licenseScopes: ["academy", ...verifiedLicenseScopes],
+      accessLabel: ownerMode ? "PROPIETARIO" : (betaMode ? "PRUEBA" : ""),
     });
   } catch (error) {
     watermark.hide();
