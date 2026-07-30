@@ -55,7 +55,7 @@ Por favor confirma:
 
 Antes de responder, prueba cerrar sesión e ingresar nuevamente en:
 
-https://emmanuelkine.github.io/kinecheck-comunicacion-clinica/academy/?v=40
+https://emmanuelkine.github.io/kinecheck-comunicacion-clinica/academy/?v=41
 
 Debes utilizar exactamente el mismo correo registrado durante la compra.
 
