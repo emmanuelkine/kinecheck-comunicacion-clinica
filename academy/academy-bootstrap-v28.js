@@ -18,7 +18,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "professionals",
       audiences: ["professionals"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/app?mode=clinico"
+      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/access.html#activar"
     },
     {
       slug: "kinecheck-estudiante",
@@ -31,7 +31,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "students",
       audiences: ["students"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/app?mode=student"
+      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/student-access.html#activar"
     },
     {
       slug: "kinecheck-recupera",
