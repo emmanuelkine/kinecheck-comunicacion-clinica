@@ -133,11 +133,19 @@ La verificación posterior no devolvió filas para esos roles y tablas. No se mo
 
 ### Privilegios de `process_hotmart_event`
 
-El snapshot de ejecución de la función quedó guardado en:
+El snapshot previo de ejecución de la función quedó guardado en:
 
 `docs/backups/2026-07-29-process-hotmart-event-function-privileges.csv`
 
-La función es `SECURITY DEFINER`, pertenece a `postgres` y actualmente puede ser ejecutada por `anon`, `authenticated` y `service_role`. Se requiere revocar `EXECUTE` a `PUBLIC`, `anon` y `authenticated`, manteniéndolo para `service_role` y el propietario.
+La migración de hardening aplicada quedó guardada en:
+
+`supabase/migrations/20260729_restrict_process_hotmart_event_execute.sql`
+
+Se revocó `EXECUTE` a `PUBLIC`, `anon` y `authenticated`, manteniendo la ejecución para `service_role` y el propietario. La verificación posterior confirmó:
+
+- `anon_can_execute = false`
+- `authenticated_can_execute = false`
+- `service_role_can_execute = true`
 
 ## Concesiones esperadas
 
@@ -168,8 +176,8 @@ La función es `SECURITY DEFINER`, pertenece a `postgres` y actualmente puede se
 - Políticas RLS explícitas encontradas: 0
 - Privilegios de tabla documentados: 98
 - Hardening de privilegios de tablas: completado
-- Funciones `SECURITY DEFINER` con ejecución pública pendiente: 1
-- Hallazgos de hardening pendientes: 1
+- Hardening de ejecución de `process_hotmart_event`: completado
+- Hallazgos de hardening pendientes: 0
 
 ## Seguridad
 
