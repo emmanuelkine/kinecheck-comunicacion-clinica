@@ -1,0 +1,15 @@
+object_type,table_name,object_name,definition
+constraint,course_access,course_access_pkey,"PRIMARY KEY (email, course_slug)"
+constraint,hotmart_events,hotmart_events_pkey,PRIMARY KEY (event_id)
+constraint,hotmart_product_grants,hotmart_product_grants_pkey,"PRIMARY KEY (product_id, course_slug)"
+constraint,hotmart_purchases,hotmart_purchases_pkey,"PRIMARY KEY (transaction_id, product_id)"
+constraint,hotmart_webhook_events,hotmart_webhook_events_pkey,PRIMARY KEY (event_id)
+index,public.course_access,course_access_email_idx,CREATE INDEX course_access_email_idx ON public.course_access USING btree (lower(email))
+index,public.course_access,course_access_event_order_idx,"CREATE INDEX course_access_event_order_idx ON public.course_access USING btree (course_slug, lower(email), last_event_at DESC)"
+index,public.course_access,course_access_pkey,"CREATE UNIQUE INDEX course_access_pkey ON public.course_access USING btree (email, course_slug)"
+index,public.hotmart_events,hotmart_events_email_idx,CREATE INDEX hotmart_events_email_idx ON public.hotmart_events USING btree (lower(buyer_email))
+index,public.hotmart_events,hotmart_events_pkey,CREATE UNIQUE INDEX hotmart_events_pkey ON public.hotmart_events USING btree (event_id)
+index,public.hotmart_product_grants,hotmart_product_grants_pkey,"CREATE UNIQUE INDEX hotmart_product_grants_pkey ON public.hotmart_product_grants USING btree (product_id, course_slug)"
+index,public.hotmart_purchases,hotmart_purchases_email_status_idx,"CREATE INDEX hotmart_purchases_email_status_idx ON public.hotmart_purchases USING btree (lower(buyer_email), status)"
+index,public.hotmart_purchases,hotmart_purchases_pkey,"CREATE UNIQUE INDEX hotmart_purchases_pkey ON public.hotmart_purchases USING btree (transaction_id, product_id)"
+index,public.hotmart_webhook_events,hotmart_webhook_events_pkey,CREATE UNIQUE INDEX hotmart_webhook_events_pkey ON public.hotmart_webhook_events USING btree (event_id)
