@@ -147,6 +147,14 @@ Se revocó `EXECUTE` a `PUBLIC`, `anon` y `authenticated`, manteniendo la ejecuc
 - `authenticated_can_execute = false`
 - `service_role_can_execute = true`
 
+### Prueba funcional con `service_role`
+
+La prueba transaccional posterior al hardening quedó documentada en:
+
+`docs/backups/2026-07-29-process-hotmart-event-service-role-test.md`
+
+La invocación bajo `service_role` devolvió `active`, la transacción terminó con `ROLLBACK` y la comprobación posterior mostró 0 registros residuales en `course_access`, `hotmart_purchases` y `hotmart_webhook_events`.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -177,6 +185,8 @@ Se revocó `EXECUTE` a `PUBLIC`, `anon` y `authenticated`, manteniendo la ejecuc
 - Privilegios de tabla documentados: 98
 - Hardening de privilegios de tablas: completado
 - Hardening de ejecución de `process_hotmart_event`: completado
+- Prueba funcional bajo `service_role`: aprobada
+- Registros residuales de la prueba: 0
 - Hallazgos de hardening pendientes: 0
 
 ## Seguridad
