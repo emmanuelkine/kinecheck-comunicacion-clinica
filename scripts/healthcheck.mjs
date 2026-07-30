@@ -188,18 +188,22 @@ async function main() {
   await Promise.all([
     ensureLocalFile("academy/academy-v39.js"),
     ensureLocalFile("academy/academy.css"),
+    ensureLocalFile("academy/academy-v40.css"),
     ensureLocalFile("academy/academy-reviews.js"),
     ensureLocalFile("academy/salir.html"),
     ensureLocalFile("academy/compra-aprobada.html"),
     ensureLocalFile("academy/pago-pendiente.html"),
     ensureLocalFile("academy/pago-en-analisis.html"),
     ensureLocalFile("kinecheck/site.css"),
+    ensureLocalFile("kinecheck/site-v3.css"),
+    ensureLocalFile("kinecheck/site-v3.js"),
+    ensureLocalFile("assets/kinecheck-mark.svg"),
   ]);
 
-  if (!academyIndex.includes("academy-v39.js?v=39")) {
-    logFail("Academy no está apuntando al script estable v39.");
+  if (!academyIndex.includes("academy-v39.js?v=40")) {
+    logFail("Academy no está apuntando al script estable con caché v40.");
   } else {
-    logOk("Academy utiliza el script estable v39.");
+    logOk("Academy utiliza el script estable con caché v40.");
   }
 
   const landingIds = new Set(extractLandingProductIds(landing));
@@ -235,7 +239,7 @@ async function main() {
   }
 
   await checkUrl("Página pública KineCheck", `${PUBLIC_BASE}/kinecheck/`);
-  await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/?v=39`);
+  await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/?v=40`);
   await checkUrl("Página compra aprobada", `${PUBLIC_BASE}/academy/compra-aprobada.html`);
   await checkUrl("Página pago pendiente", `${PUBLIC_BASE}/academy/pago-pendiente.html`);
   await checkUrl("Página compra en análisis", `${PUBLIC_BASE}/academy/pago-en-analisis.html`);

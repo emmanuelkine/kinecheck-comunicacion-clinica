@@ -1,40 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="KineCheck Academy: aplicaciones, cursos y simulación clínica para profesionales, estudiantes y pacientes.">
   <meta name="theme-color" content="#06151f">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>KineCheck Academy</title>
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://eqhcdclyeoapmqtlduwf.supabase.co" crossorigin>
   <link rel="dns-prefetch" href="//eqhcdclyeoapmqtlduwf.supabase.co">
-  <link rel="stylesheet" href="./academy.css?v=39">
-  <link rel="stylesheet" href="./academy-reviews.css?v=39">
-  <script src="./academy-bootstrap-v28.js?v=39" defer></script>
-  <script src="./academy-v39.js?v=39" defer></script>
-  <script src="./academy-reviews.js?v=39" defer></script>
+  <link rel="stylesheet" href="./academy.css?v=40">
+  <link rel="stylesheet" href="./academy-reviews.css?v=40">
+  <link rel="stylesheet" href="./academy-v40.css?v=40">
+  <script src="./academy-bootstrap-v28.js?v=40" defer></script>
+  <script src="./academy-v39.js?v=40" defer></script>
+  <script src="./academy-reviews.js?v=40" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
   <section id="login-view" class="login-layout" aria-labelledby="login-title">
     <div class="login-showcase">
       <div class="brand brand-large">
-        <span class="brand-mark">K</span>
+        <span class="brand-mark"><img src="../assets/kinecheck-mark.svg" alt=""></span>
         <div><strong>KineCheck Academy</strong><span>Formación y herramientas clínicas</span></div>
       </div>
       <span class="eyebrow">ECOSISTEMA DIGITAL PARA KINESIOLOGÍA</span>
-      <h1 id="login-title">Aprende con evidencia.<br><em>Aplica con confianza.</em></h1>
-      <p class="lead">Aplicaciones clínicas, cursos y herramientas reunidos en una sola cuenta protegida.</p>
-      <div class="trust-row" aria-label="Características del acceso">
-        <span>Acceso protegido</span>
-        <span>Licencias validadas</span>
-        <span>8 soluciones integradas</span>
-      </div>
+      <h1 id="login-title">Aprende. Aplica.<br><em>Transforma tu práctica.</em></h1>
+      <p class="lead">Cursos, herramientas y recursos diseñados para aprender con excelencia clínica basada en evidencia.</p>
+      <ul class="trust-row">
+        <li>Acceso protegido</li>
+        <li>Licencias validadas</li>
+        <li>Todo el ecosistema en una cuenta</li>
+      </ul>
     </div>
 
     <div class="login-card">
       <div class="mobile-brand brand">
-        <span class="brand-mark">K</span>
+        <span class="brand-mark"><img src="../assets/kinecheck-mark.svg" alt=""></span>
         <div><strong>KineCheck Academy</strong><span>Acceso protegido</span></div>
       </div>
       <span class="eyebrow compact">BIENVENIDO</span>
@@ -62,14 +65,15 @@
 
     <aside id="academy-sidebar" class="academy-sidebar" aria-label="Navegación principal">
       <div class="sidebar-brand brand">
-        <span class="brand-mark">K</span>
+        <span class="brand-mark"><img src="../assets/kinecheck-mark.svg" alt=""></span>
         <div><strong>KineCheck</strong><span>ACADEMY</span></div>
       </div>
 
-      <nav class="sidebar-nav">
+      <nav class="sidebar-nav" aria-label="Navegación móvil">
         <a class="nav-item active" href="#inicio"><span class="nav-icon">⌂</span><span>Inicio</span></a>
-        <a class="nav-item" href="#productos"><span class="nav-icon">▣</span><span>Mis productos</span></a>
-        <a class="nav-item" href="#recursos"><span class="nav-icon">□</span><span>Recursos</span></a>
+        <a class="nav-item" href="#productos"><span class="nav-icon">▣</span><span>Mis cursos</span></a>
+        <a class="nav-item" href="#recursos"><span class="nav-icon">◇</span><span>Recursos</span></a>
+        <a class="nav-item" href="#cuenta"><span class="nav-icon">○</span><span>Mi cuenta</span></a>
         <a class="nav-item" href="mailto:soporte.kinecheck@gmail.com"><span class="nav-icon">?</span><span>Soporte</span></a>
       </nav>
 
@@ -84,28 +88,49 @@
     <div class="academy-main">
       <header class="topbar">
         <button id="mobile-menu" class="menu-button" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
-        <div>
-          <span class="topbar-kicker">KINECHECK ACADEMY</span>
-          <strong id="account-greeting">Hola</strong>
-        </div>
+        <a class="topbar-brand brand" href="#inicio" aria-label="KineCheck Academy, inicio">
+          <span class="brand-mark"><img src="../assets/kinecheck-mark.svg" alt=""></span>
+          <div><strong>KineCheck</strong><span>ACADEMY</span></div>
+        </a>
+        <nav class="topbar-nav" aria-label="Navegación de Academy">
+          <a class="active" href="#inicio">Inicio</a>
+          <a href="#productos">Mis cursos</a>
+          <a href="#recursos">Recursos</a>
+          <a href="#cuenta">Mi cuenta</a>
+        </nav>
         <div class="topbar-account">
-          <span id="account-email" class="account-chip"></span>
-          <span class="account-avatar" aria-hidden="true">K</span>
+          <div class="topbar-greeting">
+            <strong id="account-greeting">Hola</strong>
+            <span id="account-email" class="account-chip"></span>
+          </div>
+          <span id="account-avatar" class="account-avatar" aria-hidden="true">K</span>
         </div>
       </header>
 
-      <main>
+      <main id="contenido-principal">
         <section id="inicio" class="hero-panel">
           <div class="hero-copy">
             <span class="eyebrow">BIENVENIDO A KINECHECK ACADEMY</span>
-            <h1>Aprende con evidencia.<br><em>Aplica con confianza.</em></h1>
+            <h1>Aprende. Aplica.<br><em>Transforma tu práctica.</em></h1>
             <p id="welcome">Accede a los productos asociados a tu cuenta.</p>
-            <div class="hero-benefits" aria-label="Beneficios de KineCheck">
-              <span>Basado en evidencia</span>
-              <span>Aplicación clínica</span>
-              <span>Acceso flexible</span>
-              <span>Contenido actualizado</span>
-            </div>
+            <ul class="hero-benefits">
+              <li class="benefit-item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 8.5A2.3 2.3 0 0 0 7 21h10a2.3 2.3 0 0 0 2-3.5L14 9V3M8 15h8"/></svg>
+                <span>Basado en evidencia</span>
+              </li>
+              <li class="benefit-item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h6l1 2h3v14H5V7h3l1-2Zm-1 9 2.2 2.2L16 10.5"/></svg>
+                <span>Aplicación clínica real</span>
+              </li>
+              <li class="benefit-item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14v2H5z"/></svg>
+                <span>Recursos descargables</span>
+              </li>
+              <li class="benefit-item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-18c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3ZM3 12h18"/></svg>
+                <span>Acceso desde cualquier lugar</span>
+              </li>
+            </ul>
           </div>
 
           <aside class="continue-panel" aria-labelledby="continue-heading">
@@ -120,25 +145,38 @@
           </aside>
         </section>
 
+        <section id="onboarding" class="onboarding-section" hidden aria-labelledby="onboarding-title">
+          <div>
+            <span class="eyebrow compact">PRIMEROS PASOS</span>
+            <h2 id="onboarding-title">Tu ruta comienza aquí</h2>
+            <p>Aún no has iniciado un producto. En menos de un minuto puedes dejar tu biblioteca lista para continuar cuando quieras.</p>
+          </div>
+          <ol class="onboarding-steps">
+            <li><strong>1</strong><span><b>Elige tu audiencia</b>Filtra la biblioteca según tu perfil.</span></li>
+            <li><strong>2</strong><span><b>Abre un producto</b>Academy guardará tu último acceso.</span></li>
+            <li><strong>3</strong><span><b>Retoma sin buscar</b>Tu avance aparecerá primero al volver.</span></li>
+          </ol>
+          <button id="onboarding-action" class="onboarding-action" type="button">Explorar mis cursos</button>
+        </section>
+
         <section id="productos" class="catalog-section">
           <div class="section-heading">
             <div>
               <span class="eyebrow compact">MI BIBLIOTECA</span>
-              <h2>Todo el ecosistema</h2>
-              <p>Aplicaciones, cursos y herramientas con acciones adaptadas a cada producto.</p>
+              <h2>Mis cursos y herramientas</h2>
+              <p>Filtra por audiencia y retoma primero aquello que ya comenzaste.</p>
             </div>
-            <label class="search-box" for="course-search">
-              <span>Buscar</span>
+            <label class="search-box">
+              <span>Buscar en mi biblioteca</span>
               <input id="course-search" type="search" placeholder="Nombre o categoría" autocomplete="off">
             </label>
           </div>
 
-          <div class="filter-tabs" role="group" aria-label="Filtrar productos">
+          <div class="filter-tabs" role="group" aria-label="Filtrar por audiencia">
             <button class="filter active" data-filter="all" type="button">Todos</button>
-            <button class="filter" data-filter="available" type="button">Disponibles</button>
-            <button class="filter" data-filter="application" type="button">Aplicaciones</button>
-            <button class="filter" data-filter="course" type="button">Cursos</button>
-            <button class="filter" data-filter="tool" type="button">Herramientas</button>
+            <button class="filter" data-filter="professionals" type="button">Profesionales</button>
+            <button class="filter" data-filter="students" type="button">Estudiantes</button>
+            <button class="filter" data-filter="patients" type="button">Pacientes</button>
           </div>
 
           <div id="library-message" class="notice" hidden></div>
@@ -147,17 +185,41 @@
 
         <section id="recursos" class="resource-section">
           <div class="resource-card">
-            <span class="resource-icon">✓</span>
-            <div><strong>Acceso protegido</strong><p>La cuenta y las licencias se validan antes de abrir cada producto.</p></div>
+            <span class="resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg></span>
+            <div><strong>Recursos exclusivos</strong><p>Plantillas y materiales complementarios reunidos para tu práctica y aprendizaje.</p></div>
           </div>
           <div class="resource-card">
-            <span class="resource-icon">↻</span>
-            <div><strong>Actualizaciones constantes</strong><p>Los contenidos y herramientas evolucionan sin prometer una frecuencia artificial.</p></div>
+            <span class="resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v4h4M17 21v-4h-4M6.4 17A7.5 7.5 0 0 0 19 13M17.6 7A7.5 7.5 0 0 0 5 11"/></svg></span>
+            <div><strong>Nuevos contenidos</strong><p>Los cursos y herramientas evolucionan con nueva evidencia y mejoras verificadas.</p></div>
           </div>
-          <a class="resource-card resource-link" href="mailto:soporte.kinecheck@gmail.com">
-            <span class="resource-icon">?</span>
-            <div><strong>Soporte directo</strong><p>Reporta problemas de acceso, navegación o funcionamiento.</p></div>
-          </a>
+          <button class="resource-card resource-link" type="button" data-support-open>
+            <span class="resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H8l-5 2 1.6-4.4A8 8 0 1 1 21 12ZM8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span>
+            <span class="resource-copy"><strong>¿Necesitas ayuda?</strong><span class="resource-description">Abre el centro de soporte para resolver problemas de acceso o funcionamiento.</span></span>
+          </button>
+        </section>
+
+        <section id="cuenta" class="account-section" aria-labelledby="account-title">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow compact">MI CUENTA</span>
+              <h2 id="account-title">Perfil, historial y preferencias</h2>
+              <p>Información útil de esta sesión, sin exponer datos clínicos ni información sensible.</p>
+            </div>
+          </div>
+          <div class="account-grid">
+            <article>
+              <span class="account-card-icon">ID</span>
+              <div><strong>Perfil de acceso</strong><p id="profile-email">Cuenta activa</p><small id="profile-access">Licencias verificadas antes de abrir cada producto.</small></div>
+            </article>
+            <article>
+              <span class="account-card-icon">H</span>
+              <div><strong>Historial reciente</strong><ol id="access-history"><li>Aún no hay accesos registrados.</li></ol></div>
+            </article>
+            <article>
+              <span class="account-card-icon">Aa</span>
+              <div><strong>Preferencias visuales</strong><p>Refuerza el contraste si trabajas con poca luz o brillo bajo.</p><button id="contrast-toggle" type="button" aria-pressed="false">Activar alto contraste</button></div>
+            </article>
+          </div>
         </section>
       </main>
 
@@ -167,6 +229,19 @@
       </footer>
     </div>
   </section>
+
+  <div class="support-widget">
+    <div id="support-panel" class="support-panel" hidden>
+      <button class="support-close" type="button" aria-label="Cerrar soporte" data-support-close>×</button>
+      <span class="eyebrow compact">SOPORTE KINECHECK</span>
+      <strong>¿En qué podemos ayudarte?</strong>
+      <p>Indica tu correo de compra y el producto con el que necesitas ayuda. No envíes datos clínicos de pacientes.</p>
+      <a href="mailto:soporte.kinecheck@gmail.com?subject=Soporte%20KineCheck%20Academy">Escribir a soporte</a>
+    </div>
+    <button id="support-launcher" class="support-launcher" type="button" aria-expanded="false" aria-controls="support-panel" data-support-open>
+      <span aria-hidden="true">•••</span><b>Soporte</b>
+    </button>
+  </div>
 
   <noscript>Necesitas activar JavaScript para acceder a KineCheck Academy.</noscript>
 </body>

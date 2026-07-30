@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -6,108 +6,156 @@
   <meta name="description" content="KineCheck: aplicaciones y formación clínica para kinesiólogos, estudiantes y pacientes.">
   <meta name="theme-color" content="#071d22">
   <title>KineCheck | Ecosistema digital de kinesiología</title>
-  <link rel="stylesheet" href="./site.css?v=2">
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./site.css?v=3">
+  <link rel="stylesheet" href="./site-v3.css?v=3">
+  <script src="./site-v3.js?v=3" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
   <header class="site-header">
-    <a class="brand" href="#inicio" aria-label="KineCheck inicio"><span>K</span><strong>KineCheck</strong></a>
-    <nav aria-label="Navegación principal">
+    <a class="brand" href="#inicio" aria-label="KineCheck inicio">
+      <span><img src="../assets/kinecheck-mark.svg" alt=""></span>
+      <div><strong>KineCheck</strong><small>ACADEMY</small></div>
+    </a>
+    <button id="public-menu-button" class="public-menu-button" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="public-nav">☰</button>
+    <nav id="public-nav" aria-label="Navegación principal">
       <a href="#productos">Productos</a>
+      <a href="#audiencias">Para quién</a>
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#preguntas">Preguntas</a>
-      <a class="nav-button" href="../academy/?v=39">Ingresar a Academy</a>
+      <a class="nav-button" href="../academy/?v=40">Ingresar a Academy</a>
     </nav>
   </header>
 
-  <main>
+  <main id="contenido-principal">
     <section id="inicio" class="hero">
       <div class="hero-copy">
         <span class="eyebrow">ECOSISTEMA DIGITAL PARA KINESIOLOGÍA</span>
-        <h1>Aprende, evalúa y toma mejores decisiones clínicas.</h1>
-        <p>KineCheck integra aplicaciones, cursos y herramientas prácticas para profesionales, estudiantes y pacientes.</p>
+        <h1>Aprende. Aplica.<br><em>Transforma tu práctica.</em></h1>
+        <p>Cursos, herramientas y recursos diseñados para profesionales, estudiantes y pacientes que buscan una experiencia clínica más clara y basada en evidencia.</p>
         <div class="hero-actions">
           <a class="primary" href="#productos">Explorar productos</a>
-          <a class="secondary" href="../academy/?v=39">Ya compré: ingresar</a>
+          <a class="secondary" href="../academy/?v=40">Ya compré: ingresar</a>
         </div>
-        <div class="trust-row"><span>Pago seguro con Hotmart</span><span>Acceso online</span><span>Compra internacional</span></div>
+        <ul class="hero-benefits">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 8.5A2.3 2.3 0 0 0 7 21h10a2.3 2.3 0 0 0 2-3.5L14 9V3M8 15h8"/></svg><span>Basado en evidencia</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h6l1 2h3v14H5V7h3l1-2Zm-1 9 2.2 2.2L16 10.5"/></svg><span>Aplicación clínica real</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14v2H5z"/></svg><span>Recursos descargables</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-18c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3ZM3 12h18"/></svg><span>Acceso desde cualquier lugar</span></li>
+        </ul>
       </div>
-      <div class="hero-panel" aria-label="Resumen KineCheck">
+      <aside class="hero-panel" aria-label="Resumen KineCheck">
         <div class="panel-badge">KINECHECK ACADEMY</div>
-        <h2>Todo tu ecosistema, en una sola cuenta.</h2>
+        <h2>Tu ecosistema clínico, reunido en una sola cuenta.</h2>
         <div class="panel-grid">
           <div><strong>7</strong><span>soluciones publicadas</span></div>
           <div><strong>24/7</strong><span>acceso online</span></div>
           <div><strong>1</strong><span>biblioteca unificada</span></div>
           <div><strong>Global</strong><span>ventas por Hotmart</span></div>
         </div>
-      </div>
+        <a class="panel-link" href="../academy/?v=40">Entrar a mi biblioteca</a>
+      </aside>
     </section>
 
-    <section class="audiences">
-      <article><span>PRO</span><h3>Profesionales</h3><p>Registro clínico, razonamiento, comunicación y actualización musculoesquelética.</p></article>
-      <article><span>EST</span><h3>Estudiantes</h3><p>Guía estructurada para aprender evaluación y razonamiento clínico.</p></article>
-      <article><span>PAC</span><h3>Pacientes</h3><p>Seguimiento simple del plan, síntomas, adherencia y progreso.</p></article>
+    <section id="audiencias" class="audiences" aria-labelledby="audience-title">
+      <div class="audience-intro">
+        <span class="eyebrow">ELIGE TU EXPERIENCIA</span>
+        <h2 id="audience-title">Una ruta para cada audiencia</h2>
+      </div>
+      <a href="#productos" class="audience-card professionals" data-public-filter="professionals"><span>PRO</span><h3>Profesionales</h3><p>Registro clínico, razonamiento, comunicación y actualización musculoesquelética.</p><b>Ver soluciones →</b></a>
+      <a href="#productos" class="audience-card students" data-public-filter="students"><span>EST</span><h3>Estudiantes</h3><p>Guía estructurada para aprender evaluación y razonamiento clínico.</p><b>Ver soluciones →</b></a>
+      <a href="#productos" class="audience-card patients" data-public-filter="patients"><span>PAC</span><h3>Pacientes</h3><p>Seguimiento simple del plan, síntomas, adherencia y progreso.</p><b>Ver soluciones →</b></a>
     </section>
 
     <section id="productos" class="products-section">
-      <div class="section-heading"><span class="eyebrow">PRODUCTOS KINECHECK</span><h2>Elige la solución que necesitas</h2><p>Los botones habilitados abren el checkout oficial de Hotmart en una pestaña segura.</p></div>
-      <div class="product-grid">
-        <article class="product-card featured" data-product-id="8150019">
-          <div class="product-top"><span class="product-icon">CL</span><span class="tag">Profesionales</span></div>
-          <h3>KineCheck Clínico</h3><p class="subtitle">Registro kinésico profesional</p>
-          <ul><li>Evaluación clínica estructurada</li><li>Razonamiento y registro profesional</li><li>Uso en computador, tablet o teléfono</li></ul>
-          <a class="buy" href="https://pay.hotmart.com/L106791841D" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </article>
-
-        <article class="product-card" data-product-id="8192814">
-          <div class="product-top"><span class="product-icon">CC</span><span class="tag">Masterclass</span></div>
-          <h3>Comunicación Clínica</h3><p class="subtitle">El arte de comunicar en salud</p>
-          <ul><li>Escucha activa y empatía</li><li>Validación y educación clínica</li><li>Experiencia interactiva</li></ul>
-          <a class="buy" href="https://pay.hotmart.com/T106883983U" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </article>
-
-        <article class="product-card" data-product-id="8154796">
-          <div class="product-top"><span class="product-icon">KE</span><span class="tag">Estudiantes</span></div>
-          <h3>KineCheck Estudiante</h3><p class="subtitle">Evaluación y razonamiento clínico</p>
-          <ul><li>Flujo de evaluación paso a paso</li><li>Apoyo al aprendizaje clínico</li><li>Checklist para la práctica</li></ul>
-          <a class="buy" href="https://pay.hotmart.com/G106801166S" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </article>
-
-        <article class="product-card" data-product-id="8157431">
-          <div class="product-top"><span class="product-icon">KR</span><span class="tag">Pacientes</span></div>
-          <h3>KineCheck Recupera</h3><p class="subtitle">Mi plan y progreso</p>
-          <ul><li>Seguimiento de síntomas</li><li>Registro de adherencia</li><li>Visualización del progreso</li></ul>
-          <a class="buy" href="https://pay.hotmart.com/P106806251E" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </article>
-
-        <article class="product-card" data-product-id="8194777">
-          <div class="product-top"><span class="product-icon">MD</span><span class="tag">Curso MSK</span></div>
-          <h3>Más allá del Dolor</h3><p class="subtitle">Evaluación musculoesquelética integral</p>
-          <ul><li>Dolor y función</li><li>Contexto biopsicosocial</li><li>Razonamiento clínico crítico</li></ul>
-          <a class="buy" href="https://pay.hotmart.com/W106888386Q" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </article>
-
-        <article class="product-card" data-product-id="8208817">
-          <div class="product-top"><span class="product-icon">EA</span><span class="tag">Curso clínico</span></div>
-          <h3>KineCheck Evidencia Aplicada</h3><p class="subtitle">Razonamiento clínico con evidencia</p>
-          <ul><li>Pregunta clínica y búsqueda</li><li>Lectura crítica</li><li>Aplicación a decisiones clínicas</li></ul>
-          <a class="buy" href="https://pay.hotmart.com/F106921972I" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </article>
-
-        <article class="product-card" data-product-id="8205453">
-          <div class="product-top"><span class="product-icon">TO</span><span class="tag">Curso clínico</span></div>
-          <h3>Traumatología y Ortopedia Clínica</h3><p class="subtitle">Del mecanismo lesional a la decisión clínica segura</p>
-          <ul><li>Fundamentos lesionales</li><li>Razonamiento y seguridad</li><li>Abordaje de patologías MSK</li></ul>
-          <a class="buy" href="https://pay.hotmart.com/B106913952R" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
-        </article>
-
-        <article class="product-card upcoming" data-product-id="PROPIETARIO">
-          <div class="product-top"><span class="product-icon">LB</span><span class="tag">Próximamente</span></div>
-          <h3>KineCheck Lab Clínico</h3><p class="subtitle">Simulador de decisiones clínicas</p>
-          <ul><li>Casos clínicos progresivos</li><li>Retroalimentación inmediata</li><li>Entrenamiento del razonamiento</li></ul>
-          <span class="disabled-button">En preparación</span>
-        </article>
+      <div class="products-heading-row">
+        <div class="section-heading"><span class="eyebrow">PRODUCTOS KINECHECK</span><h2>Elige la solución que necesitas</h2><p>Filtra por audiencia. Cada compra se completa en el checkout oficial de Hotmart y luego se activa en Academy.</p></div>
+        <div class="public-filter-tabs" role="group" aria-label="Filtrar productos por audiencia">
+          <button class="active" type="button" data-public-filter="all">Todos</button>
+          <button type="button" data-public-filter="professionals">Profesionales</button>
+          <button type="button" data-public-filter="students">Estudiantes</button>
+          <button type="button" data-public-filter="patients">Pacientes</button>
+        </div>
       </div>
+
+      <div id="product-groups" class="product-groups">
+        <section class="product-group" data-audience-group="professionals">
+          <div class="product-group-heading"><div><span class="group-dot professionals"></span><h3>Para profesionales</h3></div><p>Aplicaciones, cursos y simulación para la práctica clínica.</p></div>
+          <div class="product-grid">
+            <article class="product-card featured audience-professionals" data-product-id="8150019" data-audiences="professionals">
+              <div class="product-top"><span class="product-icon">CL</span><span class="tag">Profesionales</span></div>
+              <h3>KineCheck Clínico</h3><p class="subtitle">Registro kinésico profesional</p>
+              <ul><li>Evaluación clínica estructurada</li><li>Razonamiento y registro profesional</li><li>Uso en computador, tablet o teléfono</li></ul>
+              <a class="buy" href="https://pay.hotmart.com/L106791841D" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+
+            <article class="product-card audience-professionals" data-product-id="8192814" data-audiences="professionals students">
+              <div class="product-top"><span class="product-icon">CC</span><span class="tag">Profesionales y estudiantes</span></div>
+              <h3>Comunicación Clínica</h3><p class="subtitle">El arte de comunicar en salud</p>
+              <ul><li>Escucha activa y empatía</li><li>Validación y educación clínica</li><li>Experiencia interactiva</li></ul>
+              <a class="buy" href="https://pay.hotmart.com/T106883983U" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+
+            <article class="product-card audience-professionals" data-product-id="8194777" data-audiences="professionals students">
+              <div class="product-top"><span class="product-icon">MD</span><span class="tag">Profesionales y estudiantes</span></div>
+              <h3>Más allá del Dolor</h3><p class="subtitle">Evaluación musculoesquelética integral</p>
+              <ul><li>Dolor y función</li><li>Contexto biopsicosocial</li><li>Razonamiento clínico crítico</li></ul>
+              <a class="buy" href="https://pay.hotmart.com/W106888386Q" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+
+            <article class="product-card audience-professionals" data-product-id="8208817" data-audiences="professionals students">
+              <div class="product-top"><span class="product-icon">EA</span><span class="tag">Profesionales y estudiantes</span></div>
+              <h3>KineCheck Evidencia Aplicada</h3><p class="subtitle">Razonamiento clínico con evidencia</p>
+              <ul><li>Pregunta clínica y búsqueda</li><li>Lectura crítica</li><li>Aplicación a decisiones clínicas</li></ul>
+              <a class="buy" href="https://pay.hotmart.com/F106921972I" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+
+            <article class="product-card audience-professionals" data-product-id="8205453" data-audiences="professionals students">
+              <div class="product-top"><span class="product-icon">TO</span><span class="tag">Profesionales y estudiantes</span></div>
+              <h3>Traumatología y Ortopedia Clínica</h3><p class="subtitle">Del mecanismo lesional a la decisión clínica segura</p>
+              <ul><li>Fundamentos lesionales</li><li>Razonamiento y seguridad</li><li>Abordaje de patologías MSK</li></ul>
+              <a class="buy" href="https://pay.hotmart.com/B106913952R" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+
+            <article class="product-card upcoming audience-professionals" data-product-id="PROPIETARIO" data-audiences="professionals students">
+              <div class="product-top"><span class="product-icon">LB</span><span class="tag">Próximamente</span></div>
+              <h3>KineCheck Lab Clínico</h3><p class="subtitle">Simulador de decisiones clínicas</p>
+              <ul><li>Casos clínicos progresivos</li><li>Retroalimentación inmediata</li><li>Entrenamiento del razonamiento</li></ul>
+              <span class="disabled-button">En preparación</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="product-group" data-audience-group="students">
+          <div class="product-group-heading"><div><span class="group-dot students"></span><h3>Para estudiantes</h3></div><p>Una guía estructurada para aprender evaluación y razonamiento clínico.</p></div>
+          <div class="product-grid">
+            <article class="product-card audience-students" data-product-id="8154796" data-audiences="students">
+              <div class="product-top"><span class="product-icon">KE</span><span class="tag">Estudiantes</span></div>
+              <h3>KineCheck Estudiante</h3><p class="subtitle">Evaluación y razonamiento clínico</p>
+              <ul><li>Flujo de evaluación paso a paso</li><li>Apoyo al aprendizaje clínico</li><li>Checklist para la práctica</li></ul>
+              <a class="buy" href="https://pay.hotmart.com/G106801166S" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+          </div>
+        </section>
+
+        <section class="product-group" data-audience-group="patients">
+          <div class="product-group-heading"><div><span class="group-dot patients"></span><h3>Para pacientes</h3></div><p>Seguimiento simple para comunicar mejor el proceso de recuperación.</p></div>
+          <div class="product-grid">
+            <article class="product-card audience-patients" data-product-id="8157431" data-audiences="patients">
+              <div class="product-top"><span class="product-icon">KR</span><span class="tag">Pacientes</span></div>
+              <h3>KineCheck Recupera</h3><p class="subtitle">Mi plan y progreso</p>
+              <ul><li>Seguimiento de síntomas</li><li>Registro de adherencia</li><li>Visualización del progreso</li></ul>
+              <a class="buy" href="https://pay.hotmart.com/P106806251E" target="_blank" rel="noopener noreferrer">Comprar ahora</a>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <section id="filtered-products" class="product-group filtered-products" hidden aria-live="polite">
+        <div class="product-group-heading"><div><span id="filtered-dot" class="group-dot professionals"></span><h3 id="filtered-title">Productos</h3></div><p id="filtered-copy"></p></div>
+        <div id="filtered-grid" class="product-grid"></div>
+      </section>
     </section>
 
     <section id="como-funciona" class="steps-section">
@@ -117,7 +165,7 @@
         <article><strong>2</strong><h3>Paga en Hotmart</h3><p>Hotmart procesa el pago y confirma el estado de la transacción.</p></article>
         <article><strong>3</strong><h3>Ingresa a Academy</h3><p>Cuando el pago esté aprobado, ingresa o crea tu cuenta con el mismo correo utilizado en Hotmart.</p></article>
       </div>
-      <a class="primary center" href="../academy/?v=39">Ingresar a KineCheck Academy</a>
+      <a class="primary center" href="../academy/?v=40">Ingresar a KineCheck Academy</a>
     </section>
 
     <section id="preguntas" class="faq-section">
@@ -133,10 +181,28 @@
 
     <section class="final-cta">
       <span class="eyebrow">KINECHECK</span><h2>Una forma más estructurada de aprender y trabajar en kinesiología.</h2>
-      <div><a class="primary" href="#productos">Ver productos</a><a class="secondary" href="../academy/?v=39">Ingresar a Academy</a></div>
+      <div><a class="primary" href="#productos">Ver productos</a><a class="secondary" href="../academy/?v=40">Ingresar a Academy</a></div>
     </section>
   </main>
 
-  <footer><div class="brand"><span>K</span><strong>KineCheck</strong></div><p>Formación y herramientas clínicas digitales.</p><p>Soporte: <a href="mailto:soporte.kinecheck@gmail.com">soporte.kinecheck@gmail.com</a></p><small>© 2026 KineCheck. Todos los derechos reservados.</small></footer>
+  <footer>
+    <div class="brand"><span><img src="../assets/kinecheck-mark.svg" alt=""></span><div><strong>KineCheck</strong><small>ACADEMY</small></div></div>
+    <p>Formación y herramientas clínicas digitales.</p>
+    <p>Soporte: <a href="mailto:soporte.kinecheck@gmail.com">soporte.kinecheck@gmail.com</a></p>
+    <small>© 2026 KineCheck. Todos los derechos reservados.</small>
+  </footer>
+
+  <div class="support-widget">
+    <div id="public-support-panel" class="support-panel" hidden>
+      <button class="support-close" type="button" aria-label="Cerrar soporte" data-support-close>×</button>
+      <span class="eyebrow">SOPORTE KINECHECK</span>
+      <strong>¿Necesitas ayuda?</strong>
+      <p>Indica el correo usado en la compra y el producto con el que necesitas ayuda. No envíes datos clínicos de pacientes.</p>
+      <a href="mailto:soporte.kinecheck@gmail.com?subject=Soporte%20KineCheck">Escribir a soporte</a>
+    </div>
+    <button id="public-support-launcher" class="support-launcher" type="button" aria-expanded="false" aria-controls="public-support-panel" data-support-open>
+      <span aria-hidden="true">•••</span><b>Soporte</b>
+    </button>
+  </div>
 </body>
 </html>

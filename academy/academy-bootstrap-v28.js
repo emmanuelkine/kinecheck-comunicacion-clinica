@@ -15,6 +15,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       icon: "CL",
       kind: "application",
       audience: "Profesionales",
+      audienceKey: "professionals",
+      audiences: ["professionals"],
       status: "active",
       url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/app?mode=clinico"
     },
@@ -26,6 +28,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       icon: "KE",
       kind: "application",
       audience: "Estudiantes",
+      audienceKey: "students",
+      audiences: ["students"],
       status: "active",
       url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/app?mode=student"
     },
@@ -37,6 +41,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       icon: "KR",
       kind: "application",
       audience: "Pacientes",
+      audienceKey: "patients",
+      audiences: ["patients"],
       status: "active",
       url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/patient-access.html#activar"
     },
@@ -47,7 +53,10 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       productId: "8192814",
       icon: "CC",
       kind: "course",
-      audience: "Curso",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
+      modules: 12,
       status: "active",
       url: "/kinecheck-comunicacion-clinica/?course=comunicacion-clinica&v=20260727"
     },
@@ -58,7 +67,9 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       productId: "8194777",
       icon: "MD",
       kind: "course",
-      audience: "Curso",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
       status: "active",
       url: "/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260727"
     },
@@ -69,7 +80,9 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       productId: "8208817",
       icon: "EA",
       kind: "course",
-      audience: "Curso clínico",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
       status: "active",
       url: "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260728-6"
     },
@@ -80,7 +93,9 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       productId: "8205453",
       icon: "TO",
       kind: "course",
-      audience: "Curso clínico",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
       status: "active",
       url: "/kinecheck-comunicacion-clinica/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260728"
     },
@@ -91,7 +106,9 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       productId: "PROPIETARIO",
       icon: "LB",
       kind: "tool",
-      audience: "Simulador",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
       status: "preparing",
       url: "/kinecheck-comunicacion-clinica/lab/"
     }
