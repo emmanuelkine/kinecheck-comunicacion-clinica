@@ -131,6 +131,14 @@ Se revocaron todos los privilegios directos de `anon` y `authenticated` sobre:
 
 La verificación posterior no devolvió filas para esos roles y tablas. No se modificaron los privilegios de `postgres` ni `service_role`, ni las políticas RLS.
 
+### Privilegios de `process_hotmart_event`
+
+El snapshot de ejecución de la función quedó guardado en:
+
+`docs/backups/2026-07-29-process-hotmart-event-function-privileges.csv`
+
+La función es `SECURITY DEFINER`, pertenece a `postgres` y actualmente puede ser ejecutada por `anon`, `authenticated` y `service_role`. Se requiere revocar `EXECUTE` a `PUBLIC`, `anon` y `authenticated`, manteniéndolo para `service_role` y el propietario.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -159,8 +167,9 @@ La verificación posterior no devolvió filas para esos roles y tablas. No se mo
 - Tablas críticas con RLS habilitado: 5
 - Políticas RLS explícitas encontradas: 0
 - Privilegios de tabla documentados: 98
-- Hardening de privilegios aplicado: completado
-- Hallazgos de hardening pendientes: 0
+- Hardening de privilegios de tablas: completado
+- Funciones `SECURITY DEFINER` con ejecución pública pendiente: 1
+- Hallazgos de hardening pendientes: 1
 
 ## Seguridad
 
