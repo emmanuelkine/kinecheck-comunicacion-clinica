@@ -109,6 +109,7 @@
     const lines = [
       { value: "KineCheck Academy", size: compact ? 13 : 15, weight: 800 },
       { value: profile.maskedEmail, size: compact ? 11 : 12, weight: 650 },
+      ...(profile.accessLabel ? [{ value: profile.accessLabel, size: compact ? 11 : 13, weight: 900 }] : []),
       { value: `Licencia: ${profile.licenseId}`, size: compact ? 10 : 12, weight: 750 },
       { value: formatDateTime(), size: compact ? 10 : 11, weight: 650 },
       { value: "Uso personal — Prohibida su distribución", size: compact ? 9 : 11, weight: 800 },
@@ -181,7 +182,7 @@
     refreshTimer = window.setInterval(render, REFRESH_INTERVAL_MS);
   }
 
-  async function showVerifiedBuyer({ user, licenseScopes }) {
+  async function showVerifiedBuyer({ user, licenseScopes, accessLabel = "" }) {
     const email = normalizeEmail(user?.email);
     if (!user?.id || !email) {
       throw new Error("La identidad de la sesión no está validada.");
@@ -190,6 +191,9 @@
     activeProfile = {
       maskedEmail: maskEmail(email),
       licenseId: await createLicenseId(user, licenseScopes),
+      accessLabel: ["PROPIETARIO", "PRUEBA"].includes(String(accessLabel).toUpperCase())
+        ? String(accessLabel).toUpperCase()
+        : "",
     };
     render();
     startRefreshTimer();
