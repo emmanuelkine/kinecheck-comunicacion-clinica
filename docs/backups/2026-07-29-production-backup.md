@@ -110,6 +110,14 @@ El estado de RLS de las cinco tablas críticas quedó guardado en:
 
 Las cinco tablas tienen RLS habilitado y no forzado. La consulta no devolvió políticas explícitas para estas tablas.
 
+### Privilegios de tablas
+
+El snapshot de privilegios concedidos quedó guardado en:
+
+`docs/backups/2026-07-29-database-table-privileges.csv`
+
+Incluye 98 concesiones observadas para `anon`, `authenticated`, `postgres` y `service_role`. Se detectó que `anon` y `authenticated` conservan privilegios amplios sobre `public.course_access` y `public.hotmart_events`. RLS sin políticas aplica denegación predeterminada a operaciones por filas, pero los privilegios globales de tabla requieren hardening separado.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -137,6 +145,8 @@ Las cinco tablas tienen RLS habilitado y no forzado. La consulta no devolvió po
 - Índices documentados: 9
 - Tablas críticas con RLS habilitado: 5
 - Políticas RLS explícitas encontradas: 0
+- Privilegios de tabla documentados: 98
+- Hallazgos de hardening pendientes: 1
 
 ## Seguridad
 
