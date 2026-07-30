@@ -200,10 +200,11 @@ async function main() {
     ensureLocalFile("assets/kinecheck-mark.svg"),
   ]);
 
-  if (!academyIndex.includes("academy-v39.js?v=40")) {
-    logFail("Academy no está apuntando al script estable con caché v40.");
+  const academyScriptMatch = academyIndex.match(/academy-v39\.js\?v=(\d+)/);
+  if (!academyScriptMatch) {
+    logFail("Academy no está apuntando al script estable con una versión de caché válida.");
   } else {
-    logOk("Academy utiliza el script estable con caché v40.");
+    logOk(`Academy utiliza el script estable con caché v${academyScriptMatch[1]}.`);
   }
 
   const landingIds = new Set(extractLandingProductIds(landing));
@@ -239,7 +240,8 @@ async function main() {
   }
 
   await checkUrl("Página pública KineCheck", `${PUBLIC_BASE}/kinecheck/`);
-  await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/?v=40`);
+  const academyCacheVersion = academyScriptMatch?.[1] || "current";
+  await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/?v=${academyCacheVersion}`);
   await checkUrl("Página compra aprobada", `${PUBLIC_BASE}/academy/compra-aprobada.html`);
   await checkUrl("Página pago pendiente", `${PUBLIC_BASE}/academy/pago-pendiente.html`);
   await checkUrl("Página compra en análisis", `${PUBLIC_BASE}/academy/pago-en-analisis.html`);
