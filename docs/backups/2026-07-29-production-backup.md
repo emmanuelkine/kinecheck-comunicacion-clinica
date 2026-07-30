@@ -72,6 +72,14 @@ Esta función:
 - preserva los accesos de propietario;
 - crea, actualiza o revoca licencias en `public.course_access`.
 
+### `public.hotmart_product_grants`
+
+La configuración certificada de productos y cursos quedó guardada en:
+
+`supabase/seeds/20260729_hotmart_product_grants.sql`
+
+El archivo contiene las ocho concesiones verificadas en producción y puede restaurarlas de forma idempotente mediante conflicto por `product_id` y `course_slug`.
+
 ## Concesiones esperadas
 
 | product_id | course_slug |
@@ -93,6 +101,7 @@ Esta función:
 - KineCheck Clínico en producción: versión 20
 - Edge Functions de producción respaldadas: 3
 - Función SQL crítica respaldada: 1
+- Configuración de concesiones respaldada: 8 filas
 
 ## Seguridad
 
