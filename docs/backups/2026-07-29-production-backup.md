@@ -13,7 +13,9 @@ Se completó la certificación de aprobación, licencia, acceso, reembolso y blo
 - Traumatología y Ortopedia Clínica — `8205453`
 - Evidencia Aplicada — `8208817`
 
-## Respaldo incluido
+## Respaldos incluidos
+
+### `course-key`
 
 La función `course-key` de producción quedó guardada en:
 
@@ -24,6 +26,20 @@ La función valida el acceso en `public.course_access` y entrega módulos proteg
 - `comunicacion-clinica`
 - `mas-alla-del-dolor`
 - `traumatologia-ortopedia-clinica`
+
+### `hotmart-webhook`
+
+La función general `hotmart-webhook` de producción quedó guardada en:
+
+`supabase/functions/hotmart-webhook/index.ts`
+
+Esta versión:
+
+- valida `HOTMART_HOTTOK`;
+- procesa eventos de aprobación y revocación;
+- registra cancelaciones de suscripción sin revocación inmediata;
+- delega la actualización de accesos a `public.process_hotmart_event`;
+- no contiene valores secretos.
 
 ## Concesiones esperadas
 
@@ -49,10 +65,9 @@ La función valida el acceso en `public.course_access` y entrega módulos proteg
 
 Falta copiar desde Supabase el código exacto desplegado de:
 
-- `hotmart-webhook`
 - `evidence-hotmart-webhook`
 
-No deben reconstruirse desde memoria. Debe guardarse únicamente el código exacto exportado desde Supabase.
+No debe reconstruirse desde memoria. Debe guardarse únicamente el código exacto exportado desde Supabase.
 
 ## Seguridad
 
