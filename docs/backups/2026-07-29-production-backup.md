@@ -116,7 +116,20 @@ El snapshot de privilegios concedidos quedó guardado en:
 
 `docs/backups/2026-07-29-database-table-privileges.csv`
 
-Incluye 98 concesiones observadas para `anon`, `authenticated`, `postgres` y `service_role`. Se detectó que `anon` y `authenticated` conservan privilegios amplios sobre `public.course_access` y `public.hotmart_events`. RLS sin políticas aplica denegación predeterminada a operaciones por filas, pero los privilegios globales de tabla requieren hardening separado.
+Incluye 98 concesiones observadas para `anon`, `authenticated`, `postgres` y `service_role`. Se detectó que `anon` y `authenticated` conservaban privilegios amplios sobre `public.course_access` y `public.hotmart_events`.
+
+### Hardening de privilegios
+
+La revocación aplicada quedó guardada en:
+
+`supabase/migrations/20260729_revoke_anon_authenticated_table_privileges.sql`
+
+Se revocaron todos los privilegios directos de `anon` y `authenticated` sobre:
+
+- `public.course_access`
+- `public.hotmart_events`
+
+La verificación posterior no devolvió filas para esos roles y tablas. No se modificaron los privilegios de `postgres` ni `service_role`, ni las políticas RLS.
 
 ## Concesiones esperadas
 
@@ -146,7 +159,8 @@ Incluye 98 concesiones observadas para `anon`, `authenticated`, `postgres` y `se
 - Tablas críticas con RLS habilitado: 5
 - Políticas RLS explícitas encontradas: 0
 - Privilegios de tabla documentados: 98
-- Hallazgos de hardening pendientes: 1
+- Hardening de privilegios aplicado: completado
+- Hallazgos de hardening pendientes: 0
 
 ## Seguridad
 
