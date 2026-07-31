@@ -19,6 +19,16 @@ function json(payload: unknown, status = 200) {
   });
 }
 
+function normalizeCourseSlugs(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return [...new Set(
+    value
+      .map((slug) => String(slug || "").trim())
+      .filter(Boolean),
+  )].slice(0, 100);
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", {
@@ -78,7 +88,13 @@ serve(async (req) => {
     const courseSlug =
       String(body.courseSlug || "").trim();
 
-    if (!courseSlug) {
+    const courseSlugs =
+      normalizeCourseSlugs(body.courseSlugs);
+
+    const batchMode =
+      courseSlugs.length > 0;
+
+    if (!courseSlug && !batchMode) {
       return json(
         {
           message:
@@ -138,6 +154,50 @@ serve(async (req) => {
         },
       },
     );
+
+    if (batchMode) {
+      const {
+        data: accesses,
+        error: accessesError,
+      } = await admin
+        .from("course_access")
+        .select("course_slug")
+        .eq("email", email)
+        .eq("active", true)
+        .in("course_slug", courseSlugs);
+
+      if (accessesError) {
+        console.error(
+          "course-key batch course_access",
+          accessesError,
+        );
+
+        return json(
+          {
+            message:
+              "No fue posible verificar los accesos a los cursos.",
+          },
+          500,
+        );
+      }
+
+      const activeCourseSlugs = [
+        ...new Set(
+          (accesses || [])
+            .map((access) =>
+              String(access.course_slug || "").trim()
+            )
+            .filter((slug) =>
+              courseSlugs.includes(slug)
+            ),
+        ),
+      ];
+
+      return json({
+        activeCourseSlugs,
+        email,
+      });
+    }
 
     const {
       data: access,
