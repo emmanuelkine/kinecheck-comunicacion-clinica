@@ -25,7 +25,7 @@
     if (!document.querySelector('link[data-kinecheck-learning-path]')) {
       const stylesheet = document.createElement("link");
       stylesheet.rel = "stylesheet";
-      stylesheet.href = "./academy-learning-path-v4.css?v=20260731-1";
+      stylesheet.href = "./academy-learning-path-v4.css?v=20260731-color2";
       stylesheet.dataset.kinecheckLearningPath = "styles";
       document.head.appendChild(stylesheet);
     }
@@ -37,6 +37,15 @@
       script.defer = true;
       document.head.appendChild(script);
     }
+  }
+
+  function loadLaunchRouterExtension() {
+    if (document.querySelector('script[data-kinecheck-launch-router]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-launch-router-v4.js?v=20260731-sso1";
+    script.dataset.kinecheckLaunchRouter = "script";
+    script.defer = true;
+    document.head.appendChild(script);
   }
 
   function session() {
@@ -201,6 +210,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     loadAcademyEvidenceExtension();
     loadLearningPathExtension();
+    loadLaunchRouterExtension();
     createModal();
     addReviewActions();
     const catalog = document.querySelector("#course-grid");
