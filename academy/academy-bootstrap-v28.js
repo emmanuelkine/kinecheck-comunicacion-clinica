@@ -121,8 +121,32 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
 
   const nativeFetch = window.fetch.bind(window);
   const TIMEOUT_MS = 12000;
+  const BATCH_WINDOW_MS = 0;
+  const batchQueue = [];
+  let batchTimer = null;
 
-  window.fetch = async (input, init = {}) => {
+  function headerValue(headers, name) {
+    if (!headers) return "";
+    if (headers instanceof Headers) return headers.get(name) || "";
+    if (Array.isArray(headers)) {
+      const found = headers.find(([key]) => String(key).toLowerCase() === name.toLowerCase());
+      return found ? String(found[1]) : "";
+    }
+    const key = Object.keys(headers).find((item) => item.toLowerCase() === name.toLowerCase());
+    return key ? String(headers[key]) : "";
+  }
+
+  function responseJson(payload, status) {
+    return new Response(JSON.stringify(payload), {
+      status,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "private, no-store, max-age=0",
+      },
+    });
+  }
+
+  async function fetchWithTimeout(input, init = {}) {
     const url = typeof input === "string" ? input : String(input?.url || "");
     const isSupabaseRequest = url.includes(".supabase.co");
     if (!isSupabaseRequest || init.signal) return nativeFetch(input, init);
@@ -140,5 +164,124 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     } finally {
       window.clearTimeout(timer);
     }
+  }
+
+  function isBatchableCourseKeyRequest(input, init = {}) {
+    const url = typeof input === "string" ? input : String(input?.url || "");
+    const method = String(init.method || (typeof input !== "string" ? input?.method : "GET") || "GET").toUpperCase();
+
+    if (
+      method !== "POST"
+      || !url.includes(`.supabase.co/functions/v1/${window.KINECHECK_ACADEMY_CONFIG.courseKeyFunction}`)
+      || init.signal
+    ) {
+      return false;
+    }
+
+    try {
+      const body = JSON.parse(String(init.body || "{}"));
+      return typeof body.courseSlug === "string" && body.courseSlug.trim() && !body.courseSlugs;
+    } catch {
+      return false;
+    }
+  }
+
+  function enqueueCourseKeyRequest(input, init) {
+    return new Promise((resolve, reject) => {
+      const body = JSON.parse(String(init.body || "{}"));
+      batchQueue.push({
+        input,
+        init,
+        courseSlug: body.courseSlug.trim(),
+        resolve,
+        reject,
+      });
+
+      if (batchTimer !== null) return;
+      batchTimer = window.setTimeout(flushCourseKeyQueue, BATCH_WINDOW_MS);
+    });
+  }
+
+  async function flushCourseKeyQueue() {
+    batchTimer = null;
+    const pending = batchQueue.splice(0, batchQueue.length);
+    if (!pending.length) return;
+
+    const groups = new Map();
+    pending.forEach((item) => {
+      const url = typeof item.input === "string" ? item.input : String(item.input?.url || "");
+      const authorization = headerValue(item.init.headers, "authorization");
+      const apikey = headerValue(item.init.headers, "apikey");
+      const key = `${url}\n${authorization}\n${apikey}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(item);
+    });
+
+    await Promise.all([...groups.values()].map(async (group) => {
+      if (group.length === 1) {
+        const item = group[0];
+        try {
+          item.resolve(await fetchWithTimeout(item.input, item.init));
+        } catch (error) {
+          item.reject(error);
+        }
+        return;
+      }
+
+      const first = group[0];
+      const courseSlugs = [...new Set(group.map((item) => item.courseSlug))];
+
+      try {
+        const response = await fetchWithTimeout(first.input, {
+          ...first.init,
+          body: JSON.stringify({ courseSlugs }),
+        });
+        const raw = await response.text();
+        let data = {};
+        try {
+          data = raw ? JSON.parse(raw) : {};
+        } catch {
+          data = {};
+        }
+
+        if (!response.ok) {
+          group.forEach((item) => {
+            item.resolve(responseJson(
+              { message: data.message || "No fue posible verificar los accesos." },
+              response.status,
+            ));
+          });
+          return;
+        }
+
+        const active = new Set(
+          Array.isArray(data.activeCourseSlugs)
+            ? data.activeCourseSlugs.map((slug) => String(slug))
+            : [],
+        );
+
+        group.forEach((item) => {
+          if (active.has(item.courseSlug)) {
+            item.resolve(responseJson({
+              active: true,
+              courseSlug: item.courseSlug,
+            }, 200));
+          } else {
+            item.resolve(responseJson({
+              message: "No encontramos una compra activa asociada a este correo.",
+            }, 403));
+          }
+        });
+      } catch (error) {
+        group.forEach((item) => item.reject(error));
+      }
+    }));
+  }
+
+  window.fetch = (input, init = {}) => {
+    if (isBatchableCourseKeyRequest(input, init)) {
+      return enqueueCourseKeyRequest(input, init);
+    }
+    return fetchWithTimeout(input, init);
   };
 })();
