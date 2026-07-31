@@ -74,6 +74,28 @@
     if (open) supportPanel.querySelector("a")?.focus();
   }
 
+  function applyKineCheckV4Brand() {
+    document.querySelectorAll(".brand small").forEach((label) => {
+      label.textContent = "ECOSISTEMA";
+    });
+
+    const heroTitle = document.querySelector(".hero-copy h1");
+    const heroCopy = document.querySelector(".hero-copy > p");
+    if (heroTitle) heroTitle.innerHTML = "Aplicaciones, cursos y herramientas.<br><em>Todo en KineCheck.</em>";
+    if (heroCopy) heroCopy.textContent = "Un solo ecosistema para aprender, fortalecer la práctica clínica y acompañar el seguimiento del paciente.";
+
+    const panelBadge = document.querySelector(".panel-badge");
+    if (panelBadge) panelBadge.textContent = "KINECHECK";
+
+    document.querySelectorAll("a, button, h3, p, summary").forEach((element) => {
+      if (element.children.length === 0 && element.textContent.includes("Academy")) {
+        element.textContent = element.textContent
+          .replaceAll("KineCheck Academy", "KineCheck")
+          .replaceAll("Academy", "KineCheck");
+      }
+    });
+  }
+
   document.addEventListener("click", (event) => {
     const filter = event.target.closest("[data-public-filter]");
     if (filter) {
@@ -99,4 +121,6 @@
       toggleSupport(false);
     }
   });
+
+  applyKineCheckV4Brand();
 })();
