@@ -347,7 +347,8 @@
       const second = courseFromCard(b);
       return (priorities.get(first?.slug) ?? 99) - (priorities.get(second?.slug) ?? 99);
     });
-    ordered.forEach((card) => container.appendChild(card));
+    const changed = ordered.some((card, index) => card !== cards[index]);
+    if (changed) ordered.forEach((card) => container.appendChild(card));
   }
 
   function decorateProductGrids() {
