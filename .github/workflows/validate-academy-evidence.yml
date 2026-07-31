@@ -3,6 +3,7 @@ name: Validar evidencia semanal en Academy
 on:
   pull_request:
     paths:
+      - "academy/index.html"
       - "academy/academy-reviews.js"
       - "academy/academy-evidence-alerts.js"
       - "academy/academy-evidence-alerts.css"
@@ -12,10 +13,12 @@ on:
     branches:
       - main
     paths:
+      - "academy/index.html"
       - "academy/academy-reviews.js"
       - "academy/academy-evidence-alerts.js"
       - "academy/academy-evidence-alerts.css"
       - "academy/evidence-alerts.json"
+      - ".github/workflows/validate-academy-evidence.yml"
 
 permissions:
   contents: read
@@ -75,9 +78,11 @@ jobs:
           console.log(`Alertas verificadas: ${data.items.length}`);
           NODE
 
-      - name: Confirmar conexión del módulo
+      - name: Confirmar conexión y versión del módulo
         run: |
+          grep -q 'academy-reviews.js?v=43' academy/index.html
           grep -q 'academy-evidence-alerts.css' academy/academy-reviews.js
           grep -q 'academy-evidence-alerts.js' academy/academy-reviews.js
           grep -q 'evidence-alerts.json' academy/academy-evidence-alerts.js
           grep -q 'evidencia-semanal' academy/academy-evidence-alerts.js
+          grep -q 'watchSessionActivation' academy/academy-evidence-alerts.js
