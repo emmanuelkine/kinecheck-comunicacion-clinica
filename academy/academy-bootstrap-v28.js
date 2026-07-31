@@ -245,12 +245,13 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
         }
 
         if (!response.ok) {
-          group.forEach((item) => {
-            item.resolve(responseJson(
-              { message: data.message || "No fue posible verificar los accesos." },
-              response.status,
-            ));
-          });
+          await Promise.all(group.map(async (item) => {
+            try {
+              item.resolve(await fetchWithTimeout(item.input, item.init));
+            } catch (error) {
+              item.reject(error);
+            }
+          }));
           return;
         }
 
