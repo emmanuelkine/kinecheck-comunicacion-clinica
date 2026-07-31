@@ -3,6 +3,24 @@
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const state = { course: null, rating: 0, existing: null };
 
+  function loadAcademyEvidenceExtension() {
+    if (!document.querySelector('link[data-academy-evidence]')) {
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = "./academy-evidence-alerts.css?v=20260731-2";
+      stylesheet.dataset.academyEvidence = "styles";
+      document.head.appendChild(stylesheet);
+    }
+
+    if (!document.querySelector('script[data-academy-evidence]')) {
+      const script = document.createElement("script");
+      script.src = "./academy-evidence-alerts.js?v=20260731-2";
+      script.dataset.academyEvidence = "script";
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  }
+
   function session() {
     try {
       return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
@@ -163,6 +181,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    loadAcademyEvidenceExtension();
     createModal();
     addReviewActions();
     const catalog = document.querySelector("#course-grid");

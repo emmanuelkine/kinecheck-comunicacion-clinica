@@ -1,0 +1,88 @@
+name: Validar evidencia semanal en Academy
+
+on:
+  pull_request:
+    paths:
+      - "academy/index.html"
+      - "academy/academy-reviews.js"
+      - "academy/academy-evidence-alerts.js"
+      - "academy/academy-evidence-alerts.css"
+      - "academy/evidence-alerts.json"
+      - ".github/workflows/validate-academy-evidence.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "academy/index.html"
+      - "academy/academy-reviews.js"
+      - "academy/academy-evidence-alerts.js"
+      - "academy/academy-evidence-alerts.css"
+      - "academy/evidence-alerts.json"
+      - ".github/workflows/validate-academy-evidence.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validar JavaScript
+        run: |
+          node --check academy/academy-reviews.js
+          node --check academy/academy-evidence-alerts.js
+
+      - name: Validar digest editorial
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const data = JSON.parse(fs.readFileSync('academy/evidence-alerts.json', 'utf8'));
+          const required = [
+            'id', 'alertDate', 'source', 'status', 'title', 'citation',
+            'studyType', 'population', 'mainFinding', 'quality',
+            'clinicalImplication', 'teachingImplication', 'url'
+          ];
+          if (data.contentClassification !== 'public-evidence-digest') {
+            throw new Error('Clasificación editorial inválida.');
+          }
+          if (!Array.isArray(data.items) || data.items.length === 0) {
+            throw new Error('El digest no contiene alertas.');
+          }
+          const ids = new Set();
+          const forbidden = new Set([
+            'email', 'user_id', 'userId', 'password', 'access_token',
+            'refresh_token', 'transaction_id', 'license_key', 'clinical_record'
+          ]);
+          for (const item of data.items) {
+            for (const field of required) {
+              if (!String(item[field] || '').trim()) {
+                throw new Error(`Falta ${field} en ${item.id || 'registro sin id'}.`);
+              }
+            }
+            if (ids.has(item.id)) throw new Error(`ID duplicado: ${item.id}`);
+            ids.add(item.id);
+            for (const key of Object.keys(item)) {
+              if (forbidden.has(key)) throw new Error(`Campo sensible no permitido: ${key}`);
+            }
+            const url = new URL(item.url);
+            if (url.protocol !== 'https:') throw new Error(`URL insegura: ${item.url}`);
+          }
+          console.log(`Alertas verificadas: ${data.items.length}`);
+          NODE
+
+      - name: Confirmar conexión y versión del módulo
+        run: |
+          grep -q 'academy-reviews.js?v=43' academy/index.html
+          grep -q 'academy-evidence-alerts.css' academy/academy-reviews.js
+          grep -q 'academy-evidence-alerts.js' academy/academy-reviews.js
+          grep -q 'evidence-alerts.json' academy/academy-evidence-alerts.js
+          grep -q 'evidencia-semanal' academy/academy-evidence-alerts.js
+          grep -q 'watchSessionActivation' academy/academy-evidence-alerts.js
