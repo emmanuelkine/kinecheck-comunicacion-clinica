@@ -284,6 +284,26 @@
     updateSummary();
   }
 
+  function refreshForActiveSession() {
+    if (!dataset) return;
+    render();
+    updateUnreadCounters();
+  }
+
+  function watchSessionActivation() {
+    const dashboard = document.querySelector("#dashboard-view");
+    if (dashboard) {
+      new MutationObserver(() => {
+        if (!dashboard.hidden) refreshForActiveSession();
+      }).observe(dashboard, { attributes: true, attributeFilter: ["hidden"] });
+    }
+    window.addEventListener("storage", (event) => {
+      if (event.key === "kinecheck_secure_session_v1" || String(event.key || "").startsWith(STATE_PREFIX)) {
+        refreshForActiveSession();
+      }
+    });
+  }
+
   function wireSection() {
     ["#evidence-search", "#evidence-source", "#evidence-status"].forEach((selector) => {
       document.querySelector(selector)?.addEventListener("input", render);
@@ -326,6 +346,7 @@
     installNavigation();
     installSection();
     wireSection();
+    watchSessionActivation();
     initializeData();
   }
 
