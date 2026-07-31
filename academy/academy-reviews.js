@@ -21,6 +21,24 @@
     }
   }
 
+  function loadLearningPathExtension() {
+    if (!document.querySelector('link[data-kinecheck-learning-path]')) {
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = "./academy-learning-path-v4.css?v=20260731-1";
+      stylesheet.dataset.kinecheckLearningPath = "styles";
+      document.head.appendChild(stylesheet);
+    }
+
+    if (!document.querySelector('script[data-kinecheck-learning-path]')) {
+      const script = document.createElement("script");
+      script.src = "./academy-learning-path-v4.js?v=20260731-1";
+      script.dataset.kinecheckLearningPath = "script";
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  }
+
   function session() {
     try {
       return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
@@ -182,6 +200,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     loadAcademyEvidenceExtension();
+    loadLearningPathExtension();
     createModal();
     addReviewActions();
     const catalog = document.querySelector("#course-grid");
