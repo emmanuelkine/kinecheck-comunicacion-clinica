@@ -51,7 +51,7 @@
   function loadLaunchRouterExtension() {
     if (document.querySelector('script[data-kinecheck-launch-router]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260801-sso6";
+    script.src = "./academy-launch-router-v4.js?v=20260801-sso7";
     script.dataset.kinecheckLaunchRouter = "script";
     script.defer = true;
     document.head.appendChild(script);
