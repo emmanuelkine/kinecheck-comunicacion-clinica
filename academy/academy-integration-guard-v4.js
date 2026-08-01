@@ -1,4 +1,7 @@
 (() => {
+  if (window.__KINECHECK_INTEGRATION_GUARD_V4__) return;
+  window.__KINECHECK_INTEGRATION_GUARD_V4__ = true;
+
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG || {};
   const APPLICATIONS = new Set([
     "kinecheck-clinico",
@@ -13,19 +16,28 @@
     return String(value || "").replace(INTEGRATION_SUFFIX, "").trim();
   }
 
+  function setTextIfChanged(element, value) {
+    if (element && element.textContent !== value) element.textContent = value;
+  }
+
   function cleanEnabledPresentation() {
     (CONFIG.courses || []).forEach((course) => {
       if (!APPLICATIONS.has(course.slug)) return;
+
       course.integrationPending = false;
-      course.subtitle = cleanText(course.subtitle);
+      const cleanSubtitle = cleanText(course.subtitle);
+      if (course.subtitle !== cleanSubtitle) course.subtitle = cleanSubtitle;
 
       document.querySelectorAll(`[data-card-course="${CSS.escape(course.slug)}"] p`).forEach((paragraph) => {
-        paragraph.textContent = cleanText(paragraph.textContent);
+        const cleaned = cleanText(paragraph.textContent);
+        setTextIfChanged(paragraph, cleaned);
       });
 
       document.querySelectorAll(`[data-kc-path-open="${CSS.escape(course.slug)}"], [data-kc-path-explore="${CSS.escape(course.slug)}"]`).forEach((button) => {
         const paragraph = button.closest("article")?.querySelector("p");
-        if (paragraph) paragraph.textContent = cleanText(paragraph.textContent);
+        if (!paragraph) return;
+        const cleaned = cleanText(paragraph.textContent);
+        setTextIfChanged(paragraph, cleaned);
       });
     });
   }
@@ -34,24 +46,21 @@
     const slug = button?.dataset?.course;
     if (!APPLICATIONS.has(slug)) return;
 
-    button.disabled = true;
-    button.setAttribute("aria-disabled", "true");
-    button.title = "Tu licencia está activa. El acceso único de esta aplicación todavía está en integración.";
-    if (button.textContent.trim() !== "Acceso único en integración") {
-      button.textContent = "Acceso único en integración";
-    }
+    if (!button.disabled) button.disabled = true;
+    if (button.getAttribute("aria-disabled") !== "true") button.setAttribute("aria-disabled", "true");
+    const title = "Tu licencia está activa. El acceso único de esta aplicación todavía está en integración.";
+    if (button.title !== title) button.title = title;
+    setTextIfChanged(button, "Acceso único en integración");
 
     const card = button.closest("article");
     const status = card?.querySelector(".status-badge, .kc-status");
-    if (status && status.textContent.trim() !== "En integración") {
-      status.textContent = "En integración";
-      status.classList.add("preparing");
+    if (status) {
+      setTextIfChanged(status, "En integración");
+      if (!status.classList.contains("preparing")) status.classList.add("preparing");
     }
 
     const meta = card?.querySelector(".course-meta");
-    if (meta && meta.textContent.trim() !== "Licencia activa · acceso único en integración") {
-      meta.textContent = "Licencia activa · acceso único en integración";
-    }
+    setTextIfChanged(meta, "Licencia activa · acceso único en integración");
   }
 
   function applyIntegrationState() {
@@ -67,37 +76,48 @@
 
       document.querySelectorAll("[data-kc-path-open]").forEach((button) => {
         if (!APPLICATIONS.has(button.dataset.kcPathOpen)) return;
-        button.disabled = true;
-        button.setAttribute("aria-disabled", "true");
-        if (button.textContent.trim() !== "En integración") button.textContent = "En integración";
+        if (!button.disabled) button.disabled = true;
+        if (button.getAttribute("aria-disabled") !== "true") button.setAttribute("aria-disabled", "true");
+        setTextIfChanged(button, "En integración");
       });
 
       const continueButton = document.querySelector("#continue-button");
       if (continueButton && APPLICATIONS.has(continueButton.dataset.course)) {
         continueButton.hidden = true;
         continueButton.removeAttribute("data-course");
-        const heading = document.querySelector("#continue-heading");
-        const copy = document.querySelector("#continue-copy");
-        if (heading) heading.textContent = "Elige un contenido disponible";
-        if (copy) {
-          copy.textContent = "Tus licencias se conservan. Las aplicaciones Clínico, Estudiante y Recupera se habilitarán aquí cuando finalice su integración al acceso único.";
-        }
+        setTextIfChanged(document.querySelector("#continue-heading"), "Elige un contenido disponible");
+        setTextIfChanged(
+          document.querySelector("#continue-copy"),
+          "Tus licencias se conservan. Las aplicaciones Clínico, Estudiante y Recupera se habilitarán aquí cuando finalice su integración al acceso único.",
+        );
       }
     } finally {
       applying = false;
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", applyIntegrationState, { once: true });
-  } else {
+  function start() {
     applyIntegrationState();
+
+    if (ssoEnabled) {
+      // Reintentos finitos para cubrir el render inicial sin mantener un observador permanente.
+      window.setTimeout(applyIntegrationState, 150);
+      window.setTimeout(applyIntegrationState, 700);
+      return;
+    }
+
+    const observer = new MutationObserver(applyIntegrationState);
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["disabled", "data-course", "data-kc-path-open"],
+    });
   }
 
-  new MutationObserver(applyIntegrationState).observe(document.documentElement, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["disabled", "data-course", "data-kc-path-open"],
-  });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+  } else {
+    start();
+  }
 })();
