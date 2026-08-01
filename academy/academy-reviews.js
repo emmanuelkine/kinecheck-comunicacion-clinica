@@ -1,7 +1,21 @@
 (() => {
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG;
   const SESSION_KEY = "kinecheck_secure_session_v1";
+  const LEGACY_APPLICATIONS = new Set([
+    "kinecheck-clinico",
+    "kinecheck-estudiante",
+    "kinecheck-recupera",
+  ]);
   const state = { course: null, rating: 0, existing: null };
+
+  // Estas aplicaciones conservan sus licencias, pero todavía no deben presentarse
+  // como abribles hasta completar su integración con el acceso único de KineCheck 4.0.
+  (CONFIG?.courses || []).forEach((course) => {
+    if (!LEGACY_APPLICATIONS.has(course.slug)) return;
+    course.status = "integrating";
+    course.url = "";
+    course.subtitle = `${course.subtitle} Acceso único en integración; tu licencia se conserva.`;
+  });
 
   function loadAcademyEvidenceExtension() {
     if (!document.querySelector('link[data-academy-evidence]')) {
@@ -42,7 +56,7 @@
   function loadLaunchRouterExtension() {
     if (document.querySelector('script[data-kinecheck-launch-router]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260731-sso1";
+    script.src = "./academy-launch-router-v4.js?v=20260731-sso2";
     script.dataset.kinecheckLaunchRouter = "script";
     script.defer = true;
     document.head.appendChild(script);
