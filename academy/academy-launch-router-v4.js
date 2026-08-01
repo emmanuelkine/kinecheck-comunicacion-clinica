@@ -1,12 +1,10 @@
 (() => {
   const SESSION_KEY = "kinecheck_secure_session_v1";
-  const HANDOFF_TYPE = "kinecheck-sso-v2";
+  const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
 
-  const COURSE_ROUTES = Object.freeze({
-    "comunicacion-clinica": () => `${location.origin}/?course=comunicacion-clinica&v=20260731-sso2`,
-    "traumatologia-ortopedia-clinica": () => `${location.origin}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260731-sso2`,
-    "mas-alla-del-dolor": () => "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260731-sso2",
-    "evidencia-aplicada": () => "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260731-sso2",
+  const EXTERNAL_COURSES = Object.freeze({
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260731-sso3",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260731-sso3",
   });
 
   const LEGACY_APPLICATIONS = new Set([
@@ -23,24 +21,14 @@
     }
   }
 
-  function transferableSession(session) {
+  function accessOnlySession(session) {
     return {
       access_token: session.access_token,
-      refresh_token: session.refresh_token,
       expires_at: session.expires_at,
       expires_in: session.expires_in,
-      token_type: session.token_type,
+      token_type: session.token_type || "bearer",
+      handoff_access_only: true,
     };
-  }
-
-  function encodeSession(session) {
-    const bytes = new TextEncoder().encode(JSON.stringify(transferableSession(session)));
-    let binary = "";
-    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    return btoa(binary)
-      .replaceAll("+", "-")
-      .replaceAll("/", "_")
-      .replace(/=+$/g, "");
   }
 
   function showToast(text) {
@@ -52,28 +40,23 @@
     showToast.timer = window.setTimeout(() => { toast.hidden = true; }, 4200);
   }
 
-  function openCourse(slug) {
+  function openExternalCourse(slug) {
     const session = readSession();
-    if (!session?.access_token || !session?.refresh_token) {
-      showToast("Tu sesión venció. Ingresa nuevamente para abrir este curso.");
+    const expiresAt = Number(session?.expires_at || 0);
+    const now = Math.floor(Date.now() / 1000);
+
+    if (!session?.access_token || (expiresAt && expiresAt <= now + 30)) {
+      showToast("Tu sesión necesita renovarse. Actualiza KineCheck e ingresa nuevamente antes de abrir este curso.");
       return;
     }
-
-    const url = new URL(COURSE_ROUTES[slug]());
-    const transfer = transferableSession(session);
 
     window.name = JSON.stringify({
       type: HANDOFF_TYPE,
       issuedAt: Date.now(),
-      session: transfer,
+      session: accessOnlySession(session),
     });
 
-    url.hash = new URLSearchParams({
-      kc_session: encodeSession(session),
-      kc_return: `${location.origin}/academy/`,
-    }).toString();
-
-    location.assign(url.toString());
+    location.assign(EXTERNAL_COURSES[slug]);
   }
 
   function blockLegacyApplication(slug) {
@@ -82,7 +65,7 @@
       "kinecheck-estudiante": "KineCheck Estudiante",
       "kinecheck-recupera": "KineCheck Recupera",
     };
-    showToast(`${names[slug]} está siendo integrado al acceso único de KineCheck 4.0. No vuelvas a ingresar correo ni código de transacción en la página antigua.`);
+    showToast(`${names[slug]} conserva su licencia activa, pero su acceso único todavía está en integración.`);
   }
 
   function clarifyPendingButtons() {
@@ -100,11 +83,11 @@
     const slug = button?.dataset.course;
     if (!button || button.disabled || !slug) return;
 
-    if (COURSE_ROUTES[slug]) {
+    if (EXTERNAL_COURSES[slug]) {
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-      openCourse(slug);
+      openExternalCourse(slug);
       return;
     }
 
