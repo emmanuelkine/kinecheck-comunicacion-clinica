@@ -7,7 +7,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   betaTesterEmails: ["emmanuelkine+beta@gmail.com"],
   betaTrialDays: 5,
   appSso: Object.freeze({
-    enabled: false,
+    enabled: true,
     baseUrl: "https://kinecheck-clinico.emmanuelkine.chatgpt.site",
     handoffType: "kinecheck-sso-v3-access-only",
     routes: Object.freeze({
