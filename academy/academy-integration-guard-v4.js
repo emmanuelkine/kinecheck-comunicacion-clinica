@@ -20,6 +20,83 @@
     if (element && element.textContent !== value) element.textContent = value;
   }
 
+  function closeMobileNavigation() {
+    document.querySelector("#academy-sidebar")?.classList.remove("open");
+    const overlay = document.querySelector("#sidebar-overlay");
+    if (overlay) overlay.hidden = true;
+    document.querySelector("#mobile-menu")?.setAttribute("aria-expanded", "false");
+  }
+
+  function openLibrary(scrollTarget = "") {
+    document.body.dataset.kcView = "biblioteca";
+
+    document.querySelectorAll("[data-kc-view-link]").forEach((link) => {
+      link.classList.toggle("active", link.dataset.kcViewLink === "biblioteca");
+    });
+
+    const evidence = document.querySelector("#evidencia-semanal");
+    if (evidence) evidence.dataset.kcSection = "biblioteca";
+
+    history.replaceState(null, "", "#biblioteca");
+    closeMobileNavigation();
+
+    window.requestAnimationFrame(() => {
+      const target = scrollTarget ? document.getElementById(scrollTarget) : null;
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  function installStableButtonHandlers() {
+    if (window.__KINECHECK_STABLE_BUTTON_HANDLERS__) return;
+    window.__KINECHECK_STABLE_BUTTON_HANDLERS__ = true;
+
+    document.addEventListener("click", (event) => {
+      const onboarding = event.target.closest("#onboarding-action");
+      if (onboarding) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openLibrary("productos");
+        return;
+      }
+
+      const libraryLink = event.target.closest('[data-kc-view-link="biblioteca"]');
+      if (libraryLink) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openLibrary(libraryLink.dataset.kcScrollTarget || "");
+        return;
+      }
+
+      const libraryScroll = event.target.closest("[data-kc-scroll-target]");
+      if (libraryScroll) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openLibrary(libraryScroll.dataset.kcScrollTarget || "");
+      }
+    }, true);
+
+    // Respaldo para botones de recomendación. El enrutador SSO principal
+    // los intercepta primero; este controlador solo actúa si aquel no lo hizo.
+    document.addEventListener("click", (event) => {
+      const recommendation = event.target.closest("[data-kc-path-open]");
+      if (!recommendation || event.defaultPrevented) return;
+
+      const slug = String(recommendation.dataset.kcPathOpen || "").trim();
+      if (!slug) return;
+
+      const canonicalButton = document.querySelector(
+        `#course-grid [data-course="${CSS.escape(slug)}"]`,
+      );
+
+      if (canonicalButton && !canonicalButton.disabled) {
+        event.preventDefault();
+        event.stopPropagation();
+        canonicalButton.click();
+      }
+    });
+  }
+
   function cleanEnabledPresentation() {
     (CONFIG.courses || []).forEach((course) => {
       if (!APPLICATIONS.has(course.slug)) return;
@@ -97,6 +174,7 @@
   }
 
   function start() {
+    installStableButtonHandlers();
     applyIntegrationState();
 
     if (ssoEnabled) {
