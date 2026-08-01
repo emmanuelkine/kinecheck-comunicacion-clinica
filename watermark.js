@@ -107,7 +107,7 @@
     const centerX = width / 2;
     const centerY = height / 2;
     const lines = [
-      { value: "KineCheck Academy", size: compact ? 13 : 15, weight: 800 },
+      { value: "KineCheck", size: compact ? 13 : 15, weight: 800 },
       { value: profile.maskedEmail, size: compact ? 11 : 12, weight: 650 },
       ...(profile.accessLabel ? [{ value: profile.accessLabel, size: compact ? 11 : 13, weight: 900 }] : []),
       { value: `Licencia: ${profile.licenseId}`, size: compact ? 10 : 12, weight: 750 },
@@ -233,4 +233,20 @@
         : { visible: false };
     },
   });
+
+  function loadAcademyCommerce() {
+    if (!window.location.pathname.includes("/academy/")) return;
+    if (document.querySelector('script[data-kinecheck-commerce]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-commerce-v4.js?v=20260801-1";
+    script.defer = true;
+    script.dataset.kinecheckCommerce = "v4";
+    document.head.appendChild(script);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadAcademyCommerce, { once: true });
+  } else {
+    loadAcademyCommerce();
+  }
 })();
