@@ -3,14 +3,27 @@
   window.__KINECHECK_INTEGRATION_GUARD_V4__ = true;
 
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG || {};
+  const SESSION_KEY = "kinecheck_secure_session_v1";
+  const COURSE_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const APPLICATIONS = new Set([
     "kinecheck-clinico",
     "kinecheck-estudiante",
     "kinecheck-recupera",
   ]);
+  const RECOMMENDED_COURSES = new Set([
+    "comunicacion-clinica",
+    "mas-alla-del-dolor",
+    "evidencia-aplicada",
+    "traumatologia-ortopedia-clinica",
+  ]);
+  const EXTERNAL_COURSE_URLS = Object.freeze({
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260801-sso4",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260801-sso4",
+  });
   const INTEGRATION_SUFFIX = " Acceso único en integración; tu licencia se conserva.";
   const ssoEnabled = CONFIG.appSso ? Boolean(CONFIG.appSso.enabled) : true;
   let applying = false;
+  let recommendationNavigation = false;
 
   function cleanText(value) {
     return String(value || "").replace(INTEGRATION_SUFFIX, "").trim();
@@ -25,6 +38,94 @@
     const overlay = document.querySelector("#sidebar-overlay");
     if (overlay) overlay.hidden = true;
     document.querySelector("#mobile-menu")?.setAttribute("aria-expanded", "false");
+  }
+
+  function showStableToast(text) {
+    const toast = document.querySelector("#kc-toast");
+    if (!toast) return;
+    toast.textContent = text;
+    toast.hidden = false;
+    window.clearTimeout(showStableToast.timer);
+    showStableToast.timer = window.setTimeout(() => {
+      toast.hidden = true;
+    }, 4200);
+  }
+
+  function readSession() {
+    try {
+      return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+    } catch {
+      return null;
+    }
+  }
+
+  function validCourseSession() {
+    const session = readSession();
+    const expiresAt = Number(session?.expires_at || 0);
+    const now = Math.floor(Date.now() / 1000);
+
+    if (!session?.access_token || (expiresAt && expiresAt <= now + 30)) {
+      showStableToast("Tu sesión necesita renovarse. Actualiza KineCheck e ingresa nuevamente antes de abrir este curso.");
+      return null;
+    }
+    return session;
+  }
+
+  function repositoryBasePath() {
+    return location.hostname.endsWith("github.io")
+      ? "/kinecheck-comunicacion-clinica"
+      : "";
+  }
+
+  function recommendedCourseUrl(slug) {
+    if (EXTERNAL_COURSE_URLS[slug]) return EXTERNAL_COURSE_URLS[slug];
+
+    const base = repositoryBasePath();
+    if (slug === "comunicacion-clinica") {
+      return `${location.origin}${base}/?course=comunicacion-clinica&v=20260801-sso4`;
+    }
+    if (slug === "traumatologia-ortopedia-clinica") {
+      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260801-sso4`;
+    }
+    return "";
+  }
+
+  function writeCourseHandoff(session, product) {
+    window.name = "";
+    window.name = JSON.stringify({
+      type: COURSE_HANDOFF_TYPE,
+      issuedAt: Date.now(),
+      product,
+      session: {
+        access_token: session.access_token,
+        expires_at: session.expires_at,
+        expires_in: session.expires_in,
+        token_type: session.token_type || "bearer",
+        handoff_access_only: true,
+      },
+    });
+  }
+
+  function openRecommendedCourse(slug, button) {
+    if (recommendationNavigation) return;
+
+    const destination = recommendedCourseUrl(slug);
+    if (!destination) {
+      showStableToast("No fue posible encontrar la ruta de este curso.");
+      return;
+    }
+
+    const session = validCourseSession();
+    if (!session) return;
+
+    recommendationNavigation = true;
+    if (button) {
+      button.setAttribute("aria-busy", "true");
+      button.style.pointerEvents = "none";
+    }
+
+    writeCourseHandoff(session, slug);
+    location.assign(destination);
   }
 
   function openLibrary(scrollTarget = "") {
@@ -52,6 +153,17 @@
     window.__KINECHECK_STABLE_BUTTON_HANDLERS__ = true;
 
     document.addEventListener("click", (event) => {
+      const recommendation = event.target.closest("[data-kc-path-open]");
+      const recommendationSlug = String(recommendation?.dataset.kcPathOpen || "").trim();
+
+      if (recommendation && RECOMMENDED_COURSES.has(recommendationSlug)) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        openRecommendedCourse(recommendationSlug, recommendation);
+        return;
+      }
+
       const onboarding = event.target.closest("#onboarding-action");
       if (onboarding) {
         event.preventDefault();
@@ -75,26 +187,6 @@
         openLibrary(libraryScroll.dataset.kcScrollTarget || "");
       }
     }, true);
-
-    // Respaldo para botones de recomendación. El enrutador SSO principal
-    // los intercepta primero; este controlador solo actúa si aquel no lo hizo.
-    document.addEventListener("click", (event) => {
-      const recommendation = event.target.closest("[data-kc-path-open]");
-      if (!recommendation || event.defaultPrevented) return;
-
-      const slug = String(recommendation.dataset.kcPathOpen || "").trim();
-      if (!slug) return;
-
-      const canonicalButton = document.querySelector(
-        `#course-grid [data-course="${CSS.escape(slug)}"]`,
-      );
-
-      if (canonicalButton && !canonicalButton.disabled) {
-        event.preventDefault();
-        event.stopPropagation();
-        canonicalButton.click();
-      }
-    });
   }
 
   function cleanEnabledPresentation() {
@@ -178,7 +270,6 @@
     applyIntegrationState();
 
     if (ssoEnabled) {
-      // Reintentos finitos para cubrir el render inicial sin mantener un observador permanente.
       window.setTimeout(applyIntegrationState, 150);
       window.setTimeout(applyIntegrationState, 700);
       return;
