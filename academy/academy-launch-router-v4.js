@@ -158,38 +158,9 @@
     return new URL(route, APP_SSO.baseUrl).toString();
   }
 
-  function applicationPostUrl() {
-    if (!APP_SSO.baseUrl || !APP_SSO.postPath) return "";
-    return new URL(APP_SSO.postPath, APP_SSO.baseUrl).toString();
-  }
-
-  function appendHiddenInput(form, name, value) {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = name;
-    input.value = String(value ?? "");
-    form.appendChild(input);
-  }
-
   function submitApplicationPost(session, product) {
-    const action = applicationPostUrl();
-    if (!action) throw new Error("La ruta POST de acceso único no está configurada.");
-
-    window.name = "";
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = action;
-    form.acceptCharset = "UTF-8";
-    form.style.display = "none";
-
-    appendHiddenInput(form, "product", product);
-    appendHiddenInput(form, "access_token", session.access_token);
-    appendHiddenInput(form, "expires_at", session.expires_at || "");
-    appendHiddenInput(form, "issued_at", Date.now());
-    appendHiddenInput(form, "handoff_type", APP_SSO.handoffType || DEFAULT_HANDOFF_TYPE);
-
-    document.body.appendChild(form);
-    form.submit();
+    writeApplicationHandoff(session, product);
+    location.assign("./app-sso-relay.html?v=20260801-sso8");
   }
 
   function openApplication(slug, button) {
