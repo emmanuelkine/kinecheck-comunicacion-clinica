@@ -8,13 +8,14 @@
   ]);
   const state = { course: null, rating: 0, existing: null };
 
-  // Estas aplicaciones conservan sus licencias, pero todavía no deben presentarse
-  // como abribles hasta completar su integración con el acceso único de KineCheck 4.0.
+  // Las licencias se siguen verificando y mostrando. Solo se bloquea temporalmente
+  // la apertura mientras termina la integración al acceso único de KineCheck 4.0.
   (CONFIG?.courses || []).forEach((course) => {
     if (!LEGACY_APPLICATIONS.has(course.slug)) return;
-    course.status = "integrating";
-    course.url = "";
-    course.subtitle = `${course.subtitle} Acceso único en integración; tu licencia se conserva.`;
+    course.integrationPending = true;
+    if (!course.subtitle.includes("Acceso único en integración")) {
+      course.subtitle = `${course.subtitle} Acceso único en integración; tu licencia se conserva.`;
+    }
   });
 
   function loadAcademyEvidenceExtension() {
@@ -51,6 +52,15 @@
       script.defer = true;
       document.head.appendChild(script);
     }
+  }
+
+  function loadIntegrationGuardExtension() {
+    if (document.querySelector('script[data-kinecheck-integration-guard]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-integration-guard-v4.js?v=20260731-1";
+    script.dataset.kinecheckIntegrationGuard = "script";
+    script.defer = true;
+    document.head.appendChild(script);
   }
 
   function loadLaunchRouterExtension() {
@@ -224,6 +234,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     loadAcademyEvidenceExtension();
     loadLearningPathExtension();
+    loadIntegrationGuardExtension();
     loadLaunchRouterExtension();
     createModal();
     addReviewActions();
