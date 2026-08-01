@@ -1,49 +1,60 @@
 const SESSION_KEY = "kinecheck_secure_session_v1";
-const HANDOFF_TYPE = "kinecheck-sso-v2";
+const HANDOFF_TYPES = new Set([
+  "kinecheck-sso-v3-access-only",
+  "kinecheck-sso-v2",
+]);
 const HANDOFF_MAX_AGE_MS = 120000;
 
+function earlyReadSession() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+  } catch {
+    return null;
+  }
+}
+
+function normalizeHandoffSession(handoff) {
+  const candidate = handoff?.session?.access_token
+    ? handoff.session
+    : handoff;
+
+  if (!candidate?.access_token) return null;
+
+  const existing = earlyReadSession();
+  const sameAccessToken = existing?.access_token === candidate.access_token;
+
+  return {
+    ...(sameAccessToken ? existing : {}),
+    access_token: candidate.access_token,
+    expires_at: candidate.expires_at,
+    expires_in: candidate.expires_in,
+    token_type: candidate.token_type || "bearer",
+    handoff_access_only: !candidate.refresh_token,
+    ...(candidate.refresh_token ? { refresh_token: candidate.refresh_token } : {}),
+  };
+}
+
 function acceptKineCheckHandoff() {
-  let session = null;
+  if (!window.name) return null;
 
-  if (window.name) {
-    try {
-      const handoff = JSON.parse(window.name);
-      if (
-        handoff?.type === HANDOFF_TYPE
-        && Number.isFinite(Number(handoff.issuedAt))
-        && Math.abs(Date.now() - Number(handoff.issuedAt)) <= HANDOFF_MAX_AGE_MS
-        && handoff.session?.access_token
-        && handoff.session?.refresh_token
-      ) {
-        session = handoff.session;
-      }
-    } catch {
-      // Un nombre de ventana ajeno a KineCheck se ignora.
-    } finally {
-      window.name = "";
-    }
-  }
+  try {
+    const handoff = JSON.parse(window.name);
+    const issuedAt = Number(handoff?.issuedAt);
+    const fresh = Number.isFinite(issuedAt)
+      && Math.abs(Date.now() - issuedAt) <= HANDOFF_MAX_AGE_MS;
 
-  if (!session) {
-    try {
-      const params = new URLSearchParams(location.hash.replace(/^#/, ""));
-      const encoded = params.get("kc_session");
-      if (encoded) {
-        const normalized = encoded.replaceAll("-", "+").replaceAll("_", "/");
-        const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
-        const binary = atob(padded);
-        const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
-        const candidate = JSON.parse(new TextDecoder().decode(bytes));
-        if (candidate?.access_token && candidate?.refresh_token) session = candidate;
-      }
-    } catch {
-      // El acceso normal continúa disponible si el respaldo no puede leerse.
-    }
-  }
+    if (!HANDOFF_TYPES.has(handoff?.type) || !fresh) return null;
 
-  if (session) localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  if (location.hash.includes("kc_session=")) {
-    history.replaceState(null, "", `${location.pathname}${location.search}`);
+    const session = normalizeHandoffSession(handoff);
+    if (!session) return null;
+
+    window.__KINECHECK_HANDOFF_PRODUCT__ = String(handoff.product || "").trim();
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    return session;
+  } catch {
+    return null;
+  } finally {
+    window.name = "";
   }
 }
 
@@ -73,6 +84,12 @@ acceptKineCheckHandoff();
     return null;
   });
   if (!CONFIG) return;
+
+  const requestedProduct = String(window.__KINECHECK_HANDOFF_PRODUCT__ || "").trim();
+  if (requestedProduct && requestedProduct !== String(CONFIG.courseSlug || "").trim()) {
+    localStorage.removeItem(SESSION_KEY);
+  }
+  delete window.__KINECHECK_HANDOFF_PRODUCT__;
 
   const $ = (selector) => document.querySelector(selector);
   const shell = $("#access-shell");
@@ -158,7 +175,7 @@ acceptKineCheckHandoff();
   }
 
   async function refreshSession(session) {
-    if (!session?.refresh_token) throw new Error("La sesión no se puede renovar.");
+    if (!session?.refresh_token) throw new Error("La sesión temporal debe renovarse desde KineCheck.");
     const refreshed = await api("/auth/v1/token?grant_type=refresh_token", {
       method: "POST",
       body: JSON.stringify({ refresh_token: session.refresh_token }),
@@ -171,19 +188,28 @@ acceptKineCheckHandoff();
     let session = readSession();
     if (!session?.access_token) return null;
 
+    const now = Math.floor(Date.now() / 1000);
+    const expiresAt = Number(session.expires_at || 0);
+
     try {
-      if (Number(session.expires_at || 0) <= Math.floor(Date.now() / 1000) + 60) {
+      if (expiresAt && expiresAt <= now) {
+        if (!session.refresh_token) throw new Error("La sesión temporal venció.");
+        session = await refreshSession(session);
+      } else if (expiresAt && expiresAt <= now + 60 && session.refresh_token) {
         session = await refreshSession(session);
       }
       return await validateIdentity(session);
     } catch {
-      try {
-        session = await refreshSession(session);
-        return await validateIdentity(session);
-      } catch {
-        clearSession();
-        return null;
+      if (session.refresh_token) {
+        try {
+          session = await refreshSession(session);
+          return await validateIdentity(session);
+        } catch {
+          // Continúa con la limpieza segura.
+        }
       }
+      clearSession();
+      return null;
     }
   }
 
