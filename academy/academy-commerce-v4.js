@@ -43,7 +43,7 @@
       showToast("Todavía no hay un checkout configurado para este producto.");
       return;
     }
-    window.open(checkout, "_blank", "noopener,noreferrer");
+    window.location.assign(checkout);
   }
 
   function injectStyles() {
