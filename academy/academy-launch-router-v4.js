@@ -9,6 +9,8 @@
     enabled: true,
     baseUrl: "https://kinecheck-clinico.emmanuelkine.chatgpt.site",
     handoffType: DEFAULT_HANDOFF_TYPE,
+    transport: "window-name",
+    postPath: "/api/license/sso",
     routes: Object.freeze({
       "kinecheck-clinico": "/sso.html?product=kinecheck-clinico",
       "kinecheck-estudiante": "/sso.html?product=kinecheck-estudiante",
@@ -133,13 +135,17 @@
     return true;
   }
 
+  function resetNavigation(button) {
+    navigating = false;
+    button?.removeAttribute("aria-busy");
+    if (button) button.style.pointerEvents = "";
+  }
+
   function openCourse(slug, destination, button) {
     if (!startNavigation(button)) return;
     const session = validTransferSession();
     if (!session) {
-      navigating = false;
-      button?.removeAttribute("aria-busy");
-      if (button) button.style.pointerEvents = "";
+      resetNavigation(button);
       return;
     }
     writeCourseHandoff(session, slug);
@@ -152,28 +158,67 @@
     return new URL(route, APP_SSO.baseUrl).toString();
   }
 
+  function applicationPostUrl() {
+    if (!APP_SSO.baseUrl || !APP_SSO.postPath) return "";
+    return new URL(APP_SSO.postPath, APP_SSO.baseUrl).toString();
+  }
+
+  function appendHiddenInput(form, name, value) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = String(value ?? "");
+    form.appendChild(input);
+  }
+
+  function submitApplicationPost(session, product) {
+    const action = applicationPostUrl();
+    if (!action) throw new Error("La ruta POST de acceso único no está configurada.");
+
+    window.name = "";
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = action;
+    form.acceptCharset = "UTF-8";
+    form.style.display = "none";
+
+    appendHiddenInput(form, "product", product);
+    appendHiddenInput(form, "access_token", session.access_token);
+    appendHiddenInput(form, "expires_at", session.expires_at || "");
+    appendHiddenInput(form, "issued_at", Date.now());
+    appendHiddenInput(form, "handoff_type", APP_SSO.handoffType || DEFAULT_HANDOFF_TYPE);
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+
   function openApplication(slug, button) {
     if (!APP_SSO.enabled) {
       showToast("Tu licencia se conserva activa. El acceso único de esta aplicación todavía no ha sido habilitado en producción.");
       return;
     }
 
-    const destination = applicationUrl(slug);
-    if (!destination) {
-      showToast("La ruta de acceso único todavía no está configurada para esta aplicación.");
-      return;
-    }
-
     if (!startNavigation(button)) return;
     const session = validTransferSession();
     if (!session) {
-      navigating = false;
-      button?.removeAttribute("aria-busy");
-      if (button) button.style.pointerEvents = "";
+      resetNavigation(button);
       return;
     }
-    writeApplicationHandoff(session, slug);
-    location.assign(destination);
+
+    try {
+      if (APP_SSO.transport === "form-post") {
+        submitApplicationPost(session, slug);
+        return;
+      }
+
+      const destination = applicationUrl(slug);
+      if (!destination) throw new Error("La ruta de acceso único todavía no está configurada para esta aplicación.");
+      writeApplicationHandoff(session, slug);
+      location.assign(destination);
+    } catch (error) {
+      resetNavigation(button);
+      showToast(error instanceof Error ? error.message : "No fue posible abrir la aplicación.");
+    }
   }
 
   function clarifyPendingButtons() {
