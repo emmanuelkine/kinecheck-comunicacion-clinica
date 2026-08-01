@@ -6,7 +6,7 @@
     "kinecheck-recupera",
   ]);
   const INTEGRATION_SUFFIX = " Acceso único en integración; tu licencia se conserva.";
-  const ssoEnabled = Boolean(CONFIG.appSso?.enabled);
+  const ssoEnabled = CONFIG.appSso ? Boolean(CONFIG.appSso.enabled) : true;
   let applying = false;
 
   function cleanText(value) {
