@@ -8,3 +8,12 @@
 
 /*.html
   Cache-Control: no-cache, must-revalidate
+
+/*.js
+  Cache-Control: no-cache, must-revalidate
+
+/academy/*.js
+  Cache-Control: no-cache, must-revalidate
+
+/traumatologia/*.js
+  Cache-Control: no-cache, must-revalidate
