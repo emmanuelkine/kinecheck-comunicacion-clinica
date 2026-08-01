@@ -6,6 +6,16 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   ownerEmails: ["emmanuelkine@gmail.com", "emmanuelkine+owner@gmail.com", "emmanuel_fox@hotmail.com"],
   betaTesterEmails: ["emmanuelkine+beta@gmail.com"],
   betaTrialDays: 5,
+  appSso: Object.freeze({
+    enabled: false,
+    baseUrl: "https://kinecheck-clinico.emmanuelkine.chatgpt.site",
+    handoffType: "kinecheck-sso-v3-access-only",
+    routes: Object.freeze({
+      "kinecheck-clinico": "/sso.html?product=kinecheck-clinico",
+      "kinecheck-estudiante": "/sso.html?product=kinecheck-estudiante",
+      "kinecheck-recupera": "/sso.html?product=kinecheck-recupera",
+    }),
+  }),
   courses: [
     { slug: "kinecheck-clinico", title: "KineCheck Clínico", subtitle: "Registro kinésico profesional", productId: "8150019", icon: "CL", status: "active", url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/access.html#activar" },
     { slug: "comunicacion-clinica", title: "Comunicación Clínica", subtitle: "El arte de comunicar en salud", productId: "8192814", icon: "CC", status: "active", url: "/kinecheck-comunicacion-clinica/?course=comunicacion-clinica&v=20260727" },
