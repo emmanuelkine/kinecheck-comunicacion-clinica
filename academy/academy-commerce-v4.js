@@ -22,6 +22,7 @@
   });
 
   const $ = (selector, root = document) => root.querySelector(selector);
+  let leavingForCheckout = false;
 
   function showToast(text) {
     const toast = $("#kc-toast");
@@ -37,11 +38,17 @@
     return Boolean(button && !button.disabled);
   }
 
-  function openCheckout(slug) {
+  function openCheckout(slug, button) {
+    if (leavingForCheckout) return;
     const checkout = CHECKOUTS[slug];
     if (!checkout) {
       showToast("Todavía no hay un checkout configurado para este producto.");
       return;
+    }
+    leavingForCheckout = true;
+    if (button) {
+      button.setAttribute("aria-busy", "true");
+      button.style.pointerEvents = "none";
     }
     window.location.assign(checkout);
   }
@@ -58,6 +65,24 @@
       .kc-pack-offer .kc-summary-icon{background:linear-gradient(135deg,#7c6cf2,#f59e0b);color:#fff}
       .kc-pack-offer ul{margin:.5rem 0 1rem;padding-left:1.15rem;color:#52616b}
       .kc-commerce-note{font-size:.86rem;color:#667681;margin-top:.55rem}
+      .kc-stage-recommendation-card,
+      .kc-stage-recommendation-card:hover,
+      .kc-summary-card,
+      .kc-summary-card:hover,
+      .course-card,
+      .course-card:hover{transform:none!important}
+      .kc-stage-recommendation-card button,
+      .kc-stage-recommendation-card button:hover,
+      .kc-summary-card button,
+      .kc-summary-card button:hover,
+      .course-button,
+      .course-button:hover,
+      [data-kc-path-open],
+      [data-kc-path-open]:hover,
+      [data-course],
+      [data-course]:hover{transform:none!important;translate:none!important;will-change:auto!important}
+      [aria-busy="true"]{cursor:progress!important;opacity:.82}
+      @media (prefers-reduced-motion:reduce){.kc-stage-recommendation-card,.kc-summary-card,.course-card,button{transition:none!important;animation:none!important}}
     `;
     document.head.appendChild(style);
   }
@@ -139,7 +164,7 @@
     if (purchase) {
       event.preventDefault();
       event.stopPropagation();
-      openCheckout(purchase.dataset.kcBuyProduct);
+      openCheckout(purchase.dataset.kcBuyProduct, purchase);
       return;
     }
 
@@ -157,7 +182,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-      openCheckout(slug);
+      openCheckout(slug, explore);
     }
   }, true);
 
