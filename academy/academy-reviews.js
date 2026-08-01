@@ -1,22 +1,7 @@
 (() => {
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG;
   const SESSION_KEY = "kinecheck_secure_session_v1";
-  const LEGACY_APPLICATIONS = new Set([
-    "kinecheck-clinico",
-    "kinecheck-estudiante",
-    "kinecheck-recupera",
-  ]);
   const state = { course: null, rating: 0, existing: null };
-
-  // Las licencias se siguen verificando y mostrando. Solo se bloquea temporalmente
-  // la apertura mientras termina la integración al acceso único de KineCheck 4.0.
-  (CONFIG?.courses || []).forEach((course) => {
-    if (!LEGACY_APPLICATIONS.has(course.slug)) return;
-    course.integrationPending = true;
-    if (!course.subtitle.includes("Acceso único en integración")) {
-      course.subtitle = `${course.subtitle} Acceso único en integración; tu licencia se conserva.`;
-    }
-  });
 
   function loadAcademyEvidenceExtension() {
     if (!document.querySelector('link[data-academy-evidence]')) {
@@ -57,7 +42,7 @@
   function loadIntegrationGuardExtension() {
     if (document.querySelector('script[data-kinecheck-integration-guard]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-integration-guard-v4.js?v=20260731-1";
+    script.src = "./academy-integration-guard-v4.js?v=20260801-freeze2";
     script.dataset.kinecheckIntegrationGuard = "script";
     script.defer = true;
     document.head.appendChild(script);
@@ -66,7 +51,7 @@
   function loadLaunchRouterExtension() {
     if (document.querySelector('script[data-kinecheck-launch-router]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260731-sso2";
+    script.src = "./academy-launch-router-v4.js?v=20260801-sso4";
     script.dataset.kinecheckLaunchRouter = "script";
     script.defer = true;
     document.head.appendChild(script);
