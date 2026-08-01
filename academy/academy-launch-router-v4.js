@@ -9,7 +9,7 @@
     enabled: true,
     baseUrl: "https://kinecheck-clinico.emmanuelkine.chatgpt.site",
     handoffType: DEFAULT_HANDOFF_TYPE,
-    transport: "window-name",
+    transport: "form-post",
     postPath: "/api/license/sso",
     routes: Object.freeze({
       "kinecheck-clinico": "/sso.html?product=kinecheck-clinico",
