@@ -2,7 +2,16 @@
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG || {};
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const DEFAULT_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const APP_SSO = CONFIG.appSso || {};
+  const APP_SSO = CONFIG.appSso || Object.freeze({
+    enabled: true,
+    baseUrl: "https://kinecheck-clinico.emmanuelkine.chatgpt.site",
+    handoffType: DEFAULT_HANDOFF_TYPE,
+    routes: Object.freeze({
+      "kinecheck-clinico": "/sso.html?product=kinecheck-clinico",
+      "kinecheck-estudiante": "/sso.html?product=kinecheck-estudiante",
+      "kinecheck-recupera": "/sso.html?product=kinecheck-recupera",
+    }),
+  });
 
   const EXTERNAL_COURSES = Object.freeze({
     "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260731-sso3",
