@@ -51,8 +51,17 @@
   function loadLaunchRouterExtension() {
     if (document.querySelector('script[data-kinecheck-launch-router]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260801-sso4";
+    script.src = "./academy-launch-router-v4.js?v=20260801-sso6";
     script.dataset.kinecheckLaunchRouter = "script";
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
+  function loadCommerceExtension() {
+    if (document.querySelector('script[data-kinecheck-commerce]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-commerce-v4.js?v=20260801-stable2";
+    script.dataset.kinecheckCommerce = "v4";
     script.defer = true;
     document.head.appendChild(script);
   }
@@ -221,6 +230,7 @@
     loadLearningPathExtension();
     loadIntegrationGuardExtension();
     loadLaunchRouterExtension();
+    loadCommerceExtension();
     createModal();
     addReviewActions();
     const catalog = document.querySelector("#course-grid");
