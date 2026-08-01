@@ -23,16 +23,6 @@
     }
   }
 
-  function accessOnlySession(session) {
-    return {
-      access_token: session.access_token,
-      expires_at: session.expires_at,
-      expires_in: session.expires_in,
-      token_type: session.token_type || "bearer",
-      handoff_access_only: true,
-    };
-  }
-
   function showToast(text) {
     const toast = document.querySelector("#kc-toast");
     if (!toast) return;
@@ -54,19 +44,34 @@
     return session;
   }
 
-  function writeHandoff(session, product = "") {
+  function writeCourseHandoff(session) {
+    window.name = JSON.stringify({
+      type: DEFAULT_HANDOFF_TYPE,
+      issuedAt: Date.now(),
+      session: {
+        access_token: session.access_token,
+        expires_at: session.expires_at,
+        expires_in: session.expires_in,
+        token_type: session.token_type || "bearer",
+        handoff_access_only: true,
+      },
+    });
+  }
+
+  function writeApplicationHandoff(session, product) {
     window.name = JSON.stringify({
       type: APP_SSO.handoffType || DEFAULT_HANDOFF_TYPE,
       issuedAt: Date.now(),
-      product: product || undefined,
-      session: accessOnlySession(session),
+      product,
+      access_token: session.access_token,
+      expires_at: session.expires_at,
     });
   }
 
   function openExternalCourse(slug) {
     const session = validTransferSession();
     if (!session) return;
-    writeHandoff(session);
+    writeCourseHandoff(session);
     location.assign(EXTERNAL_COURSES[slug]);
   }
 
@@ -90,7 +95,7 @@
 
     const session = validTransferSession();
     if (!session) return;
-    writeHandoff(session, slug);
+    writeApplicationHandoff(session, slug);
     location.assign(destination);
   }
 
