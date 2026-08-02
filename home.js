@@ -1,7 +1,10 @@
 (() => {
   const params = new URLSearchParams(location.search);
   if (params.get("course") === "comunicacion-clinica") {
-    location.replace(`/comunicacion-clinica.html${location.search}${location.hash}`);
+    const destination = new URL("./comunicacion-clinica.html", location.href);
+    destination.search = location.search;
+    destination.hash = location.hash;
+    location.replace(destination.toString());
     return;
   }
 
