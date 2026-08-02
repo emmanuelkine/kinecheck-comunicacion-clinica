@@ -19,8 +19,8 @@
   });
 
   const EXTERNAL_COURSES = Object.freeze({
-    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260801-sso4",
-    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260801-sso4",
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260801-sso5",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260801-sso5",
   });
 
   const SAME_ORIGIN_COURSES = new Set([
@@ -75,14 +75,18 @@
     };
   }
 
-  function writeCourseHandoff(session, product) {
-    window.name = "";
-    window.name = JSON.stringify({
+  function courseHandoff(session, product) {
+    return {
       type: DEFAULT_HANDOFF_TYPE,
       issuedAt: Date.now(),
       product,
       session: accessOnlySession(session),
-    });
+    };
+  }
+
+  function writeCourseHandoff(session, product) {
+    window.name = "";
+    window.name = JSON.stringify(courseHandoff(session, product));
   }
 
   function writeApplicationHandoff(session, product) {
@@ -131,7 +135,7 @@
         button.removeAttribute("aria-busy");
         button.style.pointerEvents = "";
       }
-    }, 5000);
+    }, 10000);
     return true;
   }
 
@@ -141,7 +145,7 @@
     if (button) button.style.pointerEvents = "";
   }
 
-  function openCourse(slug, destination, button) {
+  function openSameOriginCourse(slug, destination, button) {
     if (!startNavigation(button)) return;
     const session = validTransferSession();
     if (!session) {
@@ -150,6 +154,55 @@
     }
     writeCourseHandoff(session, slug);
     location.assign(destination);
+  }
+
+  function openExternalCourse(slug, destination, button) {
+    if (!startNavigation(button)) return;
+    const session = validTransferSession();
+    if (!session) {
+      resetNavigation(button);
+      return;
+    }
+
+    const targetOrigin = new URL(destination).origin;
+    const popup = window.open("about:blank", "_blank");
+    if (!popup) {
+      resetNavigation(button);
+      showToast("El navegador bloqueó la nueva pestaña. Permite ventanas emergentes para KineCheck y vuelve a intentarlo.");
+      return;
+    }
+
+    const payload = courseHandoff(session, slug);
+    let completed = false;
+
+    const cleanup = () => {
+      window.removeEventListener("message", onMessage);
+      window.clearTimeout(timeoutId);
+      resetNavigation(button);
+    };
+
+    const onMessage = (event) => {
+      if (
+        completed
+        || event.source !== popup
+        || event.origin !== targetOrigin
+        || event.data?.type !== "kinecheck-sso-ready"
+        || event.data?.product !== slug
+      ) return;
+
+      completed = true;
+      popup.postMessage(payload, targetOrigin);
+      cleanup();
+    };
+
+    window.addEventListener("message", onMessage);
+    const timeoutId = window.setTimeout(() => {
+      if (completed) return;
+      cleanup();
+      showToast("El curso no confirmó el acceso automático. Cierra esa pestaña y vuelve a intentarlo.");
+    }, 10000);
+
+    popup.location.href = destination;
   }
 
   function applicationUrl(slug) {
@@ -211,7 +264,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-      openCourse(slug, EXTERNAL_COURSES[slug], button);
+      openExternalCourse(slug, EXTERNAL_COURSES[slug], button);
       return;
     }
 
@@ -221,7 +274,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-      openCourse(slug, destination, button);
+      openSameOriginCourse(slug, destination, button);
       return;
     }
 
