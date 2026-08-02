@@ -1,0 +1,16 @@
+.product{--accent:var(--teal)}
+.product[data-course="kinecheck-clinico"],
+.product[data-course="comunicacion-clinica"]{--accent:var(--teal)}
+.product[data-course="kinecheck-estudiante"],
+.product[data-course="pack-estudiante"]{--accent:var(--blue)}
+.product[data-course="kinecheck-recupera"],
+.product[data-course="mas-alla-del-dolor"]{--accent:var(--orange)}
+.product[data-course="evidencia-aplicada"]{--accent:var(--purple)}
+.product[data-course="traumatologia-ortopedia-clinica"]{--accent:#0b9b60}
+.product-icon{color:var(--accent,var(--teal))}
+.product-actions{display:grid!important;grid-template-columns:1fr!important;gap:9px!important;margin-top:auto!important}
+.product-actions a{display:flex!important;align-items:center!important;justify-content:center!important;min-height:50px!important;visibility:visible!important;opacity:1!important}
+.product-actions .buy{background:var(--accent,var(--teal))!important;color:#fff!important;border:1px solid transparent!important}
+.product-actions .enter{background:#f8fbfb!important;color:var(--ink)!important;border:1px solid var(--line)!important}
+.product-actions .buy:hover,.product-actions .buy:focus-visible{filter:brightness(.96)}
+.product-actions .enter:hover,.product-actions .enter:focus-visible{background:#edf7f5!important;border-color:#a9d4cd!important}
