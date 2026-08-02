@@ -17,8 +17,8 @@
     "traumatologia-ortopedia-clinica",
   ]);
   const EXTERNAL_COURSE_URLS = Object.freeze({
-    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260801-sso4",
-    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260801-sso4",
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260801-sso5",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260801-sso5",
   });
   const INTEGRATION_SUFFIX = " Acceso único en integración; tu licencia se conserva.";
   const ssoEnabled = CONFIG.appSso ? Boolean(CONFIG.appSso.enabled) : true;
@@ -90,9 +90,8 @@
     return "";
   }
 
-  function writeCourseHandoff(session, product) {
-    window.name = "";
-    window.name = JSON.stringify({
+  function courseHandoff(session, product) {
+    return {
       type: COURSE_HANDOFF_TYPE,
       issuedAt: Date.now(),
       product,
@@ -103,7 +102,60 @@
         token_type: session.token_type || "bearer",
         handoff_access_only: true,
       },
-    });
+    };
+  }
+
+  function writeCourseHandoff(session, product) {
+    window.name = "";
+    window.name = JSON.stringify(courseHandoff(session, product));
+  }
+
+  function resetRecommendationButton(button) {
+    recommendationNavigation = false;
+    button?.removeAttribute("aria-busy");
+    if (button) button.style.pointerEvents = "";
+  }
+
+  function openExternalRecommendedCourse(slug, destination, session, button) {
+    const targetOrigin = new URL(destination).origin;
+    const popup = window.open("about:blank", "_blank");
+    if (!popup) {
+      resetRecommendationButton(button);
+      showStableToast("El navegador bloqueó la nueva pestaña. Permite ventanas emergentes para KineCheck y vuelve a intentarlo.");
+      return;
+    }
+
+    const payload = courseHandoff(session, slug);
+    let completed = false;
+
+    const cleanup = () => {
+      window.removeEventListener("message", onMessage);
+      window.clearTimeout(timeoutId);
+      resetRecommendationButton(button);
+    };
+
+    const onMessage = (event) => {
+      if (
+        completed
+        || event.source !== popup
+        || event.origin !== targetOrigin
+        || event.data?.type !== "kinecheck-sso-ready"
+        || event.data?.product !== slug
+      ) return;
+
+      completed = true;
+      popup.postMessage(payload, targetOrigin);
+      cleanup();
+    };
+
+    window.addEventListener("message", onMessage);
+    const timeoutId = window.setTimeout(() => {
+      if (completed) return;
+      cleanup();
+      showStableToast("El curso no confirmó el acceso automático. Cierra esa pestaña y vuelve a intentarlo.");
+    }, 10000);
+
+    popup.location.href = destination;
   }
 
   function openRecommendedCourse(slug, button) {
@@ -122,6 +174,11 @@
     if (button) {
       button.setAttribute("aria-busy", "true");
       button.style.pointerEvents = "none";
+    }
+
+    if (EXTERNAL_COURSE_URLS[slug]) {
+      openExternalRecommendedCourse(slug, destination, session, button);
+      return;
     }
 
     writeCourseHandoff(session, slug);
