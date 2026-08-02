@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Acceso protegido a Comunicación Clínica dentro del ecosistema KineCheck.">
+  <meta name="theme-color" content="#103f43">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'">
+  <title>Comunicación Clínica | KineCheck</title>
+  <link rel="stylesheet" href="./auth.css?v=20260731-1">
+  <link rel="stylesheet" href="/auth.css?v=20260731-1">
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#09111f;color:#f8fafc}*{box-sizing:border-box}html,body{min-height:100%;margin:0}body{background:radial-gradient(circle at 20% 20%,rgba(45,212,191,.18),transparent 28%),radial-gradient(circle at 85% 80%,rgba(59,130,246,.2),transparent 32%),linear-gradient(145deg,#07111d,#102a2f 55%,#0b1730)}button,input{font:inherit}.access-shell{min-height:100dvh;display:grid;place-items:center;padding:24px}.access-card{width:min(100%,500px);padding:34px;border:1px solid rgba(94,234,212,.25);border-radius:26px;background:rgba(8,20,32,.94);box-shadow:0 30px 90px rgba(0,0,0,.45)}.brand{display:flex;align-items:center;gap:12px}.brand-mark{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#5eead4,#60a5fa);color:#06111f;font-size:24px;font-weight:900}.brand div{display:grid}.brand span{color:#9fb2c8;font-size:13px}.course-heading{margin:38px 0 26px}.eyebrow{color:#5eead4;font-size:12px;font-weight:800;letter-spacing:.14em}.course-heading h1{margin:8px 0;font-size:clamp(36px,8vw,54px);line-height:1}.course-heading p{color:#bfd0df}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;padding:5px;border-radius:14px;background:#0f2233}.auth-tab{padding:11px;border:0;border-radius:10px;background:transparent;color:#9db0c2;cursor:pointer}.auth-tab.active{background:#234158;color:#fff;font-weight:700}form{display:grid;gap:10px}label{margin-top:5px;font-size:14px;font-weight:700}input{width:100%;padding:14px;border:1px solid #385267;border-radius:12px;background:#081522;color:#fff}input:focus{outline:none;border-color:#5eead4;box-shadow:0 0 0 3px rgba(94,234,212,.15)}.primary-button{min-height:50px;margin-top:14px;border:0;border-radius:13px;background:linear-gradient(100deg,#5eead4,#60a5fa);color:#06111f;font-weight:850;cursor:pointer}.notice{margin:18px 0;padding:13px 14px;border:1px solid rgba(94,234,212,.35);border-radius:12px;background:rgba(45,212,191,.1);color:#dcfffa}.notice-error{border-color:rgba(251,113,133,.45);background:rgba(159,18,57,.2);color:#ffe4e8}.access-progress{text-align:center;padding:20px 0}.sign-out{position:fixed;right:16px;bottom:16px;padding:10px 14px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(8,20,32,.9);color:#fff;cursor:pointer}.access-help{color:#8ea3b7;font-size:12px;text-align:center;line-height:1.5}@media(max-width:560px){.access-shell{padding:16px}.access-card{padding:25px 20px;border-radius:22px}.course-heading{margin:30px 0 22px}.course-heading h1{font-size:clamp(34px,12vw,46px)}.brand strong{font-size:17px}}
+  </style>
+  <script src="./config.js?v=20260727" defer></script>
+  <script src="./watermark.js?v=20260801-access4"></script>
+  <script type="module" src="./auth-gate.js?v=20260801-access4"></script>
+</head>
+<body>
+  <main id="access-shell" class="access-shell">
+    <section class="access-card" aria-labelledby="access-title">
+      <div class="brand"><span class="brand-mark">K</span><div><strong>KineCheck</strong><span>Acceso clínico protegido</span></div></div>
+      <div class="course-heading"><span class="eyebrow">MASTERCLASS INTERACTIVA</span><h1 id="access-title">Comunicación Clínica</h1><p>El arte de comunicar en salud</p></div>
+      <div class="auth-tabs"><button id="login-tab" class="auth-tab active" type="button">Ingresar</button><button id="signup-tab" class="auth-tab" type="button">Crear cuenta</button></div>
+      <form id="auth-form" novalidate>
+        <label for="email">Correo utilizado en la compra</label>
+        <input id="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
+        <button id="auth-submit" class="primary-button" type="submit">Ingresar al curso</button>
+      </form>
+      <div id="access-progress" class="access-progress" hidden><p>Verificando tu acceso…</p></div>
+      <div id="auth-message" class="notice" hidden></div>
+      <p class="access-help">Debes usar el mismo correo con el que realizaste la compra en Hotmart.</p>
+    </section>
+  </main>
+  <div id="root" hidden></div>
+  <button id="sign-out" class="sign-out" type="button" hidden>Cerrar sesión</button>
+  <noscript>Necesitas activar JavaScript para acceder al curso.</noscript>
+</body>
+</html>
