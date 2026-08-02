@@ -3,42 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="Acceso protegido a Comunicación Clínica dentro del ecosistema KineCheck.">
-  <meta name="theme-color" content="#103f43">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'">
-  <title>Comunicación Clínica | KineCheck</title>
-  <link rel="stylesheet" href="./auth.css?v=20260731-1">
-  <link rel="stylesheet" href="/auth.css?v=20260731-1">
-  <style>
-    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#09111f;color:#f8fafc}*{box-sizing:border-box}html,body{min-height:100%;margin:0}body{background:radial-gradient(circle at 20% 20%,rgba(45,212,191,.18),transparent 28%),radial-gradient(circle at 85% 80%,rgba(59,130,246,.2),transparent 32%),linear-gradient(145deg,#07111d,#102a2f 55%,#0b1730)}button,input{font:inherit}.access-shell{min-height:100dvh;display:grid;place-items:center;padding:24px}.access-card{width:min(100%,500px);padding:34px;border:1px solid rgba(94,234,212,.25);border-radius:26px;background:rgba(8,20,32,.94);box-shadow:0 30px 90px rgba(0,0,0,.45)}.brand{display:flex;align-items:center;gap:12px}.brand-mark{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#5eead4,#60a5fa);color:#06111f;font-size:24px;font-weight:900}.brand div{display:grid}.brand span{color:#9fb2c8;font-size:13px}.course-heading{margin:38px 0 26px}.eyebrow{color:#5eead4;font-size:12px;font-weight:800;letter-spacing:.14em}.course-heading h1{margin:8px 0;font-size:clamp(36px,8vw,54px);line-height:1}.course-heading p{color:#bfd0df}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;padding:5px;border-radius:14px;background:#0f2233}.auth-tab{padding:11px;border:0;border-radius:10px;background:transparent;color:#9db0c2;cursor:pointer}.auth-tab.active{background:#234158;color:#fff;font-weight:700}form{display:grid;gap:10px}label{margin-top:5px;font-size:14px;font-weight:700}input{width:100%;padding:14px;border:1px solid #385267;border-radius:12px;background:#081522;color:#fff}input:focus{outline:none;border-color:#5eead4;box-shadow:0 0 0 3px rgba(94,234,212,.15)}.primary-button{min-height:50px;margin-top:14px;border:0;border-radius:13px;background:linear-gradient(100deg,#5eead4,#60a5fa);color:#06111f;font-weight:850;cursor:pointer}.notice{margin:18px 0;padding:13px 14px;border:1px solid rgba(94,234,212,.35);border-radius:12px;background:rgba(45,212,191,.1);color:#dcfffa}.notice-error{border-color:rgba(251,113,133,.45);background:rgba(159,18,57,.2);color:#ffe4e8}.access-progress{text-align:center;padding:20px 0}.sign-out{position:fixed;right:16px;bottom:16px;padding:10px 14px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(8,20,32,.9);color:#fff;cursor:pointer}.access-help{color:#8ea3b7;font-size:12px;text-align:center;line-height:1.5}@media(max-width:560px){.access-shell{padding:16px}.access-card{padding:25px 20px;border-radius:22px}.course-heading{margin:30px 0 22px}.course-heading h1{font-size:clamp(34px,12vw,46px)}.brand strong{font-size:17px}}
-  </style>
-  <script src="./config.js?v=20260727" defer></script>
-  <script src="./watermark.js?v=20260801-access4"></script>
-  <script type="module" src="./auth-gate.js?v=20260801-access4"></script>
+  <meta name="description" content="KineCheck reúne aplicaciones, cursos y herramientas digitales para profesionales, estudiantes y pacientes de kinesiología.">
+  <meta name="theme-color" content="#0b2e36">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'">
+  <link rel="canonical" href="https://kinecheck.cl/">
+  <link rel="icon" href="/assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/home.css?v=20260802-domain1">
+  <script src="/home.js?v=20260802-domain1" defer></script>
+  <title>KineCheck | Ecosistema digital de kinesiología</title>
 </head>
 <body>
-  <main id="access-shell" class="access-shell">
-    <section class="access-card" aria-labelledby="access-title">
-      <div class="brand"><span class="brand-mark">K</span><div><strong>KineCheck</strong><span>Acceso clínico protegido</span></div></div>
-      <div class="course-heading"><span class="eyebrow">MASTERCLASS INTERACTIVA</span><h1 id="access-title">Comunicación Clínica</h1><p>El arte de comunicar en salud</p></div>
-      <div class="auth-tabs"><button id="login-tab" class="auth-tab active" type="button">Ingresar</button><button id="signup-tab" class="auth-tab" type="button">Crear cuenta</button></div>
-      <form id="auth-form" novalidate>
-        <label for="email">Correo utilizado en la compra</label>
-        <input id="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
-        <label for="password">Contraseña</label>
-        <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
-        <button id="auth-submit" class="primary-button" type="submit">Ingresar al curso</button>
-      </form>
-      <div id="access-progress" class="access-progress" hidden><p>Verificando tu acceso…</p></div>
-      <div id="auth-message" class="notice" hidden></div>
-      <p class="access-help">Debes usar el mismo correo con el que realizaste la compra en Hotmart.</p>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="KineCheck, inicio">
+      <img src="/assets/kinecheck-mark.svg" alt="">
+      <div><strong>KineCheck</strong><small>ECOSISTEMA</small></div>
+    </a>
+    <button id="menu-button" class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav id="site-nav" class="site-nav" aria-label="Navegación principal">
+      <a href="#para-quien">Para quién</a>
+      <a href="#productos">Productos</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#preguntas">Preguntas</a>
+      <a class="nav-cta" href="/academy/?v=20260802-domain1">Ingresar a KineCheck</a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    <section id="inicio" class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">ECOSISTEMA DIGITAL PARA KINESIOLOGÍA</span>
+        <h1>Aprende. Aplica.<br><em>Avanza con claridad.</em></h1>
+        <p>Aplicaciones, cursos y recursos para estructurar el razonamiento clínico, fortalecer la comunicación y acompañar el proceso de recuperación.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#productos">Explorar productos</a>
+          <a class="button secondary" href="/academy/?v=20260802-domain1">Ya compré: ingresar</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Resumen del ecosistema">
+        <div>
+          <span class="eyebrow">KINECHECK 4.0</span>
+          <h2>Todo tu ecosistema clínico en una sola cuenta.</h2>
+          <p>Compra en Hotmart, ingresa con el mismo correo y accede desde tu biblioteca personal.</p>
+        </div>
+        <div class="hero-stats">
+          <div><strong>7</strong><span>productos activos</span></div>
+          <div><strong>1</strong><span>pack para estudiantes</span></div>
+          <div><strong>24/7</strong><span>acceso online</span></div>
+          <div><strong>1 cuenta</strong><span>biblioteca unificada</span></div>
+        </div>
+        <a class="button primary" href="/academy/?v=20260802-domain1">Abrir mi biblioteca</a>
+      </aside>
+    </section>
+
+    <section class="trust-row" aria-label="Beneficios KineCheck">
+      <article><span>⌁</span><strong>Basado en evidencia</strong></article>
+      <article><span>✓</span><strong>Aplicación clínica real</strong></article>
+      <article><span>⇩</span><strong>Recursos descargables</strong></article>
+      <article><span>◎</span><strong>Acceso web y móvil</strong></article>
+    </section>
+
+    <section id="para-quien" class="section">
+      <div class="section-heading"><span class="eyebrow">TRES EXPERIENCIAS</span><h2>Una ruta para cada etapa.</h2><p>KineCheck no ofrece una única solución genérica. Cada producto responde a una necesidad concreta de aprendizaje, práctica clínica o recuperación.</p></div>
+      <div class="audiences">
+        <article class="audience"><b>PRO</b><h3>Profesionales</h3><p>Registro clínico, razonamiento, comunicación, evidencia y decisiones musculoesqueléticas más seguras.</p></article>
+        <article class="audience"><b>EST</b><h3>Estudiantes</h3><p>Evaluación guiada, casos, checklist y formación progresiva para comprender el proceso clínico.</p></article>
+        <article class="audience"><b>PAC</b><h3>Pacientes</h3><p>Seguimiento de síntomas, función, ejercicios y adherencia sin reemplazar la atención profesional.</p></article>
+      </div>
+    </section>
+
+    <section id="productos" class="section">
+      <div class="section-heading"><span class="eyebrow">PRODUCTOS KINECHECK</span><h2>Elige lo que necesitas hoy.</h2><p>La compra se realiza en el checkout oficial de Hotmart. Después debes ingresar a Academy con el mismo correo utilizado en el pago.</p></div>
+      <div class="filter-bar" role="group" aria-label="Filtrar productos">
+        <button class="active" type="button" data-filter="all">Todos</button>
+        <button type="button" data-filter="professionals">Profesionales</button>
+        <button type="button" data-filter="students">Estudiantes</button>
+        <button type="button" data-filter="patients">Pacientes</button>
+      </div>
+      <div class="products">
+        <article class="product" data-product-card data-audience="professionals" data-audiences="professionals" data-course="kinecheck-clinico">
+          <span class="product-icon">CL</span><h3>KineCheck Clínico</h3><p class="subtitle">Registro kinésico profesional</p>
+          <ul><li>Evaluación clínica estructurada</li><li>Razonamiento y seguimiento profesional</li><li>Historial, escalas, PDF y respaldo</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/L106791841D" target="_blank" rel="noopener noreferrer">Comprar en Hotmart</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+
+        <article class="product" data-product-card data-audience="students" data-audiences="students" data-course="kinecheck-estudiante">
+          <span class="product-icon">KE</span><h3>KineCheck Estudiante</h3><p class="subtitle">Evaluación y razonamiento paso a paso</p>
+          <ul><li>Flujo guiado de evaluación</li><li>Checklist para la práctica</li><li>Apoyo al aprendizaje clínico</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/G106801166S" target="_blank" rel="noopener noreferrer">Comprar en Hotmart</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+
+        <article class="product" data-product-card data-audience="patients" data-audiences="patients" data-course="kinecheck-recupera">
+          <span class="product-icon">KR</span><h3>KineCheck Recupera</h3><p class="subtitle">Mi plan y progreso</p>
+          <ul><li>Registro de síntomas y función</li><li>Adherencia y ejercicios</li><li>Visualización del progreso</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/P106806251E" target="_blank" rel="noopener noreferrer">Comprar en Hotmart</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+
+        <article class="product" data-product-card data-audience="professionals" data-audiences="professionals students" data-course="comunicacion-clinica">
+          <span class="product-icon">CC</span><h3>Comunicación Clínica</h3><p class="subtitle">El arte de comunicar en salud</p>
+          <ul><li>Escucha activa y empatía</li><li>Validación y educación clínica</li><li>Experiencia interactiva</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/T106883983U" target="_blank" rel="noopener noreferrer">Comprar en Hotmart</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+
+        <article class="product" data-product-card data-audience="professionals" data-audiences="professionals students" data-course="mas-alla-del-dolor">
+          <span class="product-icon">MD</span><h3>Más allá del dolor</h3><p class="subtitle">Evaluación musculoesquelética integral</p>
+          <ul><li>Dolor, función y contexto</li><li>Razonamiento biopsicosocial</li><li>Conclusiones clínicas prudentes</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/W106888386Q" target="_blank" rel="noopener noreferrer">Comprar en Hotmart</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+
+        <article class="product" data-product-card data-audience="professionals" data-audiences="professionals students" data-course="evidencia-aplicada">
+          <span class="product-icon">EA</span><h3>Evidencia Aplicada</h3><p class="subtitle">Razonamiento clínico con evidencia</p>
+          <ul><li>Pregunta clínica y búsqueda</li><li>Lectura crítica</li><li>Aplicación a decisiones reales</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/F106921972I" target="_blank" rel="noopener noreferrer">Comprar en Hotmart</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+
+        <article class="product" data-product-card data-audience="professionals" data-audiences="professionals students" data-course="traumatologia-ortopedia-clinica">
+          <span class="product-icon">TO</span><h3>Traumatología y Ortopedia Clínica</h3><p class="subtitle">Del mecanismo lesional a la decisión segura</p>
+          <ul><li>Fundamentos lesionales</li><li>Razonamiento y seguridad</li><li>Abordaje de condiciones MSK</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/B106913952R" target="_blank" rel="noopener noreferrer">Comprar en Hotmart</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+
+        <article class="product pack" data-product-card data-audience="students" data-audiences="students" data-course="pack-estudiante">
+          <span class="product-icon">PK</span><h3>Pack KineCheck Estudiante</h3><p class="subtitle">Estudiante + Más allá del dolor</p>
+          <ul><li>Aplicación KineCheck Estudiante</li><li>Curso Más allá del dolor</li><li>Ruta integrada para aprender evaluación MSK</li></ul>
+          <div class="product-actions"><a class="buy" href="https://pay.hotmart.com/Q106891608M" target="_blank" rel="noopener noreferrer">Comprar el pack</a><a class="enter" href="/academy/?v=20260802-domain1">Ya tengo acceso</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="section">
+      <div class="section-heading"><span class="eyebrow">ACCESO SIMPLE</span><h2>Compra y comienza en tres pasos.</h2></div>
+      <div class="steps">
+        <article class="step"><strong>1</strong><h3>Elige tu producto</h3><p>Selecciona la aplicación, curso o pack que corresponde a tu etapa.</p></article>
+        <article class="step"><strong>2</strong><h3>Paga en Hotmart</h3><p>Hotmart procesa el pago y comunica la aprobación de la compra a KineCheck.</p></article>
+        <article class="step"><strong>3</strong><h3>Ingresa a Academy</h3><p>Crea o abre tu cuenta con el mismo correo utilizado durante la compra.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading"><span class="eyebrow">SEGURIDAD Y CONTINUIDAD</span><h2>Un sistema diseñado para proteger el acceso.</h2></div>
+      <div class="security">
+        <article><h3>Licencias verificadas</h3><p>Los productos se muestran y abren según las licencias activas asociadas al correo de cada usuario.</p></article>
+        <article><h3>Acceso personal</h3><p>Las compras, devoluciones y bloqueos se sincronizan mediante Hotmart y Supabase. Las credenciales no deben compartirse.</p></article>
+      </div>
+    </section>
+
+    <section id="preguntas" class="section">
+      <div class="section-heading"><span class="eyebrow">PREGUNTAS FRECUENTES</span><h2>Antes y después de comprar.</h2></div>
+      <div class="faq">
+        <details><summary>¿Cómo recibo el acceso?</summary><p>Cuando Hotmart aprueba el pago, ingresa a Academy con el mismo correo utilizado en la compra. La sincronización normalmente tarda pocos segundos.</p></details>
+        <details><summary>¿Necesito instalar una aplicación?</summary><p>No. KineCheck funciona desde navegadores modernos en computador, tablet y teléfono.</p></details>
+        <details><summary>¿Qué ocurre si solicito un reembolso?</summary><p>Cuando Hotmart confirma el reembolso, cancelación o reversa, la licencia correspondiente se desactiva.</p></details>
+        <details><summary>¿Puedo compartir mi cuenta?</summary><p>No. El acceso es personal y está asociado al correo utilizado en la compra.</p></details>
+        <details><summary>¿Los productos reemplazan la atención profesional?</summary><p>No. Los cursos tienen finalidad educativa y las aplicaciones son herramientas de apoyo. No reemplazan evaluación, juicio profesional ni atención de urgencia.</p></details>
+        <details><summary>¿Dónde solicito soporte?</summary><p>Escribe a <a href="mailto:soporte.kinecheck@gmail.com">soporte.kinecheck@gmail.com</a> indicando el correo de compra y el producto. No envíes datos clínicos identificables.</p></details>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <span class="eyebrow">KINECHECK 4.0</span>
+      <h2>Tu aprendizaje, práctica clínica y seguimiento en un solo ecosistema.</h2>
+      <div class="hero-actions"><a class="button primary" href="#productos">Elegir un producto</a><a class="button secondary" href="/academy/?v=20260802-domain1">Ingresar a KineCheck</a></div>
     </section>
   </main>
-  <div id="root" hidden></div>
-  <button id="sign-out" class="sign-out" type="button" hidden>Cerrar sesión</button>
-  <noscript>Necesitas activar JavaScript para acceder al curso.</noscript>
+
+  <footer class="site-footer">
+    <div><a class="brand" href="#inicio"><img src="/assets/kinecheck-mark.svg" alt=""><div><strong>KineCheck</strong><small>ECOSISTEMA</small></div></a><p>Formación y herramientas clínicas digitales.</p><p>© <span id="current-year">2026</span> KineCheck.</p></div>
+    <nav aria-label="Enlaces del pie"><a href="/academy/?v=20260802-domain1">Ingresar</a><a href="#productos">Productos</a><a href="mailto:soporte.kinecheck@gmail.com">Soporte</a></nav>
+  </footer>
 </body>
 </html>
