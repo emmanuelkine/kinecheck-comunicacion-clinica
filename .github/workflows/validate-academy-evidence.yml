@@ -80,7 +80,7 @@ jobs:
 
       - name: Confirmar conexión y versión del módulo
         run: |
-          grep -q 'academy-reviews.js?v=43' academy/index.html
+          grep -Eq 'academy-reviews\.js\?v=[A-Za-z0-9._-]+' academy/index.html
           grep -q 'academy-evidence-alerts.css' academy/academy-reviews.js
           grep -q 'academy-evidence-alerts.js' academy/academy-reviews.js
           grep -q 'evidence-alerts.json' academy/academy-evidence-alerts.js

@@ -6,6 +6,13 @@ const ACCESS_HISTORY_KEY = "kinecheck_academy_history_v1";
 const CONTRAST_KEY = "kinecheck_academy_high_contrast_v1";
 const POST_PURCHASE_RETRIES = 4;
 const POST_PURCHASE_DELAY_MS = 5000;
+const SSO_ENDPOINT = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
+const SSO_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
+const SSO_PRODUCTS = new Set([
+  "kinecheck-clinico",
+  "kinecheck-estudiante",
+  "kinecheck-recupera",
+]);
 
 const $ = (selector) => document.querySelector(selector);
 const loginView = $("#login-view");
@@ -53,6 +60,15 @@ let ownerMode = false;
 let betaMode = false;
 let betaState = { recognized: false, active: false, expiresAt: null, daysRemaining: 0 };
 let activeStorageScope = "anonymous";
+let transientSession = null;
+let nativeSessionActivation = null;
+
+window.KINECHECK_ACADEMY_SESSION = Object.freeze({
+  get() {
+    if (transientSession?.access_token) return transientSession;
+    return readSession();
+  },
+});
 
 function normalizeEmail(value) {
   return String(value || "").trim().toLowerCase();
@@ -99,6 +115,12 @@ function readSession() {
 
 function clearSession() {
   localStorage.removeItem(SESSION_KEY);
+  transientSession = null;
+  try {
+    delete window.__KINECHECK_NATIVE_ACCESS_TOKEN__;
+  } catch {
+    window.__KINECHECK_NATIVE_ACCESS_TOKEN__ = "";
+  }
 }
 
 function readStoredJson(key, fallback) {
@@ -192,17 +214,31 @@ async function refreshSession(session) {
   return refreshed;
 }
 
-async function validateIdentity(session) {
+async function validateIdentity(session, persist = true) {
   const user = await request("/auth/v1/user", {
     method: "GET",
     token: session.access_token,
   });
   const verified = { ...session, user };
-  saveSession(verified);
+  if (persist) saveSession(verified);
   return verified;
 }
 
 async function validSession() {
+  if (transientSession?.access_token) {
+    if (Number(transientSession.expires_at || 0) <= Math.floor(Date.now() / 1000) + 30) {
+      transientSession = null;
+      return null;
+    }
+    try {
+      transientSession = await validateIdentity(transientSession, false);
+      return transientSession;
+    } catch {
+      transientSession = null;
+      return null;
+    }
+  }
+
   let session = readSession();
   if (!session?.access_token) return null;
 
@@ -219,6 +255,62 @@ async function validSession() {
       clearSession();
       return null;
     }
+  }
+}
+
+function accessTokenExpiry(token) {
+  if (typeof token !== "string" || !/^[A-Za-z0-9._~-]{20,8192}$/.test(token)) return 0;
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return 0;
+    const normalized = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+    const claims = JSON.parse(atob(padded));
+    const expiresAt = Number(claims?.exp);
+    return Number.isFinite(expiresAt) ? Math.floor(expiresAt) : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function consumeNativeAccessToken() {
+  const token = typeof window.__KINECHECK_NATIVE_ACCESS_TOKEN__ === "string"
+    ? window.__KINECHECK_NATIVE_ACCESS_TOKEN__
+    : "";
+  try {
+    delete window.__KINECHECK_NATIVE_ACCESS_TOKEN__;
+  } catch {
+    window.__KINECHECK_NATIVE_ACCESS_TOKEN__ = "";
+  }
+  return /^[A-Za-z0-9._~-]{20,8192}$/.test(token) ? token : "";
+}
+
+async function receiveNativeSession() {
+  const accessToken = consumeNativeAccessToken();
+  if (!accessToken) return false;
+  if (transientSession?.access_token === accessToken) return true;
+  if (nativeSessionActivation) return nativeSessionActivation;
+
+  nativeSessionActivation = (async () => {
+    const expiresAt = accessTokenExpiry(accessToken);
+    if (expiresAt <= Math.floor(Date.now() / 1000) + 30) {
+      throw new Error("La sesión de KineCheck App venció. Vuelve a abrir esta sección desde la aplicación.");
+    }
+    setBusy(true, "Abriendo tu cuenta sin volver a pedir la contraseña…");
+    transientSession = await validateIdentity({ access_token: accessToken, expires_at: expiresAt }, false);
+    await renderLibrary(transientSession);
+    return true;
+  })();
+
+  try {
+    return await nativeSessionActivation;
+  } catch (error) {
+    transientSession = null;
+    setBusy(false);
+    showAuthMessage(error.message || "No fue posible recuperar la sesión de KineCheck App.", true);
+    return false;
+  } finally {
+    nativeSessionActivation = null;
   }
 }
 
@@ -697,6 +789,38 @@ async function renderLibrary(session) {
   await loadLicenses(session);
 }
 
+function submitSsoAccess(session, product) {
+  if (!SSO_PRODUCTS.has(product)) throw new Error("La aplicación solicitada no es válida.");
+  const accessToken = String(session?.access_token || "");
+  const expiresAt = accessTokenExpiry(accessToken);
+  const issuedAt = Math.floor(Date.now() / 1000);
+  if (!accessToken || expiresAt <= issuedAt) {
+    throw new Error("La sesión venció. Ingresa nuevamente para abrir esta aplicación.");
+  }
+
+  const ssoForm = document.createElement("form");
+  ssoForm.method = "post";
+  ssoForm.action = SSO_ENDPOINT;
+  ssoForm.enctype = "application/x-www-form-urlencoded";
+  ssoForm.hidden = true;
+  const fields = {
+    product,
+    access_token: accessToken,
+    expires_at: String(expiresAt),
+    issued_at: String(issuedAt),
+    handoff_type: SSO_HANDOFF_TYPE,
+  };
+  for (const [name, value] of Object.entries(fields)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    ssoForm.appendChild(input);
+  }
+  document.body.appendChild(ssoForm);
+  ssoForm.submit();
+}
+
 async function openCourse(slug) {
   libraryMessage.hidden = true;
   const course = CONFIG.courses.find((item) => item.slug === slug);
@@ -722,6 +846,10 @@ async function openCourse(slug) {
   try {
     await validateCourseLicense(session.access_token, slug);
     saveLastProduct(course);
+    if (course.ssoProduct) {
+      submitSsoAccess(session, course.ssoProduct);
+      return;
+    }
     window.location.assign(course.url);
   } catch (error) {
     licenseState.set(slug, "locked");
@@ -903,11 +1031,18 @@ signOut.addEventListener("click", () => clearSession());
 currentYear.textContent = String(new Date().getFullYear());
 setHighContrast(localStorage.getItem(CONTRAST_KEY) === "true");
 
+window.addEventListener("kinecheck:native-session", () => {
+  receiveNativeSession().catch((error) => {
+    console.error("KineCheck native session", error);
+  });
+});
+
 window.addEventListener("unhandledrejection", (event) => {
   console.error("KineCheck Academy unhandled rejection", event.reason);
 });
 
 (async () => {
+  if (await receiveNativeSession()) return;
   const session = await validSession();
   if (session) await renderLibrary(session);
 })();

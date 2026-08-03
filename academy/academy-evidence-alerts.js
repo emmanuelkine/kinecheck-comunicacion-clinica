@@ -14,7 +14,8 @@
 
   function storageScope() {
     try {
-      const session = JSON.parse(localStorage.getItem("kinecheck_secure_session_v1") || "null");
+      const session = window.KINECHECK_ACADEMY_SESSION?.get?.()
+        || JSON.parse(localStorage.getItem("kinecheck_secure_session_v1") || "null");
       return String(session?.user?.email || session?.user?.id || "anonymous").trim().toLowerCase();
     } catch {
       return "anonymous";

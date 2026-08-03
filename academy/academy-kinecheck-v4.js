@@ -13,6 +13,8 @@
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
   function session() {
+    const provided = window.KINECHECK_ACADEMY_SESSION?.get?.();
+    if (provided?.access_token) return provided;
     try {
       return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
     } catch {

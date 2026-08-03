@@ -18,7 +18,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "professionals",
       audiences: ["professionals"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/access.html#activar"
+      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-clinico",
+      ssoProduct: "kinecheck-clinico"
     },
     {
       slug: "kinecheck-estudiante",
@@ -31,7 +32,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "students",
       audiences: ["students"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/student-access.html#activar"
+      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-estudiante",
+      ssoProduct: "kinecheck-estudiante"
     },
     {
       slug: "kinecheck-recupera",
@@ -44,7 +46,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "patients",
       audiences: ["patients"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/patient-access.html#activar"
+      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-recupera",
+      ssoProduct: "kinecheck-recupera"
     },
     {
       slug: "comunicacion-clinica",

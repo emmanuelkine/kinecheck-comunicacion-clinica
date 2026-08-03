@@ -22,6 +22,11 @@ const CHECKOUT_EXPECTATIONS = [
     keywords: ["kinecheck estudiante"],
   },
   {
+    label: "Pack KineCheck Estudiante",
+    url: "https://pay.hotmart.com/Q106891608M",
+    keywords: ["pack kinecheck estudiante", "kinecheck estudiante"],
+  },
+  {
     label: "KineCheck Recupera",
     url: "https://pay.hotmart.com/P106806251E",
     keywords: ["kinecheck recupera"],
@@ -87,21 +92,30 @@ async function ensureLocalFile(path) {
 }
 
 async function fetchWithTimeout(url, options = {}) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  try {
-    return await fetch(url, {
-      redirect: "manual",
-      headers: {
-        "user-agent": "KineCheck-Healthcheck/1.1",
-        ...(options.headers || {}),
-      },
-      ...options,
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timer);
+  const maxAttempts = options.method && options.method !== "GET" ? 1 : 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    try {
+      const response = await fetch(url, {
+        redirect: "manual",
+        headers: {
+          "user-agent": "KineCheck-Healthcheck/1.2",
+          ...(options.headers || {}),
+        },
+        ...options,
+        signal: controller.signal,
+      });
+      if (response.status < 500 || attempt === maxAttempts) return response;
+      await response.body?.cancel();
+    } catch (error) {
+      if (attempt === maxAttempts) throw error;
+    } finally {
+      clearTimeout(timer);
+    }
+    await new Promise((resolve) => setTimeout(resolve, attempt * 400));
   }
+  throw new Error("No fue posible completar la comprobación.");
 }
 
 function isReachableStatus(status) {

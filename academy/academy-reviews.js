@@ -32,7 +32,7 @@
 
     if (!document.querySelector('script[data-kinecheck-learning-path]')) {
       const script = document.createElement("script");
-      script.src = "./academy-learning-path-v4.js?v=20260731-1";
+      script.src = "./academy-learning-path-v4.js?v=20260803-stable2";
       script.dataset.kinecheckLearningPath = "script";
       script.defer = true;
       document.head.appendChild(script);
@@ -42,7 +42,7 @@
   function loadIntegrationGuardExtension() {
     if (document.querySelector('script[data-kinecheck-integration-guard]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-integration-guard-v4.js?v=20260801-freeze2";
+    script.src = "./academy-integration-guard-v4.js?v=20260803-stable2";
     script.dataset.kinecheckIntegrationGuard = "script";
     script.defer = true;
     document.head.appendChild(script);
@@ -51,7 +51,7 @@
   function loadLaunchRouterExtension() {
     if (document.querySelector('script[data-kinecheck-launch-router]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260801-sso8";
+    script.src = "./academy-launch-router-v4.js?v=20260803-stable2";
     script.dataset.kinecheckLaunchRouter = "script";
     script.defer = true;
     document.head.appendChild(script);
@@ -67,6 +67,8 @@
   }
 
   function session() {
+    const provided = window.KINECHECK_ACADEMY_SESSION?.get?.();
+    if (provided?.access_token) return provided;
     try {
       return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
     } catch {
