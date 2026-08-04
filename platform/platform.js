@@ -5,7 +5,6 @@
     supabaseUrl: "https://eqhcdclyeoapmqtlduwf.supabase.co",
     anonKey: "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_",
     sessionKey: "kinecheck_secure_session_v1",
-    ownerEmails: new Set(["emmanuelkine@gmail.com", "emmanuelkine+owner@gmail.com", "emmanuel_fox@hotmail.com"]),
     supportEmail: "soporte.kinecheck@gmail.com",
     products: [
       { slug: "kinecheck-clinico", title: "KineCheck Clínico", subtitle: "Evaluación, registro y razonamiento profesional.", icon: "CL", kind: "application", workspace: "clinical" },
@@ -166,32 +165,16 @@
   }
 
   async function loadAccess() {
-    const slugs = CONFIG.products.map((product) => product.slug);
-    const response = await fetchWithTimeout(`${CONFIG.supabaseUrl}/functions/v1/course-key`, {
+    const response = await fetchWithTimeout(`${CONFIG.supabaseUrl}/functions/v1/platform-context`, {
       method: "POST",
       headers: apiHeaders(),
-      body: JSON.stringify({ courseSlugs: slugs })
+      body: JSON.stringify({})
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data?.message || "No fue posible verificar tus licencias.");
     state.activeSlugs = new Set(data.activeCourseSlugs || []);
     state.accessMetadata = new Map((data.activeAccesses || []).map((item) => [item.courseSlug, item]));
-    deriveCapabilities();
-  }
-
-  function deriveCapabilities() {
-    const email = String(state.user?.email || "").toLowerCase();
-    const owner = CONFIG.ownerEmails.has(email);
-    const active = state.activeSlugs;
-    state.capabilities = new Set(["course_access"]);
-
-    if (owner || active.has("kinecheck-clinico")) state.capabilities.add("clinical_workspace");
-    if (owner || active.has("kinecheck-estudiante")) state.capabilities.add("student_tutor");
-    if (owner) state.capabilities.add("teaching_studio");
-    if (owner || active.has("kinecheck-recupera")) state.capabilities.add("patient_program");
-    if (owner || active.has("evidencia-aplicada") || [...active].some((slug) => CONFIG.products.find((p) => p.slug === slug)?.kind === "course")) state.capabilities.add("evidence_library");
-
-    if (owner) CONFIG.products.forEach((product) => state.activeSlugs.add(product.slug));
+    state.capabilities = new Set(data.capabilities || ["course_access"]);
   }
 
   function availableWorkspaces() {
