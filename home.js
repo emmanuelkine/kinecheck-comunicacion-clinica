@@ -10,8 +10,8 @@
 
   document.documentElement.classList.add("js");
 
-  const COMMERCE_FIX_VERSION = "20260804-access-term1";
-  const ACADEMY_URL = new URL(`./academy/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
+  const COMMERCE_FIX_VERSION = "20260804-platform-v5-1";
+  const ACADEMY_URL = new URL(`./platform/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
   const CHECKOUTS = Object.freeze({
     "kinecheck-clinico": "https://pay.hotmart.com/L106791841D",
     "kinecheck-estudiante": "https://pay.hotmart.com/G106801166S",
