@@ -1,0 +1,87 @@
+/* KineCheck professional public catalog — 2026-08 */
+.product-media{
+  position:relative;
+  min-height:172px;
+  margin:-27px -27px 24px;
+  overflow:hidden;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  background-image:
+    linear-gradient(145deg,color-mix(in srgb,var(--accent) 78%,rgba(4,18,24,.35)),rgba(3,16,22,.26)),
+    url('./academy/academy-hero-clean.jpg');
+  background-position:center;
+  background-size:cover;
+  isolation:isolate;
+}
+.product-media::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 82% 16%,rgba(255,255,255,.23),transparent 27%),
+    linear-gradient(to top,rgba(2,13,18,.88),transparent 64%);
+}
+.product-media::after{
+  content:attr(data-label);
+  position:absolute;
+  left:18px;
+  bottom:16px;
+  z-index:1;
+  max-width:calc(100% - 36px);
+  color:#fff;
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.12em;
+  line-height:1.35;
+  text-transform:uppercase;
+  text-shadow:0 2px 12px rgba(0,0,0,.55);
+}
+.product[data-course="kinecheck-clinico"] .product-media{background-position:50% 34%}
+.product[data-course="kinecheck-estudiante"] .product-media{background-position:26% 42%}
+.product[data-course="kinecheck-recupera"] .product-media{background-position:70% 48%}
+.product[data-course="comunicacion-clinica"] .product-media{background-position:20% 30%}
+.product[data-course="mas-alla-del-dolor"] .product-media{background-position:60% 58%}
+.product[data-course="evidencia-aplicada"] .product-media{background-position:82% 36%}
+.product[data-course="traumatologia-ortopedia-clinica"] .product-media{background-position:42% 46%}
+.product[data-course="pack-estudiante"] .product-media{background-position:50% 54%}
+
+.product{
+  overflow:hidden;
+  border-color:color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.08))!important;
+}
+.product:hover .product-media{filter:saturate(1.08) brightness(1.05)}
+.product .product-top,.product h3,.product .subtitle,.product ul,.product .product-actions{position:relative;z-index:2}
+.product h3{font-size:clamp(24px,2.2vw,31px)!important;line-height:1.02!important}
+.product .subtitle{min-height:42px}
+.product-actions .detail{
+  color:#03242b!important;
+  border:1px solid transparent!important;
+  background:linear-gradient(105deg,color-mix(in srgb,var(--accent) 74%,white),color-mix(in srgb,var(--accent) 42%,white))!important;
+  box-shadow:0 14px 32px color-mix(in srgb,var(--accent) 18%,transparent)!important;
+}
+.product-actions .detail:hover,.product-actions .detail:focus-visible{filter:brightness(1.06)}
+.product-actions .buy{
+  color:#f1fffd!important;
+  border:1px solid color-mix(in srgb,var(--accent) 45%,rgba(255,255,255,.15))!important;
+  background:color-mix(in srgb,var(--accent) 14%,rgba(255,255,255,.035))!important;
+  box-shadow:none!important;
+}
+.product-actions .buy:hover,.product-actions .buy:focus-visible{background:color-mix(in srgb,var(--accent) 23%,rgba(255,255,255,.05))!important}
+.product-actions .enter{min-height:44px!important;font-size:13px!important}
+
+.catalog-intro-note{
+  max-width:1404px;
+  margin:0 auto 22px;
+  padding:18px 20px;
+  border:1px solid rgba(98,240,226,.17);
+  border-radius:18px;
+  background:linear-gradient(125deg,rgba(98,240,226,.08),rgba(79,120,255,.06));
+  color:#c7dfdf;
+  font-size:14px;
+  line-height:1.55;
+}
+.catalog-intro-note strong{color:#fff}
+
+@media(max-width:760px){
+  .product-media{min-height:150px;margin:-25px -25px 21px}
+  .product h3{font-size:25px!important}
+}
