@@ -6,11 +6,12 @@
 .product[data-course="kinecheck-recupera"],
 .product[data-course="mas-alla-del-dolor"]{--accent:var(--orange)}
 .product[data-course="evidencia-aplicada"]{--accent:var(--purple)}
-.product[data-course="traumatologia-ortopedia-clinica"]{--accent:#0b9b60}
-.product-icon{color:var(--accent,var(--teal))}
+.product[data-course="traumatologia-ortopedia-clinica"]{--accent:var(--green)}
+.product-icon{color:color-mix(in srgb,var(--accent) 75%,white)}
 .product-actions{display:grid!important;grid-template-columns:1fr!important;gap:9px!important;margin-top:auto!important}
-.product-actions a{display:flex!important;align-items:center!important;justify-content:center!important;min-height:50px!important;visibility:visible!important;opacity:1!important}
-.product-actions .buy{background:var(--accent,var(--teal))!important;color:#fff!important;border:1px solid transparent!important}
-.product-actions .enter{background:#f8fbfb!important;color:var(--ink)!important;border:1px solid var(--line)!important}
-.product-actions .buy:hover,.product-actions .buy:focus-visible{filter:brightness(.96)}
-.product-actions .enter:hover,.product-actions .enter:focus-visible{background:#edf7f5!important;border-color:#a9d4cd!important}
+.product-actions a{display:flex!important;align-items:center!important;justify-content:center!important;min-height:51px!important;visibility:visible!important;opacity:1!important;border-radius:14px!important;text-decoration:none!important;font-weight:910!important;transition:transform .2s ease,filter .2s ease,background .2s ease,border-color .2s ease!important}
+.product-actions a:hover,.product-actions a:focus-visible{transform:translateY(-2px)}
+.product-actions .buy{background:linear-gradient(105deg,var(--accent),color-mix(in srgb,var(--accent) 66%,white))!important;color:#fff!important;border:1px solid transparent!important;box-shadow:0 13px 30px color-mix(in srgb,var(--accent) 16%,transparent)!important}
+.product-actions .enter{background:rgba(255,255,255,.045)!important;color:#e8f7f5!important;border:1px solid rgba(255,255,255,.13)!important}
+.product-actions .buy:hover,.product-actions .buy:focus-visible{filter:brightness(1.06)}
+.product-actions .enter:hover,.product-actions .enter:focus-visible{background:color-mix(in srgb,var(--accent) 9%,transparent)!important;border-color:color-mix(in srgb,var(--accent) 40%,transparent)!important}
