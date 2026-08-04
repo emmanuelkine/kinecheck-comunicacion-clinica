@@ -196,14 +196,22 @@ async function main() {
   console.log("\nKineCheck end-to-end healthcheck\n");
 
   const landing = await fileText("kinecheck/index.html");
+  const ecosystemHome = await fileText("index.html");
+  const ecosystemHomeScript = await fileText("home.js");
   const academyIndex = await fileText("academy/index.html");
   const academyConfig = await fileText("academy/academy-bootstrap-v28.js");
+  const academyCore = await fileText("academy/academy-v39.js");
+  const launchRouter = await fileText("academy/academy-launch-router-v4.js");
+  const integrationGuard = await fileText("academy/academy-integration-guard-v4.js");
+  const courseAuthGate = await fileText("auth-gate.js");
 
   await Promise.all([
     ensureLocalFile("academy/academy-v39.js"),
     ensureLocalFile("academy/academy.css"),
     ensureLocalFile("academy/academy-v40.css"),
     ensureLocalFile("academy/academy-reviews.js"),
+    ensureLocalFile("academy/academy-launch-router-v4.js"),
+    ensureLocalFile("academy/academy-integration-guard-v4.js"),
     ensureLocalFile("academy/salir.html"),
     ensureLocalFile("academy/compra-aprobada.html"),
     ensureLocalFile("academy/pago-pendiente.html"),
@@ -212,13 +220,52 @@ async function main() {
     ensureLocalFile("kinecheck/site-v3.css"),
     ensureLocalFile("kinecheck/site-v3.js"),
     ensureLocalFile("assets/kinecheck-mark.svg"),
+    ensureLocalFile("comunicacion-clinica.html"),
   ]);
 
-  const academyScriptMatch = academyIndex.match(/academy-v39\.js\?v=(\d+)/);
+  const academyScriptMatch = academyIndex.match(/academy-v39\.js\?v=([A-Za-z0-9._-]+)/);
   if (!academyScriptMatch) {
     logFail("Academy no está apuntando al script estable con una versión de caché válida.");
   } else {
     logOk(`Academy utiliza el script estable con caché v${academyScriptMatch[1]}.`);
+  }
+
+  if (/(?:href|src)="\/(?:assets\/kinecheck-mark\.svg|home\.(?:css|js)|academy\/)/.test(ecosystemHome)) {
+    logFail("La portada del ecosistema contiene rutas absolutas incompatibles con GitHub Pages.");
+  } else {
+    logOk("La portada usa rutas compatibles con el subdirectorio de GitHub Pages.");
+  }
+
+  if (!ecosystemHomeScript.includes('new URL(`./academy/?v=')) {
+    logFail("La portada no resuelve Academy desde la ruta real del repositorio.");
+  } else {
+    logOk("La portada resuelve Academy correctamente en GitHub Pages y dominio propio.");
+  }
+
+  if (!academyCore.includes("async refresh()") || !academyCore.includes("return validSession();")) {
+    logFail("Academy no expone la renovación segura de sesión a los botones de lanzamiento.");
+  } else {
+    logOk("Los botones de lanzamiento pueden renovar la sesión antes de abrir un producto.");
+  }
+
+  for (const [label, source] of [["router principal", launchRouter], ["router de recomendaciones", integrationGuard]]) {
+    if (!source.includes("/comunicacion-clinica.html?course=comunicacion-clinica")) {
+      logFail(`El ${label} todavía envía Comunicación Clínica a la portada pública.`);
+    } else if (!source.includes("KINECHECK_ACADEMY_SESSION.refresh")) {
+      logFail(`El ${label} no intenta renovar una sesión vencida antes de abrir cursos.`);
+    } else if (!source.includes("popup.name = JSON.stringify(payload)")) {
+      logFail(`El ${label} no conserva un respaldo directo del traspaso para cursos externos.`);
+    } else {
+      logOk(`El ${label} usa la ruta protegida, renovación automática y traspaso con respaldo.`);
+    }
+  }
+
+  if (!courseAuthGate.includes('COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:"')) {
+    logFail("Los cursos del repositorio todavía pueden sobrescribir la sesión principal de Academy.");
+  } else if (courseAuthGate.includes("kinecheck-sso-v2")) {
+    logFail("Los cursos todavía aceptan un tipo de traspaso SSO obsoleto.");
+  } else {
+    logOk("Comunicación Clínica y Traumatología usan sesiones aisladas y el traspaso SSO oficial.");
   }
 
   const landingIds = new Set(extractLandingProductIds(landing));
@@ -254,6 +301,9 @@ async function main() {
   }
 
   await checkUrl("Página pública KineCheck", `${PUBLIC_BASE}/kinecheck/`);
+  await checkUrl("Portada del ecosistema", `${PUBLIC_BASE}/`);
+  await checkUrl("Estilos de la portada", `${PUBLIC_BASE}/home.css`);
+  await checkUrl("Acceso Comunicación Clínica", `${PUBLIC_BASE}/comunicacion-clinica.html?course=comunicacion-clinica`);
   const academyCacheVersion = academyScriptMatch?.[1] || "current";
   await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/?v=${academyCacheVersion}`);
   await checkUrl("Página compra aprobada", `${PUBLIC_BASE}/academy/compra-aprobada.html`);

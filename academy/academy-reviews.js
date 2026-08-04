@@ -42,7 +42,7 @@
   function loadIntegrationGuardExtension() {
     if (document.querySelector('script[data-kinecheck-integration-guard]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-integration-guard-v4.js?v=20260803-stable2";
+    script.src = "./academy-integration-guard-v4.js?v=20260803-sessionfix2";
     script.dataset.kinecheckIntegrationGuard = "script";
     script.defer = true;
     document.head.appendChild(script);
@@ -51,7 +51,7 @@
   function loadLaunchRouterExtension() {
     if (document.querySelector('script[data-kinecheck-launch-router]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260803-stable2";
+    script.src = "./academy-launch-router-v4.js?v=20260803-sessionfix2";
     script.dataset.kinecheckLaunchRouter = "script";
     script.defer = true;
     document.head.appendChild(script);

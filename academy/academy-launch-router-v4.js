@@ -19,8 +19,8 @@
   });
 
   const EXTERNAL_COURSES = Object.freeze({
-    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260801-sso5",
-    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260801-sso5",
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260803-sessionfix2",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260803-sessionfix2",
   });
 
   const SAME_ORIGIN_COURSES = new Set([
@@ -55,13 +55,19 @@
     showToast.timer = window.setTimeout(() => { toast.hidden = true; }, 4200);
   }
 
-  function validTransferSession() {
-    const session = readSession();
-    const expiresAt = Number(session?.expires_at || 0);
+  async function validTransferSession() {
+    let session = readSession();
+    let expiresAt = Number(session?.expires_at || 0);
     const now = Math.floor(Date.now() / 1000);
 
-    if (!session?.access_token || (expiresAt && expiresAt <= now + 30)) {
-      showToast("Tu sesión necesita renovarse. Actualiza KineCheck e ingresa nuevamente antes de abrir este producto.");
+    if ((!session?.access_token || (expiresAt && expiresAt <= now + 60))
+      && typeof window.KINECHECK_ACADEMY_SESSION?.refresh === "function") {
+      session = await window.KINECHECK_ACADEMY_SESSION.refresh().catch(() => null);
+      expiresAt = Number(session?.expires_at || 0);
+    }
+
+    if (!session?.access_token || (expiresAt && expiresAt <= Math.floor(Date.now() / 1000) + 30)) {
+      showToast("Tu sesión terminó y no fue posible renovarla automáticamente. Ingresa nuevamente a KineCheck.");
       return null;
     }
     return session;
@@ -116,10 +122,10 @@
   function sameOriginCourseUrl(slug) {
     const base = repositoryBasePath();
     if (slug === "comunicacion-clinica") {
-      return `${location.origin}${base}/?course=comunicacion-clinica&v=20260801-sso4`;
+      return `${location.origin}${base}/comunicacion-clinica.html?course=comunicacion-clinica&v=20260803-sessionfix2`;
     }
     if (slug === "traumatologia-ortopedia-clinica") {
-      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260801-sso4`;
+      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260803-sessionfix2`;
     }
     return "";
   }
@@ -147,9 +153,9 @@
     if (button) button.style.pointerEvents = "";
   }
 
-  function openSameOriginCourse(slug, destination, button) {
+  async function openSameOriginCourse(slug, destination, button) {
     if (!startNavigation(button)) return;
-    const session = validTransferSession();
+    const session = await validTransferSession();
     if (!session) {
       resetNavigation(button);
       return;
@@ -158,15 +164,8 @@
     location.assign(destination);
   }
 
-  function openExternalCourse(slug, destination, button) {
+  async function openExternalCourse(slug, destination, button) {
     if (!startNavigation(button)) return;
-    const session = validTransferSession();
-    if (!session) {
-      resetNavigation(button);
-      return;
-    }
-
-    const targetOrigin = new URL(destination).origin;
     const popup = window.open("about:blank", "_blank");
     if (!popup) {
       resetNavigation(button);
@@ -174,7 +173,21 @@
       return;
     }
 
+    const session = await validTransferSession();
+    if (!session) {
+      popup.close();
+      resetNavigation(button);
+      return;
+    }
+
+    const targetOrigin = new URL(destination).origin;
+
     const payload = courseHandoff(session, slug);
+    try {
+      popup.name = JSON.stringify(payload);
+    } catch {
+      // El intercambio por postMessage sigue disponible como respaldo.
+    }
     let completed = false;
 
     const cleanup = () => {
@@ -184,13 +197,15 @@
     };
 
     const onMessage = (event) => {
-      if (
-        completed
-        || event.source !== popup
-        || event.origin !== targetOrigin
-        || event.data?.type !== "kinecheck-sso-ready"
-        || event.data?.product !== slug
-      ) return;
+      if (completed || event.source !== popup || event.origin !== targetOrigin || event.data?.product !== slug) return;
+
+      if (event.data?.type === "kinecheck-sso-accepted") {
+        completed = true;
+        cleanup();
+        return;
+      }
+
+      if (event.data?.type !== "kinecheck-sso-ready") return;
 
       completed = true;
       popup.postMessage(payload, targetOrigin);
@@ -218,14 +233,14 @@
     location.assign("./app-sso-relay.html?v=20260801-sso8");
   }
 
-  function openApplication(slug, button) {
+  async function openApplication(slug, button) {
     if (!APP_SSO.enabled) {
       showToast("Tu licencia se conserva activa. El acceso único de esta aplicación todavía no ha sido habilitado en producción.");
       return;
     }
 
     if (!startNavigation(button)) return;
-    const session = validTransferSession();
+    const session = await validTransferSession();
     if (!session) {
       resetNavigation(button);
       return;

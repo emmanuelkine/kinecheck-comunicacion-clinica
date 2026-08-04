@@ -68,6 +68,9 @@ window.KINECHECK_ACADEMY_SESSION = Object.freeze({
     if (transientSession?.access_token) return transientSession;
     return readSession();
   },
+  async refresh() {
+    return validSession();
+  },
 });
 
 function normalizeEmail(value) {

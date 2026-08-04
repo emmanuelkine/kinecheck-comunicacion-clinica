@@ -1,13 +1,15 @@
-const SESSION_KEY = "kinecheck_secure_session_v1";
-const HANDOFF_TYPES = new Set([
-  "kinecheck-sso-v3-access-only",
-  "kinecheck-sso-v2",
-]);
+const COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:";
+const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
 const HANDOFF_MAX_AGE_MS = 120000;
 
-function earlyReadSession() {
+function courseSessionKey(product) {
+  const slug = String(product || "curso").trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+  return `${COURSE_SESSION_PREFIX}${slug || "curso"}`;
+}
+
+function earlyReadSession(product) {
   try {
-    return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+    return JSON.parse(localStorage.getItem(courseSessionKey(product)) || "null");
   } catch {
     return null;
   }
@@ -20,7 +22,7 @@ function normalizeHandoffSession(handoff) {
 
   if (!candidate?.access_token) return null;
 
-  const existing = earlyReadSession();
+  const existing = earlyReadSession(handoff?.product);
   const sameAccessToken = existing?.access_token === candidate.access_token;
 
   return {
@@ -43,13 +45,15 @@ function acceptKineCheckHandoff() {
     const fresh = Number.isFinite(issuedAt)
       && Math.abs(Date.now() - issuedAt) <= HANDOFF_MAX_AGE_MS;
 
-    if (!HANDOFF_TYPES.has(handoff?.type) || !fresh) return null;
+    if (handoff?.type !== HANDOFF_TYPE || !fresh) return null;
 
     const session = normalizeHandoffSession(handoff);
     if (!session) return null;
 
-    window.__KINECHECK_HANDOFF_PRODUCT__ = String(handoff.product || "").trim();
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    const product = String(handoff.product || "").trim();
+    if (!product) return null;
+    window.__KINECHECK_HANDOFF_PRODUCT__ = product;
+    localStorage.setItem(courseSessionKey(product), JSON.stringify(session));
     return session;
   } catch {
     return null;
@@ -85,9 +89,10 @@ acceptKineCheckHandoff();
   });
   if (!CONFIG) return;
 
+  const SESSION_KEY = courseSessionKey(CONFIG.courseSlug);
   const requestedProduct = String(window.__KINECHECK_HANDOFF_PRODUCT__ || "").trim();
   if (requestedProduct && requestedProduct !== String(CONFIG.courseSlug || "").trim()) {
-    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(courseSessionKey(requestedProduct));
   }
   delete window.__KINECHECK_HANDOFF_PRODUCT__;
 

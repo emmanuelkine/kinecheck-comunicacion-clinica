@@ -8,8 +8,8 @@
     return;
   }
 
-  const COMMERCE_FIX_VERSION = "20260802-commerce1";
-  const ACADEMY_URL = `/academy/?v=${COMMERCE_FIX_VERSION}`;
+  const COMMERCE_FIX_VERSION = "20260803-sessionfix2";
+  const ACADEMY_URL = new URL(`./academy/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
   const CHECKOUTS = Object.freeze({
     "kinecheck-clinico": "https://pay.hotmart.com/L106791841D",
     "kinecheck-estudiante": "https://pay.hotmart.com/G106801166S",
@@ -25,7 +25,7 @@
     if (document.querySelector('link[data-kc-commerce-fix]')) return;
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = `/home-commerce-fix.css?v=${COMMERCE_FIX_VERSION}`;
+    link.href = new URL(`./home-commerce-fix.css?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
     link.dataset.kcCommerceFix = "true";
     document.head.appendChild(link);
   }
@@ -81,7 +81,7 @@
   if (year) year.textContent = String(new Date().getFullYear());
   products.forEach(repairProductActions);
 
-  document.querySelectorAll('a[href^="/academy/"]').forEach((link) => {
+  document.querySelectorAll('a[href*="academy/"]').forEach((link) => {
     link.href = ACADEMY_URL;
   });
 

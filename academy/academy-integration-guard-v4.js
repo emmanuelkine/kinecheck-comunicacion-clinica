@@ -17,8 +17,8 @@
     "traumatologia-ortopedia-clinica",
   ]);
   const EXTERNAL_COURSE_URLS = Object.freeze({
-    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260801-sso5",
-    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260801-sso5",
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260803-sessionfix2",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260803-sessionfix2",
   });
   const INTEGRATION_SUFFIX = " Acceso único en integración; tu licencia se conserva.";
   const ssoEnabled = CONFIG.appSso ? Boolean(CONFIG.appSso.enabled) : true;
@@ -61,13 +61,19 @@
     }
   }
 
-  function validCourseSession() {
-    const session = readSession();
-    const expiresAt = Number(session?.expires_at || 0);
+  async function validCourseSession() {
+    let session = readSession();
+    let expiresAt = Number(session?.expires_at || 0);
     const now = Math.floor(Date.now() / 1000);
 
-    if (!session?.access_token || (expiresAt && expiresAt <= now + 30)) {
-      showStableToast("Tu sesión necesita renovarse. Actualiza KineCheck e ingresa nuevamente antes de abrir este curso.");
+    if ((!session?.access_token || (expiresAt && expiresAt <= now + 60))
+      && typeof window.KINECHECK_ACADEMY_SESSION?.refresh === "function") {
+      session = await window.KINECHECK_ACADEMY_SESSION.refresh().catch(() => null);
+      expiresAt = Number(session?.expires_at || 0);
+    }
+
+    if (!session?.access_token || (expiresAt && expiresAt <= Math.floor(Date.now() / 1000) + 30)) {
+      showStableToast("Tu sesión terminó y no fue posible renovarla automáticamente. Ingresa nuevamente a KineCheck.");
       return null;
     }
     return session;
@@ -84,10 +90,10 @@
 
     const base = repositoryBasePath();
     if (slug === "comunicacion-clinica") {
-      return `${location.origin}${base}/?course=comunicacion-clinica&v=20260801-sso4`;
+      return `${location.origin}${base}/comunicacion-clinica.html?course=comunicacion-clinica&v=20260803-sessionfix2`;
     }
     if (slug === "traumatologia-ortopedia-clinica") {
-      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260801-sso4`;
+      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260803-sessionfix2`;
     }
     return "";
   }
@@ -118,16 +124,14 @@
     if (button) button.style.pointerEvents = "";
   }
 
-  function openExternalRecommendedCourse(slug, destination, session, button) {
+  function openExternalRecommendedCourse(slug, destination, session, button, popup) {
     const targetOrigin = new URL(destination).origin;
-    const popup = window.open("about:blank", "_blank");
-    if (!popup) {
-      resetRecommendationButton(button);
-      showStableToast("El navegador bloqueó la nueva pestaña. Permite ventanas emergentes para KineCheck y vuelve a intentarlo.");
-      return;
-    }
-
     const payload = courseHandoff(session, slug);
+    try {
+      popup.name = JSON.stringify(payload);
+    } catch {
+      // El intercambio por postMessage sigue disponible como respaldo.
+    }
     let completed = false;
 
     const cleanup = () => {
@@ -137,13 +141,15 @@
     };
 
     const onMessage = (event) => {
-      if (
-        completed
-        || event.source !== popup
-        || event.origin !== targetOrigin
-        || event.data?.type !== "kinecheck-sso-ready"
-        || event.data?.product !== slug
-      ) return;
+      if (completed || event.source !== popup || event.origin !== targetOrigin || event.data?.product !== slug) return;
+
+      if (event.data?.type === "kinecheck-sso-accepted") {
+        completed = true;
+        cleanup();
+        return;
+      }
+
+      if (event.data?.type !== "kinecheck-sso-ready") return;
 
       completed = true;
       popup.postMessage(payload, targetOrigin);
@@ -160,7 +166,7 @@
     popup.location.href = destination;
   }
 
-  function openRecommendedCourse(slug, button) {
+  async function openRecommendedCourse(slug, button) {
     if (recommendationNavigation) return;
 
     const destination = recommendedCourseUrl(slug);
@@ -169,9 +175,6 @@
       return;
     }
 
-    const session = validCourseSession();
-    if (!session) return;
-
     recommendationNavigation = true;
     if (button) {
       button.setAttribute("aria-busy", "true");
@@ -179,10 +182,27 @@
     }
 
     if (EXTERNAL_COURSE_URLS[slug]) {
-      openExternalRecommendedCourse(slug, destination, session, button);
+      const popup = window.open("about:blank", "_blank");
+      if (!popup) {
+        resetRecommendationButton(button);
+        showStableToast("El navegador bloqueó la nueva pestaña. Permite ventanas emergentes para KineCheck y vuelve a intentarlo.");
+        return;
+      }
+      const session = await validCourseSession();
+      if (!session) {
+        popup.close();
+        resetRecommendationButton(button);
+        return;
+      }
+      openExternalRecommendedCourse(slug, destination, session, button, popup);
       return;
     }
 
+    const session = await validCourseSession();
+    if (!session) {
+      resetRecommendationButton(button);
+      return;
+    }
     writeCourseHandoff(session, slug);
     location.assign(destination);
   }

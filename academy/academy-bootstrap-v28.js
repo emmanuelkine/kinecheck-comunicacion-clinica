@@ -61,7 +61,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audiences: ["professionals", "students"],
       modules: 12,
       status: "active",
-      url: "/kinecheck-comunicacion-clinica/?course=comunicacion-clinica&v=20260727"
+      url: "../comunicacion-clinica.html?course=comunicacion-clinica&v=20260803-sessionfix2"
     },
     {
       slug: "mas-alla-del-dolor",
@@ -74,7 +74,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "professionals",
       audiences: ["professionals", "students"],
       status: "active",
-      url: "/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260727"
+      url: "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260803-sessionfix2"
     },
     {
       slug: "evidencia-aplicada",
@@ -87,7 +87,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "professionals",
       audiences: ["professionals", "students"],
       status: "active",
-      url: "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260728-6"
+      url: "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260803-sessionfix2"
     },
     {
       slug: "traumatologia-ortopedia-clinica",
@@ -100,7 +100,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "professionals",
       audiences: ["professionals", "students"],
       status: "active",
-      url: "/kinecheck-comunicacion-clinica/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260728"
+      url: "../traumatologia/?course=traumatologia-ortopedia-clinica&v=20260803-sessionfix2"
     },
     {
       slug: "kinecheck-lab-clinico",
@@ -113,7 +113,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "professionals",
       audiences: ["professionals", "students"],
       status: "preparing",
-      url: "/kinecheck-comunicacion-clinica/lab/"
+      url: "../lab/"
     }
   ]
 });
