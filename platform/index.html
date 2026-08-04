@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="KineCheck, plataforma adaptativa para kinesiología, aprendizaje, docencia y seguimiento.">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="color-scheme" content="light dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://eqhcdclyeoapmqtlduwf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./platform.css?v=20260804-1">
+  <script src="./platform.js?v=20260804-1" defer></script>
+  <title>KineCheck · Tu espacio inteligente</title>
+</head>
+<body data-theme="system" data-view="home">
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+  <section id="auth-view" class="auth-view" aria-labelledby="auth-title">
+    <div class="auth-visual">
+      <a class="brand brand-inverse" href="../" aria-label="KineCheck, página principal">
+        <img src="../assets/kinecheck-mark.svg" alt="">
+        <span><strong>KineCheck</strong><small>INTELIGENCIA PARA KINESIOLOGÍA</small></span>
+      </a>
+      <div class="auth-copy">
+        <span class="eyebrow">UNA CUENTA · UNA EXPERIENCIA</span>
+        <h1>Tu trabajo, aprendizaje y progreso en un solo lugar.</h1>
+        <p>KineCheck reconoce tus licencias y organiza automáticamente las tareas, cursos y herramientas disponibles para ti.</p>
+      </div>
+      <div class="auth-proof">
+        <span>Acceso protegido</span>
+        <span>Experiencia adaptativa</span>
+        <span>Web y móvil</span>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="mobile-brand brand">
+          <img src="../assets/kinecheck-mark.svg" alt="">
+          <span><strong>KineCheck</strong><small>PLATAFORMA</small></span>
+        </div>
+        <span class="eyebrow">BIENVENIDO</span>
+        <h2 id="auth-title">Ingresa a tu espacio</h2>
+        <p>Utiliza el mismo correo asociado a tu compra en Hotmart.</p>
+        <form id="login-form" novalidate>
+          <label for="login-email">Correo</label>
+          <input id="login-email" name="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
+          <label for="login-password">Contraseña</label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
+          <button id="login-submit" class="button primary full" type="submit">Ingresar a KineCheck</button>
+        </form>
+        <div id="auth-message" class="notice" hidden></div>
+        <div class="auth-links">
+          <a href="../academy/">Crear cuenta o recuperar contraseña</a>
+          <a href="mailto:soporte.kinecheck@gmail.com">Contactar soporte</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="app-view" class="app-shell" hidden>
+    <div id="mobile-overlay" class="mobile-overlay" hidden></div>
+    <aside id="sidebar" class="sidebar" aria-label="Navegación principal">
+      <a class="brand" href="#home" data-view-link="home" aria-label="KineCheck, inicio">
+        <img src="../assets/kinecheck-mark.svg" alt="">
+        <span><strong>KineCheck</strong><small>PLATAFORMA 5.0</small></span>
+      </a>
+
+      <nav class="primary-nav">
+        <a class="active" href="#home" data-view-link="home"><span class="nav-icon">⌂</span><span>Inicio</span></a>
+        <a href="#workspace" data-view-link="workspace"><span class="nav-icon">◫</span><span>Mi espacio</span></a>
+        <a href="#cases" data-view-link="cases"><span class="nav-icon">◇</span><span>Casos</span></a>
+        <a href="#library" data-view-link="library"><span class="nav-icon">▤</span><span>Biblioteca</span></a>
+        <a href="#settings" data-view-link="settings"><span class="nav-icon">⚙</span><span>Configuración</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="workspace-indicator">
+          <span id="workspace-dot" class="workspace-dot"></span>
+          <div><small>Espacio activo</small><strong id="sidebar-workspace">General</strong></div>
+        </div>
+        <a class="classic-link" href="../academy/">Academy clásica <span>↗</span></a>
+      </div>
+    </aside>
+
+    <div class="app-content">
+      <header class="topbar">
+        <button id="menu-toggle" class="icon-button mobile-only" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <div class="topbar-context">
+          <span id="view-kicker">INICIO</span>
+          <strong id="view-title">Tu espacio KineCheck</strong>
+        </div>
+        <div class="topbar-actions">
+          <button id="quick-create" class="button compact" type="button">＋ Nuevo caso</button>
+          <button id="theme-toggle" class="icon-button" type="button" aria-label="Cambiar apariencia">◐</button>
+          <button id="account-button" class="account-button" type="button" data-view-link="settings">
+            <span id="account-avatar">K</span>
+            <span class="desktop-only"><strong id="account-name">Cuenta</strong><small id="account-email"></small></span>
+          </button>
+        </div>
+      </header>
+
+      <main id="main-content" tabindex="-1">
+        <section class="view active" data-view="home" aria-labelledby="home-title">
+          <div class="home-header">
+            <div>
+              <span id="home-context" class="eyebrow">TU ESPACIO ADAPTATIVO</span>
+              <h1 id="home-title"><span id="greeting">Hola</span>, ¿qué quieres hacer hoy?</h1>
+              <p id="home-subtitle">KineCheck organiza las acciones disponibles según tus licencias activas.</p>
+            </div>
+            <div id="capability-pills" class="capability-pills" aria-label="Capacidades activas"></div>
+          </div>
+
+          <div id="task-grid" class="task-grid" aria-live="polite"></div>
+
+          <div class="home-columns">
+            <article class="panel continue-panel">
+              <div class="panel-heading">
+                <div><span class="eyebrow">CONTINUAR</span><h2>Retoma donde quedaste</h2></div>
+                <button type="button" class="text-button" data-view-link="workspace">Ver todo</button>
+              </div>
+              <div id="continue-content" class="continue-content"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+            </article>
+
+            <article class="panel account-summary">
+              <span class="eyebrow">TU CUENTA</span>
+              <div class="summary-number"><strong id="active-license-count">0</strong><span>accesos activos</span></div>
+              <p id="summary-copy">Estamos verificando los productos asociados a tu correo.</p>
+              <button class="text-button" type="button" data-view-link="settings">Revisar licencias →</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-view="workspace" aria-labelledby="workspace-title">
+          <div class="page-heading">
+            <div><span class="eyebrow">MI ESPACIO</span><h1 id="workspace-title">Todo tu trabajo, organizado</h1><p>Accede a tus espacios habilitados, borradores y actividad reciente.</p></div>
+          </div>
+          <div id="workspace-grid" class="workspace-grid"></div>
+          <div class="panel recent-panel">
+            <div class="panel-heading"><div><span class="eyebrow">ACTIVIDAD RECIENTE</span><h2>Últimos casos</h2></div><button class="text-button" type="button" data-view-link="cases">Abrir casos</button></div>
+            <div id="workspace-recent" class="case-list compact"></div>
+          </div>
+        </section>
+
+        <section class="view" data-view="cases" aria-labelledby="cases-title">
+          <div class="page-heading split">
+            <div><span class="eyebrow">CASOS</span><h1 id="cases-title">Piensa, construye y continúa</h1><p>Casos clínicos, prácticas guiadas y materiales docentes en un mismo flujo.</p></div>
+            <button class="button primary" type="button" data-new-case>＋ Crear caso</button>
+          </div>
+          <div class="toolbar">
+            <label class="search-field"><span>Buscar casos</span><input id="case-search" type="search" placeholder="Nombre o contenido"></label>
+            <div class="segmented" role="group" aria-label="Filtrar casos">
+              <button class="active" type="button" data-case-filter="all">Todos</button>
+              <button type="button" data-case-filter="active">En progreso</button>
+              <button type="button" data-case-filter="completed">Completados</button>
+            </div>
+          </div>
+          <div id="case-list" class="case-list"></div>
+        </section>
+
+        <section class="view" data-view="library" aria-labelledby="library-title">
+          <div class="page-heading">
+            <div><span class="eyebrow">BIBLIOTECA</span><h1 id="library-title">Cursos, aplicaciones y evidencia</h1><p>Solo verás como activos los productos asociados a tu cuenta.</p></div>
+          </div>
+          <div class="toolbar">
+            <label class="search-field"><span>Buscar en la biblioteca</span><input id="library-search" type="search" placeholder="Curso, aplicación o tema"></label>
+            <div class="segmented" role="group" aria-label="Filtrar biblioteca">
+              <button class="active" type="button" data-library-filter="all">Todo</button>
+              <button type="button" data-library-filter="application">Aplicaciones</button>
+              <button type="button" data-library-filter="course">Cursos</button>
+            </div>
+          </div>
+          <div id="library-grid" class="library-grid"></div>
+        </section>
+
+        <section class="view" data-view="settings" aria-labelledby="settings-title">
+          <div class="page-heading">
+            <div><span class="eyebrow">CONFIGURACIÓN</span><h1 id="settings-title">Cuenta y preferencias</h1><p>Administra la apariencia, tu espacio activo y los accesos detectados.</p></div>
+          </div>
+          <div class="settings-grid">
+            <article class="settings-card">
+              <span class="settings-icon">◐</span>
+              <div><h2>Apariencia</h2><p>Utiliza el sistema del dispositivo o fija un modo.</p></div>
+              <div class="choice-row" role="group" aria-label="Seleccionar apariencia">
+                <button type="button" data-theme-choice="system">Sistema</button>
+                <button type="button" data-theme-choice="light">Claro</button>
+                <button type="button" data-theme-choice="dark">Oscuro</button>
+              </div>
+            </article>
+            <article class="settings-card">
+              <span class="settings-icon">◫</span>
+              <div><h2>Espacio principal</h2><p>Se selecciona entre las capacidades habilitadas por tus licencias.</p></div>
+              <label class="select-label">Espacio activo<select id="workspace-select"></select></label>
+            </article>
+            <article class="settings-card wide">
+              <span class="settings-icon">✓</span>
+              <div><h2>Licencias activas</h2><p>La autorización se verifica con tu correo y las compras sincronizadas.</p></div>
+              <div id="license-list" class="license-list"></div>
+            </article>
+            <article class="settings-card">
+              <span class="settings-icon">?</span>
+              <div><h2>Ayuda y soporte</h2><p>Problemas de acceso, compra o funcionamiento.</p></div>
+              <a class="button secondary" href="mailto:soporte.kinecheck@gmail.com">Contactar soporte</a>
+            </article>
+            <article class="settings-card danger-zone">
+              <span class="settings-icon">↪</span>
+              <div><h2>Sesión</h2><p>Cierra tu sesión en este dispositivo.</p></div>
+              <button id="logout-button" class="button secondary" type="button">Cerrar sesión</button>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <nav class="mobile-nav" aria-label="Navegación móvil">
+        <a class="active" href="#home" data-view-link="home"><span>⌂</span><small>Inicio</small></a>
+        <a href="#workspace" data-view-link="workspace"><span>◫</span><small>Mi espacio</small></a>
+        <a href="#cases" data-view-link="cases"><span>◇</span><small>Casos</small></a>
+        <a href="#library" data-view-link="library"><span>▤</span><small>Biblioteca</small></a>
+        <a href="#settings" data-view-link="settings"><span>⚙</span><small>Ajustes</small></a>
+      </nav>
+    </div>
+  </section>
+
+  <dialog id="case-dialog" class="case-dialog" aria-labelledby="case-dialog-title">
+    <form id="case-form" method="dialog">
+      <div class="dialog-header">
+        <div><span class="eyebrow">NUEVO FLUJO</span><h2 id="case-dialog-title">Crear un caso</h2></div>
+        <button class="icon-button" type="button" data-dialog-close aria-label="Cerrar">×</button>
+      </div>
+      <div class="stepper" aria-label="Progreso">
+        <span class="active" data-step-indicator="1"><b>1</b><small>Objetivo</small></span>
+        <span data-step-indicator="2"><b>2</b><small>Contexto</small></span>
+        <span data-step-indicator="3"><b>3</b><small>Información</small></span>
+        <span data-step-indicator="4"><b>4</b><small>Revisión</small></span>
+      </div>
+      <div class="progress-track"><span id="dialog-progress"></span></div>
+
+      <div class="dialog-body">
+        <section class="form-step active" data-form-step="1">
+          <span class="eyebrow">PASO 1 DE 4</span>
+          <h3>¿Qué necesitas construir?</h3>
+          <div id="case-type-options" class="option-grid"></div>
+          <label>Título del caso<input id="case-title" type="text" maxlength="180" required placeholder="Ej.: Dolor de hombro al elevar el brazo"></label>
+        </section>
+        <section class="form-step" data-form-step="2">
+          <span class="eyebrow">PASO 2 DE 4</span>
+          <h3>Agrega el contexto esencial</h3>
+          <p>Incluye solo información anonimizada. No ingreses nombres, RUT, teléfonos ni datos identificatorios.</p>
+          <label>Contexto<textarea id="case-context" rows="7" placeholder="Edad aproximada, motivo, duración, actividad, antecedentes relevantes..."></textarea></label>
+        </section>
+        <section class="form-step" data-form-step="3">
+          <span class="eyebrow">PASO 3 DE 4</span>
+          <h3>¿Qué información tienes hasta ahora?</h3>
+          <label>Hallazgos, preguntas o instrucciones<textarea id="case-details" rows="8" placeholder="Hallazgos principales, dudas, objetivos de aprendizaje o requerimientos del material..."></textarea></label>
+        </section>
+        <section class="form-step" data-form-step="4">
+          <span class="eyebrow">PASO 4 DE 4</span>
+          <h3>Revisa antes de guardar</h3>
+          <div id="case-review" class="review-card"></div>
+          <label class="checkbox-label"><input id="case-confirm" type="checkbox" required><span>Confirmo que la información está anonimizada y puede guardarse en mi espacio.</span></label>
+        </section>
+      </div>
+
+      <div id="case-form-message" class="notice" hidden></div>
+      <div class="dialog-actions">
+        <button id="case-back" class="button secondary" type="button" hidden>Anterior</button>
+        <span></span>
+        <button id="case-next" class="button primary" type="button">Continuar</button>
+        <button id="case-save" class="button primary" type="submit" hidden>Guardar caso</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
