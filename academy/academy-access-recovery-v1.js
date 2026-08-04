@@ -67,7 +67,7 @@
   }
 
   function installRetryButtons(root = document) {
-    root.querySelectorAll?.("#course-grid button[data-course][disabled]").forEach((original) => {
+    root.querySelectorAll?.("button[data-course][disabled]").forEach((original) => {
       if (original.textContent.trim() !== LOCKED_LABEL) return;
       if (original.nextElementSibling?.matches?.("[data-kc-retry-access]")) return;
 
@@ -95,7 +95,10 @@
 
     try {
       const sessionApi = window.KINECHECK_ACADEMY_SESSION;
-      const session = await sessionApi?.refresh?.().catch(() => null) || sessionApi?.get?.();
+      const refreshed = typeof sessionApi?.refresh === "function"
+        ? await sessionApi.refresh().catch(() => null)
+        : null;
+      const session = refreshed || sessionApi?.get?.();
       if (!session?.access_token) {
         throw new Error("Tu sesión terminó. Ingresa nuevamente a KineCheck.");
       }
