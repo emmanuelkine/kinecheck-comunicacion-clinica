@@ -8,7 +8,9 @@
     return;
   }
 
-  const COMMERCE_FIX_VERSION = "20260803-sessionfix2";
+  document.documentElement.classList.add("js");
+
+  const COMMERCE_FIX_VERSION = "20260804-premium1";
   const ACADEMY_URL = new URL(`./academy/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
   const CHECKOUTS = Object.freeze({
     "kinecheck-clinico": "https://pay.hotmart.com/L106791841D",
@@ -20,6 +22,15 @@
     "traumatologia-ortopedia-clinica": "https://pay.hotmart.com/B106913952R",
     "pack-estudiante": "https://pay.hotmart.com/Q106891608M",
   });
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const menuButton = document.querySelector("#menu-button");
+  const nav = document.querySelector("#site-nav");
+  const header = document.querySelector(".site-header");
+  const heroCopy = document.querySelector(".hero-copy");
+  const year = document.querySelector("#current-year");
+  const filters = [...document.querySelectorAll("[data-filter]")];
+  const products = [...document.querySelectorAll("[data-product-card]")];
 
   function loadCommerceFixStyles() {
     if (document.querySelector('link[data-kc-commerce-fix]')) return;
@@ -70,13 +81,101 @@
     enter.setAttribute("aria-label", `Ingresar con una compra existente de ${card.querySelector("h3")?.textContent || "KineCheck"}`);
   }
 
-  loadCommerceFixStyles();
+  function closeMenu() {
+    nav?.classList.remove("open");
+    menuButton?.setAttribute("aria-expanded", "false");
+  }
 
-  const menuButton = document.querySelector("#menu-button");
-  const nav = document.querySelector("#site-nav");
-  const year = document.querySelector("#current-year");
-  const filters = document.querySelectorAll("[data-filter]");
-  const products = document.querySelectorAll("[data-product-card]");
+  function animateVisibleProducts() {
+    if (reduceMotion) return;
+    products.forEach((card, index) => {
+      card.classList.remove("filter-enter");
+      if (card.hidden) return;
+      card.style.animationDelay = `${Math.min(index, 6) * 45}ms`;
+      requestAnimationFrame(() => card.classList.add("filter-enter"));
+    });
+  }
+
+  function installRevealAnimations() {
+    const targets = [
+      ...document.querySelectorAll(
+        ".hero-copy,.ecosystem-card,.trust-row article,.section-heading,.audience,.product,.step,.process-note,.value-panel,.faq details,.final-cta",
+      ),
+    ];
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      targets.forEach((target) => target.classList.add("is-visible"));
+      return;
+    }
+
+    targets.forEach((target, index) => {
+      target.classList.add("reveal-ready");
+      target.style.setProperty("--reveal-order", String(index % 5));
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: "0px 0px -6% 0px",
+    });
+
+    targets.forEach((target) => observer.observe(target));
+  }
+
+  function installActiveNavigation() {
+    if (!("IntersectionObserver" in window) || !nav) return;
+    const sections = [...document.querySelectorAll("main section[id]")];
+    const links = [...nav.querySelectorAll('a[href^="#"]')];
+    const byId = new Map(links.map((link) => [link.getAttribute("href")?.slice(1), link]));
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      links.forEach((link) => link.removeAttribute("aria-current"));
+      byId.get(visible.target.id)?.setAttribute("aria-current", "true");
+    }, {
+      threshold: [0.2, 0.45, 0.7],
+      rootMargin: "-25% 0px -58% 0px",
+    });
+
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  function installHeroPointerGlow() {
+    if (!heroCopy || reduceMotion || !window.matchMedia("(pointer:fine)").matches) return;
+    heroCopy.addEventListener("pointermove", (event) => {
+      const rect = heroCopy.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      heroCopy.style.setProperty("--pointer-x", `${x.toFixed(1)}%`);
+      heroCopy.style.setProperty("--pointer-y", `${y.toFixed(1)}%`);
+    });
+    heroCopy.addEventListener("pointerleave", () => {
+      heroCopy.style.setProperty("--pointer-x", "82%");
+      heroCopy.style.setProperty("--pointer-y", "16%");
+    });
+  }
+
+  function installFaqBehavior() {
+    const details = [...document.querySelectorAll(".faq details")];
+    details.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        details.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  }
+
+  loadCommerceFixStyles();
 
   if (year) year.textContent = String(new Date().getFullYear());
   products.forEach(repairProductActions);
@@ -92,9 +191,16 @@
 
   nav?.addEventListener("click", (event) => {
     if (!event.target.closest("a")) return;
-    nav.classList.remove("open");
-    menuButton?.setAttribute("aria-expanded", "false");
+    closeMenu();
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
+  });
+
+  window.addEventListener("scroll", () => {
+    header?.classList.toggle("scrolled", window.scrollY > 18);
+  }, { passive: true });
 
   filters.forEach((button) => {
     button.addEventListener("click", () => {
@@ -104,6 +210,7 @@
         const audiences = String(card.dataset.audiences || "").split(/\s+/).filter(Boolean);
         card.hidden = filter !== "all" && !audiences.includes(filter);
       });
+      animateVisibleProducts();
     });
   });
 
@@ -112,7 +219,12 @@
       const audience = button.dataset.audienceSelect || "all";
       const filterButton = document.querySelector(`[data-filter="${CSS.escape(audience)}"]`);
       filterButton?.click();
-      document.querySelector("#productos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.querySelector("#productos")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     });
   });
+
+  installRevealAnimations();
+  installActiveNavigation();
+  installHeroPointerGlow();
+  installFaqBehavior();
 })();
