@@ -29,6 +29,133 @@ function normalizeCourseSlugs(value: unknown): string[] {
   )].slice(0, 100);
 }
 
+type AccessRecord = {
+  course_slug?: string | null;
+  active?: boolean | null;
+  access_expires_at?: string | null;
+  access_grandfathered?: boolean | null;
+  access_source?: string | null;
+  last_event?: string | null;
+};
+
+function isOwnerAccess(access: AccessRecord | null | undefined): boolean {
+  return String(access?.access_source || "").toLowerCase() === "owner"
+    || String(access?.last_event || "").toUpperCase() === "OWNER_ACCESS";
+}
+
+function expiryTime(access: AccessRecord | null | undefined): number | null {
+  const raw = access?.access_expires_at;
+  if (!raw) return null;
+  const value = new Date(raw).getTime();
+  return Number.isFinite(value) ? value : 0;
+}
+
+function isUsableAccess(
+  access: AccessRecord | null | undefined,
+  now = Date.now(),
+): boolean {
+  if (!access?.active) return false;
+  if (isOwnerAccess(access)) return true;
+
+  const expiresAt = expiryTime(access);
+  return expiresAt === null || expiresAt > now;
+}
+
+function daysRemaining(access: AccessRecord): number | null {
+  const expiresAt = expiryTime(access);
+  if (expiresAt === null) return null;
+  return Math.max(0, Math.ceil((expiresAt - Date.now()) / 86_400_000));
+}
+
+function accessMetadata(access: AccessRecord) {
+  return {
+    courseSlug: String(access.course_slug || ""),
+    accessExpiresAt: access.access_expires_at || null,
+    daysRemaining: daysRemaining(access),
+    grandfathered:
+      Boolean(access.access_grandfathered)
+      || (!access.access_expires_at && !isOwnerAccess(access)),
+  };
+}
+
+function missingExpirySchema(error: any): boolean {
+  const code = String(error?.code || "");
+  const message = String(error?.message || "").toLowerCase();
+  return code === "42703"
+    || code === "PGRST204"
+    || message.includes("access_expires_at")
+    || message.includes("access_grandfathered");
+}
+
+async function deactivateExpiredAccess(admin: any) {
+  const { error } = await admin.rpc("deactivate_expired_course_access");
+  if (!error) return;
+
+  const code = String(error.code || "");
+  const message = String(error.message || "").toLowerCase();
+  const migrationPending = code === "42883"
+    || code === "PGRST202"
+    || message.includes("deactivate_expired_course_access");
+
+  if (!migrationPending) {
+    console.error("course-key deactivate expired", error);
+  }
+}
+
+async function fetchBatchAccesses(
+  admin: any,
+  email: string,
+  courseSlugs: string[],
+): Promise<{ data: AccessRecord[] | null; error: any }> {
+  const current = await admin
+    .from("course_access")
+    .select(
+      "course_slug,active,access_expires_at,access_grandfathered,access_source,last_event",
+    )
+    .eq("email", email)
+    .eq("active", true)
+    .in("course_slug", courseSlugs);
+
+  if (!current.error || !missingExpirySchema(current.error)) {
+    return current;
+  }
+
+  // Compatibilidad temporal mientras la migración de vigencias se despliega.
+  return await admin
+    .from("course_access")
+    .select("course_slug,active")
+    .eq("email", email)
+    .eq("active", true)
+    .in("course_slug", courseSlugs);
+}
+
+async function fetchSingleAccess(
+  admin: any,
+  email: string,
+  courseSlug: string,
+): Promise<{ data: AccessRecord | null; error: any }> {
+  const current = await admin
+    .from("course_access")
+    .select(
+      "course_slug,active,access_expires_at,access_grandfathered,access_source,last_event",
+    )
+    .eq("email", email)
+    .eq("course_slug", courseSlug)
+    .maybeSingle();
+
+  if (!current.error || !missingExpirySchema(current.error)) {
+    return current;
+  }
+
+  // Compatibilidad temporal mientras la migración de vigencias se despliega.
+  return await admin
+    .from("course_access")
+    .select("course_slug,active")
+    .eq("email", email)
+    .eq("course_slug", courseSlug)
+    .maybeSingle();
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", {
@@ -155,16 +282,19 @@ serve(async (req) => {
       },
     );
 
+    // Actualiza active=false antes de responder. La llamada es tolerante
+    // durante el breve período en que la migración todavía no exista.
+    await deactivateExpiredAccess(admin);
+
     if (batchMode) {
       const {
         data: accesses,
         error: accessesError,
-      } = await admin
-        .from("course_access")
-        .select("course_slug")
-        .eq("email", email)
-        .eq("active", true)
-        .in("course_slug", courseSlugs);
+      } = await fetchBatchAccesses(
+        admin,
+        email,
+        courseSlugs,
+      );
 
       if (accessesError) {
         console.error(
@@ -181,20 +311,26 @@ serve(async (req) => {
         );
       }
 
+      const now = Date.now();
+      const activeAccesses = (accesses || [])
+        .filter((access: AccessRecord) =>
+          isUsableAccess(access, now)
+          && courseSlugs.includes(String(access.course_slug || ""))
+        );
+
       const activeCourseSlugs = [
         ...new Set(
-          (accesses || [])
-            .map((access) =>
+          activeAccesses
+            .map((access: AccessRecord) =>
               String(access.course_slug || "").trim()
             )
-            .filter((slug) =>
-              courseSlugs.includes(slug)
-            ),
+            .filter(Boolean),
         ),
       ];
 
       return json({
         activeCourseSlugs,
+        activeAccesses: activeAccesses.map(accessMetadata),
         email,
       });
     }
@@ -202,12 +338,11 @@ serve(async (req) => {
     const {
       data: access,
       error: accessError,
-    } = await admin
-      .from("course_access")
-      .select("active")
-      .eq("email", email)
-      .eq("course_slug", courseSlug)
-      .maybeSingle();
+    } = await fetchSingleAccess(
+      admin,
+      email,
+      courseSlug,
+    );
 
     if (accessError) {
       console.error(
@@ -224,11 +359,23 @@ serve(async (req) => {
       );
     }
 
-    if (!access?.active) {
+    if (!isUsableAccess(access)) {
+      const expired = Boolean(
+        access?.access_expires_at
+        && expiryTime(access) !== null
+        && Number(expiryTime(access)) <= Date.now(),
+      );
+
       return json(
         {
-          message:
-            "No encontramos una compra activa asociada a este correo.",
+          code: expired
+            ? "ACCESS_TERM_EXPIRED"
+            : "ACCESS_NOT_ACTIVE",
+          message: expired
+            ? "El período de acceso de este producto finalizó. Puedes renovarlo desde KineCheck."
+            : "No encontramos una compra activa asociada a este correo.",
+          accessExpiresAt:
+            access?.access_expires_at || null,
         },
         403,
       );
@@ -322,6 +469,7 @@ serve(async (req) => {
       active: true,
       courseSlug,
       email,
+      ...accessMetadata(access as AccessRecord),
     });
   } catch (error) {
     console.error(
