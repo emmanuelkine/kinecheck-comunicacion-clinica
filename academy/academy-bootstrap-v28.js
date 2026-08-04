@@ -298,3 +298,12 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   script.dataset.kcBrandIdentity = "true";
   document.head.appendChild(script);
 })();
+
+(() => {
+  if (document.querySelector('script[data-kc-access-recovery]')) return;
+  const script = document.createElement("script");
+  script.src = "./academy-access-recovery-v1.js?v=20260803-accessfix1";
+  script.defer = true;
+  script.dataset.kcAccessRecovery = "true";
+  document.head.appendChild(script);
+})();
