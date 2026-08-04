@@ -102,27 +102,29 @@
 
   function buildPattern(profile) {
     const compact = window.matchMedia("(max-width: 640px)").matches;
-    const width = compact ? 350 : 500;
-    const height = compact ? 210 : 245;
+    const width = compact ? 560 : 700;
+    const height = compact ? 330 : 390;
     const centerX = width / 2;
     const centerY = height / 2;
     const lines = [
-      { value: "KineCheck", size: compact ? 13 : 15, weight: 800 },
-      { value: profile.maskedEmail, size: compact ? 11 : 12, weight: 650 },
-      ...(profile.accessLabel ? [{ value: profile.accessLabel, size: compact ? 11 : 13, weight: 900 }] : []),
-      { value: `Licencia: ${profile.licenseId}`, size: compact ? 10 : 12, weight: 750 },
-      { value: formatDateTime(), size: compact ? 10 : 11, weight: 650 },
-      { value: "Uso personal — Prohibida su distribución", size: compact ? 9 : 11, weight: 800 },
+      { value: "KineCheck", size: compact ? 12 : 14, weight: 800 },
+      { value: profile.maskedEmail, size: compact ? 10 : 12, weight: 650 },
+      ...(profile.accessLabel ? [{ value: profile.accessLabel, size: compact ? 10 : 12, weight: 850 }] : []),
+      { value: `Licencia: ${profile.licenseId}`, size: compact ? 9 : 11, weight: 700 },
+      { value: formatDateTime(), size: compact ? 9 : 10, weight: 650 },
+      { value: "Uso personal — Prohibida su distribución", size: compact ? 8 : 10, weight: 750 },
     ];
-    const lineHeight = compact ? 17 : 19;
+    const lineHeight = compact ? 15 : 18;
     const startY = centerY - ((lines.length - 1) * lineHeight) / 2;
     const text = lines.map((line, index) => (
       `<text x="${centerX}" y="${startY + index * lineHeight}" font-size="${line.size}" font-weight="${line.weight}">${escapeXml(line.value)}</text>`
     )).join("");
+    const fillOpacity = compact ? "0.10" : "0.12";
+    const strokeOpacity = compact ? "0.05" : "0.07";
 
     const svg = [
       `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-      `<g transform="rotate(-24 ${centerX} ${centerY})" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" fill="#72c8c4" fill-opacity="0.22" stroke="#173b45" stroke-opacity="0.18" stroke-width="0.55" paint-order="stroke fill">`,
+      `<g transform="rotate(-24 ${centerX} ${centerY})" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" fill="#3d9f9b" fill-opacity="${fillOpacity}" stroke="#173b45" stroke-opacity="${strokeOpacity}" stroke-width="0.35" paint-order="stroke fill">`,
       text,
       "</g>",
       "</svg>",
