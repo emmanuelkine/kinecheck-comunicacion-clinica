@@ -1,0 +1,20 @@
+[hidden]{display:none!important}
+
+button,.button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible,.button:focus-visible,#section-nav a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:3px solid rgba(101,228,210,.55);
+  outline-offset:3px;
+}
+button:disabled,.button[aria-disabled="true"]{opacity:.55;cursor:not-allowed;pointer-events:none}
+.topbar nav a,.topbar nav button,.synthesis-panel .button{min-height:46px}
+#reset-guide[aria-busy="true"],#copy-summary[aria-busy="true"],#print-guide[aria-busy="true"]{pointer-events:none;opacity:.68}
+
+@media(max-width:680px){
+  .topbar{align-items:center;gap:10px;padding:12px}
+  .topbar .brand small{display:none}
+  .topbar nav{display:flex;gap:6px}
+  .topbar nav button{min-height:44px;padding:8px 10px}
+  .synthesis-panel .actions{display:grid;grid-template-columns:1fr}
+  .synthesis-panel .button{width:100%;min-height:52px}
+  #toast{left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));max-width:none}
+}
