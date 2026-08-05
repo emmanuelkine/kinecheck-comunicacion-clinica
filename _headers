@@ -2,12 +2,29 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Cross-Origin-Resource-Policy: same-site
+  X-Frame-Options: SAMEORIGIN
+  X-Permitted-Cross-Domain-Policies: none
+
+/platform/*
+  Cache-Control: private, no-store, max-age=0
+
+/platform/security-bootstrap.js
+  Cache-Control: private, no-store, max-age=0
 
 /academy/academy-integration-guard-v4.js
   Cache-Control: no-store, max-age=0
 
 /academy/*
   Cache-Control: no-cache, must-revalidate
+
+/beta/*
+  Cache-Control: no-cache, must-revalidate
+
+/legal/*
+  Cache-Control: public, max-age=3600, must-revalidate
 
 /*.html
   Cache-Control: no-cache, must-revalidate
