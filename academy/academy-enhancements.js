@@ -1,5 +1,6 @@
 const PRODUCT_META = {
-  CL: { category: "application", label: "APLICACIÓN CLÍNICA", productId: "8150019", checkoutUrl: "https://pay.hotmart.com/L106791841D" },
+  CL: { category: "tool", label: "GUÍA COMPLEMENTARIA", productId: "8150019", checkoutUrl: "https://pay.hotmart.com/L106791841D" },
+  KC: { category: "course", label: "CURSO PROFESIONAL", productId: "8150019", checkoutUrl: "https://pay.hotmart.com/L106791841D" },
   KE: { category: "application", label: "APLICACIÓN PARA ESTUDIANTES", productId: "8154796", checkoutUrl: "https://pay.hotmart.com/G106801166S" },
   KR: { category: "tool", label: "HERRAMIENTA DE SEGUIMIENTO", productId: "8157431", checkoutUrl: "https://pay.hotmart.com/P106806251E" },
   CC: { category: "course", label: "CURSO / MASTERCLASS", productId: "8192814", checkoutUrl: "https://pay.hotmart.com/T106883983U" },
