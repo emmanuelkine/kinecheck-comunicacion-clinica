@@ -46,19 +46,26 @@ test.describe("KineCheck Clínico · controles móviles", () => {
     await expect(page.locator("[data-open-module]")).toHaveCount(10);
     await expect(page.locator("[data-module].active")).toHaveCount(1);
 
+    const sidebar = page.locator("[data-sidebar]");
+    const temario = page.locator("[data-toggle-sidebar]");
+    await temario.click();
+    await expect(sidebar).toHaveClass(/open/);
+    await expect(temario).toHaveAttribute("aria-expanded", "true");
+
     const secondModule = page.locator("[data-open-module]").nth(1);
     const secondId = await secondModule.getAttribute("data-open-module");
     await secondModule.click();
     await expect(page.locator(`[data-module="${secondId}"]`)).toHaveClass(/active/);
     await expect(secondModule).toHaveAttribute("aria-current", "page");
+    await expect(sidebar).not.toHaveClass(/open/);
 
-    await page.locator("[data-toggle-sidebar]").click();
-    await expect(page.locator("[data-sidebar]")).toHaveClass(/open/);
-    await expect(page.locator("[data-toggle-sidebar]")).toHaveAttribute("aria-expanded", "true");
+    await temario.click();
+    await expect(sidebar).toHaveClass(/open/);
     await page.keyboard.press("Escape");
-    await expect(page.locator("[data-sidebar]")).not.toHaveClass(/open/);
+    await expect(sidebar).not.toHaveClass(/open/);
+    await expect(temario).toHaveAttribute("aria-expanded", "false");
 
-    const lesson = page.locator("details.kc-lesson").first();
+    const lesson = page.locator(`[data-module="${secondId}"] details.kc-lesson`).first();
     await lesson.locator("summary").click();
     const lessonId = await lesson.getAttribute("data-lesson");
     const checkButton = lesson.locator("[data-check-quiz]");
