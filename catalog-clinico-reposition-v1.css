@@ -1,0 +1,9 @@
+.product[data-course="kinecheck-clinico"] .product-media::after{content:"CURSO PROFESIONAL + GUÍA COMPLEMENTARIA"}
+.product[data-course="kinecheck-clinico"] .product-type,.product[data-course="kinecheck-clinico"] .subtitle,.product[data-course="kinecheck-clinico"] li{font-size:0}
+.product[data-course="kinecheck-clinico"] .product-type::after{content:"CURSO + GUÍA · 12 MESES";font-size:11px}
+.product[data-course="kinecheck-clinico"] .subtitle::after{content:"Evaluación, seguridad y razonamiento musculoesquelético";font-size:14px;line-height:1.45}
+.product[data-course="kinecheck-clinico"] li::after{font-size:14px;line-height:1.45}
+.product[data-course="kinecheck-clinico"] li:nth-child(1)::after{content:"Curso profesional: 10 módulos y 30 experiencias clínicas"}
+.product[data-course="kinecheck-clinico"] li:nth-child(2)::after{content:"Seguridad, examen, medición e integración CIF"}
+.product[data-course="kinecheck-clinico"] li:nth-child(3)::after{content:"Guía digital adjunta; no reemplaza la ficha institucional"}
+.product[data-course="kinecheck-clinico"] li:nth-child(4)::after{content:"Acceso a ambos componentes durante 12 meses"}
