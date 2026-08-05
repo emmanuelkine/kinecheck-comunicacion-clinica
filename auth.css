@@ -16,7 +16,7 @@ body {
 
 button, input { font: inherit; }
 button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-button:focus-visible, input:focus-visible {
+button:focus-visible, input:focus-visible, a:focus-visible {
   outline: 3px solid rgba(94, 234, 212, .55);
   outline-offset: 3px;
 }
@@ -118,6 +118,44 @@ input:disabled { opacity: .72; }
 .access-progress { text-align: center; padding: 20px 0; }
 .access-progress p { margin: 0; }
 
+.ecosystem-entry {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(94, 234, 212, .28);
+  border-radius: 16px;
+  background: rgba(45, 212, 191, .07);
+}
+.ecosystem-entry strong { font-size: 17px; }
+.ecosystem-entry p { margin: 0; color: #bfd0df; line-height: 1.55; }
+.ecosystem-entry-link {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  margin-top: 2px;
+  padding: 12px 16px;
+  text-align: center;
+  text-decoration: none;
+}
+.ecosystem-retry {
+  min-height: 46px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .04);
+  color: #eaf8ff;
+  font-weight: 750;
+  cursor: pointer;
+}
+.ecosystem-retry:hover { background: rgba(255, 255, 255, .08); }
+.access-rule {
+  margin: 16px 0 0;
+  color: #93a9ba;
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: center;
+}
+
 .sign-out {
   position: fixed;
   z-index: 90;
@@ -139,5 +177,6 @@ input:disabled { opacity: .72; }
   .course-heading { margin: 28px 0 22px; }
   .auth-tab { min-height: 50px; }
   input { min-height: 56px; font-size: 16px; }
-  .primary-button { min-height: 56px; }
+  .primary-button, .ecosystem-entry-link { min-height: 56px; }
+  .ecosystem-retry { min-height: 52px; }
 }
