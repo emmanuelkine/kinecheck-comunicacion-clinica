@@ -39,6 +39,17 @@
     }
   }
 
+  function loadClinicoCourseIntegration() {
+    if (document.querySelector('script[data-kc-clinico-course]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-clinico-course-v1.js?v=20260806-1";
+    script.async = false;
+    script.dataset.kcClinicoCourse = "true";
+    document.head.appendChild(script);
+  }
+
+  loadClinicoCourseIntegration();
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", applyIdentity, { once: true });
   } else {
