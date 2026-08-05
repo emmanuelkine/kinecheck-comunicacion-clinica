@@ -10,16 +10,15 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     {
       slug: "kinecheck-clinico",
       title: "Guía complementaria KineCheck Clínico",
-      subtitle: "Apoyo para revisar evaluación e hipótesis. No reemplaza la ficha clínica institucional.",
+      subtitle: "Revisión estructurada de seguridad, hipótesis, examen y reevaluación. No reemplaza la ficha clínica institucional.",
       productId: "8150019",
       icon: "CL",
-      kind: "application",
+      kind: "tool",
       audience: "Profesionales",
       audienceKey: "professionals",
       audiences: ["professionals"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-clinico",
-      ssoProduct: "kinecheck-clinico"
+      url: "../kinecheck-clinico-guia/?product=kinecheck-clinico&v=20260806-2"
     },
     {
       slug: "kinecheck-clinico-curso",
@@ -33,7 +32,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audiences: ["professionals"],
       modules: 10,
       status: "active",
-      url: "../kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-1"
+      url: "../kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-2"
     },
     {
       slug: "kinecheck-estudiante",
