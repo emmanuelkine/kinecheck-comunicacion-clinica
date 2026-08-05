@@ -9,6 +9,7 @@ on:
       - 'academy/academy-bootstrap-v28.js'
       - 'academy/academy-clinico-course-v1.js'
       - 'academy/academy-launch-router-v4.js'
+      - 'academy/academy-enhancements.js'
       - 'productos/product-clinico-reposition-v1.js'
       - '_headers'
       - '.github/workflows/validate-kinecheck-clinico-course.yml'
@@ -36,6 +37,7 @@ jobs:
           node --check academy/academy-clinico-course-v1.js
           node --check academy/academy-bootstrap-v28.js
           node --check academy/academy-launch-router-v4.js
+          node --check academy/academy-enhancements.js
           node --check productos/product-clinico-reposition-v1.js
       - name: Validate curriculum structure
         run: |
@@ -68,6 +70,12 @@ jobs:
             echo 'Legacy Clinico route is still active' >&2
             exit 1
           fi
+          if grep -qi 'APLICACIÓN CLÍNICA' academy/academy-enhancements.js; then
+            echo 'Residual application label remains for Clinico' >&2
+            exit 1
+          fi
+          grep -q 'GUÍA COMPLEMENTARIA' academy/academy-enhancements.js
+          grep -q 'CURSO PROFESIONAL' academy/academy-enhancements.js
           grep -q '/kinecheck-clinico-guia/' academy/academy-launch-router-v4.js
           grep -q '/kinecheck-clinico-guia/' _headers
       - name: Validate public routes
