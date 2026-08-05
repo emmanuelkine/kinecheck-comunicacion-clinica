@@ -11,9 +11,11 @@
   <title>Guía complementaria KineCheck Clínico</title>
   <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./guide.css?v=20260806-2">
+  <link rel="stylesheet" href="./guide-ui-fix.css?v=20260806-mobile1">
   <script src="./config.js?v=20260806-2" defer></script>
   <script src="../watermark.js?v=20260801-access4"></script>
   <script src="./guide.js?v=20260806-2" defer></script>
+  <script src="./guide-ui-fix.js?v=20260806-mobile1" defer></script>
   <script src="./gate.js?v=20260806-2" defer></script>
 </head>
 <body>
@@ -23,8 +25,8 @@
       <span class="eyebrow">ACCESO ASOCIADO A KINECHECK CLÍNICO</span>
       <h1>Guía complementaria de análisis clínico</h1>
       <p>Esta herramienta acompaña el curso profesional. No es una ficha clínica institucional ni un sistema de registro asistencial.</p>
-      <div id="access-progress" class="access-progress">Verificando tu licencia…</div>
-      <div id="access-message" class="notice" hidden></div>
+      <div id="access-progress" class="access-progress" role="status" aria-live="polite">Verificando tu licencia…</div>
+      <div id="access-message" class="notice" role="alert" aria-live="assertive" hidden></div>
       <a class="button secondary" href="../academy/">Volver a KineCheck</a>
     </div>
   </section>
