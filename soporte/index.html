@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Soporte automatizado de acceso, compra, licencias y privacidad de KineCheck.">
+  <meta name="theme-color" content="#073c4a">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://eqhcdclyeoapmqtlduwf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./support.css?v=20260805-1">
+  <script src="./support.js?v=20260805-1" defer></script>
+  <title>Soporte inteligente | KineCheck</title>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../"><img src="../assets/kinecheck-mark.svg" alt=""><span><strong>KineCheck</strong><small>SOPORTE INTELIGENTE</small></span></a>
+    <a class="access" href="../platform/">Ingresar</a>
+  </header>
+
+  <main>
+    <section class="intro">
+      <span class="eyebrow">DIAGNÓSTICO AUTOMÁTICO</span>
+      <h1>Cuéntanos qué ocurrió.</h1>
+      <p>Antes de crear el ticket, KineCheck revisará automáticamente compra, licencia, vigencia, reembolso y sincronización. Si detecta un desfase seguro, intentará corregirlo.</p>
+    </section>
+
+    <section class="layout">
+      <form id="support-form" class="support-card" novalidate>
+        <label>Correo asociado a tu compra
+          <input id="support-email" name="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
+        </label>
+
+        <div class="two-cols">
+          <label>Tipo de solicitud
+            <select id="support-category" name="category" required>
+              <option value="access">No puedo ingresar</option>
+              <option value="purchase">Compra o licencia</option>
+              <option value="refund">Reembolso o cancelación</option>
+              <option value="technical">Error técnico</option>
+              <option value="privacy">Privacidad o datos personales</option>
+              <option value="content">Contenido del producto</option>
+              <option value="other">Otro</option>
+            </select>
+          </label>
+          <label>Producto
+            <select id="support-product" name="productSlug">
+              <option value="general">Consulta general</option>
+              <option value="kinecheck-clinico">KineCheck Clínico</option>
+              <option value="kinecheck-estudiante">KineCheck Estudiante</option>
+              <option value="kinecheck-recupera">KineCheck Recupera</option>
+              <option value="comunicacion-clinica">Comunicación Clínica</option>
+              <option value="mas-alla-del-dolor">Más allá del dolor</option>
+              <option value="evidencia-aplicada">Evidencia Aplicada</option>
+              <option value="traumatologia-ortopedia-clinica">Traumatología y Ortopedia Clínica</option>
+              <option value="pack-estudiante">Pack Estudiante</option>
+            </select>
+          </label>
+        </div>
+
+        <label>Código de transacción de Hotmart <small>Opcional</small>
+          <input id="support-transaction" name="transactionId" type="text" maxlength="180" placeholder="Ej.: HP123456789">
+        </label>
+
+        <label>Describe el problema
+          <textarea id="support-message" name="message" rows="7" minlength="10" maxlength="2000" required placeholder="Indica qué intentaste, qué esperabas y qué mensaje apareció."></textarea>
+        </label>
+
+        <label class="honeypot" aria-hidden="true">Sitio web<input id="support-website" name="website" tabindex="-1" autocomplete="off"></label>
+
+        <div class="warning"><strong>No ingreses contraseñas ni datos clínicos identificables.</strong> No incluyas nombres, RUT, teléfonos, fichas ni imágenes de pacientes.</div>
+        <button id="support-submit" type="submit">Revisar y crear solicitud</button>
+        <div id="support-result" class="result" role="status" hidden></div>
+      </form>
+
+      <aside class="side-card">
+        <span class="eyebrow">QUÉ OCURRE DESPUÉS</span>
+        <ol>
+          <li><b>1</b><span>Se comprueba si existe compra y licencia.</span></li>
+          <li><b>2</b><span>Se identifica vencimiento, devolución o correo incorrecto.</span></li>
+          <li><b>3</b><span>Se intenta conciliar una compra activa desincronizada.</span></li>
+          <li><b>4</b><span>Se crea un ticket con prioridad y diagnóstico inicial.</span></li>
+        </ol>
+        <p>Las solicitudes de privacidad reciben prioridad alta. Para urgencias de salud, utiliza los canales sanitarios correspondientes: KineCheck no presta atención de urgencia.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer><span>© 2026 KineCheck</span><nav><a href="../legal/terminos.html">Términos</a><a href="../legal/privacidad.html">Privacidad</a><a href="../legal/reembolsos.html">Reembolsos</a></nav></footer>
+</body>
+</html>
