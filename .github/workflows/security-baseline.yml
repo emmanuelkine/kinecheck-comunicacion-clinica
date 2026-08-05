@@ -1,0 +1,46 @@
+name: KineCheck Security Baseline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 11 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "_headers"
+      - "platform/**"
+      - "legal/**"
+      - "scripts/security-baseline.mjs"
+      - ".github/workflows/security-baseline.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kinecheck-security-baseline
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run security baseline
+        run: node scripts/security-baseline.mjs
+
+      - name: Upload security evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinecheck-security-baseline-${{ github.run_id }}
+          path: security-baseline-report.json
+          if-no-files-found: warn
+          retention-days: 30
