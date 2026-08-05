@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#073c4a">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://eqhcdclyeoapmqtlduwf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./admin.css?v=20260805-1">
+  <script src="./admin.js?v=20260805-1" defer></script>
+  <title>Centro de automatización | KineCheck</title>
+</head>
+<body>
+  <section id="login-view" class="login-view">
+    <form id="admin-login" class="login-card">
+      <img src="../assets/kinecheck-mark.svg" alt="">
+      <span>ADMINISTRACIÓN PRIVADA</span>
+      <h1>Centro de automatización</h1>
+      <p>Utiliza una cuenta con acceso de propietario.</p>
+      <label>Correo<input id="admin-email" type="email" autocomplete="email" required></label>
+      <label>Contraseña<input id="admin-password" type="password" autocomplete="current-password" required minlength="8"></label>
+      <button id="admin-login-button" type="submit">Ingresar</button>
+      <div id="admin-login-message" class="message" hidden></div>
+    </form>
+  </section>
+
+  <section id="dashboard-view" hidden>
+    <header class="topbar">
+      <a class="brand" href="../"><img src="../assets/kinecheck-mark.svg" alt=""><span><strong>KineCheck</strong><small>CENTRO DE AUTOMATIZACIÓN</small></span></a>
+      <div class="top-actions"><span id="admin-account"></span><button id="refresh-button" type="button">Actualizar</button><button id="logout-button" type="button">Salir</button></div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div><span class="eyebrow">OPERACIÓN AUTOMATIZADA</span><h1>Estado general de KineCheck</h1><p id="generated-at">Cargando información…</p></div>
+        <div class="actions">
+          <button data-action="run_daily">Ejecutar operación diaria</button>
+          <button data-action="reconcile">Conciliar Hotmart</button>
+          <button data-action="triage_beta">Clasificar beta</button>
+          <button data-action="run_restore">Probar restauración</button>
+        </div>
+      </section>
+
+      <div id="action-message" class="action-message" hidden></div>
+      <section id="metric-grid" class="metric-grid"></section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><span class="eyebrow">AUTOMATIZACIONES</span><h2>Últimas ejecuciones</h2></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Proceso</th><th>Inicio</th><th>Estado</th><th>Resultado</th></tr></thead><tbody id="runs-body"></tbody></table></div>
+      </section>
+
+      <section class="two-panels">
+        <article class="panel">
+          <div class="panel-heading"><div><span class="eyebrow">SOPORTE</span><h2>Solicitudes abiertas</h2></div></div>
+          <div id="support-list" class="item-list"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><span class="eyebrow">BETA</span><h2>Postulaciones activas</h2></div></div>
+          <div id="beta-list" class="item-list"></div>
+        </article>
+      </section>
+
+      <section class="two-panels">
+        <article class="panel">
+          <div class="panel-heading"><div><span class="eyebrow">CONCILIACIÓN</span><h2>Incidencias abiertas</h2></div></div>
+          <div id="issues-list" class="item-list"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><span class="eyebrow">CONTINUIDAD</span><h2>Última restauración</h2></div></div>
+          <div id="restore-card" class="restore-card"></div>
+        </article>
+      </section>
+    </main>
+  </section>
+</body>
+</html>
