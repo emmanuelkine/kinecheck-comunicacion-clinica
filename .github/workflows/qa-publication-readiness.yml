@@ -1,0 +1,54 @@
+name: KineCheck Publication Readiness
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ayuda/**"
+      - "bienvenida/**"
+      - "platform/onboarding.*"
+      - "platform/security-bootstrap.js"
+      - "404.html"
+      - "robots.txt"
+      - "sitemap.xml"
+      - "site.webmanifest"
+      - "_headers"
+      - "scripts/qa-publication-readiness.mjs"
+      - ".github/workflows/qa-publication-readiness.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "15 11 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-publication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Wait for Cloudflare Pages propagation
+        if: github.event_name == 'push'
+        run: sleep 55
+
+      - name: Run publication readiness QA
+        env:
+          BASE_URL: https://kinecheck.cl
+        run: node scripts/qa-publication-readiness.mjs
+
+      - name: Upload publication QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinecheck-publication-readiness-${{ github.run_id }}
+          path: qa-publication-readiness-report.json
+          retention-days: 14
+          if-no-files-found: warn
