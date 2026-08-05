@@ -245,6 +245,15 @@
     });
   }
 
+  function loadOnboarding() {
+    if (document.querySelector('script[data-kinecheck-onboarding]')) return;
+    const script = document.createElement("script");
+    script.src = "./onboarding.js?v=20260805-1";
+    script.defer = true;
+    script.dataset.kinecheckOnboarding = "true";
+    document.head.appendChild(script);
+  }
+
   async function fetchMissingLegal(accessToken) {
     const response = await authenticatedRequest("/rest/v1/rpc/kinecheck_missing_legal_acceptances", accessToken, {
       method: "POST",
@@ -384,6 +393,7 @@
     installAutomationStyles();
     installLegalConsentField();
     replaceSupportLinks();
+    loadOnboarding();
     initializeAuthenticatedAutomation();
     let attempts = 0;
     const timer = window.setInterval(() => {
@@ -409,5 +419,6 @@
     legalAcceptanceVersioned: true,
     automatedNotifications: true,
     smartSupportRouting: true,
+    firstUseOnboarding: true,
   });
 })();
