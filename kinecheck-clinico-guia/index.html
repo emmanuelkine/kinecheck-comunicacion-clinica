@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Guía complementaria KineCheck Clínico para revisar evaluación, seguridad, hipótesis y reevaluación musculoesquelética.">
+  <meta name="theme-color" content="#07171b">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'">
+  <title>Guía complementaria KineCheck Clínico</title>
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./guide.css?v=20260806-2">
+  <script src="./config.js?v=20260806-2" defer></script>
+  <script src="../watermark.js?v=20260801-access4"></script>
+  <script src="./guide.js?v=20260806-2" defer></script>
+  <script src="./gate.js?v=20260806-2" defer></script>
+</head>
+<body>
+  <section id="access-shell" class="access-shell">
+    <div class="access-card">
+      <a class="brand" href="../academy/"><img src="../assets/kinecheck-mark.svg" alt=""><span><strong>KineCheck</strong><small>Guía complementaria profesional</small></span></a>
+      <span class="eyebrow">ACCESO ASOCIADO A KINECHECK CLÍNICO</span>
+      <h1>Guía complementaria de análisis clínico</h1>
+      <p>Esta herramienta acompaña el curso profesional. No es una ficha clínica institucional ni un sistema de registro asistencial.</p>
+      <div id="access-progress" class="access-progress">Verificando tu licencia…</div>
+      <div id="access-message" class="notice" hidden></div>
+      <a class="button secondary" href="../academy/">Volver a KineCheck</a>
+    </div>
+  </section>
+
+  <div id="guide-app" hidden>
+    <header class="topbar">
+      <a class="brand" href="../academy/"><img src="../assets/kinecheck-mark.svg" alt=""><span><strong>KineCheck Clínico</strong><small>Guía complementaria</small></span></a>
+      <nav><a href="../kinecheck-clinico-curso/">Abrir curso</a><a href="../ayuda/">Ayuda</a><button id="reset-guide" type="button">Limpiar guía</button></nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <span class="eyebrow">COMPLEMENTO DEL CURSO PROFESIONAL</span>
+          <h1>Revisa tu proceso.<br><em>No reemplaces tu ficha clínica.</em></h1>
+          <p>Utiliza esta guía para detectar omisiones, contrastar hipótesis y preparar una síntesis. Registra la atención real únicamente en el sistema autorizado por tu institución o consulta.</p>
+        </div>
+        <aside class="safety-card">
+          <strong>Regla de uso</strong>
+          <p>No ingreses nombre, RUT, dirección, teléfono, fecha de nacimiento, número de ficha, fotografías ni otros identificadores de una persona.</p>
+          <label><input id="anon-confirm" type="checkbox"> Confirmo que trabajaré con un caso simulado, anonimizado o identificado mediante un código ficticio.</label>
+        </aside>
+      </section>
+
+      <section class="workspace">
+        <aside class="sidebar">
+          <div class="progress-block"><span>Avance de revisión</span><strong id="progress-value">0%</strong><div><i id="progress-bar"></i></div></div>
+          <nav id="section-nav" aria-label="Secciones de la guía"></nav>
+          <div class="sidebar-note"><strong>No diagnostica</strong><p>Las alertas y preguntas son recordatorios. La interpretación y las decisiones corresponden al profesional.</p></div>
+        </aside>
+
+        <div class="content">
+          <section class="intro-panel">
+            <span class="eyebrow">CÓMO UTILIZARLA</span>
+            <h2>Una pausa estructurada para pensar mejor</h2>
+            <ol><li>Define el propósito de la revisión.</li><li>Marca solo lo que realmente exploraste.</li><li>Distingue datos, interpretación e hipótesis.</li><li>Contrasta coherencia y vacíos.</li><li>Traslada la síntesis pertinente a tu registro institucional.</li></ol>
+          </section>
+          <form id="guide-form" novalidate></form>
+          <section class="synthesis-panel">
+            <div><span class="eyebrow">SALIDA DE LA GUÍA</span><h2>Síntesis para transferir con criterio</h2><p>Genera un resumen de trabajo sin identificadores. Revísalo antes de trasladar información pertinente a la ficha oficial.</p></div>
+            <div class="actions"><button id="copy-summary" class="button primary" type="button">Copiar síntesis</button><button id="print-guide" class="button secondary" type="button">Imprimir o guardar PDF</button></div>
+            <pre id="summary-output">Completa la guía para construir una síntesis.</pre>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer><span>KineCheck Clínico · guía complementaria</span><span>No constituye ficha clínica, diagnóstico ni respaldo institucional.</span></footer>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <noscript>Necesitas activar JavaScript para utilizar la guía.</noscript>
+</body>
+</html>
