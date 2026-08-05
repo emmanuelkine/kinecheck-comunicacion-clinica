@@ -1,0 +1,66 @@
+name: Validate Clinico Buttons
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'auth.css'
+      - 'auth-gate.js'
+      - 'kinecheck-clinico-curso/**'
+      - 'kinecheck-clinico-guia/**'
+      - 'tests/clinico-buttons.spec.mjs'
+      - '.github/workflows/validate-clinico-buttons.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-clinico-buttons
+  cancel-in-progress: true
+
+jobs:
+  mobile-buttons:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start local KineCheck server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/kinecheck-http.log 2>&1 &
+          echo $! > /tmp/kinecheck-http.pid
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsS http://127.0.0.1:4173/kinecheck-clinico-curso/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/kinecheck-http.log
+          exit 1
+
+      - name: Test all Clinico buttons at iPhone size
+        run: npx playwright test tests/clinico-buttons.spec.mjs --reporter=line
+
+      - name: Upload Playwright evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clinico-mobile-button-evidence-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 14
