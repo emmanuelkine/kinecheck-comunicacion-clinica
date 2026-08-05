@@ -1,5 +1,41 @@
 [hidden]{display:none!important}
 
+.ecosystem-entry{
+  display:grid;
+  gap:.85rem;
+  margin-top:1.1rem;
+  padding:1.1rem;
+  border:1px solid rgba(125,224,208,.25);
+  border-radius:18px;
+  background:rgba(125,224,208,.06);
+  text-align:left;
+}
+.ecosystem-entry strong{font-size:1.05rem;color:var(--ink)}
+.ecosystem-entry p{margin:0;color:var(--muted);line-height:1.55}
+.ecosystem-entry-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:50px;
+  padding:.9rem 1rem;
+  border-radius:14px;
+  text-decoration:none;
+  text-align:center;
+}
+.ecosystem-retry{
+  min-height:44px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:transparent;
+  color:var(--ink);
+  font:inherit;
+  font-weight:750;
+  cursor:pointer;
+}
+.ecosystem-retry:hover{background:rgba(255,255,255,.045)}
+.ecosystem-entry-link:focus-visible,.ecosystem-retry:focus-visible{outline:3px solid rgba(125,224,208,.5);outline-offset:3px}
+
 .kc-top-actions .sign-out{
   position:static;
   z-index:auto;
@@ -22,6 +58,9 @@
 .kc-module-nav button[aria-current="page"]{border-color:rgba(125,224,208,.35);background:rgba(125,224,208,.09);color:var(--ink)}
 
 @media(max-width:620px){
+  .ecosystem-entry{padding:1rem}
+  .ecosystem-entry-link{min-height:54px}
+  .ecosystem-retry{min-height:50px}
   .kc-topbar{align-items:center;gap:.45rem}
   .kc-top-actions{gap:.35rem;min-width:0}
   .kc-progress-chip{padding:.42rem .56rem;font-size:.7rem}
