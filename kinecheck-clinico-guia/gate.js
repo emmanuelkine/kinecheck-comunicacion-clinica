@@ -6,7 +6,8 @@
 
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const HANDOFF_MAX_AGE_MS = 120000;
-  const SESSION_KEY = "kinecheck_guide_session_v1";
+  const SESSION_KEY = "kinecheck_guide_session_v2";
+  const LEGACY_SESSION_KEY = "kinecheck_guide_session_v1";
   const SHARED_SESSION_KEY = "kinecheck_secure_session_v1";
 
   const shell = document.querySelector("#access-shell");
@@ -15,10 +16,20 @@
   const message = document.querySelector("#access-message");
 
   function showError(text) {
-    progress.hidden = true;
-    message.textContent = text;
-    message.className = "notice error";
-    message.hidden = false;
+    if (progress) progress.hidden = true;
+    if (message) {
+      message.textContent = text;
+      message.className = "notice error";
+      message.hidden = false;
+    }
+  }
+
+  function safeJson(value) {
+    try {
+      return JSON.parse(value || "null");
+    } catch {
+      return null;
+    }
   }
 
   function normalizeSession(value) {
@@ -26,16 +37,41 @@
     const expiresAt = Number(value.expires_at || 0);
     if (expiresAt && expiresAt <= Math.floor(Date.now() / 1000) + 15) return null;
     return {
-      access_token: value.access_token,
+      ...value,
+      access_token: String(value.access_token),
       expires_at: expiresAt || null,
       token_type: value.token_type || "bearer",
     };
   }
 
+  function storageRead(storage, key) {
+    try {
+      return normalizeSession(safeJson(storage.getItem(key)));
+    } catch {
+      return null;
+    }
+  }
+
+  function storageWrite(storage, key, value) {
+    try {
+      storage.setItem(key, JSON.stringify(value));
+    } catch {
+      // Sesión temporal de mejor esfuerzo.
+    }
+  }
+
+  function storageRemove(storage, key) {
+    try {
+      storage.removeItem(key);
+    } catch {
+      // Limpieza de mejor esfuerzo.
+    }
+  }
+
   function consumeHandoff() {
     if (!window.name) return null;
     try {
-      const handoff = JSON.parse(window.name);
+      const handoff = safeJson(window.name);
       const issuedAt = Number(handoff?.issuedAt || 0);
       if (handoff?.type !== HANDOFF_TYPE || Math.abs(Date.now() - issuedAt) > HANDOFF_MAX_AGE_MS) return null;
       const product = String(handoff?.product || "");
@@ -49,23 +85,29 @@
   }
 
   function readStoredSession() {
-    for (const key of [SESSION_KEY, SHARED_SESSION_KEY]) {
-      try {
-        const session = normalizeSession(JSON.parse(sessionStorage.getItem(key) || "null"));
-        if (session) return session;
-      } catch {
-        // Continúa con la siguiente fuente segura.
-      }
+    const sources = [
+      [sessionStorage, SESSION_KEY],
+      [sessionStorage, SHARED_SESSION_KEY],
+      [localStorage, SHARED_SESSION_KEY],
+      [sessionStorage, LEGACY_SESSION_KEY],
+      [localStorage, LEGACY_SESSION_KEY],
+    ];
+    for (const [storage, key] of sources) {
+      const session = storageRead(storage, key);
+      if (session) return session;
     }
     return null;
   }
 
   function saveSession(session) {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    storageWrite(sessionStorage, SESSION_KEY, session);
+    storageRemove(sessionStorage, LEGACY_SESSION_KEY);
+    storageRemove(localStorage, LEGACY_SESSION_KEY);
   }
 
   async function verifyIdentity(session) {
     const response = await fetch(`${CONFIG.supabaseUrl}/auth/v1/user`, {
+      cache: "no-store",
       headers: {
         apikey: CONFIG.supabaseAnonKey,
         Authorization: `Bearer ${session.access_token}`,
@@ -81,6 +123,7 @@
   async function verifyLicense(session) {
     const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
       method: "POST",
+      cache: "no-store",
       headers: {
         apikey: CONFIG.supabaseAnonKey,
         Authorization: `Bearer ${session.access_token}`,
@@ -98,20 +141,20 @@
 
   async function openGuide() {
     const session = consumeHandoff() || readStoredSession();
-    if (!session) throw new Error("Abre esta guía desde tu biblioteca KineCheck para transferir una sesión segura.");
-    progress.textContent = "Verificando identidad y licencia…";
+    if (!session) throw new Error("Inicia sesión una sola vez en el ecosistema KineCheck y abre la guía desde tu biblioteca.");
+    if (progress) progress.textContent = "Verificando identidad y licencia…";
     const [user] = await Promise.all([verifyIdentity(session), verifyLicense(session)]);
     saveSession(session);
     if (window.KineCheckWatermark) {
       await window.KineCheckWatermark.showVerifiedBuyer({ user, licenseScopes: [CONFIG.accessSlug] });
     }
-    shell.hidden = true;
-    app.hidden = false;
+    if (shell) shell.hidden = true;
+    if (app) app.hidden = false;
     window.KineCheckClinicoGuide?.start?.();
   }
 
   openGuide().catch((error) => {
-    sessionStorage.removeItem(SESSION_KEY);
+    storageRemove(sessionStorage, SESSION_KEY);
     showError(error instanceof Error ? error.message : "No fue posible abrir la guía complementaria.");
   });
 })();
