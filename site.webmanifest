@@ -1,0 +1,19 @@
+{
+  "name": "KineCheck Ecosistema Clínico",
+  "short_name": "KineCheck",
+  "description": "Aplicaciones, cursos y herramientas digitales para kinesiología.",
+  "start_url": "/platform/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#041218",
+  "theme_color": "#073c4a",
+  "lang": "es-CL",
+  "icons": [
+    {
+      "src": "/assets/kinecheck-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
