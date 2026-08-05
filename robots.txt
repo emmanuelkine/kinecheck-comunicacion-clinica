@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /platform/
+Disallow: /academy/
+
+Sitemap: https://kinecheck.cl/sitemap.xml
