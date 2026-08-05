@@ -19,6 +19,14 @@
   Cache-Control: private, no-store, max-age=0
   X-Robots-Tag: noindex, nofollow
 
+/kinecheck-clinico-curso/*
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
+
+/kinecheck-clinico-guia/*
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
+
 /academy/academy-integration-guard-v4.js
   Cache-Control: no-store, max-age=0
 
