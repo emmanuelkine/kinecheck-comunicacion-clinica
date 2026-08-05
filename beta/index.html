@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Postula al programa beta externo de KineCheck para probar cursos y aplicaciones antes del lanzamiento abierto.">
+  <meta name="theme-color" content="#041218">
+  <meta name="robots" content="index,follow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src https://eqhcdclyeoapmqtlduwf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./beta.css?v=20260805-1">
+  <script src="./beta.js?v=20260805-1" defer></script>
+  <title>Programa beta externo | KineCheck</title>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../"><img src="../assets/kinecheck-mark.svg" alt=""><span><strong>KineCheck</strong><small>PROGRAMA BETA</small></span></a>
+    <nav class="header-links"><a href="../#productos">Productos</a><a href="../legal/privacidad.html">Privacidad</a><a class="access" href="../platform/">Ingresar</a></nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">VALIDACIÓN EXTERNA · CUPOS LIMITADOS</span>
+        <h1>Ayúdanos a probar <em>KineCheck</em> antes del lanzamiento abierto.</h1>
+        <p>Buscamos profesionales, estudiantes, docentes y personas adultas en recuperación que puedan evaluar claridad, navegación, utilidad y funcionamiento real en distintos dispositivos.</p>
+        <div class="hero-actions"><a class="button primary" href="#postulacion">Postular a la beta</a><a class="button secondary" href="../#productos">Conocer los productos</a></div>
+      </div>
+      <aside class="hero-card">
+        <span class="eyebrow">CONDICIONES BÁSICAS</span>
+        <h2>Una beta segura y acotada</h2>
+        <div class="check-list">
+          <div><b>✓</b><span>Debes ser mayor de 18 años.</span></div>
+          <div><b>✓</b><span>Usarás casos ficticios o completamente anonimizados.</span></div>
+          <div><b>✓</b><span>Probarás desde celular, computador o ambos.</span></div>
+          <div><b>✓</b><span>Reportarás errores y responderás una encuesta breve.</span></div>
+          <div><b>✓</b><span>La postulación no garantiza selección ni acceso permanente.</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-heading"><span class="eyebrow">PERFILES BUSCADOS</span><h2>Cuatro miradas para validar el ecosistema.</h2><p>La selección busca diversidad de experiencia, dispositivos y productos. No necesitas dominar tecnología; también necesitamos detectar dificultades de usuarios reales.</p></div>
+      <div class="tracks">
+        <article class="track"><b>PRO</b><h3>Profesionales</h3><p>Kinesiólogos que puedan revisar flujo clínico, seguridad, síntesis y utilidad de KineCheck Clínico o los cursos.</p></article>
+        <article class="track"><b>EST</b><h3>Estudiantes</h3><p>Estudiantes de kinesiología que prueben comprensión, navegación, práctica guiada y retroalimentación.</p></article>
+        <article class="track"><b>DOC</b><h3>Docentes</h3><p>Profesores del área de salud que evalúen aplicabilidad educativa, estructura y calidad de los recursos.</p></article>
+        <article class="track"><b>PAC</b><h3>Personas en recuperación</h3><p>Adultos que puedan evaluar lenguaje, registro diario, ejercicios y claridad de KineCheck Recupera.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading"><span class="eyebrow">CÓMO FUNCIONA</span><h2>Prueba breve, observada y con criterios claros.</h2></div>
+      <div class="protocol">
+        <article><strong>ETAPA 01</strong><h3>Selección</h3><p>Revisaremos perfil, producto de interés, experiencia y dispositivo. Los seleccionados recibirán instrucciones y una licencia temporal.</p></article>
+        <article><strong>ETAPA 02</strong><h3>Uso guiado</h3><p>Realizarás tareas concretas durante 7 a 10 días. No se utilizarán pacientes reales ni datos clínicos identificables.</p></article>
+        <article><strong>ETAPA 03</strong><h3>Retroalimentación</h3><p>Reportarás errores, fricciones y sugerencias. Los problemas se clasificarán por impacto antes del lanzamiento.</p></article>
+      </div>
+    </section>
+
+    <section id="postulacion" class="section">
+      <div class="form-shell">
+        <aside class="form-copy">
+          <span class="eyebrow">POSTULACIÓN</span>
+          <h2>Cuéntanos cómo podrías probar KineCheck.</h2>
+          <p>La información se utilizará únicamente para seleccionar y contactar participantes beta.</p>
+          <ul><li>No ingreses información de pacientes.</li><li>No envíes contraseñas ni documentos clínicos.</li><li>Los cupos iniciales serán de 5 a 10 personas.</li><li>El acceso beta puede retirarse al finalizar la prueba.</li></ul>
+        </aside>
+
+        <form id="beta-form" class="beta-form" novalidate>
+          <div class="field-row">
+            <div class="field"><label for="fullName">Nombre y apellido *</label><input id="fullName" name="fullName" type="text" minlength="2" maxlength="120" autocomplete="name" required></div>
+            <div class="field"><label for="email">Correo personal *</label><input id="email" name="email" type="email" maxlength="254" autocomplete="email" required></div>
+          </div>
+
+          <div class="field-row">
+            <div class="field"><label for="role">Perfil *</label><select id="role" name="role" required><option value="">Selecciona</option><option value="professional">Profesional</option><option value="student">Estudiante</option><option value="teacher">Docente</option><option value="patient">Persona en recuperación</option></select></div>
+            <div class="field"><label for="device">Dispositivo disponible *</label><select id="device" name="device" required><option value="">Selecciona</option><option value="mobile">Principalmente celular</option><option value="desktop">Principalmente computador</option><option value="both">Celular y computador</option></select></div>
+          </div>
+
+          <div class="field"><label for="productInterest">Producto de mayor interés *</label><select id="productInterest" name="productInterest" required><option value="">Selecciona</option><option value="kinecheck-clinico">KineCheck Clínico</option><option value="kinecheck-estudiante">KineCheck Estudiante</option><option value="kinecheck-recupera">KineCheck Recupera</option><option value="comunicacion-clinica">Comunicación Clínica</option><option value="mas-alla-del-dolor">Más allá del dolor</option><option value="evidencia-aplicada">Evidencia Aplicada</option><option value="traumatologia-ortopedia-clinica">Traumatología y Ortopedia Clínica</option><option value="pack-estudiante">Pack KineCheck Estudiante</option><option value="general">Ecosistema general</option></select></div>
+
+          <div class="field"><label for="experience">Experiencia o contexto *</label><textarea id="experience" name="experience" rows="5" maxlength="1200" required placeholder="Ej.: kinesiólogo musculoesquelético, estudiante de cuarto año, docente clínico, persona que realiza rehabilitación..."></textarea></div>
+
+          <div class="field"><label for="availability">Disponibilidad para probar y responder *</label><textarea id="availability" name="availability" rows="3" maxlength="500" required placeholder="Ej.: dos sesiones durante la próxima semana y una encuesta final."></textarea></div>
+
+          <div class="honeypot" aria-hidden="true"><label for="company">Empresa</label><input id="company" name="company" type="text" tabindex="-1" autocomplete="off"></div>
+
+          <div class="checks">
+            <label class="check"><input name="consentPrivacy" type="checkbox" required><span>He leído la <a href="../legal/privacidad.html" target="_blank" rel="noopener">Política de privacidad</a> y autorizo el tratamiento de estos datos para gestionar la beta. *</span></label>
+            <label class="check"><input name="consentContact" type="checkbox"><span>Acepto recibir futuras invitaciones relacionadas con pruebas o lanzamiento de KineCheck.</span></label>
+          </div>
+
+          <button id="beta-submit" class="button primary" type="submit">Enviar postulación</button>
+          <div id="beta-message" class="form-message" role="status" aria-live="polite" hidden></div>
+          <p class="smallprint">La selección depende de los cupos y de la diversidad necesaria para cada prueba. No compartiremos tu postulación con anunciantes.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>© 2026 KineCheck · Programa beta externo</span><nav class="footer-links"><a href="../legal/terminos.html">Términos</a><a href="../legal/privacidad.html">Privacidad</a><a href="../legal/reembolsos.html">Reembolsos</a><a href="mailto:soporte.kinecheck@gmail.com">Soporte</a></nav></footer>
+</body>
+</html>
