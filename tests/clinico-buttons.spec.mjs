@@ -35,7 +35,7 @@ test.describe("KineCheck Clínico · controles móviles", () => {
   });
 
   test("curso: temario, módulos, comprobación y progreso", async ({ page }) => {
-    await page.goto(`${BASE}/404.html`);
+    await page.goto(`${BASE}/tests/blank.html`);
     await page.setContent(`<!doctype html><html><body><div id="root"></div><button id="sign-out" type="button" hidden>Cerrar sesión</button></body></html>`);
     await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/course-data.js` });
     await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/access-ui-fix.js` });
@@ -87,7 +87,7 @@ test.describe("KineCheck Clínico · controles móviles", () => {
 
   test("guía: anonimización, copiar, imprimir y limpiar", async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin: BASE });
-    await page.goto(`${BASE}/404.html`);
+    await page.goto(`${BASE}/tests/blank.html`);
     await page.setContent(`<!doctype html><html><body>
       <input id="anon-confirm" type="checkbox">
       <nav id="section-nav"></nav>
