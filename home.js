@@ -10,7 +10,7 @@
 
   document.documentElement.classList.add("js");
 
-  const COMMERCE_FIX_VERSION = "20260804-catalog1";
+  const COMMERCE_FIX_VERSION = "20260805-legal-security1";
   const PLATFORM_URL = new URL(`./platform/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
   const CHECKOUTS = Object.freeze({
     "kinecheck-clinico": "https://pay.hotmart.com/L106791841D",
@@ -119,6 +119,37 @@
     productGrid.before(note);
   }
 
+  function installComplianceLinks() {
+    const footerNav = document.querySelector(".site-footer nav");
+    const links = [
+      ["./legal/terminos.html", "Términos"],
+      ["./legal/privacidad.html", "Privacidad"],
+      ["./legal/reembolsos.html", "Reembolsos"],
+      ["./beta/", "Programa beta"],
+    ];
+    links.forEach(([href, label]) => {
+      if (!footerNav || footerNav.querySelector(`a[href="${href}"]`)) return;
+      const link = document.createElement("a");
+      link.href = href;
+      link.textContent = label;
+      footerNav.appendChild(link);
+    });
+
+    if (nav && !nav.querySelector('a[href="./beta/"]')) {
+      const betaLink = document.createElement("a");
+      betaLink.href = "./beta/";
+      betaLink.textContent = "Beta";
+      nav.insertBefore(betaLink, nav.querySelector(".nav-cta"));
+    }
+
+    const accessQuestion = [...document.querySelectorAll(".faq details")]
+      .find((item) => item.querySelector("summary")?.textContent?.includes("¿Cómo recibo el acceso?"));
+    const accessAnswer = accessQuestion?.querySelector("p");
+    if (accessAnswer) {
+      accessAnswer.textContent = "Cuando Hotmart aprueba el pago, ingresa a la plataforma KineCheck con el mismo correo utilizado en la compra. La sincronización normalmente tarda pocos segundos.";
+    }
+  }
+
   function closeMenu() {
     nav?.classList.remove("open");
     menuButton?.setAttribute("aria-expanded", "false");
@@ -197,6 +228,7 @@
   if (year) year.textContent = String(new Date().getFullYear());
   products.forEach(repairProductActions);
   installCatalogIntro();
+  installComplianceLinks();
 
   document.querySelectorAll('a[href*="academy/"],a[href*="platform/"]').forEach((link) => {
     if (!link.closest(".product-actions") || link.classList.contains("enter")) link.href = PLATFORM_URL;
