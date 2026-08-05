@@ -1,0 +1,204 @@
+name: KineCheck Disaster Recovery v2
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 09 * * 0"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/kinecheck-disaster-recovery-v2.yml"
+      - "docs/continuidad/plan-recuperacion-kinecheck.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kinecheck-disaster-recovery
+  cancel-in-progress: false
+
+jobs:
+  backup-restore-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: restore_validation_only
+          POSTGRES_DB: kinecheck_restore
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d kinecheck_restore"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_ENCRYPTION_PASSPHRASE: ${{ secrets.BACKUP_ENCRYPTION_PASSPHRASE }}
+      PGPASSWORD: restore_validation_only
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          if [ -z "${SUPABASE_DB_URL:-}" ]; then
+            echo "::error::Missing GitHub Actions secret SUPABASE_DB_URL"
+            missing=1
+          fi
+          if [ -z "${BACKUP_ENCRYPTION_PASSPHRASE:-}" ]; then
+            echo "::error::Missing GitHub Actions secret BACKUP_ENCRYPTION_PASSPHRASE"
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            echo "Configure both repository secrets before the external backup can run."
+            exit 1
+          fi
+
+      - name: Create public-schema database dump
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p disaster-recovery
+          docker run --rm \
+            -e SUPABASE_DB_URL \
+            -v "$PWD/disaster-recovery:/backup" \
+            postgres:17 \
+            bash -lc 'pg_dump "$SUPABASE_DB_URL" --format=custom --compress=9 --no-owner --no-acl --schema=public --file=/backup/kinecheck-public.dump'
+          test -s disaster-recovery/kinecheck-public.dump
+          sha256sum disaster-recovery/kinecheck-public.dump | tee disaster-recovery/kinecheck-public.dump.sha256
+
+      - name: Restore dump into temporary PostgreSQL 17
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --network host \
+            -e PGPASSWORD="$PGPASSWORD" \
+            -v "$PWD/disaster-recovery:/backup" \
+            postgres:17 \
+            pg_restore \
+              --host=127.0.0.1 \
+              --port=5432 \
+              --username=postgres \
+              --dbname=kinecheck_restore \
+              --no-owner \
+              --no-acl \
+              --exit-on-error \
+              /backup/kinecheck-public.dump
+
+      - name: Validate restored application structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          required_tables=(
+            course_access
+            hotmart_product_grants
+            hotmart_purchases
+            hotmart_webhook_events
+            kinecheck_access_policy
+            platform_feature_flags
+            platform_cases
+            platform_user_preferences
+            kinecheck_legal_acceptances
+            kinecheck_support_requests
+            kinecheck_restore_drills
+          )
+          for table in "${required_tables[@]}"; do
+            result=$(psql -h 127.0.0.1 -U postgres -d kinecheck_restore -Atc "select to_regclass('public.${table}') is not null")
+            if [ "$result" != "t" ]; then
+              echo "::error::Missing restored table public.${table}"
+              exit 1
+            fi
+          done
+
+          required_functions=(
+            process_hotmart_event
+            deactivate_expired_course_access
+            run_kinecheck_config_restore_drill
+          )
+          for fn in "${required_functions[@]}"; do
+            result=$(psql -h 127.0.0.1 -U postgres -d kinecheck_restore -Atc "select exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='${fn}')")
+            if [ "$result" != "t" ]; then
+              echo "::error::Missing restored function public.${fn}"
+              exit 1
+            fi
+          done
+
+          psql -h 127.0.0.1 -U postgres -d kinecheck_restore -Atc "select json_build_object(
+            'course_access', (select count(*) from public.course_access),
+            'product_grants', (select count(*) from public.hotmart_product_grants),
+            'purchases', (select count(*) from public.hotmart_purchases),
+            'feature_flags', (select count(*) from public.platform_feature_flags),
+            'legal_acceptances', (select count(*) from public.kinecheck_legal_acceptances)
+          )" > disaster-recovery/restored-counts.json
+
+      - name: Build recovery manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          checksum=$(cut -d' ' -f1 disaster-recovery/kinecheck-public.dump.sha256)
+          counts=$(cat disaster-recovery/restored-counts.json)
+          cat > disaster-recovery/manifest.json <<EOF
+          {
+            "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "repository": "${GITHUB_REPOSITORY}",
+            "commit": "${GITHUB_SHA}",
+            "scope": "public_schema",
+            "postgres_version": "17",
+            "dump_sha256": "${checksum}",
+            "restore_validation": "passed",
+            "restored_counts": ${counts},
+            "storage_objects_included": false,
+            "auth_users_included": false
+          }
+          EOF
+
+      - name: Encrypt backup
+        shell: bash
+        run: |
+          set -euo pipefail
+          openssl enc -aes-256-cbc -salt -pbkdf2 -iter 250000 \
+            -in disaster-recovery/kinecheck-public.dump \
+            -out disaster-recovery/kinecheck-public.dump.enc \
+            -pass env:BACKUP_ENCRYPTION_PASSPHRASE
+          test -s disaster-recovery/kinecheck-public.dump.enc
+          sha256sum disaster-recovery/kinecheck-public.dump.enc > disaster-recovery/kinecheck-public.dump.enc.sha256
+          rm -f disaster-recovery/kinecheck-public.dump disaster-recovery/kinecheck-public.dump.sha256
+
+      - name: Upload encrypted recovery package
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinecheck-disaster-recovery-${{ github.run_id }}
+          path: |
+            disaster-recovery/kinecheck-public.dump.enc
+            disaster-recovery/kinecheck-public.dump.enc.sha256
+            disaster-recovery/manifest.json
+            disaster-recovery/restored-counts.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Write workflow summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## KineCheck Disaster Recovery"
+            echo
+            if [ -f disaster-recovery/manifest.json ]; then
+              echo "External encrypted database backup: **created**"
+              echo
+              echo "Temporary PostgreSQL restore: **passed**"
+              echo
+              echo "Scope: public schema. Supabase Storage objects and Auth users require separate recovery procedures."
+            else
+              echo "Backup package was not created. Review the failed step and required repository secrets."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
