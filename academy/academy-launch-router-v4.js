@@ -12,7 +12,6 @@
     transport: "form-post",
     postPath: "/api/license/sso",
     routes: Object.freeze({
-      "kinecheck-clinico": "/sso.html?product=kinecheck-clinico",
       "kinecheck-estudiante": "/sso.html?product=kinecheck-estudiante",
       "kinecheck-recupera": "/sso.html?product=kinecheck-recupera",
     }),
@@ -24,12 +23,13 @@
   });
 
   const SAME_ORIGIN_COURSES = new Set([
+    "kinecheck-clinico",
+    "kinecheck-clinico-curso",
     "comunicacion-clinica",
     "traumatologia-ortopedia-clinica",
   ]);
 
   const APPLICATIONS = new Set([
-    "kinecheck-clinico",
     "kinecheck-estudiante",
     "kinecheck-recupera",
   ]);
@@ -121,6 +121,12 @@
 
   function sameOriginCourseUrl(slug) {
     const base = repositoryBasePath();
+    if (slug === "kinecheck-clinico") {
+      return `${location.origin}${base}/kinecheck-clinico-guia/?product=kinecheck-clinico&v=20260806-2`;
+    }
+    if (slug === "kinecheck-clinico-curso") {
+      return `${location.origin}${base}/kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-2`;
+    }
     if (slug === "comunicacion-clinica") {
       return `${location.origin}${base}/comunicacion-clinica.html?course=comunicacion-clinica&v=20260803-sessionfix2`;
     }
@@ -181,7 +187,6 @@
     }
 
     const targetOrigin = new URL(destination).origin;
-
     const payload = courseHandoff(session, slug);
     try {
       popup.name = JSON.stringify(payload);
@@ -198,15 +203,12 @@
 
     const onMessage = (event) => {
       if (completed || event.source !== popup || event.origin !== targetOrigin || event.data?.product !== slug) return;
-
       if (event.data?.type === "kinecheck-sso-accepted") {
         completed = true;
         cleanup();
         return;
       }
-
       if (event.data?.type !== "kinecheck-sso-ready") return;
-
       completed = true;
       popup.postMessage(payload, targetOrigin);
       cleanup();
@@ -251,7 +253,6 @@
         submitApplicationPost(session, slug);
         return;
       }
-
       const destination = applicationUrl(slug);
       if (!destination) throw new Error("La ruta de acceso único todavía no está configurada para esta aplicación.");
       writeApplicationHandoff(session, slug);
