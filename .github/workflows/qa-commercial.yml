@@ -1,0 +1,53 @@
+name: KineCheck Commercial QA
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 11 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "home.js"
+      - "home.css"
+      - "catalog-professional.css"
+      - "productos/**"
+      - "platform/**"
+      - "legal/**"
+      - "beta/**"
+      - "scripts/qa-commercial.mjs"
+      - ".github/workflows/qa-commercial.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  certify-public-commerce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Wait for Cloudflare Pages propagation
+        if: github.event_name == 'push'
+        run: sleep 45
+
+      - name: Run commercial QA
+        env:
+          BASE_URL: https://kinecheck.cl
+        run: node scripts/qa-commercial.mjs
+
+      - name: Upload QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinecheck-commercial-qa-${{ github.run_id }}
+          path: qa-commercial-report.json
+          retention-days: 14
+          if-no-files-found: warn
