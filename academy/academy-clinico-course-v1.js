@@ -13,8 +13,11 @@
   const guide = CONFIG.courses.find((course) => course.slug === APP_SLUG);
   if (guide) {
     guide.title = "Guía complementaria KineCheck Clínico";
-    guide.subtitle = "Apoyo para revisar evaluación e hipótesis. No reemplaza la ficha clínica institucional.";
+    guide.subtitle = "Revisión estructurada de seguridad, hipótesis, examen y reevaluación. No reemplaza la ficha clínica institucional.";
     guide.audience = "Profesionales";
+    guide.kind = "tool";
+    guide.url = "../kinecheck-clinico-guia/?product=kinecheck-clinico&v=20260806-2";
+    delete guide.ssoProduct;
   }
 
   if (!CONFIG.courses.some((course) => course.slug === COURSE_SLUG)) {
@@ -30,7 +33,7 @@
       audiences: ["professionals"],
       modules: 10,
       status: "active",
-      url: "../kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-1",
+      url: "../kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-2",
     };
     const guideIndex = CONFIG.courses.findIndex((item) => item.slug === APP_SLUG);
     CONFIG.courses.splice(Math.max(0, guideIndex + 1), 0, course);
@@ -55,7 +58,7 @@
 
   function destination() {
     const base = location.hostname.endsWith("github.io") ? "/kinecheck-comunicacion-clinica" : "";
-    return `${location.origin}${base}/kinecheck-clinico-curso/?course=${COURSE_SLUG}&v=20260806-1`;
+    return `${location.origin}${base}/kinecheck-clinico-curso/?course=${COURSE_SLUG}&v=20260806-2`;
   }
 
   async function openCourse(button) {
