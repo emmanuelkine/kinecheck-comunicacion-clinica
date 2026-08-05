@@ -31,7 +31,12 @@ async function checkSource() {
   const product = await read("productos/product.js");
   const productPage = await read("productos/index.html");
   const platformPage = await read("platform/index.html");
+  const platformSecurity = await read("platform/security-bootstrap.js");
   const betaPage = await read("beta/index.html");
+  const supportPage = await read("soporte/index.html");
+  const supportScript = await read("soporte/support.js");
+  const adminPage = await read("admin/index.html");
+  const adminScript = await read("admin/admin.js");
 
   for (const [slug, name, checkout] of products) {
     const inHome = home.includes(`"${slug}"`) && home.includes(checkout);
@@ -43,6 +48,9 @@ async function checkSource() {
     .every((href) => productPage.includes(href));
   record("Product page legal links", legalLinksPresent ? "PASS" : "FAIL", legalLinksPresent ? "terms, privacy and refunds are visible" : "one or more legal links are missing");
   record("Temporary platform session", platformPage.includes("security-bootstrap.js") ? "PASS" : "FAIL", "security bootstrap must load before platform.js");
+  record("Versioned legal acceptance", platformSecurity.includes("kinecheck_missing_legal_acceptances") && platformSecurity.includes("kinecheck_accept_current_legal") ? "PASS" : "FAIL", "platform must require and record current legal versions");
+  record("Automated support source", supportPage.includes('id="support-form"') && supportScript.includes("support-request") ? "PASS" : "FAIL", "support portal must submit to diagnostic endpoint");
+  record("Private automation source", adminPage.includes('id="admin-login"') && adminScript.includes("automation-status") && adminScript.includes("automation-control") ? "PASS" : "FAIL", "admin portal must use protected status and control endpoints");
   record("Beta privacy consent", betaPage.includes("consentPrivacy") && betaPage.includes("../legal/privacidad.html") ? "PASS" : "FAIL", "beta form must require privacy consent");
 }
 
@@ -50,7 +58,7 @@ async function fetchWithTimeout(url, options = {}, timeout = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/1.0", ...(options.headers || {}) } });
+    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/1.1", ...(options.headers || {}) } });
   } finally {
     clearTimeout(timer);
   }
@@ -85,6 +93,8 @@ async function checkLive() {
   await checkPage("Privacy", "/legal/privacidad.html", ["Política de privacidad", "Ley N.º 21.719"]);
   await checkPage("Refunds", "/legal/reembolsos.html", ["Retracto y reembolsos", "Hotmart"]);
   await checkPage("External beta", "/beta/", ["PROGRAMA BETA", "id=\"beta-form\""]);
+  await checkPage("Automated support", "/soporte/", ["DIAGNÓSTICO AUTOMÁTICO", "id=\"support-form\""]);
+  await checkPage("Private automation portal", "/admin/", ["Centro de automatización", "id=\"admin-login\""]);
 
   for (const [slug, name, checkout] of products) {
     await checkPage(`Product detail ${name}`, `/productos/?producto=${encodeURIComponent(slug)}`, ["id=\"product-title\"", "Comprar en Hotmart", "Ya compré: ingresar"]);
