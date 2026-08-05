@@ -39,7 +39,9 @@ async function checkSource() {
     record(`Source mapping ${name}`, inHome && inProduct ? "PASS" : "FAIL", inHome && inProduct ? "slug and checkout match" : "missing or inconsistent mapping");
   }
 
-  record("Product page legal links", productPage.includes("../legal/terminos.html") && productPage.includes("../legal/privacidad.html") && productPage.includes("../legal/reembolsos.html") ? "PASS" : "FAIL", "terms, privacy and refunds must be visible");
+  const legalLinksPresent = ["../legal/terminos.html", "../legal/privacidad.html", "../legal/reembolsos.html"]
+    .every((href) => productPage.includes(href));
+  record("Product page legal links", legalLinksPresent ? "PASS" : "FAIL", legalLinksPresent ? "terms, privacy and refunds are visible" : "one or more legal links are missing");
   record("Temporary platform session", platformPage.includes("security-bootstrap.js") ? "PASS" : "FAIL", "security bootstrap must load before platform.js");
   record("Beta privacy consent", betaPage.includes("consentPrivacy") && betaPage.includes("../legal/privacidad.html") ? "PASS" : "FAIL", "beta form must require privacy consent");
 }
@@ -82,10 +84,10 @@ async function checkLive() {
   await checkPage("Terms", "/legal/terminos.html", ["Términos y condiciones", "KineCheck"]);
   await checkPage("Privacy", "/legal/privacidad.html", ["Política de privacidad", "Ley N.º 21.719"]);
   await checkPage("Refunds", "/legal/reembolsos.html", ["Retracto y reembolsos", "Hotmart"]);
-  await checkPage("External beta", "/beta/", ["Programa beta", "beta-form"]);
+  await checkPage("External beta", "/beta/", ["PROGRAMA BETA", "id=\"beta-form\""]);
 
   for (const [slug, name, checkout] of products) {
-    await checkPage(`Product detail ${name}`, `/productos/?producto=${encodeURIComponent(slug)}`, [name, "Comprar en Hotmart", "Ya compré: ingresar"]);
+    await checkPage(`Product detail ${name}`, `/productos/?producto=${encodeURIComponent(slug)}`, ["id=\"product-title\"", "Comprar en Hotmart", "Ya compré: ingresar"]);
     await checkCheckout(name, checkout);
   }
 }
