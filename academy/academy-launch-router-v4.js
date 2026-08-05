@@ -1,4 +1,6 @@
 (() => {
+  "use strict";
+
   if (window.__KINECHECK_LAUNCH_ROUTER_V4__) return;
   window.__KINECHECK_LAUNCH_ROUTER_V4__ = true;
 
@@ -18,8 +20,8 @@
   });
 
   const EXTERNAL_COURSES = Object.freeze({
-    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260803-sessionfix2",
-    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260803-sessionfix2",
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260806-ecosystem3",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260806-ecosystem3",
   });
 
   const SAME_ORIGIN_COURSES = new Set([
@@ -34,16 +36,33 @@
     "kinecheck-recupera",
   ]);
 
+  const KNOWN_PRODUCTS = new Set([
+    ...Object.keys(EXTERNAL_COURSES),
+    ...SAME_ORIGIN_COURSES,
+    ...APPLICATIONS,
+  ]);
+
   let navigating = false;
+
+  function parseSession(storage) {
+    try {
+      const value = JSON.parse(storage.getItem(SESSION_KEY) || "null");
+      return value?.access_token ? value : null;
+    } catch {
+      return null;
+    }
+  }
 
   function readSession() {
     const provided = window.KINECHECK_ACADEMY_SESSION?.get?.();
     if (provided?.access_token) return provided;
-    try {
-      return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-    } catch {
-      return null;
-    }
+
+    const temporary = parseSession(sessionStorage);
+    if (temporary) return temporary;
+
+    // Compatibilidad temporal con sesiones anteriores. La capa de seguridad
+    // del ecosistema migra la sesión activa a sessionStorage.
+    return parseSession(localStorage);
   }
 
   function showToast(text) {
@@ -84,6 +103,7 @@
   }
 
   function courseHandoff(session, product) {
+    if (!KNOWN_PRODUCTS.has(product)) throw new Error("El producto solicitado no pertenece al catálogo protegido.");
     return {
       type: DEFAULT_HANDOFF_TYPE,
       issuedAt: Date.now(),
@@ -98,6 +118,7 @@
   }
 
   function writeApplicationHandoff(session, product) {
+    if (!APPLICATIONS.has(product)) throw new Error("La aplicación solicitada no está habilitada para SSO.");
     const accessOnly = accessOnlySession(session);
     window.name = "";
     window.name = JSON.stringify({
@@ -122,16 +143,16 @@
   function sameOriginCourseUrl(slug) {
     const base = repositoryBasePath();
     if (slug === "kinecheck-clinico") {
-      return `${location.origin}${base}/kinecheck-clinico-guia/?product=kinecheck-clinico&v=20260806-2`;
+      return `${location.origin}${base}/kinecheck-clinico-guia/?product=kinecheck-clinico&v=20260806-ecosystem3`;
     }
     if (slug === "kinecheck-clinico-curso") {
-      return `${location.origin}${base}/kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-2`;
+      return `${location.origin}${base}/kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-ecosystem3`;
     }
     if (slug === "comunicacion-clinica") {
-      return `${location.origin}${base}/comunicacion-clinica.html?course=comunicacion-clinica&v=20260803-sessionfix2`;
+      return `${location.origin}${base}/comunicacion-clinica.html?course=comunicacion-clinica&v=20260806-ecosystem3`;
     }
     if (slug === "traumatologia-ortopedia-clinica") {
-      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260803-sessionfix2`;
+      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260806-ecosystem3`;
     }
     return "";
   }
@@ -166,8 +187,13 @@
       resetNavigation(button);
       return;
     }
-    writeCourseHandoff(session, slug);
-    location.assign(destination);
+    try {
+      writeCourseHandoff(session, slug);
+      location.assign(destination);
+    } catch (error) {
+      resetNavigation(button);
+      showToast(error instanceof Error ? error.message : "No fue posible abrir el producto.");
+    }
   }
 
   async function openExternalCourse(slug, destination, button) {
@@ -187,14 +213,18 @@
     }
 
     const targetOrigin = new URL(destination).origin;
-    const payload = courseHandoff(session, slug);
+    let payload;
     try {
+      payload = courseHandoff(session, slug);
       popup.name = JSON.stringify(payload);
-    } catch {
-      // El intercambio por postMessage sigue disponible como respaldo.
+    } catch (error) {
+      popup.close();
+      resetNavigation(button);
+      showToast(error instanceof Error ? error.message : "No fue posible preparar el acceso.");
+      return;
     }
-    let completed = false;
 
+    let completed = false;
     const cleanup = () => {
       window.removeEventListener("message", onMessage);
       window.clearTimeout(timeoutId);
@@ -224,18 +254,16 @@
     popup.location.href = destination;
   }
 
-  function applicationUrl(slug) {
-    const route = APP_SSO.routes?.[slug];
-    if (!APP_SSO.baseUrl || !route) return "";
-    return new URL(route, APP_SSO.baseUrl).toString();
-  }
-
   function submitApplicationPost(session, product) {
     writeApplicationHandoff(session, product);
-    location.assign("./app-sso-relay.html?v=20260801-sso8");
+    location.assign("./app-sso-relay.html?v=20260806-ecosystem3");
   }
 
   async function openApplication(slug, button) {
+    if (!APPLICATIONS.has(slug)) {
+      showToast("La aplicación solicitada no pertenece a los accesos externos activos.");
+      return;
+    }
     if (!APP_SSO.enabled) {
       showToast("Tu licencia se conserva activa. El acceso único de esta aplicación todavía no ha sido habilitado en producción.");
       return;
@@ -253,10 +281,10 @@
         submitApplicationPost(session, slug);
         return;
       }
-      const destination = applicationUrl(slug);
-      if (!destination) throw new Error("La ruta de acceso único todavía no está configurada para esta aplicación.");
+      const route = APP_SSO.routes?.[slug];
+      if (!APP_SSO.baseUrl || !route) throw new Error("La ruta de acceso único no está configurada para esta aplicación.");
       writeApplicationHandoff(session, slug);
-      location.assign(destination);
+      location.assign(new URL(route, APP_SSO.baseUrl).toString());
     } catch (error) {
       resetNavigation(button);
       showToast(error instanceof Error ? error.message : "No fue posible abrir la aplicación.");
