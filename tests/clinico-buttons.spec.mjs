@@ -1,37 +1,60 @@
 import { test, expect } from "@playwright/test";
 
 const BASE = "http://127.0.0.1:4173";
+const SUPABASE = "https://eqhcdclyeoapmqtlduwf.supabase.co";
 
 test.describe("KineCheck Clínico · controles móviles", () => {
   test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
 
-  test("acceso: pestañas, validación y estados ocultos", async ({ page }) => {
+  test("acceso: no duplica correo y contraseña cuando falta sesión", async ({ page }) => {
     await page.goto(`${BASE}/kinecheck-clinico-curso/`, { waitUntil: "networkidle" });
 
-    await expect(page.locator("#access-progress")).toBeHidden();
-    await expect(page.locator("#auth-message")).toBeHidden();
+    await expect(page.locator("#auth-form")).toHaveCount(0);
+    await expect(page.locator("#email")).toHaveCount(0);
+    await expect(page.locator("#password")).toHaveCount(0);
     await expect(page.locator("#sign-out")).toBeHidden();
-    await expect(page.locator("#auth-form")).toBeVisible();
-
-    await page.locator("#signup-tab").click();
-    await expect(page.locator("#signup-tab")).toHaveAttribute("aria-selected", "true");
-    await expect(page.locator("#auth-submit")).toHaveText("Crear mi cuenta");
-
-    await page.locator("#login-tab").click();
-    await expect(page.locator("#login-tab")).toHaveAttribute("aria-selected", "true");
-    await expect(page.locator("#auth-submit")).toHaveText("Ingresar al curso");
-
-    await page.locator("#auth-submit").click();
-    await expect(page.locator("#auth-message")).toBeVisible();
-    await expect(page.locator("#auth-message")).toContainText("correo válido");
     await expect(page.locator("#access-progress")).toBeHidden();
-    await expect(page.locator("#sign-out")).toBeHidden();
+    await expect(page.locator("#ecosystem-entry")).toBeVisible();
+    await expect(page.locator("#ecosystem-entry")).toContainText("Un solo acceso");
+    await expect(page.locator(".ecosystem-entry-link")).toHaveAttribute("href", "../academy/#biblioteca");
+  });
 
-    await page.locator("#email").fill("profesional@ejemplo.cl");
-    await page.locator("#password").fill("1234567");
-    await page.locator("#auth-submit").click();
-    await expect(page.locator("#auth-message")).toContainText("al menos 8 caracteres");
-    await expect(page.locator("#access-progress")).toBeHidden();
+  test("acceso: reutiliza automáticamente la sesión del ecosistema", async ({ page }) => {
+    await page.route(`${SUPABASE}/**`, async (route) => {
+      const url = route.request().url();
+      if (url.includes("/auth/v1/user")) {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ id: "usuario-prueba", email: "profesional@ejemplo.cl" }),
+        });
+        return;
+      }
+      if (url.includes("/functions/v1/course-key")) {
+        await route.fulfill({
+          status: 200,
+          contentType: "text/javascript",
+          body: "document.querySelector('#root').innerHTML='<main id=\"course-opened\"><div class=\"kc-top-actions\"></div><h1>Curso abierto</h1></main>';",
+        });
+        return;
+      }
+      await route.fulfill({ status: 404, contentType: "application/json", body: "{}" });
+    });
+
+    await page.addInitScript(() => {
+      localStorage.setItem("kinecheck_secure_session_v1", JSON.stringify({
+        access_token: "token-sesion-ecosistema-prueba-1234567890",
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
+        token_type: "bearer",
+      }));
+    });
+
+    await page.goto(`${BASE}/kinecheck-clinico-curso/`, { waitUntil: "networkidle" });
+    await expect(page.locator("#course-opened")).toBeVisible();
+    await expect(page.locator("#access-shell")).toBeHidden();
+    await expect(page.locator("#ecosystem-entry")).toBeHidden();
+    await expect(page.locator(".kc-top-actions #sign-out")).toBeVisible();
+    await expect(page.locator("#kinecheck-dynamic-watermark")).toBeVisible();
   });
 
   test("curso: temario, módulos, comprobación y progreso", async ({ page }) => {
