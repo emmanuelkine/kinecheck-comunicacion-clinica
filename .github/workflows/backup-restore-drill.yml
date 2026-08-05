@@ -1,0 +1,131 @@
+name: KineCheck Backup and Restore Drill
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 5 * * 0"
+
+permissions:
+  contents: read
+
+jobs:
+  public-schema-backup:
+    name: Encrypted public-schema backup and restore test
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 8
+
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_ENCRYPTION_PASSPHRASE: ${{ secrets.BACKUP_ENCRYPTION_PASSPHRASE }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${SUPABASE_DB_URL:-}" ]]; then
+            echo "::error::Missing repository secret SUPABASE_DB_URL."
+            exit 1
+          fi
+          if [[ -z "${BACKUP_ENCRYPTION_PASSPHRASE:-}" ]]; then
+            echo "::error::Missing repository secret BACKUP_ENCRYPTION_PASSPHRASE."
+            exit 1
+          fi
+
+      - name: Create logical backup of public schema
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p backup
+          docker run --rm \
+            -v "$PWD/backup:/backup" \
+            postgres:17 \
+            pg_dump "$SUPABASE_DB_URL" \
+              --format=custom \
+              --schema=public \
+              --no-owner \
+              --no-acl \
+              --file=/backup/kinecheck-public.dump
+          test -s backup/kinecheck-public.dump
+
+      - name: Restore into temporary PostgreSQL
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --network host \
+            -e PGPASSWORD=postgres \
+            postgres:17 \
+            psql -h 127.0.0.1 -U postgres -d postgres \
+              -v ON_ERROR_STOP=1 \
+              -c "drop database if exists kinecheck_restore;" \
+              -c "create database kinecheck_restore;"
+
+          docker run --rm --network host \
+            -e PGPASSWORD=postgres \
+            -v "$PWD/backup:/backup" \
+            postgres:17 \
+            pg_restore \
+              -h 127.0.0.1 \
+              -U postgres \
+              -d kinecheck_restore \
+              --no-owner \
+              --no-acl \
+              /backup/kinecheck-public.dump
+
+      - name: Validate restored schema
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --network host \
+            -e PGPASSWORD=postgres \
+            -v "$PWD/scripts:/scripts:ro" \
+            postgres:17 \
+            psql -h 127.0.0.1 -U postgres -d kinecheck_restore \
+              -f /scripts/validate_restore.sql \
+              | tee backup/restore-validation.txt
+
+      - name: Create encrypted artifact and manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum backup/kinecheck-public.dump > backup/SHA256SUMS.txt
+          {
+            echo "created_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "source=Supabase public schema"
+            echo "restore_target=temporary PostgreSQL 17"
+            echo "commit=${GITHUB_SHA}"
+          } > backup/manifest.txt
+          openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000 \
+            -pass env:BACKUP_ENCRYPTION_PASSPHRASE \
+            -in backup/kinecheck-public.dump \
+            -out backup/kinecheck-public.dump.enc
+          rm -f backup/kinecheck-public.dump
+
+      - name: Upload encrypted backup evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinecheck-public-backup-${{ github.run_id }}
+          path: |
+            backup/kinecheck-public.dump.enc
+            backup/SHA256SUMS.txt
+            backup/manifest.txt
+            backup/restore-validation.txt
+          retention-days: 7
+          if-no-files-found: error
