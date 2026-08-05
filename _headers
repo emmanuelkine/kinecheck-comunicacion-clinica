@@ -10,21 +10,49 @@
 
 /platform/*
   Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
 
 /platform/security-bootstrap.js
   Cache-Control: private, no-store, max-age=0
+
+/admin/*
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
 
 /academy/academy-integration-guard-v4.js
   Cache-Control: no-store, max-age=0
 
 /academy/*
   Cache-Control: no-cache, must-revalidate
+  X-Robots-Tag: noindex, nofollow
 
 /beta/*
   Cache-Control: no-cache, must-revalidate
 
+/ayuda/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/bienvenida/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/soporte/*
+  Cache-Control: no-cache, must-revalidate
+
 /legal/*
   Cache-Control: public, max-age=3600, must-revalidate
+
+/404.html
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Robots-Tag: noindex, follow
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400
 
 /*.html
   Cache-Control: no-cache, must-revalidate
