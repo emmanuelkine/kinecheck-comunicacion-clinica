@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Guía de bienvenida y primeros pasos para ingresar a KineCheck después de comprar.">
+  <meta name="theme-color" content="#041218">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CL">
+  <meta property="og:title" content="Bienvenido a KineCheck | Primeros pasos">
+  <meta property="og:description" content="Activa tu cuenta, ingresa con el correo de compra y encuentra tus productos KineCheck.">
+  <meta property="og:url" content="https://kinecheck.cl/bienvenida/">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
+  <link rel="canonical" href="https://kinecheck.cl/bienvenida/">
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/public-guide.css?v=20260805-1">
+  <script src="./bienvenida.js?v=20260805-1" defer></script>
+  <title>Bienvenido a KineCheck | Primeros pasos</title>
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+  <header class="guide-header">
+    <a class="guide-brand" href="../" aria-label="KineCheck, página principal"><img src="../assets/kinecheck-mark.svg" alt=""><span><strong>KineCheck</strong><small>PRIMEROS PASOS</small></span></a>
+    <nav class="guide-nav" aria-label="Navegación"><a href="../ayuda/">Centro de Ayuda</a><a href="../soporte/">Soporte</a><a href="../legal/terminos.html">Términos</a><a class="primary-link" href="../platform/">Ingresar</a></nav>
+  </header>
+
+  <main id="contenido" class="guide-main">
+    <section class="guide-hero">
+      <div>
+        <span class="eyebrow">BIENVENIDO A KINECHECK</span>
+        <h1>Tu compra está hecha. Ahora organicemos el acceso.</h1>
+        <p>Selecciona el producto adquirido para recibir instrucciones precisas. El principio es siempre el mismo: utiliza en KineCheck el correo exacto asociado a tu compra en Hotmart.</p>
+        <div class="product-selector">
+          <select id="product-selector" aria-label="Seleccionar producto">
+            <option value="general">Selecciona tu producto</option>
+            <option value="kinecheck-clinico">KineCheck Clínico</option>
+            <option value="kinecheck-estudiante">KineCheck Estudiante</option>
+            <option value="kinecheck-recupera">KineCheck Recupera</option>
+            <option value="comunicacion-clinica">Comunicación Clínica</option>
+            <option value="evidencia-aplicada">Evidencia Aplicada</option>
+            <option value="mas-alla-del-dolor">Más allá del dolor</option>
+            <option value="traumatologia-ortopedia-clinica">Traumatología y Ortopedia Clínica</option>
+            <option value="pack-estudiante">Pack KineCheck Estudiante</option>
+          </select>
+          <button id="apply-product" class="button primary" type="button">Personalizar guía</button>
+        </div>
+        <div id="personalized-box" class="personalized-box" aria-live="polite">
+          <span class="eyebrow">TU RUTA</span>
+          <h2 id="product-title">Acceso general KineCheck</h2>
+          <p id="product-description">Tus productos aparecerán automáticamente según las licencias asociadas a tu correo.</p>
+          <p><strong id="product-term">Vigencia:</strong> revisa la condición informada en tu compra.</p>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <strong>Regla más importante</strong>
+        <p>El correo de ingreso debe coincidir con el correo de compra. Si usas otro, KineCheck puede abrir correctamente, pero no encontrará tu licencia.</p>
+        <div class="card-actions"><a class="button primary" href="../platform/">Ingresar a la plataforma</a><a class="button secondary" href="../ayuda/">Necesito ayuda</a></div>
+      </aside>
+    </section>
+
+    <section class="guide-section" aria-labelledby="pasos-title">
+      <div class="section-heading"><span class="eyebrow">RUTA RECOMENDADA</span><h2 id="pasos-title">Cinco pasos para comenzar correctamente</h2></div>
+      <div class="steps">
+        <article class="step-card"><span>1</span><h3>Confirma la compra</h3><p>Revisa el mensaje de Hotmart y comprueba que el pago esté aprobado.</p></article>
+        <article class="step-card"><span>2</span><h3>Identifica el correo</h3><p>Usa exactamente el correo que aparece en la confirmación de la compra.</p></article>
+        <article class="step-card"><span>3</span><h3>Crea o recupera tu cuenta</h3><p>Si todavía no tienes contraseña, utiliza la opción disponible en Academy.</p></article>
+        <article class="step-card"><span>4</span><h3>Ingresa a KineCheck</h3><p>La plataforma revisará automáticamente qué productos están activos.</p></article>
+        <article class="step-card"><span>5</span><h3>Abre tu biblioteca</h3><p>Selecciona el producto y continúa desde el módulo o herramienta correspondiente.</p></article>
+      </div>
+    </section>
+
+    <section class="guide-section">
+      <div class="section-heading"><span class="eyebrow">PRIMERA SESIÓN</span><h2>Qué conviene revisar al ingresar</h2></div>
+      <div class="topic-grid">
+        <article class="topic-card"><span>✓</span><h3>Licencias activas</h3><p>En Configuración podrás revisar qué accesos fueron detectados y, cuando corresponda, la vigencia restante.</p></article>
+        <article class="topic-card"><span>◫</span><h3>Espacio principal</h3><p>KineCheck organiza automáticamente el entorno profesional, estudiantil, docente o de recuperación según tus productos.</p></article>
+        <article class="topic-card"><span>▤</span><h3>Biblioteca</h3><p>Los productos comprados aparecen como activos. Los demás se muestran bloqueados y no generan cobros automáticos.</p></article>
+        <article class="topic-card"><span>◇</span><h3>Casos y proyectos</h3><p>Cuando uses esta función, trabaja únicamente con información anonimizada y sin identificadores de pacientes.</p></article>
+        <article class="topic-card"><span>◐</span><h3>Apariencia</h3><p>Puedes usar el modo del sistema, claro u oscuro. La preferencia se conserva en tu cuenta o dispositivo.</p></article>
+        <article class="topic-card"><span>?</span><h3>Ayuda</h3><p>El Centro de Ayuda responde las dudas frecuentes y el soporte automatizado diagnostica problemas de compra y licencia.</p></article>
+      </div>
+    </section>
+
+    <section class="guide-section">
+      <div class="section-heading"><span class="eyebrow">EVITA ESTOS ERRORES</span><h2>Lo que no debes hacer</h2></div>
+      <div class="notice-box"><strong>No compres nuevamente si el producto no aparece.</strong><p>Primero confirma el correo, cierra sesión y vuelve a ingresar. Tampoco compartas credenciales, envíes contraseñas por soporte ni incorpores datos identificables de pacientes.</p></div>
+    </section>
+
+    <section class="support-band">
+      <div><h2>¿Listo para comenzar?</h2><p>Ingresa a la plataforma con el correo de tu compra. Si algo falla, utiliza el diagnóstico automatizado.</p></div>
+      <div class="hero-actions"><a class="button" href="../platform/">Ingresar ahora</a><a class="button secondary" href="../soporte/">Abrir soporte</a></div>
+    </section>
+  </main>
+
+  <footer class="guide-footer"><span>© 2026 KineCheck · Primeros pasos</span><nav><a href="../ayuda/">Ayuda</a><a href="../legal/privacidad.html">Privacidad</a><a href="../legal/reembolsos.html">Reembolsos</a><a href="../">Inicio</a></nav></footer>
+</body>
+</html>
