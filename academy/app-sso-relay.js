@@ -1,9 +1,10 @@
 (() => {
+  "use strict";
+
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const MAX_AGE_MS = 120000;
   const POST_URL = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
   const PRODUCTS = new Set([
-    "kinecheck-clinico",
     "kinecheck-estudiante",
     "kinecheck-recupera",
   ]);
@@ -62,7 +63,7 @@
     return;
   }
   if (!PRODUCTS.has(product)) {
-    fail("La aplicación solicitada no está permitida.");
+    fail("La aplicación solicitada no está permitida. KineCheck Clínico se abre mediante su curso y guía complementaria dentro del ecosistema.");
     return;
   }
   if (!accessToken) {
@@ -87,6 +88,6 @@
   hidden(form, "handoff_type", HANDOFF_TYPE);
 
   document.body.appendChild(form);
-  if (status) status.textContent = "Acceso validado. Abriendo la aplicación…";
+  if (status) status.textContent = `Validando la licencia específica de ${product === "kinecheck-estudiante" ? "KineCheck Estudiante" : "KineCheck Recupera"}…`;
   form.submit();
 })();
