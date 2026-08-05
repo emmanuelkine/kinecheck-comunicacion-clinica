@@ -10,8 +10,8 @@
 
   document.documentElement.classList.add("js");
 
-  const COMMERCE_FIX_VERSION = "20260804-platform-v5-1";
-  const ACADEMY_URL = new URL(`./platform/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
+  const COMMERCE_FIX_VERSION = "20260804-catalog1";
+  const PLATFORM_URL = new URL(`./platform/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
   const CHECKOUTS = Object.freeze({
     "kinecheck-clinico": "https://pay.hotmart.com/L106791841D",
     "kinecheck-estudiante": "https://pay.hotmart.com/G106801166S",
@@ -21,6 +21,16 @@
     "evidencia-aplicada": "https://pay.hotmart.com/F106921972I",
     "traumatologia-ortopedia-clinica": "https://pay.hotmart.com/B106913952R",
     "pack-estudiante": "https://pay.hotmart.com/Q106891608M",
+  });
+  const PRODUCT_LABELS = Object.freeze({
+    "kinecheck-clinico": "Aplicación profesional · evaluación y seguimiento",
+    "kinecheck-estudiante": "Aplicación formativa · razonamiento guiado",
+    "kinecheck-recupera": "Aplicación para pacientes · progreso y ejercicios",
+    "comunicacion-clinica": "Curso interactivo · comunicación en salud",
+    "mas-alla-del-dolor": "Curso clínico · evaluación musculoesquelética",
+    "evidencia-aplicada": "Curso clínico · evidencia y decisiones",
+    "traumatologia-ortopedia-clinica": "Curso clínico · lesiones y seguridad",
+    "pack-estudiante": "Pack formativo · dos productos en una cuenta",
   });
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -32,12 +42,12 @@
   const filters = [...document.querySelectorAll("[data-filter]")];
   const products = [...document.querySelectorAll("[data-product-card]")];
 
-  function loadCommerceFixStyles() {
-    if (document.querySelector('link[data-kc-commerce-fix]')) return;
+  function loadStyles(href, marker) {
+    if (document.querySelector(`link[${marker}]`)) return;
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = new URL(`./home-commerce-fix.css?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
-    link.dataset.kcCommerceFix = "true";
+    link.href = new URL(href, location.href).toString();
+    link.setAttribute(marker, "true");
     document.head.appendChild(link);
   }
 
@@ -48,10 +58,21 @@
     return link;
   }
 
+  function installProductMedia(card, slug) {
+    if (card.querySelector(".product-media")) return;
+    const media = document.createElement("div");
+    media.className = "product-media";
+    media.dataset.label = PRODUCT_LABELS[slug] || "Producto KineCheck";
+    media.setAttribute("aria-hidden", "true");
+    card.prepend(media);
+  }
+
   function repairProductActions(card) {
     const slug = String(card.dataset.course || "").trim();
     const checkout = CHECKOUTS[slug];
     if (!checkout) return;
+
+    installProductMedia(card, slug);
 
     let actions = card.querySelector(".product-actions");
     if (!actions) {
@@ -60,10 +81,18 @@
       card.appendChild(actions);
     }
 
+    let detail = actions.querySelector(".detail");
+    if (!detail) {
+      detail = makeLink("detail", "Conocer el producto");
+      actions.prepend(detail);
+    }
+    detail.href = new URL(`./productos/?producto=${encodeURIComponent(slug)}`, location.href).toString();
+    detail.setAttribute("aria-label", `Conocer en detalle ${card.querySelector("h3")?.textContent || "este producto"}`);
+
     let buy = actions.querySelector(".buy");
     if (!buy) {
       buy = makeLink("buy", slug === "pack-estudiante" ? "Comprar el pack" : "Comprar en Hotmart");
-      actions.prepend(buy);
+      actions.appendChild(buy);
     }
     buy.href = checkout;
     buy.target = "_blank";
@@ -76,9 +105,18 @@
       enter = makeLink("enter", "Ya compré: ingresar");
       actions.appendChild(enter);
     }
-    enter.href = ACADEMY_URL;
+    enter.href = PLATFORM_URL;
     enter.textContent = "Ya compré: ingresar";
     enter.setAttribute("aria-label", `Ingresar con una compra existente de ${card.querySelector("h3")?.textContent || "KineCheck"}`);
+  }
+
+  function installCatalogIntro() {
+    const productGrid = document.querySelector(".products");
+    if (!productGrid || document.querySelector(".catalog-intro-note")) return;
+    const note = document.createElement("p");
+    note.className = "catalog-intro-note";
+    note.innerHTML = "<strong>Primero conoce el producto.</strong> Cada ficha explica propósito, contenidos, público, vigencia y forma de acceso antes de llevarte al checkout de Hotmart.";
+    productGrid.before(note);
   }
 
   function closeMenu() {
@@ -97,33 +135,22 @@
   }
 
   function installRevealAnimations() {
-    const targets = [
-      ...document.querySelectorAll(
-        ".hero-copy,.ecosystem-card,.trust-row article,.section-heading,.audience,.product,.step,.process-note,.value-panel,.faq details,.final-cta",
-      ),
-    ];
-
+    const targets = [...document.querySelectorAll(".hero-copy,.ecosystem-card,.trust-row article,.section-heading,.audience,.product,.step,.process-note,.value-panel,.faq details,.final-cta")];
     if (reduceMotion || !("IntersectionObserver" in window)) {
       targets.forEach((target) => target.classList.add("is-visible"));
       return;
     }
-
     targets.forEach((target, index) => {
       target.classList.add("reveal-ready");
       target.style.setProperty("--reveal-order", String(index % 5));
     });
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add("is-visible");
         observer.unobserve(entry.target);
       });
-    }, {
-      threshold: 0.12,
-      rootMargin: "0px 0px -6% 0px",
-    });
-
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
     targets.forEach((target) => observer.observe(target));
   }
 
@@ -132,19 +159,12 @@
     const sections = [...document.querySelectorAll("main section[id]")];
     const links = [...nav.querySelectorAll('a[href^="#"]')];
     const byId = new Map(links.map((link) => [link.getAttribute("href")?.slice(1), link]));
-
     const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
       links.forEach((link) => link.removeAttribute("aria-current"));
       byId.get(visible.target.id)?.setAttribute("aria-current", "true");
-    }, {
-      threshold: [0.2, 0.45, 0.7],
-      rootMargin: "-25% 0px -58% 0px",
-    });
-
+    }, { threshold: [0.2, 0.45, 0.7], rootMargin: "-25% 0px -58% 0px" });
     sections.forEach((section) => observer.observe(section));
   }
 
@@ -152,10 +172,8 @@
     if (!heroCopy || reduceMotion || !window.matchMedia("(pointer:fine)").matches) return;
     heroCopy.addEventListener("pointermove", (event) => {
       const rect = heroCopy.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width) * 100;
-      const y = ((event.clientY - rect.top) / rect.height) * 100;
-      heroCopy.style.setProperty("--pointer-x", `${x.toFixed(1)}%`);
-      heroCopy.style.setProperty("--pointer-y", `${y.toFixed(1)}%`);
+      heroCopy.style.setProperty("--pointer-x", `${(((event.clientX - rect.left) / rect.width) * 100).toFixed(1)}%`);
+      heroCopy.style.setProperty("--pointer-y", `${(((event.clientY - rect.top) / rect.height) * 100).toFixed(1)}%`);
     });
     heroCopy.addEventListener("pointerleave", () => {
       heroCopy.style.setProperty("--pointer-x", "82%");
@@ -168,39 +186,29 @@
     details.forEach((item) => {
       item.addEventListener("toggle", () => {
         if (!item.open) return;
-        details.forEach((other) => {
-          if (other !== item) other.open = false;
-        });
+        details.forEach((other) => { if (other !== item) other.open = false; });
       });
     });
   }
 
-  loadCommerceFixStyles();
+  loadStyles(`./home-commerce-fix.css?v=${COMMERCE_FIX_VERSION}`, "data-kc-commerce-fix");
+  loadStyles(`./catalog-professional.css?v=${COMMERCE_FIX_VERSION}`, "data-kc-catalog-professional");
 
   if (year) year.textContent = String(new Date().getFullYear());
   products.forEach(repairProductActions);
+  installCatalogIntro();
 
-  document.querySelectorAll('a[href*="academy/"]').forEach((link) => {
-    link.href = ACADEMY_URL;
+  document.querySelectorAll('a[href*="academy/"],a[href*="platform/"]').forEach((link) => {
+    if (!link.closest(".product-actions") || link.classList.contains("enter")) link.href = PLATFORM_URL;
   });
 
   menuButton?.addEventListener("click", () => {
     const open = nav?.classList.toggle("open");
     menuButton.setAttribute("aria-expanded", String(Boolean(open)));
   });
-
-  nav?.addEventListener("click", (event) => {
-    if (!event.target.closest("a")) return;
-    closeMenu();
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeMenu();
-  });
-
-  window.addEventListener("scroll", () => {
-    header?.classList.toggle("scrolled", window.scrollY > 18);
-  }, { passive: true });
+  nav?.addEventListener("click", (event) => { if (event.target.closest("a")) closeMenu(); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
+  window.addEventListener("scroll", () => { header?.classList.toggle("scrolled", window.scrollY > 18); }, { passive: true });
 
   filters.forEach((button) => {
     button.addEventListener("click", () => {
@@ -217,8 +225,7 @@
   document.querySelectorAll("[data-audience-select]").forEach((button) => {
     button.addEventListener("click", () => {
       const audience = button.dataset.audienceSelect || "all";
-      const filterButton = document.querySelector(`[data-filter="${CSS.escape(audience)}"]`);
-      filterButton?.click();
+      document.querySelector(`[data-filter="${CSS.escape(audience)}"]`)?.click();
       document.querySelector("#productos")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     });
   });
