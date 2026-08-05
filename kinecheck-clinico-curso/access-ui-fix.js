@@ -6,12 +6,33 @@
   const password = document.querySelector("#password");
   const message = document.querySelector("#auth-message");
   const progress = document.querySelector("#access-progress");
+  const progressText = progress?.querySelector("p");
   const tabs = document.querySelector(".auth-tabs");
   const loginTab = document.querySelector("#login-tab");
   const signupTab = document.querySelector("#signup-tab");
   const submit = document.querySelector("#auth-submit");
   const signOut = document.querySelector("#sign-out");
   const root = document.querySelector("#root");
+
+  function setTabState(activeTab) {
+    [loginTab, signupTab].forEach((tab) => {
+      if (!tab) return;
+      const active = tab === activeTab;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+    });
+  }
+
+  loginTab?.addEventListener("click", () => setTabState(loginTab));
+  signupTab?.addEventListener("click", () => setTabState(signupTab));
+
+  tabs?.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    event.preventDefault();
+    const next = document.activeElement === loginTab ? signupTab : loginTab;
+    next?.click();
+    next?.focus();
+  });
 
   function showValidation(text, target) {
     if (progress) progress.hidden = true;
@@ -27,18 +48,26 @@
     target?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
+  function beginCredentialCheck() {
+    if (progressText) progressText.textContent = "Verificando tus credenciales…";
+    if (message) message.hidden = true;
+    if (progress) progress.hidden = false;
+  }
+
   form?.addEventListener("submit", (event) => {
     const emailValid = Boolean(email?.value.trim()) && Boolean(email?.checkValidity());
     const passwordValid = (password?.value || "").length >= 8;
-    if (emailValid && passwordValid) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    if (!emailValid) {
-      showValidation("Ingresa un correo válido asociado a tu compra.", email);
+    if (!emailValid || !passwordValid) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if (!emailValid) {
+        showValidation("Ingresa un correo válido asociado a tu compra.", email);
+        return;
+      }
+      showValidation("La contraseña debe tener al menos 8 caracteres.", password);
       return;
     }
-    showValidation("La contraseña debe tener al menos 8 caracteres.", password);
+    beginCredentialCheck();
   }, true);
 
   [email, password].forEach((input) => {
@@ -61,6 +90,7 @@
     new MutationObserver(syncBusyState).observe(progress, { attributes: true, attributeFilter: ["hidden"] });
   }
   syncBusyState();
+  setTabState(loginTab);
 
   function syncCourseControls() {
     const sidebar = root?.querySelector("[data-sidebar]");
@@ -69,9 +99,10 @@
 
     if (sidebar && !sidebar.id) sidebar.id = "kc-course-sidebar";
     if (toggle) {
+      const open = Boolean(sidebar?.classList.contains("open"));
       toggle.setAttribute("aria-controls", sidebar?.id || "kc-course-sidebar");
-      toggle.setAttribute("aria-expanded", String(Boolean(sidebar?.classList.contains("open"))));
-      toggle.setAttribute("aria-label", sidebar?.classList.contains("open") ? "Cerrar temario" : "Abrir temario");
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Cerrar temario" : "Abrir temario");
     }
 
     if (actions && signOut && signOut.parentElement !== actions) {
