@@ -37,6 +37,8 @@ test.describe("KineCheck Clínico · controles móviles", () => {
   test("curso: temario, módulos, comprobación y progreso", async ({ page }) => {
     await page.goto(`${BASE}/tests/blank.html`);
     await page.setContent(`<!doctype html><html><body><div id="root"></div><button id="sign-out" type="button" hidden>Cerrar sesión</button></body></html>`);
+    await page.addStyleTag({ url: `${BASE}/kinecheck-clinico-curso/course.css` });
+    await page.addStyleTag({ url: `${BASE}/kinecheck-clinico-curso/access-ui-fix.css` });
     await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/course-data.js` });
     await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/access-ui-fix.js` });
     await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/renderer.js` });
@@ -93,11 +95,15 @@ test.describe("KineCheck Clínico · controles móviles", () => {
       <nav id="section-nav"></nav>
       <form id="guide-form"></form>
       <strong id="progress-value">0%</strong><i id="progress-bar"></i>
-      <button id="copy-summary" type="button">Copiar síntesis</button>
-      <button id="print-guide" type="button">Imprimir o guardar PDF</button>
+      <section class="synthesis-panel"><div class="actions">
+        <button id="copy-summary" class="button primary" type="button">Copiar síntesis</button>
+        <button id="print-guide" class="button secondary" type="button">Imprimir o guardar PDF</button>
+      </div><pre id="summary-output"></pre></section>
       <button id="reset-guide" type="button">Limpiar guía</button>
-      <pre id="summary-output"></pre><div id="toast" hidden></div>
+      <div id="toast" hidden></div>
     </body></html>`);
+    await page.addStyleTag({ url: `${BASE}/kinecheck-clinico-guia/guide.css` });
+    await page.addStyleTag({ url: `${BASE}/kinecheck-clinico-guia/guide-ui-fix.css` });
     await page.evaluate(() => {
       Object.defineProperty(navigator, "clipboard", {
         configurable: true,
