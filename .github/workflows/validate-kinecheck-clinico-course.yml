@@ -1,0 +1,57 @@
+name: Validate KineCheck Clinico Course
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'kinecheck-clinico-curso/**'
+      - 'academy/academy-bootstrap-v28.js'
+      - 'academy/academy-clinico-course-v1.js'
+      - 'productos/product-clinico-reposition-v1.js'
+      - '.github/workflows/validate-kinecheck-clinico-course.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check kinecheck-clinico-curso/course-data.js
+          node --check kinecheck-clinico-curso/renderer.js
+          node --check kinecheck-clinico-curso/config.js
+          node --check academy/academy-clinico-course-v1.js
+          node --check academy/academy-bootstrap-v28.js
+          node --check productos/product-clinico-reposition-v1.js
+      - name: Validate curriculum structure
+        run: |
+          node <<'NODE'
+          global.window = {};
+          require('./kinecheck-clinico-curso/course-data.js');
+          const course = window.__KINECHECK_COURSE_PAYLOAD__;
+          if (!course) throw new Error('Course payload missing');
+          if (course.modules.length !== 10) throw new Error(`Expected 10 modules, got ${course.modules.length}`);
+          const lessons = course.modules.flatMap((module) => module.lessons || []);
+          if (lessons.length !== 30) throw new Error(`Expected 30 experiences, got ${lessons.length}`);
+          const ids = lessons.map((lesson) => lesson.id);
+          if (new Set(ids).size !== ids.length) throw new Error('Duplicate lesson IDs');
+          for (const lesson of lessons) {
+            if (!lesson.title || !lesson.core || !lesson.case || !lesson.task) throw new Error(`Incomplete lesson ${lesson.id}`);
+            if (!lesson.quiz || !Array.isArray(lesson.quiz.options) || lesson.quiz.options.length < 3) throw new Error(`Invalid quiz ${lesson.id}`);
+            if (!Number.isInteger(lesson.quiz.answer) || lesson.quiz.answer < 0 || lesson.quiz.answer >= lesson.quiz.options.length) throw new Error(`Invalid answer ${lesson.id}`);
+          }
+          if (!Array.isArray(course.references) || course.references.length < 15) throw new Error('Insufficient reference base');
+          console.log(`Validated ${course.modules.length} modules, ${lessons.length} experiences and ${course.references.length} references.`);
+          NODE
+      - name: Validate positioning language
+        run: |
+          grep -q 'No reemplaza la ficha clínica institucional' kinecheck-clinico-curso/index.html
+          grep -q 'Curso profesional' academy/academy-bootstrap-v28.js
+          grep -q 'guía digital adjunta' productos/product-clinico-reposition-v1.js
