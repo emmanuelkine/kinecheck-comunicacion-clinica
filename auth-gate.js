@@ -1,4 +1,6 @@
-const COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:";
+const COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:";
+const LEGACY_COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:";
+const SHARED_SESSION_KEY = "kinecheck_secure_session_v1";
 const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
 const HANDOFF_MAX_AGE_MS = 120000;
 
@@ -7,54 +9,65 @@ function courseSessionKey(product) {
   return `${COURSE_SESSION_PREFIX}${slug || "curso"}`;
 }
 
-function earlyReadSession(product) {
+function legacyCourseSessionKey(product) {
+  const slug = String(product || "curso").trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+  return `${LEGACY_COURSE_SESSION_PREFIX}${slug || "curso"}`;
+}
+
+function safeJson(value) {
   try {
-    return JSON.parse(localStorage.getItem(courseSessionKey(product)) || "null");
+    return JSON.parse(value || "null");
   } catch {
     return null;
   }
 }
 
-function normalizeHandoffSession(handoff) {
-  const candidate = handoff?.session?.access_token
-    ? handoff.session
-    : handoff;
-
-  if (!candidate?.access_token) return null;
-
-  const existing = earlyReadSession(handoff?.product);
-  const sameAccessToken = existing?.access_token === candidate.access_token;
-
+function normalizeSession(value) {
+  if (!value?.access_token) return null;
   return {
-    ...(sameAccessToken ? existing : {}),
-    access_token: candidate.access_token,
-    expires_at: candidate.expires_at,
-    expires_in: candidate.expires_in,
-    token_type: candidate.token_type || "bearer",
-    handoff_access_only: !candidate.refresh_token,
-    ...(candidate.refresh_token ? { refresh_token: candidate.refresh_token } : {}),
+    ...value,
+    access_token: String(value.access_token),
+    expires_at: Number(value.expires_at || 0) || null,
+    expires_in: Number(value.expires_in || 0) || null,
+    token_type: value.token_type || "bearer",
   };
 }
 
-function acceptKineCheckHandoff() {
-  if (!window.name) return null;
-
+function storageRead(storage, key) {
   try {
-    const handoff = JSON.parse(window.name);
-    const issuedAt = Number(handoff?.issuedAt);
-    const fresh = Number.isFinite(issuedAt)
-      && Math.abs(Date.now() - issuedAt) <= HANDOFF_MAX_AGE_MS;
+    return normalizeSession(safeJson(storage.getItem(key)));
+  } catch {
+    return null;
+  }
+}
 
+function storageWrite(storage, key, value) {
+  try {
+    storage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function storageRemove(storage, key) {
+  try {
+    storage.removeItem(key);
+  } catch {
+    // Limpieza de mejor esfuerzo.
+  }
+}
+
+function consumeKineCheckHandoff() {
+  if (!window.name) return null;
+  try {
+    const handoff = safeJson(window.name);
+    const issuedAt = Number(handoff?.issuedAt || 0);
+    const fresh = Number.isFinite(issuedAt) && Math.abs(Date.now() - issuedAt) <= HANDOFF_MAX_AGE_MS;
     if (handoff?.type !== HANDOFF_TYPE || !fresh) return null;
-
-    const session = normalizeHandoffSession(handoff);
-    if (!session) return null;
-
-    const product = String(handoff.product || "").trim();
-    if (!product) return null;
-    window.__KINECHECK_HANDOFF_PRODUCT__ = product;
-    localStorage.setItem(courseSessionKey(product), JSON.stringify(session));
-    return session;
+    const session = normalizeSession(handoff?.session?.access_token ? handoff.session : handoff);
+    const product = String(handoff?.product || "").trim();
+    return session && product ? { session, product, source: null } : null;
   } catch {
     return null;
   } finally {
@@ -80,8 +93,6 @@ function waitForConfig(timeoutMs = 5000) {
   });
 }
 
-acceptKineCheckHandoff();
-
 (async () => {
   const CONFIG = await waitForConfig().catch((error) => {
     console.error("KineCheck config", error);
@@ -89,31 +100,23 @@ acceptKineCheckHandoff();
   });
   if (!CONFIG) return;
 
-  const SESSION_KEY = courseSessionKey(CONFIG.courseSlug);
-  const requestedProduct = String(window.__KINECHECK_HANDOFF_PRODUCT__ || "").trim();
-  if (requestedProduct && requestedProduct !== String(CONFIG.courseSlug || "").trim()) {
-    localStorage.removeItem(courseSessionKey(requestedProduct));
-  }
-  delete window.__KINECHECK_HANDOFF_PRODUCT__;
+  const COURSE_KEY = courseSessionKey(CONFIG.courseSlug);
+  const LEGACY_COURSE_KEY = legacyCourseSessionKey(CONFIG.courseSlug);
+  const handoff = consumeKineCheckHandoff();
 
   const $ = (selector) => document.querySelector(selector);
   const shell = $("#access-shell");
   const root = $("#root");
-  const form = $("#auth-form");
-  const emailInput = $("#email");
-  const passwordInput = $("#password");
   const message = $("#auth-message");
   const progress = $("#access-progress");
+  const ecosystemEntry = $("#ecosystem-entry");
   const signOut = $("#sign-out");
-  const loginTab = $("#login-tab");
-  const signupTab = $("#signup-tab");
-  const submit = $("#auth-submit");
-  let mode = "login";
 
   function headers(token) {
     const value = {
       apikey: CONFIG.supabaseAnonKey,
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
     };
     if (token) value.Authorization = `Bearer ${token}`;
     return value;
@@ -122,6 +125,7 @@ acceptKineCheckHandoff();
   async function api(path, options = {}) {
     const response = await fetch(`${CONFIG.supabaseUrl}${path}`, {
       ...options,
+      cache: "no-store",
       headers: { ...headers(options.token), ...(options.headers || {}) },
     });
     const data = await response.json().catch(() => ({}));
@@ -135,24 +139,6 @@ acceptKineCheckHandoff();
     return data;
   }
 
-  function saveSession(session) {
-    const expiresAt = session.expires_at
-      || Math.floor(Date.now() / 1000) + Number(session.expires_in || 3600);
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ ...session, expires_at: expiresAt }));
-  }
-
-  function readSession() {
-    try {
-      return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-    } catch {
-      return null;
-    }
-  }
-
-  function clearSession() {
-    localStorage.removeItem(SESSION_KEY);
-  }
-
   function showMessage(text, error = false) {
     if (!message) return;
     message.textContent = text;
@@ -160,13 +146,65 @@ acceptKineCheckHandoff();
     message.hidden = false;
   }
 
-  function setBusy(busy, text = "Verificando tu acceso…") {
-    if (form) form.hidden = busy;
-    if (progress) {
-      progress.hidden = !busy;
-      const paragraph = progress.querySelector("p") || progress.querySelector("#progress-message");
-      if (paragraph) paragraph.textContent = text;
+  function setProgress(visible, text = "Recuperando tu sesión de KineCheck…") {
+    if (!progress) return;
+    progress.hidden = !visible;
+    const paragraph = progress.querySelector("p") || progress.querySelector("#progress-message");
+    if (paragraph) paragraph.textContent = text;
+  }
+
+  function showEcosystemEntry(text = "Inicia sesión una sola vez en el ecosistema KineCheck y abre el curso desde tu biblioteca.") {
+    setProgress(false);
+    if (message) message.hidden = true;
+    if (ecosystemEntry) {
+      const copy = ecosystemEntry.querySelector("p");
+      if (copy) copy.textContent = text;
+      ecosystemEntry.hidden = false;
     }
+    if (shell) shell.hidden = false;
+    if (root) root.hidden = true;
+    if (signOut) signOut.hidden = true;
+  }
+
+  function candidateSessions() {
+    const candidates = [];
+    if (handoff?.session) candidates.push({ session: handoff.session, source: null, product: handoff.product });
+
+    const sources = [
+      { storage: sessionStorage, key: COURSE_KEY, label: "course-session" },
+      { storage: sessionStorage, key: SHARED_SESSION_KEY, label: "ecosystem-session-tab" },
+      { storage: localStorage, key: SHARED_SESSION_KEY, label: "ecosystem-session" },
+      { storage: localStorage, key: LEGACY_COURSE_KEY, label: "legacy-course-session" },
+    ];
+
+    for (const source of sources) {
+      const session = storageRead(source.storage, source.key);
+      if (session) candidates.push({ session, source });
+    }
+    return candidates;
+  }
+
+  function persistCourseSession(session) {
+    const safeSession = normalizeSession(session);
+    if (!safeSession) return;
+    storageWrite(sessionStorage, COURSE_KEY, safeSession);
+    storageRemove(localStorage, LEGACY_COURSE_KEY);
+  }
+
+  function persistSourceSession(record, session) {
+    if (!record?.source?.storage || !record?.source?.key) return;
+    storageWrite(record.source.storage, record.source.key, session);
+  }
+
+  function clearCourseSession() {
+    storageRemove(sessionStorage, COURSE_KEY);
+    storageRemove(localStorage, LEGACY_COURSE_KEY);
+  }
+
+  function clearAllKineCheckSessions() {
+    clearCourseSession();
+    storageRemove(sessionStorage, SHARED_SESSION_KEY);
+    storageRemove(localStorage, SHARED_SESSION_KEY);
   }
 
   async function validateIdentity(session) {
@@ -174,48 +212,43 @@ acceptKineCheckHandoff();
       method: "GET",
       token: session.access_token,
     });
-    const verified = { ...session, user };
-    saveSession(verified);
-    return verified;
+    return { ...session, user };
   }
 
   async function refreshSession(session) {
-    if (!session?.refresh_token) throw new Error("La sesión temporal debe renovarse desde KineCheck.");
-    const refreshed = await api("/auth/v1/token?grant_type=refresh_token", {
+    if (!session?.refresh_token) throw new Error("La sesión temporal venció.");
+    return await api("/auth/v1/token?grant_type=refresh_token", {
       method: "POST",
       body: JSON.stringify({ refresh_token: session.refresh_token }),
     });
-    saveSession(refreshed);
-    return refreshed;
   }
 
-  async function validSession() {
-    let session = readSession();
-    if (!session?.access_token) return null;
+  async function validEcosystemSession() {
+    const candidates = candidateSessions();
+    for (const record of candidates) {
+      let session = normalizeSession(record.session);
+      if (!session) continue;
 
-    const now = Math.floor(Date.now() / 1000);
-    const expiresAt = Number(session.expires_at || 0);
+      if (record.product && record.product !== CONFIG.courseSlug) continue;
 
-    try {
-      if (expiresAt && expiresAt <= now) {
-        if (!session.refresh_token) throw new Error("La sesión temporal venció.");
-        session = await refreshSession(session);
-      } else if (expiresAt && expiresAt <= now + 60 && session.refresh_token) {
-        session = await refreshSession(session);
-      }
-      return await validateIdentity(session);
-    } catch {
-      if (session.refresh_token) {
-        try {
+      try {
+        const now = Math.floor(Date.now() / 1000);
+        const expiresAt = Number(session.expires_at || 0);
+        if (expiresAt && expiresAt <= now + 45) {
           session = await refreshSession(session);
-          return await validateIdentity(session);
-        } catch {
-          // Continúa con la limpieza segura.
+          persistSourceSession(record, session);
+        }
+        const verified = await validateIdentity(session);
+        persistCourseSession(verified);
+        return verified;
+      } catch {
+        if (record.source?.storage && record.source?.key) {
+          storageRemove(record.source.storage, record.source.key);
         }
       }
-      clearSession();
-      return null;
     }
+    clearCourseSession();
+    return null;
   }
 
   async function fetchCourse(token) {
@@ -224,13 +257,14 @@ acceptKineCheckHandoff();
 
     const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
       method: "POST",
+      cache: "no-store",
       headers: headers(token),
       body: JSON.stringify({ courseSlug }),
     });
 
     if (!response.ok) {
       const data = await response.json().catch(() => ({}));
-      const error = new Error(data.message || "No encontramos una compra activa asociada a este correo.");
+      const error = new Error(data.message || "No encontramos una licencia activa asociada a esta cuenta.");
       error.status = response.status;
       throw error;
     }
@@ -266,73 +300,32 @@ acceptKineCheckHandoff();
   }
 
   async function authorize(session) {
-    setBusy(true, "Validando tu licencia en KineCheck…");
+    setProgress(true, "Validando tu licencia en KineCheck…");
+    if (ecosystemEntry) ecosystemEntry.hidden = true;
     if (message) message.hidden = true;
     try {
       const course = await fetchCourse(session.access_token);
       await launchCourse(course.source, session, course.courseSlug);
     } catch (error) {
       window.KineCheckWatermark?.hide();
-      setBusy(false);
-      if (error.status === 401) clearSession();
-      showMessage(`${error.message} Si necesitas ayuda, escribe a ${CONFIG.supportEmail}.`, true);
+      setProgress(false);
+      if (error.status === 401) clearCourseSession();
+      showMessage(`${error.message} Abre nuevamente el curso desde tu biblioteca KineCheck.`, true);
+      if (ecosystemEntry) ecosystemEntry.hidden = false;
     }
   }
-
-  function setMode(next) {
-    mode = next;
-    loginTab?.classList.toggle("active", mode === "login");
-    signupTab?.classList.toggle("active", mode === "signup");
-    if (submit) submit.textContent = mode === "login" ? "Ingresar al curso" : "Crear mi cuenta";
-    if (passwordInput) passwordInput.autocomplete = mode === "login" ? "current-password" : "new-password";
-    if (message) message.hidden = true;
-  }
-
-  loginTab?.addEventListener("click", () => setMode("login"));
-  signupTab?.addEventListener("click", () => setMode("signup"));
-
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (message) message.hidden = true;
-    const email = emailInput?.value.trim().toLowerCase() || "";
-    const password = passwordInput?.value || "";
-    if (!email || password.length < 8) {
-      showMessage("Ingresa un correo válido y una contraseña de al menos 8 caracteres.", true);
-      return;
-    }
-
-    try {
-      let session = mode === "login"
-        ? await api("/auth/v1/token?grant_type=password", {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-          })
-        : await api("/auth/v1/signup", {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-          });
-
-      if (!session.access_token) {
-        setMode("login");
-        showMessage("Cuenta creada. Revisa tu correo y confirma la dirección antes de ingresar.");
-        return;
-      }
-
-      saveSession(session);
-      session = await validateIdentity(session);
-      await authorize(session);
-    } catch (error) {
-      setBusy(false);
-      showMessage(error.message, true);
-    }
-  });
 
   signOut?.addEventListener("click", () => {
     window.KineCheckWatermark?.hide();
-    clearSession();
-    location.reload();
+    clearAllKineCheckSessions();
+    location.replace("../academy/");
   });
 
-  const session = await validSession();
-  if (session) await authorize(session);
+  setProgress(true);
+  const session = await validEcosystemSession();
+  if (session) {
+    await authorize(session);
+  } else {
+    showEcosystemEntry();
+  }
 })();
