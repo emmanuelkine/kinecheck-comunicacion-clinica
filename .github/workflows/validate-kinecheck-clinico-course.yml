@@ -5,9 +5,12 @@ on:
   push:
     paths:
       - 'kinecheck-clinico-curso/**'
+      - 'kinecheck-clinico-guia/**'
       - 'academy/academy-bootstrap-v28.js'
       - 'academy/academy-clinico-course-v1.js'
+      - 'academy/academy-launch-router-v4.js'
       - 'productos/product-clinico-reposition-v1.js'
+      - '_headers'
       - '.github/workflows/validate-kinecheck-clinico-course.yml'
 
 permissions:
@@ -16,7 +19,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,8 +30,12 @@ jobs:
           node --check kinecheck-clinico-curso/course-data.js
           node --check kinecheck-clinico-curso/renderer.js
           node --check kinecheck-clinico-curso/config.js
+          node --check kinecheck-clinico-guia/config.js
+          node --check kinecheck-clinico-guia/guide.js
+          node --check kinecheck-clinico-guia/gate.js
           node --check academy/academy-clinico-course-v1.js
           node --check academy/academy-bootstrap-v28.js
+          node --check academy/academy-launch-router-v4.js
           node --check productos/product-clinico-reposition-v1.js
       - name: Validate curriculum structure
         run: |
@@ -50,8 +57,28 @@ jobs:
           if (!Array.isArray(course.references) || course.references.length < 15) throw new Error('Insufficient reference base');
           console.log(`Validated ${course.modules.length} modules, ${lessons.length} experiences and ${course.references.length} references.`);
           NODE
-      - name: Validate positioning language
+      - name: Validate guide positioning and privacy
         run: |
-          grep -q 'No reemplaza la ficha clínica institucional' kinecheck-clinico-curso/index.html
-          grep -q 'Curso profesional' academy/academy-bootstrap-v28.js
-          grep -q 'guía digital adjunta' productos/product-clinico-reposition-v1.js
+          grep -q 'No reemplaces tu ficha clínica' kinecheck-clinico-guia/index.html
+          grep -q 'No ingreses nombre, RUT' kinecheck-clinico-guia/index.html
+          grep -q 'No constituye ficha clínica' kinecheck-clinico-guia/index.html
+          grep -q 'sessionStorage' kinecheck-clinico-guia/gate.js
+          grep -q 'courseSlug: CONFIG.accessSlug' kinecheck-clinico-guia/gate.js
+          if grep -Rqi 'kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-clinico' academy/academy-bootstrap-v28.js academy/academy-launch-router-v4.js academy/academy-clinico-course-v1.js; then
+            echo 'Legacy Clinico route is still active' >&2
+            exit 1
+          fi
+          grep -q '/kinecheck-clinico-guia/' academy/academy-launch-router-v4.js
+          grep -q '/kinecheck-clinico-guia/' _headers
+      - name: Validate public routes
+        run: |
+          for attempt in 1 2 3 4 5; do
+            course_status=$(curl -sS -o /tmp/course.html -w '%{http_code}' https://kinecheck.cl/kinecheck-clinico-curso/ || true)
+            guide_status=$(curl -sS -o /tmp/guide.html -w '%{http_code}' https://kinecheck.cl/kinecheck-clinico-guia/ || true)
+            if [ "$course_status" = '200' ] && [ "$guide_status" = '200' ]; then break; fi
+            sleep 12
+          done
+          test "$course_status" = '200'
+          test "$guide_status" = '200'
+          grep -q 'El curso es el centro del producto' /tmp/course.html
+          grep -q 'Guía complementaria de análisis clínico' /tmp/guide.html
