@@ -1,0 +1,52 @@
+name: Validate Ecosystem Access
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 10 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "academy/**"
+      - "auth-gate.js"
+      - "auth.css"
+      - "comunicacion-clinica.html"
+      - "secure-index.html"
+      - "traumatologia/**"
+      - "kinecheck-clinico-curso/**"
+      - "kinecheck-clinico-guia/**"
+      - "supabase/functions/course-key/**"
+      - "scripts/validate-ecosystem-access.mjs"
+      - ".github/workflows/validate-ecosystem-access.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-ecosystem-access
+  cancel-in-progress: true
+
+jobs:
+  access-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout ecosystem repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate all course and application access routes
+        run: node scripts/validate-ecosystem-access.mjs
+
+      - name: Upload access evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinecheck-ecosystem-access-${{ github.run_id }}
+          path: ecosystem-access-report.json
+          if-no-files-found: warn
+          retention-days: 30
