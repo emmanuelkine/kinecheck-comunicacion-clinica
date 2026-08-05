@@ -125,6 +125,29 @@
     setLocal(FAILURES_KEY, String(current));
   }
 
+  async function proxyPasswordLogin(requestUrl, init = {}) {
+    const sourceHeaders = new Headers(init.headers || {});
+    const apikey = sourceHeaders.get("apikey") || "";
+    const rawBody = typeof init.body === "string" ? init.body : "{}";
+    const credentials = JSON.parse(rawBody || "{}");
+    const endpoint = new URL("/functions/v1/platform-login", requestUrl).toString();
+
+    return await nativeFetch(endpoint, {
+      method: "POST",
+      cache: "no-store",
+      credentials: "omit",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-Info": "kinecheck-platform/5.0",
+        ...(apikey ? { apikey } : {}),
+      },
+      body: JSON.stringify({
+        email: String(credentials.email || "").trim(),
+        password: String(credentials.password || ""),
+      }),
+    });
+  }
+
   window.fetch = async (input, init) => {
     const requestUrl = typeof input === "string" ? input : String(input?.url || "");
     const isPasswordLogin = requestUrl.includes("/auth/v1/token") && requestUrl.includes("grant_type=password");
@@ -143,11 +166,19 @@
       if (lockUntil) clearLoginFailures();
     }
 
-    const response = await nativeFetch(input, init);
+    let response;
+    try {
+      response = isPasswordLogin
+        ? await proxyPasswordLogin(requestUrl, init)
+        : await nativeFetch(input, init);
+    } catch (error) {
+      if (isPasswordLogin) registerLoginFailure();
+      throw error;
+    }
 
     if (isPasswordLogin) {
       if (response.ok) clearLoginFailures();
-      else if ([400, 401, 422, 429].includes(response.status)) registerLoginFailure();
+      else if ([400, 401, 403, 422, 429].includes(response.status)) registerLoginFailure();
     }
 
     return response;
@@ -158,5 +189,6 @@
     idleLimitMinutes: IDLE_LIMIT_MS / 60000,
     maxLoginFailures: MAX_FAILURES,
     loginLockMinutes: LOCK_TIME_MS / 60000,
+    serverRateLimit: true,
   });
 })();
