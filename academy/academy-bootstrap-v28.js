@@ -9,8 +9,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   courses: [
     {
       slug: "kinecheck-clinico",
-      title: "KineCheck Clínico",
-      subtitle: "Evaluación, registro y razonamiento kinésico profesional.",
+      title: "Guía complementaria KineCheck Clínico",
+      subtitle: "Apoyo para revisar evaluación e hipótesis. No reemplaza la ficha clínica institucional.",
       productId: "8150019",
       icon: "CL",
       kind: "application",
@@ -20,6 +20,20 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       status: "active",
       url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-clinico",
       ssoProduct: "kinecheck-clinico"
+    },
+    {
+      slug: "kinecheck-clinico-curso",
+      title: "KineCheck Clínico",
+      subtitle: "Curso profesional de evaluación, seguridad y razonamiento musculoesquelético.",
+      productId: "8150019",
+      icon: "KC",
+      kind: "course",
+      audience: "Profesionales",
+      audienceKey: "professionals",
+      audiences: ["professionals"],
+      modules: 10,
+      status: "active",
+      url: "../kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-1"
     },
     {
       slug: "kinecheck-estudiante",
