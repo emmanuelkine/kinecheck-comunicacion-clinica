@@ -1,6 +1,14 @@
 (() => {
   "use strict";
 
+  const metricsSource = new URL("../metrics-v1.js?v=20260806-launch-metrics1", location.href).toString();
+  if (![...document.scripts].some((script) => script.src === metricsSource)) {
+    const script = document.createElement("script");
+    script.src = metricsSource;
+    script.async = false;
+    document.head.appendChild(script);
+  }
+
   const ENDPOINT = "https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/beta-apply";
   const form = document.querySelector("#beta-form");
   const button = document.querySelector("#beta-submit");
@@ -45,6 +53,10 @@
       if (!response.ok) throw new Error(result?.message || "No fue posible enviar la postulación.");
       form.reset();
       setMessage(result?.message || "Postulación recibida.");
+      window.KINECHECK_METRIC?.("beta_submit_success", {
+        productSlug: payload.productInterest,
+        metadata: { role: payload.role, device: payload.device },
+      });
       message.scrollIntoView({ behavior: "smooth", block: "center" });
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "No fue posible enviar la postulación.", true);
