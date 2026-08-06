@@ -60,7 +60,7 @@ jobs:
             'mas-alla-del-dolor': 39990,
             'evidencia-aplicada': 29990,
             'traumatologia-ortopedia-clinica': 35900,
-            'pack-estudiante': 59900,
+            'pack-estudiante': 49900,
           };
           if (prices.country !== 'Chile' || prices.currency !== 'CLP') throw new Error('País o moneda incorrectos.');
           const rows = prices.products || {};
@@ -68,7 +68,10 @@ jobs:
           for (const [slug, amount] of Object.entries(expected)) {
             if (rows[slug]?.price !== amount) throw new Error(`Precio incorrecto para ${slug}.`);
           }
-          console.log('8/8 precios CLP verificados.');
+          if (rows['pack-estudiante']?.saving !== 5080 || rows['pack-estudiante']?.discountPercent !== 9.2) {
+            throw new Error('El ahorro verificado del pack es incorrecto.');
+          }
+          console.log('8/8 precios CLP y ahorro del pack verificados.');
           NODE
 
       - name: Validar precios visibles sin JavaScript
@@ -78,14 +81,16 @@ jobs:
           const html = fs.readFileSync('index.html', 'utf8');
           const blocks = (html.match(/class="product-price"/g) || []).length;
           if (blocks !== 8) throw new Error(`La portada debe contener 8 precios estáticos; contiene ${blocks}.`);
-          for (const amount of ['$39.990','$14.990','$9.990','$19.900','$29.990','$35.900','$59.900']) {
+          for (const amount of ['$39.990','$14.990','$9.990','$19.900','$29.990','$35.900','$49.900']) {
             if (!html.includes(amount)) throw new Error(`Falta ${amount} en index.html.`);
           }
+          if (html.includes('$59.900')) throw new Error('La portada conserva el precio anterior del pack.');
+          if (!html.includes('Ahorras $5.080')) throw new Error('Falta el ahorro real del pack.');
           if (!html.includes('id="respaldo-verificable"')) throw new Error('Falta el respaldo verificable estático.');
           if (!html.includes('Las opiniones se incorporarán únicamente con autorización y verificación')) {
             throw new Error('Falta la política de opiniones verificadas.');
           }
-          console.log('8/8 precios visibles en HTML estático.');
+          console.log('8/8 precios visibles y pack actualizado en HTML estático.');
           NODE
 
       - name: Confirmar integración pública
@@ -101,9 +106,10 @@ jobs:
 
       - name: Impedir respaldo comercial inventado o perfil personal añadido
         run: |
-          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio|ahorra' index.html home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
+          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio' index.html home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
 
-      - name: Confirmar transparencia del pack
+      - name: Confirmar ahorro transparente del pack
         run: |
-          grep -q 'no se presenta como descuento frente a compras individuales' index.html
-          grep -q 'no se presenta como descuento frente a compras individuales' productos/product-price-v1.js
+          grep -q 'Ahorras $5.080' index.html
+          grep -q 'ambos productos suman $54.980' productos/product-price-v1.js
+          grep -q '9,2%' home-commercial-proof-v1.js
