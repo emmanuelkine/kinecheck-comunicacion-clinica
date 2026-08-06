@@ -1,4 +1,12 @@
 (() => {
+  const priceSource = new URL("./product-price-v1.js?v=20260806-commercial-proof1", location.href).toString();
+  if (![...document.scripts].some((script) => script.src === priceSource)) {
+    const priceScript = document.createElement("script");
+    priceScript.src = priceSource;
+    priceScript.async = false;
+    document.head.appendChild(priceScript);
+  }
+
   const slug = new URLSearchParams(location.search).get("producto") || "kinecheck-clinico";
   if (slug !== "kinecheck-clinico") return;
 
