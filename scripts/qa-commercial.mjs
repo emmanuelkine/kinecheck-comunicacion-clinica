@@ -2,14 +2,14 @@ import fs from "node:fs/promises";
 
 const baseUrl = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
 const products = [
-  ["kinecheck-clinico", "KineCheck Clínico", "https://pay.hotmart.com/L106791841D"],
-  ["kinecheck-estudiante", "KineCheck Estudiante", "https://pay.hotmart.com/G106801166S"],
-  ["kinecheck-recupera", "KineCheck Recupera", "https://pay.hotmart.com/P106806251E"],
-  ["comunicacion-clinica", "Comunicación Clínica", "https://pay.hotmart.com/T106883983U"],
-  ["mas-alla-del-dolor", "Más allá del dolor", "https://pay.hotmart.com/W106888386Q"],
-  ["evidencia-aplicada", "Evidencia Aplicada", "https://pay.hotmart.com/F106921972I"],
-  ["traumatologia-ortopedia-clinica", "Traumatología y Ortopedia Clínica", "https://pay.hotmart.com/B106913952R"],
-  ["pack-estudiante", "Pack KineCheck Estudiante", "https://pay.hotmart.com/Q106891608M"],
+  ["kinecheck-clinico", "KineCheck Clínico", "https://pay.hotmart.com/L106791841D", 39990],
+  ["kinecheck-estudiante", "KineCheck Estudiante", "https://pay.hotmart.com/G106801166S", 14990],
+  ["kinecheck-recupera", "KineCheck Recupera", "https://pay.hotmart.com/P106806251E", 9990],
+  ["comunicacion-clinica", "Comunicación Clínica", "https://pay.hotmart.com/T106883983U", 19900],
+  ["mas-alla-del-dolor", "Más allá del dolor", "https://pay.hotmart.com/W106888386Q", 39990],
+  ["evidencia-aplicada", "Evidencia Aplicada", "https://pay.hotmart.com/F106921972I", 29990],
+  ["traumatologia-ortopedia-clinica", "Traumatología y Ortopedia Clínica", "https://pay.hotmart.com/B106913952R", 35900],
+  ["pack-estudiante", "Pack KineCheck Estudiante", "https://pay.hotmart.com/Q106891608M", 59900],
 ];
 
 const results = [];
@@ -27,8 +27,13 @@ async function read(path) {
 }
 
 async function checkSource() {
-  const home = await read("home.js");
+  const homeLoader = await read("home.js");
+  const home = await read("home-core-20260806.js");
+  const homeCommercial = await read("home-commercial-proof-v1.js");
+  const priceData = JSON.parse(await read("commercial-prices-cl.json"));
+  const publicIndex = await read("index.html");
   const product = await read("productos/product.js");
+  const productPrice = await read("productos/product-price-v1.js");
   const productPage = await read("productos/index.html");
   const platformPage = await read("platform/index.html");
   const platformSecurity = await read("platform/security-bootstrap.js");
@@ -38,11 +43,39 @@ async function checkSource() {
   const adminPage = await read("admin/index.html");
   const adminScript = await read("admin/admin.js");
 
-  for (const [slug, name, checkout] of products) {
+  record(
+    "Modular public catalog",
+    homeLoader.includes("home-core-20260806.js") && homeLoader.includes("home-commercial-proof-v1.js") ? "PASS" : "FAIL",
+    "home.js must load the protected core and commercial proof layer",
+  );
+
+  const prices = priceData.products || {};
+  for (const [slug, name, checkout, expectedPrice] of products) {
     const inHome = home.includes(`"${slug}"`) && home.includes(checkout);
     const inProduct = product.includes(`"${slug}"`) && product.includes(checkout) && product.includes(name);
-    record(`Source mapping ${name}`, inHome && inProduct ? "PASS" : "FAIL", inHome && inProduct ? "slug and checkout match" : "missing or inconsistent mapping");
+    const priceMatches = prices[slug]?.price === expectedPrice
+      && homeCommercial.includes(`"${slug}"`)
+      && productPrice.includes(`"${slug}"`);
+    record(
+      `Source mapping ${name}`,
+      inHome && inProduct && priceMatches ? "PASS" : "FAIL",
+      inHome && inProduct && priceMatches ? "slug, checkout and Chile price match" : "missing or inconsistent mapping",
+    );
   }
+
+  const staticPriceBlocks = (publicIndex.match(/class="product-price"/g) || []).length;
+  record("Static public prices", staticPriceBlocks === 8 ? "PASS" : "FAIL", `${staticPriceBlocks}/8 prices visible without JavaScript`);
+  record("Verified trust layer", publicIndex.includes('id="respaldo-verificable"') ? "PASS" : "FAIL", "public site must contain the verified proof section");
+  record(
+    "No fabricated social proof",
+    !/Creado y dirigido por|Magíster en Docencia|97,1\/100|usado por \d+|más de \d+ usuarios|testimonio ficticio/i.test(publicIndex + homeCommercial) ? "PASS" : "FAIL",
+    "personal profile and unsupported testimonials or user counts must remain absent",
+  );
+  record(
+    "Transparent pack",
+    publicIndex.includes("no se presenta como descuento frente a compras individuales") ? "PASS" : "FAIL",
+    "the current pack must not claim an undocumented saving",
+  );
 
   const legalLinksPresent = ["../legal/terminos.html", "../legal/privacidad.html", "../legal/reembolsos.html"]
     .every((href) => productPage.includes(href));
@@ -58,7 +91,7 @@ async function fetchWithTimeout(url, options = {}, timeout = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/1.1", ...(options.headers || {}) } });
+    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/1.2", ...(options.headers || {}) } });
   } finally {
     clearTimeout(timer);
   }
@@ -87,7 +120,7 @@ async function checkCheckout(name, url) {
 }
 
 async function checkLive() {
-  await checkPage("Public catalog", "/?qa=1", ["KineCheck", "PRODUCTOS KINECHECK"]);
+  await checkPage("Public catalog", "/?qa=commercial-pricing", ["KineCheck", "PRODUCTOS KINECHECK", "PRECIO EN CHILE", "RESPALDO VERIFICABLE"]);
   await checkPage("Platform login", "/platform/?qa=1", ["Ingresa a tu espacio", "security-bootstrap.js"]);
   await checkPage("Terms", "/legal/terminos.html", ["Términos y condiciones", "KineCheck"]);
   await checkPage("Privacy", "/legal/privacidad.html", ["Política de privacidad", "Ley N.º 21.719"]);
