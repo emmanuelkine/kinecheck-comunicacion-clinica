@@ -1,0 +1,53 @@
+.mi-kc-simplified-hidden{display:none!important}
+#kc-learning-path,#kc-profile-stage,#kc-sidebar-stage,#kc-topbar-stage,#kc-stage-modal{display:none!important}
+
+body.mi-kc-focused-student .hero-panel,
+body.mi-kc-focused-patient .hero-panel{grid-template-columns:minmax(0,1fr)!important}
+body.mi-kc-focused-student .hero-copy,
+body.mi-kc-focused-patient .hero-copy{max-width:900px}
+body.mi-kc-focused-student .kc-home-actions,
+body.mi-kc-focused-patient .kc-home-actions{margin-top:20px}
+body.mi-kc-focused-student #kc-home-continue,
+body.mi-kc-focused-patient #kc-home-continue{min-width:220px}
+
+body.mi-kc-focused-student #kc-guided-experience,
+body.mi-kc-focused-patient #kc-guided-experience{margin-top:0}
+body.mi-kc-focused-student .kc-guided-heading,
+body.mi-kc-focused-patient .kc-guided-heading{max-width:920px}
+
+.mi-kc-step-status{display:block;margin:0 0 7px;color:#8eb6ff;font-size:10px;font-weight:950;letter-spacing:.12em}
+.kc-student-path>li.next .mi-kc-step-status{color:#a8c8ff}
+.mi-kc-student-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;margin-top:20px;padding:18px 19px;border:1px solid rgba(131,174,252,.18);border-radius:16px;background:rgba(131,174,252,.055)}
+.mi-kc-student-footer p{margin:0;color:#bfd0d4;line-height:1.55;font-size:13px}
+.mi-kc-student-footer p strong{color:#fff}
+.mi-kc-student-footer>div{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+.mi-kc-student-footer button{min-height:43px;padding:0 15px;border:1px solid rgba(131,174,252,.32);border-radius:12px;background:rgba(131,174,252,.14);color:#fff;font-weight:850;cursor:pointer}
+.mi-kc-student-footer button.secondary{background:transparent;color:#c7d8e0}
+.mi-kc-student-footer button:hover,.mi-kc-student-footer button:focus-visible{background:rgba(131,174,252,.23);outline:none;box-shadow:0 0 0 3px rgba(131,174,252,.10)}
+
+body.mi-kc-focused-patient .academy-sidebar{--sidebar-width:230px}
+body.mi-kc-focused-patient .hero-panel{padding-bottom:22px}
+body.mi-kc-focused-patient .kc-guided-experience{border-color:rgba(239,208,110,.34);background:linear-gradient(145deg,rgba(43,38,18,.88),rgba(7,29,38,.97))}
+body.mi-kc-focused-patient .kc-patient-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+body.mi-kc-focused-patient .kc-patient-actions article{min-height:150px}
+.mi-kc-patient-help{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-top:18px;padding:17px 18px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:rgba(255,255,255,.025)}
+.mi-kc-patient-help div{display:grid;gap:5px}
+.mi-kc-patient-help strong{color:#fff;font-size:15px}
+.mi-kc-patient-help span{color:#adc1c4;font-size:12px;line-height:1.5}
+.mi-kc-patient-help a{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 16px;border:1px solid rgba(239,208,110,.30);border-radius:12px;background:rgba(239,208,110,.10);color:#fff3bd;font-weight:850;text-decoration:none}
+.mi-kc-patient-help a:hover,.mi-kc-patient-help a:focus-visible{background:rgba(239,208,110,.18);outline:none;box-shadow:0 0 0 3px rgba(239,208,110,.09)}
+
+@media(max-width:900px){
+  .mi-kc-student-footer,.mi-kc-patient-help{grid-template-columns:1fr}
+  .mi-kc-student-footer>div{justify-content:flex-start}
+  body.mi-kc-focused-patient .kc-patient-actions{grid-template-columns:1fr}
+  body.mi-kc-focused-patient .kc-patient-actions article{min-height:auto}
+}
+
+@media(max-width:620px){
+  body.mi-kc-focused-student #kc-home-continue,
+  body.mi-kc-focused-patient #kc-home-continue{width:100%;min-width:0}
+  .mi-kc-student-footer{padding:15px}
+  .mi-kc-student-footer>div{display:grid}
+  .mi-kc-student-footer button,.mi-kc-patient-help a{width:100%}
+}
