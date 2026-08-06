@@ -1,0 +1,53 @@
+name: Validate Recommended Buttons
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'academy/academy-open-v6.js'
+      - 'academy/academy-recommended-buttons-fix.js'
+      - 'academy/academy-brand-identity.js'
+      - 'academy/academy-learning-path-v4.js'
+      - 'tests/recommended-buttons.spec.mjs'
+      - '.github/workflows/validate-recommended-buttons.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-recommended-buttons
+  cancel-in-progress: true
+
+jobs:
+  browser-buttons:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Test recommendation buttons and browser return
+        run: npx playwright test tests/recommended-buttons.spec.mjs --reporter=line
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recommended-buttons-evidence-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 14
