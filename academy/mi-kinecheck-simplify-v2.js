@@ -4,7 +4,7 @@
   if (window.__MI_KINECHECK_SIMPLIFY_V2__) return;
   window.__MI_KINECHECK_SIMPLIFY_V2__ = true;
 
-  const VERSION = "20260806-simplified2";
+  const VERSION = "20260806-simplified3";
   const STUDENT_ORDER = [
     "kinecheck-estudiante",
     "mas-alla-del-dolor",
@@ -77,6 +77,11 @@
     return "professional";
   }
 
+  function resetSimplifiedVisibility() {
+    document.querySelectorAll(".mi-kc-simplified-hidden").forEach((node) => hide(node, false));
+    document.body.classList.remove("mi-kc-focused-student", "mi-kc-focused-patient");
+  }
+
   function removeStageChooser() {
     hideAll("#kc-learning-path,#kc-profile-stage,#kc-sidebar-stage,#kc-topbar-stage,#kc-stage-modal", true);
     hideAll("#kc-change-stage,#kc-profile-stage-change,[data-kc-stage-choice],#kc-stage-suggested", true);
@@ -127,7 +132,6 @@
   function simplifyStudent() {
     document.body.dataset.kcExperience = "student";
     document.body.classList.add("mi-kc-focused-student");
-    document.body.classList.remove("mi-kc-focused-patient");
 
     labelView("inicio", "Mi ruta");
     labelView("biblioteca", "Mis productos");
@@ -171,7 +175,6 @@
   function simplifyPatient() {
     document.body.dataset.kcExperience = "patient";
     document.body.classList.add("mi-kc-focused-patient");
-    document.body.classList.remove("mi-kc-focused-student");
 
     labelView("inicio", "Hoy");
     labelView("biblioteca", "Mi plan", true);
@@ -203,7 +206,6 @@
   }
 
   function simplifyProfessional() {
-    document.body.classList.remove("mi-kc-focused-student", "mi-kc-focused-patient");
     labelView("inicio", "Inicio");
     labelView("biblioteca", "Mis productos");
     labelView("herramientas", "Recursos");
@@ -212,8 +214,12 @@
 
   function apply() {
     loadStyles();
+    if (document.querySelector("#dashboard-view")?.hidden) {
+      removeStageChooser();
+      return;
+    }
+    resetSimplifiedVisibility();
     removeStageChooser();
-    if (document.querySelector("#dashboard-view")?.hidden) return;
     const currentRole = role();
     if (currentRole === "student") simplifyStudent();
     else if (currentRole === "patient") simplifyPatient();
