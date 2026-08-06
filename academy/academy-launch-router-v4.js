@@ -1,16 +1,16 @@
 (() => {
   "use strict";
 
-  if (window.__KINECHECK_LAUNCH_ROUTER_V4__) return;
-  window.__KINECHECK_LAUNCH_ROUTER_V4__ = true;
+  if (window.__KINECHECK_LAUNCH_ROUTER_V5__) return;
+  window.__KINECHECK_LAUNCH_ROUTER_V5__ = true;
 
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG || {};
   const SESSION_KEY = "kinecheck_secure_session_v1";
-  const DEFAULT_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
+  const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const APP_SSO = CONFIG.appSso || Object.freeze({
     enabled: true,
     baseUrl: "https://kinecheck-clinico.emmanuelkine.chatgpt.site",
-    handoffType: DEFAULT_HANDOFF_TYPE,
+    handoffType: HANDOFF_TYPE,
     transport: "form-post",
     postPath: "/api/license/sso",
     routes: Object.freeze({
@@ -20,8 +20,8 @@
   });
 
   const EXTERNAL_COURSES = Object.freeze({
-    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260806-ecosystem3",
-    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260806-ecosystem3",
+    "mas-alla-del-dolor": "https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=20260806-direct1",
+    "evidencia-aplicada": "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?v=20260806-direct1",
   });
 
   const SAME_ORIGIN_COURSES = new Set([
@@ -56,13 +56,7 @@
   function readSession() {
     const provided = window.KINECHECK_ACADEMY_SESSION?.get?.();
     if (provided?.access_token) return provided;
-
-    const temporary = parseSession(sessionStorage);
-    if (temporary) return temporary;
-
-    // Compatibilidad temporal con sesiones anteriores. La capa de seguridad
-    // del ecosistema migra la sesión activa a sessionStorage.
-    return parseSession(localStorage);
+    return parseSession(sessionStorage) || parseSession(localStorage);
   }
 
   function showToast(text) {
@@ -86,7 +80,7 @@
     }
 
     if (!session?.access_token || (expiresAt && expiresAt <= Math.floor(Date.now() / 1000) + 30)) {
-      showToast("Tu sesión terminó y no fue posible renovarla automáticamente. Ingresa nuevamente a KineCheck.");
+      showToast("Tu sesión terminó. Ingresa nuevamente una sola vez en KineCheck.");
       return null;
     }
     return session;
@@ -102,27 +96,25 @@
     };
   }
 
-  function courseHandoff(session, product) {
+  function handoff(session, product) {
     if (!KNOWN_PRODUCTS.has(product)) throw new Error("El producto solicitado no pertenece al catálogo protegido.");
     return {
-      type: DEFAULT_HANDOFF_TYPE,
+      type: HANDOFF_TYPE,
       issuedAt: Date.now(),
       product,
       session: accessOnlySession(session),
     };
   }
 
-  function writeCourseHandoff(session, product) {
-    window.name = "";
-    window.name = JSON.stringify(courseHandoff(session, product));
+  function writeHandoff(session, product) {
+    window.name = JSON.stringify(handoff(session, product));
   }
 
   function writeApplicationHandoff(session, product) {
     if (!APPLICATIONS.has(product)) throw new Error("La aplicación solicitada no está habilitada para SSO.");
     const accessOnly = accessOnlySession(session);
-    window.name = "";
     window.name = JSON.stringify({
-      type: APP_SSO.handoffType || DEFAULT_HANDOFF_TYPE,
+      type: APP_SSO.handoffType || HANDOFF_TYPE,
       issuedAt: Date.now(),
       product,
       access_token: accessOnly.access_token,
@@ -143,16 +135,16 @@
   function sameOriginCourseUrl(slug) {
     const base = repositoryBasePath();
     if (slug === "kinecheck-clinico") {
-      return `${location.origin}${base}/kinecheck-clinico-guia/?product=kinecheck-clinico&v=20260806-ecosystem3`;
+      return `${location.origin}${base}/kinecheck-clinico-guia/?product=kinecheck-clinico&v=20260806-fetchfix1`;
     }
     if (slug === "kinecheck-clinico-curso") {
-      return `${location.origin}${base}/kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-ecosystem3`;
+      return `${location.origin}${base}/kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=20260806-fetchfix1`;
     }
     if (slug === "comunicacion-clinica") {
-      return `${location.origin}${base}/comunicacion-clinica.html?course=comunicacion-clinica&v=20260806-ecosystem3`;
+      return `${location.origin}${base}/comunicacion-clinica.html?course=comunicacion-clinica&v=20260806-fetchfix1`;
     }
     if (slug === "traumatologia-ortopedia-clinica") {
-      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260806-ecosystem3`;
+      return `${location.origin}${base}/traumatologia/?course=traumatologia-ortopedia-clinica&v=20260806-fetchfix1`;
     }
     return "";
   }
@@ -164,13 +156,7 @@
       button.setAttribute("aria-busy", "true");
       button.style.pointerEvents = "none";
     }
-    window.setTimeout(() => {
-      navigating = false;
-      if (button) {
-        button.removeAttribute("aria-busy");
-        button.style.pointerEvents = "";
-      }
-    }, 10000);
+    window.setTimeout(() => resetNavigation(button), 10000);
     return true;
   }
 
@@ -180,7 +166,7 @@
     if (button) button.style.pointerEvents = "";
   }
 
-  async function openSameOriginCourse(slug, destination, button) {
+  async function openCourse(slug, destination, button) {
     if (!startNavigation(button)) return;
     const session = await validTransferSession();
     if (!session) {
@@ -188,7 +174,7 @@
       return;
     }
     try {
-      writeCourseHandoff(session, slug);
+      writeHandoff(session, slug);
       location.assign(destination);
     } catch (error) {
       resetNavigation(button);
@@ -196,67 +182,9 @@
     }
   }
 
-  async function openExternalCourse(slug, destination, button) {
-    if (!startNavigation(button)) return;
-    const popup = window.open("about:blank", "_blank");
-    if (!popup) {
-      resetNavigation(button);
-      showToast("El navegador bloqueó la nueva pestaña. Permite ventanas emergentes para KineCheck y vuelve a intentarlo.");
-      return;
-    }
-
-    const session = await validTransferSession();
-    if (!session) {
-      popup.close();
-      resetNavigation(button);
-      return;
-    }
-
-    const targetOrigin = new URL(destination).origin;
-    let payload;
-    try {
-      payload = courseHandoff(session, slug);
-      popup.name = JSON.stringify(payload);
-    } catch (error) {
-      popup.close();
-      resetNavigation(button);
-      showToast(error instanceof Error ? error.message : "No fue posible preparar el acceso.");
-      return;
-    }
-
-    let completed = false;
-    const cleanup = () => {
-      window.removeEventListener("message", onMessage);
-      window.clearTimeout(timeoutId);
-      resetNavigation(button);
-    };
-
-    const onMessage = (event) => {
-      if (completed || event.source !== popup || event.origin !== targetOrigin || event.data?.product !== slug) return;
-      if (event.data?.type === "kinecheck-sso-accepted") {
-        completed = true;
-        cleanup();
-        return;
-      }
-      if (event.data?.type !== "kinecheck-sso-ready") return;
-      completed = true;
-      popup.postMessage(payload, targetOrigin);
-      cleanup();
-    };
-
-    window.addEventListener("message", onMessage);
-    const timeoutId = window.setTimeout(() => {
-      if (completed) return;
-      cleanup();
-      showToast("El curso no confirmó el acceso automático. Cierra esa pestaña y vuelve a intentarlo.");
-    }, 10000);
-
-    popup.location.href = destination;
-  }
-
   function submitApplicationPost(session, product) {
     writeApplicationHandoff(session, product);
-    location.assign("./app-sso-relay.html?v=20260806-ecosystem3");
+    location.assign("./app-sso-relay.html?v=20260806-direct1");
   }
 
   async function openApplication(slug, button) {
@@ -265,11 +193,11 @@
       return;
     }
     if (!APP_SSO.enabled) {
-      showToast("Tu licencia se conserva activa. El acceso único de esta aplicación todavía no ha sido habilitado en producción.");
+      showToast("El acceso único de esta aplicación todavía no está habilitado.");
       return;
     }
-
     if (!startNavigation(button)) return;
+
     const session = await validTransferSession();
     if (!session) {
       resetNavigation(button);
@@ -291,6 +219,12 @@
     }
   }
 
+  function destinationFor(slug) {
+    if (EXTERNAL_COURSES[slug]) return EXTERNAL_COURSES[slug];
+    if (SAME_ORIGIN_COURSES.has(slug)) return sameOriginCourseUrl(slug);
+    return "";
+  }
+
   function clarifyPendingButtons() {
     document.querySelectorAll("[data-kc-coming-soon]").forEach((button) => {
       const label = button.textContent.trim();
@@ -302,34 +236,25 @@
   }
 
   document.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-course], [data-kc-path-open]");
-    const slug = button?.dataset.course || button?.dataset.kcPathOpen;
-    if (!button || button.disabled || !slug) return;
+    const button = event.target.closest("[data-course], [data-kc-path-open], [data-kc-open-product]");
+    const slug = button?.dataset.course || button?.dataset.kcPathOpen || button?.dataset.kcOpenProduct;
+    if (!button || button.disabled || !slug || !KNOWN_PRODUCTS.has(slug)) return;
 
-    if (EXTERNAL_COURSES[slug]) {
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      openExternalCourse(slug, EXTERNAL_COURSES[slug], button);
-      return;
-    }
-
-    if (SAME_ORIGIN_COURSES.has(slug)) {
-      const destination = sameOriginCourseUrl(slug);
-      if (!destination) return;
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      openSameOriginCourse(slug, destination, button);
-      return;
-    }
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 
     if (APPLICATIONS.has(slug)) {
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
       openApplication(slug, button);
+      return;
     }
+
+    const destination = destinationFor(slug);
+    if (!destination) {
+      showToast("No fue posible encontrar la ruta de este producto.");
+      return;
+    }
+    openCourse(slug, destination, button);
   }, true);
 
   if (document.readyState === "loading") {
