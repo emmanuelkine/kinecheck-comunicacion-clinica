@@ -1,0 +1,20 @@
+.kc-guided-route{padding-top:24px!important;padding-bottom:24px!important}
+.kc-route-heading{max-width:830px;margin-bottom:26px}
+.kc-route-heading>span{display:inline-block;color:#75e5d6;font-size:11px;font-weight:950;letter-spacing:.14em}
+.kc-route-heading h2{margin:10px 0 8px;color:#fff;font-size:clamp(30px,4vw,48px);line-height:1.04;letter-spacing:-.04em}
+.kc-route-heading p{margin:0;color:#b8cdcf;font-size:17px;line-height:1.65}
+.kc-route-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.kc-route-steps li{display:grid;grid-template-columns:46px minmax(0,1fr);gap:14px;align-items:start;padding:22px;border:1px solid rgba(255,255,255,.09);border-radius:19px;background:linear-gradient(145deg,rgba(14,45,57,.94),rgba(6,27,36,.92))}
+.kc-route-steps li.active{border-color:rgba(77,218,198,.35);box-shadow:0 18px 42px rgba(0,0,0,.15)}
+.kc-route-steps b{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:rgba(75,217,197,.14);color:#8cf2e2;font-size:15px}
+.kc-route-steps strong{display:block;color:#fff;font-size:17px;line-height:1.25}
+.kc-route-steps span{display:block;margin-top:7px;color:#afc4c7;font-size:13px;line-height:1.55}
+.kc-route-note{margin-top:16px;padding:16px 18px;border-left:3px solid #58d7c4;border-radius:0 13px 13px 0;background:rgba(73,209,190,.07);color:#cfe1e1;line-height:1.6}
+.kc-product-patient .product-hero{background:radial-gradient(circle at 78% 20%,rgba(238,195,91,.10),transparent 38%),linear-gradient(180deg,#071d25,#06161d)}
+.kc-product-patient .content-card,.kc-product-patient .list-card{border-color:rgba(239,197,96,.18)}
+.kc-product-patient .kc-route-heading>span{color:#ffe19a}
+.kc-product-patient .kc-route-steps li.active{border-color:rgba(239,197,96,.34)}
+.kc-product-patient .kc-route-steps b{background:rgba(239,197,96,.13);color:#ffe6a9}
+.kc-product-patient #outcomes-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:900px){.kc-route-steps{grid-template-columns:1fr}.kc-product-patient #outcomes-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.kc-route-steps li{padding:18px}.kc-route-heading h2{font-size:30px}.kc-route-heading p{font-size:15px}}
