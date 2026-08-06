@@ -50,6 +50,8 @@
     }
   }
 
+  loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260806-launch-metrics1");
+
   // El controlador de recomendaciones se registra primero para que los botones
   // dinámicos no dependan de clics simulados sobre tarjetas ocultas de Biblioteca.
   loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260806-final5");
