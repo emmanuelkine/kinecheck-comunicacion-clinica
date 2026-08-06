@@ -1,9 +1,9 @@
 {
-  "version": "2026-08-06.1",
+  "version": "2026-08-06.2",
   "auditedAt": "2026-08-06",
   "country": "Chile",
   "currency": "CLP",
-  "source": "Checkouts públicos oficiales de Hotmart seleccionando Chile",
+  "source": "Precio base confirmado en el panel oficial de Hotmart para Chile",
   "notes": "Valores base visibles antes del pago. Hotmart confirma cuotas, impuestos y total final aplicable al medio de pago.",
   "products": {
     "kinecheck-clinico": {
@@ -57,10 +57,14 @@
     },
     "pack-estudiante": {
       "name": "Pack KineCheck Estudiante",
-      "price": 59900,
-      "display": "$59.900",
+      "price": 49900,
+      "display": "$49.900",
       "term": "12 meses",
-      "installments": "Hasta 12 cuotas de $4.992"
+      "installments": "Hotmart confirma las cuotas disponibles antes del pago",
+      "regularCombinedPrice": 54980,
+      "saving": 5080,
+      "savingDisplay": "$5.080",
+      "discountPercent": 9.2
     }
   }
 }
