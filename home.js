@@ -4,6 +4,7 @@
   const scripts = [
     "./home-core-20260806.js?v=20260806-commercial-proof1",
     "./home-commercial-proof-v1.js?v=20260806-commercial-proof1",
+    "./metrics-v1.js?v=20260806-launch-metrics1",
   ];
 
   function load(index) {
