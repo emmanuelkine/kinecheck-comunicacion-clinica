@@ -55,7 +55,7 @@
   loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260806-launch-metrics1");
   loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260806-unified1");
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
-  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260806-simplified2");
+  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260806-simplified3");
 
   // El controlador de recomendaciones se registra primero para que los botones
   // dinámicos no dependan de clics simulados sobre tarjetas ocultas.
