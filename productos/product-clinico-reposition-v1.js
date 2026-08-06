@@ -15,6 +15,14 @@
     document.head.appendChild(priceScript);
   }
 
+  const experienceSource = new URL("./product-experience-unification-v1.js?v=20260806-unified1", location.href).toString();
+  if (![...document.scripts].some((script) => script.src === experienceSource)) {
+    const experienceScript = document.createElement("script");
+    experienceScript.src = experienceSource;
+    experienceScript.async = false;
+    document.head.appendChild(experienceScript);
+  }
+
   const slug = new URLSearchParams(location.search).get("producto") || "kinecheck-clinico";
   if (slug !== "kinecheck-clinico") return;
 
