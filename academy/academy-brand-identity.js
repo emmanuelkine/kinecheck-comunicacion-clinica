@@ -39,6 +39,15 @@
     }
   }
 
+  function loadCurrentLaunchRouter() {
+    if (document.querySelector('script[data-kc-current-launch-router]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-launch-router-v4.js?v=20260806-direct2";
+    script.async = false;
+    script.dataset.kcCurrentLaunchRouter = "true";
+    document.head.appendChild(script);
+  }
+
   function loadClinicoCourseIntegration() {
     if (document.querySelector('script[data-kc-clinico-course]')) return;
     const script = document.createElement("script");
@@ -48,6 +57,9 @@
     document.head.appendChild(script);
   }
 
+  // El router actual se carga desde un archivo que Academy ya incorpora al inicio.
+  // Esto evita que handlers antiguos abran cursos con sesiones obsoletas o rutas en caché.
+  loadCurrentLaunchRouter();
   loadClinicoCourseIntegration();
 
   if (document.readyState === "loading") {
