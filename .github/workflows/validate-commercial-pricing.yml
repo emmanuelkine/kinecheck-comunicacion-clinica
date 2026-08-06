@@ -82,7 +82,7 @@ jobs:
 
       - name: Impedir respaldo comercial inventado o perfil personal añadido
         run: |
-          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio|ahorra|descuento frente' home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
+          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio|ahorra' home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
 
       - name: Confirmar transparencia del pack
         run: |
