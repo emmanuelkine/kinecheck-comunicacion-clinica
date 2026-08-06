@@ -12,6 +12,7 @@ on:
       - "productos/product-experience-unification-v1.css"
       - "academy/academy-brand-identity.js"
       - "academy/mi-kinecheck-v1.js"
+      - "academy/mi-kinecheck-card-copy-v1.js"
       - "academy/mi-kinecheck-v1.css"
       - "platform/index.html"
       - "platform/redirect-to-mi-kinecheck-v1.js"
@@ -44,6 +45,7 @@ jobs:
           node --check productos/product-experience-unification-v1.js
           node --check academy/academy-brand-identity.js
           node --check academy/mi-kinecheck-v1.js
+          node --check academy/mi-kinecheck-card-copy-v1.js
           node --check platform/redirect-to-mi-kinecheck-v1.js
           node --check tests/launch-readiness-public.spec.mjs
 
@@ -51,6 +53,7 @@ jobs:
         run: |
           grep -q 'home-experience-unification-v1.js' home.js
           grep -q 'mi-kinecheck-v1.js' academy/academy-brand-identity.js
+          grep -q 'mi-kinecheck-card-copy-v1.js' academy/academy-brand-identity.js
           grep -q 'product-experience-unification-v1.js' productos/product-clinico-reposition-v1.js
           grep -q 'redirect-to-mi-kinecheck-v1.js' platform/index.html
           grep -q 'Abriendo Mi KineCheck' platform/index.html
@@ -63,6 +66,8 @@ jobs:
           grep -q 'ORDEN RECOMENDADO' academy/mi-kinecheck-v1.js
           grep -q 'Tres acciones para tu día' academy/mi-kinecheck-v1.js
           grep -q 'No necesitas navegar cursos, evidencia ni herramientas clínicas' academy/mi-kinecheck-v1.js
+          grep -q 'Empezar práctica guiada' academy/mi-kinecheck-card-copy-v1.js
+          grep -q 'Abrir mi plan' academy/mi-kinecheck-card-copy-v1.js
           grep -q 'No estudies todo al mismo tiempo' productos/product-experience-unification-v1.js
           grep -q 'Tres acciones. Nada más' productos/product-experience-unification-v1.js
           grep -q 'related.hidden = true' productos/product-experience-unification-v1.js
@@ -86,5 +91,3 @@ jobs:
             sleep 12
           done
           exit 1
-
-# revisión 2
