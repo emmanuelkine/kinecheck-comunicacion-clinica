@@ -1,0 +1,220 @@
+(() => {
+  "use strict";
+
+  if (window.__KINECHECK_OPEN_V6__) return;
+  window.__KINECHECK_OPEN_V6__ = true;
+
+  const SESSION_KEY = "kinecheck_secure_session_v1";
+  const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
+  const READY_TYPE = "kinecheck-sso-ready";
+  const ACCEPTED_TYPE = "kinecheck-sso-accepted";
+  const RELEASE = "20260806-final4";
+
+  const SAME_ORIGIN = Object.freeze({
+    "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
+    "kinecheck-clinico-curso": `../kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=${RELEASE}`,
+    "comunicacion-clinica": `../comunicacion-clinica.html?course=comunicacion-clinica&v=${RELEASE}`,
+    "traumatologia-ortopedia-clinica": `../traumatologia/?course=traumatologia-ortopedia-clinica&v=${RELEASE}`,
+  });
+
+  const EXTERNAL = Object.freeze({
+    "mas-alla-del-dolor": `https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=${RELEASE}`,
+    "evidencia-aplicada": `https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?course=evidencia-aplicada&v=${RELEASE}`,
+  });
+
+  const APPLICATIONS = new Set(["kinecheck-estudiante", "kinecheck-recupera"]);
+  const KNOWN = new Set([...Object.keys(SAME_ORIGIN), ...Object.keys(EXTERNAL), ...APPLICATIONS]);
+  let navigating = false;
+
+  function parse(storage) {
+    try {
+      const value = JSON.parse(storage.getItem(SESSION_KEY) || "null");
+      return value?.access_token ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function currentSession() {
+    const supplied = window.KINECHECK_ACADEMY_SESSION?.get?.();
+    if (supplied?.access_token) return supplied;
+    return parse(sessionStorage) || parse(localStorage);
+  }
+
+  async function usableSession() {
+    let session = currentSession();
+    const now = Math.floor(Date.now() / 1000);
+    const expiresAt = Number(session?.expires_at || 0);
+    if ((!session?.access_token || (expiresAt && expiresAt <= now + 60))
+      && typeof window.KINECHECK_ACADEMY_SESSION?.refresh === "function") {
+      session = await window.KINECHECK_ACADEMY_SESSION.refresh().catch(() => null);
+    }
+    const finalExpiry = Number(session?.expires_at || 0);
+    if (!session?.access_token || (finalExpiry && finalExpiry <= Math.floor(Date.now() / 1000) + 20)) return null;
+    return session;
+  }
+
+  function accessOnly(session) {
+    return {
+      access_token: session.access_token,
+      expires_at: session.expires_at,
+      expires_in: session.expires_in,
+      token_type: session.token_type || "bearer",
+      handoff_access_only: true,
+    };
+  }
+
+  function payload(session, product) {
+    return {
+      type: HANDOFF_TYPE,
+      issuedAt: Date.now(),
+      product,
+      session: accessOnly(session),
+    };
+  }
+
+  function toast(text) {
+    const element = document.querySelector("#kc-toast");
+    if (!element) return;
+    element.textContent = text;
+    element.hidden = false;
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => { element.hidden = true; }, 5000);
+  }
+
+  function setBusy(button, value) {
+    navigating = value;
+    if (!button) return;
+    if (value) {
+      button.setAttribute("aria-busy", "true");
+      button.dataset.kcOriginalText ||= button.textContent;
+      button.textContent = "Abriendo…";
+      button.style.pointerEvents = "none";
+    } else {
+      button.removeAttribute("aria-busy");
+      if (button.dataset.kcOriginalText) button.textContent = button.dataset.kcOriginalText;
+      button.style.pointerEvents = "";
+    }
+  }
+
+  function saveSharedSession(session) {
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    } catch {
+      // La sesión en memoria del ecosistema sigue disponible.
+    }
+  }
+
+  async function openSameOrigin(product, button) {
+    setBusy(button, true);
+    const session = await usableSession();
+    if (!session) {
+      setBusy(button, false);
+      toast("Tu sesión terminó. Ingresa nuevamente a KineCheck una sola vez.");
+      return;
+    }
+    saveSharedSession(session);
+    window.name = JSON.stringify(payload(session, product));
+    location.assign(SAME_ORIGIN[product]);
+  }
+
+  async function openExternal(product, button) {
+    const targetUrl = EXTERNAL[product];
+    const targetOrigin = new URL(targetUrl).origin;
+    const popup = window.open("about:blank", `kinecheck-${product}`);
+    if (!popup) {
+      toast("El navegador bloqueó la apertura del curso. Habilita ventanas emergentes para kinecheck.cl y vuelve a intentarlo.");
+      return;
+    }
+
+    setBusy(button, true);
+    const session = await usableSession();
+    if (!session) {
+      popup.close();
+      setBusy(button, false);
+      toast("Tu sesión terminó. Ingresa nuevamente a KineCheck una sola vez.");
+      return;
+    }
+
+    const transfer = payload(session, product);
+    let accepted = false;
+    let intervalId = 0;
+    let timeoutId = 0;
+
+    const cleanup = () => {
+      window.removeEventListener("message", onMessage);
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+      setBusy(button, false);
+    };
+
+    const send = () => {
+      if (accepted || popup.closed) return;
+      try { popup.postMessage(transfer, targetOrigin); } catch { /* reintento automático */ }
+    };
+
+    const onMessage = (event) => {
+      if (event.source !== popup || event.origin !== targetOrigin || event.data?.product !== product) return;
+      if (event.data?.type === READY_TYPE) {
+        send();
+        return;
+      }
+      if (event.data?.type === ACCEPTED_TYPE) {
+        accepted = true;
+        cleanup();
+      }
+    };
+
+    window.addEventListener("message", onMessage);
+    try { popup.name = JSON.stringify(transfer); } catch { /* postMessage es la vía principal */ }
+    popup.location.replace(targetUrl);
+    intervalId = window.setInterval(send, 500);
+    timeoutId = window.setTimeout(() => {
+      if (!accepted) toast("El curso tardó en confirmar el acceso. La pestaña permanece abierta para reintentar automáticamente.");
+      cleanup();
+    }, 15000);
+  }
+
+  async function openApplication(product, button) {
+    setBusy(button, true);
+    const session = await usableSession();
+    if (!session) {
+      setBusy(button, false);
+      toast("Tu sesión terminó. Ingresa nuevamente a KineCheck una sola vez.");
+      return;
+    }
+    const transfer = payload(session, product);
+    window.name = JSON.stringify({
+      ...transfer,
+      access_token: transfer.session.access_token,
+      expires_at: transfer.session.expires_at,
+    });
+    location.assign(`./app-sso-relay.html?product=${encodeURIComponent(product)}&v=${RELEASE}`);
+  }
+
+  async function openProduct(product, button = null) {
+    if (!KNOWN.has(product) || navigating) return;
+    if (SAME_ORIGIN[product]) return openSameOrigin(product, button);
+    if (EXTERNAL[product]) return openExternal(product, button);
+    if (APPLICATIONS.has(product)) return openApplication(product, button);
+  }
+
+  window.KINECHECK_OPEN_PRODUCT = openProduct;
+
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-course], [data-kc-path-open], [data-kc-open-product], #continue-button");
+    if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
+    const product = String(
+      button.dataset.course
+      || button.dataset.kcPathOpen
+      || button.dataset.kcOpenProduct
+      || "",
+    ).trim();
+    if (!KNOWN.has(product)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    openProduct(product, button);
+  }, true);
+})();
