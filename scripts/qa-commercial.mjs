@@ -9,7 +9,7 @@ const products = [
   ["mas-alla-del-dolor", "Más allá del dolor", "https://pay.hotmart.com/W106888386Q", 39990],
   ["evidencia-aplicada", "Evidencia Aplicada", "https://pay.hotmart.com/F106921972I", 29990],
   ["traumatologia-ortopedia-clinica", "Traumatología y Ortopedia Clínica", "https://pay.hotmart.com/B106913952R", 35900],
-  ["pack-estudiante", "Pack KineCheck Estudiante", "https://pay.hotmart.com/Q106891608M", 59900],
+  ["pack-estudiante", "Pack KineCheck Estudiante", "https://pay.hotmart.com/Q106891608M", 49900],
 ];
 
 const results = [];
@@ -72,9 +72,12 @@ async function checkSource() {
     "personal profile and unsupported testimonials or user counts must remain absent",
   );
   record(
-    "Transparent pack",
-    publicIndex.includes("no se presenta como descuento frente a compras individuales") ? "PASS" : "FAIL",
-    "the current pack must not claim an undocumented saving",
+    "Verified pack saving",
+    prices["pack-estudiante"]?.saving === 5080
+      && prices["pack-estudiante"]?.discountPercent === 9.2
+      && publicIndex.includes("Ahorras $5.080")
+      && !publicIndex.includes("$59.900"),
+    "Pack must show 49.900 CLP and a verified saving of 5.080 CLP (9.2%)",
   );
 
   const legalLinksPresent = ["../legal/terminos.html", "../legal/privacidad.html", "../legal/reembolsos.html"]
@@ -91,7 +94,7 @@ async function fetchWithTimeout(url, options = {}, timeout = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/1.2", ...(options.headers || {}) } });
+    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/1.3", ...(options.headers || {}) } });
   } finally {
     clearTimeout(timer);
   }
@@ -120,7 +123,7 @@ async function checkCheckout(name, url) {
 }
 
 async function checkLive() {
-  await checkPage("Public catalog", "/?qa=commercial-pricing", ["KineCheck", "PRODUCTOS KINECHECK", "PRECIO EN CHILE", "RESPALDO VERIFICABLE"]);
+  await checkPage("Public catalog", "/?qa=commercial-pricing", ["KineCheck", "PRODUCTOS KINECHECK", "PRECIO EN CHILE", "RESPALDO VERIFICABLE", "$49.900", "Ahorras $5.080"]);
   await checkPage("Platform login", "/platform/?qa=1", ["Ingresa a tu espacio", "security-bootstrap.js"]);
   await checkPage("Terms", "/legal/terminos.html", ["Términos y condiciones", "KineCheck"]);
   await checkPage("Privacy", "/legal/privacidad.html", ["Política de privacidad", "Ley N.º 21.719"]);
