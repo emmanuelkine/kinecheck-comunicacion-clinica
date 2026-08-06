@@ -1,0 +1,46 @@
+name: Habilitar métricas de acceso en plataforma
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/enable-platform-launch-metrics.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Integrar scripts de métricas
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          path = Path("platform/index.html")
+          text = path.read_text(encoding="utf-8")
+          marker = '<script src="./security-bootstrap.js?v=20260805-security1"></script>'
+          addition = '<script src="../metrics-v1.js?v=20260806-launch-metrics1"></script>\n  <script src="./platform-metrics-v1.js?v=20260806-launch-metrics1"></script>\n  '
+          if "platform-metrics-v1.js" not in text:
+              if marker not in text:
+                  raise SystemExit("No se encontró el bootstrap de plataforma")
+              text = text.replace(marker, addition + marker, 1)
+              path.write_text(text, encoding="utf-8")
+          PY
+      - name: Validar integración
+        run: |
+          grep -q "../metrics-v1.js" platform/index.html
+          grep -q "platform-metrics-v1.js" platform/index.html
+          grep -q "connect-src 'self' https://eqhcdclyeoapmqtlduwf.supabase.co" platform/index.html
+      - name: Publicar integración
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "KineCheck Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add platform/index.html
+          git commit -m "feat: enable anonymous platform access metrics"
+          git push
