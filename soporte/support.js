@@ -1,6 +1,14 @@
 (() => {
   "use strict";
 
+  const metricsSource = new URL("../metrics-v1.js?v=20260806-launch-metrics1", location.href).toString();
+  if (![...document.scripts].some((script) => script.src === metricsSource)) {
+    const script = document.createElement("script");
+    script.src = metricsSource;
+    script.async = false;
+    document.head.appendChild(script);
+  }
+
   const SUPABASE_URL = "https://eqhcdclyeoapmqtlduwf.supabase.co";
   const ANON_KEY = "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_";
   const SESSION_KEY = "kinecheck_secure_session_v1";
@@ -63,6 +71,10 @@
       if (!response.ok) throw new Error(data?.message || "No fue posible crear la solicitud.");
 
       setResult(`${data.message} Código de solicitud: ${data.ticketId}. Prioridad asignada: ${data.priority}.`);
+      window.KINECHECK_METRIC?.("support_submit_success", {
+        productSlug: payload.productSlug,
+        metadata: { category: payload.category, priority: data.priority || "unknown" },
+      });
       form.reset();
       if (session?.user?.email) emailInput.value = session.user.email;
     } catch (error) {
