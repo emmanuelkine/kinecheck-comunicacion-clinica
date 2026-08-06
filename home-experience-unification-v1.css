@@ -1,0 +1,21 @@
+.kc-clear-routes{padding-top:34px!important}
+.kc-route-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1400px;margin:34px auto 0}
+.kc-route-card{position:relative;display:flex;flex-direction:column;min-height:300px;padding:28px;border:1px solid rgba(255,255,255,.10);border-radius:24px;background:linear-gradient(145deg,rgba(12,42,54,.96),rgba(5,24,33,.96));box-shadow:0 20px 48px rgba(0,0,0,.16)}
+.kc-route-card>span{font-size:11px;font-weight:950;letter-spacing:.14em;color:#73e6d7}
+.kc-route-card h3{margin:14px 0 8px;color:#fff;font-size:26px;line-height:1.08;letter-spacing:-.03em}
+.kc-route-card p{margin:0;color:#b9ced0;line-height:1.62}
+.kc-route-card ol{margin:18px 0 0;padding-left:22px;color:#d9e8e8;line-height:1.7;font-size:14px}
+.kc-route-card button{margin-top:auto;min-height:48px;border:1px solid rgba(108,226,210,.28);border-radius:14px;background:rgba(56,206,186,.10);color:#efffff;font-weight:900;cursor:pointer}
+.kc-route-card button:hover,.kc-route-card button:focus-visible{background:rgba(56,206,186,.18);outline:none;box-shadow:0 0 0 3px rgba(80,220,203,.15)}
+.kc-route-card.student{border-color:rgba(98,156,255,.26)}
+.kc-route-card.student>span{color:#a8c8ff}
+.kc-route-card.patient{border-color:rgba(245,197,92,.26)}
+.kc-route-card.patient>span{color:#ffe39a}
+.kc-role-badge{display:inline-flex;align-items:center;margin-left:auto;padding:6px 9px;border-radius:999px;font-size:9px!important;font-weight:950;letter-spacing:.11em;white-space:nowrap}
+.kc-role-badge.student{background:rgba(89,145,255,.15);border:1px solid rgba(116,165,255,.28);color:#c8dcff}
+.kc-role-badge.patient{background:rgba(240,196,91,.13);border:1px solid rgba(240,196,91,.27);color:#ffe8a9}
+.kc-student-product,.kc-patient-product{box-shadow:0 22px 48px rgba(0,0,0,.17)}
+.kc-student-product{border-color:rgba(104,157,255,.30)!important}
+.kc-patient-product{border-color:rgba(239,196,96,.32)!important}
+@media(max-width:980px){.kc-route-grid{grid-template-columns:1fr}.kc-route-card{min-height:auto}.kc-route-card button{margin-top:22px}}
+@media(max-width:640px){.kc-route-card{padding:22px;border-radius:19px}.kc-route-card h3{font-size:23px}.kc-role-badge{width:100%;justify-content:center;margin:8px 0 0}}
