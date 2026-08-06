@@ -11,13 +11,13 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'">
   <title>KineCheck Clínico | Curso profesional</title>
   <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../auth.css?v=20260806-mobile1">
+  <link rel="stylesheet" href="../auth.css?v=20260806-direct2">
   <link rel="stylesheet" href="./course.css?v=20260806-1">
-  <link rel="stylesheet" href="./access-ui-fix.css?v=20260806-sso2">
+  <link rel="stylesheet" href="./access-ui-fix.css?v=20260806-direct2">
   <script src="./config.js?v=20260806-1" defer></script>
   <script src="../watermark.js?v=20260801-access4"></script>
-  <script src="./access-ui-fix.js?v=20260806-sso2" defer></script>
-  <script type="module" src="../auth-gate.js?v=20260806-sso2"></script>
+  <script src="./access-ui-fix.js?v=20260806-direct2" defer></script>
+  <script type="module" src="../auth-gate.js?v=20260806-direct2"></script>
 </head>
 <body>
   <main id="access-shell" class="access-shell">
@@ -32,15 +32,13 @@
         <strong>El curso es el centro del producto.</strong>
         <span>La guía digital es un complemento educativo y operativo. No reemplaza la ficha clínica institucional ni debe utilizarse como repositorio de datos identificables de pacientes.</span>
       </div>
-      <div id="access-progress" class="access-progress" role="status" aria-live="polite">
-        <p>Recuperando tu sesión de KineCheck…</p>
-      </div>
+      <div id="access-progress" class="access-progress" role="status" aria-live="polite"><p>Abriendo tu curso…</p></div>
       <div id="auth-message" class="notice" role="alert" aria-live="assertive" hidden></div>
       <div id="ecosystem-entry" class="ecosystem-entry" hidden>
-        <strong>Un solo acceso para todo KineCheck</strong>
-        <p>Inicia sesión una sola vez en el ecosistema KineCheck y abre el curso desde tu biblioteca.</p>
-        <a class="primary-button ecosystem-entry-link" href="../academy/#biblioteca">Ingresar al ecosistema KineCheck</a>
-        <button class="ecosystem-retry" type="button" onclick="location.reload()">Volver a comprobar mi sesión</button>
+        <strong>Tu sesión se mantiene en KineCheck</strong>
+        <p>No necesitas volver a ingresar tus datos. Reintenta aquí o vuelve a tu biblioteca.</p>
+        <a class="primary-button ecosystem-entry-link" href="../academy/#biblioteca">Volver a mi biblioteca</a>
+        <button class="ecosystem-retry" type="button">Reintentar acceso al curso</button>
       </div>
     </section>
   </main>
