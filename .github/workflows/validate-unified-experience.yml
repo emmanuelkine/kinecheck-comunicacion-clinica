@@ -14,9 +14,12 @@ on:
       - "academy/mi-kinecheck-v1.js"
       - "academy/mi-kinecheck-card-copy-v1.js"
       - "academy/mi-kinecheck-v1.css"
+      - "academy/mi-kinecheck-simplify-v2.js"
+      - "academy/mi-kinecheck-simplify-v2.css"
       - "platform/index.html"
       - "platform/redirect-to-mi-kinecheck-v1.js"
       - "tests/launch-readiness-public.spec.mjs"
+      - "tests/mi-kinecheck-roles.spec.mjs"
       - ".github/workflows/validate-unified-experience.yml"
   workflow_dispatch:
 
@@ -46,14 +49,17 @@ jobs:
           node --check academy/academy-brand-identity.js
           node --check academy/mi-kinecheck-v1.js
           node --check academy/mi-kinecheck-card-copy-v1.js
+          node --check academy/mi-kinecheck-simplify-v2.js
           node --check platform/redirect-to-mi-kinecheck-v1.js
           node --check tests/launch-readiness-public.spec.mjs
+          node --check tests/mi-kinecheck-roles.spec.mjs
 
       - name: Confirmar una sola puerta visible
         run: |
           grep -q 'home-experience-unification-v1.js' home.js
           grep -q 'mi-kinecheck-v1.js' academy/academy-brand-identity.js
           grep -q 'mi-kinecheck-card-copy-v1.js' academy/academy-brand-identity.js
+          grep -q 'mi-kinecheck-simplify-v2.js' academy/academy-brand-identity.js
           grep -q 'product-experience-unification-v1.js' productos/product-clinico-reposition-v1.js
           grep -q 'redirect-to-mi-kinecheck-v1.js' platform/index.html
           grep -q 'Abriendo Mi KineCheck' platform/index.html
@@ -66,6 +72,9 @@ jobs:
           grep -q 'ORDEN RECOMENDADO' academy/mi-kinecheck-v1.js
           grep -q 'Tres acciones para tu día' academy/mi-kinecheck-v1.js
           grep -q 'No necesitas navegar cursos, evidencia ni herramientas clínicas' academy/mi-kinecheck-v1.js
+          grep -q 'PASO RECOMENDADO AHORA' academy/mi-kinecheck-simplify-v2.js
+          grep -q 'Tres acciones. Nada más.' academy/mi-kinecheck-simplify-v2.js
+          grep -q 'removeStageChooser' academy/mi-kinecheck-simplify-v2.js
           grep -q 'Empezar práctica guiada' academy/mi-kinecheck-card-copy-v1.js
           grep -q 'Abrir mi plan' academy/mi-kinecheck-card-copy-v1.js
           grep -q 'No estudies todo al mismo tiempo' productos/product-experience-unification-v1.js
@@ -77,6 +86,9 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
+
+      - name: Probar perfiles estudiante, paciente y profesional
+        run: node tests/mi-kinecheck-roles.spec.mjs
 
       - name: Validar producción en tres tamaños
         env:
