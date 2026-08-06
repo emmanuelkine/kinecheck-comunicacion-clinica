@@ -1,0 +1,83 @@
+name: QA comercial público en producción
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "home.js"
+      - "home-core-20260806.js"
+      - "home-commercial-proof-v1.js"
+      - "home-commercial-proof-v1.css"
+      - "commercial-prices-cl.json"
+      - "productos/product-price-v1.js"
+      - "productos/product-price-v1.css"
+      - "productos/product-clinico-reposition-v1.js"
+      - ".github/workflows/qa-public-commercial-live.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Instalar Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+      - name: Esperar despliegue y probar portada y fichas
+        run: |
+          node <<'NODE'
+          const { chromium } = require('playwright');
+          const expected = ['$39.990','$14.990','$9.990','$19.900','$39.990','$29.990','$35.900','$59.900'];
+          const base = 'https://kinecheck.cl/?v=20260806-commercial-proof1';
+          const detail = 'https://kinecheck.cl/productos/?producto=evidencia-aplicada&v=20260806-commercial-proof1';
+          const forbidden = /Creado y dirigido por|Magíster en Docencia|97,1\/100/i;
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage({ viewport: { width: 1440, height: 1200 }, locale: 'es-CL' });
+            let lastError;
+            for (let attempt = 1; attempt <= 12; attempt += 1) {
+              try {
+                await page.goto(`${base}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
+                await page.waitForSelector('.product-price', { timeout: 15000 });
+                const blocks = await page.locator('.product-price').count();
+                if (blocks !== 8) throw new Error(`Se esperaban 8 precios y aparecieron ${blocks}.`);
+                const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+                for (const amount of new Set(expected)) {
+                  if (!text.includes(amount)) throw new Error(`Falta ${amount} en la portada.`);
+                }
+                if (!text.includes('Respaldo verificable')) throw new Error('Falta la sección de respaldo verificable.');
+                if (!text.includes('Las opiniones se incorporarán únicamente con autorización y verificación')) throw new Error('Falta la política de opiniones reales.');
+                if (forbidden.test(text)) throw new Error('Se añadió contenido personal expresamente excluido.');
+
+                await page.goto(`${detail}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
+                await page.waitForSelector('.product-detail-price', { timeout: 15000 });
+                const detailText = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+                if (!detailText.includes('$29.990')) throw new Error('La ficha de Evidencia Aplicada no muestra $29.990.');
+                if (forbidden.test(detailText)) throw new Error('La ficha añadió contenido personal expresamente excluido.');
+
+                console.log(`QA comercial público aprobado en el intento ${attempt}.`);
+                await browser.close();
+                return;
+              } catch (error) {
+                lastError = error;
+                console.log(`Intento ${attempt} pendiente: ${error.message}`);
+                await page.waitForTimeout(10000);
+              }
+            }
+            await browser.close();
+            throw lastError || new Error('No fue posible validar producción.');
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
