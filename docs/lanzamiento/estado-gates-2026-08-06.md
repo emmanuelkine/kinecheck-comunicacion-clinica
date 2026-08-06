@@ -1,7 +1,7 @@
 # Estado verificable de gates de lanzamiento
 
 **Corte:** 6 de agosto de 2026  
-**Regla:** un gate solo se cierra con evidencia reproducible. No se aceptan simulaciones como sustituto de personas, compras, credenciales o revisión profesional reales.
+**Regla:** un gate solo se cierra con evidencia reproducible. Las pruebas controladas validan el backend, pero no sustituyen personas, compras reales, credenciales administrativas ni revisión profesional.
 
 ## 1. Seguridad y continuidad — ABIERTO
 
@@ -18,18 +18,22 @@
 ### Criterio de cierre
 Todos los controles administrativos confirmados y al menos un backup externo cifrado restaurado satisfactoriamente.
 
-## 2. Hotmart final — ABIERTO
+## 2. Hotmart final — ABIERTO, BACKEND 8/8 APROBADO
 
 ### Evidencia disponible
 - Ocho checkouts, Product IDs, slugs, vigencias y grants mapeados.
 - Precios públicos auditados.
 - Pack Estudiante confirmado en panel a $49.900 CLP, pago al contado, conversión internacional activa y retracto/reembolso de 7 días.
+- Siete productos ya contaban con eventos de aprobación y reembolso registrados por el backend.
+- Evidencia Aplicada completó una prueba controlada secuencial: aprobación, licencia activa, reembolso, compra revocada y licencia inactiva.
+- La matriz técnica de aprobación y revocación quedó validada en 8/8 productos.
+- Todos los datos ficticios utilizados para las pruebas fueron eliminados.
 
 ### Bloqueos reales
-Para los ocho productos todavía se requiere evidencia del panel de PDF, correo de bienvenida, página pospago, enlace a Academy y webhook. También falta una compra y un reembolso controlados.
+Para los ocho productos todavía se requiere evidencia del panel de PDF, correo de bienvenida, página pospago, enlace a Academy y webhook. También falta una compra y un reembolso reales, ejecutados mediante el checkout oficial.
 
 ### Criterio de cierre
-8/8 productos con capturas o registro del panel y ciclo compra → licencia → acceso → devolución → revocación aprobado.
+8/8 productos con evidencia del panel y ciclo real compra → licencia → acceso → devolución → revocación aprobado.
 
 ## 3. QA completa — ABIERTO, MUY AVANZADO
 
@@ -43,7 +47,7 @@ Para los ocho productos todavía se requiere evidencia del panel de PDF, correo 
 - QA pública multidispositivo automatizada incorporada para celular, tableta y computador.
 
 ### Bloqueos reales
-Faltan sesiones autenticadas con cuentas representativas reales, revisión completa de contenidos, persistencia del progreso y dispositivos físicos.
+Faltan sesiones autenticadas con cuentas representativas reales, revisión completa de contenidos, persistencia del progreso y dispositivos físicos. La validación pública multidispositivo continúa pendiente de ejecución porque GitHub Actions mantiene los trabajos en cola sin asignar runner.
 
 ### Criterio de cierre
 Matriz 8 productos × 3 dispositivos × compra/acceso/contenido/progreso/reembolso sin P0 y con P1 resueltos o aceptados.
@@ -54,7 +58,8 @@ Matriz 8 productos × 3 dispositivos × compra/acceso/contenido/progreso/reembol
 - Términos, privacidad y retracto/reembolsos publicados.
 - Aceptación legal versionada y trazable.
 - Mapa de datos, retención, seguridad y proveedores documentados.
-- Métricas nuevas diseñadas sin correo, IP ni datos clínicos.
+- Métricas diseñadas sin correo, IP almacenada, contraseña ni datos clínicos.
+- Checklist de identidad legal y revisión jurídica incorporado al proyecto.
 
 ### Bloqueos reales
 Faltan definición formal del proveedor, RUT, domicilio, comuna/región, teléfono o canal equivalente y revisión jurídica chilena.
@@ -67,7 +72,7 @@ Identidad idéntica en web, Hotmart y comprobantes, más revisión jurídica doc
 ### Evidencia disponible
 - Ruta oficial de búsqueda INAPI identificada.
 - Clases preliminares a evaluar: 9, 41 y 42, sujetas al clasificador vigente y revisión del alcance real.
-- Registro de activos y protocolo de revisión incorporados al proyecto.
+- Protocolo de búsqueda e inventario de activos incorporado al proyecto.
 
 ### Bloqueos reales
 Falta búsqueda formal exacta y por semejanza en INAPI, decisión de clases/cobertura y verificación de licencia o autoría de cada imagen, escala, tabla y material de terceros.
@@ -91,14 +96,18 @@ Actualmente no existen postulaciones ni sesiones observadas. No se crearán part
 
 ### Implementación
 - Eventos anónimos y mínimos: visita, vista de producto, checkout, Academy, curso, beta y soporte.
-- Sin correo, IP, contraseña, texto clínico ni identificadores Hotmart en analítica pública.
+- Sin correo, IP almacenada, contraseña, texto clínico ni códigos de compra en la analítica pública.
 - Embudo diario con conversión y abandono estimados.
 - Compras, reembolsos y revocaciones derivados de webhooks Hotmart.
 - Retención automática de eventos públicos por 400 días.
 - Panel administrativo actualizado en tiempo real.
+- Prueba sintética de registro, consolidación y limpieza aprobada.
+
+### Publicación pendiente
+La infraestructura y las funciones están activas. Los parches de CSP, integración en plataforma y transparencia de privacidad permanecen en la cola de GitHub Actions; el gate técnico se considera implementado, pero se debe comprobar su despliegue público cuando GitHub asigne un runner.
 
 ### Seguimiento
-El gate técnico está cerrado. La utilidad estadística crecerá cuando exista tráfico real.
+La utilidad estadística crecerá cuando exista tráfico real.
 
 ## 8. Go/No-Go — ABIERTO
 
@@ -107,13 +116,14 @@ El gate técnico está cerrado. La utilidad estadística crecerá cuando exista 
 - Precios definidos y métricas disponibles.
 
 ### Bloqueos reales
-Faltan grupo real, fecha, Hotmart 8/8, beta, seguridad administrativa y operación durante 48–72 horas.
+Faltan grupo real, fecha, Hotmart final, beta, seguridad administrativa y operación durante 48–72 horas.
 
 ### Criterio de cierre
 Soft launch ejecutado, métricas revisadas y decisión escrita Go/No-Go con responsables y contingencia.
 
 ## Resultado del corte
 
-- **Cerrados:** 1 de 8 gates — Métricas.
-- **Abiertos y avanzados:** QA, Hotmart, seguridad/continuidad.
+- **Cerrados técnicamente:** 1 de 8 gates — Métricas.
+- **Backend Hotmart:** 8/8 productos aprobados mediante evidencia existente y pruebas controladas.
+- **Abiertos y avanzados:** QA, Hotmart final y seguridad/continuidad.
 - **Abiertos por dependencia humana o profesional:** legal, marca/PI, beta y Go/No-Go.
