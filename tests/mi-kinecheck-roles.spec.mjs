@@ -38,7 +38,8 @@ function fixture(slugs) {
 }
 
 async function pageFor(slugs) {
-  const page = await browser.newPage();
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: "es-CL" });
+  const page = await context.newPage();
   await page.setContent(fixture(slugs));
   await page.evaluate((courses) => {
     window.KINECHECK_ACADEMY_CONFIG = { ownerEmails: [], courses: courses.map((slug) => ({ slug, title: slug, subtitle: slug, kind: slug.includes("estudiante") || slug.includes("recupera") ? "application" : "course" })) };
@@ -50,12 +51,12 @@ async function pageFor(slugs) {
   await page.waitForTimeout(220);
   await page.addScriptTag({ path: "academy/mi-kinecheck-simplify-v2.js" });
   await page.waitForTimeout(320);
-  return page;
+  return { page, context };
 }
 
 try {
   {
-    const page = await pageFor(["kinecheck-recupera"]);
+    const { page, context } = await pageFor(["kinecheck-recupera"]);
     assert.equal(await page.locator("body").getAttribute("data-kc-experience"), "patient");
     assert.ok((await page.locator("#kc-learning-path").getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
     assert.ok((await page.locator('[data-kc-view-link="biblioteca"]').first().getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
@@ -65,11 +66,11 @@ try {
     assert.equal(await page.locator(".mi-kc-patient-help").count(), 1);
     await page.locator("#kc-home-continue").click();
     assert.deepEqual(await page.evaluate(() => window.__opened), ["kinecheck-recupera"]);
-    await page.close();
+    await context.close();
   }
 
   {
-    const page = await pageFor(["kinecheck-estudiante", "mas-alla-del-dolor", "comunicacion-clinica"]);
+    const { page, context } = await pageFor(["kinecheck-estudiante", "mas-alla-del-dolor", "comunicacion-clinica"]);
     assert.equal(await page.locator("body").getAttribute("data-kc-experience"), "student");
     assert.equal(await page.locator(".mi-kc-step-status").count(), 3);
     assert.equal(await page.locator(".mi-kc-step-status").first().textContent(), "PASO RECOMENDADO AHORA");
@@ -78,16 +79,16 @@ try {
     assert.ok(!(await page.locator('[data-kc-view-link="biblioteca"]').first().getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
     await page.locator("#kc-home-continue").click();
     assert.deepEqual(await page.evaluate(() => window.__opened), ["kinecheck-estudiante"]);
-    await page.close();
+    await context.close();
   }
 
   {
-    const page = await pageFor(["kinecheck-clinico", "kinecheck-clinico-curso", "evidencia-aplicada"]);
+    const { page, context } = await pageFor(["kinecheck-clinico", "kinecheck-clinico-curso", "evidencia-aplicada"]);
     assert.equal(await page.locator("body").getAttribute("data-kc-experience"), "professional");
     assert.equal(await page.locator(".kc-home-section.mi-kc-simplified-hidden").count(), 0);
     assert.ok((await page.locator("#kc-learning-path").getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
     assert.ok(!(await page.locator('[data-kc-view-link="herramientas"]').first().getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
-    await page.close();
+    await context.close();
   }
 
   console.log("Mi KineCheck role UX: 3/3 perfiles aprobados.");
