@@ -13,7 +13,7 @@
     "mas-alla-del-dolor": { amount: "$39.990", term: "12 meses", installments: "Hasta 12 cuotas de $3.333" },
     "evidencia-aplicada": { amount: "$29.990", term: "12 meses", installments: "Hasta 12 cuotas de $2.499" },
     "traumatologia-ortopedia-clinica": { amount: "$35.900", term: "12 meses", installments: "Hasta 12 cuotas de $2.992" },
-    "pack-estudiante": { amount: "$59.900", term: "12 meses", installments: "Hasta 12 cuotas de $4.992" },
+    "pack-estudiante": { amount: "$49.900", term: "12 meses", installments: "Hotmart confirma las cuotas disponibles antes del pago", saving: "$5.080", discount: "9,2%" },
   });
 
   function loadStyles() {
@@ -33,12 +33,16 @@
     const actions = document.querySelector(".product-hero .hero-actions");
     if (!actions) return;
 
+    const installmentCopy = slug === "pack-estudiante"
+      ? price.installments
+      : `${price.installments} en tarjeta de crédito.`;
+
     const block = document.createElement("div");
     block.className = "product-detail-price";
     block.setAttribute("aria-label", `Precio en Chile: ${price.amount}, pago único, acceso por ${price.term}`);
     block.innerHTML = `
       <div><span>PRECIO EN CHILE</span><strong>${price.amount}</strong></div>
-      <p>Pago único · acceso por ${price.term}<small>${price.installments} en tarjeta de crédito.</small></p>
+      <p>Pago único · acceso por ${price.term}<small>${installmentCopy}</small></p>
     `;
     actions.before(block);
 
@@ -59,7 +63,7 @@
     if (slug === "pack-estudiante") {
       const note = document.createElement("p");
       note.className = "pack-price-note";
-      note.textContent = "Este valor corresponde al pack configurado actualmente en Hotmart. El pack agrupa los dos accesos en una sola compra y no se presenta como descuento frente a compras individuales.";
+      note.textContent = `Comprados por separado, ambos productos suman $54.980. Con el pack ahorras ${price.saving}, equivalente a ${price.discount}.`;
       block.after(note);
     }
 
