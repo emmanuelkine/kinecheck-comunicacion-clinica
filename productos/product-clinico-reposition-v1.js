@@ -1,4 +1,12 @@
 (() => {
+  const rootMetricsSource = new URL("../metrics-v1.js?v=20260806-launch-metrics1", location.href).toString();
+  if (![...document.scripts].some((script) => script.src === rootMetricsSource)) {
+    const metricsScript = document.createElement("script");
+    metricsScript.src = rootMetricsSource;
+    metricsScript.async = false;
+    document.head.appendChild(metricsScript);
+  }
+
   const priceSource = new URL("./product-price-v1.js?v=20260806-commercial-proof1", location.href).toString();
   if (![...document.scripts].some((script) => script.src === priceSource)) {
     const priceScript = document.createElement("script");
