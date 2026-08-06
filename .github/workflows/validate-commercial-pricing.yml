@@ -1,0 +1,89 @@
+name: Validar precios y respaldo comercial
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "home.js"
+      - "home-core-20260806.js"
+      - "home-commercial-proof-v1.js"
+      - "home-commercial-proof-v1.css"
+      - "commercial-prices-cl.json"
+      - "productos/product-price-v1.js"
+      - "productos/product-price-v1.css"
+      - "productos/product-clinico-reposition-v1.js"
+      - ".github/workflows/validate-commercial-pricing.yml"
+  pull_request:
+    paths:
+      - "home.js"
+      - "home-core-20260806.js"
+      - "home-commercial-proof-v1.js"
+      - "home-commercial-proof-v1.css"
+      - "commercial-prices-cl.json"
+      - "productos/product-price-v1.js"
+      - "productos/product-price-v1.css"
+      - "productos/product-clinico-reposition-v1.js"
+      - ".github/workflows/validate-commercial-pricing.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validar sintaxis JavaScript
+        run: |
+          node --check home.js
+          node --check home-core-20260806.js
+          node --check home-commercial-proof-v1.js
+          node --check productos/product-price-v1.js
+          node --check productos/product-clinico-reposition-v1.js
+
+      - name: Validar los ocho precios de Chile
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const prices = JSON.parse(fs.readFileSync('commercial-prices-cl.json', 'utf8'));
+          const expected = {
+            'kinecheck-clinico': 39990,
+            'kinecheck-estudiante': 14990,
+            'kinecheck-recupera': 9990,
+            'comunicacion-clinica': 19900,
+            'mas-alla-del-dolor': 39990,
+            'evidencia-aplicada': 29990,
+            'traumatologia-ortopedia-clinica': 35900,
+            'pack-estudiante': 59900,
+          };
+          if (prices.country !== 'Chile' || prices.currency !== 'CLP') throw new Error('País o moneda incorrectos.');
+          const rows = prices.products || {};
+          if (Object.keys(rows).length !== 8) throw new Error('Deben existir exactamente ocho productos.');
+          for (const [slug, amount] of Object.entries(expected)) {
+            if (rows[slug]?.price !== amount) throw new Error(`Precio incorrecto para ${slug}.`);
+          }
+          console.log('8/8 precios CLP verificados.');
+          NODE
+
+      - name: Confirmar integración pública
+        run: |
+          grep -q 'home-core-20260806.js' home.js
+          grep -q 'home-commercial-proof-v1.js' home.js
+          grep -q 'product-price-v1.js' productos/product-clinico-reposition-v1.js
+          grep -q 'PRECIO EN CHILE' home-commercial-proof-v1.js
+          grep -q 'RESPALDO VERIFICABLE' home-commercial-proof-v1.js
+          grep -q 'Las opiniones se incorporarán únicamente con autorización y verificación' home-commercial-proof-v1.js
+          grep -q 'priceCurrency: "CLP"' home-commercial-proof-v1.js
+          grep -q 'priceCurrency: "CLP"' productos/product-price-v1.js
+
+      - name: Impedir respaldo comercial inventado o perfil personal añadido
+        run: |
+          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio|ahorra|descuento frente' home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
+
+      - name: Confirmar transparencia del pack
+        run: |
+          grep -q 'no se presenta como descuento frente a compras individuales' productos/product-price-v1.js
