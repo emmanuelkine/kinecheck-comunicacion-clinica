@@ -1,0 +1,123 @@
+.product-price{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:16px;
+  align-items:center;
+  margin:18px 0 20px;
+  padding:16px 17px;
+  border:1px solid color-mix(in srgb,var(--accent) 34%,rgba(255,255,255,.12));
+  border-radius:16px;
+  background:linear-gradient(125deg,color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.025)),rgba(255,255,255,.025));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.product-price>div{display:grid;gap:3px;min-width:118px}
+.product-price span{color:color-mix(in srgb,var(--accent) 58%,white);font-size:10px;font-weight:950;letter-spacing:.13em}
+.product-price strong{color:#fff;font-size:clamp(26px,2.4vw,34px);line-height:1;font-weight:950;letter-spacing:-.035em}
+.product-price p{margin:0;color:#d7e7e7;font-size:13px;line-height:1.45}
+.product-price small{display:block;margin-top:3px;color:#95b0b1;font-size:11px;line-height:1.45}
+.product-actions .buy{font-weight:900!important}
+
+.commercial-proof-section{position:relative;overflow:hidden}
+.commercial-proof-section::before{
+  content:"";
+  position:absolute;
+  inset:7% 2% auto;
+  height:280px;
+  pointer-events:none;
+  background:radial-gradient(circle at center,rgba(73,213,198,.09),transparent 68%);
+}
+.commercial-proof-heading{position:relative;z-index:1;max-width:860px;margin-inline:auto}
+.commercial-proof-heading p{max-width:760px;margin-inline:auto}
+.commercial-proof-metrics{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  max-width:1404px;
+  margin:34px auto 18px;
+}
+.commercial-proof-metrics article{
+  min-height:154px;
+  padding:24px 22px;
+  border:1px solid rgba(117,213,207,.16);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(14,47,58,.94),rgba(7,28,38,.92));
+  box-shadow:0 18px 42px rgba(0,0,0,.13);
+}
+.commercial-proof-metrics strong{display:block;color:#fff;font-size:clamp(31px,3vw,45px);line-height:1;font-weight:950;letter-spacing:-.04em}
+.commercial-proof-metrics span{display:block;margin-top:14px;color:#bcd4d4;font-size:13px;line-height:1.55}
+
+.commercial-confidence-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  max-width:1404px;
+  margin:14px auto 18px;
+}
+.commercial-confidence-grid article{
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr);
+  gap:15px;
+  align-items:start;
+  padding:21px 22px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:18px;
+  background:rgba(255,255,255,.028);
+}
+.commercial-confidence-grid article>span{
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:linear-gradient(140deg,rgba(66,218,199,.18),rgba(81,136,255,.15));
+  color:#77eadc;
+  font-size:12px;
+  font-weight:950;
+}
+.commercial-confidence-grid strong{display:block;color:#fff;font-size:17px;line-height:1.2}
+.commercial-confidence-grid p{margin:7px 0 0;color:#afc7c8;font-size:13px;line-height:1.58}
+
+.verified-experience-note{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:24px;
+  align-items:center;
+  max-width:1404px;
+  margin:18px auto 0;
+  padding:25px 27px;
+  border:1px solid rgba(238,196,93,.24);
+  border-radius:20px;
+  background:linear-gradient(125deg,rgba(238,196,93,.075),rgba(80,128,255,.05));
+}
+.verified-experience-note strong{display:block;margin-top:7px;color:#fff;font-size:19px;line-height:1.3}
+.verified-experience-note p{margin:8px 0 0;color:#bccfd0;font-size:13px;line-height:1.55}
+.verified-experience-note a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:48px;
+  padding:0 18px;
+  border:1px solid rgba(238,196,93,.32);
+  border-radius:13px;
+  background:rgba(238,196,93,.10);
+  color:#fff5d0;
+  font-size:13px;
+  font-weight:900;
+  text-decoration:none;
+}
+.verified-experience-note a:hover,.verified-experience-note a:focus-visible{background:rgba(238,196,93,.17)}
+
+@media(max-width:1050px){
+  .commercial-proof-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .product-price{grid-template-columns:1fr;gap:9px}
+  .product-price>div{min-width:0}
+  .commercial-proof-metrics,.commercial-confidence-grid{grid-template-columns:1fr}
+  .commercial-proof-metrics article{min-height:auto}
+  .verified-experience-note{grid-template-columns:1fr;padding:21px}
+  .verified-experience-note a{width:100%}
+}
