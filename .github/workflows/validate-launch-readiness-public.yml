@@ -43,6 +43,7 @@ jobs:
           for attempt in $(seq 1 12); do
             echo "Intento ${attempt}/12"
             if node tests/launch-readiness-public.spec.mjs; then
+              echo "QA pública multidispositivo aprobada." >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi
             last=$?
