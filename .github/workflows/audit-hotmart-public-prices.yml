@@ -1,5 +1,6 @@
 name: Auditar precios públicos Hotmart
 
+# Verificación manual solicitada el 2026-08-06.
 on:
   push:
     branches: [main]
