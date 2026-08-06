@@ -1,10 +1,21 @@
 (() => {
+  "use strict";
+
   const BRAND_NAME = "KineCheck Ecosistema Clínico";
   const BRAND_DESCRIPTOR = "ECOSISTEMA CLÍNICO";
 
   function setText(selector, value) {
     const element = document.querySelector(selector);
     if (element) element.textContent = value;
+  }
+
+  function loadScript(path, marker, version) {
+    if (document.querySelector(`script[${marker}]`)) return;
+    const script = document.createElement("script");
+    script.src = `${path}?v=${version}`;
+    script.async = false;
+    script.setAttribute(marker, "true");
+    document.head.appendChild(script);
   }
 
   function applyIdentity() {
@@ -39,28 +50,8 @@
     }
   }
 
-  function loadCurrentLaunchRouter() {
-    if (document.querySelector('script[data-kc-current-launch-router]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260806-direct2";
-    script.async = false;
-    script.dataset.kcCurrentLaunchRouter = "true";
-    document.head.appendChild(script);
-  }
-
-  function loadClinicoCourseIntegration() {
-    if (document.querySelector('script[data-kc-clinico-course]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-clinico-course-v1.js?v=20260806-1";
-    script.async = false;
-    script.dataset.kcClinicoCourse = "true";
-    document.head.appendChild(script);
-  }
-
-  // El router actual se carga desde un archivo que Academy ya incorpora al inicio.
-  // Esto evita que handlers antiguos abran cursos con sesiones obsoletas o rutas en caché.
-  loadCurrentLaunchRouter();
-  loadClinicoCourseIntegration();
+  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260806-final4");
+  loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final4");
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", applyIdentity, { once: true });
