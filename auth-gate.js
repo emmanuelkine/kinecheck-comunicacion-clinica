@@ -3,6 +3,8 @@ const LEGACY_COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:";
 const SHARED_SESSION_KEY = "kinecheck_secure_session_v1";
 const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
 const HANDOFF_MAX_AGE_MS = 120000;
+const REQUEST_TIMEOUT_MS = 15000;
+const NETWORK_ATTEMPTS = 2;
 
 function courseSessionKey(product) {
   const slug = String(product || "curso").trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
@@ -93,6 +95,33 @@ function waitForConfig(timeoutMs = 5000) {
   });
 }
 
+function delay(ms) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry(url, init = {}, attempts = NETWORK_ATTEMPTS) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      return await fetch(url, {
+        ...init,
+        signal: init.signal || controller.signal,
+      });
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await delay(350 * attempt);
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }
+  const networkError = new Error("No pudimos conectar con el servicio de acceso de KineCheck.");
+  networkError.code = "NETWORK_ERROR";
+  networkError.cause = lastError;
+  throw networkError;
+}
+
 (async () => {
   const CONFIG = await waitForConfig().catch((error) => {
     console.error("KineCheck config", error);
@@ -110,20 +139,21 @@ function waitForConfig(timeoutMs = 5000) {
   const message = $("#auth-message");
   const progress = $("#access-progress");
   const ecosystemEntry = $("#ecosystem-entry");
+  const ecosystemLink = ecosystemEntry?.querySelector(".ecosystem-entry-link");
+  const retryButton = ecosystemEntry?.querySelector(".ecosystem-retry");
   const signOut = $("#sign-out");
 
   function headers(token) {
     const value = {
       apikey: CONFIG.supabaseAnonKey,
       "Content-Type": "application/json",
-      "Cache-Control": "no-store",
     };
     if (token) value.Authorization = `Bearer ${token}`;
     return value;
   }
 
   async function api(path, options = {}) {
-    const response = await fetch(`${CONFIG.supabaseUrl}${path}`, {
+    const response = await fetchWithRetry(`${CONFIG.supabaseUrl}${path}`, {
       ...options,
       cache: "no-store",
       headers: { ...headers(options.token), ...(options.headers || {}) },
@@ -153,14 +183,33 @@ function waitForConfig(timeoutMs = 5000) {
     if (paragraph) paragraph.textContent = text;
   }
 
+  function configureEntry({
+    copy,
+    linkVisible = true,
+    linkText = "Ingresar al ecosistema KineCheck",
+    linkHref = "../academy/#biblioteca",
+    retryVisible = true,
+    retryText = "Volver a comprobar mi sesión",
+  } = {}) {
+    if (!ecosystemEntry) return;
+    const paragraph = ecosystemEntry.querySelector("p");
+    if (paragraph && copy) paragraph.textContent = copy;
+    ecosystemEntry.hidden = false;
+    if (ecosystemLink) {
+      ecosystemLink.hidden = !linkVisible;
+      ecosystemLink.textContent = linkText;
+      ecosystemLink.href = linkHref;
+    }
+    if (retryButton) {
+      retryButton.hidden = !retryVisible;
+      retryButton.textContent = retryText;
+    }
+  }
+
   function showEcosystemEntry(text = "Inicia sesión una sola vez en el ecosistema KineCheck y abre el curso desde tu biblioteca.") {
     setProgress(false);
     if (message) message.hidden = true;
-    if (ecosystemEntry) {
-      const copy = ecosystemEntry.querySelector("p");
-      if (copy) copy.textContent = text;
-      ecosystemEntry.hidden = false;
-    }
+    configureEntry({ copy: text, linkVisible: true, retryVisible: true });
     if (shell) shell.hidden = false;
     if (root) root.hidden = true;
     if (signOut) signOut.hidden = true;
@@ -228,7 +277,6 @@ function waitForConfig(timeoutMs = 5000) {
     for (const record of candidates) {
       let session = normalizeSession(record.session);
       if (!session) continue;
-
       if (record.product && record.product !== CONFIG.courseSlug) continue;
 
       try {
@@ -241,7 +289,8 @@ function waitForConfig(timeoutMs = 5000) {
         const verified = await validateIdentity(session);
         persistCourseSession(verified);
         return verified;
-      } catch {
+      } catch (error) {
+        if (error?.code === "NETWORK_ERROR") throw error;
         if (record.source?.storage && record.source?.key) {
           storageRemove(record.source.storage, record.source.key);
         }
@@ -255,7 +304,7 @@ function waitForConfig(timeoutMs = 5000) {
     const courseSlug = String(CONFIG.courseSlug || "").trim();
     if (!courseSlug) throw new Error("No fue posible identificar el curso solicitado.");
 
-    const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
+    const response = await fetchWithRetry(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
       method: "POST",
       cache: "no-store",
       headers: headers(token),
@@ -309,11 +358,55 @@ function waitForConfig(timeoutMs = 5000) {
     } catch (error) {
       window.KineCheckWatermark?.hide();
       setProgress(false);
-      if (error.status === 401) clearCourseSession();
-      showMessage(`${error.message} Abre nuevamente el curso desde tu biblioteca KineCheck.`, true);
-      if (ecosystemEntry) ecosystemEntry.hidden = false;
+
+      if (error?.code === "NETWORK_ERROR") {
+        showMessage("No pudimos conectar con el validador de acceso. Tu sesión sigue activa; reintenta aquí sin volver al ecosistema.", true);
+        configureEntry({
+          copy: "No necesitas salir ni volver a ingresar. Presiona reintentar para validar nuevamente este mismo curso.",
+          linkVisible: false,
+          retryVisible: true,
+          retryText: "Reintentar acceso al curso",
+        });
+        return;
+      }
+
+      if (error.status === 401) {
+        clearCourseSession();
+        showMessage("Tu sesión terminó. Ingresa nuevamente una sola vez en KineCheck.", true);
+        configureEntry({
+          copy: "La sesión ya no es válida. Vuelve al ecosistema para iniciar sesión nuevamente.",
+          linkVisible: true,
+          linkText: "Volver a ingresar a KineCheck",
+          retryVisible: false,
+        });
+        return;
+      }
+
+      if (error.status === 403) {
+        showMessage(error.message, true);
+        configureEntry({
+          copy: "Tu cuenta está activa, pero este producto no está incluido en sus licencias vigentes.",
+          linkVisible: true,
+          linkText: "Volver a mi biblioteca",
+          retryVisible: false,
+        });
+        return;
+      }
+
+      showMessage(`${error.message} Reintenta sin salir de esta pantalla.`, true);
+      configureEntry({
+        copy: "El curso no pudo prepararse. Puedes reintentar aquí sin volver a iniciar sesión.",
+        linkVisible: false,
+        retryVisible: true,
+        retryText: "Reintentar acceso al curso",
+      });
     }
   }
+
+  retryButton?.addEventListener("click", (event) => {
+    event.preventDefault();
+    location.reload();
+  });
 
   signOut?.addEventListener("click", () => {
     window.KineCheckWatermark?.hide();
@@ -322,10 +415,21 @@ function waitForConfig(timeoutMs = 5000) {
   });
 
   setProgress(true);
-  const session = await validEcosystemSession();
-  if (session) {
-    await authorize(session);
-  } else {
-    showEcosystemEntry();
+  try {
+    const session = await validEcosystemSession();
+    if (session) {
+      await authorize(session);
+    } else {
+      showEcosystemEntry();
+    }
+  } catch (error) {
+    setProgress(false);
+    showMessage("No pudimos comprobar tu sesión por un problema de conexión. Reintenta aquí; no necesitas volver a ingresar.", true);
+    configureEntry({
+      copy: "La sesión permanece en este navegador. Reintenta cuando la conexión esté disponible.",
+      linkVisible: false,
+      retryVisible: true,
+      retryText: "Reintentar conexión",
+    });
   }
 })();
