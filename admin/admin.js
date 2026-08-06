@@ -86,6 +86,15 @@
   function renderMetrics(data) {
     const metrics = data.metrics?.payload || {};
     const cards = [
+      ["Visitas públicas hoy", metrics.public_page_views ?? 0],
+      ["Vistas de productos", metrics.product_views ?? 0],
+      ["Inicios de checkout", metrics.checkout_starts ?? 0],
+      ["Aperturas Academy", metrics.academy_opens ?? 0],
+      ["Aperturas de cursos", metrics.course_opens ?? 0],
+      ["Compras aprobadas hoy", metrics.purchase_approvals_today ?? 0],
+      ["Revocaciones hoy", metrics.revocation_events_today ?? 0],
+      ["Postulaciones beta hoy", metrics.beta_submissions_today ?? 0],
+      ["Soporte creado hoy", metrics.support_submissions_today ?? 0],
       ["Licencias activas", metrics.active_licenses ?? 0],
       ["Vencen en 30 días", metrics.expiring_30_days ?? 0],
       ["Soporte abierto", metrics.open_support ?? data.supportRequests.length],
