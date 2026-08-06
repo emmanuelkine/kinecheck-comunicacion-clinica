@@ -12,7 +12,7 @@
     "mas-alla-del-dolor": { amount: "$39.990", term: "12 meses", label: "Curso clínico" },
     "evidencia-aplicada": { amount: "$29.990", term: "12 meses", label: "Curso clínico" },
     "traumatologia-ortopedia-clinica": { amount: "$35.900", term: "12 meses", label: "Curso clínico" },
-    "pack-estudiante": { amount: "$59.900", term: "12 meses", label: "Pack de dos productos" },
+    "pack-estudiante": { amount: "$49.900", term: "12 meses", label: "Pack de dos productos", saving: "$5.080", discount: "9,2%" },
   });
 
   const CHECKOUTS = Object.freeze({
@@ -41,6 +41,10 @@
       const price = PRICES[slug];
       if (!price || card.querySelector(".product-price")) return;
 
+      const detail = slug === "pack-estudiante"
+        ? `Ahorras ${price.saving} frente a la compra individual de ambos productos (${price.discount}).`
+        : "Hotmart informa las cuotas y el total final antes del pago.";
+
       const priceBlock = document.createElement("div");
       priceBlock.className = "product-price";
       priceBlock.setAttribute("aria-label", `Precio en Chile: ${price.amount}, pago único, acceso por ${price.term}`);
@@ -49,7 +53,7 @@
           <span>PRECIO EN CHILE</span>
           <strong>${price.amount}</strong>
         </div>
-        <p>Pago único · acceso por ${price.term}<small>Hotmart informa las cuotas y el total final antes del pago.</small></p>
+        <p>Pago único · acceso por ${price.term}<small>${detail}</small></p>
       `;
 
       const list = card.querySelector("ul");
