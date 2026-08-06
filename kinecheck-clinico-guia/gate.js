@@ -9,19 +9,24 @@
   const SESSION_KEY = "kinecheck_guide_session_v2";
   const LEGACY_SESSION_KEY = "kinecheck_guide_session_v1";
   const SHARED_SESSION_KEY = "kinecheck_secure_session_v1";
+  const REQUEST_TIMEOUT_MS = 15000;
 
   const shell = document.querySelector("#access-shell");
   const app = document.querySelector("#guide-app");
   const progress = document.querySelector("#access-progress");
   const message = document.querySelector("#access-message");
+  const retry = document.querySelector("#retry-guide-access");
+  const back = document.querySelector("#guide-back-to-ecosystem");
 
-  function showError(text) {
+  function showError(text, { retryVisible = false, backVisible = true } = {}) {
     if (progress) progress.hidden = true;
     if (message) {
       message.textContent = text;
       message.className = "notice error";
       message.hidden = false;
     }
+    if (retry) retry.hidden = !retryVisible;
+    if (back) back.hidden = !backVisible;
   }
 
   function safeJson(value) {
@@ -105,44 +110,83 @@
     storageRemove(localStorage, LEGACY_SESSION_KEY);
   }
 
+  function delay(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  async function request(url, init = {}) {
+    let lastError = null;
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+      try {
+        return await fetch(url, { ...init, signal: controller.signal });
+      } catch (error) {
+        lastError = error;
+        if (attempt === 1) await delay(350);
+      } finally {
+        window.clearTimeout(timer);
+      }
+    }
+    const error = new Error("No pudimos conectar con el servicio de acceso de KineCheck.");
+    error.code = "NETWORK_ERROR";
+    error.cause = lastError;
+    throw error;
+  }
+
   async function verifyIdentity(session) {
-    const response = await fetch(`${CONFIG.supabaseUrl}/auth/v1/user`, {
+    const response = await request(`${CONFIG.supabaseUrl}/auth/v1/user`, {
       cache: "no-store",
       headers: {
         apikey: CONFIG.supabaseAnonKey,
         Authorization: `Bearer ${session.access_token}`,
-        "Cache-Control": "no-store",
       },
     });
-    if (!response.ok) throw new Error("Tu sesión terminó. Vuelve a abrir la guía desde KineCheck.");
+    if (!response.ok) {
+      const error = new Error("Tu sesión terminó. Vuelve a abrir la guía desde KineCheck.");
+      error.status = response.status;
+      throw error;
+    }
     const user = await response.json();
     if (!user?.email) throw new Error("No fue posible verificar la identidad de la cuenta.");
     return user;
   }
 
   async function verifyLicense(session) {
-    const response = await fetch(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
+    const response = await request(`${CONFIG.supabaseUrl}/functions/v1/${CONFIG.courseKeyFunction}`, {
       method: "POST",
       cache: "no-store",
       headers: {
         apikey: CONFIG.supabaseAnonKey,
         Authorization: `Bearer ${session.access_token}`,
         "Content-Type": "application/json",
-        "Cache-Control": "no-store",
       },
       body: JSON.stringify({ courseSlug: CONFIG.accessSlug }),
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok || payload.active !== true) {
-      throw new Error(payload.message || "No encontramos una licencia activa de KineCheck Clínico.");
+      const error = new Error(payload.message || "No encontramos una licencia activa de KineCheck Clínico.");
+      error.status = response.status;
+      throw error;
     }
     return payload;
   }
 
   async function openGuide() {
+    if (message) message.hidden = true;
+    if (retry) retry.hidden = true;
+    if (progress) {
+      progress.hidden = false;
+      progress.textContent = "Verificando identidad y licencia…";
+    }
+
     const session = consumeHandoff() || readStoredSession();
-    if (!session) throw new Error("Inicia sesión una sola vez en el ecosistema KineCheck y abre la guía desde tu biblioteca.");
-    if (progress) progress.textContent = "Verificando identidad y licencia…";
+    if (!session) {
+      const error = new Error("Inicia sesión una sola vez en el ecosistema KineCheck y abre la guía desde tu biblioteca.");
+      error.status = 401;
+      throw error;
+    }
+
     const [user] = await Promise.all([verifyIdentity(session), verifyLicense(session)]);
     saveSession(session);
     if (window.KineCheckWatermark) {
@@ -153,8 +197,35 @@
     window.KineCheckClinicoGuide?.start?.();
   }
 
-  openGuide().catch((error) => {
-    storageRemove(sessionStorage, SESSION_KEY);
-    showError(error instanceof Error ? error.message : "No fue posible abrir la guía complementaria.");
+  function handleError(error) {
+    if (error?.code === "NETWORK_ERROR") {
+      showError(
+        "No pudimos conectar con el validador. Tu sesión sigue activa; reintenta aquí sin volver al ecosistema.",
+        { retryVisible: true, backVisible: false },
+      );
+      return;
+    }
+
+    if (error?.status === 401) {
+      storageRemove(sessionStorage, SESSION_KEY);
+      showError(error.message, { retryVisible: false, backVisible: true });
+      return;
+    }
+
+    if (error?.status === 403) {
+      showError(error.message, { retryVisible: false, backVisible: true });
+      return;
+    }
+
+    showError(
+      `${error instanceof Error ? error.message : "No fue posible abrir la guía complementaria."} Reintenta sin salir de esta pantalla.`,
+      { retryVisible: true, backVisible: false },
+    );
+  }
+
+  retry?.addEventListener("click", () => {
+    openGuide().catch(handleError);
   });
+
+  openGuide().catch(handleError);
 })();
