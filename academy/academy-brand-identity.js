@@ -50,8 +50,11 @@
     }
   }
 
-  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260806-final4");
-  loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final4");
+  // El controlador de recomendaciones se registra primero para que los botones
+  // dinámicos no dependan de clics simulados sobre tarjetas ocultas de Biblioteca.
+  loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260806-final5");
+  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260806-final5");
+  loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", applyIdentity, { once: true });
