@@ -18,19 +18,21 @@
 
   function text(selector, value) {
     const node = document.querySelector(selector);
-    if (node) node.textContent = value;
+    if (node && node.textContent !== value) node.textContent = value;
   }
 
   function accessLinks() {
     document.querySelectorAll('a[href*="/academy/"],a[href*="/platform/"]').forEach((link) => {
-      link.href = PRIVATE_URL;
+      if (link.href !== PRIVATE_URL) link.href = PRIVATE_URL;
       const current = link.textContent.trim().toLowerCase();
+      let label = "";
       if (link.classList.contains("enter") || current.includes("ya tengo") || current.includes("ya compr")) {
-        link.textContent = "Ya compré: entrar";
+        label = "Ya compré: entrar";
       } else if (current.includes("biblioteca") || current.includes("ingresar") || current.includes("abrir")) {
-        link.textContent = "Entrar a Mi KineCheck";
+        label = "Entrar a Mi KineCheck";
       }
-      link.setAttribute("aria-label", link.textContent.trim());
+      if (label && link.textContent.trim() !== label) link.textContent = label;
+      if (label && link.getAttribute("aria-label") !== label) link.setAttribute("aria-label", label);
     });
   }
 
@@ -39,13 +41,14 @@
       if (node.children.length) return;
       const value = node.textContent;
       if (!/Academy|plataforma KineCheck|mi biblioteca|tu biblioteca|una sola biblioteca/i.test(value)) return;
-      node.textContent = value
+      const next = value
         .replace(/KineCheck Academy/gi, "Mi KineCheck")
         .replace(/Academy/gi, "Mi KineCheck")
         .replace(/plataforma KineCheck/gi, "Mi KineCheck")
         .replace(/mi biblioteca/gi, "Mi KineCheck")
         .replace(/tu biblioteca/gi, "tus productos")
         .replace(/una sola biblioteca/gi, "un solo acceso");
+      if (next !== value) node.textContent = next;
     });
   }
 
@@ -54,11 +57,12 @@
     if (!card) return;
     card.classList.add(`kc-${config.role}-product`);
     const subtitle = card.querySelector(".subtitle");
-    if (subtitle) subtitle.textContent = config.subtitle;
+    if (subtitle && subtitle.textContent !== config.subtitle) subtitle.textContent = config.subtitle;
     const list = card.querySelector("ul");
-    if (list) list.innerHTML = config.items.map((item) => `<li>${item}</li>`).join("");
+    const listHtml = config.items.map((item) => `<li>${item}</li>`).join("");
+    if (list && list.innerHTML !== listHtml) list.innerHTML = listHtml;
     const type = card.querySelector(".product-type");
-    if (type && config.type) type.textContent = config.type;
+    if (type && config.type && type.textContent !== config.type) type.textContent = config.type;
     if (!card.querySelector(".kc-role-badge")) {
       const badge = document.createElement("span");
       badge.className = `kc-role-badge ${config.role}`;
@@ -122,47 +126,24 @@
     text("#rutas .section-heading p", "Profesional, estudiante o paciente: cada perfil comienza en un lugar distinto, pero todos entran por Mi KineCheck.");
 
     const patientAudience = document.querySelector(".patient-card p");
-    if (patientAudience) patientAudience.textContent = "Quiero revisar mi plan, registrar cómo me siento y ver mi avance sin términos complicados.";
+    if (patientAudience && patientAudience.textContent !== "Quiero revisar mi plan, registrar cómo me siento y ver mi avance sin términos complicados.") patientAudience.textContent = "Quiero revisar mi plan, registrar cómo me siento y ver mi avance sin términos complicados.";
     const studentAudience = document.querySelector(".student-card p");
-    if (studentAudience) studentAudience.textContent = "Quiero saber qué estudiar primero y avanzar desde la práctica guiada hacia cursos clínicos.";
+    if (studentAudience && studentAudience.textContent !== "Quiero saber qué estudiar primero y avanzar desde la práctica guiada hacia cursos clínicos.") studentAudience.textContent = "Quiero saber qué estudiar primero y avanzar desde la práctica guiada hacia cursos clínicos.";
 
     updateProduct("kinecheck-estudiante", {
-      role: "student",
-      badge: "EMPIEZA AQUÍ",
-      type: "APRENDIZAJE GUIADO · 12 MESES",
+      role: "student", badge: "EMPIEZA AQUÍ", type: "APRENDIZAJE GUIADO · 12 MESES",
       subtitle: "Tu primer paso para aprender evaluación y razonamiento clínico",
-      items: [
-        "Recorrido guiado: qué preguntar, observar y relacionar",
-        "Práctica paso a paso antes de los cursos avanzados",
-        "Checklist para reconocer lo que falta",
-        "Acceso durante 12 meses",
-      ],
+      items: ["Recorrido guiado: qué preguntar, observar y relacionar", "Práctica paso a paso antes de los cursos avanzados", "Checklist para reconocer lo que falta", "Acceso durante 12 meses"],
     });
-
     updateProduct("kinecheck-recupera", {
-      role: "patient",
-      badge: "SIMPLE Y DIRECTO",
-      type: "MI RECUPERACIÓN · 3 MESES",
+      role: "patient", badge: "SIMPLE Y DIRECTO", type: "MI RECUPERACIÓN · 3 MESES",
       subtitle: "Tu plan, tu registro y tu avance en un solo lugar",
-      items: [
-        "Revisa qué corresponde hacer hoy",
-        "Registra cómo te sientes con preguntas simples",
-        "Observa tu avance sin interpretar datos clínicos",
-        "Acceso durante 3 meses",
-      ],
+      items: ["Revisa qué corresponde hacer hoy", "Registra cómo te sientes con preguntas simples", "Observa tu avance sin interpretar datos clínicos", "Acceso durante 3 meses"],
     });
-
     updateProduct("pack-estudiante", {
-      role: "student",
-      badge: "RUTA INTEGRADA",
-      type: "RUTA ESTUDIANTE · 12 MESES",
+      role: "student", badge: "RUTA INTEGRADA", type: "RUTA ESTUDIANTE · 12 MESES",
       subtitle: "Primero practica el proceso; luego comprende el dolor y el contexto",
-      items: [
-        "Paso 1: KineCheck Estudiante",
-        "Paso 2: curso Más allá del dolor",
-        "Dos experiencias conectadas, no dos puertas distintas",
-        "Acceso a ambos productos durante 12 meses",
-      ],
+      items: ["Paso 1: KineCheck Estudiante", "Paso 2: curso Más allá del dolor", "Dos experiencias conectadas, no dos puertas distintas", "Acceso a ambos productos durante 12 meses"],
     });
 
     installRoutePanel();
