@@ -27,18 +27,18 @@
 
   function setText(selector, value) {
     const node = document.querySelector(selector);
-    if (node) node.textContent = value;
+    if (node && node.textContent !== value) node.textContent = value;
   }
 
   function setHtml(selector, value) {
     const node = document.querySelector(selector);
-    if (node) node.innerHTML = value;
+    if (node && node.innerHTML !== value) node.innerHTML = value;
   }
 
   function setLinkLabel(view, value) {
     document.querySelectorAll(`[data-kc-view-link="${view}"]`).forEach((item) => {
       const label = item.querySelector("span:last-child,small") || item;
-      label.textContent = value;
+      if (label.textContent !== value) label.textContent = value;
     });
   }
 
@@ -46,7 +46,7 @@
     document.querySelectorAll(`[data-kc-view-link="${view}"]`).forEach((item) => {
       if (item.closest(".kc-home-actions,.kc-section-heading")) return;
       item.classList.toggle("kc-role-hidden", hidden);
-      item.setAttribute("aria-hidden", hidden ? "true" : "false");
+      if (item.getAttribute("aria-hidden") !== (hidden ? "true" : "false")) item.setAttribute("aria-hidden", hidden ? "true" : "false");
       if (hidden) item.setAttribute("tabindex", "-1");
       else item.removeAttribute("tabindex");
     });
@@ -76,7 +76,7 @@
   }
 
   function normalizeIdentity() {
-    document.title = "Mi KineCheck";
+    if (document.title !== "Mi KineCheck") document.title = "Mi KineCheck";
     document.documentElement.classList.add("mi-kinecheck");
     document.querySelector('meta[name="description"]')?.setAttribute("content", "Mi KineCheck: entra una vez y accede a los productos asociados a tu compra.");
 
@@ -97,21 +97,25 @@
     setLinkLabel("herramientas", "Recursos");
     setLinkLabel("perfil", "Cuenta y ayuda");
 
-    document.querySelectorAll(".kc-explore-link span").forEach((node) => { node.textContent = "Conocer otros productos"; });
+    document.querySelectorAll(".kc-explore-link span").forEach((node) => {
+      if (node.textContent !== "Conocer otros productos") node.textContent = "Conocer otros productos";
+    });
     setText("#home-library-title", "Recursos para seguir aprendiendo");
     setText("#home-courses-title", "Tu aprendizaje");
     setText("#home-apps-title", "Tus herramientas");
 
     document.querySelectorAll("p,span,strong,h1,h2,h3").forEach((node) => {
       if (node.children.length) return;
-      if (!/Academy|ecosistema|biblioteca clásica|plataforma 5\.0/i.test(node.textContent)) return;
-      node.textContent = node.textContent
+      const current = node.textContent;
+      if (!/Academy|ecosistema|biblioteca clásica|plataforma 5\.0/i.test(current)) return;
+      const next = current
         .replace(/KineCheck Academy/gi, "Mi KineCheck")
         .replace(/Academy clásica/gi, "Mi KineCheck")
         .replace(/Academy/gi, "Mi KineCheck")
         .replace(/ecosistema KineCheck/gi, "Mi KineCheck")
         .replace(/tu ecosistema clínico/gi, "Mi KineCheck")
         .replace(/PLATAFORMA 5\.0/gi, "MI KINECHECK");
+      if (next !== current) node.textContent = next;
     });
   }
 
@@ -165,7 +169,7 @@
     document.querySelector("#inicio")?.after(section);
 
     document.querySelectorAll('[data-course="kinecheck-recupera"]').forEach((button) => {
-      if (!button.disabled) button.textContent = "Abrir mi plan";
+      if (!button.disabled && button.textContent !== "Abrir mi plan") button.textContent = "Abrir mi plan";
     });
   }
 
@@ -202,7 +206,7 @@
     document.querySelector("#inicio")?.after(section);
 
     document.querySelectorAll('[data-course="kinecheck-estudiante"]').forEach((button) => {
-      if (!button.disabled) button.textContent = "Empezar práctica guiada";
+      if (!button.disabled && button.textContent !== "Empezar práctica guiada") button.textContent = "Empezar práctica guiada";
     });
   }
 
