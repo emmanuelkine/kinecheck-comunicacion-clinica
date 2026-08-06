@@ -23,7 +23,7 @@
     "pack-estudiante": "https://pay.hotmart.com/Q106891608M",
   });
   const PRODUCT_LABELS = Object.freeze({
-    "kinecheck-clinico": "Aplicación profesional · evaluación y seguimiento",
+    "kinecheck-clinico": "Curso profesional + guía complementaria",
     "kinecheck-estudiante": "Aplicación formativa · razonamiento guiado",
     "kinecheck-recupera": "Aplicación para pacientes · progreso y ejercicios",
     "comunicacion-clinica": "Curso interactivo · comunicación en salud",
