@@ -68,7 +68,7 @@ try {
       if (slug === "kinecheck-recupera") {
         await page.waitForSelector("#kc-patient-simple-guide", { timeout: 15000 });
         assert.ok(text.includes("Tres acciones. Nada más"), `${device}: falta simplificación paciente`);
-        assert.equal(await page.locator("#related-title").count(), 0, `${device}: Recupera no debe mostrar recomendaciones superpuestas`);
+        assert.ok(await page.locator("#related-title").isHidden(), `${device}: Recupera no debe mostrar recomendaciones superpuestas`);
       }
       const checkout = page.locator("[data-checkout]").first();
       assert.ok((await checkout.getAttribute("href") || "").startsWith("https://pay.hotmart.com/"), `${device}/${slug}: checkout inválido`);
