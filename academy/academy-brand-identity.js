@@ -6,7 +6,7 @@
 
   function setText(selector, value) {
     const element = document.querySelector(selector);
-    if (element) element.textContent = value;
+    if (element && element.textContent !== value) element.textContent = value;
   }
 
   function loadScript(path, marker, version) {
@@ -33,7 +33,8 @@
     setText(".login-showcase > .eyebrow", "MI KINECHECK");
 
     const loginTitle = document.querySelector("#login-title");
-    if (loginTitle) loginTitle.innerHTML = "Entra una vez.<br><em>Continúa desde aquí.</em>";
+    const loginHtml = "Entra una vez.<br><em>Continúa desde aquí.</em>";
+    if (loginTitle && loginTitle.innerHTML !== loginHtml) loginTitle.innerHTML = loginHtml;
 
     setText(".mobile-brand > div > span", "UN SOLO ACCESO");
     setText(".sidebar-brand > div > span", BRAND_DESCRIPTOR);
@@ -46,12 +47,14 @@
     const footerCopyright = document.querySelector(".academy-footer > span:first-child");
     if (footerCopyright) {
       const year = document.querySelector("#current-year")?.textContent || String(new Date().getFullYear());
-      footerCopyright.innerHTML = `© <span id="current-year">${year}</span> KineCheck`;
+      const copy = `© <span id="current-year">${year}</span> KineCheck`;
+      if (footerCopyright.innerHTML !== copy) footerCopyright.innerHTML = copy;
     }
   }
 
   loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260806-launch-metrics1");
   loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260806-unified1");
+  loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
 
   // El controlador de recomendaciones se registra primero para que los botones
   // dinámicos no dependan de clics simulados sobre tarjetas ocultas.
