@@ -8,7 +8,7 @@
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const READY_TYPE = "kinecheck-sso-ready";
   const ACCEPTED_TYPE = "kinecheck-sso-accepted";
-  const RELEASE = "20260806-final4";
+  const RELEASE = "20260806-final5";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
@@ -82,18 +82,30 @@
     toast.timer = setTimeout(() => { element.hidden = true; }, 5000);
   }
 
+  function restoreButton(button) {
+    if (!button) return;
+    button.removeAttribute("aria-busy");
+    if (button.dataset.kcOriginalText) button.textContent = button.dataset.kcOriginalText;
+    button.style.pointerEvents = "";
+    delete button.dataset.kcOpening;
+  }
+
+  function resetNavigationState() {
+    navigating = false;
+    document.querySelectorAll('[aria-busy="true"], [data-kc-opening="true"]').forEach(restoreButton);
+  }
+
   function setBusy(button, value) {
     navigating = value;
     if (!button) return;
     if (value) {
       button.setAttribute("aria-busy", "true");
+      button.dataset.kcOpening = "true";
       button.dataset.kcOriginalText ||= button.textContent;
       button.textContent = "Abriendo…";
       button.style.pointerEvents = "none";
     } else {
-      button.removeAttribute("aria-busy");
-      if (button.dataset.kcOriginalText) button.textContent = button.dataset.kcOriginalText;
-      button.style.pointerEvents = "";
+      restoreButton(button);
     }
   }
 
@@ -115,7 +127,12 @@
     }
     saveSharedSession(session);
     window.name = JSON.stringify(payload(session, product));
-    location.assign(SAME_ORIGIN[product]);
+    try {
+      location.assign(SAME_ORIGIN[product]);
+    } catch {
+      setBusy(button, false);
+      toast("No fue posible abrir el producto. Vuelve a intentarlo.");
+    }
   }
 
   async function openExternal(product, button) {
@@ -189,17 +206,26 @@
       access_token: transfer.session.access_token,
       expires_at: transfer.session.expires_at,
     });
-    location.assign(`./app-sso-relay.html?product=${encodeURIComponent(product)}&v=${RELEASE}`);
+    try {
+      location.assign(`./app-sso-relay.html?product=${encodeURIComponent(product)}&v=${RELEASE}`);
+    } catch {
+      setBusy(button, false);
+      toast("No fue posible abrir la aplicación. Vuelve a intentarlo.");
+    }
   }
 
   async function openProduct(product, button = null) {
-    if (!KNOWN.has(product) || navigating) return;
+    if (!KNOWN.has(product)) return;
+    if (navigating) {
+      resetNavigationState();
+    }
     if (SAME_ORIGIN[product]) return openSameOrigin(product, button);
     if (EXTERNAL[product]) return openExternal(product, button);
     if (APPLICATIONS.has(product)) return openApplication(product, button);
   }
 
   window.KINECHECK_OPEN_PRODUCT = openProduct;
+  window.KINECHECK_RESET_PRODUCT_NAVIGATION = resetNavigationState;
 
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-course], [data-kc-path-open], [data-kc-open-product], #continue-button");
@@ -217,4 +243,7 @@
     event.stopImmediatePropagation();
     openProduct(product, button);
   }, true);
+
+  window.addEventListener("pageshow", resetNavigationState);
+  window.addEventListener("pagehide", () => { navigating = false; });
 })();
