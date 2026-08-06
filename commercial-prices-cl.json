@@ -1,0 +1,66 @@
+{
+  "version": "2026-08-06.1",
+  "auditedAt": "2026-08-06",
+  "country": "Chile",
+  "currency": "CLP",
+  "source": "Checkouts públicos oficiales de Hotmart seleccionando Chile",
+  "notes": "Valores base visibles antes del pago. Hotmart confirma cuotas, impuestos y total final aplicable al medio de pago.",
+  "products": {
+    "kinecheck-clinico": {
+      "name": "KineCheck Clínico",
+      "price": 39990,
+      "display": "$39.990",
+      "term": "12 meses",
+      "installments": "Hasta 12 cuotas de $3.333"
+    },
+    "kinecheck-estudiante": {
+      "name": "KineCheck Estudiante",
+      "price": 14990,
+      "display": "$14.990",
+      "term": "12 meses",
+      "installments": "Hasta 12 cuotas de $1.249"
+    },
+    "kinecheck-recupera": {
+      "name": "KineCheck Recupera",
+      "price": 9990,
+      "display": "$9.990",
+      "term": "3 meses",
+      "installments": "Hasta 12 cuotas de $833"
+    },
+    "comunicacion-clinica": {
+      "name": "Comunicación Clínica",
+      "price": 19900,
+      "display": "$19.900",
+      "term": "12 meses",
+      "installments": "Hasta 12 cuotas de $1.658"
+    },
+    "mas-alla-del-dolor": {
+      "name": "Más allá del dolor",
+      "price": 39990,
+      "display": "$39.990",
+      "term": "12 meses",
+      "installments": "Hasta 12 cuotas de $3.333"
+    },
+    "evidencia-aplicada": {
+      "name": "Evidencia Aplicada",
+      "price": 29990,
+      "display": "$29.990",
+      "term": "12 meses",
+      "installments": "Hasta 12 cuotas de $2.499"
+    },
+    "traumatologia-ortopedia-clinica": {
+      "name": "Traumatología y Ortopedia Clínica",
+      "price": 35900,
+      "display": "$35.900",
+      "term": "12 meses",
+      "installments": "Hasta 12 cuotas de $2.992"
+    },
+    "pack-estudiante": {
+      "name": "Pack KineCheck Estudiante",
+      "price": 59900,
+      "display": "$59.900",
+      "term": "12 meses",
+      "installments": "Hasta 12 cuotas de $4.992"
+    }
+  }
+}
