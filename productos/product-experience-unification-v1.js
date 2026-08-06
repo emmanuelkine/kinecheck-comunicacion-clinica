@@ -19,19 +19,20 @@
 
   function setText(selector, value) {
     const node = document.querySelector(selector);
-    if (node) node.textContent = value;
+    if (node && node.textContent !== value) node.textContent = value;
   }
 
   function setHtml(selector, value) {
     const node = document.querySelector(selector);
-    if (node) node.innerHTML = value;
+    if (node && node.innerHTML !== value) node.innerHTML = value;
   }
 
   function rewriteAccess() {
     document.querySelectorAll("[data-access]").forEach((link) => {
-      link.href = PRIVATE_URL;
-      link.textContent = "Entrar a Mi KineCheck";
-      link.setAttribute("aria-label", "Entrar a Mi KineCheck");
+      if (link.href !== PRIVATE_URL) link.href = PRIVATE_URL;
+      const label = "Entrar a Mi KineCheck";
+      if (link.textContent.trim() !== label) link.textContent = label;
+      if (link.getAttribute("aria-label") !== label) link.setAttribute("aria-label", label);
     });
   }
 
@@ -65,7 +66,7 @@
     insertBeforeOutcomes(route);
 
     document.querySelectorAll("[data-checkout]").forEach((button) => {
-      if (!button.textContent.includes("$")) button.textContent = "Comenzar mi ruta";
+      if (!button.textContent.includes("$") && button.textContent !== "Comenzar mi ruta") button.textContent = "Comenzar mi ruta";
     });
   }
 
@@ -122,7 +123,7 @@
     insertBeforeOutcomes(guide);
 
     document.querySelectorAll("[data-checkout]").forEach((button) => {
-      if (!button.textContent.includes("$")) button.textContent = "Comenzar con Recupera";
+      if (!button.textContent.includes("$") && button.textContent !== "Comenzar con Recupera") button.textContent = "Comenzar con Recupera";
     });
   }
 
