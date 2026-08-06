@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "index.html"
       - "home.js"
       - "home-core-20260806.js"
       - "home-commercial-proof-v1.js"
@@ -15,6 +16,7 @@ on:
       - ".github/workflows/validate-commercial-pricing.yml"
   pull_request:
     paths:
+      - "index.html"
       - "home.js"
       - "home-core-20260806.js"
       - "home-commercial-proof-v1.js"
@@ -69,6 +71,23 @@ jobs:
           console.log('8/8 precios CLP verificados.');
           NODE
 
+      - name: Validar precios visibles sin JavaScript
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const blocks = (html.match(/class="product-price"/g) || []).length;
+          if (blocks !== 8) throw new Error(`La portada debe contener 8 precios estáticos; contiene ${blocks}.`);
+          for (const amount of ['$39.990','$14.990','$9.990','$19.900','$29.990','$35.900','$59.900']) {
+            if (!html.includes(amount)) throw new Error(`Falta ${amount} en index.html.`);
+          }
+          if (!html.includes('id="respaldo-verificable"')) throw new Error('Falta el respaldo verificable estático.');
+          if (!html.includes('Las opiniones se incorporarán únicamente con autorización y verificación')) {
+            throw new Error('Falta la política de opiniones verificadas.');
+          }
+          console.log('8/8 precios visibles en HTML estático.');
+          NODE
+
       - name: Confirmar integración pública
         run: |
           grep -q 'home-core-20260806.js' home.js
@@ -82,8 +101,9 @@ jobs:
 
       - name: Impedir respaldo comercial inventado o perfil personal añadido
         run: |
-          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio|ahorra' home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
+          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio|ahorra' index.html home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
 
       - name: Confirmar transparencia del pack
         run: |
+          grep -q 'no se presenta como descuento frente a compras individuales' index.html
           grep -q 'no se presenta como descuento frente a compras individuales' productos/product-price-v1.js
