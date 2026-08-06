@@ -1,0 +1,50 @@
+name: Habilitar CSP de métricas públicas
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/enable-launch-metrics-csp.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Permitir conexión exclusiva a Supabase
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          target = "connect-src 'self' https://eqhcdclyeoapmqtlduwf.supabase.co;"
+          for name in ["index.html", "productos/index.html"]:
+              path = Path(name)
+              text = path.read_text(encoding="utf-8")
+              marker = "font-src 'self' data:;"
+              if target not in text:
+                  if marker not in text:
+                      raise SystemExit(f"No se encontró el punto CSP esperado en {name}")
+                  text = text.replace(marker, f"{marker} {target}", 1)
+                  path.write_text(text, encoding="utf-8")
+          PY
+      - name: Validar política
+        run: |
+          grep -q "connect-src 'self' https://eqhcdclyeoapmqtlduwf.supabase.co" index.html
+          grep -q "connect-src 'self' https://eqhcdclyeoapmqtlduwf.supabase.co" productos/index.html
+      - name: Publicar parche
+        run: |
+          if git diff --quiet; then
+            echo "La política ya estaba actualizada."
+            exit 0
+          fi
+          git config user.name "KineCheck Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html productos/index.html
+          git commit -m "security: allow privacy-preserving metrics endpoint"
+          git push
