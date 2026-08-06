@@ -18,7 +18,7 @@ function read(relativePath) {
 function noSecondaryCredentials(name, source) {
   check(`${name}: sin formulario secundario`, !/id=["']auth-form["']/i.test(source));
   check(`${name}: sin campo de contraseña`, !/type=["']password["']/i.test(source));
-  check(`${name}: entrada al ecosistema`, /ecosystem-entry|academy\/#biblioteca/i.test(source));
+  check(`${name}: regreso claro a biblioteca`, /biblioteca|ecosystem-entry/i.test(source));
 }
 
 function setItems(source, variableName) {
@@ -33,9 +33,7 @@ function sameItems(actual, expected) {
 }
 
 async function fetchText(url) {
-  const response = await fetch(url, {
-    headers: { "User-Agent": "KineCheck-access-validator" },
-  });
+  const response = await fetch(url, { headers: { "User-Agent": "KineCheck-access-validator" } });
   if (!response.ok) throw new Error(`${url} respondió ${response.status}`);
   return response.text();
 }
@@ -67,6 +65,8 @@ const commonGate = read("auth-gate.js");
 check("Gate común no inicia sesión por contraseña", !/grant_type=password|auth\/v1\/signup/.test(commonGate));
 check("Gate común solicita el slug configurado", /body:\s*JSON\.stringify\(\{\s*courseSlug\s*\}\)/m.test(commonGate));
 check("Gate común valida identidad", /auth\/v1\/user/.test(commonGate));
+check("Gate común no envía Cache-Control como request header", !/["']Cache-Control["']\s*:/.test(commonGate));
+check("Gate común conserva sesión ante error de red", /NETWORK_ERROR[\s\S]*?Reintentar acceso/i.test(commonGate));
 
 const courseKey = read("supabase/functions/course-key/index.ts");
 check("Course-key compara correo autenticado", /auth\.getUser\(\)/.test(courseKey));
@@ -74,14 +74,24 @@ check("Course-key filtra slug exacto", /\.eq\("course_slug",\s*courseSlug\)/.tes
 check("Course-key exige licencia activa", /if\s*\(!isUsableAccess\(access\)\)/.test(courseKey));
 check("Course-key separa contenido por slug", /protectedModules:\s*Record<string, string>/.test(courseKey));
 
-const router = read("academy/academy-launch-router-v4.js");
+const opener = read("academy/academy-open-v6.js");
+const legacyRouter = read("academy/academy-launch-router-v4.js");
+const integrationGuard = read("academy/academy-integration-guard-v4.js");
 const relay = read("academy/app-sso-relay.js");
 const expectedApps = ["kinecheck-estudiante", "kinecheck-recupera"];
-check("Router limita aplicaciones externas", sameItems(setItems(router, "APPLICATIONS"), expectedApps));
+
+check("Opener final está instalado", /__KINECHECK_OPEN_V6__/.test(opener));
+check("Opener limita aplicaciones externas", sameItems(setItems(opener, "APPLICATIONS"), expectedApps));
+check("Opener usa sesión temporal", /parse\(sessionStorage\)/.test(opener));
+check("Opener intercepta todos los botones", /data-course[\s\S]*data-kc-path-open[\s\S]*data-kc-open-product/.test(opener));
+check("Opener usa captura para evitar handlers antiguos", /},\s*true\);/.test(opener));
+check("Opener abre cursos externos mediante postMessage", /popup\.postMessage\(transfer, targetOrigin\)/.test(opener));
+check("Opener espera confirmación SSO", /kinecheck-sso-accepted/.test(opener));
+check("Opener publica rutas final4", /20260806-final4/.test(opener));
+check("Router legado solo delega", /academy-open-v6\.js/.test(legacyRouter) && !/location\.assign\(destination\)/.test(legacyRouter));
+check("Guard antiguo no intercepta clicks", !/addEventListener\(["']click["']/.test(integrationGuard));
 check("Relay limita aplicaciones externas", sameItems(setItems(relay, "PRODUCTS"), expectedApps));
 check("Ruta Clínica antigua excluida del relay", !setItems(relay, "PRODUCTS").includes("kinecheck-clinico"));
-check("Router usa sesión temporal primero", /parseSession\(sessionStorage\)/.test(router));
-check("Router transfiere el producto solicitado", /product,\s*access_token/m.test(router));
 check("Relay envía product al servidor", /hidden\(form,\s*["']product["'],\s*product\)/.test(relay));
 
 const academyConfig = read("academy/config.js");
@@ -103,15 +113,23 @@ noSecondaryCredentials("Más allá del dolor", externalSources.masIndex);
 check("Más allá fija producto exacto", /EXPECTED_COURSE\s*=\s*["']mas-alla-del-dolor["']/.test(externalSources.masGate));
 check("Más allá solicita licencia exacta", /courseSlug:\s*EXPECTED_COURSE/.test(externalSources.masGate));
 check("Más allá usa sesión temporal", /sessionStorage\.setItem\(SESSION_KEY/.test(externalSources.masSso));
-check("Más allá rechaza handoff de otro producto", /handoff\?\.product\s*!==\s*EXPECTED_PRODUCT/.test(externalSources.masSso));
+check("Más allá recibe postMessage", /kinecheck-sso-ready/.test(externalSources.masSso) && /addEventListener\(["']message["']/.test(externalSources.masSso));
+check("Más allá no borra sesión por falta de opener", !/if\s*\(!window\.opener\)\s*\{[\s\S]*?clear/i.test(externalSources.masSso));
+check("Más allá no envía Cache-Control como request header", !/["']Cache-Control["']\s*:/.test(externalSources.masGate));
+check("Más allá conserva sesión ante error de red", /NETWORK_ERROR[\s\S]*?Reintentar acceso/i.test(externalSources.masGate));
 check("Más allá no permite login local", !/grant_type=password|auth\/v1\/signup/.test(externalSources.masGate));
+check("Más allá carga versión final4", /20260806-final4/.test(externalSources.masIndex));
 
 noSecondaryCredentials("Evidencia Aplicada", externalSources.evidenceIndex);
 check("Evidencia fija producto exacto", /EXPECTED_COURSE\s*=\s*["']evidencia-aplicada["']/.test(externalSources.evidenceGate));
 check("Evidencia solicita contenido exacto", /courseSlug:\s*EXPECTED_COURSE/.test(externalSources.evidenceGate));
 check("Evidencia usa sesión temporal", /sessionStorage\.setItem\(SESSION_KEY/.test(externalSources.evidenceSso));
-check("Evidencia rechaza handoff de otro producto", /handoff\?\.product\s*!==\s*EXPECTED_PRODUCT/.test(externalSources.evidenceSso));
+check("Evidencia recibe postMessage", /kinecheck-sso-ready/.test(externalSources.evidenceSso) && /addEventListener\(["']message["']/.test(externalSources.evidenceSso));
+check("Evidencia no borra sesión por falta de opener", !/if\s*\(!window\.opener\)\s*\{[\s\S]*?clear/i.test(externalSources.evidenceSso));
+check("Evidencia no envía Cache-Control como request header", !/["']Cache-Control["']\s*:/.test(externalSources.evidenceGate));
+check("Evidencia conserva sesión ante error de red", /NETWORK_ERROR[\s\S]*?Reintentar acceso/i.test(externalSources.evidenceGate));
 check("Evidencia no permite login local", !/grant_type=password|auth\/v1\/signup/.test(externalSources.evidenceGate));
+check("Evidencia carga versión final4", /20260806-final4/.test(externalSources.evidenceIndex));
 check("Backend Evidencia fija course slug", /const COURSE_SLUG = ["']evidencia-aplicada["']/.test(externalSources.evidenceContent));
 check("Backend Evidencia rechaza otro slug", /requestedSlug !== COURSE_SLUG/.test(externalSources.evidenceContent));
 check("Backend Evidencia filtra licencia exacta", /\.eq\("course_slug", COURSE_SLUG\)/.test(externalSources.evidenceContent));
