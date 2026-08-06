@@ -27,8 +27,17 @@
   Cache-Control: private, no-store, max-age=0
   X-Robots-Tag: noindex, nofollow
 
+/academy/academy-open-v6.js
+  Cache-Control: private, no-store, max-age=0
+
+/academy/academy-launch-router-v4.js
+  Cache-Control: private, no-store, max-age=0
+
 /academy/academy-integration-guard-v4.js
-  Cache-Control: no-store, max-age=0
+  Cache-Control: private, no-store, max-age=0
+
+/academy/academy-brand-identity.js
+  Cache-Control: private, no-store, max-age=0
 
 /academy/*
   Cache-Control: no-cache, must-revalidate
