@@ -1,0 +1,51 @@
+name: Validar preparación pública multidispositivo
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "home.js"
+      - "metrics-v1.js"
+      - "productos/**"
+      - "academy/academy-brand-identity.js"
+      - "platform/**"
+      - "tests/launch-readiness-public.spec.mjs"
+      - ".github/workflows/validate-launch-readiness-public.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-launch-readiness-public
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Instalar Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+      - name: Esperar publicación y validar
+        env:
+          BASE_URL: https://kinecheck.cl
+        run: |
+          last=1
+          for attempt in $(seq 1 12); do
+            echo "Intento ${attempt}/12"
+            if node tests/launch-readiness-public.spec.mjs; then
+              exit 0
+            fi
+            last=$?
+            sleep 10
+          done
+          exit "$last"
