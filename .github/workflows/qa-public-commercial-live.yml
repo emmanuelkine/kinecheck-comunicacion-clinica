@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "index.html"
       - "home.js"
       - "home-core-20260806.js"
       - "home-commercial-proof-v1.js"
@@ -36,9 +37,10 @@ jobs:
         run: |
           node <<'NODE'
           const { chromium } = require('playwright');
-          const expected = ['$39.990','$14.990','$9.990','$19.900','$39.990','$29.990','$35.900','$59.900'];
-          const base = 'https://kinecheck.cl/?v=20260806-commercial-proof1';
-          const detail = 'https://kinecheck.cl/productos/?producto=evidencia-aplicada&v=20260806-commercial-proof1';
+          const expected = ['$39.990','$14.990','$9.990','$19.900','$29.990','$35.900','$49.900'];
+          const base = 'https://kinecheck.cl/?v=20260806-pack49900';
+          const evidenceDetail = 'https://kinecheck.cl/productos/?producto=evidencia-aplicada&v=20260806-pack49900';
+          const packDetail = 'https://kinecheck.cl/productos/?producto=pack-estudiante&v=20260806-pack49900';
           const forbidden = /Creado y dirigido por|Magíster en Docencia|97,1\/100/i;
 
           (async () => {
@@ -55,15 +57,26 @@ jobs:
                 for (const amount of new Set(expected)) {
                   if (!text.includes(amount)) throw new Error(`Falta ${amount} en la portada.`);
                 }
+                if (text.includes('$59.900')) throw new Error('La portada conserva el precio anterior del pack.');
+                if (!text.includes('Ahorras $5.080')) throw new Error('La portada no informa el ahorro real del pack.');
                 if (!text.includes('Respaldo verificable')) throw new Error('Falta la sección de respaldo verificable.');
                 if (!text.includes('Las opiniones se incorporarán únicamente con autorización y verificación')) throw new Error('Falta la política de opiniones reales.');
                 if (forbidden.test(text)) throw new Error('Se añadió contenido personal expresamente excluido.');
 
-                await page.goto(`${detail}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
+                await page.goto(`${evidenceDetail}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
                 await page.waitForSelector('.product-detail-price', { timeout: 15000 });
-                const detailText = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-                if (!detailText.includes('$29.990')) throw new Error('La ficha de Evidencia Aplicada no muestra $29.990.');
-                if (forbidden.test(detailText)) throw new Error('La ficha añadió contenido personal expresamente excluido.');
+                const evidenceText = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+                if (!evidenceText.includes('$29.990')) throw new Error('La ficha de Evidencia Aplicada no muestra $29.990.');
+                if (forbidden.test(evidenceText)) throw new Error('La ficha añadió contenido personal expresamente excluido.');
+
+                await page.goto(`${packDetail}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
+                await page.waitForSelector('.product-detail-price', { timeout: 15000 });
+                const packText = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+                if (!packText.includes('$49.900')) throw new Error('La ficha del pack no muestra $49.900.');
+                if (!packText.includes('$54.980') || !packText.includes('$5.080') || !packText.includes('9,2%')) {
+                  throw new Error('La ficha del pack no muestra la comparación y ahorro verificados.');
+                }
+                if (packText.includes('$59.900')) throw new Error('La ficha del pack conserva el precio anterior.');
 
                 console.log(`QA comercial público aprobado en el intento ${attempt}.`);
                 await browser.close();
