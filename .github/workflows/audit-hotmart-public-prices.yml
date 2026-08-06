@@ -28,44 +28,49 @@ jobs:
         run: |
           node <<'NODE'
           const { chromium } = require('playwright');
-          const products = {
-            'kinecheck-clinico': 'https://pay.hotmart.com/L106791841D',
-            'kinecheck-estudiante': 'https://pay.hotmart.com/G106801166S',
-            'kinecheck-recupera': 'https://pay.hotmart.com/P106806251E',
-            'comunicacion-clinica': 'https://pay.hotmart.com/T106883983U',
-            'mas-alla-del-dolor': 'https://pay.hotmart.com/W106888386Q',
-            'evidencia-aplicada': 'https://pay.hotmart.com/F106921972I',
-            'traumatologia-ortopedia-clinica': 'https://pay.hotmart.com/B106913952R',
-            'pack-estudiante': 'https://pay.hotmart.com/Q106891608M'
-          };
-          const browser = await chromium.launch({ headless: true });
-          const context = await browser.newContext({
-            locale: 'es-CL',
-            timezoneId: 'America/Santiago',
-            viewport: { width: 1440, height: 1200 }
-          });
-          const output = {};
-          for (const [slug, url] of Object.entries(products)) {
-            const page = await context.newPage();
-            try {
-              await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-              await page.waitForTimeout(7000);
-              const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ').trim();
-              const matches = [...body.matchAll(/(?:CLP\s*)?\$\s?\d{1,3}(?:[\.\s]\d{3})+(?:,\d{2})?|(?:CLP|USD|US\$|R\$)\s?\d+(?:[\.,]\d{2})?/gi)].map(m => m[0]);
-              output[slug] = {
-                finalUrl: page.url(),
-                title: await page.title(),
-                prices: [...new Set(matches)].slice(0, 12),
-                excerpt: body.slice(0, 1200)
-              };
-            } catch (error) {
-              output[slug] = { error: String(error.message || error) };
-            } finally {
-              await page.close();
+          (async () => {
+            const products = {
+              'kinecheck-clinico': 'https://pay.hotmart.com/L106791841D',
+              'kinecheck-estudiante': 'https://pay.hotmart.com/G106801166S',
+              'kinecheck-recupera': 'https://pay.hotmart.com/P106806251E',
+              'comunicacion-clinica': 'https://pay.hotmart.com/T106883983U',
+              'mas-alla-del-dolor': 'https://pay.hotmart.com/W106888386Q',
+              'evidencia-aplicada': 'https://pay.hotmart.com/F106921972I',
+              'traumatologia-ortopedia-clinica': 'https://pay.hotmart.com/B106913952R',
+              'pack-estudiante': 'https://pay.hotmart.com/Q106891608M'
+            };
+            const browser = await chromium.launch({ headless: true });
+            const context = await browser.newContext({
+              locale: 'es-CL',
+              timezoneId: 'America/Santiago',
+              viewport: { width: 1440, height: 1200 }
+            });
+            const output = {};
+            for (const [slug, url] of Object.entries(products)) {
+              const page = await context.newPage();
+              try {
+                await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+                await page.waitForTimeout(7000);
+                const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ').trim();
+                const matches = [...body.matchAll(/(?:CLP\s*)?\$\s?\d{1,3}(?:[\.\s]\d{3})+(?:,\d{2})?|(?:CLP|USD|US\$|R\$)\s?\d+(?:[\.,]\d{2})?/gi)].map(m => m[0]);
+                output[slug] = {
+                  finalUrl: page.url(),
+                  title: await page.title(),
+                  prices: [...new Set(matches)].slice(0, 12),
+                  excerpt: body.slice(0, 1200)
+                };
+              } catch (error) {
+                output[slug] = { error: String(error.message || error) };
+              } finally {
+                await page.close();
+              }
             }
-          }
-          await browser.close();
-          console.log('HOTMART_PRICE_AUDIT_START');
-          console.log(JSON.stringify(output, null, 2));
-          console.log('HOTMART_PRICE_AUDIT_END');
+            await browser.close();
+            console.log('HOTMART_PRICE_AUDIT_START');
+            console.log(JSON.stringify(output, null, 2));
+            console.log('HOTMART_PRICE_AUDIT_END');
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
           NODE
