@@ -1,0 +1,52 @@
+name: Actualizar privacidad de métricas
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/update-privacy-launch-metrics.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Incorporar transparencia de métricas
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          path = Path("legal/privacidad.html")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace("Última actualización: 5 de agosto de 2026", "Última actualización: 6 de agosto de 2026")
+          old = '<li><strong>Uso:</strong> progreso, actividad, preferencias, casos o proyectos guardados, errores técnicos y solicitudes de soporte.</li>'
+          new = '<li><strong>Uso:</strong> progreso, actividad, preferencias, casos o proyectos guardados, errores técnicos y solicitudes de soporte.</li><li><strong>Métricas mínimas del sitio:</strong> eventos de visita, vista de producto, inicio de checkout, apertura de Academy o curso, postulación beta y soporte; ruta, producto, clase de dispositivo, dominio de referencia y un identificador aleatorio de sesión temporal.</li>'
+          if old in text and "Métricas mínimas del sitio" not in text:
+              text = text.replace(old, new, 1)
+          old_session = '<section id="sesion" class="policy-section"><h2>11. Almacenamiento del navegador y analítica</h2><p>La plataforma utiliza almacenamiento del navegador para mantener la sesión temporal, recordar apariencia y aplicar controles básicos de seguridad. La sesión protegida no se conserva permanentemente al cerrar el navegador. Al momento de esta actualización, KineCheck no utiliza redes publicitarias ni perfiles de publicidad comportamental en su sitio propio.</p></section>'
+          new_session = '<section id="sesion" class="policy-section"><h2>11. Almacenamiento del navegador y analítica</h2><p>La plataforma utiliza almacenamiento del navegador para mantener la sesión temporal, recordar apariencia y aplicar controles básicos de seguridad. La sesión protegida no se conserva permanentemente al cerrar el navegador.</p><p>Para evaluar funcionamiento y preparación del lanzamiento, KineCheck registra métricas mínimas de navegación y del embudo comercial. Este registro no incorpora correo electrónico, nombre, dirección IP almacenada en la base analítica, contraseña, código de compra, texto de soporte ni datos clínicos. Utiliza un identificador aleatorio guardado únicamente durante la sesión del navegador, la clase general de dispositivo, la ruta, el producto y el dominio de referencia cuando existe. Los eventos públicos se eliminan automáticamente después de 400 días.</p><p>KineCheck no utiliza redes publicitarias ni crea perfiles de publicidad comportamental en su sitio propio.</p></section>'
+          if old_session in text:
+              text = text.replace(old_session, new_session, 1)
+          elif "Los eventos públicos se eliminan automáticamente después de 400 días" not in text:
+              raise SystemExit("No se encontró la sección de analítica esperada")
+          path.write_text(text, encoding="utf-8")
+          PY
+      - name: Validar contenido
+        run: |
+          grep -q "Métricas mínimas del sitio" legal/privacidad.html
+          grep -q "no incorpora correo electrónico" legal/privacidad.html
+          grep -q "después de 400 días" legal/privacidad.html
+          grep -q "Última actualización: 6 de agosto de 2026" legal/privacidad.html
+      - name: Publicar actualización
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "KineCheck Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add legal/privacidad.html
+          git commit -m "legal: disclose privacy-preserving launch metrics"
+          git push
