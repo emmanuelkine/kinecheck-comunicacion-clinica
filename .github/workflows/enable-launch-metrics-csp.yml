@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: enable-launch-metrics-csp
+  cancel-in-progress: false
+
 jobs:
   patch:
     runs-on: ubuntu-latest
