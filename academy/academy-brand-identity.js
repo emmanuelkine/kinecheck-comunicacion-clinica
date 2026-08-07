@@ -50,6 +50,9 @@
       onboardingAction.setAttribute("aria-label", "Ver mi biblioteca");
     }
 
+    const catalogButton = document.querySelector(".kc-catalog-button");
+    if (catalogButton) catalogButton.setAttribute("href", "../#productos");
+
     document.querySelectorAll('a[hidden][aria-hidden="true"]:empty').forEach((anchor) => anchor.remove());
 
     const loginCard = document.querySelector(".login-card");
