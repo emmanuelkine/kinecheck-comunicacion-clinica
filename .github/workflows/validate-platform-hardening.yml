@@ -10,6 +10,7 @@ on:
       - 'assets/observability.js'
       - 'kinecheck/site-v5.js'
       - 'academy/academy-brand-identity.js'
+      - '_headers'
       - 'tests/platform-hardening.spec.mjs'
       - '.github/workflows/validate-platform-hardening.yml'
 
