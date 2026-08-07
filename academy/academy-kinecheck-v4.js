@@ -8,7 +8,7 @@
   let pendingScrollTarget = "";
   let recoveryToken = "";
   let renderTimer = 0;
-  let suppressNextHashEvent = false;
+  let lastHandledLocation = "";
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -93,19 +93,27 @@
       || params.get("type") === "recovery";
   }
 
-  function applyHash(next, historyMode = "replace") {
-    const targetHash = `#${next}`;
-    if (location.hash === targetHash) return;
-    suppressNextHashEvent = true;
-    if (historyMode === "push") {
-      history.pushState(null, "", targetHash);
-    } else {
-      history.replaceState(null, "", targetHash);
-    }
-    window.setTimeout(() => {
-      suppressNextHashEvent = false;
-    }, 0);
+  function currentLocationKey() {
+  return `${location.pathname}${location.search}${location.hash}`;
+}
+
+function markLocationHandled() {
+  lastHandledLocation = currentLocationKey();
+}
+
+function applyHash(next, historyMode = "replace") {
+  const targetHash = `#${next}`;
+  if (location.hash === targetHash) {
+    markLocationHandled();
+    return;
   }
+  if (historyMode === "push") {
+    history.pushState(null, "", targetHash);
+  } else {
+    history.replaceState(null, "", targetHash);
+  }
+  markLocationHandled();
+}
 
   function activateView(view, options = {}) {
     const next = normalizedView(view);
@@ -133,37 +141,43 @@
   }
 
   function restoreViewFromLocation(options = {}) {
-    const currentHash = String(location.hash || "");
-    if (isAuthFragment(currentHash)) return;
-
-    const raw = currentHash.replace(/^#/, "").toLowerCase();
-    const legacyAliases = new Set(["productos", "recursos", "evidencia-semanal", "mis-cursos", "cuenta", "mi-cuenta"]);
-    const isValidHash = VIEW_NAMES.has(raw) || legacyAliases.has(raw);
-
-    if (!isValidHash) {
-      if (location.hash !== "#inicio") {
-        suppressNextHashEvent = true;
-        history.replaceState(null, "", "#inicio");
-        window.setTimeout(() => {
-          suppressNextHashEvent = false;
-        }, 0);
-      }
-      activateView("inicio", { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
-      return;
-    }
-
-    const next = normalizedView(currentHash);
-    const targetHash = `#${next}`;
-    if (location.hash !== targetHash) {
-      suppressNextHashEvent = true;
-      history.replaceState(null, "", targetHash);
-      window.setTimeout(() => {
-        suppressNextHashEvent = false;
-      }, 0);
-    }
-
-    activateView(next, { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+  const currentHash = String(location.hash || "");
+  if (isAuthFragment(currentHash)) {
+    markLocationHandled();
+    return;
   }
+
+  const raw = currentHash.replace(/^#/, "").toLowerCase();
+  const legacyAliases = new Set(["productos", "recursos", "evidencia-semanal", "mis-cursos", "cuenta", "mi-cuenta"]);
+  const isValidHash = VIEW_NAMES.has(raw) || legacyAliases.has(raw);
+
+  if (!isValidHash) {
+    if (location.hash !== "#inicio") {
+      history.replaceState(null, "", "#inicio");
+    }
+    activateView("inicio", { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+    markLocationHandled();
+    return;
+  }
+
+  const next = normalizedView(currentHash);
+  const targetHash = `#${next}`;
+  if (location.hash !== targetHash) {
+    history.replaceState(null, "", targetHash);
+  }
+
+  activateView(next, { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+  markLocationHandled();
+}
+
+function handleLocationNavigation(source) {
+  if (currentLocationKey() === lastHandledLocation) return;
+  if (!parseRecoveryCallback()) {
+    restoreViewFromLocation({ updateHash: false, source });
+  } else {
+    markLocationHandled();
+  }
+}
 
   function markEvidenceSection() {
     const evidence = $("#evidencia-semanal");
@@ -463,20 +477,12 @@
     });
 
     window.addEventListener("hashchange", () => {
-      if (suppressNextHashEvent) {
-        suppressNextHashEvent = false;
-        return;
-      }
-      if (!parseRecoveryCallback()) restoreViewFromLocation({ updateHash: false, source: "hashchange" });
-    });
+    handleLocationNavigation("hashchange");
+  });
 
-    window.addEventListener("popstate", () => {
-      if (suppressNextHashEvent) {
-        suppressNextHashEvent = false;
-        return;
-      }
-      if (!parseRecoveryCallback()) restoreViewFromLocation({ updateHash: false, source: "popstate" });
-    });
+  window.addEventListener("popstate", () => {
+    handleLocationNavigation("popstate");
+  });
 
     $("#kc-home-continue")?.addEventListener("click", () => {
       if (!$("#continue-button")?.hidden) $("#continue-button").click();
