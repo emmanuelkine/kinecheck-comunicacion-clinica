@@ -4,14 +4,24 @@ const JSON_HEADERS = {
   "x-content-type-options": "nosniff",
 };
 
-async function check(url, timeoutMs = 3500) {
+async function check(url, options = {}, timeoutMs = 3500) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(url, { method: "HEAD", redirect: "manual", signal: controller.signal, cache: "no-store" });
-    return response.status > 0 && response.status < 500;
+    const response = await fetch(url, {
+      method: options.method || "HEAD",
+      headers: options.headers || {},
+      body: options.body,
+      redirect: "manual",
+      signal: controller.signal,
+      cache: "no-store",
+    });
+    return {
+      ok: response.status > 0 && response.status < 500,
+      status: response.status,
+    };
   } catch {
-    return false;
+    return { ok: false, status: 0 };
   } finally {
     clearTimeout(timer);
   }
@@ -20,11 +30,33 @@ async function check(url, timeoutMs = 3500) {
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
   const origin = url.origin;
+  const supabaseUrl = env?.SUPABASE_URL || "https://eqhcdclyeoapmqtlduwf.supabase.co";
+  const supabaseAnonKey = env?.SUPABASE_ANON_KEY || "";
+  const ssoOrigin = env?.KINECHECK_SSO_ORIGIN || "https://kinecheck-clinico.emmanuelkine.chatgpt.site";
+
+  const [publicSite, academy, auth, licenseService, sso] = await Promise.all([
+    check(`${origin}/`),
+    check(`${origin}/academy/`),
+    check(`${supabaseUrl}/auth/v1/health`, { method: "GET" }),
+    check(`${supabaseUrl}/functions/v1/course-key`, {
+      method: "POST",
+      headers: {
+        ...(supabaseAnonKey ? { apikey: supabaseAnonKey } : {}),
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ courseSlug: "__readiness_probe__" }),
+    }),
+    check(`${ssoOrigin}/sso.html?product=kinecheck-estudiante`, { method: "GET" }),
+  ]);
+
   const checks = {
-    publicSite: await check(`${origin}/`),
-    academy: await check(`${origin}/academy/`),
+    publicSite,
+    academy,
+    auth,
+    licenseService,
+    sso,
   };
-  const ready = Object.values(checks).every(Boolean);
+  const ready = Object.values(checks).every((result) => result.ok);
   const environment = env?.KINECHECK_ENV || (url.hostname === "kinecheck.cl" || url.hostname === "www.kinecheck.cl" ? "production" : "preview");
 
   return new Response(JSON.stringify({
