@@ -14,6 +14,7 @@ on:
       - "academy/**"
       - "platform/**"
       - "tests/launch-readiness-public.spec.mjs"
+      - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
   workflow_dispatch:
 
@@ -38,18 +39,20 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
+      - name: Diagnosticar overflow móvil de productos
+        env:
+          BASE_URL: https://kinecheck.cl
+        run: node tests/product-overflow-diagnostic.mjs
       - name: Esperar publicación y validar
         env:
           BASE_URL: https://kinecheck.cl
         run: |
-          last=1
           for attempt in $(seq 1 12); do
             echo "Intento ${attempt}/12"
             if node tests/launch-readiness-public.spec.mjs; then
               echo "QA pública multidispositivo aprobada." >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi
-            last=$?
             sleep 10
           done
-          exit "$last"
+          exit 1
