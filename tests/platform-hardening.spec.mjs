@@ -36,7 +36,11 @@ assert.match(publicJs, /observability\.js/);
 assert.match(academyBrand, /runtime-config\.js/);
 assert.match(academyBrand, /observability\.js/);
 
-assert.match(academyBrand, /removeEmptyHiddenLinks/);
+// Contratos de navegación y soporte de Academy.
+assert.match(academyBrand, /#onboarding-action/);
+assert.match(academyBrand, /data-kc-view-link/);
+assert.match(academyBrand, /"biblioteca"/);
+assert.match(academyBrand, /a\[hidden\]\[aria-hidden="true"\]:empty/);
 assert.match(academyBrand, /Compré y todavía no aparece mi acceso/);
 assert.match(academyBrand, /mismo correo utilizado en Hotmart/);
 assert.match(academyBrand, /código de transacción de Hotmart/);
@@ -44,4 +48,4 @@ assert.match(academyBrand, /No envíes contraseñas, datos clínicos ni informac
 assert.match(headers, /\/academy\/\*/);
 assert.match(headers, /X-Robots-Tag:\s*noindex, nofollow/);
 
-console.log("KineCheck platform hardening OK: salud, readiness, runtime, observabilidad, soporte post-compra y noindex de Academy.");
+console.log("KineCheck platform hardening OK: salud, readiness, runtime, observabilidad, navegación de biblioteca, soporte post-compra y noindex de Academy.");
