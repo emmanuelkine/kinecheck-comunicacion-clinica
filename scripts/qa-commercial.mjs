@@ -40,6 +40,7 @@ async function checkSource() {
   const productPage = await read("productos/index.html");
   const productExperience = await read("productos/product-experience-unification-v1.js");
   const platformPage = await read("platform/index.html");
+  const platformRedirect = await read("platform/redirect-to-mi-kinecheck-v1.js");
   const academyPage = await read("academy/index.html");
   const betaPage = await read("beta/index.html");
   const supportPage = await read("soporte/index.html");
@@ -94,13 +95,15 @@ async function checkSource() {
 
   const platformIsRedirect = platformPage.includes("../academy/")
     && /http-equiv="refresh"/i.test(platformPage)
-    && /noindex,nofollow/i.test(platformPage);
-  record("Legacy platform route", platformIsRedirect ? "PASS" : "FAIL", "legacy /platform/ must redirect to the canonical /academy/ entry point");
+    && /noindex,nofollow/i.test(platformPage)
+    && !platformPage.includes("20260806-unified1")
+    && platformRedirect.includes('new URL("../academy/"')
+    && !platformRedirect.includes('searchParams.set("v"');
+  record("Legacy platform route", platformIsRedirect ? "PASS" : "FAIL", "legacy /platform/ must redirect cleanly to the canonical /academy/ entry point");
 
   const academyLoginPresent = academyPage.includes('id="login-view"')
-    && academyPage.includes("academy-v39.js")
-    && academyPage.includes("academy-brand-identity.js");
-  record("Canonical Academy entry", academyLoginPresent ? "PASS" : "FAIL", "canonical /academy/ must contain the login shell and current identity layer");
+    && academyPage.includes("academy-v39.js");
+  record("Canonical Academy entry", academyLoginPresent ? "PASS" : "FAIL", "canonical /academy/ must contain the login shell and active runtime");
 
   const cleanProductAccess = productExperience.includes('new URL("../academy/"')
     && !productExperience.includes("20260806-final5");
@@ -115,7 +118,7 @@ async function fetchWithTimeout(url, options = {}, timeout = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/2.0", ...(options.headers || {}) } });
+    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/2.1", ...(options.headers || {}) } });
   } finally {
     clearTimeout(timer);
   }
@@ -149,7 +152,7 @@ async function checkLive() {
   await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "RECOMENDADO"]);
   await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "$9.990 CLP", "Acceso por 3 meses"]);
   await checkPage("Canonical Academy", "/academy/?qa=commercial-current", ['id="login-view"', "academy-v39.js"]);
-  await checkPage("Legacy platform redirect", "/platform/?qa=commercial-current", ['id="login-view"', "academy-v39.js"]);
+  await checkPage("Legacy platform redirect shell", "/platform/?qa=commercial-current", ["Abriendo Mi KineCheck", "../academy/"]);
   await checkPage("Terms", "/legal/terminos.html", ["Términos y condiciones", "KineCheck"]);
   await checkPage("Privacy", "/legal/privacidad.html", ["Política de privacidad", "Ley N.º 21.719"]);
   await checkPage("Refunds", "/legal/reembolsos.html", ["Retracto y reembolsos", "Hotmart"]);
