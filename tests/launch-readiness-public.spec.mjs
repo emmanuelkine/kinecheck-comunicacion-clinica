@@ -29,6 +29,21 @@ async function checkOverflow(page, label) {
   assert.ok(overflow.scrollWidth <= overflow.clientWidth + 3, `${label}: desbordamiento horizontal ${overflow.scrollWidth}/${overflow.clientWidth}`);
 }
 
+async function pageText(page) {
+  return (await page.locator("body").innerText()).replace(/\s+/g, " ");
+}
+
+async function assertCleanAcademyLinks(page, label) {
+  const hrefs = await page.locator('a[href*="academy"]').evaluateAll((links) => links.map((link) => link.href));
+  assert.ok(hrefs.length > 0, `${label}: falta acceso a Academy`);
+  assert.ok(hrefs.every((href) => href.includes("/academy/") && !href.includes("20260806-final5")), `${label}: hay enlaces de Academy con versionado interno`);
+}
+
+async function openPublicPage(page, path, device) {
+  const join = path.includes("?") ? "&" : "?";
+  await page.goto(`${BASE}${path}${join}qa=${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+}
+
 try {
   for (const [device, viewport] of VIEWPORTS) {
     const context = await browser.newContext({ viewport, locale: "es-CL", timezoneId: "America/Santiago" });
@@ -39,56 +54,87 @@ try {
       if (message.type() === "error" && !/favicon|metric-event/i.test(message.text())) errors.push(`console: ${message.text()}`);
     });
 
-    await page.goto(`${BASE}/?qa=unified-${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
-    await page.waitForSelector("#kc-clear-routes", { timeout: 20000 });
-    assert.equal(await page.locator("[data-product-card]").count(), 8, `${device}: deben existir 8 productos`);
-    assert.equal(await page.locator(".product-price").count(), 8, `${device}: deben existir 8 precios visibles`);
-    assert.equal(await page.locator(".kc-route-card").count(), 3, `${device}: deben existir tres rutas claras`);
-    assert.equal(await page.locator(".kc-role-badge.student").count(), 2, `${device}: faltan las dos señales de ruta estudiante`);
-    assert.equal(await page.locator(".kc-role-badge.patient").count(), 1, `${device}: falta la señal simple para pacientes`);
-    const homeText = (await page.locator("body").innerText()).replace(/\s+/g, " ");
-    assert.ok(homeText.includes("Una cuenta. Un acceso."), `${device}: falta mensaje de entrada única`);
-    assert.ok(homeText.includes("$49.900"), `${device}: falta precio actual del pack`);
+    // Portada vigente: tres experiencias y tres productos principales.
+    await openPublicPage(page, "/", device);
+    await page.waitForSelector("#contenido", { timeout: 20000 });
+    assert.equal(await page.locator(".audience-card").count(), 3, `${device}: deben existir tres experiencias por perfil`);
+    assert.equal(await page.locator("#productos .product").count(), 3, `${device}: la portada debe destacar tres productos principales`);
+    assert.equal(await page.locator("#productos .price").count(), 3, `${device}: la portada debe mostrar tres precios`);
+    const homeText = await pageText(page);
+    for (const price of ["$39.990 CLP", "$14.990 CLP", "$9.990 CLP"]) {
+      assert.ok(homeText.includes(price), `${device}: falta ${price} en portada`);
+    }
+    assert.ok(homeText.includes("Creado por Emmanuel Zúñiga"), `${device}: falta señal de autoría`);
+    assert.ok(homeText.includes("Precios visibles"), `${device}: falta compromiso de transparencia de precio`);
     assert.ok(!homeText.includes("$59.900"), `${device}: aparece precio antiguo del pack`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(homeText), `${device}: aparecen experiencias retiradas`);
-    const accessHrefs = await page.locator('a[href*="academy"],a[href*="platform"]').evaluateAll((links) => links.map((link) => link.href));
-    assert.ok(accessHrefs.length > 0 && accessHrefs.every((href) => href.includes("/academy/")), `${device}: todos los accesos públicos deben ir a Mi KineCheck`);
-    await checkOverflow(page, `${device} portada`);
+    assert.ok((await page.locator('a[href^="mailto:soporte.kinecheck@gmail.com"]').count()) >= 1, `${device}: soporte de portada no es funcional`);
+    await assertCleanAcademyLinks(page, `${device}/portada`);
+    await checkOverflow(page, `${device}/portada`);
 
+    // Profesionales: catálogo completo, precios y CTA honestos.
+    await openPublicPage(page, "/profesionales/", device);
+    assert.equal(await page.locator("#soluciones .product").count(), 5, `${device}: profesionales debe mostrar cinco productos`);
+    assert.equal(await page.locator("#soluciones .price").count(), 5, `${device}: profesionales debe mostrar cinco precios`);
+    const professionalText = await pageText(page);
+    for (const price of ["$39.990 CLP", "$19.900 CLP", "$29.990 CLP", "$35.900 CLP"]) {
+      assert.ok(professionalText.includes(price), `${device}/profesionales: falta ${price}`);
+    }
+    assert.ok(!professionalText.includes("Ver curso"), `${device}/profesionales: un checkout sigue rotulado como “Ver curso”`);
+    assert.ok(professionalText.includes("RECOMENDADO"), `${device}/profesionales: falta producto recomendado`);
+    await assertCleanAcademyLinks(page, `${device}/profesionales`);
+    await checkOverflow(page, `${device}/profesionales`);
+
+    // Estudiantes: cuatro opciones, precios completos y badge unificado.
+    await openPublicPage(page, "/estudiantes/", device);
+    assert.equal(await page.locator("#productos .product").count(), 4, `${device}: estudiantes debe mostrar cuatro productos`);
+    assert.equal(await page.locator("#productos .price").count(), 4, `${device}: estudiantes debe mostrar cuatro precios`);
+    const studentText = await pageText(page);
+    for (const price of ["$14.990 CLP", "$49.900 CLP", "$19.900 CLP", "$29.990 CLP"]) {
+      assert.ok(studentText.includes(price), `${device}/estudiantes: falta ${price}`);
+    }
+    assert.ok(studentText.includes("RECOMENDADO"), `${device}/estudiantes: falta badge RECOMENDADO`);
+    assert.ok(!studentText.includes("PRODUCTO PRINCIPAL"), `${device}/estudiantes: conserva badge anterior`);
+    assert.ok(!studentText.includes("Ver curso"), `${device}/estudiantes: un checkout sigue rotulado como “Ver curso”`);
+    await assertCleanAcademyLinks(page, `${device}/estudiantes`);
+    await checkOverflow(page, `${device}/estudiantes`);
+
+    // Recupera: precio visible, vigencia y acceso limpio.
+    await openPublicPage(page, "/recupera/", device);
+    assert.equal(await page.locator("#incluye .price").count(), 1, `${device}: Recupera debe mostrar su precio en la sección principal`);
+    const recoveryText = await pageText(page);
+    assert.ok(recoveryText.includes("$9.990 CLP"), `${device}/recupera: falta precio`);
+    assert.ok(recoveryText.includes("Acceso por 3 meses"), `${device}/recupera: falta vigencia`);
+    await assertCleanAcademyLinks(page, `${device}/recupera`);
+    await checkOverflow(page, `${device}/recupera`);
+
+    // Las ocho fichas de producto siguen disponibles y enlazan a Hotmart/Academy.
     for (const [slug, price] of PRODUCTS) {
-      await page.goto(`${BASE}/productos/?producto=${encodeURIComponent(slug)}&qa=${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+      await openPublicPage(page, `/productos/?producto=${encodeURIComponent(slug)}`, device);
       await page.waitForSelector("#product-title", { timeout: 15000 });
       await page.waitForSelector(".product-detail-price", { timeout: 15000 });
-      const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+      const text = await pageText(page);
       assert.ok(text.includes(price), `${device}/${slug}: falta ${price}`);
-      if (slug === "kinecheck-estudiante") {
-        await page.waitForSelector("#kc-student-learning-route", { timeout: 15000 });
-        assert.ok(text.includes("No estudies todo al mismo tiempo"), `${device}: falta orientación estudiante`);
-      }
-      if (slug === "kinecheck-recupera") {
-        await page.waitForSelector("#kc-patient-simple-guide", { timeout: 15000 });
-        assert.ok(text.includes("Tres acciones. Nada más"), `${device}: falta simplificación paciente`);
-        assert.ok(await page.locator("#related-title").isHidden(), `${device}: Recupera no debe mostrar recomendaciones superpuestas`);
-      }
       const checkout = page.locator("[data-checkout]").first();
       assert.ok((await checkout.getAttribute("href") || "").startsWith("https://pay.hotmart.com/"), `${device}/${slug}: checkout inválido`);
       const access = page.locator("[data-access]").first();
-      assert.ok((await access.getAttribute("href") || "").includes("/academy/"), `${device}/${slug}: el acceso debe abrir Mi KineCheck`);
+      const accessHref = await access.getAttribute("href") || "";
+      assert.ok(accessHref.includes("/academy/") && !accessHref.includes("20260806-final5"), `${device}/${slug}: acceso a Academy inválido`);
       await checkOverflow(page, `${device}/${slug}`);
     }
 
-    await page.goto(`${BASE}/platform/?qa=${device}-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 60000 });
+    // Ruta histórica y puerta única de acceso.
+    await openPublicPage(page, "/platform/", device);
     await page.waitForURL(/\/academy\//, { timeout: 15000 });
     assert.ok(page.url().includes("/academy/"), `${device}: /platform/ debe redirigir a Mi KineCheck`);
-
     await page.waitForSelector("#login-view", { timeout: 15000 });
-    const privateText = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+    const privateText = await pageText(page);
     assert.ok(privateText.includes("Entra una vez"), `${device}: falta puerta única en Mi KineCheck`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(privateText), `${device}: quedan nombres privados superpuestos`);
     await checkOverflow(page, `${device}/mi-kinecheck`);
 
     assert.deepEqual(errors, [], `${device}: errores de navegador: ${errors.join(" | ")}`);
-    report.push({ device, status: "passed", products: PRODUCTS.length });
+    report.push({ device, status: "passed", products: PRODUCTS.length, publicProfiles: 3 });
     await context.close();
   }
 
