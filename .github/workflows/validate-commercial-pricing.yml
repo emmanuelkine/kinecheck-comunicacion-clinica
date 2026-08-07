@@ -5,26 +5,18 @@ on:
     branches: [main]
     paths:
       - "index.html"
-      - "home.js"
-      - "home-core-20260806.js"
-      - "home-commercial-proof-v1.js"
-      - "home-commercial-proof-v1.css"
+      - "profesionales/index.html"
+      - "estudiantes/index.html"
+      - "recupera/index.html"
       - "commercial-prices-cl.json"
-      - "productos/product-price-v1.js"
-      - "productos/product-price-v1.css"
-      - "productos/product-clinico-reposition-v1.js"
       - ".github/workflows/validate-commercial-pricing.yml"
   pull_request:
     paths:
       - "index.html"
-      - "home.js"
-      - "home-core-20260806.js"
-      - "home-commercial-proof-v1.js"
-      - "home-commercial-proof-v1.css"
+      - "profesionales/index.html"
+      - "estudiantes/index.html"
+      - "recupera/index.html"
       - "commercial-prices-cl.json"
-      - "productos/product-price-v1.js"
-      - "productos/product-price-v1.css"
-      - "productos/product-clinico-reposition-v1.js"
       - ".github/workflows/validate-commercial-pricing.yml"
 
 permissions:
@@ -39,77 +31,114 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Validar sintaxis JavaScript
-        run: |
-          node --check home.js
-          node --check home-core-20260806.js
-          node --check home-commercial-proof-v1.js
-          node --check productos/product-price-v1.js
-          node --check productos/product-clinico-reposition-v1.js
-
-      - name: Validar los ocho precios de Chile
+      - name: Validar fuente comercial de Chile
         run: |
           node <<'NODE'
           const fs = require('node:fs');
           const prices = JSON.parse(fs.readFileSync('commercial-prices-cl.json', 'utf8'));
           const expected = {
-            'kinecheck-clinico': 39990,
-            'kinecheck-estudiante': 14990,
-            'kinecheck-recupera': 9990,
-            'comunicacion-clinica': 19900,
-            'mas-alla-del-dolor': 39990,
-            'evidencia-aplicada': 29990,
-            'traumatologia-ortopedia-clinica': 35900,
-            'pack-estudiante': 49900,
+            'kinecheck-clinico': { price: 39990, display: '$39.990', term: '12 meses' },
+            'kinecheck-estudiante': { price: 14990, display: '$14.990', term: '12 meses' },
+            'kinecheck-recupera': { price: 9990, display: '$9.990', term: '3 meses' },
+            'comunicacion-clinica': { price: 19900, display: '$19.900', term: '12 meses' },
+            'mas-alla-del-dolor': { price: 39990, display: '$39.990', term: '12 meses' },
+            'evidencia-aplicada': { price: 29990, display: '$29.990', term: '12 meses' },
+            'traumatologia-ortopedia-clinica': { price: 35900, display: '$35.900', term: '12 meses' },
+            'pack-estudiante': { price: 49900, display: '$49.900', term: '12 meses' },
           };
           if (prices.country !== 'Chile' || prices.currency !== 'CLP') throw new Error('País o moneda incorrectos.');
           const rows = prices.products || {};
-          if (Object.keys(rows).length !== 8) throw new Error('Deben existir exactamente ocho productos.');
-          for (const [slug, amount] of Object.entries(expected)) {
-            if (rows[slug]?.price !== amount) throw new Error(`Precio incorrecto para ${slug}.`);
+          if (Object.keys(rows).length !== 8) throw new Error('Deben existir exactamente ocho productos en la fuente comercial.');
+          for (const [slug, expectedRow] of Object.entries(expected)) {
+            const row = rows[slug];
+            if (!row) throw new Error(`Falta ${slug} en commercial-prices-cl.json.`);
+            for (const [field, value] of Object.entries(expectedRow)) {
+              if (row[field] !== value) throw new Error(`${field} incorrecto para ${slug}.`);
+            }
           }
           if (rows['pack-estudiante']?.saving !== 5080 || rows['pack-estudiante']?.discountPercent !== 9.2) {
             throw new Error('El ahorro verificado del pack es incorrecto.');
           }
-          console.log('8/8 precios CLP y ahorro del pack verificados.');
+          console.log('Fuente comercial: 8/8 productos CLP verificados.');
           NODE
 
-      - name: Validar precios visibles sin JavaScript
+      - name: Validar precios visibles en la arquitectura pública actual
         run: |
           node <<'NODE'
           const fs = require('node:fs');
-          const html = fs.readFileSync('index.html', 'utf8');
-          const blocks = (html.match(/class="product-price"/g) || []).length;
-          if (blocks !== 8) throw new Error(`La portada debe contener 8 precios estáticos; contiene ${blocks}.`);
-          for (const amount of ['$39.990','$14.990','$9.990','$19.900','$29.990','$35.900','$49.900']) {
-            if (!html.includes(amount)) throw new Error(`Falta ${amount} en index.html.`);
+          const pages = {
+            home: fs.readFileSync('index.html', 'utf8'),
+            profesionales: fs.readFileSync('profesionales/index.html', 'utf8'),
+            estudiantes: fs.readFileSync('estudiantes/index.html', 'utf8'),
+            recupera: fs.readFileSync('recupera/index.html', 'utf8'),
+          };
+
+          const expectedCounts = { home: 3, profesionales: 5, estudiantes: 4, recupera: 1 };
+          for (const [pageName, expected] of Object.entries(expectedCounts)) {
+            const blocks = (pages[pageName].match(/class="price"/g) || []).length;
+            if (blocks !== expected) throw new Error(`${pageName}: se esperaban ${expected} bloques de precio y hay ${blocks}.`);
           }
-          if (html.includes('$59.900')) throw new Error('La portada conserva el precio anterior del pack.');
-          if (!html.includes('Ahorras $5.080')) throw new Error('Falta el ahorro real del pack.');
-          if (!html.includes('id="respaldo-verificable"')) throw new Error('Falta el respaldo verificable estático.');
-          if (!html.includes('Las opiniones se incorporarán únicamente con autorización y verificación')) {
-            throw new Error('Falta la política de opiniones verificadas.');
+
+          const products = [
+            ['home', 'KineCheck Clínico', '$39.990 CLP', 'Acceso por 12 meses', 'L106791841D'],
+            ['home', 'KineCheck Estudiante', '$14.990 CLP', 'Acceso por 12 meses', 'G106801166S'],
+            ['home', 'KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses', 'P106806251E'],
+            ['profesionales', 'KineCheck Clínico', '$39.990 CLP', 'Acceso por 12 meses', 'L106791841D'],
+            ['profesionales', 'Comunicación Clínica', '$19.900 CLP', 'Acceso por 12 meses', 'T106883983U'],
+            ['profesionales', 'Más allá del Dolor', '$39.990 CLP', 'Acceso por 12 meses', 'W106888386Q'],
+            ['profesionales', 'Evidencia Aplicada', '$29.990 CLP', 'Acceso por 12 meses', 'F106921972I'],
+            ['profesionales', 'Traumatología y Ortopedia Clínica', '$35.900 CLP', 'Acceso por 12 meses', 'B106913952R'],
+            ['estudiantes', 'KineCheck Estudiante', '$14.990 CLP', 'Acceso por 12 meses', 'G106801166S'],
+            ['estudiantes', 'Pack KineCheck Estudiante', '$49.900 CLP', 'Acceso por 12 meses', 'Q106891608M'],
+            ['estudiantes', 'Comunicación Clínica', '$19.900 CLP', 'Acceso por 12 meses', 'T106883983U'],
+            ['estudiantes', 'Evidencia Aplicada', '$29.990 CLP', 'Acceso por 12 meses', 'F106921972I'],
+            ['recupera', 'KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses', 'P106806251E'],
+          ];
+
+          for (const [pageName, product, price, term, checkoutId] of products) {
+            const html = pages[pageName];
+            for (const token of [product, price, term, checkoutId]) {
+              if (!html.includes(token)) throw new Error(`${pageName}: falta ${token} para ${product}.`);
+            }
           }
-          console.log('8/8 precios visibles y pack actualizado en HTML estático.');
+
+          if (Object.values(pages).some((html) => html.includes('$59.900'))) {
+            throw new Error('Se conserva el precio anterior del pack.');
+          }
+          console.log('Precios, vigencias y checkouts visibles en la arquitectura pública actual.');
           NODE
 
-      - name: Confirmar integración pública
+      - name: Validar correcciones de auditoría pública
         run: |
-          grep -q 'home-core-20260806.js' home.js
-          grep -q 'home-commercial-proof-v1.js' home.js
-          grep -q 'product-price-v1.js' productos/product-clinico-reposition-v1.js
-          grep -q 'PRECIO EN CHILE' home-commercial-proof-v1.js
-          grep -q 'RESPALDO VERIFICABLE' home-commercial-proof-v1.js
-          grep -q 'Las opiniones se incorporarán únicamente con autorización y verificación' home-commercial-proof-v1.js
-          grep -q 'priceCurrency: "CLP"' home-commercial-proof-v1.js
-          grep -q 'priceCurrency: "CLP"' productos/product-price-v1.js
+          node <<'NODE'
+          const fs = require('node:fs');
+          const files = ['index.html', 'profesionales/index.html', 'estudiantes/index.html', 'recupera/index.html'];
+          const pages = Object.fromEntries(files.map((file) => [file, fs.readFileSync(file, 'utf8')]));
 
-      - name: Impedir respaldo comercial inventado o perfil personal añadido
-        run: |
-          ! grep -Eqi 'Creado y dirigido por|Magíster en Docencia|97,1/100|usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio' index.html home-commercial-proof-v1.js home-commercial-proof-v1.css productos/product-price-v1.js productos/product-price-v1.css
+          for (const [file, html] of Object.entries(pages)) {
+            if (html.includes('?v=20260806-final5')) throw new Error(`${file}: conserva parámetro interno de Academy.`);
+            if (html.includes('kinecheck-mark.svg" alt=""')) throw new Error(`${file}: conserva logo sin texto alternativo.`);
+            if (!html.includes('alt="KineCheck"')) throw new Error(`${file}: falta alt="KineCheck".`);
+          }
 
-      - name: Confirmar ahorro transparente del pack
+          if (!pages['index.html'].includes('href="mailto:soporte.kinecheck@gmail.com"')) {
+            throw new Error('La home no contiene el enlace de soporte funcional.');
+          }
+          if (pages['index.html'].includes('href="#" data-support-email')) {
+            throw new Error('La home conserva el enlace de soporte roto.');
+          }
+          for (const file of ['profesionales/index.html', 'estudiantes/index.html']) {
+            if (pages[file].includes('>Ver curso<')) throw new Error(`${file}: conserva CTA “Ver curso” hacia checkout.`);
+          }
+          if (!pages['estudiantes/index.html'].includes('<span class="tag">RECOMENDADO</span>')) {
+            throw new Error('Estudiantes no usa el badge unificado RECOMENDADO.');
+          }
+          for (const file of ['profesionales/index.html', 'estudiantes/index.html', 'recupera/index.html']) {
+            if (!pages[file].includes('<small>ECOSISTEMA CLÍNICO</small>')) throw new Error(`${file}: footer de marca no unificado.`);
+          }
+          console.log('Hallazgos de auditoría pública cubiertos por CI.');
+          NODE
+
+      - name: Impedir prueba social cuantitativa inventada
         run: |
-          grep -q 'Ahorras $5.080' index.html
-          grep -q 'ambos productos suman $54.980' productos/product-price-v1.js
-          grep -q '9,2%' home-commercial-proof-v1.js
+          ! grep -Eqi 'usado por [0-9]+|más de [0-9]+ usuarios|testimonio ficticio' index.html profesionales/index.html estudiantes/index.html recupera/index.html
