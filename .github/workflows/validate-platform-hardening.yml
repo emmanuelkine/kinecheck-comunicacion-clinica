@@ -1,0 +1,37 @@
+name: Validate Platform Hardening
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'functions/api/**'
+      - 'assets/runtime-config.js'
+      - 'assets/observability.js'
+      - 'kinecheck/site-v5.js'
+      - 'academy/academy-brand-identity.js'
+      - 'tests/platform-hardening.spec.mjs'
+      - '.github/workflows/validate-platform-hardening.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-platform-hardening
+  cancel-in-progress: true
+
+jobs:
+  platform-hardening:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate hardening contracts
+        run: node tests/platform-hardening.spec.mjs
