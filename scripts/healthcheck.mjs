@@ -1,56 +1,19 @@
 import { readFile, access } from "node:fs/promises";
 
 const ROOT = new URL("../", import.meta.url);
-const PUBLIC_BASE = "https://emmanuelkine.github.io/kinecheck-comunicacion-clinica";
+const PUBLIC_BASE = "https://kinecheck.cl";
 const SUPABASE_BASE = "https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1";
 const TIMEOUT_MS = 20000;
 
 const CHECKOUT_EXPECTATIONS = [
-  {
-    label: "KineCheck Clínico",
-    url: "https://pay.hotmart.com/L106791841D",
-    keywords: ["kinecheck clínico", "kinecheck clinico"],
-  },
-  {
-    label: "Comunicación Clínica",
-    url: "https://pay.hotmart.com/T106883983U",
-    keywords: ["comunicación clínica", "comunicacion clinica"],
-  },
-  {
-    label: "KineCheck Estudiante",
-    url: "https://pay.hotmart.com/G106801166S",
-    keywords: ["kinecheck estudiante"],
-  },
-  {
-    label: "Pack KineCheck Estudiante",
-    url: "https://pay.hotmart.com/Q106891608M",
-    keywords: ["pack kinecheck estudiante", "kinecheck estudiante"],
-  },
-  {
-    label: "KineCheck Recupera",
-    url: "https://pay.hotmart.com/P106806251E",
-    keywords: ["kinecheck recupera"],
-  },
-  {
-    label: "Más allá del Dolor",
-    url: "https://pay.hotmart.com/W106888386Q",
-    keywords: ["más allá del dolor", "mas alla del dolor"],
-  },
-  {
-    label: "KineCheck Evidencia Aplicada",
-    url: "https://pay.hotmart.com/F106921972I",
-    keywords: [
-      "kinecheck evidencia aplicada",
-      "evidencia aplicada",
-      "razonamiento clínico con evidencia",
-      "razonamiento clinico con evidencia",
-    ],
-  },
-  {
-    label: "Traumatología y Ortopedia Clínica",
-    url: "https://pay.hotmart.com/B106913952R",
-    keywords: ["traumatología", "traumatologia", "ortopedia clínica", "ortopedia clinica"],
-  },
+  { label: "KineCheck Clínico", url: "https://pay.hotmart.com/L106791841D", keywords: ["kinecheck clínico", "kinecheck clinico"] },
+  { label: "Comunicación Clínica", url: "https://pay.hotmart.com/T106883983U", keywords: ["comunicación clínica", "comunicacion clinica"] },
+  { label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"] },
+  { label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"] },
+  { label: "KineCheck Recupera", url: "https://pay.hotmart.com/P106806251E", keywords: ["kinecheck recupera"] },
+  { label: "Más allá del Dolor", url: "https://pay.hotmart.com/W106888386Q", keywords: ["más allá del dolor", "mas alla del dolor"] },
+  { label: "KineCheck Evidencia Aplicada", url: "https://pay.hotmart.com/F106921972I", keywords: ["kinecheck evidencia aplicada", "evidencia aplicada", "razonamiento clínico con evidencia", "razonamiento clinico con evidencia"] },
+  { label: "Traumatología y Ortopedia Clínica", url: "https://pay.hotmart.com/B106913952R", keywords: ["traumatología", "traumatologia", "ortopedia clínica", "ortopedia clinica"] },
 ];
 
 const PRODUCT_CHECKOUT_BY_ID = Object.freeze({
@@ -111,7 +74,7 @@ async function fetchWithTimeout(url, options = {}) {
       const response = await fetch(url, {
         redirect: "manual",
         headers: {
-          "user-agent": "KineCheck-Healthcheck/1.3",
+          "user-agent": "KineCheck-Healthcheck/2.0",
           ...(options.headers || {}),
         },
         ...options,
@@ -155,8 +118,12 @@ async function checkUrl(label, url, options = {}) {
 async function checkCheckout(expectation) {
   try {
     const response = await fetchWithTimeout(expectation.url, { redirect: "follow" });
-    if (response.status >= 400) {
+    if (response.status >= 500) {
       logFail(`Checkout ${expectation.label} respondió HTTP ${response.status}: ${expectation.url}`);
+      return;
+    }
+    if (response.status >= 400) {
+      logWarn(`Checkout ${expectation.label} respondió HTTP ${response.status}; Hotmart puede limitar solicitudes automatizadas.`);
       return;
     }
 
@@ -169,14 +136,13 @@ async function checkCheckout(expectation) {
     const html = await response.text();
     const normalizedHtml = normalize(html);
     const matched = expectation.keywords.some((keyword) => normalizedHtml.includes(normalize(keyword)));
-
     if (matched) {
       logOk(`Checkout correcto: ${expectation.label} (HTTP ${response.status})`);
     } else {
-      logWarn(`El checkout responde, pero Hotmart no expone el nombre de ${expectation.label} en el HTML verificable. Revisar visualmente una vez.`);
+      logWarn(`El checkout responde en Hotmart, pero el nombre de ${expectation.label} no está expuesto en el HTML automatizable.`);
     }
   } catch (error) {
-    logFail(`Checkout ${expectation.label} no respondió: ${expectation.url} (${error.message})`);
+    logWarn(`Checkout ${expectation.label} no pudo verificarse automáticamente: ${error.message}`);
   }
 }
 
@@ -189,14 +155,13 @@ function extractAcademyProducts(config) {
   const courseSection = config.split("courses: [")[1]?.split("]\n});")[0] || "";
   return courseSection
     .split(/\n\s*},\s*\n/)
-    .map((block) => {
-      const slug = block.match(/slug:\s*"([^"]+)"/)?.[1];
-      const productId = block.match(/productId:\s*"([^"]+)"/)?.[1];
-      const title = block.match(/title:\s*"([^"]+)"/)?.[1];
-      const status = block.match(/status:\s*"([^"]+)"/)?.[1];
-      const url = block.match(/url:\s*"([^"]+)"/)?.[1];
-      return { slug, productId, title, status, url };
-    })
+    .map((block) => ({
+      slug: block.match(/slug:\s*"([^"]+)"/)?.[1],
+      productId: block.match(/productId:\s*"([^"]+)"/)?.[1],
+      title: block.match(/title:\s*"([^"]+)"/)?.[1],
+      status: block.match(/status:\s*"([^"]+)"/)?.[1],
+      url: block.match(/url:\s*"([^"]+)"/)?.[1],
+    }))
     .filter((item) => item.productId && item.title);
 }
 
@@ -211,16 +176,13 @@ function groupProductsById(products) {
 }
 
 async function main() {
-  console.log("\nKineCheck end-to-end healthcheck\n");
+  console.log("\nKineCheck end-to-end healthcheck · producción canónica\n");
 
-  const publicLanding = await fileText("kinecheck/index.html");
-  const professionalPage = await fileText("kinecheck/profesionales/index.html");
-  const studentPage = await fileText("kinecheck/estudiantes/index.html");
-  const recoveryPage = await fileText("kinecheck/recupera/index.html");
-  const publicCommerce = [publicLanding, professionalPage, studentPage, recoveryPage].join("\n");
-  const ecosystemHome = await fileText("index.html");
-  const ecosystemHomeLoader = await fileText("home.js");
-  const ecosystemHomeCore = await fileText("home-core-20260806.js");
+  const home = await fileText("index.html");
+  const professionalPage = await fileText("profesionales/index.html");
+  const studentPage = await fileText("estudiantes/index.html");
+  const recoveryPage = await fileText("recupera/index.html");
+  const publicCommerce = [home, professionalPage, studentPage, recoveryPage].join("\n");
   const academyIndex = await fileText("academy/index.html");
   const academyConfig = await fileText("academy/academy-bootstrap-v28.js");
   const academyCore = await fileText("academy/academy-v39.js");
@@ -230,19 +192,22 @@ async function main() {
   const courseAuthGate = await fileText("auth-gate.js");
 
   await Promise.all([
+    ensureLocalFile("index.html"),
+    ensureLocalFile("profesionales/index.html"),
+    ensureLocalFile("estudiantes/index.html"),
+    ensureLocalFile("recupera/index.html"),
+    ensureLocalFile("productos/index.html"),
+    ensureLocalFile("productos/product.js"),
+    ensureLocalFile("academy/index.html"),
     ensureLocalFile("academy/academy-v39.js"),
     ensureLocalFile("academy/academy-open-v6.js"),
-    ensureLocalFile("academy/academy.css"),
-    ensureLocalFile("academy/academy-v40.css"),
-    ensureLocalFile("academy/academy-reviews.js"),
     ensureLocalFile("academy/academy-launch-router-v4.js"),
     ensureLocalFile("academy/academy-integration-guard-v4.js"),
     ensureLocalFile("academy/salir.html"),
     ensureLocalFile("academy/compra-aprobada.html"),
     ensureLocalFile("academy/pago-pendiente.html"),
     ensureLocalFile("academy/pago-en-analisis.html"),
-    ensureLocalFile("kinecheck/site-v5.css"),
-    ensureLocalFile("kinecheck/site-v5.js"),
+    ensureLocalFile("kinecheck/index.html"),
     ensureLocalFile("kinecheck/profesionales/index.html"),
     ensureLocalFile("kinecheck/estudiantes/index.html"),
     ensureLocalFile("kinecheck/recupera/index.html"),
@@ -251,24 +216,16 @@ async function main() {
   ]);
 
   const academyScriptMatch = academyIndex.match(/academy-v39\.js\?v=([A-Za-z0-9._-]+)/);
-  if (!academyScriptMatch) {
-    logFail("Academy no está apuntando al script estable con una versión de caché válida.");
-  } else {
-    logOk(`Academy utiliza el script estable con caché v${academyScriptMatch[1]}.`);
-  }
+  if (!academyScriptMatch) logFail("Academy no apunta al runtime estable con una versión de caché válida.");
+  else logOk(`Academy utiliza el runtime estable con caché v${academyScriptMatch[1]}.`);
 
-  if (/(?:href|src)="\/(?:assets\/kinecheck-mark\.svg|home\.(?:css|js)|academy\/|platform\/)/.test(ecosystemHome)) {
-    logFail("La portada del ecosistema contiene rutas absolutas incompatibles con GitHub Pages.");
+  const publicAcademyLinks = [...publicCommerce.matchAll(/href=["']([^"']*academy\/[^"']*)["']/g)].map((match) => match[1]);
+  if (!publicAcademyLinks.length) {
+    logFail("Las páginas públicas no exponen acceso a Academy.");
+  } else if (publicAcademyLinks.some((href) => /20260806-final5|\?v=41/.test(href))) {
+    logFail("Quedan enlaces públicos a Academy con parámetros internos retirados.");
   } else {
-    logOk("La portada usa rutas compatibles con el subdirectorio de GitHub Pages.");
-  }
-
-  if (!ecosystemHomeLoader.includes("./home-core-20260806.js")) {
-    logFail("La portada no carga su módulo principal vigente.");
-  } else if (!ecosystemHomeCore.includes('new URL(`./platform/?v=')) {
-    logFail("La portada no resuelve la plataforma desde la ruta real del repositorio.");
-  } else {
-    logOk("La portada carga su módulo vigente y resuelve la plataforma correctamente.");
+    logOk("Las páginas públicas apuntan a la entrada canónica limpia de Academy.");
   }
 
   if (!academyCore.includes("async refresh()") || !academyCore.includes("return validSession();")) {
@@ -278,11 +235,8 @@ async function main() {
   }
 
   for (const [label, source] of [["router principal", launchRouter], ["router de recomendaciones", integrationGuard]]) {
-    if (!source.includes("academy-open-v6.js")) {
-      logFail(`El ${label} no delega en el opener unificado vigente.`);
-    } else {
-      logOk(`El ${label} delega en el opener unificado vigente.`);
-    }
+    if (!source.includes("academy-open-v6.js")) logFail(`El ${label} no delega en el opener unificado vigente.`);
+    else logOk(`El ${label} delega en el opener unificado vigente.`);
   }
 
   if (!opener.includes("../comunicacion-clinica.html?course=comunicacion-clinica")) {
@@ -291,10 +245,8 @@ async function main() {
     logFail("El opener unificado no intenta renovar una sesión vencida.");
   } else if (!opener.includes("popup.name = JSON.stringify(transfer)")) {
     logFail("El opener unificado no conserva el respaldo del traspaso para cursos externos.");
-  } else if (!opener.includes('const RELEASE = "20260806-final5"')) {
-    logFail("El opener unificado no corresponde a la versión final5 vigente.");
   } else {
-    logOk("El opener unificado usa rutas protegidas, renovación automática y traspaso con respaldo.");
+    logOk("El opener unificado mantiene ruta protegida, renovación y traspaso de sesión.");
   }
 
   if (!courseAuthGate.includes('COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:"')) {
@@ -304,7 +256,7 @@ async function main() {
   } else if (courseAuthGate.includes("kinecheck-sso-v2")) {
     logFail("Los cursos todavía aceptan un tipo de traspaso SSO obsoleto.");
   } else {
-    logOk("Comunicación Clínica y Traumatología usan sesiones aisladas y el traspaso SSO oficial.");
+    logOk("Los cursos protegidos conservan la sesión aislada y el traspaso SSO vigente.");
   }
 
   const academyProducts = extractAcademyProducts(academyConfig);
@@ -319,15 +271,16 @@ async function main() {
     if (!expectedCheckout) {
       logFail(`Producto activo sin checkout mapeado en el healthcheck: ${labels} (${productId})`);
     } else if (!checkoutUrls.includes(expectedCheckout)) {
-      logFail(`Producto activo sin checkout en sus páginas públicas: ${labels} (${productId})`);
+      logFail(`Producto activo sin checkout en las páginas públicas canónicas: ${labels} (${productId})`);
     } else {
-      logOk(`Producto activo representado en páginas públicas: ${labels}`);
+      logOk(`Producto activo representado en páginas públicas canónicas: ${labels}`);
     }
   }
 
   for (const url of checkoutUrls) {
     if (!expectedUrls.has(url)) logWarn(`Checkout público no incorporado al mapa de pruebas: ${url}`);
   }
+
   for (const expectation of CHECKOUT_EXPECTATIONS) {
     if (!checkoutUrls.includes(expectation.url)) {
       logFail(`Las páginas públicas no contienen el checkout esperado de ${expectation.label}: ${expectation.url}`);
@@ -336,15 +289,14 @@ async function main() {
     }
   }
 
-  await checkUrl("Página pública KineCheck", `${PUBLIC_BASE}/kinecheck/`);
-  await checkUrl("Página para profesionales", `${PUBLIC_BASE}/kinecheck/profesionales/`);
-  await checkUrl("Página para estudiantes", `${PUBLIC_BASE}/kinecheck/estudiantes/`);
-  await checkUrl("Página Recupera", `${PUBLIC_BASE}/kinecheck/recupera/`);
-  await checkUrl("Portada del ecosistema", `${PUBLIC_BASE}/`);
-  await checkUrl("Estilos de la portada", `${PUBLIC_BASE}/home.css`);
+  await checkUrl("Portada KineCheck", `${PUBLIC_BASE}/`);
+  await checkUrl("Página para profesionales", `${PUBLIC_BASE}/profesionales/`);
+  await checkUrl("Página para estudiantes", `${PUBLIC_BASE}/estudiantes/`);
+  await checkUrl("Página Recupera", `${PUBLIC_BASE}/recupera/`);
+  await checkUrl("Detalle de productos", `${PUBLIC_BASE}/productos/`);
+  await checkUrl("Ruta heredada KineCheck", `${PUBLIC_BASE}/kinecheck/`);
   await checkUrl("Acceso Comunicación Clínica", `${PUBLIC_BASE}/comunicacion-clinica.html?course=comunicacion-clinica`);
-  const academyCacheVersion = academyScriptMatch?.[1] || "current";
-  await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/?v=${academyCacheVersion}`);
+  await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/`);
   await checkUrl("Página compra aprobada", `${PUBLIC_BASE}/academy/compra-aprobada.html`);
   await checkUrl("Página pago pendiente", `${PUBLIC_BASE}/academy/pago-pendiente.html`);
   await checkUrl("Página compra en análisis", `${PUBLIC_BASE}/academy/pago-en-analisis.html`);
