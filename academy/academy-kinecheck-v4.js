@@ -8,6 +8,7 @@
   let pendingScrollTarget = "";
   let recoveryToken = "";
   let renderTimer = 0;
+  let lastHandledLocation = "";
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -81,6 +82,39 @@
     return VIEW_NAMES.has(raw) ? raw : "inicio";
   }
 
+  function isAuthFragment(value = "") {
+    const fragment = String(value || "").replace(/^#/, "");
+    if (!fragment) return false;
+    const params = new URLSearchParams(fragment);
+    return params.has("access_token")
+      || params.has("refresh_token")
+      || params.has("error")
+      || params.has("error_description")
+      || params.get("type") === "recovery";
+  }
+
+  function currentLocationKey() {
+  return `${location.pathname}${location.search}${location.hash}`;
+}
+
+function markLocationHandled() {
+  lastHandledLocation = currentLocationKey();
+}
+
+function applyHash(next, historyMode = "replace") {
+  const targetHash = `#${next}`;
+  if (location.hash === targetHash) {
+    markLocationHandled();
+    return;
+  }
+  if (historyMode === "push") {
+    history.pushState(null, "", targetHash);
+  } else {
+    history.replaceState(null, "", targetHash);
+  }
+  markLocationHandled();
+}
+
   function activateView(view, options = {}) {
     const next = normalizedView(view);
     document.body.dataset.kcView = next;
@@ -89,7 +123,7 @@
     });
 
     if (options.updateHash !== false) {
-      history.replaceState(null, "", `#${next}`);
+      applyHash(next, options.historyMode || "replace");
     }
 
     if (next === "biblioteca") {
@@ -105,6 +139,45 @@
       }
     });
   }
+
+  function restoreViewFromLocation(options = {}) {
+  const currentHash = String(location.hash || "");
+  if (isAuthFragment(currentHash)) {
+    markLocationHandled();
+    return;
+  }
+
+  const raw = currentHash.replace(/^#/, "").toLowerCase();
+  const legacyAliases = new Set(["productos", "recursos", "evidencia-semanal", "mis-cursos", "cuenta", "mi-cuenta"]);
+  const isValidHash = VIEW_NAMES.has(raw) || legacyAliases.has(raw);
+
+  if (!isValidHash) {
+    if (location.hash !== "#inicio") {
+      history.replaceState(null, "", "#inicio");
+    }
+    activateView("inicio", { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+    markLocationHandled();
+    return;
+  }
+
+  const next = normalizedView(currentHash);
+  const targetHash = `#${next}`;
+  if (location.hash !== targetHash) {
+    history.replaceState(null, "", targetHash);
+  }
+
+  activateView(next, { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+  markLocationHandled();
+}
+
+function handleLocationNavigation(source) {
+  if (currentLocationKey() === lastHandledLocation) return;
+  if (!parseRecoveryCallback()) {
+    restoreViewFromLocation({ updateHash: false, source });
+  } else {
+    markLocationHandled();
+  }
+}
 
   function markEvidenceSection() {
     const evidence = $("#evidencia-semanal");
@@ -369,7 +442,7 @@
       if (link) {
         event.preventDefault();
         pendingScrollTarget = link.dataset.kcScrollTarget || "";
-        activateView(link.dataset.kcViewLink);
+        activateView(link.dataset.kcViewLink, { historyMode: "push" });
         document.querySelector("#academy-sidebar")?.classList.remove("open");
         const overlay = $("#sidebar-overlay");
         if (overlay) overlay.hidden = true;
@@ -381,7 +454,7 @@
       if (scroll) {
         event.preventDefault();
         pendingScrollTarget = scroll.dataset.kcScrollTarget;
-        activateView("biblioteca");
+        activateView("biblioteca", { historyMode: "push" });
         return;
       }
 
@@ -393,7 +466,7 @@
 
       const explore = event.target.closest("[data-kc-explore-product]");
       if (explore) {
-        activateView("explorar");
+        activateView("explorar", { historyMode: "push" });
         return;
       }
 
@@ -404,12 +477,16 @@
     });
 
     window.addEventListener("hashchange", () => {
-      if (!parseRecoveryCallback()) activateView(location.hash, { updateHash: false });
-    });
+    handleLocationNavigation("hashchange");
+  });
+
+  window.addEventListener("popstate", () => {
+    handleLocationNavigation("popstate");
+  });
 
     $("#kc-home-continue")?.addEventListener("click", () => {
       if (!$("#continue-button")?.hidden) $("#continue-button").click();
-      else activateView("biblioteca");
+      else activateView("biblioteca", { historyMode: "push" });
     });
   }
 
@@ -445,7 +522,7 @@
     wireRecovery();
     wireNavigation();
     observeCoreState();
-    if (!isRecovery) activateView(location.hash, { updateHash: false, scroll: false });
+    if (!isRecovery) restoreViewFromLocation({ updateHash: false, scroll: false });
     refreshAll();
   }
 
