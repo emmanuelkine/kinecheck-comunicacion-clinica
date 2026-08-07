@@ -64,7 +64,7 @@ try {
     for (const price of ["$39.990 CLP", "$14.990 CLP", "$9.990 CLP"]) {
       assert.ok(homeText.includes(price), `${device}: falta ${price} en portada`);
     }
-    assert.ok(homeText.includes("Creado por Emmanuel Zúñiga"), `${device}: falta señal de autoría`);
+    assert.ok(/Creado por Emmanuel Zúñiga/i.test(homeText), `${device}: falta señal de autoría`);
     assert.ok(homeText.includes("Precios visibles"), `${device}: falta compromiso de transparencia de precio`);
     assert.ok(!homeText.includes("$59.900"), `${device}: aparece precio antiguo del pack`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(homeText), `${device}: aparecen experiencias retiradas`);
@@ -108,6 +108,18 @@ try {
     await assertCleanAcademyLinks(page, `${device}/recupera`);
     await checkOverflow(page, `${device}/recupera`);
 
+    // Acceso directo a /productos/: debe hidratar una ficha real, no dejar la plantilla vacía.
+    await openPublicPage(page, "/productos/", device);
+    await page.waitForFunction(() => {
+      const title = document.querySelector("#product-title")?.textContent || "";
+      const checkout = document.querySelector("[data-checkout]")?.getAttribute("href") || "";
+      return title.includes("KineCheck Clínico") && checkout.startsWith("https://pay.hotmart.com/");
+    }, { timeout: 15000 });
+    const defaultProductText = await pageText(page);
+    assert.ok(defaultProductText.includes("KineCheck Clínico"), `${device}/productos: la ficha por defecto no se hidrató`);
+    assert.ok((await page.locator("[data-checkout]").first().getAttribute("href") || "").startsWith("https://pay.hotmart.com/"), `${device}/productos: CTA por defecto inválido`);
+    await checkOverflow(page, `${device}/productos`);
+
     // Las ocho fichas de producto siguen disponibles y enlazan a Hotmart/Academy.
     for (const [slug, price] of PRODUCTS) {
       await openPublicPage(page, `/productos/?producto=${encodeURIComponent(slug)}`, device);
@@ -131,6 +143,8 @@ try {
     const privateText = await pageText(page);
     assert.ok(privateText.includes("Entra una vez"), `${device}: falta puerta única en Mi KineCheck`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(privateText), `${device}: quedan nombres privados superpuestos`);
+    await page.waitForFunction(() => document.querySelector(".kc-catalog-button")?.getAttribute("href") === "../#productos", { timeout: 15000 });
+    assert.equal(await page.locator(".kc-catalog-button").getAttribute("href"), "../#productos", `${device}: enlace de catálogo interno inválido`);
     await checkOverflow(page, `${device}/mi-kinecheck`);
 
     assert.deepEqual(errors, [], `${device}: errores de navegador: ${errors.join(" | ")}`);
