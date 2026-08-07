@@ -44,18 +44,14 @@
     const topbarBrand = document.querySelector(".topbar-brand");
     if (topbarBrand) topbarBrand.setAttribute("aria-label", `${BRAND_NAME}, inicio`);
 
-    // El router de Academy escucha data-kc-view-link mediante delegación de eventos.
-    // El botón de onboarding existía sin ese contrato, por lo que no navegaba.
     const onboardingAction = document.querySelector("#onboarding-action");
     if (onboardingAction) {
       onboardingAction.setAttribute("data-kc-view-link", "biblioteca");
       onboardingAction.setAttribute("aria-label", "Ver mi biblioteca");
     }
 
-    // Retira anclas técnicas ocultas y vacías que no aportan navegación accesible.
     document.querySelectorAll('a[hidden][aria-hidden="true"]:empty').forEach((anchor) => anchor.remove());
 
-    // Ayuda visible para compras que todavía no aparecen en la cuenta.
     const loginCard = document.querySelector(".login-card");
     if (loginCard && !document.querySelector("#purchase-access-help")) {
       const help = document.createElement("details");
@@ -85,13 +81,12 @@
 
   loadScript("../assets/runtime-config.js", "data-kc-runtime", "20260807-1");
   loadScript("../assets/observability.js", "data-kc-observability", "20260807-1");
+  loadScript("./security-hardening-v1.js", "data-kc-security-hardening", "20260807-1");
   loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260806-launch-metrics1");
   loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260806-unified1");
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
   loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260806-simplified3");
 
-  // El controlador de recomendaciones se registra primero para que los botones
-  // dinámicos no dependan de clics simulados sobre tarjetas ocultas.
   loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260806-final5");
   loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260806-final5");
   loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
