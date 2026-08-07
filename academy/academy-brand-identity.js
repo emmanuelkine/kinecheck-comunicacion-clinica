@@ -52,6 +52,8 @@
     }
   }
 
+  loadScript("../assets/runtime-config.js", "data-kc-runtime", "20260807-1");
+  loadScript("../assets/observability.js", "data-kc-observability", "20260807-1");
   loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260806-launch-metrics1");
   loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260806-unified1");
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
