@@ -87,7 +87,7 @@ check("Opener intercepta todos los botones", /data-course[\s\S]*data-kc-path-ope
 check("Opener usa captura para evitar handlers antiguos", /},\s*true\);/.test(opener));
 check("Opener abre cursos externos mediante postMessage", /popup\.postMessage\(transfer, targetOrigin\)/.test(opener));
 check("Opener espera confirmación SSO", /kinecheck-sso-accepted/.test(opener));
-check("Opener publica rutas final4", /20260806-final4/.test(opener));
+check("Opener publica rutas final5", /20260806-final5/.test(opener));
 check("Router legado solo delega", /academy-open-v6\.js/.test(legacyRouter) && !/location\.assign\(destination\)/.test(legacyRouter));
 check("Guard antiguo no intercepta clicks", !/addEventListener\(["']click["']/.test(integrationGuard));
 check("Relay limita aplicaciones externas", sameItems(setItems(relay, "PRODUCTS"), expectedApps));
