@@ -27,12 +27,12 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Validate Academy, App and SSO integration
         run: node academy/verify-kinecheck-access.mjs
 
-      - name: Wait for GitHub Pages deployment
+      - name: Wait for deployment
         if: github.event_name == 'push'
         run: sleep 75
 
