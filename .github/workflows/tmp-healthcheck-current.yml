@@ -1,0 +1,24 @@
+name: Temporary current architecture healthcheck
+
+on:
+  push:
+    branches:
+      - test/actualizar-healthcheck-arquitectura-vigente
+
+permissions:
+  contents: read
+
+jobs:
+  healthcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: test/actualizar-healthcheck-arquitectura-vigente
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run current architecture healthcheck
+        run: node scripts/healthcheck.mjs
