@@ -1,0 +1,195 @@
+name: Temporary navigation dedupe
+
+on:
+  push:
+    branches:
+      - fix/academy-navegacion-estable-clean
+
+permissions:
+  contents: write
+
+jobs:
+  patch-navigation:
+    if: ${{ !contains(github.event.head_commit.message, '[nav-dedupe]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/academy-navegacion-estable-clean
+
+      - name: Apply deterministic navigation patch
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('academy/academy-kinecheck-v4.js')
+          source = path.read_text(encoding='utf-8')
+
+          replacements = [
+              (
+                  '  let suppressNextHashEvent = false;\n',
+                  '  let lastHandledLocation = "";\n',
+              ),
+              (
+                  '''  function applyHash(next, historyMode = "replace") {
+            const targetHash = `#${next}`;
+            if (location.hash === targetHash) return;
+            suppressNextHashEvent = true;
+            if (historyMode === "push") {
+              history.pushState(null, "", targetHash);
+            } else {
+              history.replaceState(null, "", targetHash);
+            }
+            window.setTimeout(() => {
+              suppressNextHashEvent = false;
+            }, 0);
+          }
+          ''',
+                  '''  function currentLocationKey() {
+            return `${location.pathname}${location.search}${location.hash}`;
+          }
+
+          function markLocationHandled() {
+            lastHandledLocation = currentLocationKey();
+          }
+
+          function applyHash(next, historyMode = "replace") {
+            const targetHash = `#${next}`;
+            if (location.hash === targetHash) {
+              markLocationHandled();
+              return;
+            }
+            if (historyMode === "push") {
+              history.pushState(null, "", targetHash);
+            } else {
+              history.replaceState(null, "", targetHash);
+            }
+            markLocationHandled();
+          }
+          ''',
+              ),
+              (
+                  '''  function restoreViewFromLocation(options = {}) {
+            const currentHash = String(location.hash || "");
+            if (isAuthFragment(currentHash)) return;
+
+            const raw = currentHash.replace(/^#/, "").toLowerCase();
+            const legacyAliases = new Set(["productos", "recursos", "evidencia-semanal", "mis-cursos", "cuenta", "mi-cuenta"]);
+            const isValidHash = VIEW_NAMES.has(raw) || legacyAliases.has(raw);
+
+            if (!isValidHash) {
+              if (location.hash !== "#inicio") {
+                suppressNextHashEvent = true;
+                history.replaceState(null, "", "#inicio");
+                window.setTimeout(() => {
+                  suppressNextHashEvent = false;
+                }, 0);
+              }
+              activateView("inicio", { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+              return;
+            }
+
+            const next = normalizedView(currentHash);
+            const targetHash = `#${next}`;
+            if (location.hash !== targetHash) {
+              suppressNextHashEvent = true;
+              history.replaceState(null, "", targetHash);
+              window.setTimeout(() => {
+                suppressNextHashEvent = false;
+              }, 0);
+            }
+
+            activateView(next, { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+          }
+          ''',
+                  '''  function restoreViewFromLocation(options = {}) {
+            const currentHash = String(location.hash || "");
+            if (isAuthFragment(currentHash)) {
+              markLocationHandled();
+              return;
+            }
+
+            const raw = currentHash.replace(/^#/, "").toLowerCase();
+            const legacyAliases = new Set(["productos", "recursos", "evidencia-semanal", "mis-cursos", "cuenta", "mi-cuenta"]);
+            const isValidHash = VIEW_NAMES.has(raw) || legacyAliases.has(raw);
+
+            if (!isValidHash) {
+              if (location.hash !== "#inicio") {
+                history.replaceState(null, "", "#inicio");
+              }
+              activateView("inicio", { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+              markLocationHandled();
+              return;
+            }
+
+            const next = normalizedView(currentHash);
+            const targetHash = `#${next}`;
+            if (location.hash !== targetHash) {
+              history.replaceState(null, "", targetHash);
+            }
+
+            activateView(next, { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
+            markLocationHandled();
+          }
+
+          function handleLocationNavigation(source) {
+            if (currentLocationKey() === lastHandledLocation) return;
+            if (!parseRecoveryCallback()) {
+              restoreViewFromLocation({ updateHash: false, source });
+            } else {
+              markLocationHandled();
+            }
+          }
+          ''',
+              ),
+              (
+                  '''    window.addEventListener("hashchange", () => {
+              if (suppressNextHashEvent) {
+                suppressNextHashEvent = false;
+                return;
+              }
+              if (!parseRecoveryCallback()) restoreViewFromLocation({ updateHash: false, source: "hashchange" });
+            });
+
+            window.addEventListener("popstate", () => {
+              if (suppressNextHashEvent) {
+                suppressNextHashEvent = false;
+                return;
+              }
+              if (!parseRecoveryCallback()) restoreViewFromLocation({ updateHash: false, source: "popstate" });
+            });
+          ''',
+                  '''    window.addEventListener("hashchange", () => {
+              handleLocationNavigation("hashchange");
+            });
+
+            window.addEventListener("popstate", () => {
+              handleLocationNavigation("popstate");
+            });
+          ''',
+              ),
+          ]
+
+          for old, new in replacements:
+              if old not in source:
+                  raise SystemExit('Expected navigation block was not found; refusing to modify the file.')
+              source = source.replace(old, new, 1)
+
+          path.write_text(source, encoding='utf-8')
+          PY
+
+          node --check academy/academy-kinecheck-v4.js
+
+      - name: Commit patched navigation
+        shell: bash
+        run: |
+          if git diff --quiet -- academy/academy-kinecheck-v4.js; then
+            echo "No change required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add academy/academy-kinecheck-v4.js
+          git commit -m "fix(academy): deduplicar eventos de historial [nav-dedupe]"
+          git push origin HEAD:fix/academy-navegacion-estable-clean
