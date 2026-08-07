@@ -5,10 +5,13 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "profesionales/index.html"
+      - "estudiantes/index.html"
+      - "recupera/index.html"
       - "home.js"
       - "metrics-v1.js"
       - "productos/**"
-      - "academy/academy-brand-identity.js"
+      - "academy/**"
       - "platform/**"
       - "tests/launch-readiness-public.spec.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
