@@ -16,5 +16,5 @@
 .kc-product-patient .kc-route-steps li.active{border-color:rgba(239,197,96,.34)}
 .kc-product-patient .kc-route-steps b{background:rgba(239,197,96,.13);color:#ffe6a9}
 .kc-product-patient #outcomes-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media(max-width:900px){.kc-route-steps{grid-template-columns:1fr}.kc-product-patient #outcomes-grid{grid-template-columns:1fr}}
+@media(max-width:980px){.access-panel{grid-template-columns:minmax(0,1fr)}.access-panel>*{min-width:0}.access-card strong{overflow-wrap:anywhere}.step>div{min-width:0}.kc-route-steps{grid-template-columns:1fr}.kc-product-patient #outcomes-grid{grid-template-columns:1fr}}
 @media(max-width:620px){.kc-route-steps li{padding:18px}.kc-route-heading h2{font-size:30px}.kc-route-heading p{font-size:15px}}
