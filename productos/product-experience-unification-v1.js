@@ -4,9 +4,9 @@
   if (window.__KC_PRODUCT_EXPERIENCE_V1__) return;
   window.__KC_PRODUCT_EXPERIENCE_V1__ = true;
 
-  const VERSION = "20260806-unified1";
+  const VERSION = "20260807-unified2";
   const slug = new URLSearchParams(location.search).get("producto") || "kinecheck-clinico";
-  const PRIVATE_URL = new URL(`../academy/?v=${VERSION}`, location.href).toString();
+  const PRIVATE_URL = new URL("../academy/", location.href).toString();
 
   function loadStyles() {
     if (document.querySelector("link[data-kc-product-unified]")) return;
