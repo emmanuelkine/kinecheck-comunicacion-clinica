@@ -19,7 +19,8 @@ const [index, bootstrap, config, core, router, relayHtml, relayJs, recovery, rev
 ]);
 
 const appOrigin = "https://kinecheck-clinico.emmanuelkine.chatgpt.site";
-const products = ["kinecheck-clinico", "kinecheck-estudiante", "kinecheck-recupera"];
+const ssoProducts = ["kinecheck-estudiante", "kinecheck-recupera"];
+const localClinicoRoutes = ["kinecheck-clinico-guia", "kinecheck-clinico-curso"];
 const manualRoutes = ["access.html#activar", "student-access.html#activar", "patient-access.html#activar"];
 
 assert.match(
@@ -30,7 +31,7 @@ assert.match(
 assert.doesNotMatch(index, /form-action[^>]*\*/i, "form-action no debe usar comodines.");
 assert.match(relayHtml, new RegExp(`form-action ${appOrigin.replaceAll(".", "\\.")}`));
 
-for (const product of products) {
+for (const product of ssoProducts) {
   for (const source of [bootstrap, config]) {
     assert.match(source, new RegExp(`sso\\.html\\?product=${product}`));
     assert.match(source, new RegExp(`ssoProduct:\\s*"${product}"`));
@@ -39,6 +40,13 @@ for (const product of products) {
   assert.match(router, new RegExp(`"${product}"`));
   assert.match(relayJs, new RegExp(`"${product}"`));
 }
+
+for (const route of localClinicoRoutes) {
+  assert.match(bootstrap, new RegExp(route));
+  assert.match(config, new RegExp(route));
+}
+assert.match(bootstrap, /slug:\s*"kinecheck-clinico"/);
+assert.match(bootstrap, /slug:\s*"kinecheck-clinico-curso"/);
 
 for (const route of manualRoutes) {
   assert.doesNotMatch(bootstrap, new RegExp(route.replaceAll(".", "\\.")));
@@ -60,7 +68,8 @@ assert.match(relayJs, /handoff_type/);
 assert.match(router, /popup\.name = JSON\.stringify\(payload\)/);
 assert.match(integrationGuard, /popup\.name = JSON\.stringify\(payload\)/);
 assert.match(router, /comunicacion-clinica\.html\?course=comunicacion-clinica/);
-assert.match(courseAuthGate, /COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:"/);
+assert.match(courseAuthGate, /COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:"/);
+assert.match(courseAuthGate, /LEGACY_COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:"/);
 assert.match(courseAuthGate, /handoff\?\.type !== HANDOFF_TYPE/);
 assert.doesNotMatch(courseAuthGate, /kinecheck-sso-v2/);
 
@@ -80,4 +89,4 @@ assert.match(recovery, /method:\s*"PUT"/);
 assert.match(recovery, /\/auth\/v1\/user/);
 assert.match(recovery, /password\.length < 8/);
 
-console.log("KineCheck Academy OK: SSO de 3 productos, sesión móvil transitoria, CSP restringida y recuperación de contraseña.");
+console.log("KineCheck Academy OK: Clínico local, SSO de Estudiante y Recupera, sesión móvil transitoria, CSP restringida y recuperación de contraseña.");
