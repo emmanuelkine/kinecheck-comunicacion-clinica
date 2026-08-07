@@ -57,9 +57,13 @@ assert.match(academySecurity, /Si existe una cuenta asociada a este correo/);
 assert.match(academySecurity, /stopImmediatePropagation/);
 assert.match(academySecurity, /recovery-request-form/);
 assert.match(academySecurity, /reduceRoadmapNoise/);
+assert.match(academySecurity, /reduceLibraryPlaceholders/);
+assert.match(academySecurity, /data-kc-coming-soon/);
+assert.match(academySecurity, /aria-live/);
+assert.match(academySecurity, /role.*status/);
 assert.match(academySecurity, /Novedades KineCheck/);
 
 assert.match(headers, /\/academy\/\*/);
 assert.match(headers, /X-Robots-Tag:\s*noindex, nofollow/);
 
-console.log("KineCheck platform hardening OK: salud, readiness de dependencias, recuperación no enumerable, navegación, soporte post-compra y noindex de Academy.");
+console.log("KineCheck platform hardening OK: salud, readiness de dependencias, recuperación no enumerable, accesibilidad, reducción de placeholders, navegación, soporte post-compra y noindex de Academy.");
