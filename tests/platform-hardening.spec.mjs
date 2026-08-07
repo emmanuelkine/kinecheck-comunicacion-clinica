@@ -3,13 +3,14 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-const [health, ready, runtime, observability, publicJs, academyBrand] = await Promise.all([
+const [health, ready, runtime, observability, publicJs, academyBrand, headers] = await Promise.all([
   read("functions/api/health.js"),
   read("functions/api/ready.js"),
   read("assets/runtime-config.js"),
   read("assets/observability.js"),
   read("kinecheck/site-v5.js"),
   read("academy/academy-brand-identity.js"),
+  read("_headers"),
 ]);
 
 assert.match(health, /status:\s*"ok"/);
@@ -35,4 +36,12 @@ assert.match(publicJs, /observability\.js/);
 assert.match(academyBrand, /runtime-config\.js/);
 assert.match(academyBrand, /observability\.js/);
 
-console.log("KineCheck platform hardening OK: health, readiness, runtime config y diagnósticos seguros.");
+assert.match(academyBrand, /removeEmptyHiddenLinks/);
+assert.match(academyBrand, /Compré y todavía no aparece mi acceso/);
+assert.match(academyBrand, /mismo correo utilizado en Hotmart/);
+assert.match(academyBrand, /código de transacción de Hotmart/);
+assert.match(academyBrand, /No envíes contraseñas, datos clínicos ni información sensible/);
+assert.match(headers, /\/academy\/\*/);
+assert.match(headers, /X-Robots-Tag:\s*noindex, nofollow/);
+
+console.log("KineCheck platform hardening OK: salud, readiness, runtime, observabilidad, soporte post-compra y noindex de Academy.");
