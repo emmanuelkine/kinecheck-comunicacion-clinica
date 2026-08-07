@@ -3,7 +3,6 @@
 
   const BRAND_NAME = "Mi KineCheck";
   const BRAND_DESCRIPTOR = "UN SOLO ACCESO";
-  const SUPPORT_EMAIL = "soporte.kinecheck@gmail.com";
 
   function setText(selector, value) {
     const element = document.querySelector(selector);
@@ -17,66 +16,6 @@
     script.async = false;
     script.setAttribute(marker, "true");
     document.head.appendChild(script);
-  }
-
-  function removeEmptyHiddenLinks() {
-    document.querySelectorAll('a[hidden][aria-hidden="true"]').forEach((link) => {
-      if (!link.textContent.trim() && !link.querySelector("img,svg")) link.remove();
-    });
-  }
-
-  function ensurePurchaseHelp() {
-    const loginCard = document.querySelector(".login-card");
-    if (!loginCard || loginCard.querySelector("[data-kc-purchase-help]")) return;
-
-    const style = document.createElement("style");
-    style.setAttribute("data-kc-purchase-help-style", "true");
-    style.textContent = `
-      .kc-purchase-help{margin-top:14px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.035)}
-      .kc-purchase-help summary{cursor:pointer;font-weight:800;line-height:1.35}
-      .kc-purchase-help p{margin:10px 0 8px;line-height:1.5}
-      .kc-purchase-help ol{margin:0 0 10px;padding-left:20px;line-height:1.5}
-      .kc-purchase-help a{display:inline-block;margin-top:2px;font-weight:800}
-      .kc-purchase-help small{display:block;margin-top:9px;opacity:.78;line-height:1.4}
-    `;
-    document.head.appendChild(style);
-
-    const details = document.createElement("details");
-    details.className = "kc-purchase-help";
-    details.setAttribute("data-kc-purchase-help", "true");
-
-    const summary = document.createElement("summary");
-    summary.textContent = "Compré y todavía no aparece mi acceso";
-    details.appendChild(summary);
-
-    const intro = document.createElement("p");
-    intro.textContent = "Si Hotmart confirmó tu compra pero aún no ves el producto, revisa estos pasos antes de contactar soporte:";
-    details.appendChild(intro);
-
-    const list = document.createElement("ol");
-    [
-      "Confirma que ingresaste con el mismo correo utilizado en Hotmart.",
-      "Espera unos minutos y vuelve a abrir Mi KineCheck; algunas confirmaciones pueden tardar en sincronizarse.",
-      "Si sigue sin aparecer, contacta soporte indicando el correo de compra y el código de transacción de Hotmart.",
-    ].forEach((text) => {
-      const item = document.createElement("li");
-      item.textContent = text;
-      list.appendChild(item);
-    });
-    details.appendChild(list);
-
-    const support = document.createElement("a");
-    support.href = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent("Compra confirmada sin acceso en KineCheck")}`;
-    support.textContent = "Contactar soporte por acceso";
-    details.appendChild(support);
-
-    const privacy = document.createElement("small");
-    privacy.textContent = "No envíes contraseñas, datos clínicos ni información sensible por correo.";
-    details.appendChild(privacy);
-
-    const existingSupport = loginCard.querySelector(".support-link");
-    if (existingSupport) existingSupport.insertAdjacentElement("beforebegin", details);
-    else loginCard.appendChild(details);
   }
 
   function applyIdentity() {
@@ -105,15 +44,43 @@
     const topbarBrand = document.querySelector(".topbar-brand");
     if (topbarBrand) topbarBrand.setAttribute("aria-label", `${BRAND_NAME}, inicio`);
 
+    // El router de Academy escucha data-kc-view-link mediante delegación de eventos.
+    // El botón de onboarding existía sin ese contrato, por lo que no navegaba.
+    const onboardingAction = document.querySelector("#onboarding-action");
+    if (onboardingAction) {
+      onboardingAction.setAttribute("data-kc-view-link", "biblioteca");
+      onboardingAction.setAttribute("aria-label", "Ver mi biblioteca");
+    }
+
+    // Retira anclas técnicas ocultas y vacías que no aportan navegación accesible.
+    document.querySelectorAll('a[hidden][aria-hidden="true"]:empty').forEach((anchor) => anchor.remove());
+
+    // Ayuda visible para compras que todavía no aparecen en la cuenta.
+    const loginCard = document.querySelector(".login-card");
+    if (loginCard && !document.querySelector("#purchase-access-help")) {
+      const help = document.createElement("details");
+      help.id = "purchase-access-help";
+      help.className = "kc-purchase-access-help";
+      help.innerHTML = `
+        <summary>Compré y todavía no aparece mi acceso</summary>
+        <div>
+          <p>Primero confirma que estás usando el mismo correo utilizado en Hotmart. La activación puede tardar unos minutos mientras se procesa la compra.</p>
+          <p>Si el acceso sigue sin aparecer, contacta a soporte e incluye el correo de compra y el código de transacción de Hotmart.</p>
+          <p><strong>No envíes contraseñas, datos clínicos ni información sensible.</strong></p>
+          <a href="mailto:soporte.kinecheck@gmail.com?subject=Compra%20Hotmart%20sin%20acceso%20en%20KineCheck">Contactar soporte por una compra</a>
+        </div>
+      `;
+      const support = loginCard.querySelector(".support-link");
+      if (support) support.before(help);
+      else loginCard.appendChild(help);
+    }
+
     const footerCopyright = document.querySelector(".academy-footer > span:first-child");
     if (footerCopyright) {
       const year = document.querySelector("#current-year")?.textContent || String(new Date().getFullYear());
       const copy = `© <span id="current-year">${year}</span> KineCheck`;
       if (footerCopyright.innerHTML !== copy) footerCopyright.innerHTML = copy;
     }
-
-    removeEmptyHiddenLinks();
-    ensurePurchaseHelp();
   }
 
   loadScript("../assets/runtime-config.js", "data-kc-runtime", "20260807-1");
