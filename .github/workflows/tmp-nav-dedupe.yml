@@ -26,27 +26,25 @@ jobs:
           path = Path('academy/academy-kinecheck-v4.js')
           source = path.read_text(encoding='utf-8')
 
-          replacements = [
-              (
-                  '  let suppressNextHashEvent = false;\n',
-                  '  let lastHandledLocation = "";\n',
-              ),
-              (
-                  '''  function applyHash(next, historyMode = "replace") {
-            const targetHash = `#${next}`;
-            if (location.hash === targetHash) return;
-            suppressNextHashEvent = true;
-            if (historyMode === "push") {
-              history.pushState(null, "", targetHash);
-            } else {
-              history.replaceState(null, "", targetHash);
-            }
-            window.setTimeout(() => {
-              suppressNextHashEvent = false;
-            }, 0);
-          }
-          ''',
-                  '''  function currentLocationKey() {
+          old_state = '  let suppressNextHashEvent = false;'
+          if source.count(old_state) != 1:
+              raise SystemExit('Expected navigation state declaration was not found exactly once.')
+          source = source.replace(old_state, '  let lastHandledLocation = "";', 1)
+
+          def replace_between(text, start_marker, end_marker, replacement):
+              start = text.find(start_marker)
+              if start < 0:
+                  raise SystemExit(f'Start marker not found: {start_marker}')
+              end = text.find(end_marker, start)
+              if end < 0:
+                  raise SystemExit(f'End marker not found: {end_marker}')
+              return text[:start] + replacement + text[end:]
+
+          source = replace_between(
+              source,
+              '  function applyHash(next, historyMode = "replace") {',
+              '  function activateView(view, options = {}) {',
+              '''  function currentLocationKey() {
             return `${location.pathname}${location.search}${location.hash}`;
           }
 
@@ -67,43 +65,15 @@ jobs:
             }
             markLocationHandled();
           }
+
           ''',
-              ),
-              (
-                  '''  function restoreViewFromLocation(options = {}) {
-            const currentHash = String(location.hash || "");
-            if (isAuthFragment(currentHash)) return;
+          )
 
-            const raw = currentHash.replace(/^#/, "").toLowerCase();
-            const legacyAliases = new Set(["productos", "recursos", "evidencia-semanal", "mis-cursos", "cuenta", "mi-cuenta"]);
-            const isValidHash = VIEW_NAMES.has(raw) || legacyAliases.has(raw);
-
-            if (!isValidHash) {
-              if (location.hash !== "#inicio") {
-                suppressNextHashEvent = true;
-                history.replaceState(null, "", "#inicio");
-                window.setTimeout(() => {
-                  suppressNextHashEvent = false;
-                }, 0);
-              }
-              activateView("inicio", { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
-              return;
-            }
-
-            const next = normalizedView(currentHash);
-            const targetHash = `#${next}`;
-            if (location.hash !== targetHash) {
-              suppressNextHashEvent = true;
-              history.replaceState(null, "", targetHash);
-              window.setTimeout(() => {
-                suppressNextHashEvent = false;
-              }, 0);
-            }
-
-            activateView(next, { ...options, updateHash: false, historyMode: options.historyMode || "replace" });
-          }
-          ''',
-                  '''  function restoreViewFromLocation(options = {}) {
+          source = replace_between(
+              source,
+              '  function restoreViewFromLocation(options = {}) {',
+              '  function markEvidenceSection() {',
+              '''  function restoreViewFromLocation(options = {}) {
             const currentHash = String(location.hash || "");
             if (isAuthFragment(currentHash)) {
               markLocationHandled();
@@ -141,40 +111,30 @@ jobs:
               markLocationHandled();
             }
           }
-          ''',
-              ),
-              (
-                  '''    window.addEventListener("hashchange", () => {
-              if (suppressNextHashEvent) {
-                suppressNextHashEvent = false;
-                return;
-              }
-              if (!parseRecoveryCallback()) restoreViewFromLocation({ updateHash: false, source: "hashchange" });
-            });
 
-            window.addEventListener("popstate", () => {
-              if (suppressNextHashEvent) {
-                suppressNextHashEvent = false;
-                return;
-              }
-              if (!parseRecoveryCallback()) restoreViewFromLocation({ updateHash: false, source: "popstate" });
-            });
           ''',
-                  '''    window.addEventListener("hashchange", () => {
+          )
+
+          source = replace_between(
+              source,
+              '    window.addEventListener("hashchange", () => {',
+              '    $("#kc-home-continue")?.addEventListener("click", () => {',
+              '''    window.addEventListener("hashchange", () => {
               handleLocationNavigation("hashchange");
             });
 
             window.addEventListener("popstate", () => {
               handleLocationNavigation("popstate");
             });
-          ''',
-              ),
-          ]
 
-          for old, new in replacements:
-              if old not in source:
-                  raise SystemExit('Expected navigation block was not found; refusing to modify the file.')
-              source = source.replace(old, new, 1)
+          ''',
+          )
+
+          if 'suppressNextHashEvent' in source:
+              raise SystemExit('Legacy suppression flag remains after patch.')
+          for required in ('lastHandledLocation', 'handleLocationNavigation("hashchange")', 'handleLocationNavigation("popstate")'):
+              if required not in source:
+                  raise SystemExit(f'Required navigation safeguard missing: {required}')
 
           path.write_text(source, encoding='utf-8')
           PY
