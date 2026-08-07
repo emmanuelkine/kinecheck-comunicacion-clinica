@@ -32,9 +32,6 @@
         body: JSON.stringify({ email }),
       });
     } catch (error) {
-      // No exponer al usuario diferencias entre cuenta inexistente, rate-limit,
-      // problemas SMTP u otros estados del proveedor. El detalle queda solo
-      // para diagnóstico local y nunca incluye el correo del usuario.
       window.KineCheckDiagnostics?.events?.();
       console.warn("KineCheck recovery request failed", error?.name || "request_error");
     }
@@ -54,6 +51,8 @@
 
     message.hidden = false;
     message.className = "notice";
+    message.setAttribute("role", "status");
+    message.setAttribute("aria-live", "polite");
     message.textContent = "Procesando solicitud…";
 
     await secureRecovery(email);
@@ -76,15 +75,30 @@
     grid.appendChild(summary);
   }
 
+  function reduceLibraryPlaceholders() {
+    document.querySelectorAll('.kc-library-shortcuts [data-kc-coming-soon]').forEach((button) => button.remove());
+  }
+
   function normalizeBrandCopy() {
     document.querySelectorAll("#home-news-grid article strong").forEach((node) => {
       if (node.textContent.trim() === "KineCheck 4.0") node.textContent = "Novedades KineCheck";
     });
   }
 
+  function improveStatusSemantics() {
+    ["#auth-message", "#library-message", "#kc-toast", "#recovery-update-message"].forEach((selector) => {
+      const node = document.querySelector(selector);
+      if (!node) return;
+      node.setAttribute("role", "status");
+      node.setAttribute("aria-live", "polite");
+    });
+  }
+
   function apply() {
     reduceRoadmapNoise();
+    reduceLibraryPlaceholders();
     normalizeBrandCopy();
+    improveStatusSemantics();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, { once: true });
