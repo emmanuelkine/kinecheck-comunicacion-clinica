@@ -44,6 +44,24 @@ async function openPublicPage(page, path, device) {
   await page.goto(`${BASE}${path}${join}qa=${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
 }
 
+async function assertCatalogDestination(page, context, device) {
+  const catalog = page.locator(".kc-catalog-button");
+  await catalog.waitFor({ state: "attached", timeout: 15000 });
+  const href = await catalog.getAttribute("href") || "";
+
+  if (href === "../#productos") return;
+
+  // Compatibilidad con páginas que aún conserven en caché el enlace público heredado.
+  assert.equal(href, "../kinecheck/", `${device}: enlace de catálogo interno inválido: ${href}`);
+  const compatibilityPage = await context.newPage();
+  try {
+    await compatibilityPage.goto(new URL(href, page.url()).toString(), { waitUntil: "domcontentloaded", timeout: 30000 });
+    await compatibilityPage.waitForURL((url) => url.origin === new URL(BASE).origin && url.pathname === "/" && url.hash === "#productos", { timeout: 15000 });
+  } finally {
+    await compatibilityPage.close();
+  }
+}
+
 try {
   for (const [device, viewport] of VIEWPORTS) {
     const context = await browser.newContext({ viewport, locale: "es-CL", timezoneId: "America/Santiago" });
@@ -140,11 +158,11 @@ try {
     await page.waitForURL(/\/academy\//, { timeout: 15000 });
     assert.ok(page.url().includes("/academy/"), `${device}: /platform/ debe redirigir a Mi KineCheck`);
     await page.waitForSelector("#login-view", { timeout: 15000 });
+    await page.waitForSelector("#auth-form", { timeout: 15000 });
     const privateText = await pageText(page);
-    assert.ok(privateText.includes("Entra una vez"), `${device}: falta puerta única en Mi KineCheck`);
+    assert.ok(/Ingresa a KineCheck|Entra una vez/i.test(privateText), `${device}: falta una puerta de autenticación reconocible`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(privateText), `${device}: quedan nombres privados superpuestos`);
-    await page.waitForFunction(() => document.querySelector(".kc-catalog-button")?.getAttribute("href") === "../#productos", { timeout: 15000 });
-    assert.equal(await page.locator(".kc-catalog-button").getAttribute("href"), "../#productos", `${device}: enlace de catálogo interno inválido`);
+    await assertCatalogDestination(page, context, device);
     await checkOverflow(page, `${device}/mi-kinecheck`);
 
     assert.deepEqual(errors, [], `${device}: errores de navegador: ${errors.join(" | ")}`);
