@@ -63,19 +63,18 @@ assert.match(core, /return validSession\(\)/);
 assert.match(core, /access_token:\s*accessToken/);
 assert.doesNotMatch(core.match(/function submitSsoAccess[\s\S]*?\n}\n/)?.[0] || "", /refresh_token|password|transaction|email/);
 assert.match(router, /academy-open-v6\.js/);
-assert.match(router, /transport:\s*"form-post"/);
-assert.match(router, /app-sso-relay\.html/);
+assert.match(opener, /app-sso-relay\.html/);
 assert.match(relayJs, /method = "POST"/);
 assert.match(relayJs, /handoff_type/);
-assert.match(router, /popup\.name = JSON\.stringify\(payload\)/);
+assert.match(opener, /popup\.name = JSON\.stringify\(transfer\)/);
 assert.match(integrationGuard, /popup\.name = JSON\.stringify\(payload\)/);
-assert.match(router, /comunicacion-clinica\.html\?course=comunicacion-clinica/);
+assert.match(opener, /comunicacion-clinica\.html\?course=comunicacion-clinica/);
 assert.match(courseAuthGate, /COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:"/);
 assert.match(courseAuthGate, /LEGACY_COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:"/);
 assert.match(courseAuthGate, /handoff\?\.type !== HANDOFF_TYPE/);
 assert.doesNotMatch(courseAuthGate, /kinecheck-sso-v2/);
 
-for (const sessionConsumer of [router, recovery, reviews, learningPath, integrationGuard, evidence]) {
+for (const sessionConsumer of [opener, recovery, reviews, learningPath, integrationGuard, evidence]) {
   assert.match(
     sessionConsumer,
     /KINECHECK_ACADEMY_SESSION\?\.get\?\.\(\)/,
