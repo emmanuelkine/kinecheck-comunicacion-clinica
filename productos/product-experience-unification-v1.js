@@ -27,6 +27,13 @@
     if (node && node.innerHTML !== value) node.innerHTML = value;
   }
 
+  function setMetadata(title, description) {
+    document.title = title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+  }
+
   function rewriteAccess() {
     document.querySelectorAll("[data-access]").forEach((link) => {
       if (link.href !== PRIVATE_URL) link.href = PRIVATE_URL;
@@ -72,8 +79,7 @@
 
   function patientExperience() {
     document.body.classList.add("kc-product-patient");
-    document.title = "KineCheck Recupera | Mi plan y mi avance";
-    document.querySelector('meta[name="description"]')?.setAttribute("content", "KineCheck Recupera: revisa tu plan, registra cómo te sientes y observa tu avance con una experiencia simple.");
+    setMetadata("KineCheck Recupera | Mi plan y mi avance", "KineCheck Recupera: revisa tu plan, registra cómo te sientes y observa tu avance con una experiencia simple.");
     setText("#product-type", "MI RECUPERACIÓN · 3 MESES");
     setHtml("#product-title", "KineCheck <em>Recupera</em>");
     setText("#product-subtitle", "Tu plan, tu registro y tu avance");

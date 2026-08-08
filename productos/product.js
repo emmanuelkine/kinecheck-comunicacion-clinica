@@ -1,11 +1,12 @@
 (() => {
   "use strict";
 
-  const ACCESS_URL = "../platform/";
+  const ACCESS_URL = "../academy/";
   const CATALOG_URL = "../#productos";
   const PRODUCTS = Object.freeze({
     "kinecheck-clinico": {
       name: "KineCheck Clínico",
+      family: "KineCheck Apps",
       shortName: "Clínico",
       type: "Aplicación profesional",
       term: "12 meses",
@@ -39,6 +40,7 @@
     },
     "kinecheck-estudiante": {
       name: "KineCheck Estudiante",
+      family: "KineCheck Apps",
       shortName: "Estudiante",
       type: "Aplicación formativa",
       term: "12 meses",
@@ -72,6 +74,7 @@
     },
     "kinecheck-recupera": {
       name: "KineCheck Recupera",
+      family: "KineCheck Apps",
       shortName: "Recupera",
       type: "Aplicación de seguimiento",
       term: "3 meses",
@@ -105,6 +108,7 @@
     },
     "comunicacion-clinica": {
       name: "Comunicación Clínica",
+      family: "KineCheck Formación",
       shortName: "Comunicación",
       type: "Curso interactivo",
       term: "12 meses",
@@ -138,6 +142,7 @@
     },
     "mas-alla-del-dolor": {
       name: "Más allá del dolor",
+      family: "KineCheck Formación",
       shortName: "Más allá del dolor",
       type: "Curso clínico",
       term: "12 meses",
@@ -171,6 +176,7 @@
     },
     "evidencia-aplicada": {
       name: "Evidencia Aplicada",
+      family: "KineCheck Formación",
       shortName: "Evidencia",
       type: "Curso clínico",
       term: "12 meses",
@@ -204,6 +210,7 @@
     },
     "traumatologia-ortopedia-clinica": {
       name: "Traumatología y Ortopedia Clínica",
+      family: "KineCheck Formación",
       shortName: "Traumatología",
       type: "Curso clínico",
       term: "12 meses",
@@ -237,6 +244,7 @@
     },
     "pack-estudiante": {
       name: "Pack KineCheck Estudiante",
+      family: "KineCheck Packs",
       shortName: "Pack Estudiante",
       type: "Pack formativo",
       term: "12 meses",
@@ -282,11 +290,14 @@
   document.body.dataset.product = slug;
   document.title = `${product.name} | KineCheck`;
   document.querySelector('meta[name="description"]')?.setAttribute("content", product.description);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", `${product.name} | KineCheck`);
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", product.description);
 
   const $ = (selector) => document.querySelector(selector);
   const list = (items, renderer) => items.map(renderer).join("");
   const relatedSlugs = Object.keys(PRODUCTS).filter((item) => item !== slug).slice(0, 3);
 
+  $("#product-family").textContent = product.family;
   $("#product-type").textContent = product.type;
   $("#product-term").textContent = product.term;
   $("#product-title").innerHTML = product.name.replace(/(KineCheck|Comunicación|Evidencia|Traumatología|Más allá)/, "<em>$1</em>");
@@ -313,7 +324,7 @@
   `);
 
   const commonFaq = [
-    ["¿Cómo ingreso después de comprar?", "Crea o abre tu cuenta en kinecheck.cl/platform utilizando exactamente el mismo correo asociado a la compra en Hotmart."],
+    ["¿Cómo ingreso después de comprar?", "Crea o abre tu cuenta en kinecheck.cl/academy utilizando exactamente el mismo correo asociado a la compra en Hotmart."],
     ["¿Cuándo comienza la vigencia?", `La vigencia de ${product.term} comienza cuando el pago queda aprobado. Las compras activas anteriores a la política vigente conservan sus condiciones aplicables.`],
     ["¿Puedo compartir mi acceso?", "No. La licencia es personal e intransferible. No compartas correo, contraseña, capturas ni contenidos protegidos."],
     ["¿Funciona en celular?", "Sí. La plataforma está diseñada para computador, tablet y teléfono, aunque algunas tareas extensas son más cómodas en una pantalla mayor."],
@@ -324,7 +335,7 @@
 
   $("#related-grid").innerHTML = list(relatedSlugs, (item) => {
     const related = PRODUCTS[item];
-    return `<a class="related-card" href="./?producto=${item}"><small>${related.type.toUpperCase()}</small><strong>${related.name}</strong><span>${related.subtitle}</span></a>`;
+    return `<a class="related-card" href="./?producto=${item}"><small>${related.family.toUpperCase()} · ${related.type.toUpperCase()}</small><strong>${related.name}</strong><span>${related.subtitle}</span></a>`;
   });
 
   $("#current-year").textContent = String(new Date().getFullYear());

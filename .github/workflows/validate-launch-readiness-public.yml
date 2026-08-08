@@ -14,6 +14,7 @@ on:
       - "academy/**"
       - "platform/**"
       - "tests/launch-readiness-public.spec.mjs"
+      - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
   workflow_dispatch:
@@ -34,6 +35,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Validar regresiones del HTML inicial
+        run: node --test tests/public-source-regression.test.mjs
       - name: Instalar Playwright
         run: |
           npm init -y >/dev/null 2>&1

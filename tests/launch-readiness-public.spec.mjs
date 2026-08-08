@@ -3,14 +3,14 @@ import { chromium } from "playwright";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
 const PRODUCTS = [
-  ["kinecheck-clinico", "$39.990"],
-  ["kinecheck-estudiante", "$14.990"],
-  ["kinecheck-recupera", "$9.990"],
-  ["comunicacion-clinica", "$19.900"],
-  ["mas-alla-del-dolor", "$39.990"],
-  ["evidencia-aplicada", "$29.990"],
-  ["traumatologia-ortopedia-clinica", "$35.900"],
-  ["pack-estudiante", "$49.900"],
+  { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KineCheck Apps", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
+  { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", family: "KineCheck Apps", price: "$14.990", checkout: "https://pay.hotmart.com/G106801166S" },
+  { slug: "kinecheck-recupera", name: "KineCheck Recupera", family: "KineCheck Apps", price: "$9.990", checkout: "https://pay.hotmart.com/P106806251E" },
+  { slug: "comunicacion-clinica", name: "Comunicación Clínica", family: "KineCheck Formación", price: "$19.900", checkout: "https://pay.hotmart.com/T106883983U" },
+  { slug: "mas-alla-del-dolor", name: "Más allá del dolor", family: "KineCheck Formación", price: "$39.990", checkout: "https://pay.hotmart.com/W106888386Q" },
+  { slug: "evidencia-aplicada", name: "Evidencia Aplicada", family: "KineCheck Formación", price: "$29.990", checkout: "https://pay.hotmart.com/F106921972I" },
+  { slug: "traumatologia-ortopedia-clinica", name: "Traumatología y Ortopedia Clínica", family: "KineCheck Formación", price: "$35.900", checkout: "https://pay.hotmart.com/B106913952R" },
+  { slug: "pack-estudiante", name: "Pack KineCheck Estudiante", family: "KineCheck Packs", price: "$49.900", checkout: "https://pay.hotmart.com/Q106891608M" },
 ];
 const VIEWPORTS = [
   ["mobile", { width: 390, height: 844 }],
@@ -39,6 +39,31 @@ async function assertCleanAcademyLinks(page, label) {
   assert.ok(hrefs.every((href) => href.includes("/academy/") && !href.includes("20260806-final5")), `${label}: hay enlaces de Academy con versionado interno`);
 }
 
+async function assertOpenGraph(page, label) {
+  for (const property of ["og:type", "og:locale", "og:site_name", "og:title", "og:description", "og:url"]) {
+    const content = await page.locator(`meta[property="${property}"]`).getAttribute("content") || "";
+    assert.ok(content.trim(), `${label}: falta ${property}`);
+  }
+}
+
+async function assertPublicMenu(page, label, interactive) {
+  const button = page.locator("[data-menu-button]");
+  const navigation = page.locator("#public-navigation");
+  assert.equal(await button.getAttribute("aria-expanded"), "false", `${label}: estado inicial de menú incorrecto`);
+  assert.equal(await button.getAttribute("aria-label"), "Abrir menú", `${label}: nombre inicial de menú incorrecto`);
+  assert.equal(await button.getAttribute("aria-controls"), "public-navigation", `${label}: aria-controls incorrecto`);
+  assert.equal(await navigation.getAttribute("aria-label"), "Navegación principal", `${label}: navegación sin etiqueta`);
+  assert.equal(await page.locator("h1").count(), 1, `${label}: debe existir un solo h1`);
+
+  if (!interactive) return;
+  await button.click();
+  assert.equal(await button.getAttribute("aria-expanded"), "true", `${label}: el menú no informa apertura`);
+  assert.equal(await button.getAttribute("aria-label"), "Cerrar menú", `${label}: nombre de cierre incorrecto`);
+  await page.keyboard.press("Escape");
+  assert.equal(await button.getAttribute("aria-expanded"), "false", `${label}: Escape no cierra el menú`);
+  assert.equal(await button.getAttribute("aria-label"), "Abrir menú", `${label}: Escape no restaura el nombre`);
+}
+
 async function openPublicPage(page, path, device) {
   const join = path.includes("?") ? "&" : "?";
   await page.goto(`${BASE}${path}${join}qa=${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
@@ -63,6 +88,24 @@ async function assertCatalogDestination(page, context, device) {
 }
 
 try {
+  const noJsContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 }, locale: "es-CL" });
+  try {
+    const noJsPage = await noJsContext.newPage();
+    await noJsPage.goto(`${BASE}/productos/?qa=no-js-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 60000 });
+    const noJsText = await pageText(noJsPage);
+    assert.ok(noJsText.includes("KineCheck Clínico"), "sin JS: falta el producto clínico por defecto");
+    assert.ok(noJsText.includes("KINECHECK APPS"), "sin JS: falta familia del producto clínico");
+    assert.ok(noJsText.includes("12 meses desde la aprobación"), "sin JS: falta vigencia clínica");
+    assert.ok(noJsText.includes("Kinesiólogos titulados"), "sin JS: falta público objetivo");
+    assert.equal(await noJsPage.locator("[data-checkout]").first().getAttribute("href"), "https://pay.hotmart.com/L106791841D", "sin JS: checkout clínico incorrecto");
+    assert.equal(await noJsPage.locator("[data-access]").first().getAttribute("href"), "../academy/", "sin JS: acceso no apunta a Academy");
+    assert.equal(await noJsPage.locator('link[rel="canonical"]').getAttribute("href"), "https://kinecheck.cl/productos/", "sin JS: canonical incorrecto");
+    await assertOpenGraph(noJsPage, "sin JS/productos");
+    await checkOverflow(noJsPage, "sin JS/productos");
+  } finally {
+    await noJsContext.close();
+  }
+
   for (const [device, viewport] of VIEWPORTS) {
     const context = await browser.newContext({ viewport, locale: "es-CL", timezoneId: "America/Santiago" });
     const page = await context.newPage();
@@ -84,10 +127,12 @@ try {
     }
     assert.ok(/Creado por Emmanuel Zúñiga/i.test(homeText), `${device}: falta señal de autoría`);
     assert.ok(homeText.includes("Precios visibles"), `${device}: falta compromiso de transparencia de precio`);
+    for (const family of ["KINECHECK APPS", "KINECHECK FORMACIÓN", "KINECHECK PACKS"]) assert.ok(homeText.includes(family), `${device}: falta familia ${family}`);
     assert.ok(!homeText.includes("$59.900"), `${device}: aparece precio antiguo del pack`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(homeText), `${device}: aparecen experiencias retiradas`);
     assert.ok((await page.locator('a[href^="mailto:soporte.kinecheck@gmail.com"]').count()) >= 1, `${device}: soporte de portada no es funcional`);
     await assertCleanAcademyLinks(page, `${device}/portada`);
+    await assertPublicMenu(page, `${device}/portada`, viewport.width <= 900);
     await checkOverflow(page, `${device}/portada`);
 
     // Profesionales: catálogo completo, precios y CTA honestos.
@@ -100,7 +145,10 @@ try {
     }
     assert.ok(!professionalText.includes("Ver curso"), `${device}/profesionales: un checkout sigue rotulado como “Ver curso”`);
     assert.ok(professionalText.includes("RECOMENDADO"), `${device}/profesionales: falta producto recomendado`);
+    assert.ok(professionalText.includes("KINECHECK APPS") && professionalText.includes("KINECHECK FORMACIÓN · POR KINECHECK"), `${device}/profesionales: arquitectura de marca incompleta`);
     await assertCleanAcademyLinks(page, `${device}/profesionales`);
+    await assertOpenGraph(page, `${device}/profesionales`);
+    await assertPublicMenu(page, `${device}/profesionales`, viewport.width <= 900);
     await checkOverflow(page, `${device}/profesionales`);
 
     // Estudiantes: cuatro opciones, precios completos y badge unificado.
@@ -114,7 +162,10 @@ try {
     assert.ok(studentText.includes("RECOMENDADO"), `${device}/estudiantes: falta badge RECOMENDADO`);
     assert.ok(!studentText.includes("PRODUCTO PRINCIPAL"), `${device}/estudiantes: conserva badge anterior`);
     assert.ok(!studentText.includes("Ver curso"), `${device}/estudiantes: un checkout sigue rotulado como “Ver curso”`);
+    assert.ok(studentText.includes("KINECHECK APPS") && studentText.includes("KINECHECK FORMACIÓN · POR KINECHECK") && studentText.includes("KINECHECK PACKS"), `${device}/estudiantes: arquitectura de marca incompleta`);
     await assertCleanAcademyLinks(page, `${device}/estudiantes`);
+    await assertOpenGraph(page, `${device}/estudiantes`);
+    await assertPublicMenu(page, `${device}/estudiantes`, viewport.width <= 900);
     await checkOverflow(page, `${device}/estudiantes`);
 
     // Recupera: precio visible, vigencia y acceso limpio.
@@ -123,7 +174,11 @@ try {
     const recoveryText = await pageText(page);
     assert.ok(recoveryText.includes("$9.990 CLP"), `${device}/recupera: falta precio`);
     assert.ok(recoveryText.includes("Acceso por 3 meses"), `${device}/recupera: falta vigencia`);
+    assert.ok(recoveryText.includes("KINECHECK APPS"), `${device}/recupera: falta familia KineCheck Apps`);
+    assert.ok(recoveryText.includes("No diagnostica ni reemplaza una evaluación profesional"), `${device}/recupera: falta disclaimer de no diagnóstico`);
     await assertCleanAcademyLinks(page, `${device}/recupera`);
+    await assertOpenGraph(page, `${device}/recupera`);
+    await assertPublicMenu(page, `${device}/recupera`, viewport.width <= 900);
     await checkOverflow(page, `${device}/recupera`);
 
     // Acceso directo a /productos/: debe hidratar una ficha real, no dejar la plantilla vacía.
@@ -135,25 +190,33 @@ try {
     }, { timeout: 15000 });
     const defaultProductText = await pageText(page);
     assert.ok(defaultProductText.includes("KineCheck Clínico"), `${device}/productos: la ficha por defecto no se hidrató`);
-    assert.ok((await page.locator("[data-checkout]").first().getAttribute("href") || "").startsWith("https://pay.hotmart.com/"), `${device}/productos: CTA por defecto inválido`);
+    assert.equal(await page.locator("[data-checkout]").first().getAttribute("href"), "https://pay.hotmart.com/L106791841D", `${device}/productos: CTA por defecto inválido`);
+    await assertOpenGraph(page, `${device}/productos`);
     await checkOverflow(page, `${device}/productos`);
 
     // Las ocho fichas de producto siguen disponibles y enlazan a Hotmart/Academy.
-    for (const [slug, price] of PRODUCTS) {
+    for (const { slug, name, family, price, checkout: expectedCheckout } of PRODUCTS) {
       await openPublicPage(page, `/productos/?producto=${encodeURIComponent(slug)}`, device);
       await page.waitForSelector("#product-title", { timeout: 15000 });
       await page.waitForSelector(".product-detail-price", { timeout: 15000 });
       const text = await pageText(page);
+      assert.ok(text.includes(name), `${device}/${slug}: falta nombre del producto`);
+      assert.equal((await page.locator("#product-family").textContent() || "").trim(), family, `${device}/${slug}: familia incorrecta`);
       assert.ok(text.includes(price), `${device}/${slug}: falta ${price}`);
       const checkout = page.locator("[data-checkout]").first();
-      assert.ok((await checkout.getAttribute("href") || "").startsWith("https://pay.hotmart.com/"), `${device}/${slug}: checkout inválido`);
+      assert.equal(await checkout.getAttribute("href"), expectedCheckout, `${device}/${slug}: checkout inválido`);
       const access = page.locator("[data-access]").first();
       const accessHref = await access.getAttribute("href") || "";
       assert.ok(accessHref.includes("/academy/") && !accessHref.includes("20260806-final5"), `${device}/${slug}: acceso a Academy inválido`);
+      await assertOpenGraph(page, `${device}/${slug}`);
       await checkOverflow(page, `${device}/${slug}`);
     }
 
     // Ruta histórica y puerta única de acceso.
+    const platformShell = await context.request.get(`${BASE}/platform/?qa=shell-${Date.now()}`);
+    const platformSource = await platformShell.text();
+    assert.ok(platformSource.includes('http-equiv="refresh"') && platformSource.includes("../academy/"), `${device}: /platform/ perdió su redirección de compatibilidad`);
+    assert.ok(!platformSource.includes('id="login-view"'), `${device}: /platform/ no debe convertirse en aplicación independiente`);
     await openPublicPage(page, "/platform/", device);
     await page.waitForURL(/\/academy\//, { timeout: 15000 });
     assert.ok(page.url().includes("/academy/"), `${device}: /platform/ debe redirigir a Mi KineCheck`);
@@ -164,6 +227,17 @@ try {
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(privateText), `${device}: quedan nombres privados superpuestos`);
     await assertCatalogDestination(page, context, device);
     await checkOverflow(page, `${device}/mi-kinecheck`);
+
+    const legacyRoutes = [
+      ["/kinecheck/", (url) => url.pathname === "/" && url.hash === "#productos"],
+      ["/kinecheck/profesionales/", (url) => url.pathname === "/profesionales/"],
+      ["/kinecheck/estudiantes/", (url) => url.pathname === "/estudiantes/"],
+      ["/kinecheck/recupera/", (url) => url.pathname === "/recupera/"],
+    ];
+    for (const [legacyPath, destination] of legacyRoutes) {
+      await openPublicPage(page, legacyPath, device);
+      await page.waitForURL((url) => url.origin === new URL(BASE).origin && destination(url), { timeout: 15000 });
+    }
 
     assert.deepEqual(errors, [], `${device}: errores de navegador: ${errors.join(" | ")}`);
     report.push({ device, status: "passed", products: PRODUCTS.length, publicProfiles: 3 });

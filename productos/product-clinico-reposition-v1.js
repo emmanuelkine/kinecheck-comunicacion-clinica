@@ -56,6 +56,8 @@
 
   document.title = "KineCheck Clínico | Curso profesional y guía complementaria";
   document.querySelector('meta[name="description"]')?.setAttribute("content", "Curso profesional de evaluación, seguridad y razonamiento musculoesquelético con guía digital complementaria.");
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", "KineCheck Clínico | Curso profesional y guía complementaria");
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", "Curso profesional de evaluación, seguridad y razonamiento musculoesquelético con guía digital complementaria.");
   $("#product-type").textContent = "CURSO PROFESIONAL + GUÍA COMPLEMENTARIA";
   $("#product-term").textContent = "12 MESES";
   $("#product-title").innerHTML = "<em>KineCheck</em> Clínico";
