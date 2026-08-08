@@ -9,6 +9,7 @@ on:
       - 'academy/academy-bootstrap-v28.js'
       - 'academy/academy-clinico-course-v1.js'
       - 'academy/academy-launch-router-v4.js'
+      - 'academy/academy-open-v6.js'
       - 'academy/academy-enhancements.js'
       - 'productos/product-clinico-reposition-v1.js'
       - '_headers'
@@ -37,6 +38,7 @@ jobs:
           node --check academy/academy-clinico-course-v1.js
           node --check academy/academy-bootstrap-v28.js
           node --check academy/academy-launch-router-v4.js
+          node --check academy/academy-open-v6.js
           node --check academy/academy-enhancements.js
           node --check productos/product-clinico-reposition-v1.js
       - name: Validate curriculum structure
@@ -76,7 +78,7 @@ jobs:
           fi
           grep -q 'GUÍA COMPLEMENTARIA' academy/academy-enhancements.js
           grep -q 'CURSO PROFESIONAL' academy/academy-enhancements.js
-          grep -q '/kinecheck-clinico-guia/' academy/academy-launch-router-v4.js
+          grep -q '/kinecheck-clinico-guia/' academy/academy-open-v6.js
           grep -q '/kinecheck-clinico-guia/' _headers
       - name: Validate public routes
         run: |

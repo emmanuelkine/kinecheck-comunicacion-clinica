@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
+const IS_LOCAL = ["127.0.0.1", "localhost"].includes(new URL(BASE).hostname);
 const PRODUCTS = [
   { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KineCheck Apps", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
   { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", family: "KineCheck Apps", price: "$14.990", checkout: "https://pay.hotmart.com/G106801166S" },
@@ -110,6 +111,10 @@ try {
     const context = await browser.newContext({ viewport, locale: "es-CL", timezoneId: "America/Santiago" });
     const page = await context.newPage();
     const errors = [];
+    if (IS_LOCAL) {
+      await page.route("https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/metric-event", (route) => route.fulfill({ status: 204, body: "" }));
+      await page.route(`${BASE}/api/health`, (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"status":"ok"}' }));
+    }
     page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
     page.on("console", (message) => {
       if (message.type() === "error" && !/favicon|metric-event/i.test(message.text())) errors.push(`console: ${message.text()}`);
@@ -223,7 +228,9 @@ try {
     await page.waitForSelector("#login-view", { timeout: 15000 });
     await page.waitForSelector("#auth-form", { timeout: 15000 });
     const privateText = await pageText(page);
-    assert.ok(/Ingresa a KineCheck|Entra una vez/i.test(privateText), `${device}: falta una puerta de autenticación reconocible`);
+    const authSubmitText = (await page.locator("#auth-submit").innerText()).trim();
+    assert.match(authSubmitText, /^(?:Ingresar a KineCheck|Entrar a Mi KineCheck)$/i, `${device}: CTA de autenticación irreconocible`);
+    assert.ok(privateText.includes("Correo utilizado en la compra"), `${device}: falta contexto del correo de compra`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(privateText), `${device}: quedan nombres privados superpuestos`);
     await assertCatalogDestination(page, context, device);
     await checkOverflow(page, `${device}/mi-kinecheck`);

@@ -11,7 +11,7 @@
   document.documentElement.classList.add("js");
 
   const COMMERCE_FIX_VERSION = "20260806-commercial-proof1";
-  const PLATFORM_URL = new URL(`./platform/?v=${COMMERCE_FIX_VERSION}`, location.href).toString();
+  const ACADEMY_URL = new URL("./academy/", location.href).toString();
   const CHECKOUTS = Object.freeze({
     "kinecheck-clinico": "https://pay.hotmart.com/L106791841D",
     "kinecheck-estudiante": "https://pay.hotmart.com/G106801166S",
@@ -105,7 +105,7 @@
       enter = makeLink("enter", "Ya compré: ingresar");
       actions.appendChild(enter);
     }
-    enter.href = PLATFORM_URL;
+    enter.href = ACADEMY_URL;
     enter.textContent = "Ya compré: ingresar";
     enter.setAttribute("aria-label", `Ingresar con una compra existente de ${card.querySelector("h3")?.textContent || "KineCheck"}`);
   }
@@ -231,7 +231,7 @@
   installComplianceLinks();
 
   document.querySelectorAll('a[href*="academy/"],a[href*="platform/"]').forEach((link) => {
-    if (!link.closest(".product-actions") || link.classList.contains("enter")) link.href = PLATFORM_URL;
+    if (!link.closest(".product-actions") || link.classList.contains("enter")) link.href = ACADEMY_URL;
   });
 
   menuButton?.addEventListener("click", () => {

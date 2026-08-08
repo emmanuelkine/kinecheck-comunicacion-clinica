@@ -64,7 +64,7 @@ record(helpSource.includes("Centro de Ayuda") && helpSource.includes("../soporte
 record(!helpSource.includes("mailto:soporte.kinecheck@gmail.com"), "Help center avoids manual email-first support");
 
 const welcomeSource = await read("bienvenida/index.html");
-record(welcomeSource.includes("product-selector") && welcomeSource.includes("../platform/"), "Personalized welcome guide");
+record(welcomeSource.includes("product-selector") && welcomeSource.includes("../academy/") && !welcomeSource.includes("../platform/"), "Personalized welcome guide uses canonical Academy access");
 
 const robotsSource = await read("robots.txt");
 record(robotsSource.includes("Sitemap: https://kinecheck.cl/sitemap.xml"), "Robots references sitemap");
