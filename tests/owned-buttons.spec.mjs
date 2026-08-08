@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const FIX_SCRIPT = path.join(ROOT, "academy", "academy-owned-buttons-fix.js");
+const FIX_SCRIPT = path.join(ROOT, "academy", "academy-recommended-buttons-fix.js");
 
 const applications = ["kinecheck-estudiante", "kinecheck-recupera"];
 const courses = [
