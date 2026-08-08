@@ -61,7 +61,10 @@ test("la arquitectura oficial de marca está explícita y es consistente", async
 
   const professionals = await read("profesionales/index.html");
   assert.equal(count(professionals, "KINECHECK APPS"), 1);
-  assert.equal(count(professionals, "KINECHECK FORMACIÓN · POR KINECHECK"), 4);
+  assert.equal(count(professionals, "KINECHECK FORMACIÓN · POR KINECHECK"), 6);
+  assert.equal(count(professionals, "PRÓXIMAMENTE"), 2);
+  assert.ok(professionals.includes("Banderas Clínicas"));
+  assert.ok(professionals.includes("Dolor Lumbar"));
 
   const students = await read("estudiantes/index.html");
   assert.equal(count(students, "KINECHECK APPS"), 1);
