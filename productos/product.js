@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const ACCESS_URL = "../platform/";
+  const ACCESS_URL = "../academy/";
   const CATALOG_URL = "../#productos";
   const PRODUCTS = Object.freeze({
     "kinecheck-clinico": {
@@ -282,6 +282,8 @@
   document.body.dataset.product = slug;
   document.title = `${product.name} | KineCheck`;
   document.querySelector('meta[name="description"]')?.setAttribute("content", product.description);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", `${product.name} | KineCheck`);
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", product.description);
 
   const $ = (selector) => document.querySelector(selector);
   const list = (items, renderer) => items.map(renderer).join("");
@@ -313,7 +315,7 @@
   `);
 
   const commonFaq = [
-    ["¿Cómo ingreso después de comprar?", "Crea o abre tu cuenta en kinecheck.cl/platform utilizando exactamente el mismo correo asociado a la compra en Hotmart."],
+    ["¿Cómo ingreso después de comprar?", "Crea o abre tu cuenta en kinecheck.cl/academy utilizando exactamente el mismo correo asociado a la compra en Hotmart."],
     ["¿Cuándo comienza la vigencia?", `La vigencia de ${product.term} comienza cuando el pago queda aprobado. Las compras activas anteriores a la política vigente conservan sus condiciones aplicables.`],
     ["¿Puedo compartir mi acceso?", "No. La licencia es personal e intransferible. No compartas correo, contraseña, capturas ni contenidos protegidos."],
     ["¿Funciona en celular?", "Sí. La plataforma está diseñada para computador, tablet y teléfono, aunque algunas tareas extensas son más cómodas en una pantalla mayor."],
