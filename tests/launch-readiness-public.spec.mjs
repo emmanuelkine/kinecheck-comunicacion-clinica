@@ -3,14 +3,14 @@ import { chromium } from "playwright";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
 const PRODUCTS = [
-  { slug: "kinecheck-clinico", name: "KineCheck Clínico", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
-  { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", price: "$14.990", checkout: "https://pay.hotmart.com/G106801166S" },
-  { slug: "kinecheck-recupera", name: "KineCheck Recupera", price: "$9.990", checkout: "https://pay.hotmart.com/P106806251E" },
-  { slug: "comunicacion-clinica", name: "Comunicación Clínica", price: "$19.900", checkout: "https://pay.hotmart.com/T106883983U" },
-  { slug: "mas-alla-del-dolor", name: "Más allá del dolor", price: "$39.990", checkout: "https://pay.hotmart.com/W106888386Q" },
-  { slug: "evidencia-aplicada", name: "Evidencia Aplicada", price: "$29.990", checkout: "https://pay.hotmart.com/F106921972I" },
-  { slug: "traumatologia-ortopedia-clinica", name: "Traumatología y Ortopedia Clínica", price: "$35.900", checkout: "https://pay.hotmart.com/B106913952R" },
-  { slug: "pack-estudiante", name: "Pack KineCheck Estudiante", price: "$49.900", checkout: "https://pay.hotmart.com/Q106891608M" },
+  { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KineCheck Apps", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
+  { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", family: "KineCheck Apps", price: "$14.990", checkout: "https://pay.hotmart.com/G106801166S" },
+  { slug: "kinecheck-recupera", name: "KineCheck Recupera", family: "KineCheck Apps", price: "$9.990", checkout: "https://pay.hotmart.com/P106806251E" },
+  { slug: "comunicacion-clinica", name: "Comunicación Clínica", family: "KineCheck Formación", price: "$19.900", checkout: "https://pay.hotmart.com/T106883983U" },
+  { slug: "mas-alla-del-dolor", name: "Más allá del dolor", family: "KineCheck Formación", price: "$39.990", checkout: "https://pay.hotmart.com/W106888386Q" },
+  { slug: "evidencia-aplicada", name: "Evidencia Aplicada", family: "KineCheck Formación", price: "$29.990", checkout: "https://pay.hotmart.com/F106921972I" },
+  { slug: "traumatologia-ortopedia-clinica", name: "Traumatología y Ortopedia Clínica", family: "KineCheck Formación", price: "$35.900", checkout: "https://pay.hotmart.com/B106913952R" },
+  { slug: "pack-estudiante", name: "Pack KineCheck Estudiante", family: "KineCheck Packs", price: "$49.900", checkout: "https://pay.hotmart.com/Q106891608M" },
 ];
 const VIEWPORTS = [
   ["mobile", { width: 390, height: 844 }],
@@ -94,6 +94,7 @@ try {
     await noJsPage.goto(`${BASE}/productos/?qa=no-js-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 60000 });
     const noJsText = await pageText(noJsPage);
     assert.ok(noJsText.includes("KineCheck Clínico"), "sin JS: falta el producto clínico por defecto");
+    assert.ok(noJsText.includes("KINECHECK APPS"), "sin JS: falta familia del producto clínico");
     assert.ok(noJsText.includes("12 meses desde la aprobación"), "sin JS: falta vigencia clínica");
     assert.ok(noJsText.includes("Kinesiólogos titulados"), "sin JS: falta público objetivo");
     assert.equal(await noJsPage.locator("[data-checkout]").first().getAttribute("href"), "https://pay.hotmart.com/L106791841D", "sin JS: checkout clínico incorrecto");
@@ -126,6 +127,7 @@ try {
     }
     assert.ok(/Creado por Emmanuel Zúñiga/i.test(homeText), `${device}: falta señal de autoría`);
     assert.ok(homeText.includes("Precios visibles"), `${device}: falta compromiso de transparencia de precio`);
+    for (const family of ["KINECHECK APPS", "KINECHECK FORMACIÓN", "KINECHECK PACKS"]) assert.ok(homeText.includes(family), `${device}: falta familia ${family}`);
     assert.ok(!homeText.includes("$59.900"), `${device}: aparece precio antiguo del pack`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(homeText), `${device}: aparecen experiencias retiradas`);
     assert.ok((await page.locator('a[href^="mailto:soporte.kinecheck@gmail.com"]').count()) >= 1, `${device}: soporte de portada no es funcional`);
@@ -143,6 +145,7 @@ try {
     }
     assert.ok(!professionalText.includes("Ver curso"), `${device}/profesionales: un checkout sigue rotulado como “Ver curso”`);
     assert.ok(professionalText.includes("RECOMENDADO"), `${device}/profesionales: falta producto recomendado`);
+    assert.ok(professionalText.includes("KINECHECK APPS") && professionalText.includes("KINECHECK FORMACIÓN · POR KINECHECK"), `${device}/profesionales: arquitectura de marca incompleta`);
     await assertCleanAcademyLinks(page, `${device}/profesionales`);
     await assertOpenGraph(page, `${device}/profesionales`);
     await assertPublicMenu(page, `${device}/profesionales`, viewport.width <= 900);
@@ -159,6 +162,7 @@ try {
     assert.ok(studentText.includes("RECOMENDADO"), `${device}/estudiantes: falta badge RECOMENDADO`);
     assert.ok(!studentText.includes("PRODUCTO PRINCIPAL"), `${device}/estudiantes: conserva badge anterior`);
     assert.ok(!studentText.includes("Ver curso"), `${device}/estudiantes: un checkout sigue rotulado como “Ver curso”`);
+    assert.ok(studentText.includes("KINECHECK APPS") && studentText.includes("KINECHECK FORMACIÓN · POR KINECHECK") && studentText.includes("KINECHECK PACKS"), `${device}/estudiantes: arquitectura de marca incompleta`);
     await assertCleanAcademyLinks(page, `${device}/estudiantes`);
     await assertOpenGraph(page, `${device}/estudiantes`);
     await assertPublicMenu(page, `${device}/estudiantes`, viewport.width <= 900);
@@ -170,6 +174,7 @@ try {
     const recoveryText = await pageText(page);
     assert.ok(recoveryText.includes("$9.990 CLP"), `${device}/recupera: falta precio`);
     assert.ok(recoveryText.includes("Acceso por 3 meses"), `${device}/recupera: falta vigencia`);
+    assert.ok(recoveryText.includes("KINECHECK APPS"), `${device}/recupera: falta familia KineCheck Apps`);
     assert.ok(recoveryText.includes("No diagnostica ni reemplaza una evaluación profesional"), `${device}/recupera: falta disclaimer de no diagnóstico`);
     await assertCleanAcademyLinks(page, `${device}/recupera`);
     await assertOpenGraph(page, `${device}/recupera`);
@@ -190,12 +195,13 @@ try {
     await checkOverflow(page, `${device}/productos`);
 
     // Las ocho fichas de producto siguen disponibles y enlazan a Hotmart/Academy.
-    for (const { slug, name, price, checkout: expectedCheckout } of PRODUCTS) {
+    for (const { slug, name, family, price, checkout: expectedCheckout } of PRODUCTS) {
       await openPublicPage(page, `/productos/?producto=${encodeURIComponent(slug)}`, device);
       await page.waitForSelector("#product-title", { timeout: 15000 });
       await page.waitForSelector(".product-detail-price", { timeout: 15000 });
       const text = await pageText(page);
       assert.ok(text.includes(name), `${device}/${slug}: falta nombre del producto`);
+      assert.equal((await page.locator("#product-family").textContent() || "").trim(), family, `${device}/${slug}: familia incorrecta`);
       assert.ok(text.includes(price), `${device}/${slug}: falta ${price}`);
       const checkout = page.locator("[data-checkout]").first();
       assert.equal(await checkout.getAttribute("href"), expectedCheckout, `${device}/${slug}: checkout inválido`);

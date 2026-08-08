@@ -16,6 +16,17 @@ const PRODUCT_CHECKOUTS = [
   ["pack-estudiante", "https://pay.hotmart.com/Q106891608M"],
 ];
 
+const PRODUCT_FAMILIES = [
+  ["kinecheck-clinico", "KineCheck Apps"],
+  ["kinecheck-estudiante", "KineCheck Apps"],
+  ["kinecheck-recupera", "KineCheck Apps"],
+  ["comunicacion-clinica", "KineCheck Formación"],
+  ["mas-alla-del-dolor", "KineCheck Formación"],
+  ["evidencia-aplicada", "KineCheck Formación"],
+  ["traumatologia-ortopedia-clinica", "KineCheck Formación"],
+  ["pack-estudiante", "KineCheck Packs"],
+];
+
 function assertOpenGraph(source, url) {
   for (const property of ["og:type", "og:locale", "og:site_name", "og:title", "og:description", "og:url"]) {
     assert.ok(source.includes(`property="${property}"`), `falta ${property}`);
@@ -40,6 +51,41 @@ test("la portada conserva soporte, precios y accesos canónicos", async () => {
   assert.ok(!home.includes("20260806-final5"));
   assertAccessiblePublicShell(home);
   assert.equal(count(home, 'class="icon" aria-hidden="true"'), 3, "los emojis de perfil deben ser decorativos");
+});
+
+test("la arquitectura oficial de marca está explícita y es consistente", async () => {
+  const home = await read("index.html");
+  assert.equal(count(home, 'class="brand-family-card"'), 3, "la portada debe mostrar tres familias");
+  for (const family of ["KINECHECK APPS", "KINECHECK FORMACIÓN", "KINECHECK PACKS"]) assert.ok(home.includes(family));
+  for (const name of ["KineCheck Clínico", "KineCheck Estudiante", "KineCheck Recupera", "Comunicación Clínica", "Más allá del Dolor", "Evidencia Aplicada", "Traumatología y Ortopedia Clínica", "Pack KineCheck Estudiante"]) assert.ok(home.includes(name));
+
+  const professionals = await read("profesionales/index.html");
+  assert.equal(count(professionals, "KINECHECK APPS"), 1);
+  assert.equal(count(professionals, "KINECHECK FORMACIÓN · POR KINECHECK"), 4);
+
+  const students = await read("estudiantes/index.html");
+  assert.equal(count(students, "KINECHECK APPS"), 1);
+  assert.equal(count(students, "KINECHECK PACKS"), 1);
+  assert.equal(count(students, "KINECHECK FORMACIÓN · POR KINECHECK"), 2);
+
+  const recovery = await read("recupera/index.html");
+  assert.ok(recovery.includes("KINECHECK APPS"));
+
+  const productPage = await read("productos/index.html");
+  assert.ok(productPage.includes('id="product-family">KINECHECK APPS'));
+  const productScript = await read("productos/product.js");
+  for (const [slug, family] of PRODUCT_FAMILIES) {
+    const block = new RegExp(`"${slug}"\\s*:\\s*\\{[\\s\\S]*?family:\\s*"${family}"`);
+    assert.match(productScript, block, `${slug}: familia incorrecta`);
+  }
+
+  for (const path of ["index.html", "profesionales/index.html", "estudiantes/index.html", "recupera/index.html", "productos/index.html", "404.html", "legal/terminos.html", "legal/privacidad.html", "legal/reembolsos.html"]) {
+    const source = await read(path);
+    assert.ok(!source.includes("ECOSISTEMA CLÍNICO"), `${path}: conserva descriptor global antiguo`);
+    assert.ok(source.includes("SALUD MUSCULOESQUELÉTICA"), `${path}: falta descriptor global vigente`);
+  }
+  const manifest = await read("site.webmanifest");
+  assert.ok(manifest.includes('"name": "KineCheck Salud Musculoesquelética"'));
 });
 
 test("los perfiles publican precios, Open Graph y acceso directo a Academy", async () => {
