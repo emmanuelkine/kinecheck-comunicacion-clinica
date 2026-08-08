@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://eqhcdclyeoapmqtlduwf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
   <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./admin.css?v=20260805-1">
+  <link rel="stylesheet" href="./admin.css?v=20260807-release1">
   <script src="./admin.js?v=20260805-1" defer></script>
   <title>Centro de automatización | KineCheck</title>
 </head>
@@ -45,6 +45,72 @@
 
       <div id="action-message" class="action-message" hidden></div>
       <section id="metric-grid" class="metric-grid"></section>
+
+      <section class="panel release-panel" aria-labelledby="release-title">
+        <div class="panel-heading release-heading">
+          <div>
+            <span class="eyebrow">PREPARACIÓN DE LANZAMIENTO</span>
+            <h2 id="release-title">Estado técnico y comercial</h2>
+            <p>Corte QA: 7 de agosto de 2026 · producción canónica · commit base <code>dd515c3</code></p>
+          </div>
+          <div class="release-verdicts" aria-label="Nivel de preparación">
+            <span class="release-pill good">Beta controlada · APTA</span>
+            <span class="release-pill warning">Público limitado · PENDIENTE PRUEBAS MANUALES</span>
+            <span class="release-pill neutral">Masivo · NO CERTIFICADO</span>
+          </div>
+        </div>
+
+        <div class="release-summary">
+          <article><small>HEALTHCHECK CANÓNICO</small><strong>0 fallos · 0 advertencias</strong><span>Academy, App, SSO, Hotmart y endpoints protegidos.</span></article>
+          <article><small>CHECKOUTS HOTMART</small><strong>8 / 8 verificados</strong><span>Los ocho destinos comerciales responden correctamente.</span></article>
+          <article><small>DESPLIEGUE</small><strong>Cloudflare · OK</strong><span>Último despliegue validado en producción.</span></article>
+          <article><small>AUDITORÍA EXTERNA V3</small><strong>Hallazgos contrastados</strong><span>Falsos positivos separados de problemas reales.</span></article>
+        </div>
+
+        <div class="release-columns">
+          <article class="release-column">
+            <div class="release-column-title"><span class="status">VERIFICADO</span><h3>Corregido y certificado</h3></div>
+            <ul class="check-list done">
+              <li><strong>/productos/</strong> hidrata una ficha real y asigna checkout válido.</li>
+              <li>Soporte de la home usa correo funcional, no <code>href="#"</code>.</li>
+              <li>Precios y vigencias están visibles en páginas de perfiles.</li>
+              <li>CTAs comerciales usan “Comprar”, no “Ver curso”, cuando llevan a checkout.</li>
+              <li><strong>/platform/</strong> funciona como ruta histórica hacia <strong>/academy/</strong>.</li>
+              <li>Rutas <strong>/kinecheck/...</strong> heredadas redirigen a la arquitectura vigente.</li>
+              <li>Overflow móvil de <strong>/productos/</strong> corregido y diagnosticado.</li>
+              <li>Integración estática Academy / App / SSO validada.</li>
+            </ul>
+          </article>
+
+          <article class="release-column">
+            <div class="release-column-title"><span class="status warning">PENDIENTE</span><h3>Pruebas humanas obligatorias</h3></div>
+            <ul class="check-list pending">
+              <li>Compra real de prueba: app, curso y pack → activación → acceso.</li>
+              <li>Compra con correo distinto al de la cuenta y mensaje de recuperación.</li>
+              <li>Reembolso / chargeback → revocación automática del acceso.</li>
+              <li>Login, logout, expiración de sesión y uso simultáneo en dos dispositivos.</li>
+              <li>Safari iOS y Chrome Android con usuarios reales.</li>
+              <li>Accesibilidad real: teclado, lector de pantalla y contraste WCAG.</li>
+              <li>Core Web Vitals y rendimiento en red móvil.</li>
+              <li>Verificación externa de headers HTTP y seguridad de superficie.</li>
+            </ul>
+          </article>
+
+          <article class="release-column">
+            <div class="release-column-title"><span class="status failed">NO CONFUNDIR</span><h3>Falsos positivos de auditoría V3</h3></div>
+            <ul class="check-list false-positive">
+              <li><strong>/productos/ vacío:</strong> el HTML inicial es una plantilla; JavaScript hidrata producto, precio y CTA.</li>
+              <li><strong>/platform/ duplicado:</strong> no es una segunda Academy; es una ruta de compatibilidad.</li>
+              <li><strong>../kinecheck/ 404:</strong> la ruta existía; ahora queda consolidada mediante redirección.</li>
+              <li><strong>alt="" del isotipo:</strong> puede ser correcto cuando la imagen es decorativa y el enlace ya tiene nombre accesible.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="release-note">
+          <strong>Criterio operativo:</strong> no declarar lanzamiento comercial masivo hasta completar las pruebas manuales de compra, revocación, sesión, accesibilidad y rendimiento. La automatización confirma infraestructura y rutas; no sustituye transacciones reales ni pruebas humanas.
+        </div>
+      </section>
 
       <section class="panel">
         <div class="panel-heading"><div><span class="eyebrow">AUTOMATIZACIONES</span><h2>Últimas ejecuciones</h2></div></div>
