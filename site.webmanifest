@@ -2,7 +2,7 @@
   "name": "KineCheck Salud Musculoesquelética",
   "short_name": "KineCheck",
   "description": "Aplicaciones, cursos y herramientas digitales para kinesiología.",
-  "start_url": "/platform/",
+  "start_url": "/academy/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#041218",
