@@ -134,7 +134,7 @@ jobs:
             throw new Error('Estudiantes no usa el badge unificado RECOMENDADO.');
           }
           for (const file of ['profesionales/index.html', 'estudiantes/index.html', 'recupera/index.html']) {
-            if (!pages[file].includes('<small>ECOSISTEMA CLÍNICO</small>')) throw new Error(`${file}: footer de marca no unificado.`);
+            if (!pages[file].includes('<small>SALUD MUSCULOESQUELÉTICA</small>')) throw new Error(`${file}: footer de marca no unificado.`);
           }
           console.log('Hallazgos de auditoría pública cubiertos por CI.');
           NODE
