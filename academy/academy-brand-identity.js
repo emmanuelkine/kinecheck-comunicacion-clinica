@@ -82,8 +82,6 @@
     }
   }
 
-  // El SSO del navegador sale siempre por kinecheck.cl. El origen legado queda encapsulado en servidor.
-  loadScript("./academy-sso-same-origin-v1.js", "data-kc-sso-same-origin", "20260809-1");
   loadScript("../assets/runtime-config.js", "data-kc-runtime", "20260807-1");
   loadScript("../assets/observability.js", "data-kc-observability", "20260807-1");
   loadScript("./security-hardening-v1.js", "data-kc-security-hardening", "20260807-1");
