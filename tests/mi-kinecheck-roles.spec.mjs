@@ -31,7 +31,7 @@ function fixture(slugs) {
         <section class="kc-home-section"><h2 id="home-news-title">Noticias</h2></section>
         <section id="biblioteca"></section><section id="herramientas"></section><section id="perfil"></section><section id="cuenta"><div class="kc-page-heading"></div></section>
         <section id="kc-learning-path"></section><section id="kc-profile-stage"></section><button id="kc-sidebar-stage"></button><button id="kc-topbar-stage"></button><div id="kc-stage-modal"></div>
-        ${buttons}
+        <section id="course-grid">${buttons}</section>
       </main>
     </section>
     <div id="support-panel" hidden></div><button id="support-launcher" data-support-open>Soporte</button>
