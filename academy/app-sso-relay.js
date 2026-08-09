@@ -3,11 +3,14 @@
 
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const MAX_AGE_MS = 120000;
-  const POST_URL = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
+  const POST_URL = "/api/license/sso";
   const PRODUCTS = new Set([
     "kinecheck-estudiante",
     "kinecheck-recupera",
   ]);
+  const RECUPERA_CONSENT_VERSION = "2026-08-09-health-v1";
+  const RECUPERA_CONSENT_KEY = "kinecheck_recupera_health_consent_v1";
+  const RECUPERA_HANDOFF_KEY = "kinecheck_recupera_consent_handoff_v1";
 
   const status = document.querySelector("#relay-status");
   const errorBox = document.querySelector("#relay-error");
@@ -39,6 +42,15 @@
       return null;
     } finally {
       window.name = "";
+    }
+  }
+
+  function hasCurrentRecuperaConsent() {
+    try {
+      const record = JSON.parse(localStorage.getItem(RECUPERA_CONSENT_KEY) || "null");
+      return record?.version === RECUPERA_CONSENT_VERSION && Boolean(record?.acceptedAt);
+    } catch {
+      return false;
     }
   }
 
@@ -75,6 +87,23 @@
     return;
   }
 
+  if (product === "kinecheck-recupera" && !hasCurrentRecuperaConsent()) {
+    try {
+      sessionStorage.setItem(RECUPERA_HANDOFF_KEY, JSON.stringify({
+        product,
+        access_token: accessToken,
+        expires_at: expiresAt || "",
+        issued_at: issuedAt,
+        handoff_type: HANDOFF_TYPE,
+      }));
+      location.assign("../recupera/consentimiento.html");
+      return;
+    } catch {
+      fail("No fue posible preparar el consentimiento de privacidad de KineCheck Recupera.");
+      return;
+    }
+  }
+
   const form = document.createElement("form");
   form.method = "POST";
   form.action = POST_URL;
@@ -86,6 +115,9 @@
   hidden(form, "expires_at", expiresAt || "");
   hidden(form, "issued_at", issuedAt);
   hidden(form, "handoff_type", HANDOFF_TYPE);
+  if (product === "kinecheck-recupera") {
+    hidden(form, "privacy_consent_version", RECUPERA_CONSENT_VERSION);
+  }
 
   document.body.appendChild(form);
   if (status) status.textContent = `Validando la licencia específica de ${product === "kinecheck-estudiante" ? "KineCheck Estudiante" : "KineCheck Recupera"}…`;
