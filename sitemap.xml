@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://kinecheck.cl/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://kinecheck.cl/profesionales/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kinecheck.cl/estudiantes/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kinecheck.cl/recupera/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://kinecheck.cl/productos/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kinecheck.cl/ayuda/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kinecheck.cl/bienvenida/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://kinecheck.cl/soporte/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://kinecheck.cl/beta/</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kinecheck.cl/productos/kinecheck-clinico/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kinecheck.cl/productos/kinecheck-estudiante/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kinecheck.cl/productos/kinecheck-recupera/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kinecheck.cl/productos/comunicacion-clinica/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kinecheck.cl/productos/mas-alla-del-dolor/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kinecheck.cl/productos/evidencia-aplicada/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kinecheck.cl/productos/traumatologia-ortopedia-clinica/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kinecheck.cl/productos/pack-estudiante/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kinecheck.cl/ayuda/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kinecheck.cl/bienvenida/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kinecheck.cl/soporte/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://kinecheck.cl/legal/terminos.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://kinecheck.cl/legal/privacidad.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://kinecheck.cl/legal/reembolsos.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>

@@ -46,7 +46,7 @@
     ["Guía digital adjunta", "Apoyo para revisar preguntas, hallazgos e hipótesis. No es una ficha clínica oficial ni un repositorio de pacientes."],
   ];
   const faq = [
-    ["¿Qué es ahora KineCheck Clínico?", "Es principalmente un curso avanzado para profesionales. La guía digital es una herramienta adjunta para aplicar el método aprendido."],
+    ["¿Qué es KineCheck Clínico?", "Es un curso avanzado para profesionales. La guía digital es una herramienta complementaria para aplicar el método aprendido."],
     ["¿La guía reemplaza la ficha clínica de mi centro?", "No. Debes documentar la atención en el sistema oficial de tu institución y respetar sus exigencias legales, éticas y de seguridad."],
     ["¿Debo ingresar pacientes reales en la guía?", "No es necesario ni recomendado. Utiliza casos simulados, anonimizados o resúmenes sin datos identificables."],
     ["¿La misma compra incluye curso y guía?", "Sí. La licencia de KineCheck Clínico activa ambos componentes durante la vigencia informada."],
@@ -58,6 +58,7 @@
   document.querySelector('meta[name="description"]')?.setAttribute("content", "Curso profesional de evaluación, seguridad y razonamiento musculoesquelético con guía digital complementaria.");
   document.querySelector('meta[property="og:title"]')?.setAttribute("content", "KineCheck Clínico | Curso profesional y guía complementaria");
   document.querySelector('meta[property="og:description"]')?.setAttribute("content", "Curso profesional de evaluación, seguridad y razonamiento musculoesquelético con guía digital complementaria.");
+  $("#product-family").textContent = "KINECHECK FORMACIÓN";
   $("#product-type").textContent = "CURSO PROFESIONAL + GUÍA COMPLEMENTARIA";
   $("#product-term").textContent = "12 MESES";
   $("#product-title").innerHTML = "<em>KineCheck</em> Clínico";

@@ -46,6 +46,11 @@
   Cache-Control: no-cache, must-revalidate
   X-Robots-Tag: noindex, nofollow
 
+/recupera/consentimiento.html
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
+  Content-Security-Policy: frame-ancestors 'none'; form-action 'self'
+
 /beta/*
   Cache-Control: no-cache, must-revalidate
 

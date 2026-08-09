@@ -16,10 +16,18 @@ on:
       - 'academy/app-sso-relay.js'
       - 'academy/mi-kinecheck-v1.js'
       - 'academy/mi-kinecheck-simplify-v2.js'
+      - 'recupera/consentimiento.html'
+      - 'recupera/consentimiento-recupera.js'
+      - 'legal/privacidad.html'
+      - 'legal/terminos.html'
+      - 'profesionales/index.html'
+      - 'productos/**'
+      - 'sitemap.xml'
       - 'tests/recommended-buttons.spec.mjs'
       - 'tests/owned-buttons.spec.mjs'
       - 'tests/live-academy-runtime.spec.mjs'
       - 'tests/app-sso-relay.spec.mjs'
+      - 'tests/p0-p1-hardening.test.mjs'
       - '.github/workflows/validate-recommended-buttons.yml'
   push:
     branches: [main]
@@ -36,10 +44,18 @@ on:
       - 'academy/app-sso-relay.js'
       - 'academy/mi-kinecheck-v1.js'
       - 'academy/mi-kinecheck-simplify-v2.js'
+      - 'recupera/consentimiento.html'
+      - 'recupera/consentimiento-recupera.js'
+      - 'legal/privacidad.html'
+      - 'legal/terminos.html'
+      - 'profesionales/index.html'
+      - 'productos/**'
+      - 'sitemap.xml'
       - 'tests/recommended-buttons.spec.mjs'
       - 'tests/owned-buttons.spec.mjs'
       - 'tests/live-academy-runtime.spec.mjs'
       - 'tests/app-sso-relay.spec.mjs'
+      - 'tests/p0-p1-hardening.test.mjs'
       - '.github/workflows/validate-recommended-buttons.yml'
 
 permissions:
@@ -68,6 +84,9 @@ jobs:
           npm install --no-save @playwright/test@1.55.0
           npx playwright install --with-deps chromium webkit
 
+      - name: Validate privacy and product architecture invariants
+        run: node --test tests/p0-p1-hardening.test.mjs
+
       - name: Serve exact pull request checkout
         if: github.event_name == 'pull_request'
         run: |
@@ -83,7 +102,7 @@ jobs:
       - name: Test recommendation and owned product buttons
         run: npx playwright test tests/recommended-buttons.spec.mjs tests/owned-buttons.spec.mjs --reporter=line
 
-      - name: Test Academy runtime and app relay in Chromium
+      - name: Test Academy runtime, app relay and Recupera consent in Chromium
         id: chromium_gate
         if: always()
         continue-on-error: true
@@ -91,7 +110,7 @@ jobs:
           BASE_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:4173' || 'https://kinecheck.cl' }}
         run: npx playwright test tests/live-academy-runtime.spec.mjs tests/app-sso-relay.spec.mjs --browser=chromium --reporter=line
 
-      - name: Test Academy runtime and app relay in WebKit
+      - name: Test Academy runtime, app relay and Recupera consent in WebKit
         id: webkit_gate
         if: always()
         continue-on-error: true
