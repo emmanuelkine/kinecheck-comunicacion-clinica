@@ -1,6 +1,26 @@
 name: Validar experiencia unificada Mi KineCheck
 
 on:
+  pull_request:
+    paths:
+      - "home.js"
+      - "home-experience-unification-v1.js"
+      - "home-experience-unification-v1.css"
+      - "productos/product-clinico-reposition-v1.js"
+      - "productos/product-experience-unification-v1.js"
+      - "productos/product-experience-unification-v1.css"
+      - "academy/academy-owned-native-bridge-v1.js"
+      - "academy/academy-brand-identity.js"
+      - "academy/mi-kinecheck-v1.js"
+      - "academy/mi-kinecheck-card-copy-v1.js"
+      - "academy/mi-kinecheck-v1.css"
+      - "academy/mi-kinecheck-simplify-v2.js"
+      - "academy/mi-kinecheck-simplify-v2.css"
+      - "platform/index.html"
+      - "platform/redirect-to-mi-kinecheck-v1.js"
+      - "tests/launch-readiness-public.spec.mjs"
+      - "tests/mi-kinecheck-roles.spec.mjs"
+      - ".github/workflows/validate-unified-experience.yml"
   push:
     branches: [main]
     paths:
@@ -10,6 +30,7 @@ on:
       - "productos/product-clinico-reposition-v1.js"
       - "productos/product-experience-unification-v1.js"
       - "productos/product-experience-unification-v1.css"
+      - "academy/academy-owned-native-bridge-v1.js"
       - "academy/academy-brand-identity.js"
       - "academy/mi-kinecheck-v1.js"
       - "academy/mi-kinecheck-card-copy-v1.js"
@@ -27,7 +48,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: validate-unified-experience
+  group: validate-unified-experience-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -91,6 +112,7 @@ jobs:
         run: node tests/mi-kinecheck-roles.spec.mjs
 
       - name: Validar producción en tres tamaños
+        if: github.event_name != 'pull_request'
         env:
           BASE_URL: https://kinecheck.cl
         run: |

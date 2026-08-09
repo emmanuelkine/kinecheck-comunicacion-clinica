@@ -8,7 +8,7 @@ function fixture(slugs) {
   return `<!doctype html><html><head><meta name="description" content=""></head><body>
     <section id="login-view" hidden></section>
     <section id="dashboard-view">
-      <aside class="academy-sidebar">
+      <aside id="academy-sidebar" class="academy-sidebar">
         <nav class="sidebar-nav">
           <a data-kc-view-link="inicio"><span>⌂</span><span>Inicio</span></a>
           <a data-kc-view-link="biblioteca"><span>▤</span><span>Biblioteca</span></a>
@@ -18,7 +18,8 @@ function fixture(slugs) {
         <button class="kc-explore-link"><span>Explorar KineCheck</span></button>
         <div class="sidebar-account"><span id="sidebar-access">Cuenta activa</span><small id="sidebar-email">test@example.invalid</small></div>
       </aside>
-      <header class="topbar"><nav>
+      <div id="sidebar-overlay" hidden></div>
+      <header class="topbar"><button id="mobile-menu" aria-expanded="false">Menú</button><nav>
         <a data-kc-view-link="inicio">Inicio</a><a data-kc-view-link="biblioteca">Biblioteca</a><a data-kc-view-link="herramientas">Herramientas</a><a data-kc-view-link="perfil">Perfil</a>
       </nav></header>
       <main>
@@ -30,9 +31,10 @@ function fixture(slugs) {
         <section class="kc-home-section"><h2 id="home-news-title">Noticias</h2></section>
         <section id="biblioteca"></section><section id="herramientas"></section><section id="perfil"></section><section id="cuenta"><div class="kc-page-heading"></div></section>
         <section id="kc-learning-path"></section><section id="kc-profile-stage"></section><button id="kc-sidebar-stage"></button><button id="kc-topbar-stage"></button><div id="kc-stage-modal"></div>
-        ${buttons}
+        <section id="course-grid">${buttons}</section>
       </main>
     </section>
+    <div id="support-panel" hidden></div><button id="support-launcher" data-support-open>Soporte</button>
     <div id="kc-toast" hidden></div>
   </body></html>`;
 }
@@ -44,9 +46,9 @@ async function pageFor(slugs) {
   await page.evaluate((courses) => {
     window.KINECHECK_ACADEMY_CONFIG = { ownerEmails: [], courses: courses.map((slug) => ({ slug, title: slug, subtitle: slug, kind: slug.includes("estudiante") || slug.includes("recupera") ? "application" : "course" })) };
     window.__opened = [];
-    document.querySelectorAll("[data-course]").forEach((button) => button.addEventListener("click", () => window.__opened.push(button.dataset.course)));
-    document.querySelectorAll("[data-kc-view-link]").forEach((link) => link.addEventListener("click", () => { window.__lastView = link.dataset.kcViewLink; }));
+    window.KINECHECK_OPEN_PRODUCT = async (slug) => { window.__opened.push(slug); };
   }, slugs);
+  await page.addScriptTag({ path: "academy/academy-owned-native-bridge-v1.js" });
   await page.addScriptTag({ path: "academy/mi-kinecheck-v1.js" });
   await page.waitForTimeout(220);
   await page.addScriptTag({ path: "academy/mi-kinecheck-simplify-v2.js" });
@@ -91,7 +93,7 @@ try {
     await context.close();
   }
 
-  console.log("Mi KineCheck role UX: 3/3 perfiles aprobados.");
+  console.log("Mi KineCheck role UX: 3/3 perfiles aprobados con controlador directo.");
 } finally {
   await browser.close();
 }
