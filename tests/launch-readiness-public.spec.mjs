@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
+const IS_LOCAL = ["127.0.0.1", "localhost"].includes(new URL(BASE).hostname);
 const PRODUCTS = [
   { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KineCheck Apps", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
   { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", family: "KineCheck Apps", price: "$14.990", checkout: "https://pay.hotmart.com/G106801166S" },
@@ -66,7 +67,7 @@ async function assertPublicMenu(page, label, interactive) {
 
 async function openPublicPage(page, path, device) {
   const join = path.includes("?") ? "&" : "?";
-  await page.goto(`${BASE}${path}${join}qa=${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+  await page.goto(`${BASE}${path}${join}qa=${device}-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 30000 });
 }
 
 async function assertCatalogDestination(page, context, device) {
@@ -110,9 +111,20 @@ try {
     const context = await browser.newContext({ viewport, locale: "es-CL", timezoneId: "America/Santiago" });
     const page = await context.newPage();
     const errors = [];
+    if (IS_LOCAL) {
+      await page.route("https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/metric-event", (route) => route.fulfill({ status: 204, body: "" }));
+      await page.route(`${BASE}/api/health`, (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"status":"ok"}' }));
+    }
     page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
     page.on("console", (message) => {
-      if (message.type() === "error" && !/favicon|metric-event/i.test(message.text())) errors.push(`console: ${message.text()}`);
+      const source = message.location().url || "origen desconocido";
+      const detail = `${message.text()} ${source}`;
+      const cloudflareAnalyticsError = /(?:^|[^a-z0-9.-])(?:static\.)?cloudflareinsights\.com(?:[^a-z0-9.-]|$)/i.test(detail)
+        || /(?:^|[^a-z0-9.])beacon\.min\.js(?:[^a-z0-9.]|$)/i.test(detail);
+      const allowedError = /favicon|metric-event/i.test(detail) || cloudflareAnalyticsError;
+      if (message.type() === "error" && !allowedError) {
+        errors.push(`console: ${message.text()} @ ${source}`);
+      }
     });
 
     // Portada vigente: tres experiencias y tres productos principales.
@@ -125,8 +137,9 @@ try {
     for (const price of ["$39.990 CLP", "$14.990 CLP", "$9.990 CLP"]) {
       assert.ok(homeText.includes(price), `${device}: falta ${price} en portada`);
     }
-    assert.ok(/Creado por Emmanuel Zúñiga/i.test(homeText), `${device}: falta señal de autoría`);
     assert.ok(homeText.includes("Precios visibles"), `${device}: falta compromiso de transparencia de precio`);
+    assert.ok(homeText.includes("Compra segura"), `${device}: falta compromiso de compra segura`);
+    assert.equal(await page.locator("#confianza").count(), 0, `${device}: reapareció la sección de autor retirada del main vigente`);
     for (const family of ["KINECHECK APPS", "KINECHECK FORMACIÓN", "KINECHECK PACKS"]) assert.ok(homeText.includes(family), `${device}: falta familia ${family}`);
     assert.ok(!homeText.includes("$59.900"), `${device}: aparece precio antiguo del pack`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(homeText), `${device}: aparecen experiencias retiradas`);
@@ -137,14 +150,16 @@ try {
 
     // Profesionales: catálogo completo, precios y CTA honestos.
     await openPublicPage(page, "/profesionales/", device);
-    assert.equal(await page.locator("#soluciones .product").count(), 5, `${device}: profesionales debe mostrar cinco productos`);
+    assert.equal(await page.locator("#soluciones .product").count(), 7, `${device}: profesionales debe mostrar cinco productos disponibles y dos próximos`);
     assert.equal(await page.locator("#soluciones .price").count(), 5, `${device}: profesionales debe mostrar cinco precios`);
+    assert.equal(await page.locator("#soluciones .tag", { hasText: "PRÓXIMAMENTE" }).count(), 2, `${device}: profesionales debe distinguir exactamente dos cursos próximos`);
     const professionalText = await pageText(page);
     for (const price of ["$39.990 CLP", "$19.900 CLP", "$29.990 CLP", "$35.900 CLP"]) {
       assert.ok(professionalText.includes(price), `${device}/profesionales: falta ${price}`);
     }
     assert.ok(!professionalText.includes("Ver curso"), `${device}/profesionales: un checkout sigue rotulado como “Ver curso”`);
     assert.ok(professionalText.includes("RECOMENDADO"), `${device}/profesionales: falta producto recomendado`);
+    assert.ok(professionalText.includes("Banderas Clínicas") && professionalText.includes("Dolor Lumbar"), `${device}/profesionales: faltan cursos próximos aprobados`);
     assert.ok(professionalText.includes("KINECHECK APPS") && professionalText.includes("KINECHECK FORMACIÓN · POR KINECHECK"), `${device}/profesionales: arquitectura de marca incompleta`);
     await assertCleanAcademyLinks(page, `${device}/profesionales`);
     await assertOpenGraph(page, `${device}/profesionales`);
@@ -223,7 +238,9 @@ try {
     await page.waitForSelector("#login-view", { timeout: 15000 });
     await page.waitForSelector("#auth-form", { timeout: 15000 });
     const privateText = await pageText(page);
-    assert.ok(/Ingresa a KineCheck|Entra una vez/i.test(privateText), `${device}: falta una puerta de autenticación reconocible`);
+    const authSubmitText = (await page.locator("#auth-submit").innerText()).trim();
+    assert.match(authSubmitText, /^(?:Ingresar a KineCheck|Entrar a Mi KineCheck)$/i, `${device}: CTA de autenticación irreconocible`);
+    assert.ok(privateText.includes("Correo utilizado en la compra"), `${device}: falta contexto del correo de compra`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(privateText), `${device}: quedan nombres privados superpuestos`);
     await assertCatalogDestination(page, context, device);
     await checkOverflow(page, `${device}/mi-kinecheck`);

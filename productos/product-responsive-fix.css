@@ -1,0 +1,9 @@
+.access-panel > * {
+  min-width: 0;
+}
+
+@media (max-width: 980px) {
+  .access-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

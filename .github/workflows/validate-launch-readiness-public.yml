@@ -1,6 +1,29 @@
 name: Validar preparación pública multidispositivo
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "profesionales/index.html"
+      - "estudiantes/index.html"
+      - "recupera/index.html"
+      - "ayuda/**"
+      - "bienvenida/**"
+      - "beta/**"
+      - "soporte/**"
+      - "legal/**"
+      - "404.html"
+      - "site.webmanifest"
+      - "home.js"
+      - "metrics-v1.js"
+      - "productos/**"
+      - "academy/**"
+      - "platform/**"
+      - "tests/launch-readiness-public.spec.mjs"
+      - "tests/public-source-regression.test.mjs"
+      - "tests/product-overflow-diagnostic.mjs"
+      - ".github/workflows/validate-launch-readiness-public.yml"
   push:
     branches: [main]
     paths:
@@ -8,6 +31,13 @@ on:
       - "profesionales/index.html"
       - "estudiantes/index.html"
       - "recupera/index.html"
+      - "ayuda/**"
+      - "bienvenida/**"
+      - "beta/**"
+      - "soporte/**"
+      - "legal/**"
+      - "404.html"
+      - "site.webmanifest"
       - "home.js"
       - "metrics-v1.js"
       - "productos/**"
@@ -23,7 +53,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: validate-launch-readiness-public
+  group: validate-launch-readiness-public-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -42,11 +72,25 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
-      - name: Diagnosticar overflow móvil de productos
+      - name: Validar PR contra el checkout exacto
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/kinecheck-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          sleep 2
+          BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
+          NO_JS=1 BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
+          BASE_URL=http://127.0.0.1:4173 node tests/launch-readiness-public.spec.mjs
+      - name: Diagnosticar overflow móvil de productos en producción
+        if: github.event_name != 'pull_request'
         env:
           BASE_URL: https://kinecheck.cl
-        run: node tests/product-overflow-diagnostic.mjs
-      - name: Esperar publicación y validar
+        run: |
+          node tests/product-overflow-diagnostic.mjs
+          NO_JS=1 node tests/product-overflow-diagnostic.mjs
+      - name: Esperar publicación y validar producción
+        if: github.event_name != 'pull_request'
         env:
           BASE_URL: https://kinecheck.cl
         run: |

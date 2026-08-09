@@ -73,10 +73,15 @@ async function checkSource() {
     `home=${homePrices}, profesionales=${professionalPrices}, estudiantes=${studentPrices}, recupera=${recoveryPrices}`,
   );
 
-  const trustSignals = /CREADO POR EMMANUEL ZÚÑIGA/i.test(home)
-    && home.includes("Precios visibles")
-    && home.includes("Compra segura");
-  record("Public trust layer", trustSignals ? "PASS" : "FAIL", "author, visible-price and secure-purchase signals must be present");
+  const trustSignals = home.includes("Precios visibles")
+    && home.includes("Compra segura")
+    && home.includes("Conoce el precio antes de decidir.");
+  record("Public trust layer", trustSignals ? "PASS" : "FAIL", "visible-price, secure-purchase and price-before-decision signals must be present");
+  record(
+    "Retired creator section",
+    !/id="confianza"|CREADO POR EMMANUEL ZÚÑIGA/i.test(home) ? "PASS" : "FAIL",
+    "the creator profile intentionally removed from the current public home must not return as stale content",
+  );
   record(
     "No fabricated social proof",
     !/usado por \d+|más de \d+ usuarios|testimonio ficticio|\d+ pacientes satisfechos/i.test(publicCatalog) ? "PASS" : "FAIL",
@@ -147,7 +152,7 @@ async function checkCheckout(name, url) {
 }
 
 async function checkLive() {
-  await checkPage("Public home", "/?qa=commercial-current", ["PRODUCTOS PRINCIPALES", "$39.990 CLP", "$14.990 CLP", "$9.990 CLP", "CREADO POR EMMANUEL ZÚÑIGA"]);
+  await checkPage("Public home", "/?qa=commercial-current", ["PRODUCTOS PRINCIPALES", "$39.990 CLP", "$14.990 CLP", "$9.990 CLP", "Precios visibles", "Compra segura"]);
   await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "RECOMENDADO"]);
   await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "RECOMENDADO"]);
   await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "$9.990 CLP", "Acceso por 3 meses"]);
