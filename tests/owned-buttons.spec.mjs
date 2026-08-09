@@ -1,9 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const BRIDGE_SCRIPT = path.join(ROOT, "academy", "academy-owned-native-bridge-v1.js");
+const MI_SCRIPT = path.join(ROOT, "academy", "mi-kinecheck-v1.js");
+const SIMPLIFY_SCRIPT = path.join(ROOT, "academy", "mi-kinecheck-simplify-v2.js");
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -149,4 +152,35 @@ test("si el opener termina de cargar después del render, el primer click se con
   await expect.poll(async () => page.evaluate(() => window.__opened), { timeout: 2000 }).toEqual([
     "evidencia-aplicada",
   ]);
+});
+
+test("la personalización no renombra la marca ni reintroduce clicks proxy", async ({ page }) => {
+  const miSource = readFileSync(MI_SCRIPT, "utf8");
+  const simplifySource = readFileSync(SIMPLIFY_SCRIPT, "utf8");
+  expect(miSource).not.toContain("target.click()");
+  expect(miSource).not.toContain("__KINECHECK_NATIVE_OWNED_PROXY__");
+  expect(simplifySource).not.toContain("button.click()");
+
+  await page.setContent(`
+    <!doctype html><html><body data-kc-view="inicio">
+      <section id="dashboard-view"></section>
+      <a class="topbar-brand" data-kc-view-link="inicio"><div><strong>KineCheck</strong><span>MI KINECHECK</span></div></a>
+      <a id="real-inicio" data-kc-view-link="inicio"><span>Inicio</span></a>
+      <div id="sidebar-email">profesional@ejemplo.cl</div>
+      <div id="account-email">profesional@ejemplo.cl</div>
+      <section id="inicio"></section>
+      <section id="course-grid"><button data-course="comunicacion-clinica">Comunicación</button></section>
+      <div class="kc-home-hero"><span class="eyebrow">MI KINECHECK</span><h1>Inicio</h1></div>
+      <p id="welcome"></p><button id="kc-home-continue"></button>
+    </body></html>
+  `);
+  await page.evaluate(() => {
+    window.KINECHECK_ACADEMY_CONFIG = { ownerEmails: [] };
+  });
+  await page.addScriptTag({ path: MI_SCRIPT });
+  await page.addScriptTag({ path: SIMPLIFY_SCRIPT });
+  await page.waitForTimeout(250);
+
+  await expect(page.locator(".topbar-brand span")).toHaveText("MI KINECHECK");
+  await expect(page.locator("#real-inicio span")).toHaveText("Inicio");
 });
