@@ -7,6 +7,7 @@
   const SELECTOR = [
     "#kc-stage-recommendations [data-kc-path-open]",
     "[data-kc-open-product]",
+    "[data-kc-open-owned]",
     "#course-grid [data-course]",
   ].join(",");
   const OPENER_SRC = "./academy-open-v6.js?v=20260808-owned-buttons1";
@@ -67,6 +68,7 @@
     return String(
       button.dataset.kcPathOpen
       || button.dataset.kcOpenProduct
+      || button.dataset.kcOpenOwned
       || button.dataset.course
       || "",
     ).trim();
