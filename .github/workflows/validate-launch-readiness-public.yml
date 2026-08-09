@@ -80,12 +80,15 @@ jobs:
           trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
           sleep 2
           BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
+          NO_JS=1 BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
           BASE_URL=http://127.0.0.1:4173 node tests/launch-readiness-public.spec.mjs
       - name: Diagnosticar overflow móvil de productos en producción
         if: github.event_name != 'pull_request'
         env:
           BASE_URL: https://kinecheck.cl
-        run: node tests/product-overflow-diagnostic.mjs
+        run: |
+          node tests/product-overflow-diagnostic.mjs
+          NO_JS=1 node tests/product-overflow-diagnostic.mjs
       - name: Esperar publicación y validar producción
         if: github.event_name != 'pull_request'
         env:
