@@ -41,6 +41,7 @@ async function fetchText(url) {
 const academy = read("academy/index.html");
 check("Academy conserva el único formulario de ingreso", /id=["']auth-form["']/i.test(academy));
 check("Academy conserva recuperación de contraseña", /id=["']forgot-password["']/i.test(academy));
+check("Academy carga bootstrap de sesión privada", /academy-bootstrap-v28\.js\?v=20260809-private1/.test(academy));
 
 const protectedLocalPages = [
   ["Comunicación Clínica", read("comunicacion-clinica.html")],
@@ -75,19 +76,34 @@ check("Course-key exige licencia activa", /if\s*\(!isUsableAccess\(access\)\)/.t
 check("Course-key separa contenido por slug", /protectedModules:\s*Record<string, string>/.test(courseKey));
 
 const opener = read("academy/academy-open-v6.js");
+const bridge = read("academy/academy-owned-native-bridge-v1.js");
+const bootstrap = read("academy/academy-bootstrap-v28.js");
 const legacyRouter = read("academy/academy-launch-router-v4.js");
 const integrationGuard = read("academy/academy-integration-guard-v4.js");
 const relay = read("academy/app-sso-relay.js");
 const expectedApps = ["kinecheck-estudiante", "kinecheck-recupera"];
+const expectedExternalCourses = ["evidencia-aplicada", "mas-alla-del-dolor"];
 
 check("Opener final está instalado", /__KINECHECK_OPEN_V6__/.test(opener));
 check("Opener limita aplicaciones externas", sameItems(setItems(opener, "APPLICATIONS"), expectedApps));
+check("Opener limita cursos alojados externamente", sameItems(Object.keys({
+  ...(opener.includes('"mas-alla-del-dolor"') ? { "mas-alla-del-dolor": true } : {}),
+  ...(opener.includes('"evidencia-aplicada"') ? { "evidencia-aplicada": true } : {}),
+}), expectedExternalCourses));
 check("Opener usa sesión temporal", /parse\(sessionStorage\)/.test(opener));
-check("Opener intercepta todos los botones", /data-course[\s\S]*data-kc-path-open[\s\S]*data-kc-open-product/.test(opener));
-check("Opener usa captura para evitar handlers antiguos", /},\s*true\);/.test(opener));
-check("Opener abre cursos externos mediante postMessage", /popup\.postMessage\(transfer, targetOrigin\)/.test(opener));
-check("Opener espera confirmación SSO", /kinecheck-sso-accepted/.test(opener));
-check("Opener publica rutas final5", /20260806-final5/.test(opener));
+check("Bridge cubre Inicio, ruta, recomendaciones, Mis productos y Continuar",
+  /data-kc-open-product/.test(bridge)
+  && /data-kc-open-owned/.test(bridge)
+  && /data-kc-path-open/.test(bridge)
+  && /data-course/.test(bridge)
+  && /continue-button/.test(bridge));
+check("Bridge usa captura antes de handlers de document", /window\.addEventListener\(["']click["'][\s\S]*?},\s*true\);/.test(bridge));
+check("Opener usa handoff efímero por fragmento", /kc_handoff/.test(opener) && /url\.hash\s*=/.test(opener));
+check("Opener navega cursos externos en la misma pestaña", /location\.assign\(externalHandoffUrl\(/.test(opener));
+check("Opener no depende de popup para cursos externos", !/window\.open\(/.test(opener) && !/popup\.postMessage/.test(opener));
+check("Opener no transfiere refresh_token ni identidad", !/refresh_token|user\s*:|email\s*:/i.test(opener));
+check("Opener publica versión private1", /20260809-private1/.test(opener));
+check("Bootstrap publica brand identity private1", /academy-brand-identity\.js\?v=20260809-private1/.test(bootstrap));
 check("Router legado solo delega", /academy-open-v6\.js/.test(legacyRouter) && !/location\.assign\(destination\)/.test(legacyRouter));
 check("Guard antiguo no intercepta clicks", !/addEventListener\(["']click["']/.test(integrationGuard));
 check("Relay limita aplicaciones externas", sameItems(setItems(relay, "PRODUCTS"), expectedApps));
@@ -113,23 +129,27 @@ noSecondaryCredentials("Más allá del dolor", externalSources.masIndex);
 check("Más allá fija producto exacto", /EXPECTED_COURSE\s*=\s*["']mas-alla-del-dolor["']/.test(externalSources.masGate));
 check("Más allá solicita licencia exacta", /courseSlug:\s*EXPECTED_COURSE/.test(externalSources.masGate));
 check("Más allá usa sesión temporal", /sessionStorage\.setItem\(SESSION_KEY/.test(externalSources.masSso));
-check("Más allá recibe postMessage", /kinecheck-sso-ready/.test(externalSources.masSso) && /addEventListener\(["']message["']/.test(externalSources.masSso));
+check("Más allá consume handoff privado", /FRAGMENT_KEY\s*=\s*["']kc_handoff["']/.test(externalSources.masSso) && /readFragmentHandoff/.test(externalSources.masSso));
+check("Más allá limpia el handoff de la URL", /history\.replaceState/.test(externalSources.masSso));
+check("Más allá conserva postMessage como compatibilidad", /kinecheck-sso-ready/.test(externalSources.masSso) && /addEventListener\(["']message["']/.test(externalSources.masSso));
 check("Más allá no borra sesión por falta de opener", !/if\s*\(!window\.opener\)\s*\{[\s\S]*?clear/i.test(externalSources.masSso));
 check("Más allá no envía Cache-Control como request header", !/["']Cache-Control["']\s*:/.test(externalSources.masGate));
 check("Más allá conserva sesión ante error de red", /NETWORK_ERROR[\s\S]*?Reintentar acceso/i.test(externalSources.masGate));
 check("Más allá no permite login local", !/grant_type=password|auth\/v1\/signup/.test(externalSources.masGate));
-check("Más allá carga versión final4", /20260806-final4/.test(externalSources.masIndex));
+check("Más allá carga handoff private1 antes del gate", /sso-handoff\.js\?v=20260809-private1[\s\S]*?auth-gate\.js/.test(externalSources.masIndex));
 
 noSecondaryCredentials("Evidencia Aplicada", externalSources.evidenceIndex);
 check("Evidencia fija producto exacto", /EXPECTED_COURSE\s*=\s*["']evidencia-aplicada["']/.test(externalSources.evidenceGate));
 check("Evidencia solicita contenido exacto", /courseSlug:\s*EXPECTED_COURSE/.test(externalSources.evidenceGate));
 check("Evidencia usa sesión temporal", /sessionStorage\.setItem\(SESSION_KEY/.test(externalSources.evidenceSso));
-check("Evidencia recibe postMessage", /kinecheck-sso-ready/.test(externalSources.evidenceSso) && /addEventListener\(["']message["']/.test(externalSources.evidenceSso));
+check("Evidencia consume handoff privado", /FRAGMENT_KEY\s*=\s*["']kc_handoff["']/.test(externalSources.evidenceSso) && /readFragmentHandoff/.test(externalSources.evidenceSso));
+check("Evidencia limpia el handoff de la URL", /history\.replaceState/.test(externalSources.evidenceSso));
+check("Evidencia conserva postMessage como compatibilidad", /kinecheck-sso-ready/.test(externalSources.evidenceSso) && /addEventListener\(["']message["']/.test(externalSources.evidenceSso));
 check("Evidencia no borra sesión por falta de opener", !/if\s*\(!window\.opener\)\s*\{[\s\S]*?clear/i.test(externalSources.evidenceSso));
 check("Evidencia no envía Cache-Control como request header", !/["']Cache-Control["']\s*:/.test(externalSources.evidenceGate));
 check("Evidencia conserva sesión ante error de red", /NETWORK_ERROR[\s\S]*?Reintentar acceso/i.test(externalSources.evidenceGate));
 check("Evidencia no permite login local", !/grant_type=password|auth\/v1\/signup/.test(externalSources.evidenceGate));
-check("Evidencia carga versión final4", /20260806-final4/.test(externalSources.evidenceIndex));
+check("Evidencia carga handoff private1 antes del gate", /sso-handoff\.js\?v=20260809-private1[\s\S]*?auth-gate\.js/.test(externalSources.evidenceIndex));
 check("Backend Evidencia fija course slug", /const COURSE_SLUG = ["']evidencia-aplicada["']/.test(externalSources.evidenceContent));
 check("Backend Evidencia rechaza otro slug", /requestedSlug !== COURSE_SLUG/.test(externalSources.evidenceContent));
 check("Backend Evidencia filtra licencia exacta", /\.eq\("course_slug", COURSE_SLUG\)/.test(externalSources.evidenceContent));
