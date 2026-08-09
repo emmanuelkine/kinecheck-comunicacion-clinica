@@ -60,17 +60,31 @@ jobs:
           npm install --no-save @playwright/test@1.55.0
           npx playwright install --with-deps chromium webkit
 
+      - name: Serve exact pull request checkout
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/kinecheck-http.log 2>&1 &
+          echo $! >/tmp/kinecheck-http.pid
+          sleep 2
+          curl --fail --silent http://127.0.0.1:4173/academy/ >/dev/null
+
+      - name: Wait for production deployment
+        if: github.event_name == 'push'
+        run: sleep 60
+
       - name: Test recommendation and owned product buttons
         run: npx playwright test tests/recommended-buttons.spec.mjs tests/owned-buttons.spec.mjs --reporter=line
 
-      - name: Test live Academy runtime in Chromium
+      - name: Test Academy runtime in Chromium
+        if: always()
         env:
-          BASE_URL: https://kinecheck.cl
+          BASE_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:4173' || 'https://kinecheck.cl' }}
         run: npx playwright test tests/live-academy-runtime.spec.mjs --browser=chromium --reporter=line
 
-      - name: Test live Academy runtime in WebKit
+      - name: Test Academy runtime in WebKit
+        if: always()
         env:
-          BASE_URL: https://kinecheck.cl
+          BASE_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:4173' || 'https://kinecheck.cl' }}
         run: npx playwright test tests/live-academy-runtime.spec.mjs --browser=webkit --reporter=line
 
       - name: Upload browser evidence
