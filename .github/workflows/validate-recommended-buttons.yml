@@ -76,16 +76,31 @@ jobs:
         run: npx playwright test tests/recommended-buttons.spec.mjs tests/owned-buttons.spec.mjs --reporter=line
 
       - name: Test Academy runtime in Chromium
+        id: chromium_gate
         if: always()
+        continue-on-error: true
         env:
           BASE_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:4173' || 'https://kinecheck.cl' }}
         run: npx playwright test tests/live-academy-runtime.spec.mjs --browser=chromium --reporter=line
 
       - name: Test Academy runtime in WebKit
+        id: webkit_gate
         if: always()
+        continue-on-error: true
         env:
           BASE_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:4173' || 'https://kinecheck.cl' }}
         run: npx playwright test tests/live-academy-runtime.spec.mjs --browser=webkit --reporter=line
+
+      - name: Enforce Chromium and WebKit gates
+        if: always()
+        env:
+          CHROMIUM_OUTCOME: ${{ steps.chromium_gate.outcome }}
+          WEBKIT_OUTCOME: ${{ steps.webkit_gate.outcome }}
+        run: |
+          echo "Chromium: ${CHROMIUM_OUTCOME}"
+          echo "WebKit: ${WEBKIT_OUTCOME}"
+          test "${CHROMIUM_OUTCOME}" = "success"
+          test "${WEBKIT_OUTCOME}" = "success"
 
       - name: Upload browser evidence
         if: always()
