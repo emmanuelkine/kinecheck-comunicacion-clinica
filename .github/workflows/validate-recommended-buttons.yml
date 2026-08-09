@@ -9,6 +9,7 @@ on:
       - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'
       - 'academy/academy-brand-identity.js'
+      - 'academy/academy-sso-same-origin-v1.js'
       - 'academy/academy-learning-path-v4.js'
       - 'academy/academy-kinecheck-v4.js'
       - 'academy/academy-v39.js'
@@ -16,10 +17,19 @@ on:
       - 'academy/app-sso-relay.js'
       - 'academy/mi-kinecheck-v1.js'
       - 'academy/mi-kinecheck-simplify-v2.js'
+      - 'functions/api/license/sso.js'
+      - 'recupera/consentimiento.html'
+      - 'recupera/consentimiento-recupera.js'
+      - 'legal/privacidad.html'
+      - 'legal/terminos.html'
+      - 'profesionales/index.html'
+      - 'productos/**'
+      - 'sitemap.xml'
       - 'tests/recommended-buttons.spec.mjs'
       - 'tests/owned-buttons.spec.mjs'
       - 'tests/live-academy-runtime.spec.mjs'
       - 'tests/app-sso-relay.spec.mjs'
+      - 'tests/p0-p1-hardening.test.mjs'
       - '.github/workflows/validate-recommended-buttons.yml'
   push:
     branches: [main]
@@ -29,6 +39,7 @@ on:
       - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'
       - 'academy/academy-brand-identity.js'
+      - 'academy/academy-sso-same-origin-v1.js'
       - 'academy/academy-learning-path-v4.js'
       - 'academy/academy-kinecheck-v4.js'
       - 'academy/academy-v39.js'
@@ -36,10 +47,19 @@ on:
       - 'academy/app-sso-relay.js'
       - 'academy/mi-kinecheck-v1.js'
       - 'academy/mi-kinecheck-simplify-v2.js'
+      - 'functions/api/license/sso.js'
+      - 'recupera/consentimiento.html'
+      - 'recupera/consentimiento-recupera.js'
+      - 'legal/privacidad.html'
+      - 'legal/terminos.html'
+      - 'profesionales/index.html'
+      - 'productos/**'
+      - 'sitemap.xml'
       - 'tests/recommended-buttons.spec.mjs'
       - 'tests/owned-buttons.spec.mjs'
       - 'tests/live-academy-runtime.spec.mjs'
       - 'tests/app-sso-relay.spec.mjs'
+      - 'tests/p0-p1-hardening.test.mjs'
       - '.github/workflows/validate-recommended-buttons.yml'
 
 permissions:
@@ -67,6 +87,9 @@ jobs:
         run: |
           npm install --no-save @playwright/test@1.55.0
           npx playwright install --with-deps chromium webkit
+
+      - name: Validate P0/P1 source invariants
+        run: node --test tests/p0-p1-hardening.test.mjs
 
       - name: Serve exact pull request checkout
         if: github.event_name == 'pull_request'
