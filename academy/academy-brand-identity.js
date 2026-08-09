@@ -91,9 +91,9 @@
   loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260809-directnav1");
   loadScript("./academy-owned-native-bridge-v1.js", "data-kc-owned-native-bridge", "20260809-directnav1");
 
-  loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260809-native-owned1");
+  loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260809-directnav2");
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
-  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260806-simplified3");
+  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260809-directnav2");
   loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
 
   if (document.readyState === "loading") {
