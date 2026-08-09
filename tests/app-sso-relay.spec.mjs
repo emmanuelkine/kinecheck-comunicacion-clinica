@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const BASE = process.env.BASE_URL || "http://127.0.0.1:4173";
-const POST_URL = new URL("/api/license/sso", BASE).toString();
+const POST_URL = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
 const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
 const CONSENT_VERSION = "2026-08-09-health-v1";
 
@@ -36,7 +36,7 @@ async function seedHandoff(page, product) {
 }
 
 for (const product of ["kinecheck-estudiante", "kinecheck-recupera"]) {
-  test(`${product} usa SSO de kinecheck.cl y conserva el handoff`, async ({ page }) => {
+  test(`${product} conserva el SSO probado y el handoff protegido`, async ({ page }) => {
     let capturedPost = "";
     await page.route(POST_URL, async (route) => {
       capturedPost = route.request().postData() || "";
@@ -71,7 +71,7 @@ for (const product of ["kinecheck-estudiante", "kinecheck-recupera"]) {
 
     const request = await postRequest;
     const body = new URLSearchParams(request.postData() || capturedPost);
-    expect(new URL(request.url()).origin).toBe(new URL(BASE).origin);
+    expect(request.url()).toBe(POST_URL);
     expect(body.get("product")).toBe(product);
     expect(body.get("access_token")).toBe(accessToken);
     expect(body.get("expires_at")).toBe(String(expiresAt));
