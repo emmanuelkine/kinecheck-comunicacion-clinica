@@ -67,7 +67,7 @@ async function assertPublicMenu(page, label, interactive) {
 
 async function openPublicPage(page, path, device) {
   const join = path.includes("?") ? "&" : "?";
-  await page.goto(`${BASE}${path}${join}qa=${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+  await page.goto(`${BASE}${path}${join}qa=${device}-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 30000 });
 }
 
 async function assertCatalogDestination(page, context, device) {
@@ -118,7 +118,11 @@ try {
     page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
     page.on("console", (message) => {
       const source = message.location().url || "origen desconocido";
-      if (message.type() === "error" && !/favicon|metric-event/i.test(`${message.text()} ${source}`)) {
+      const detail = `${message.text()} ${source}`;
+      const cloudflareAnalyticsError = /(?:^|[^a-z0-9.-])(?:static\.)?cloudflareinsights\.com(?:[^a-z0-9.-]|$)/i.test(detail)
+        || /(?:^|[^a-z0-9.])beacon\.min\.js(?:[^a-z0-9.]|$)/i.test(detail);
+      const allowedError = /favicon|metric-event/i.test(detail) || cloudflareAnalyticsError;
+      if (message.type() === "error" && !allowedError) {
         errors.push(`console: ${message.text()} @ ${source}`);
       }
     });
