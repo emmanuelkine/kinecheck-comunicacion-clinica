@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - 'academy/academy-open-v6.js'
+      - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'
       - 'academy/academy-brand-identity.js'
       - 'academy/academy-learning-path-v4.js'
@@ -17,6 +18,7 @@ on:
     branches: [main]
     paths:
       - 'academy/academy-open-v6.js'
+      - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'
       - 'academy/academy-brand-identity.js'
       - 'academy/academy-learning-path-v4.js'
