@@ -98,7 +98,14 @@
     if (!target) return;
 
     const card = target.closest("[data-product-card]");
-    const slug = cleanProduct(card?.getAttribute("data-course") || target.getAttribute("data-course") || target.getAttribute("data-kc-path-open") || currentProduct());
+    const slug = cleanProduct(
+      card?.getAttribute("data-course")
+      || target.getAttribute("data-course")
+      || target.getAttribute("data-kc-path-open")
+      || target.getAttribute("data-kc-open-product")
+      || target.getAttribute("data-kc-open-owned")
+      || currentProduct(),
+    );
     const href = target instanceof HTMLAnchorElement ? target.href : "";
 
     if (href && /pay\.hotmart\.com/i.test(href)) {
@@ -111,7 +118,12 @@
       return;
     }
 
-    if (slug && (target.hasAttribute("data-course") || target.hasAttribute("data-kc-path-open") || target.hasAttribute("data-kc-open-product"))) {
+    if (slug && (
+      target.hasAttribute("data-course")
+      || target.hasAttribute("data-kc-path-open")
+      || target.hasAttribute("data-kc-open-product")
+      || target.hasAttribute("data-kc-open-owned")
+    )) {
       send("course_open", { productSlug: slug });
     }
   }, { capture: true });
