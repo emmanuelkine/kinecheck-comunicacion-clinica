@@ -2,23 +2,27 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
+const NO_JS = process.env.NO_JS === "1";
 const browser = await chromium.launch({ headless: true });
 
 try {
   const context = await browser.newContext({
+    javaScriptEnabled: !NO_JS,
     viewport: { width: 390, height: 844 },
     locale: "es-CL",
     timezoneId: "America/Santiago",
   });
   const page = await context.newPage();
-  await page.goto(`${BASE}/productos/?qa=overflow-${Date.now()}`, {
-    waitUntil: "networkidle",
+  await page.goto(`${BASE}/productos/?qa=overflow-${NO_JS ? "nojs" : "js"}-${Date.now()}`, {
+    waitUntil: NO_JS ? "domcontentloaded" : "networkidle",
     timeout: 60000,
   });
-  await page.waitForFunction(() => {
-    const title = document.querySelector("#product-title")?.textContent || "";
-    return title.includes("KineCheck Clínico") && Boolean(document.querySelector(".product-detail-price"));
-  }, { timeout: 15000 });
+  if (!NO_JS) {
+    await page.waitForFunction(() => {
+      const title = document.querySelector("#product-title")?.textContent || "";
+      return title.includes("KineCheck Clínico") && Boolean(document.querySelector(".product-detail-price"));
+    }, { timeout: 15000 });
+  }
 
   const result = await page.evaluate(() => {
     const viewport = document.documentElement.clientWidth;
@@ -46,6 +50,7 @@ try {
       .slice(0, 25);
 
     return {
+      mode: document.documentElement.classList.contains("js") ? "js" : "no-js",
       viewport,
       documentScrollWidth: document.documentElement.scrollWidth,
       bodyScrollWidth: document.body.scrollWidth,
@@ -56,7 +61,7 @@ try {
   console.log(JSON.stringify(result, null, 2));
   assert.ok(
     result.documentScrollWidth <= result.viewport + 3,
-    `Overflow móvil en /productos/: ${result.documentScrollWidth}/${result.viewport}`,
+    `Overflow móvil (${NO_JS ? "sin JS" : "con JS"}) en /productos/: ${result.documentScrollWidth}/${result.viewport}`,
   );
   await context.close();
 } finally {
