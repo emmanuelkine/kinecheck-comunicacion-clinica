@@ -48,44 +48,67 @@ async function installHarness(page) {
   `);
 
   await page.evaluate(() => {
-    window.__opened = [];
-    window.__courseGridProxyClicks = 0;
-    window.KINECHECK_OPEN_PRODUCT = async (slug) => {
-      window.__opened.push(slug);
+    window.__openedCore = [];
+    window.__openedFallback = [];
+    window.__nativeGridClicks = [];
+    window.__nativeContinueClicks = [];
+
+    // academy-v39.js expone openCourse como función global en script clásico.
+    window.openCourse = async (slug) => {
+      window.__openedCore.push(slug);
     };
-    document.querySelector("#course-grid").addEventListener("click", () => {
-      window.__courseGridProxyClicks += 1;
+    window.KINECHECK_OPEN_PRODUCT = async (slug) => {
+      window.__openedFallback.push(slug);
+    };
+
+    document.querySelector("#course-grid").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-course]");
+      if (button) window.__nativeGridClicks.push(button.dataset.course);
+    });
+    document.querySelector("#continue-button").addEventListener("click", (event) => {
+      window.__nativeContinueClicks.push(event.currentTarget.dataset.course);
     });
   });
 
   await page.addScriptTag({ path: BRIDGE_SCRIPT });
 }
 
-test("todos los puntos de entrada abren el producto directamente, sin click proxy", async ({ page }) => {
+test("tarjetas proxy usan el controlador nativo de Academy, no el opener alternativo", async ({ page }) => {
   await installHarness(page);
 
   await page.locator("#home-clinico").click();
   await page.locator("#owned-student").click();
   await page.locator("#recommended-pain").click();
-  await page.locator('#course-grid [data-course="comunicacion-clinica"]').click();
-  await page.locator('#course-grid [data-course="kinecheck-clinico-curso"]').click();
   await page.locator("#home-recupera").click();
-  await page.locator("#continue-button").click();
 
-  await expect.poll(async () => page.evaluate(() => window.__opened)).toEqual([
+  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([
     "kinecheck-clinico",
     "kinecheck-estudiante",
     "mas-alla-del-dolor",
-    "comunicacion-clinica",
-    "kinecheck-clinico-curso",
     "kinecheck-recupera",
-    "evidencia-aplicada",
   ]);
-
-  await expect.poll(async () => page.evaluate(() => window.__courseGridProxyClicks)).toBe(0);
+  await expect.poll(async () => page.evaluate(() => window.__openedFallback)).toEqual([]);
 });
 
-test("Continuar actividad usa el producto recordado sin depender de otro listener", async ({ page }) => {
+test("botones nativos de course-grid y Continuar no son interceptados por el bridge", async ({ page }) => {
+  await installHarness(page);
+
+  await page.locator('#course-grid [data-course="comunicacion-clinica"]').click();
+  await page.locator('#course-grid [data-course="kinecheck-clinico-curso"]').click();
+  await page.locator("#continue-button").click();
+
+  await expect.poll(async () => page.evaluate(() => window.__nativeGridClicks)).toEqual([
+    "comunicacion-clinica",
+    "kinecheck-clinico-curso",
+  ]);
+  await expect.poll(async () => page.evaluate(() => window.__nativeContinueClicks)).toEqual([
+    "evidencia-aplicada",
+  ]);
+  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
+  await expect.poll(async () => page.evaluate(() => window.__openedFallback)).toEqual([]);
+});
+
+test("Continuar actividad usa el controlador nativo con el producto recordado", async ({ page }) => {
   await installHarness(page);
 
   await page.evaluate(() => {
@@ -93,9 +116,10 @@ test("Continuar actividad usa el producto recordado sin depender de otro listene
   });
   await page.locator("#kc-home-continue").click();
 
-  await expect.poll(async () => page.evaluate(() => window.__opened)).toEqual([
+  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([
     "traumatologia-ortopedia-clinica",
   ]);
+  await expect.poll(async () => page.evaluate(() => window.__openedFallback)).toEqual([]);
 });
 
 test("Mis productos, Recursos, Cuenta y navegación móvil funcionan desde el controlador directo", async ({ page }) => {
@@ -132,7 +156,7 @@ test("Soporte responde aunque los listeners secundarios no carguen", async ({ pa
   await expect(page.locator("#support-launcher")).toHaveAttribute("aria-expanded", "true");
 });
 
-test("si el opener termina de cargar después del render, el primer click se conserva", async ({ page }) => {
+test("si el controlador nativo no existe, conserva el fallback del opener", async ({ page }) => {
   await page.setContent(`
     <!doctype html><html><body>
       <div id="kc-toast" hidden></div>
