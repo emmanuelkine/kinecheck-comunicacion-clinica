@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FIX_SCRIPT = path.join(ROOT, "academy", "academy-recommended-buttons-fix.js");
+const OPEN_SCRIPT = path.join(ROOT, "academy", "academy-open-v6.js");
 
 const applications = ["kinecheck-estudiante", "kinecheck-recupera"];
 const courses = [
@@ -101,6 +102,41 @@ test("los botones Abrir de la ruta guiada abren directamente el producto exacto"
   await expect.poll(async () => page.evaluate(() => window.__openedProducts)).toEqual(
     guidedProducts.map((product) => ({ product, text: "Abrir" })),
   );
+});
+
+test("el router principal reconoce data-kc-open-owned y navega a la aplicación", async ({ page }) => {
+  await page.route("https://example.test/**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "text/html",
+      body: `<!doctype html><html><body>
+        <div id="kc-toast" hidden></div>
+        <button type="button" data-kc-open-owned="kinecheck-estudiante">Abrir</button>
+      </body></html>`,
+    });
+  });
+
+  await page.goto("https://example.test/academy/");
+  await page.evaluate(() => {
+    const session = {
+      access_token: "test-access-token",
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+      expires_in: 3600,
+      token_type: "bearer",
+    };
+    window.KINECHECK_ACADEMY_SESSION = {
+      get: () => session,
+      refresh: async () => session,
+    };
+  });
+  await page.addScriptTag({ path: OPEN_SCRIPT });
+
+  await page.locator('[data-kc-open-owned="kinecheck-estudiante"]').click();
+  await page.waitForURL(/app-sso-relay\.html\?product=kinecheck-estudiante/);
+
+  const url = new URL(page.url());
+  expect(url.pathname).toBe("/academy/app-sso-relay.html");
+  expect(url.searchParams.get("product")).toBe("kinecheck-estudiante");
 });
 
 test("al volver a Academy se libera cualquier estado de navegación", async ({ page }) => {
