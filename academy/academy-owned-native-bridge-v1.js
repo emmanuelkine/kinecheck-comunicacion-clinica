@@ -5,8 +5,9 @@
   window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__ = true;
 
   // Solo intercepta entradas proxy creadas por Inicio, Mi KineCheck y recomendaciones.
-  // Los botones nativos de #course-grid y #continue-button deben conservar sus
-  // listeners de academy-v39.js y no ser bloqueados por este bridge.
+  // Todas esas entradas deben usar el mismo opener unificado que ya funciona en las
+  // recomendaciones. Los botones nativos de #course-grid y #continue-button conservan
+  // sus listeners de academy-v39.js y su validación nativa.
   const PRODUCT_SELECTOR = [
     "[data-kc-open-product]",
     "[data-kc-open-owned]",
@@ -94,8 +95,6 @@
     if (typeof window.KINECHECK_ACADEMY_OPEN_COURSE === "function") {
       return window.KINECHECK_ACADEMY_OPEN_COURSE;
     }
-    // academy-v39.js es un script clásico; su función openCourse queda disponible
-    // en window. Este fallback conecta el bridge con el flujo nativo validado.
     if (typeof window.openCourse === "function") return window.openCourse;
     return null;
   }
@@ -104,12 +103,9 @@
     if (!slug) return;
 
     try {
-      const native = nativeOpenCourse();
-      if (native) {
-        await native(slug);
-        return;
-      }
-
+      // Las tarjetas proxy usan primero el opener unificado. Es la misma ruta que
+      // utilizan las recomendaciones: muestra estado "Abriendo…", renueva sesión
+      // cuando corresponde y deja un error visible en #kc-toast si no puede navegar.
       if (typeof window.KINECHECK_OPEN_PRODUCT === "function") {
         await window.KINECHECK_OPEN_PRODUCT(slug, source || null);
         return;
@@ -118,15 +114,17 @@
       const startedAt = Date.now();
       while (Date.now() - startedAt < 4000) {
         await new Promise((resolve) => window.setTimeout(resolve, 40));
-        const delayedNative = nativeOpenCourse();
-        if (delayedNative) {
-          await delayedNative(slug);
-          return;
-        }
         if (typeof window.KINECHECK_OPEN_PRODUCT === "function") {
           await window.KINECHECK_OPEN_PRODUCT(slug, source || null);
           return;
         }
+      }
+
+      // Fallback de resiliencia únicamente si el opener unificado no llegó a cargar.
+      const native = nativeOpenCourse();
+      if (native) {
+        await native(slug);
+        return;
       }
 
       throw new Error("El controlador de acceso no terminó de cargar.");

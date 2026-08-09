@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - 'metrics-v1.js'
       - 'academy/academy-open-v6.js'
       - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'
@@ -20,6 +21,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'metrics-v1.js'
       - 'academy/academy-open-v6.js'
       - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'

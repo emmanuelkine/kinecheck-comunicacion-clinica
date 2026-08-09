@@ -49,16 +49,15 @@ async function installHarness(page) {
 
   await page.evaluate(() => {
     window.__openedCore = [];
-    window.__openedFallback = [];
+    window.__openedUnified = [];
     window.__nativeGridClicks = [];
     window.__nativeContinueClicks = [];
 
-    // academy-v39.js expone openCourse como función global en script clásico.
     window.openCourse = async (slug) => {
       window.__openedCore.push(slug);
     };
     window.KINECHECK_OPEN_PRODUCT = async (slug) => {
-      window.__openedFallback.push(slug);
+      window.__openedUnified.push(slug);
     };
 
     document.querySelector("#course-grid").addEventListener("click", (event) => {
@@ -73,7 +72,7 @@ async function installHarness(page) {
   await page.addScriptTag({ path: BRIDGE_SCRIPT });
 }
 
-test("tarjetas proxy usan el controlador nativo de Academy, no el opener alternativo", async ({ page }) => {
+test("tarjetas proxy usan el opener unificado y no duplican el flujo nativo", async ({ page }) => {
   await installHarness(page);
 
   await page.locator("#home-clinico").click();
@@ -81,13 +80,13 @@ test("tarjetas proxy usan el controlador nativo de Academy, no el opener alterna
   await page.locator("#recommended-pain").click();
   await page.locator("#home-recupera").click();
 
-  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([
+  await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([
     "kinecheck-clinico",
     "kinecheck-estudiante",
     "mas-alla-del-dolor",
     "kinecheck-recupera",
   ]);
-  await expect.poll(async () => page.evaluate(() => window.__openedFallback)).toEqual([]);
+  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
 });
 
 test("botones nativos de course-grid y Continuar no son interceptados por el bridge", async ({ page }) => {
@@ -105,10 +104,10 @@ test("botones nativos de course-grid y Continuar no son interceptados por el bri
     "evidencia-aplicada",
   ]);
   await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
-  await expect.poll(async () => page.evaluate(() => window.__openedFallback)).toEqual([]);
+  await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([]);
 });
 
-test("Continuar actividad usa el controlador nativo con el producto recordado", async ({ page }) => {
+test("Continuar actividad usa el opener unificado con el producto recordado", async ({ page }) => {
   await installHarness(page);
 
   await page.evaluate(() => {
@@ -116,10 +115,10 @@ test("Continuar actividad usa el controlador nativo con el producto recordado", 
   });
   await page.locator("#kc-home-continue").click();
 
-  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([
+  await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([
     "traumatologia-ortopedia-clinica",
   ]);
-  await expect.poll(async () => page.evaluate(() => window.__openedFallback)).toEqual([]);
+  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
 });
 
 test("Mis productos, Recursos, Cuenta y navegación móvil funcionan desde el controlador directo", async ({ page }) => {
@@ -156,7 +155,7 @@ test("Soporte responde aunque los listeners secundarios no carguen", async ({ pa
   await expect(page.locator("#support-launcher")).toHaveAttribute("aria-expanded", "true");
 });
 
-test("si el controlador nativo no existe, conserva el fallback del opener", async ({ page }) => {
+test("si el opener todavía no cargó, el bridge espera su disponibilidad", async ({ page }) => {
   await page.setContent(`
     <!doctype html><html><body>
       <div id="kc-toast" hidden></div>

@@ -85,11 +85,11 @@
   loadScript("../assets/runtime-config.js", "data-kc-runtime", "20260807-1");
   loadScript("../assets/observability.js", "data-kc-observability", "20260807-1");
   loadScript("./security-hardening-v1.js", "data-kc-security-hardening", "20260807-1");
-  loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260806-launch-metrics1");
+  loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260809-ownedopener1");
 
   // Orden deliberado: primero existe un único opener; luego el controlador de clicks.
   loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260809-directnav1");
-  loadScript("./academy-owned-native-bridge-v1.js", "data-kc-owned-native-bridge", "20260809-directnav1");
+  loadScript("./academy-owned-native-bridge-v1.js", "data-kc-owned-native-bridge", "20260809-ownedopener1");
 
   loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260809-directnav2");
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
