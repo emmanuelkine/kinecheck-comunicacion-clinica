@@ -227,16 +227,13 @@
   window.KINECHECK_OPEN_PRODUCT = openProduct;
   window.KINECHECK_RESET_PRODUCT_NAVIGATION = resetNavigationState;
 
+  // Este router queda reservado a recomendaciones especiales. Los botones
+  // nativos de Inicio/Mis productos/Continuar deben llegar a Academy v39,
+  // que valida licencia y ejecuta el SSO canónico mediante openCourse().
   document.addEventListener("click", (event) => {
-    if (window.__KINECHECK_NATIVE_OWNED_PROXY__) return;
-    const button = event.target.closest("[data-course], [data-kc-path-open], [data-kc-open-product], #continue-button");
+    const button = event.target.closest("[data-kc-path-open]");
     if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
-    const product = String(
-      button.dataset.course
-      || button.dataset.kcPathOpen
-      || button.dataset.kcOpenProduct
-      || "",
-    ).trim();
+    const product = String(button.dataset.kcPathOpen || "").trim();
     if (!KNOWN.has(product)) return;
 
     event.preventDefault();

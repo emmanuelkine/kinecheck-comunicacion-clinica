@@ -4,12 +4,11 @@
   if (window.__KINECHECK_RECOMMENDED_BUTTONS_FIX__) return;
   window.__KINECHECK_RECOMMENDED_BUTTONS_FIX__ = true;
 
-  const SELECTOR = [
-    "#kc-stage-recommendations [data-kc-path-open]",
-    "[data-kc-open-product]",
-    "#course-grid [data-course]",
-  ].join(",");
-  const OPENER_SRC = "./academy-open-v6.js?v=20260809-native-owned1";
+  // Solo las recomendaciones especiales usan el router alternativo.
+  // Inicio, Mis productos y Continuar deben llegar a los listeners nativos
+  // de Academy para reutilizar openCourse(), validación de licencia y SSO.
+  const SELECTOR = "#kc-stage-recommendations [data-kc-path-open]";
+  const OPENER_SRC = "./academy-open-v6.js?v=20260809-native-buttons2";
   let openerPromise = null;
 
   function toast(text) {
@@ -63,21 +62,11 @@
     return openerPromise;
   }
 
-  function productFor(button) {
-    return String(
-      button.dataset.kcPathOpen
-      || button.dataset.kcOpenProduct
-      || button.dataset.course
-      || "",
-    ).trim();
-  }
-
   document.addEventListener("click", async (event) => {
-    if (window.__KINECHECK_NATIVE_OWNED_PROXY__) return;
     const button = event.target.closest(SELECTOR);
     if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
 
-    const product = productFor(button);
+    const product = String(button.dataset.kcPathOpen || "").trim();
     if (!product) return;
 
     event.preventDefault();

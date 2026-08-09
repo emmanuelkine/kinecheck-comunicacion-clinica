@@ -7,155 +7,120 @@ const FIX_SCRIPT = path.join(ROOT, "academy", "academy-recommended-buttons-fix.j
 const OPEN_SCRIPT = path.join(ROOT, "academy", "academy-open-v6.js");
 const MI_SCRIPT = path.join(ROOT, "academy", "mi-kinecheck-v1.js");
 
-const applications = ["kinecheck-estudiante", "kinecheck-recupera"];
-const courses = [
-  "kinecheck-clinico-curso",
-  "comunicacion-clinica",
-  "mas-alla-del-dolor",
-  "evidencia-aplicada",
-  "traumatologia-ortopedia-clinica",
-];
-
 test.use({ viewport: { width: 1440, height: 900 } });
 
-async function installHarness(page) {
-  await page.setContent(`
-    <!doctype html>
-    <html><head></head><body>
-      <div id="kc-toast" hidden></div>
-      <section id="home-app-grid"></section>
-      <section id="home-course-grid"></section>
-      <section id="guided-route"></section>
-      <section id="course-grid"></section>
-    </body></html>
-  `);
-
-  await page.evaluate(() => {
-    window.__openedProducts = [];
-    window.__navigationResets = 0;
-    window.KINECHECK_RESET_PRODUCT_NAVIGATION = () => {
-      window.__navigationResets += 1;
-    };
-    window.KINECHECK_OPEN_PRODUCT = async (product, button) => {
-      window.__openedProducts.push({ product, text: button.textContent.trim() });
-    };
-  });
-
-  await page.addScriptTag({ path: FIX_SCRIPT });
-}
-
-test("los botones de aplicaciones en Mis productos abren la aplicación exacta", async ({ page }) => {
-  await installHarness(page);
-
-  await page.evaluate((slugs) => {
-    document.querySelector("#home-app-grid").innerHTML = slugs.map((slug) => `
-      <article><button type="button" data-kc-open-product="${slug}">Abrir</button></article>
-    `).join("");
-  }, applications);
-
-  for (const product of applications) {
-    await page.locator(`[data-kc-open-product="${product}"]`).click();
-  }
-
-  await expect.poll(async () => page.evaluate(() => window.__openedProducts)).toEqual(
-    applications.map((product) => ({ product, text: "Abrir" })),
-  );
-});
-
-test("los botones de cursos en Inicio y Mis cursos abren el curso exacto", async ({ page }) => {
-  await installHarness(page);
-
-  await page.evaluate((slugs) => {
-    document.querySelector("#home-course-grid").innerHTML = slugs.slice(0, 2).map((slug) => `
-      <article><button type="button" data-kc-open-product="${slug}">Continuar</button></article>
-    `).join("");
-    document.querySelector("#course-grid").innerHTML = slugs.slice(2).map((slug) => `
-      <article><button type="button" data-course="${slug}">Continuar</button></article>
-    `).join("");
-  }, courses);
-
-  for (const product of courses.slice(0, 2)) {
-    await page.locator(`[data-kc-open-product="${product}"]`).click();
-  }
-  for (const product of courses.slice(2)) {
-    await page.locator(`#course-grid [data-course="${product}"]`).click();
-  }
-
-  await expect.poll(async () => page.evaluate(() => window.__openedProducts)).toEqual(
-    courses.map((product) => ({ product, text: "Continuar" })),
-  );
-});
-
-test("los botones Abrir de la ruta guiada reutilizan el flujo nativo de Mis productos", async ({ page }) => {
-  const guidedProducts = ["kinecheck-estudiante", "kinecheck-recupera", "comunicacion-clinica"];
-
+async function installNativeHarness(page) {
   await page.setContent(`
     <!doctype html>
     <html><head></head><body data-kc-experience="professional">
       <div id="kc-toast" hidden></div>
       <section id="dashboard-view"></section>
       <section id="inicio"></section>
+      <section id="home-app-grid"></section>
+      <section id="home-course-grid"></section>
       <section id="guided-route"></section>
       <section id="course-grid"></section>
+      <button id="continue-button" type="button">Continuar</button>
     </body></html>
   `);
 
-  await page.evaluate((slugs) => {
+  await page.evaluate(() => {
+    window.__nativeHome = [];
+    window.__nativeLibrary = [];
     window.KINECHECK_ACADEMY_CONFIG = { ownerEmails: [] };
-    window.__nativeOpenedProducts = [];
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-kc-open-product]");
+      if (button) window.__nativeHome.push(button.dataset.kcOpenProduct);
+    });
+
+    document.querySelector("#course-grid").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-course]");
+      if (button && !button.disabled) window.__nativeLibrary.push(button.dataset.course);
+    });
+  });
+
+  await page.addScriptTag({ path: OPEN_SCRIPT });
+  await page.addScriptTag({ path: FIX_SCRIPT });
+}
+
+test("Inicio deja pasar data-kc-open-product al flujo nativo", async ({ page }) => {
+  await installNativeHarness(page);
+
+  await page.evaluate(() => {
+    document.querySelector("#home-app-grid").innerHTML = `
+      <article><button type="button" data-kc-open-product="kinecheck-estudiante">Abrir</button></article>
+    `;
+  });
+
+  await page.locator('[data-kc-open-product="kinecheck-estudiante"]').click();
+  await expect.poll(async () => page.evaluate(() => window.__nativeHome)).toEqual(["kinecheck-estudiante"]);
+});
+
+test("Mis productos deja pasar data-course al openCourse nativo", async ({ page }) => {
+  await installNativeHarness(page);
+
+  await page.evaluate(() => {
+    document.querySelector("#course-grid").innerHTML = `
+      <article><button type="button" data-course="kinecheck-estudiante">Abrir desde biblioteca</button></article>
+    `;
+  });
+
+  await page.locator('#course-grid [data-course="kinecheck-estudiante"]').click();
+  await expect.poll(async () => page.evaluate(() => window.__nativeLibrary)).toEqual(["kinecheck-estudiante"]);
+});
+
+test("los botones Abrir de la ruta guiada reutilizan el flujo nativo de Mis productos", async ({ page }) => {
+  const guidedProducts = ["kinecheck-estudiante", "kinecheck-recupera", "comunicacion-clinica"];
+  await installNativeHarness(page);
+
+  await page.evaluate((slugs) => {
     document.querySelector("#guided-route").innerHTML = slugs.map((slug) => `
       <article><button type="button" data-kc-open-owned="${slug}">Abrir</button></article>
     `).join("");
     document.querySelector("#course-grid").innerHTML = slugs.map((slug) => `
       <article><button type="button" data-course="${slug}">Abrir desde biblioteca</button></article>
     `).join("");
-    document.querySelector("#course-grid").addEventListener("click", (event) => {
-      const button = event.target.closest("[data-course]");
-      if (button && !button.disabled) window.__nativeOpenedProducts.push(button.dataset.course);
-    });
   }, guidedProducts);
 
-  await page.addScriptTag({ path: OPEN_SCRIPT });
-  await page.addScriptTag({ path: FIX_SCRIPT });
   await page.addScriptTag({ path: MI_SCRIPT });
 
   for (const product of guidedProducts) {
     await page.locator(`#guided-route [data-kc-open-owned="${product}"]`).click();
   }
 
-  await expect.poll(async () => page.evaluate(() => window.__nativeOpenedProducts)).toEqual(guidedProducts);
+  await expect.poll(async () => page.evaluate(() => window.__nativeLibrary)).toEqual(guidedProducts);
 });
 
-test("el proxy nativo hace bypass de los routers auxiliares", async ({ page }) => {
+test("las recomendaciones especiales conservan el router alternativo", async ({ page }) => {
   await page.setContent(`
     <!doctype html>
     <html><head></head><body>
       <div id="kc-toast" hidden></div>
-      <section id="course-grid"><button type="button" data-course="comunicacion-clinica">Abrir</button></section>
+      <section id="kc-stage-recommendations">
+        <button type="button" data-kc-path-open="comunicacion-clinica">Abrir recomendación</button>
+      </section>
     </body></html>
   `);
 
   await page.evaluate(() => {
-    window.__nativeClicks = 0;
-    document.querySelector("#course-grid").addEventListener("click", () => { window.__nativeClicks += 1; });
+    window.__recommended = [];
+    window.KINECHECK_OPEN_PRODUCT = async (product) => { window.__recommended.push(product); };
+    window.KINECHECK_RESET_PRODUCT_NAVIGATION = () => {};
   });
-  await page.addScriptTag({ path: OPEN_SCRIPT });
   await page.addScriptTag({ path: FIX_SCRIPT });
 
-  await page.evaluate(() => {
-    window.__KINECHECK_NATIVE_OWNED_PROXY__ = true;
-    try {
-      document.querySelector('#course-grid [data-course="comunicacion-clinica"]').click();
-    } finally {
-      window.__KINECHECK_NATIVE_OWNED_PROXY__ = false;
-    }
-  });
-
-  await expect.poll(async () => page.evaluate(() => window.__nativeClicks)).toBe(1);
+  await page.locator('[data-kc-path-open="comunicacion-clinica"]').click();
+  await expect.poll(async () => page.evaluate(() => window.__recommended)).toEqual(["comunicacion-clinica"]);
 });
 
 test("al volver a Academy se libera cualquier estado de navegación", async ({ page }) => {
-  await installHarness(page);
+  await page.setContent('<!doctype html><html><body><div id="kc-toast" hidden></div></body></html>');
+  await page.evaluate(() => {
+    window.__navigationResets = 0;
+    window.KINECHECK_RESET_PRODUCT_NAVIGATION = () => { window.__navigationResets += 1; };
+  });
+  await page.addScriptTag({ path: FIX_SCRIPT });
   await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true })));
   await expect.poll(async () => page.evaluate(() => window.__navigationResets)).toBeGreaterThan(0);
 });
