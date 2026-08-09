@@ -15,15 +15,11 @@ const seoSlugs = [
   "pack-estudiante",
 ];
 
-test("SSO del navegador usa exclusivamente kinecheck.cl", () => {
+test("no publica un proxy SSO parcial que pueda romper cookie y 303", () => {
   const relay = read("academy/app-sso-relay.js");
-  const clientGuard = read("academy/academy-sso-same-origin-v1.js");
-  const gateway = read("functions/api/license/sso.js");
-  const headers = read("_headers");
-  assert.match(relay, /const POST_URL = "\/api\/license\/sso"/);
-  assert.match(clientGuard, /SAME_ORIGIN_SSO = "\/api\/license\/sso"/);
-  assert.match(gateway, /KINECHECK_SSO_ORIGIN/);
-  assert.match(headers, /\/academy\/\*[\s\S]*?Content-Security-Policy:\s*form-action 'self'/);
+  assert.equal(fs.existsSync("functions/api/license/sso.js"), false);
+  assert.equal(fs.existsSync("academy/academy-sso-same-origin-v1.js"), false);
+  assert.match(relay, /https:\/\/kinecheck-clinico\.emmanuelkine\.chatgpt\.site\/api\/license\/sso/);
 });
 
 test("Recupera exige consentimiento expreso para datos de salud", () => {
