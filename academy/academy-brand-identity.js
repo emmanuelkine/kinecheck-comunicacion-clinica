@@ -91,7 +91,7 @@
   loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260806-simplified3");
 
   loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260808-guided-owned2");
-  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260808-owned-buttons1");
+  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260808-guided-router3");
   loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
 
   if (document.readyState === "loading") {
