@@ -8,12 +8,12 @@
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; form-action https://kinecheck-clinico.emmanuelkine.chatgpt.site; base-uri 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'">
   <title>Abriendo KineCheck</title>
   <style>
     :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#123d43;background:#f4faf9}*{box-sizing:border-box}body{min-height:100dvh;margin:0;display:grid;place-items:center;padding:24px}.card{width:min(100%,560px);padding:32px;border:1px solid #cfe4e1;border-radius:24px;background:#fff;box-shadow:0 24px 70px rgba(17,61,67,.12);text-align:center}.mark{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 18px;border-radius:18px;background:#123d43;color:#fff;font-size:25px;font-weight:900}.card h1{margin:0 0 10px;font-size:clamp(28px,7vw,40px)}.card p{margin:0;color:#587177;line-height:1.6}.error{margin-top:18px;padding:14px;border:1px solid #e9b8b8;border-radius:14px;background:#fff2f2;color:#9b1c1c}.back{display:inline-flex;margin-top:18px;padding:12px 18px;border-radius:12px;background:#123d43;color:#fff;text-decoration:none;font-weight:800}
   </style>
-  <script src="./app-sso-relay.js?v=20260801-sso8" defer></script>
+  <script src="./app-sso-relay.js?v=20260809-same-origin1" defer></script>
 </head>
 <body>
   <main class="card" aria-live="polite">
@@ -21,7 +21,7 @@
     <h1>Abriendo tu aplicación</h1>
     <p id="relay-status">Validando el acceso seguro de KineCheck…</p>
     <div id="relay-error" class="error" hidden></div>
-    <a id="relay-back" class="back" href="./?v=20260801-sso8" hidden>Volver a KineCheck</a>
+    <a id="relay-back" class="back" href="./" hidden>Volver a KineCheck</a>
   </main>
   <noscript>Necesitas activar JavaScript para completar el acceso.</noscript>
 </body>
