@@ -86,12 +86,12 @@
   loadScript("../assets/observability.js", "data-kc-observability", "20260807-1");
   loadScript("./security-hardening-v1.js", "data-kc-security-hardening", "20260807-1");
   loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260806-launch-metrics1");
-  loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260806-unified1");
+  loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260809-native-owned1");
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
   loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260806-simplified3");
 
-  loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260808-guided-owned3");
-  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260808-guided-router4");
+  loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260809-native-owned1");
+  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260809-native-owned1");
   loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
 
   if (document.readyState === "loading") {

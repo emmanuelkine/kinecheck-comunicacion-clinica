@@ -7,10 +7,9 @@
   const SELECTOR = [
     "#kc-stage-recommendations [data-kc-path-open]",
     "[data-kc-open-product]",
-    "[data-kc-open-owned]",
     "#course-grid [data-course]",
   ].join(",");
-  const OPENER_SRC = "./academy-open-v6.js?v=20260808-guided-router4";
+  const OPENER_SRC = "./academy-open-v6.js?v=20260809-native-owned1";
   let openerPromise = null;
 
   function toast(text) {
@@ -68,13 +67,13 @@
     return String(
       button.dataset.kcPathOpen
       || button.dataset.kcOpenProduct
-      || button.dataset.kcOpenOwned
       || button.dataset.course
       || "",
     ).trim();
   }
 
   document.addEventListener("click", async (event) => {
+    if (window.__KINECHECK_NATIVE_OWNED_PROXY__) return;
     const button = event.target.closest(SELECTOR);
     if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
 
