@@ -90,8 +90,8 @@
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
   loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260806-simplified3");
 
-  loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260808-guided-owned2");
-  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260808-guided-router3");
+  loadScript("./academy-recommended-buttons-fix.js", "data-kc-recommended-buttons-fix", "20260808-guided-owned3");
+  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260808-guided-router4");
   loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
 
   if (document.readyState === "loading") {
