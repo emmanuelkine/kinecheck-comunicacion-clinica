@@ -6,6 +6,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FIX_SCRIPT = path.join(ROOT, "academy", "academy-recommended-buttons-fix.js");
 const OPEN_SCRIPT = path.join(ROOT, "academy", "academy-open-v6.js");
 const MI_SCRIPT = path.join(ROOT, "academy", "mi-kinecheck-v1.js");
+const BRIDGE_SCRIPT = path.join(ROOT, "academy", "academy-owned-native-bridge-v1.js");
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
@@ -68,6 +69,50 @@ test("Mis productos deja pasar data-course al openCourse nativo", async ({ page 
 
   await page.locator('#course-grid [data-course="kinecheck-estudiante"]').click();
   await expect.poll(async () => page.evaluate(() => window.__nativeLibrary)).toEqual(["kinecheck-estudiante"]);
+});
+
+test("el bridge de window gana a interceptores de document y termina en el botón nativo", async ({ page }) => {
+  await page.setContent(`
+    <!doctype html>
+    <html><head></head><body>
+      <section id="inicio">
+        <button type="button" data-kc-open-product="kinecheck-estudiante">Abrir Estudiante</button>
+        <button type="button" data-kc-open-owned="kinecheck-recupera">Abrir Recupera</button>
+      </section>
+      <section id="course-grid">
+        <button type="button" data-course="kinecheck-estudiante">Nativo Estudiante</button>
+        <button type="button" data-course="kinecheck-recupera">Nativo Recupera</button>
+      </section>
+    </body></html>
+  `);
+
+  await page.evaluate(() => {
+    window.__nativeLibrary = [];
+    window.__blockedAtDocument = 0;
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest("[data-kc-open-product], [data-kc-open-owned]")) return;
+      window.__blockedAtDocument += 1;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
+
+    document.querySelector("#course-grid").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-course]");
+      if (button && !button.disabled) window.__nativeLibrary.push(button.dataset.course);
+    });
+  });
+
+  await page.addScriptTag({ path: BRIDGE_SCRIPT });
+
+  await page.locator('[data-kc-open-product="kinecheck-estudiante"]').click();
+  await page.locator('[data-kc-open-owned="kinecheck-recupera"]').click();
+
+  await expect.poll(async () => page.evaluate(() => window.__nativeLibrary)).toEqual([
+    "kinecheck-estudiante",
+    "kinecheck-recupera",
+  ]);
+  await expect.poll(async () => page.evaluate(() => window.__blockedAtDocument)).toBe(0);
 });
 
 test("los botones Abrir de la ruta guiada reutilizan el flujo nativo de Mis productos", async ({ page }) => {
