@@ -228,12 +228,13 @@
   window.KINECHECK_RESET_PRODUCT_NAVIGATION = resetNavigationState;
 
   document.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-course], [data-kc-path-open], [data-kc-open-product], #continue-button");
+    const button = event.target.closest("[data-course], [data-kc-path-open], [data-kc-open-product], [data-kc-open-owned], #continue-button");
     if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
     const product = String(
       button.dataset.course
       || button.dataset.kcPathOpen
       || button.dataset.kcOpenProduct
+      || button.dataset.kcOpenOwned
       || "",
     ).trim();
     if (!KNOWN.has(product)) return;
