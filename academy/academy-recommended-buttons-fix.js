@@ -8,7 +8,7 @@
   // Inicio, Mis productos y Continuar deben llegar a los listeners nativos
   // de Academy para reutilizar openCourse(), validación de licencia y SSO.
   const SELECTOR = "#kc-stage-recommendations [data-kc-path-open]";
-  const OPENER_SRC = "./academy-open-v6.js?v=20260809-native-buttons2";
+  const OPENER_SRC = "./academy-open-v6.js?v=20260809-private1";
   let openerPromise = null;
 
   function toast(text) {
