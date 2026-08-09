@@ -1,6 +1,29 @@
 name: Validar preparación pública multidispositivo
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "profesionales/index.html"
+      - "estudiantes/index.html"
+      - "recupera/index.html"
+      - "ayuda/**"
+      - "bienvenida/**"
+      - "beta/**"
+      - "soporte/**"
+      - "legal/**"
+      - "404.html"
+      - "site.webmanifest"
+      - "home.js"
+      - "metrics-v1.js"
+      - "productos/**"
+      - "academy/**"
+      - "platform/**"
+      - "tests/launch-readiness-public.spec.mjs"
+      - "tests/public-source-regression.test.mjs"
+      - "tests/product-overflow-diagnostic.mjs"
+      - ".github/workflows/validate-launch-readiness-public.yml"
   push:
     branches: [main]
     paths:
@@ -30,7 +53,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: validate-launch-readiness-public
+  group: validate-launch-readiness-public-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
