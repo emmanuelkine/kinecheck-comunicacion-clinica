@@ -10,7 +10,7 @@
     "[data-kc-open-owned]",
     "#course-grid [data-course]",
   ].join(",");
-  const OPENER_SRC = "./academy-open-v6.js?v=20260808-owned-buttons1";
+  const OPENER_SRC = "./academy-open-v6.js?v=20260808-guided-router4";
   let openerPromise = null;
 
   function toast(text) {
