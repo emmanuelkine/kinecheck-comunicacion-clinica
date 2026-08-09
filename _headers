@@ -45,7 +45,6 @@
 /academy/*
   Cache-Control: no-cache, must-revalidate
   X-Robots-Tag: noindex, nofollow
-  Content-Security-Policy: form-action 'self'
 
 /recupera/consentimiento.html
   Cache-Control: private, no-store, max-age=0
