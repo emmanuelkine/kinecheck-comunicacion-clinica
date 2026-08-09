@@ -6,9 +6,7 @@
 
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const READY_TYPE = "kinecheck-sso-ready";
-  const ACCEPTED_TYPE = "kinecheck-sso-accepted";
-  const RELEASE = "20260806-final5";
+  const RELEASE = "20260809-private1";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
@@ -71,6 +69,23 @@
       product,
       session: accessOnly(session),
     };
+  }
+
+  function encodeBase64Url(value) {
+    const bytes = new TextEncoder().encode(value);
+    let binary = "";
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    return btoa(binary)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/g, "");
+  }
+
+  function externalHandoffUrl(targetUrl, session, product) {
+    const url = new URL(targetUrl);
+    const encoded = encodeBase64Url(JSON.stringify(payload(session, product)));
+    url.hash = new URLSearchParams({ kc_handoff: encoded }).toString();
+    return url.toString();
   }
 
   function toast(text) {
@@ -137,59 +152,21 @@
 
   async function openExternal(product, button) {
     const targetUrl = EXTERNAL[product];
-    const targetOrigin = new URL(targetUrl).origin;
-    const popup = window.open("about:blank", `kinecheck-${product}`);
-    if (!popup) {
-      toast("El navegador bloqueó la apertura del curso. Habilita ventanas emergentes para kinecheck.cl y vuelve a intentarlo.");
-      return;
-    }
-
     setBusy(button, true);
     const session = await usableSession();
     if (!session) {
-      popup.close();
       setBusy(button, false);
       toast("Tu sesión terminó. Ingresa nuevamente a KineCheck una sola vez.");
       return;
     }
 
-    const transfer = payload(session, product);
-    let accepted = false;
-    let intervalId = 0;
-    let timeoutId = 0;
-
-    const cleanup = () => {
-      window.removeEventListener("message", onMessage);
-      clearInterval(intervalId);
-      clearTimeout(timeoutId);
+    try {
+      window.name = "";
+      location.assign(externalHandoffUrl(targetUrl, session, product));
+    } catch {
       setBusy(button, false);
-    };
-
-    const send = () => {
-      if (accepted || popup.closed) return;
-      try { popup.postMessage(transfer, targetOrigin); } catch { /* reintento automático */ }
-    };
-
-    const onMessage = (event) => {
-      if (event.source !== popup || event.origin !== targetOrigin || event.data?.product !== product) return;
-      if (event.data?.type === READY_TYPE) {
-        send();
-        return;
-      }
-      if (event.data?.type === ACCEPTED_TYPE) {
-        accepted = true;
-        cleanup();
-      }
-    };
-
-    window.addEventListener("message", onMessage);
-    try { popup.name = JSON.stringify(transfer); } catch { /* postMessage es la vía principal */ }
-    popup.location.replace(targetUrl);
-    intervalId = window.setInterval(send, 500);
-    timeoutId = window.setTimeout(() => {
-      if (!accepted) toast("El curso tardó en confirmar el acceso. La pestaña permanece abierta para reintentar automáticamente.");
-      cleanup();
-    }, 15000);
+      toast("No fue posible transferir el acceso al curso. Vuelve a intentarlo.");
+    }
   }
 
   async function openApplication(product, button) {
@@ -216,9 +193,7 @@
 
   async function openProduct(product, button = null) {
     if (!KNOWN.has(product)) return;
-    if (navigating) {
-      resetNavigationState();
-    }
+    if (navigating) resetNavigationState();
     if (SAME_ORIGIN[product]) return openSameOrigin(product, button);
     if (EXTERNAL[product]) return openExternal(product, button);
     if (APPLICATIONS.has(product)) return openApplication(product, button);
@@ -227,9 +202,6 @@
   window.KINECHECK_OPEN_PRODUCT = openProduct;
   window.KINECHECK_RESET_PRODUCT_NAVIGATION = resetNavigationState;
 
-  // Este router queda reservado a recomendaciones especiales. Los botones
-  // nativos de Inicio/Mis productos/Continuar deben llegar a Academy v39,
-  // que valida licencia y ejecuta el SSO canónico mediante openCourse().
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-kc-path-open]");
     if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
