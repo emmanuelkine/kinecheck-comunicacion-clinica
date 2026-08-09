@@ -4,7 +4,7 @@
   if (window.__MI_KINECHECK_SIMPLIFY_V2__) return;
   window.__MI_KINECHECK_SIMPLIFY_V2__ = true;
 
-  const VERSION = "20260806-simplified3";
+  const VERSION = "20260809-directnav2";
   const STUDENT_ORDER = [
     "kinecheck-estudiante",
     "mas-alla-del-dolor",
@@ -48,6 +48,7 @@
 
   function labelView(view, label, hidden = false) {
     document.querySelectorAll(`[data-kc-view-link="${view}"]`).forEach((node) => {
+      if (node.matches(".topbar-brand,.sidebar-brand,.mobile-brand")) return;
       if (node.closest(".kc-home-actions,.kc-section-heading")) return;
       const textNode = node.querySelector("span:last-child") || node;
       if (textNode.textContent !== label) textNode.textContent = label;
@@ -93,11 +94,6 @@
       const heading = document.querySelector(selector);
       hide(heading?.closest(".kc-home-section"), true);
     });
-  }
-
-  function openOwned(slug) {
-    const button = activeButton(slug);
-    if (button) button.click();
   }
 
   function firstStudentProduct() {
@@ -226,29 +222,7 @@
     else simplifyProfessional();
   }
 
-  document.addEventListener("click", (event) => {
-    const viewButton = event.target.closest("[data-mi-kc-view]");
-    if (viewButton) {
-      document.querySelector(`[data-kc-view-link="${CSS.escape(viewButton.dataset.miKcView)}"]`)?.click();
-      return;
-    }
-
-    if (event.target.closest("#kc-home-continue")) {
-      const currentRole = role();
-      if (currentRole === "patient") {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        openOwned("kinecheck-recupera");
-      } else if (currentRole === "student") {
-        const slug = firstStudentProduct();
-        if (!slug) return;
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        openOwned(slug);
-      }
-    }
-  }, true);
-
+  // Este módulo queda exclusivamente visual. La navegación y apertura pertenecen al controlador global de Academy.
   function schedule() {
     window.clearTimeout(timer);
     timer = window.setTimeout(apply, 100);
