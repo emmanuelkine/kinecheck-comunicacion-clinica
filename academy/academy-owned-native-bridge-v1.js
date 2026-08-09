@@ -4,12 +4,13 @@
   if (window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__) return;
   window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__ = true;
 
+  // Solo intercepta entradas proxy creadas por Inicio, Mi KineCheck y recomendaciones.
+  // Los botones nativos de #course-grid y #continue-button deben conservar sus
+  // listeners de academy-v39.js y no ser bloqueados por este bridge.
   const PRODUCT_SELECTOR = [
     "[data-kc-open-product]",
     "[data-kc-open-owned]",
     "[data-kc-path-open]",
-    "#course-grid [data-course]",
-    "#continue-button[data-course]",
   ].join(", ");
 
   const STUDENT_ORDER = [
@@ -89,12 +90,23 @@
     });
   }
 
+  function nativeOpenCourse() {
+    if (typeof window.KINECHECK_ACADEMY_OPEN_COURSE === "function") {
+      return window.KINECHECK_ACADEMY_OPEN_COURSE;
+    }
+    // academy-v39.js es un script clásico; su función openCourse queda disponible
+    // en window. Este fallback conecta el bridge con el flujo nativo validado.
+    if (typeof window.openCourse === "function") return window.openCourse;
+    return null;
+  }
+
   async function openSlug(slug, source) {
     if (!slug) return;
 
     try {
-      if (typeof window.KINECHECK_ACADEMY_OPEN_COURSE === "function") {
-        await window.KINECHECK_ACADEMY_OPEN_COURSE(slug);
+      const native = nativeOpenCourse();
+      if (native) {
+        await native(slug);
         return;
       }
 
@@ -106,8 +118,9 @@
       const startedAt = Date.now();
       while (Date.now() - startedAt < 4000) {
         await new Promise((resolve) => window.setTimeout(resolve, 40));
-        if (typeof window.KINECHECK_ACADEMY_OPEN_COURSE === "function") {
-          await window.KINECHECK_ACADEMY_OPEN_COURSE(slug);
+        const delayedNative = nativeOpenCourse();
+        if (delayedNative) {
+          await delayedNative(slug);
           return;
         }
         if (typeof window.KINECHECK_OPEN_PRODUCT === "function") {
