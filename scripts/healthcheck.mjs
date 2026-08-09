@@ -243,10 +243,16 @@ async function main() {
     logFail("El opener unificado no utiliza la ruta protegida de Comunicación Clínica.");
   } else if (!opener.includes("KINECHECK_ACADEMY_SESSION?.refresh")) {
     logFail("El opener unificado no intenta renovar una sesión vencida.");
-  } else if (!opener.includes("popup.name = JSON.stringify(transfer)")) {
-    logFail("El opener unificado no conserva el respaldo del traspaso para cursos externos.");
+  } else if (
+    !opener.includes("kc_handoff")
+    || !opener.includes("externalHandoffUrl")
+    || !opener.includes("location.assign(externalHandoffUrl(targetUrl, session, product))")
+    || !opener.includes("handoff_access_only: true")
+    || opener.includes("popup.name = JSON.stringify(transfer)")
+  ) {
+    logFail("El opener unificado no conserva el handoff efímero access-only vigente para cursos externos.");
   } else {
-    logOk("El opener unificado mantiene ruta protegida, renovación y traspaso de sesión.");
+    logOk("El opener unificado mantiene ruta protegida, renovación y handoff efímero access-only sin popup.");
   }
 
   if (!courseAuthGate.includes('COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:"')) {
