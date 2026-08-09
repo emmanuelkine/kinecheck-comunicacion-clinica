@@ -23,6 +23,24 @@ function collectUnexpectedConsoleErrors(page) {
   return consoleErrors;
 }
 
+async function captureMetrics(page) {
+  const events = [];
+  await page.route("**/functions/v1/metric-event", async (route) => {
+    try {
+      const payload = JSON.parse(route.request().postData() || "{}");
+      events.push(payload);
+    } catch {
+      // Un cuerpo no JSON no debe romper la prueba de navegación.
+    }
+    await route.fulfill({
+      status: 202,
+      contentType: "application/json; charset=utf-8",
+      body: '{"ok":true}',
+    });
+  });
+  return events;
+}
+
 async function openAcademy(page, label) {
   await page.goto(`${BASE}/academy/?qa=${label}-${Date.now()}`, {
     waitUntil: "domcontentloaded",
@@ -36,9 +54,12 @@ async function openAcademy(page, label) {
   })), { timeout: 10000 }).toEqual({ opener: "function", native: "function", bridge: true });
 }
 
-test("Mis productos usa el opener real y completa una navegación de curso", async ({ page }) => {
+test("Mis productos registra el toque, usa el opener real y completa una navegación de curso", async ({ page }) => {
   const consoleErrors = collectUnexpectedConsoleErrors(page);
+  const metricEvents = await captureMetrics(page);
   await openAcademy(page, "owned-real-open");
+
+  await expect.poll(() => metricEvents.some((event) => event.eventName === "page_view")).toBe(true);
 
   const runtime = await page.evaluate(() => ({
     scripts: [...document.scripts].map((script) => script.src).filter(Boolean),
@@ -93,6 +114,10 @@ test("Mis productos usa el opener real y completa una navegación de curso", asy
     ownedButton.click(),
   ]);
 
+  await expect.poll(() => metricEvents.some((event) => (
+    event.eventName === "course_open"
+    && event.productSlug === "comunicacion-clinica"
+  ))).toBe(true);
   await expect(page.locator("#qa-destination")).toHaveText("Destino QA");
   expect(consoleErrors).toEqual([]);
 });
