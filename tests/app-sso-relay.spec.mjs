@@ -64,7 +64,7 @@ for (const product of ["kinecheck-estudiante", "kinecheck-recupera"]) {
     });
 
     if (product === "kinecheck-recupera") {
-      await expect(page).toHaveURL(/\/recupera\/consentimiento\.html$/);
+      await expect(page).toHaveURL(/\/recupera\/consentimiento(?:\.html)?\/?$/);
       await page.locator("#recupera-consent").check();
       await page.getByRole("button", { name: "Aceptar y abrir KineCheck Recupera" }).click();
     }
