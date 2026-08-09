@@ -45,6 +45,10 @@ async function installNativeHarness(page) {
   await page.addScriptTag({ path: FIX_SCRIPT });
 }
 
+function decodeBase64UrlJson(value) {
+  return JSON.parse(Buffer.from(value, "base64url").toString("utf8"));
+}
+
 test("Inicio deja pasar data-kc-open-product al flujo nativo", async ({ page }) => {
   await installNativeHarness(page);
 
@@ -114,6 +118,100 @@ test("el bridge de window gana a interceptores de document y termina en el botó
   ]);
   await expect.poll(async () => page.evaluate(() => window.__blockedAtDocument)).toBe(0);
 });
+
+test("los cursos externos evitan listeners de document y usan el opener privado", async ({ page }) => {
+  await page.setContent(`
+    <!doctype html>
+    <html><body>
+      <section id="inicio">
+        <button type="button" data-kc-open-product="mas-alla-del-dolor">Más allá</button>
+      </section>
+      <section id="kc-stage-recommendations">
+        <button type="button" data-kc-path-open="evidencia-aplicada">Evidencia</button>
+      </section>
+      <section id="course-grid">
+        <button type="button" data-course="mas-alla-del-dolor">Biblioteca Más allá</button>
+        <button type="button" data-course="evidencia-aplicada">Biblioteca Evidencia</button>
+      </section>
+    </body></html>
+  `);
+
+  await page.evaluate(() => {
+    window.__external = [];
+    window.__documentIntercepts = 0;
+    window.KINECHECK_OPEN_PRODUCT = (slug) => { window.__external.push(slug); };
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest("[data-kc-open-product], [data-kc-path-open], [data-course]")) return;
+      window.__documentIntercepts += 1;
+      event.stopImmediatePropagation();
+    }, true);
+  });
+
+  await page.addScriptTag({ path: BRIDGE_SCRIPT });
+
+  await page.locator('[data-kc-open-product="mas-alla-del-dolor"]').click();
+  await page.locator('[data-kc-path-open="evidencia-aplicada"]').click();
+  await page.locator('#course-grid [data-course="mas-alla-del-dolor"]').click();
+
+  await expect.poll(async () => page.evaluate(() => window.__external)).toEqual([
+    "mas-alla-del-dolor",
+    "evidencia-aplicada",
+    "mas-alla-del-dolor",
+  ]);
+  await expect.poll(async () => page.evaluate(() => window.__documentIntercepts)).toBe(0);
+});
+
+for (const [product, pathname] of [
+  ["mas-alla-del-dolor", "/mas-alla-del-dolor/"],
+  ["evidencia-aplicada", "/kinecheck-evidencia-aplicada/"],
+]) {
+  test(`sesión fresca entrega ${product} por fragmento efímero sin datos extra`, async ({ page }) => {
+    const accessToken = "private-session-access-token-1234567890";
+    const expiresAt = Math.floor(Date.now() / 1000) + 3600;
+
+    await page.setContent(`
+      <!doctype html><html><body>
+        <div id="kc-toast" hidden></div>
+        <button type="button" data-kc-path-open="${product}">Abrir externo</button>
+      </body></html>
+    `);
+    await page.evaluate(({ accessToken: token, expiresAt: expiry }) => {
+      window.KINECHECK_ACADEMY_SESSION = {
+        get: () => ({
+          access_token: token,
+          expires_at: expiry,
+          refresh_token: "NO-DEBE-SALIR",
+          user: { email: "no-debe-salir@example.com" },
+        }),
+      };
+    }, { accessToken, expiresAt });
+
+    await page.route(`https://emmanuelkine.github.io${pathname}**`, async (route) => {
+      await route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Destino</title>" });
+    });
+    await page.addScriptTag({ path: OPEN_SCRIPT });
+
+    await Promise.all([
+      page.waitForURL((url) => url.hostname === "emmanuelkine.github.io" && url.pathname === pathname),
+      page.locator(`[data-kc-path-open="${product}"]`).click(),
+    ]);
+
+    const destination = new URL(page.url());
+    const encoded = new URLSearchParams(destination.hash.slice(1)).get("kc_handoff");
+    expect(encoded).toBeTruthy();
+
+    const handoff = decodeBase64UrlJson(encoded);
+    expect(handoff.type).toBe("kinecheck-sso-v3-access-only");
+    expect(handoff.product).toBe(product);
+    expect(handoff.session.access_token).toBe(accessToken);
+    expect(handoff.session.expires_at).toBe(expiresAt);
+    expect(handoff.session.refresh_token).toBeUndefined();
+    expect(handoff.session.user).toBeUndefined();
+    expect(JSON.stringify(handoff)).not.toContain("no-debe-salir@example.com");
+    expect(JSON.stringify(handoff)).not.toContain("NO-DEBE-SALIR");
+  });
+}
 
 test("los botones Abrir de la ruta guiada reutilizan el flujo nativo de Mis productos", async ({ page }) => {
   const guidedProducts = ["kinecheck-estudiante", "kinecheck-recupera", "comunicacion-clinica"];

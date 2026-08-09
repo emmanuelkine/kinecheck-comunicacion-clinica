@@ -306,7 +306,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
 (() => {
   if (document.querySelector('script[data-kc-brand-identity]')) return;
   const script = document.createElement("script");
-  script.src = "./academy-brand-identity.js?v=20260809-native-owned1";
+  script.src = "./academy-brand-identity.js?v=20260809-private1";
   script.async = false;
   script.dataset.kcBrandIdentity = "true";
   document.head.appendChild(script);
