@@ -4,7 +4,7 @@
   if (window.__MI_KINECHECK_V1__) return;
   window.__MI_KINECHECK_V1__ = true;
 
-  const VERSION = "20260809-native-owned1";
+  const VERSION = "20260809-directnav2";
   const STUDENT_ORDER = [
     ["kinecheck-estudiante", "Practica el proceso guiado", "Aprende qué preguntar, observar y relacionar antes de avanzar."],
     ["mas-alla-del-dolor", "Comprende dolor, función y contexto", "Profundiza cuando ya puedas seguir el orden básico de evaluación."],
@@ -37,6 +37,7 @@
 
   function linkLabel(view, value) {
     document.querySelectorAll(`[data-kc-view-link="${view}"]`).forEach((item) => {
+      if (item.matches(".topbar-brand,.sidebar-brand,.mobile-brand")) return;
       const label = item.querySelector("span:last-child,small") || item;
       if (label.textContent !== value) label.textContent = value;
     });
@@ -44,6 +45,7 @@
 
   function hideLink(view, hidden) {
     document.querySelectorAll(`[data-kc-view-link="${view}"]`).forEach((item) => {
+      if (item.matches(".topbar-brand,.sidebar-brand,.mobile-brand")) return;
       if (item.closest(".kc-home-actions,.kc-section-heading")) return;
       item.classList.toggle("kc-role-hidden", hidden);
       item.setAttribute("aria-hidden", hidden ? "true" : "false");
@@ -59,15 +61,9 @@
       || null;
   }
 
-  function openOwnedThroughLibrary(slug) {
-    const target = openButton(slug);
-    if (!target) return false;
-    window.__KINECHECK_NATIVE_OWNED_PROXY__ = true;
-    try {
-      target.click();
-    } finally {
-      window.__KINECHECK_NATIVE_OWNED_PROXY__ = false;
-    }
+  function openOwnedDirect(slug, source = null) {
+    if (typeof window.KINECHECK_OPEN_PRODUCT !== "function") return false;
+    void window.KINECHECK_OPEN_PRODUCT(slug, source);
     return true;
   }
 
@@ -242,12 +238,14 @@
     else professional();
   }
 
+  // Fallback directo: el controlador global en window captura primero; si no está, no se simulan clicks proxy.
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-kc-open-owned]");
     if (!button || button.disabled) return;
+    if (typeof window.KINECHECK_OPEN_PRODUCT !== "function") return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    openOwnedThroughLibrary(button.dataset.kcOpenOwned);
+    openOwnedDirect(button.dataset.kcOpenOwned, button);
   });
 
   function schedule() {

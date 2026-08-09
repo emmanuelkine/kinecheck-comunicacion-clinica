@@ -2,12 +2,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const read = (name) => readFile(new URL(name, import.meta.url), "utf8");
-const [index, bootstrap, config, core, opener, router, relayHtml, relayJs, recovery, reviews, learningPath, integrationGuard, evidence, courseAuthGate] = await Promise.all([
+const [index, bootstrap, config, core, opener, bridge, router, relayHtml, relayJs, recovery, reviews, learningPath, integrationGuard, evidence, courseAuthGate] = await Promise.all([
   read("index.html"),
   read("academy-bootstrap-v28.js"),
   read("config.js"),
   read("academy-v39.js"),
   read("academy-open-v6.js"),
+  read("academy-owned-native-bridge-v1.js"),
   read("academy-launch-router-v4.js"),
   read("app-sso-relay.html"),
   read("app-sso-relay.js"),
@@ -67,7 +68,24 @@ assert.match(integrationGuard, /academy-open-v6\.js/);
 assert.match(opener, /app-sso-relay\.html/);
 assert.match(relayJs, /method = "POST"/);
 assert.match(relayJs, /handoff_type/);
-assert.match(opener, /popup\.name = JSON\.stringify\(transfer\)/);
+
+// El handoff externo debe funcionar también en sesiones privadas frescas sin popup/opener.
+assert.match(opener, /kc_handoff/);
+assert.match(opener, /externalHandoffUrl\(/);
+assert.match(opener, /location\.assign\(externalHandoffUrl\(targetUrl, session, product\)\)/);
+assert.match(opener, /handoff_access_only:\s*true/);
+assert.doesNotMatch(opener.match(/function accessOnly[\s\S]*?\n  }/)?.[0] || "", /refresh_token|email|user|password/);
+assert.doesNotMatch(opener, /window\.open\(|popup\.postMessage|popup\.name/);
+
+// La interfaz visible debe tener un único controlador directo, sin clicks proxy.
+assert.match(bridge, /window\.addEventListener\("click"[\s\S]*?true\);/);
+assert.match(bridge, /KINECHECK_OPEN_PRODUCT/);
+assert.match(bridge, /data-kc-open-product/);
+assert.match(bridge, /data-kc-open-owned/);
+assert.match(bridge, /data-kc-path-open/);
+assert.match(bridge, /#course-grid \[data-course\]/);
+assert.doesNotMatch(bridge, /target\.click\(|button\.click\(/);
+
 assert.match(opener, /comunicacion-clinica\.html\?course=comunicacion-clinica/);
 assert.match(courseAuthGate, /COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:"/);
 assert.match(courseAuthGate, /LEGACY_COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:"/);
@@ -90,4 +108,4 @@ assert.match(recovery, /method:\s*"PUT"/);
 assert.match(recovery, /\/auth\/v1\/user/);
 assert.match(recovery, /password\.length < 8/);
 
-console.log("KineCheck Academy OK: Clínico local, SSO de Estudiante y Recupera, sesión móvil transitoria, CSP restringida y recuperación de contraseña.");
+console.log("KineCheck Academy OK: navegación directa, Clínico local, SSO de Estudiante y Recupera, handoff privado sin popup, CSP restringida y recuperación de contraseña.");
