@@ -1,6 +1,12 @@
 name: KineCheck healthcheck
 
 on:
+  pull_request:
+    paths:
+      - "academy/**"
+      - "kinecheck/**"
+      - "scripts/healthcheck.mjs"
+      - ".github/workflows/kinecheck-healthcheck.yml"
   push:
     branches: [main]
     paths:
@@ -15,6 +21,10 @@ on:
 permissions:
   contents: read
   issues: write
+
+concurrency:
+  group: kinecheck-healthcheck-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   end-to-end-healthcheck:
@@ -50,6 +60,7 @@ jobs:
           exit 0
 
       - name: Publish healthcheck report
+        if: github.event_name != 'pull_request'
         uses: actions/github-script@v7
         env:
           HEALTHCHECK_EXIT_CODE: ${{ steps.healthcheck.outputs.exit_code }}
