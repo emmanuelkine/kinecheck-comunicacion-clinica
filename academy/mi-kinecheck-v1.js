@@ -4,7 +4,7 @@
   if (window.__MI_KINECHECK_V1__) return;
   window.__MI_KINECHECK_V1__ = true;
 
-  const VERSION = "20260806-unified1";
+  const VERSION = "20260809-native-owned1";
   const STUDENT_ORDER = [
     ["kinecheck-estudiante", "Practica el proceso guiado", "Aprende qué preguntar, observar y relacionar antes de avanzar."],
     ["mas-alla-del-dolor", "Comprende dolor, función y contexto", "Profundiza cuando ya puedas seguir el orden básico de evaluación."],
@@ -53,7 +53,22 @@
   }
 
   function openButton(slug) {
-    return [...document.querySelectorAll(`[data-course="${slug}"]`)].find((button) => !button.disabled) || null;
+    const selector = `[data-course="${slug}"]`;
+    return [...document.querySelectorAll(`#course-grid ${selector}`)].find((button) => !button.disabled)
+      || [...document.querySelectorAll(selector)].find((button) => !button.disabled)
+      || null;
+  }
+
+  function openOwnedThroughLibrary(slug) {
+    const target = openButton(slug);
+    if (!target) return false;
+    window.__KINECHECK_NATIVE_OWNED_PROXY__ = true;
+    try {
+      target.click();
+    } finally {
+      window.__KINECHECK_NATIVE_OWNED_PROXY__ = false;
+    }
+    return true;
   }
 
   function activeSlugs() {
@@ -230,7 +245,9 @@
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-kc-open-owned]");
     if (!button || button.disabled) return;
-    openButton(button.dataset.kcOpenOwned)?.click();
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    openOwnedThroughLibrary(button.dataset.kcOpenOwned);
   });
 
   function schedule() {
