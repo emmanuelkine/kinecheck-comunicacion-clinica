@@ -13,7 +13,7 @@ async function installHarness(page) {
     <html><head></head><body data-kc-view="inicio" data-kc-experience="professional">
       <div id="kc-toast" hidden></div>
       <button id="mobile-menu" type="button" aria-expanded="false">Menu</button>
-      <div id="sidebar-overlay" hidden></div>
+      <div id="sidebar-overlay" hidden style="position:fixed;inset:0;z-index:10"></div>
       <aside id="academy-sidebar"></aside>
       <div id="support-panel" hidden></div>
       <button id="support-launcher" data-support-open aria-expanded="false">Soporte</button>
