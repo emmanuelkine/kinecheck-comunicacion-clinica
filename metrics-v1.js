@@ -93,7 +93,9 @@
     if (path.startsWith("/platform/")) send("platform_login_view");
   }
 
-  document.addEventListener("click", (event) => {
+  // El bridge de Academy captura en window y puede detener propagación antes de document.
+  // Escuchar aquí garantiza que los toques de tarjetas proxy queden observables.
+  window.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target.closest("a,button") : null;
     if (!target) return;
 
