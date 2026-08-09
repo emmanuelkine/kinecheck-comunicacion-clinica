@@ -1,8 +1,15 @@
 import { test, expect } from "@playwright/test";
 
 const BASE = process.env.BASE_URL || "https://kinecheck.cl";
+const LOCAL_HARNESS = /^http:\/\/127\.0\.0\.1:4173(?:\/|$)/i.test(BASE);
 
 test.use({ viewport: { width: 390, height: 844 } });
+
+function isExpectedHarnessNoise(text) {
+  if (!LOCAL_HARNESS) return false;
+  return /Origin http:\/\/127\.0\.0\.1:4173 is not allowed by Access-Control-Allow-Origin/i.test(text)
+    || /http:\/\/127\.0\.0\.1:4173\/api\/health(?:\s|$|\?)/i.test(text);
+}
 
 test("Academy real carga el bridge y conecta tarjetas proxy con openCourse nativo", async ({ page }) => {
   const consoleErrors = [];
@@ -10,6 +17,7 @@ test("Academy real carga el bridge y conecta tarjetas proxy con openCourse nativ
     if (message.type() !== "error") return;
     const text = `${message.text()} ${message.location().url || ""}`;
     if (/favicon|metric-event|cloudflareinsights\.com|static\.cloudflareinsights\.com|beacon\.min\.js/i.test(text)) return;
+    if (isExpectedHarnessNoise(text)) return;
     consoleErrors.push(text);
   });
 
