@@ -23,6 +23,7 @@ async function installHarness(page) {
       <div id="kc-toast" hidden></div>
       <section id="home-app-grid"></section>
       <section id="home-course-grid"></section>
+      <section id="guided-route"></section>
       <section id="course-grid"></section>
     </body></html>
   `);
@@ -80,6 +81,25 @@ test("los botones de cursos en Inicio y Mis cursos abren el curso exacto", async
 
   await expect.poll(async () => page.evaluate(() => window.__openedProducts)).toEqual(
     courses.map((product) => ({ product, text: "Continuar" })),
+  );
+});
+
+test("los botones Abrir de la ruta guiada abren directamente el producto exacto", async ({ page }) => {
+  await installHarness(page);
+
+  const guidedProducts = ["kinecheck-estudiante", "kinecheck-recupera", "comunicacion-clinica"];
+  await page.evaluate((slugs) => {
+    document.querySelector("#guided-route").innerHTML = slugs.map((slug) => `
+      <article><button type="button" data-kc-open-owned="${slug}">Abrir</button></article>
+    `).join("");
+  }, guidedProducts);
+
+  for (const product of guidedProducts) {
+    await page.locator(`[data-kc-open-owned="${product}"]`).click();
+  }
+
+  await expect.poll(async () => page.evaluate(() => window.__openedProducts)).toEqual(
+    guidedProducts.map((product) => ({ product, text: "Abrir" })),
   );
 });
 
