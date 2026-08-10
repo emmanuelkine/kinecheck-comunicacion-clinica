@@ -392,6 +392,17 @@
   function openModal() {
     const modal = $("#kc-stage-modal");
     if (!modal) return;
+
+    // Mi KineCheck infiere el perfil desde los productos activos y oculta este
+    // selector legado. No debe abrirse en segundo plano: además de quedar
+    // invisible, su clase de modal bloqueaba el desplazamiento de toda Academy.
+    if (window.__MI_KINECHECK_SIMPLIFY_V2__ === true) {
+      closeModal();
+      return;
+    }
+
+    modal.removeAttribute("inert");
+    modal.removeAttribute("aria-hidden");
     const suggested = inferStage();
     const suggestedButton = $("#kc-stage-suggested");
     if (suggestedButton) {
@@ -404,8 +415,19 @@
 
   function closeModal() {
     const modal = $("#kc-stage-modal");
-    if (modal) modal.hidden = true;
+    if (modal && !modal.hidden) modal.hidden = true;
     document.body.classList.remove("kc-stage-modal-open");
+  }
+
+  function scheduleStageChooser() {
+    if (readSavedStage() || window.__MI_KINECHECK_SIMPLIFY_V2__ === true) {
+      closeModal();
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (!readSavedStage()) openModal();
+    }, 350);
   }
 
   function selectStage(stage, notify = true) {
@@ -465,7 +487,7 @@
         if (!dashboard.hidden) {
           activeStage = readSavedStage() || inferStage();
           renderStage();
-          if (!readSavedStage()) window.setTimeout(openModal, 350);
+          scheduleStageChooser();
         }
       }).observe(dashboard, { attributes: true, attributeFilter: ["hidden"] });
     }
@@ -477,7 +499,7 @@
     observePlatform();
     activeStage = readSavedStage() || inferStage();
     renderStage();
-    if (!$("#dashboard-view")?.hidden && !readSavedStage()) window.setTimeout(openModal, 350);
+    if (!$("#dashboard-view")?.hidden) scheduleStageChooser();
   }
 
   if (document.readyState === "loading") {

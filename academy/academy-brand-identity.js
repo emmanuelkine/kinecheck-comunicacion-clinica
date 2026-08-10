@@ -93,7 +93,7 @@
 
   loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260809-directnav2");
   loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
-  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260809-directnav2");
+  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260810-interactionfix1");
   loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
 
   if (document.readyState === "loading") {

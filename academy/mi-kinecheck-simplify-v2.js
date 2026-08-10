@@ -4,7 +4,7 @@
   if (window.__MI_KINECHECK_SIMPLIFY_V2__) return;
   window.__MI_KINECHECK_SIMPLIFY_V2__ = true;
 
-  const VERSION = "20260809-directnav2";
+  const VERSION = "20260810-interactionfix1";
   const STUDENT_ORDER = [
     "kinecheck-estudiante",
     "mas-alla-del-dolor",
@@ -83,7 +83,26 @@
     document.body.classList.remove("mi-kc-focused-student", "mi-kc-focused-patient");
   }
 
+  function releaseStaleInteractionLocks() {
+    const stageModal = document.querySelector("#kc-stage-modal");
+    if (stageModal) {
+      if (!stageModal.hidden) stageModal.hidden = true;
+      if (stageModal.getAttribute("aria-hidden") !== "true") stageModal.setAttribute("aria-hidden", "true");
+      if (!stageModal.hasAttribute("inert")) stageModal.setAttribute("inert", "");
+    }
+
+    // Recupera sesiones que quedaron congeladas por el selector legado oculto.
+    document.body.classList.remove("kc-stage-modal-open");
+
+    // Una evaluación cerrada tampoco debe conservar su bloqueo de scroll al
+    // volver desde el historial o restaurar una pestaña.
+    const reviewModal = document.querySelector("#review-modal");
+    if (!reviewModal || reviewModal.hidden) document.body.classList.remove("review-open");
+  }
+
   function removeStageChooser() {
+    releaseStaleInteractionLocks();
+
     hideAll("#kc-learning-path,#kc-profile-stage,#kc-sidebar-stage,#kc-topbar-stage,#kc-stage-modal", true);
     hideAll("#kc-change-stage,#kc-profile-stage-change,[data-kc-stage-choice],#kc-stage-suggested", true);
     document.documentElement.classList.add("mi-kc-stage-inferred");
@@ -230,6 +249,11 @@
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", schedule, { once: true });
   else schedule();
+
+  window.addEventListener("pageshow", () => {
+    releaseStaleInteractionLocks();
+    schedule();
+  });
 
   new MutationObserver(schedule).observe(document.documentElement, {
     childList: true,

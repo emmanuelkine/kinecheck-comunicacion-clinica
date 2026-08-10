@@ -25,14 +25,14 @@
     if (!document.querySelector('link[data-kinecheck-learning-path]')) {
       const stylesheet = document.createElement("link");
       stylesheet.rel = "stylesheet";
-      stylesheet.href = "./academy-learning-path-v4.css?v=20260731-color2";
+      stylesheet.href = "./academy-learning-path-v4.css?v=20260810-interactionfix1";
       stylesheet.dataset.kinecheckLearningPath = "styles";
       document.head.appendChild(stylesheet);
     }
 
     if (!document.querySelector('script[data-kinecheck-learning-path]')) {
       const script = document.createElement("script");
-      script.src = "./academy-learning-path-v4.js?v=20260803-stable2";
+      script.src = "./academy-learning-path-v4.js?v=20260810-interactionfix1";
       script.dataset.kinecheckLearningPath = "script";
       script.defer = true;
       document.head.appendChild(script);
