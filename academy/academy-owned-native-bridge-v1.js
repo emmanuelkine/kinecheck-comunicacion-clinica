@@ -4,10 +4,10 @@
   if (window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__) return;
   window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__ = true;
 
-  // Intercepta las entradas proxy y, de forma específica, el botón global Continuar.
-  // Las tarjetas nativas de #course-grid conservan intactos sus listeners probados.
+  // Intercepta únicamente accesos auxiliares y el botón global Continuar.
+  // Las tarjetas dinámicas [data-kc-open-product] conservan su controlador nativo
+  // de academy-kinecheck-v4.js para evitar bloquear su clic antes de abrir el curso.
   const PRODUCT_SELECTOR = [
-    "[data-kc-open-product]",
     "[data-kc-open-owned]",
     "[data-kc-path-open]",
     "#continue-button[data-course]",
@@ -102,7 +102,7 @@
     if (!slug) return;
 
     try {
-      // Las tarjetas proxy usan primero el opener unificado. Es la misma ruta que
+      // Los accesos auxiliares usan primero el opener unificado. Es la misma ruta que
       // utilizan las recomendaciones: muestra estado "Abriendo…", renueva sesión
       // cuando corresponde y deja un error visible en #kc-toast si no puede navegar.
       if (typeof window.KINECHECK_OPEN_PRODUCT === "function") {
