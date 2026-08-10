@@ -862,6 +862,18 @@ async function openCourse(slug) {
   }
 }
 
+window.KineCheckAcademyLauncher = Object.freeze({
+  open(slug) {
+    const course = CONFIG.courses.find((item) => item.slug === slug);
+    if (!course || courseAccess(course) !== "owned") {
+      showLibraryMessage("Este producto no está disponible en tu cuenta.", true);
+      return false;
+    }
+    openCourse(slug);
+    return true;
+  },
+});
+
 function toggleSidebar(force) {
   const open = typeof force === "boolean" ? force : !sidebar.classList.contains("open");
   sidebar.classList.toggle("open", open);
