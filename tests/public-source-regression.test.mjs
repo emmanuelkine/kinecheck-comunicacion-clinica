@@ -69,12 +69,18 @@ function assertAccessiblePublicShell(source) {
   assert.equal(count(source, "<h1"), 1, "la página debe tener un único h1");
 }
 
-test("la portada conserva soporte, precios y accesos canónicos", async () => {
+test("la portada simplificada conserva soporte, tres perfiles y acceso canónico", async () => {
   const home = await read("index.html");
   assert.ok(home.includes('href="mailto:soporte.kinecheck@gmail.com"'));
-  for (const price of ["$39.990 CLP", "$14.990 CLP", "$9.990 CLP"]) assert.ok(home.includes(price));
   assertAccessiblePublicShell(home);
+  assertOpenGraph(home, "https://kinecheck.cl/");
   assert.equal(count(home, 'class="icon" aria-hidden="true"'), 3);
+  assert.equal(count(home, 'class="audience-card'), 3);
+  assert.ok(home.includes('href="./profesionales/"'));
+  assert.ok(home.includes('href="./estudiantes/"'));
+  assert.ok(home.includes('href="./recupera/"'));
+  assert.ok(home.includes('href="./academy/"'));
+  assert.equal(count(home, 'class="price"'), 0, "la portada ya no debe duplicar precios ni checkouts");
 });
 
 test("ninguna superficie pública visible usa /platform/ ni CTAs vacíos", async () => {
@@ -94,19 +100,17 @@ test("ninguna superficie pública visible usa /platform/ ni CTAs vacíos", async
   assert.ok(!manifest.includes('"start_url": "/platform/"'));
 });
 
-test("la arquitectura oficial de marca está explícita y es consistente", async () => {
+test("la arquitectura de marca queda distribuida por perfil sin duplicarse en portada", async () => {
   const home = await read("index.html");
-  assert.equal(count(home, 'class="brand-family-card"'), 3);
-  assert.ok(home.includes("KINECHECK APPS"));
-  assert.ok(home.includes("KINECHECK FORMACIÓN"));
-  assert.ok(home.includes("KINECHECK PACKS"));
-  assert.match(home, /KINECHECK APPS[\s\S]*?KineCheck Estudiante · KineCheck Recupera/);
-  assert.match(home, /KINECHECK FORMACIÓN[\s\S]*?KineCheck Clínico/);
+  assert.equal(count(home, 'class="audience-card'), 3);
+  assert.equal(count(home, 'class="brand-family-card"'), 0);
+  assert.ok(home.includes("Soy profesional"));
+  assert.ok(home.includes("Soy estudiante"));
+  assert.ok(home.includes("Estoy en recuperación"));
 
   const professionals = await read("profesionales/index.html");
-  assert.equal(count(professionals, "KINECHECK FORMACIÓN + GUÍA COMPLEMENTARIA"), 1);
-  assert.equal(count(professionals, "KINECHECK FORMACIÓN · POR KINECHECK"), 6);
-  assert.equal(count(professionals, "PRÓXIMAMENTE"), 2);
+  assert.equal(count(professionals, "KINECHECK FORMACIÓN"), 5);
+  assert.equal(count(professionals, "PRÓXIMAMENTE"), 0);
   assert.ok(professionals.includes("curso profesional avanzado"));
   assert.ok(professionals.includes("guía digital complementaria"));
   assert.ok(!professionals.includes("Registro kinésico profesional"));
@@ -114,7 +118,7 @@ test("la arquitectura oficial de marca está explícita y es consistente", async
   const students = await read("estudiantes/index.html");
   assert.equal(count(students, "KINECHECK APPS"), 1);
   assert.equal(count(students, "KINECHECK PACKS"), 1);
-  assert.equal(count(students, "KINECHECK FORMACIÓN · POR KINECHECK"), 2);
+  assert.equal(count(students, "KINECHECK FORMACIÓN"), 2);
 
   const recovery = await read("recupera/index.html");
   assert.ok(recovery.includes("KINECHECK APPS"));
