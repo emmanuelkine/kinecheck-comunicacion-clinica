@@ -73,16 +73,15 @@ jobs:
             recupera: fs.readFileSync('recupera/index.html', 'utf8'),
           };
 
-          const expectedCounts = { home: 3, profesionales: 5, estudiantes: 4, recupera: 1 };
+          // La portada se simplificó deliberadamente: solo muestra tres perfiles.
+          // Los precios y checkouts oficiales viven dentro de cada perfil.
+          const expectedCounts = { home: 0, profesionales: 5, estudiantes: 4, recupera: 1 };
           for (const [pageName, expected] of Object.entries(expectedCounts)) {
             const blocks = (pages[pageName].match(/class="price"/g) || []).length;
             if (blocks !== expected) throw new Error(`${pageName}: se esperaban ${expected} bloques de precio y hay ${blocks}.`);
           }
 
           const products = [
-            ['home', 'KineCheck Clínico', '$39.990 CLP', 'Acceso por 12 meses', 'L106791841D'],
-            ['home', 'KineCheck Estudiante', '$14.990 CLP', 'Acceso por 12 meses', 'G106801166S'],
-            ['home', 'KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses', 'P106806251E'],
             ['profesionales', 'KineCheck Clínico', '$39.990 CLP', 'Acceso por 12 meses', 'L106791841D'],
             ['profesionales', 'Comunicación Clínica', '$19.900 CLP', 'Acceso por 12 meses', 'T106883983U'],
             ['profesionales', 'Más allá del Dolor', '$39.990 CLP', 'Acceso por 12 meses', 'W106888386Q'],
@@ -105,7 +104,7 @@ jobs:
           if (Object.values(pages).some((html) => html.includes('$59.900'))) {
             throw new Error('Se conserva el precio anterior del pack.');
           }
-          console.log('Precios, vigencias y checkouts visibles en la arquitectura pública actual.');
+          console.log('Precios, vigencias y checkouts visibles en los perfiles públicos.');
           NODE
 
       - name: Validar correcciones de auditoría pública
