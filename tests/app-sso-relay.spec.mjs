@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const BASE = process.env.BASE_URL || "http://127.0.0.1:4173";
-const POST_URL = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
+const POST_URL = "https://apps.kinecheck.cl/api/license/sso";
 const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
 const CONSENT_VERSION = "2026-08-09-health-v1";
 
