@@ -193,3 +193,90 @@ test("navegación móvil real y botones nativos conservan eventos de puntero", a
   await expect(page.locator("#academy-sidebar")).toHaveClass(/open/);
   await expect(menu).toHaveAttribute("aria-expanded", "true");
 });
+
+test("Academy no conserva overlays invisibles ni bloquea el scroll o los controles", async ({ page }) => {
+  await page.setViewportSize({ width: 1867, height: 976 });
+
+  await page.addInitScript(() => {
+    const session = {
+      access_token: "qa-owner-access-token-with-safe-runtime-length",
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+      expires_in: 3600,
+      token_type: "bearer",
+      user: {
+        id: "qa-owner-user",
+        email: "emmanuelkine@gmail.com",
+      },
+    };
+    localStorage.setItem("kinecheck_secure_session_v1", JSON.stringify(session));
+    localStorage.removeItem("kinecheck_learning_stage_v1:emmanuelkine@gmail.com");
+  });
+
+  await page.route("**/auth/v1/user", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json; charset=utf-8",
+      body: JSON.stringify({
+        id: "qa-owner-user",
+        email: "emmanuelkine@gmail.com",
+        created_at: "2026-01-01T00:00:00.000Z",
+      }),
+    });
+  });
+  await page.route("**/functions/v1/metric-event", async (route) => {
+    await route.fulfill({ status: 202, contentType: "application/json", body: '{"ok":true}' });
+  });
+
+  await openAcademy(page, "scroll-and-controls");
+  await expect(page.locator("#dashboard-view")).toBeVisible();
+  await expect(page.locator("#course-grid .course-card")).toHaveCount(9);
+  await page.locator('.topbar-nav [data-kc-view-link="biblioteca"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-kc-view", "biblioteca");
+
+  // El selector legado intentaba abrirse 350 ms después del dashboard.
+  await page.waitForTimeout(900);
+
+  const interactionState = await page.evaluate(() => {
+    const modal = document.querySelector("#kc-stage-modal");
+    return {
+      bodyClass: document.body.className,
+      bodyOverflow: getComputedStyle(document.body).overflow,
+      documentOverflow: getComputedStyle(document.documentElement).overflow,
+      modalHidden: modal?.hidden ?? true,
+      modalDisplay: modal ? getComputedStyle(modal).display : "missing",
+      scrollHeight: document.documentElement.scrollHeight,
+      viewportHeight: window.innerHeight,
+    };
+  });
+
+  expect(interactionState.bodyClass).not.toContain("kc-stage-modal-open");
+  expect(interactionState.bodyOverflow).not.toBe("hidden");
+  expect(interactionState.documentOverflow).not.toBe("hidden");
+  expect(interactionState.modalHidden || interactionState.modalDisplay === "none").toBeTruthy();
+  expect(interactionState.scrollHeight).toBeGreaterThan(interactionState.viewportHeight);
+
+  await page.evaluate(() => window.scrollTo(0, 700));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+
+  for (const view of ["biblioteca", "herramientas", "perfil", "inicio"]) {
+    await page.locator(`.topbar-nav [data-kc-view-link="${view}"]`).click();
+    await expect(page.locator("body")).toHaveAttribute("data-kc-view", view);
+  }
+
+  await page.locator("#support-launcher").click();
+  await expect(page.locator("#support-panel")).toBeVisible();
+  await page.locator("[data-support-close]").click();
+  await expect(page.locator("#support-panel")).toBeHidden();
+
+  // También repara una pestaña restaurada por el navegador con locks antiguos.
+  await page.evaluate(() => {
+    document.body.classList.add("kc-stage-modal-open", "review-open");
+    const stageModal = document.querySelector("#kc-stage-modal");
+    const reviewModal = document.querySelector("#review-modal");
+    if (stageModal) stageModal.hidden = true;
+    if (reviewModal) reviewModal.hidden = true;
+    window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
+  await expect.poll(() => page.evaluate(() => document.body.className)).not.toContain("modal-open");
+  await expect.poll(() => page.evaluate(() => document.body.className)).not.toContain("review-open");
+});
