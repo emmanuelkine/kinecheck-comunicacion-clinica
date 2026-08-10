@@ -1,9 +1,138 @@
 {
-  "version": "2026-07-31.2",
-  "lastReviewed": "2026-07-31",
+  "version": "2026-08-09.1",
+  "lastReviewed": "2026-08-09",
   "contentClassification": "public-evidence-digest",
   "editorialNote": "Síntesis editorial pública de estudios y guías enlazados a sus fuentes originales. No contiene datos de usuarios, información clínica individual ni material curricular protegido. La lectura crítica completa, las actividades formativas, las licencias y el progreso personal permanecen dentro del acceso autenticado de KineCheck.",
   "items": [
+    {
+      "id": "reason-cp-clinical-reasoning-2026",
+      "alertDate": "2026-08-09",
+      "source": "PubMed",
+      "status": "Verificada",
+      "title": "REASON CP: razonamiento clínico basado en sistemas, CIF y participación",
+      "authors": "Mayston M, Foley S, Reynolds K, Walsh W, Saloojee G.",
+      "citation": "REASON CP: a systems-based framework for clinical reasoning to support participation across the lifespan in childhood-onset neurodisability. Front Public Health. 2026;14:1800273.",
+      "publicationDate": "2026-04-21",
+      "studyType": "Mini-revisión y propuesta de marco de razonamiento clínico",
+      "population": "Personas con neurodiscapacidad de inicio infantil, con énfasis en parálisis cerebral, sus familias y equipos terapéuticos.",
+      "mainFinding": "REASON CP (Reflect, Evaluate, Activate, Support, Optimize, Navigate via Clinical reasoning for Participation) explicita un proceso colaborativo y basado en sistemas para vincular metas, análisis de tareas, CIF, evidencia disponible y selección de intervenciones en el momento adecuado.",
+      "quality": "Es un marco conceptual y clínico, no un ensayo de efectividad ni una guía normativa. Su utilidad reside en estructurar y transparentar el razonamiento; requiere evaluación empírica adicional de resultados.",
+      "clinicalImplication": "Puede utilizarse para hacer explícito por qué una intervención es pertinente para una persona, objetivo y momento determinados, integrando participación, contexto, trayectoria y toma de decisiones compartida.",
+      "teachingImplication": "Útil para enseñar que el razonamiento clínico no consiste en escoger técnicas: el estudiante debe conectar hallazgos, CIF, objetivos, evidencia, contexto y reevaluación en una cadena de decisiones justificable.",
+      "topics": [
+        "Razonamiento clínico",
+        "CIF",
+        "Sistemas",
+        "Participación",
+        "Toma de decisiones compartida"
+      ],
+      "pmid": "42094902",
+      "doi": "10.3389/fpubh.2026.1800273",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42094902/"
+    },
+    {
+      "id": "diagnostic-reasoning-msk-2026",
+      "alertDate": "2026-08-09",
+      "source": "Revisión científica",
+      "status": "Verificada",
+      "title": "Razonamiento diagnóstico en atención musculoesquelética contemporánea",
+      "authors": "De Sloovere M, Van Tiggelen D, De Ridder R, Dewitte V, Cagnie B.",
+      "citation": "Diagnostic reasoning in musculoskeletal healthcare: a scoping review. J Bodyw Mov Ther. 2026;47:295-303.",
+      "publicationDate": "2026-04-01",
+      "studyType": "Scoping review",
+      "population": "65 estudios de distintas profesiones sanitarias sobre razonamiento diagnóstico en trastornos musculoesqueléticos.",
+      "mainFinding": "Identificó dimensiones recurrentes de razonamiento: factores ambientales y personales, estratificación de riesgo, estructuras/mecanismos tisulares y mecanismos de dolor. Se identificaron 23 herramientas, pero ninguna dimensión aislada representa adecuadamente la complejidad diagnóstica.",
+      "quality": "Revisión de alcance: describe el campo y sus herramientas, pero no establece superioridad diagnóstica ni efectividad clínica. Los autores señalan la necesidad de herramientas válidas y fiables que integren simultáneamente múltiples dimensiones.",
+      "clinicalImplication": "Evitar reducir la evaluación musculoesquelética a una prueba física o etiqueta estructural. La hipótesis clínica debe integrar riesgo, contexto, factores personales, mecanismos y hallazgos físicos, actualizando probabilidades a medida que aparece nueva información.",
+      "teachingImplication": "Evaluar al estudiante por la calidad de la integración y actualización de hipótesis, no por la cantidad de pruebas especiales memorizadas.",
+      "topics": [
+        "Razonamiento diagnóstico",
+        "Musculoesquelético",
+        "Biopsicosocial",
+        "Estratificación de riesgo",
+        "Hipótesis clínica"
+      ],
+      "doi": "10.1016/j.jbmt.2026.04.003",
+      "url": "https://doi.org/10.1016/j.jbmt.2026.04.003"
+    },
+    {
+      "id": "clinical-reasoning-pedagogy-2026",
+      "alertDate": "2026-08-09",
+      "source": "PubMed",
+      "status": "Verificada",
+      "title": "Estrategias pedagógicas para desarrollar razonamiento clínico en fisioterapia",
+      "authors": "Ndacayisaba G, Vanderweyen J, Mapinduzi J, et al.",
+      "citation": "Effectiveness of various pedagogical tools to enhance clinical reasoning in physiotherapy: a systematic review. Physiother Theory Pract. 2026:1-15.",
+      "publicationDate": "2026-04-27",
+      "studyType": "Revisión sistemática",
+      "population": "34 estudios y 3.048 participantes, desde estudiantes de fisioterapia hasta clínicos titulados.",
+      "mainFinding": "La simulación, las tecnologías digitales, el aprendizaje activo y basado en casos y los programas estructurados mostraron mejoras en razonamiento o toma de decisiones. La simulación y los enfoques activos presentaron resultados especialmente consistentes.",
+      "quality": "Los estudios incluidos fueron de calidad metodológica moderada a alta, pero existió heterogeneidad de intervenciones y desenlaces. Se requieren más ensayos aleatorizados y resultados de largo plazo vinculados a pacientes.",
+      "clinicalImplication": "Para formación clínica y educación continua, priorizar práctica deliberada con casos, simulación, reflexión y retroalimentación por sobre exposición exclusivamente teórica.",
+      "teachingImplication": "Diseñar evaluaciones donde el estudiante deba verbalizar hipótesis, justificar decisiones, responder a información nueva y reflexionar sobre errores; no limitar la evaluación a recuerdo factual.",
+      "topics": [
+        "Razonamiento clínico",
+        "Educación",
+        "Simulación",
+        "Aprendizaje basado en casos",
+        "Tecnología educativa"
+      ],
+      "pmid": "42046463",
+      "doi": "10.1080/09593985.2026.2664643",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42046463/"
+    },
+    {
+      "id": "pne-physical-therapy-2025",
+      "alertDate": "2026-08-09",
+      "source": "PubMed",
+      "status": "Verificada",
+      "title": "Educación en neurociencia del dolor combinada con fisioterapia",
+      "authors": "Sánchez-Robalino A, Sinchi-Sinchi H, Ramírez A.",
+      "citation": "Effectiveness of Pain Neuroscience Education in Physical Therapy: A Systematic Review and Meta-Analysis. Brain Sci. 2025;15(6):658.",
+      "publicationDate": "2025-06-18",
+      "studyType": "Revisión sistemática y metaanálisis",
+      "population": "19 estudios de personas con dolor crónico tratadas con PNE combinada con modalidades de rehabilitación.",
+      "mainFinding": "La PNE combinada con fisioterapia se asoció con reducción de intensidad de dolor y mejoría funcional. Los resultados apoyan utilizar educación dentro de una intervención multimodal, no como sustituto automático de la rehabilitación activa.",
+      "quality": "La síntesis agrupa poblaciones e intervenciones heterogéneas; la magnitud y transferibilidad del efecto dependen del contexto, comparador, dosis educativa y tratamiento concomitante.",
+      "clinicalImplication": "Usar PNE para apoyar comprensión, autoeficacia y participación en actividad o ejercicio, evitando convertirla en una explicación estandarizada que invalide la experiencia de dolor.",
+      "teachingImplication": "Enseñar PNE como una competencia de comunicación clínica integrada con exposición, actividad y ejercicio, evaluando lenguaje, individualización y vínculo con objetivos funcionales.",
+      "topics": [
+        "Dolor persistente",
+        "PNE",
+        "Educación",
+        "Ejercicio terapéutico",
+        "Comunicación clínica"
+      ],
+      "pmid": "40563828",
+      "doi": "10.3390/brainsci15060658",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40563828/"
+    },
+    {
+      "id": "pne-plus-mechanisms-2025",
+      "alertDate": "2026-08-09",
+      "source": "PubMed",
+      "status": "Verificada",
+      "title": "PNE+ en diferentes mecanismos de dolor crónico",
+      "authors": "Tatikola SP, Natarajan V, Amaravadi SK, et al.",
+      "citation": "Effect of pain neuroscience education+ (PNE+) in people with different mechanisms of chronic pain: A systematic review and meta-analysis. J Bodyw Mov Ther. 2025;41:215-237.",
+      "publicationDate": "2025-03-01",
+      "studyType": "Revisión sistemática y metaanálisis",
+      "population": "24 estudios en la revisión sistemática y 20 en el metaanálisis, con diferentes mecanismos de dolor crónico.",
+      "mainFinding": "PNE+ redujo dolor e interferencia y mostró mejoras en variables psicosociales como kinesiofobia y catastrofización. La mayor parte de la evidencia se concentró en sensibilización central/nociplasticidad, con menor evidencia para dolor neuropático específico.",
+      "quality": "La evidencia fue moderada a buena en estudios centrados predominantemente en sensibilización central y dolor neuropático, pero la heterogeneidad y la escasez de estudios por mecanismo limitan inferencias de tratamiento específico por fenotipo.",
+      "clinicalImplication": "No utilizar la clasificación nociceptivo-neuropático-nociplástico como algoritmo rígido para prescribir PNE. Individualizar educación y tratamiento activo según presentación clínica, objetivos y respuesta.",
+      "teachingImplication": "Enseñar mecanismos de dolor como hipótesis clínicas probabilísticas. El estudiante debe justificar qué mensaje educativo utiliza, para qué barrera concreta y cómo lo integra con una intervención activa.",
+      "topics": [
+        "PNE+",
+        "Dolor nociplástico",
+        "Dolor neuropático",
+        "Kinesiofobia",
+        "Catastrofización"
+      ],
+      "pmid": "39663091",
+      "doi": "10.1016/j.jbmt.2024.11.016",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39663091/"
+    },
     {
       "id": "bfr-msk-2026",
       "alertDate": "2026-07-17",
@@ -19,7 +148,12 @@
       "quality": "Certeza baja para fuerza y discapacidad frente a baja carga; moderada para la comparación de fuerza con alta carga. La vigilancia y notificación de eventos adversos fue inconsistente.",
       "clinicalImplication": "Puede ser una estrategia transitoria cuando la persona todavía no tolera cargas altas. No debe reemplazar automáticamente el entrenamiento convencional de alta carga cuando este sea seguro y factible.",
       "teachingImplication": "Enseñar la restricción de flujo como una herramienta de dosificación y progresión. El estudiante debe justificar indicación, presión, carga, contraindicaciones, monitorización y transición posterior hacia cargas convencionales.",
-      "topics": ["Fuerza", "Restricción de flujo", "Dosificación", "Rehabilitación musculoesquelética"],
+      "topics": [
+        "Fuerza",
+        "Restricción de flujo",
+        "Dosificación",
+        "Rehabilitación musculoesquelética"
+      ],
       "pmid": "42399091",
       "doi": "10.1136/bjsports-2025-111452",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42399091/"
@@ -39,7 +173,13 @@
       "quality": "La certeza varió de moderada a muy baja. Hubo heterogeneidad alta en varios desenlaces y señales de posible sesgo de publicación.",
       "clinicalImplication": "Las pausas de ejercicio breves pueden aumentar factibilidad y adherencia en personas sedentarias. Deben integrarse con fortalecimiento progresivo, educación y reducción del tiempo sedentario, no limitarse a estiramientos aislados.",
       "teachingImplication": "Pedir al estudiante una prescripción aplicable al trabajo que incluya frecuencia, intensidad, duración, progresión, monitorización y una estrategia concreta de adherencia.",
-      "topics": ["Dolor cervical", "Hombro", "Trabajo sedentario", "Adherencia", "Ejercicio terapéutico"],
+      "topics": [
+        "Dolor cervical",
+        "Hombro",
+        "Trabajo sedentario",
+        "Adherencia",
+        "Ejercicio terapéutico"
+      ],
       "pmid": "42297926",
       "doi": "10.1038/s41598-026-56061-z",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42297926/"
@@ -59,7 +199,13 @@
       "quality": "Heterogeneidad importante entre suplementos, dosis, edades y programas de ejercicio. Varios análisis incluyeron pocos estudios y no permiten recomendaciones universales.",
       "clinicalImplication": "La prioridad continúa siendo un programa de ejercicio bien dosificado. La suplementación debe individualizarse y no utilizarse para compensar una prescripción deficiente.",
       "teachingImplication": "Utilizar este estudio para diferenciar significación estadística, relevancia clínica y certeza de evidencia. Evitar enseñar la combinación ejercicio más suplemento como superior por defecto.",
-      "topics": ["Prescripción de ejercicio", "Mujeres", "Nutrición", "Fuerza", "Salud ósea"],
+      "topics": [
+        "Prescripción de ejercicio",
+        "Mujeres",
+        "Nutrición",
+        "Fuerza",
+        "Salud ósea"
+      ],
       "pmid": "42158825",
       "doi": "10.7150/ijms.130435",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42158825/"
@@ -79,7 +225,13 @@
       "quality": "No es una revisión sistemática ni una guía clínica formal desarrollada con GRADE. Su valor principal es organizativo y educativo, no la fuerza normativa de sus recomendaciones.",
       "clinicalImplication": "Registrar de forma explícita FITT-VP, respuesta sintomática, criterios de progresión y razones de cada adaptación del programa.",
       "teachingImplication": "Exigir que el estudiante pase de recomendar actividad física a formular una prescripción completa, medible, segura, progresiva y reevaluable.",
-      "topics": ["FITT-VP", "Prescripción de ejercicio", "Enfermedad crónica", "Seguridad", "Progresión"],
+      "topics": [
+        "FITT-VP",
+        "Prescripción de ejercicio",
+        "Enfermedad crónica",
+        "Seguridad",
+        "Progresión"
+      ],
       "pmid": "41847621",
       "doi": "10.3389/fspor.2026.1649549",
       "url": "https://pubmed.ncbi.nlm.nih.gov/41847621/"
@@ -99,7 +251,13 @@
       "quality": "La heterogeneidad de ejercicios, dosis y técnicas de imagen limita comparaciones directas. Los cambios morfológicos son desenlaces intermedios y no demuestran por sí solos menor recurrencia o mejor retorno deportivo.",
       "clinicalImplication": "El ejercicio nórdico puede integrar prevención y rehabilitación, pero debe combinarse con carga progresiva en diferentes longitudes, exposición a carrera rápida y criterios funcionales de retorno.",
       "teachingImplication": "Diferenciar adaptación estructural, capacidad física y desenlace clínico. El estudiante debe evitar inferir prevención de lesiones únicamente desde cambios ecográficos o por resonancia.",
-      "topics": ["Isquiotibiales", "Ejercicio excéntrico", "Nordic Hamstring", "Arquitectura muscular", "Retorno deportivo"],
+      "topics": [
+        "Isquiotibiales",
+        "Ejercicio excéntrico",
+        "Nordic Hamstring",
+        "Arquitectura muscular",
+        "Retorno deportivo"
+      ],
       "pmid": "42460513",
       "doi": "10.1177/19417381261463404",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42460513/"
@@ -119,7 +277,13 @@
       "quality": "Certeza moderada para fuerza máxima y baja para fuerza rápida. Existe heterogeneidad y la evidencia específica para pacientes musculoesqueléticos continúa siendo insuficiente.",
       "clinicalImplication": "Puede considerarse durante periodos de descarga o imposibilidad de entrenar un miembro, pero debe presentarse como complemento y no como sustituto de la carga progresiva del segmento afectado.",
       "teachingImplication": "Diseñar casos en los que el estudiante justifique población, intensidad, tipo de contracción, especificidad y momento de transición hacia entrenamiento del lado afectado.",
-      "topics": ["Educación cruzada", "Fuerza", "Inmovilización", "Hemiparesia", "Entrenamiento unilateral"],
+      "topics": [
+        "Educación cruzada",
+        "Fuerza",
+        "Inmovilización",
+        "Hemiparesia",
+        "Entrenamiento unilateral"
+      ],
       "pmid": "42410073",
       "doi": "10.1007/s40279-026-02476-7",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42410073/"
@@ -139,7 +303,13 @@
       "quality": "PEDro 8/10, con asignación oculta, evaluador cegado, seguimiento adecuado y análisis por intención de tratar. La muestra fue pequeña y una adherencia del 95% puede ser difícil de replicar.",
       "clinicalImplication": "Antes de concluir que un ejercicio no funciona, verificar dosis realmente ejecutada, técnica, progresión y barreras de adherencia. La adherencia debe tratarse como un componente terapéutico.",
       "teachingImplication": "Incorporar en las rúbricas la capacidad de explicar, adaptar, registrar y seguir el programa, además de seleccionar ejercicios.",
-      "topics": ["Dolor cervical", "Adherencia", "Ejercicio específico", "Terapia manual", "PEDro"],
+      "topics": [
+        "Dolor cervical",
+        "Adherencia",
+        "Ejercicio específico",
+        "Terapia manual",
+        "PEDro"
+      ],
       "pmid": "40273517",
       "pedroRecord": "82074",
       "pedroScore": "8/10",
@@ -161,7 +331,13 @@
       "quality": "El comparador simulado fortalece la interpretación. La aplicabilidad a subgrupos con una alteración cervical articular concordante sigue siendo incierta.",
       "clinicalImplication": "No añadir terapia manual cervical de manera rutinaria por el diagnóstico de migraña. Considerarla solo si la evaluación identifica una contribución cervical plausible y como complemento de un manejo específico de migraña.",
       "teachingImplication": "Enseñar que coexistencia de dolor cervical y migraña no demuestra causalidad. La selección debe basarse en razonamiento diferencial, hallazgos concordantes y respuesta clínica.",
-      "topics": ["Migraña", "Terapia manual", "Ejercicio cervical", "Razonamiento diferencial", "Placebo"],
+      "topics": [
+        "Migraña",
+        "Terapia manual",
+        "Ejercicio cervical",
+        "Razonamiento diferencial",
+        "Placebo"
+      ],
       "pmid": "42453071",
       "doi": "10.1080/10669817.2026.2703643",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42453071/"
