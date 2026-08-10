@@ -15,11 +15,16 @@ const seoSlugs = [
   "pack-estudiante",
 ];
 
-test("no publica un proxy SSO parcial que pueda romper cookie y 303", () => {
+test("SSO de aplicaciones usa el dominio KineCheck sin publicar un proxy parcial", () => {
   const relay = read("academy/app-sso-relay.js");
+  const relayHtml = read("academy/app-sso-relay.html");
+  const config = read("academy/config.js");
   assert.equal(fs.existsSync("functions/api/license/sso.js"), false);
   assert.equal(fs.existsSync("academy/academy-sso-same-origin-v1.js"), false);
-  assert.match(relay, /https:\/\/kinecheck-clinico\.emmanuelkine\.chatgpt\.site\/api\/license\/sso/);
+  assert.match(relay, /https:\/\/apps\.kinecheck\.cl\/api\/license\/sso/);
+  assert.match(relayHtml, /form-action https:\/\/apps\.kinecheck\.cl/);
+  assert.match(config, /baseUrl:\s*"https:\/\/apps\.kinecheck\.cl"/);
+  assert.doesNotMatch([relay, relayHtml, config].join("\n"), /kinecheck-clinico\.emmanuelkine\.chatgpt\.site/);
 });
 
 test("Recupera exige consentimiento expreso para datos de salud", () => {
@@ -42,10 +47,10 @@ test("KineCheck Clinico mantiene posicionamiento curso + guia", () => {
   const brand = read("docs/brand-architecture.md");
   const reposition = read("productos/product-clinico-reposition-v1.js");
   assert.match(home, /KINECHECK FORMACIÓN[\s\S]*?KineCheck Clínico/);
-  assert.match(professionals, /Curso profesional avanzado de evaluación, seguridad y razonamiento musculoesquelético/);
-  assert.match(professionals, /guía digital complementaria/);
-  assert.doesNotMatch(professionals, /Registro kinésico profesional/);
-  assert.match(terms, /KineCheck Clínico:<\/strong> curso profesional avanzado/);
+  assert.match(professionals, /curso profesional avanzado de evaluación, seguridad y razonamiento musculoesquelético/i);
+  assert.match(professionals, /guía digital complementaria/i);
+  assert.doesNotMatch(professionals, /Registro kinésico profesional/i);
+  assert.match(terms, /KineCheck Clínico:<\/strong> curso profesional avanzado/i);
   assert.match(brand, /### KineCheck Formación[\s\S]*?KineCheck Clínico/);
   assert.match(reposition, /product-family"\)\.textContent = "KINECHECK FORMACIÓN"/);
 });

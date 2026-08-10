@@ -45,7 +45,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "students",
       audiences: ["students"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-estudiante",
+      url: "https://apps.kinecheck.cl/sso.html?product=kinecheck-estudiante",
       ssoProduct: "kinecheck-estudiante"
     },
     {
@@ -59,7 +59,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       audienceKey: "patients",
       audiences: ["patients"],
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-recupera",
+      url: "https://apps.kinecheck.cl/sso.html?product=kinecheck-recupera",
       ssoProduct: "kinecheck-recupera"
     },
     {
@@ -130,6 +130,47 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     }
   ]
 });
+
+(() => {
+  if (window.__KINECHECK_APP_SSO_FORM_GUARD__) return;
+  window.__KINECHECK_APP_SSO_FORM_GUARD__ = true;
+
+  const nativeSubmit = HTMLFormElement.prototype.submit;
+  const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
+  const APPLICATIONS = new Set(["kinecheck-estudiante", "kinecheck-recupera"]);
+
+  HTMLFormElement.prototype.submit = function guardedKineCheckSubmit() {
+    try {
+      const product = String(this.querySelector('input[name="product"]')?.value || "").trim();
+      const handoffType = String(this.querySelector('input[name="handoff_type"]')?.value || "").trim();
+      if (String(this.method || "").toLowerCase() === "post" && handoffType === HANDOFF_TYPE && APPLICATIONS.has(product)) {
+        const accessToken = String(this.querySelector('input[name="access_token"]')?.value || "").trim();
+        const expiresAt = Number(this.querySelector('input[name="expires_at"]')?.value || 0);
+        const issuedAt = Number(this.querySelector('input[name="issued_at"]')?.value || Date.now());
+        if (accessToken) {
+          window.name = JSON.stringify({
+            type: HANDOFF_TYPE,
+            issuedAt,
+            product,
+            access_token: accessToken,
+            expires_at: expiresAt || "",
+            session: {
+              access_token: accessToken,
+              expires_at: expiresAt || "",
+              token_type: "bearer",
+              handoff_access_only: true,
+            },
+          });
+          location.assign(`./app-sso-relay.html?product=${encodeURIComponent(product)}&v=20260809-appsdomain1`);
+          return;
+        }
+      }
+    } catch {
+      // Si no corresponde al handoff de aplicaciones, conserva el submit nativo.
+    }
+    return nativeSubmit.call(this);
+  };
+})();
 
 (() => {
   if (window.__KINECHECK_NETWORK_GUARD__) return;

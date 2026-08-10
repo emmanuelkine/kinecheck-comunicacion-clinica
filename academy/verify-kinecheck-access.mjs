@@ -20,18 +20,20 @@ const [index, bootstrap, config, core, opener, bridge, router, relayHtml, relayJ
   read("../auth-gate.js"),
 ]);
 
-const appOrigin = "https://kinecheck-clinico.emmanuelkine.chatgpt.site";
+const appOrigin = "https://apps.kinecheck.cl";
 const ssoProducts = ["kinecheck-estudiante", "kinecheck-recupera"];
 const localClinicoRoutes = ["kinecheck-clinico-guia", "kinecheck-clinico-curso"];
 const manualRoutes = ["access.html#activar", "student-access.html#activar", "patient-access.html#activar"];
 
-assert.match(
-  index,
-  new RegExp(`form-action 'self' ${appOrigin.replaceAll(".", "\\.")}`),
-  "La política principal debe permitir únicamente el POST al dominio oficial además del origen propio.",
-);
+assert.match(index, /form-action 'self'/, "La política principal debe conservar form-action restringido al origen propio para el flujo local.");
 assert.doesNotMatch(index, /form-action[^>]*\*/i, "form-action no debe usar comodines.");
 assert.match(relayHtml, new RegExp(`form-action ${appOrigin.replaceAll(".", "\\.")}`));
+assert.doesNotMatch([bootstrap, config, relayHtml, relayJs].join("\n"), /chatgpt\.site/i, "El flujo activo de aplicaciones no debe depender de chatgpt.site.");
+assert.match(bootstrap, /__KINECHECK_APP_SSO_FORM_GUARD__/);
+assert.match(bootstrap, /app-sso-relay\.html/);
+assert.match(bootstrap, /https:\/\/apps\.kinecheck\.cl\/sso\.html\?product=kinecheck-estudiante/);
+assert.match(bootstrap, /https:\/\/apps\.kinecheck\.cl\/sso\.html\?product=kinecheck-recupera/);
+assert.match(config, /baseUrl:\s*"https:\/\/apps\.kinecheck\.cl"/);
 
 for (const product of ssoProducts) {
   for (const source of [bootstrap, config]) {
@@ -68,6 +70,7 @@ assert.match(integrationGuard, /academy-open-v6\.js/);
 assert.match(opener, /app-sso-relay\.html/);
 assert.match(relayJs, /method = "POST"/);
 assert.match(relayJs, /handoff_type/);
+assert.match(relayJs, /https:\/\/apps\.kinecheck\.cl\/api\/license\/sso/);
 
 // El handoff externo debe funcionar también en sesiones privadas frescas sin popup/opener.
 assert.match(opener, /kc_handoff/);
@@ -108,4 +111,4 @@ assert.match(recovery, /method:\s*"PUT"/);
 assert.match(recovery, /\/auth\/v1\/user/);
 assert.match(recovery, /password\.length < 8/);
 
-console.log("KineCheck Academy OK: navegación directa, Clínico local, SSO de Estudiante y Recupera, handoff privado sin popup, CSP restringida y recuperación de contraseña.");
+console.log("KineCheck Academy OK: navegación directa, Clínico local, SSO de Estudiante y Recupera en apps.kinecheck.cl, handoff privado sin popup, CSP restringida y recuperación de contraseña.");

@@ -4,7 +4,7 @@ import { chromium } from "playwright";
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
 const IS_LOCAL = ["127.0.0.1", "localhost"].includes(new URL(BASE).hostname);
 const PRODUCTS = [
-  { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KineCheck Apps", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
+  { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KINECHECK FORMACIÓN", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
   { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", family: "KineCheck Apps", price: "$14.990", checkout: "https://pay.hotmart.com/G106801166S" },
   { slug: "kinecheck-recupera", name: "KineCheck Recupera", family: "KineCheck Apps", price: "$9.990", checkout: "https://pay.hotmart.com/P106806251E" },
   { slug: "comunicacion-clinica", name: "Comunicación Clínica", family: "KineCheck Formación", price: "$19.900", checkout: "https://pay.hotmart.com/T106883983U" },
@@ -160,7 +160,8 @@ try {
     assert.ok(!professionalText.includes("Ver curso"), `${device}/profesionales: un checkout sigue rotulado como “Ver curso”`);
     assert.ok(professionalText.includes("RECOMENDADO"), `${device}/profesionales: falta producto recomendado`);
     assert.ok(professionalText.includes("Banderas Clínicas") && professionalText.includes("Dolor Lumbar"), `${device}/profesionales: faltan cursos próximos aprobados`);
-    assert.ok(professionalText.includes("KINECHECK APPS") && professionalText.includes("KINECHECK FORMACIÓN · POR KINECHECK"), `${device}/profesionales: arquitectura de marca incompleta`);
+    assert.ok(professionalText.includes("KINECHECK FORMACIÓN + GUÍA COMPLEMENTARIA") && professionalText.includes("KINECHECK FORMACIÓN · POR KINECHECK"), `${device}/profesionales: arquitectura de Formación incompleta`);
+    assert.ok(!professionalText.includes("Registro kinésico profesional"), `${device}/profesionales: Clínico volvió a presentarse como aplicación de registro`);
     await assertCleanAcademyLinks(page, `${device}/profesionales`);
     await assertOpenGraph(page, `${device}/profesionales`);
     await assertPublicMenu(page, `${device}/profesionales`, viewport.width <= 900);

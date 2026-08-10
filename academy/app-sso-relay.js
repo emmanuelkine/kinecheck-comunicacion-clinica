@@ -3,7 +3,7 @@
 
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const MAX_AGE_MS = 120000;
-  const POST_URL = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
+  const POST_URL = "https://apps.kinecheck.cl/api/license/sso";
   const PRODUCTS = new Set([
     "kinecheck-estudiante",
     "kinecheck-recupera",
