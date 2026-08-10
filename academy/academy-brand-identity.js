@@ -9,13 +9,23 @@
     if (element && element.textContent !== value) element.textContent = value;
   }
 
-  function loadScript(path, marker, version) {
-    if (document.querySelector(`script[${marker}]`)) return;
-    const script = document.createElement("script");
-    script.src = `${path}?v=${version}`;
-    script.async = false;
-    script.setAttribute(marker, "true");
-    document.head.appendChild(script);
+  function setNavigationLabels() {
+    document.querySelectorAll('[data-kc-view-link="inicio"]').forEach((item) => {
+      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;
+      if (label && label.textContent.trim() !== "Inicio") label.textContent = "Inicio";
+    });
+    document.querySelectorAll('[data-kc-view-link="biblioteca"]').forEach((item) => {
+      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;
+      if (label && !item.hasAttribute("data-kc-scroll-target")) label.textContent = "Mis productos";
+    });
+    document.querySelectorAll('[data-kc-view-link="herramientas"]').forEach((item) => {
+      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;
+      if (label) label.textContent = "Recursos";
+    });
+    document.querySelectorAll('[data-kc-view-link="perfil"]').forEach((item) => {
+      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;
+      if (label) label.textContent = "Cuenta y ayuda";
+    });
   }
 
   function applyIdentity() {
@@ -40,6 +50,7 @@
     setText(".sidebar-brand > div > span", BRAND_DESCRIPTOR);
     setText(".topbar-brand > div > span", BRAND_DESCRIPTOR);
     setText(".kc-home-hero > .eyebrow", "MI KINECHECK");
+    setNavigationLabels();
 
     const topbarBrand = document.querySelector(".topbar-brand");
     if (topbarBrand) topbarBrand.setAttribute("aria-label", `${BRAND_NAME}, inicio`);
@@ -48,6 +59,7 @@
     if (onboardingAction) {
       onboardingAction.setAttribute("data-kc-view-link", "biblioteca");
       onboardingAction.setAttribute("aria-label", "Ver mis productos");
+      onboardingAction.textContent = "Ver mis productos";
     }
 
     const catalogButton = document.querySelector(".kc-catalog-button");
@@ -82,20 +94,9 @@
     }
   }
 
-  loadScript("../assets/runtime-config.js", "data-kc-runtime", "20260807-1");
-  loadScript("../assets/observability.js", "data-kc-observability", "20260807-1");
-  loadScript("./security-hardening-v1.js", "data-kc-security-hardening", "20260807-1");
-  loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260809-ownedobs1");
-
-  // Orden deliberado: primero existe un único opener; luego el controlador de clicks.
-  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260809-directnav1");
-  loadScript("./academy-owned-native-bridge-v1.js", "data-kc-owned-native-bridge", "20260810-coursecards2");
-
-  loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260809-directnav2");
-  loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
-  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260810-interactionfix1");
-  loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
-
+  // Estabilidad primero: Academy ya incluye su núcleo funcional en index.html.
+  // No se inyectan aquí routers, observers, capas visuales ni controladores
+  // adicionales que puedan competir por los mismos clics o bloquear el scroll.
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", applyIdentity, { once: true });
   } else {
