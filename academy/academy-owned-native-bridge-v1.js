@@ -141,6 +141,28 @@
     event.stopImmediatePropagation();
   }
 
+  function reconcileInteractionLocks() {
+    const stageModal = document.querySelector("#kc-stage-modal");
+    if (stageModal) {
+      if (!stageModal.hidden) stageModal.hidden = true;
+      if (stageModal.getAttribute("aria-hidden") !== "true") stageModal.setAttribute("aria-hidden", "true");
+      if (!stageModal.hasAttribute("inert")) stageModal.setAttribute("inert", "");
+    }
+    if (document.body.classList.contains("kc-stage-modal-open")) {
+      document.body.classList.remove("kc-stage-modal-open");
+    }
+
+    const reviewModal = document.querySelector("#review-modal");
+    const reviewIsOpen = Boolean(reviewModal && !reviewModal.hidden);
+    if (document.body.classList.contains("review-open") !== reviewIsOpen) {
+      document.body.classList.toggle("review-open", reviewIsOpen);
+    }
+
+    if (!reviewIsOpen && getComputedStyle(document.body).overflow === "hidden") {
+      document.body.style.removeProperty("overflow");
+    }
+  }
+
   window.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
@@ -241,5 +263,21 @@
 
   window.addEventListener("pageshow", () => {
     window.KINECHECK_RESET_PRODUCT_NAVIGATION?.();
+    reconcileInteractionLocks();
+  });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", reconcileInteractionLocks, { once: true });
+  } else {
+    reconcileInteractionLocks();
+  }
+
+  const lockObserver = new MutationObserver(reconcileInteractionLocks);
+  lockObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  lockObserver.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["hidden"],
   });
 })();
