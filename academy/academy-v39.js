@@ -853,7 +853,22 @@ async function openCourse(slug) {
       submitSsoAccess(session, course.ssoProduct);
       return;
     }
-    window.location.assign(course.url);
+
+    const destination = new URL(course.url, window.location.href);
+    if (destination.origin !== window.location.origin) {
+      window.name = JSON.stringify({
+        type: SSO_HANDOFF_TYPE,
+        issuedAt: Date.now(),
+        product: course.slug,
+        session: {
+          access_token: session.access_token,
+          expires_at: Number(session.expires_at || accessTokenExpiry(session.access_token) || 0),
+          token_type: session.token_type || "bearer",
+          handoff_access_only: true,
+        },
+      });
+    }
+    window.location.assign(destination.href);
   } catch (error) {
     licenseState.set(slug, "locked");
     renderCourses();
