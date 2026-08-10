@@ -51,9 +51,9 @@
 
   function studentRoute() {
     document.body.classList.add("kc-product-student");
-    setText("#product-type", "APRENDIZAJE GUIADO · 12 MESES");
+    setText("#product-type", "APLICACIÓN WEB FORMATIVA · SIN INSTALACIÓN");
     setText("#product-subtitle", "Tu primer paso para aprender evaluación y razonamiento clínico");
-    setText("#product-description", "Una experiencia guiada que te indica qué hacer primero, por qué hacerlo y qué revisar antes de avanzar a cursos clínicos más complejos.");
+    setText("#product-description", "Una aplicación web guiada que te indica qué hacer primero, por qué hacerlo y qué revisar antes de avanzar a cursos clínicos más complejos. Se usa desde el navegador, sin instalación.");
     setText("#story-copy", "Practica el proceso completo en un orden comprensible: historia, seguridad, observación, movimiento, medición, hipótesis y comunicación. La meta no es rellenar casillas, sino aprender a relacionar la información.");
     setText("#audience-copy", "Estudiantes de kinesiología que necesitan estructura para practicar evaluación clínica sin saltarse pasos importantes.");
     setHtml("#audience-pills", "<span>Estudiantes</span><span>Práctica inicial</span><span>Razonamiento guiado</span>");
@@ -80,10 +80,10 @@
   function patientExperience() {
     document.body.classList.add("kc-product-patient");
     setMetadata("KineCheck Recupera | Mi plan y mi avance", "KineCheck Recupera: revisa tu plan, registra cómo te sientes y observa tu avance con una experiencia simple.");
-    setText("#product-type", "MI RECUPERACIÓN · 3 MESES");
+    setText("#product-type", "APLICACIÓN WEB DE SEGUIMIENTO · SIN INSTALACIÓN");
     setHtml("#product-title", "KineCheck <em>Recupera</em>");
     setText("#product-subtitle", "Tu plan, tu registro y tu avance");
-    setText("#product-description", "Una herramienta simple para saber qué corresponde hacer hoy, registrar cómo te sientes y observar tu progreso. No necesitas conocimientos clínicos.");
+    setText("#product-description", "Una aplicación web simple para saber qué corresponde hacer hoy, registrar cómo te sientes y observar tu progreso. Se usa desde el navegador, sin instalación ni conocimientos clínicos.");
     setText("#breadcrumb-name", "Recupera");
     setText("#story-copy", "Abre Recupera, revisa tu plan y responde preguntas breves. La información te ayuda a seguir el proceso y a conversar mejor con el profesional que te acompaña.");
     setText("#audience-copy", "Personas que están realizando un plan de recuperación indicado o supervisado por un profesional.");
@@ -107,6 +107,7 @@
       <details><summary>¿Quién define mis ejercicios?</summary><p>Tu plan debe provenir del profesional que te evalúa o acompaña. Recupera ayuda a seguirlo; no prescribe ni diagnostica.</p></details>
       <details><summary>¿Qué hago si empeoro o aparece algo preocupante?</summary><p>Suspende lo que estés haciendo y contacta al profesional o al servicio de salud correspondiente. Recupera no es un servicio de urgencia.</p></details>
       <details><summary>¿Puedo compartir mi progreso?</summary><p>Puedes utilizar el resumen para conversar sobre tu evolución, evitando enviar información sensible por canales inseguros.</p></details>
+      <details><summary>¿Debo instalar una aplicación?</summary><p>No. Recupera se utiliza desde un navegador moderno en computador, tablet o teléfono.</p></details>
       <details><summary>¿Cuánto dura el acceso?</summary><p>La compra nueva incluye 3 meses desde la aprobación en Hotmart.</p></details>
     `);
 

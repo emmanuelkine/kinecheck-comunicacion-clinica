@@ -19,6 +19,8 @@ No usar **ECOSISTEMA CLÍNICO** como descriptor de toda la marca.
 - **KineCheck Estudiante**
 - **KineCheck Recupera**
 
+Ambas se comunican como **aplicaciones web**: se accede desde un navegador y no requieren instalación desde App Store o Google Play.
+
 ### KineCheck Formación
 
 - **KineCheck Clínico** — curso profesional avanzado de evaluación, seguridad y razonamiento musculoesquelético con **guía digital complementaria** incluida. El curso es el producto central; la guía apoya la aplicación y no reemplaza la ficha clínica institucional.
@@ -38,6 +40,9 @@ Los nombres propios de estos cursos no se cambian. La relación con la marca pue
 - Mantener **KineCheck** como marca raíz y no convertir las rutas técnicas en marcas visibles.
 - Mantener las asignaciones Apps, Formación y Packs indicadas en este documento.
 - No describir **KineCheck Clínico** como ficha clínica, registro kinésico institucional ni aplicación autónoma. Su definición comercial oficial es **curso profesional + guía digital complementaria**.
+- Reservar la familia **KineCheck Apps** exclusivamente para **KineCheck Estudiante** y **KineCheck Recupera**.
+- En superficies comerciales, indicar **“Aplicación web · sin instalación”** y no sugerir disponibilidad en App Store o Google Play.
+- Toda ficha comercial de KineCheck Clínico debe mostrar temario, autoría, metodología, una muestra pública y condiciones de soporte antes del checkout.
 - No abreviar ni renombrar productos o cursos en superficies comerciales, legales o de acceso.
 - Usar **SALUD MUSCULOESQUELÉTICA** cuando una superficie requiera el descriptor global.
 - La entrada pública canónica para usuarios con acceso es **`/academy/`**.

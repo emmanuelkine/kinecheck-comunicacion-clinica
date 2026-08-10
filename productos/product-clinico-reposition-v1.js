@@ -47,11 +47,15 @@
   ];
   const faq = [
     ["¿Qué es KineCheck Clínico?", "Es un curso avanzado para profesionales. La guía digital es una herramienta complementaria para aplicar el método aprendido."],
+    ["¿Cómo se aprende dentro del curso?", "Cada módulo combina objetivos, lecciones breves, casos simulados, tareas de razonamiento, evidencia, preguntas de comprobación y retroalimentación explicada."],
     ["¿La guía reemplaza la ficha clínica de mi centro?", "No. Debes documentar la atención en el sistema oficial de tu institución y respetar sus exigencias legales, éticas y de seguridad."],
     ["¿Debo ingresar pacientes reales en la guía?", "No es necesario ni recomendado. Utiliza casos simulados, anonimizados o resúmenes sin datos identificables."],
     ["¿La misma compra incluye curso y guía?", "Sí. La licencia de KineCheck Clínico activa ambos componentes durante la vigencia informada."],
     ["¿El curso entrega diagnósticos o protocolos automáticos?", "No. Enseña a razonar, justificar decisiones, reconocer límites y reevaluar. La responsabilidad clínica permanece en el profesional."],
     ["¿Qué evidencia utiliza?", "Integra guías de alta calidad, OMS, marco IFOMPT y revisiones sobre seguridad, pruebas diagnósticas, dinamometría, resultados y educación del razonamiento clínico."],
+    ["¿Puedo revisar algo antes de comprar?", "Sí. La demostración pública incluye una experiencia clínica seleccionada y permite conocer el tipo de caso, pregunta y retroalimentación del curso."],
+    ["¿Qué soporte y actualizaciones incluye?", "El soporte cubre acceso, licencia, navegación, funcionamiento y consultas sobre el contenido. El objetivo de respuesta inicial es dentro de 2 días hábiles; las correcciones y mejoras quedan disponibles durante la vigencia activa."],
+    ["¿Necesito instalar una aplicación?", "No. El curso y la guía complementaria se utilizan desde un navegador moderno en computador, tablet o teléfono."],
   ];
 
   document.title = "KineCheck Clínico | Curso profesional y guía complementaria";

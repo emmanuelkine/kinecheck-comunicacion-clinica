@@ -24,8 +24,8 @@
   });
   const PRODUCT_LABELS = Object.freeze({
     "kinecheck-clinico": "Curso profesional + guía complementaria · evaluación y razonamiento",
-    "kinecheck-estudiante": "Aplicación formativa · razonamiento guiado",
-    "kinecheck-recupera": "Aplicación para pacientes · progreso y ejercicios",
+    "kinecheck-estudiante": "Aplicación web · razonamiento guiado · sin instalación",
+    "kinecheck-recupera": "Aplicación web · progreso y ejercicios · sin instalación",
     "comunicacion-clinica": "Curso interactivo · comunicación en salud",
     "mas-alla-del-dolor": "Curso clínico · evaluación musculoesquelética",
     "evidencia-aplicada": "Curso clínico · evidencia y decisiones",
