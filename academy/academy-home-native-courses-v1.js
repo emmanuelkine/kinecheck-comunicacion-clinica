@@ -68,27 +68,18 @@
     if (document.documentElement.style.overflow === "hidden") document.documentElement.style.removeProperty("overflow");
   }
 
-  function loadClinicalLibrary() {
-    if (!document.querySelector('link[data-kc-clinical-library]')) {
-      const style = document.createElement("link");
-      style.rel = "stylesheet";
-      style.href = "./academy-clinical-library-v1.css?v=20260810-evidence1";
-      style.dataset.kcClinicalLibrary = "styles";
-      document.head.appendChild(style);
-    }
-
-    if (!document.querySelector('script[data-kc-clinical-library]')) {
-      const script = document.createElement("script");
-      script.src = "./academy-clinical-library-v1.js?v=20260810-evidence1";
-      script.async = false;
-      script.dataset.kcClinicalLibrary = "script";
-      document.head.appendChild(script);
-    }
+  function loadClinicalCommerce() {
+    if (document.querySelector('script[data-kc-clinical-commerce]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-clinical-commerce-v1.js?v=20260810-paid1";
+    script.async = false;
+    script.dataset.kcClinicalCommerce = "v1";
+    document.head.appendChild(script);
   }
 
   function initialize() {
     simplifyHome();
-    loadClinicalLibrary();
+    loadClinicalCommerce();
   }
 
   if (document.readyState === "loading") {
