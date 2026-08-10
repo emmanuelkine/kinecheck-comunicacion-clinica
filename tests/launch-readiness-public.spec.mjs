@@ -4,7 +4,7 @@ import { chromium } from "playwright";
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
 const IS_LOCAL = ["127.0.0.1", "localhost"].includes(new URL(BASE).hostname);
 const PRODUCTS = [
-  { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KineCheck Formación", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
+  { slug: "kinecheck-clinico", name: "KineCheck Clínico", family: "KINECHECK FORMACIÓN", price: "$39.990", checkout: "https://pay.hotmart.com/L106791841D" },
   { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", family: "KineCheck Apps", price: "$14.990", checkout: "https://pay.hotmart.com/G106801166S" },
   { slug: "kinecheck-recupera", name: "KineCheck Recupera", family: "KineCheck Apps", price: "$9.990", checkout: "https://pay.hotmart.com/P106806251E" },
   { slug: "comunicacion-clinica", name: "Comunicación Clínica", family: "KineCheck Formación", price: "$19.900", checkout: "https://pay.hotmart.com/T106883983U" },
