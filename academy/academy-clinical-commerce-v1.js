@@ -9,11 +9,23 @@
       slug: "kinecheck-escalas",
       name: "Escalas clínicas",
       price: 5000,
+      label: "BIBLIOTECA CLÍNICA",
+      benefits: [
+        "PROMs organizados por región y propósito",
+        "Interpretación, población y dirección del puntaje",
+        "Fuentes científicas y límites de uso clínico",
+      ],
     }),
     "kc-special-tests-library": Object.freeze({
       slug: "kinecheck-pruebas-especiales",
       name: "Pruebas especiales",
       price: 5000,
+      label: "RAZONAMIENTO DIAGNÓSTICO",
+      benefits: [
+        "Pruebas y clusters organizados por región",
+        "Sensibilidad, especificidad y LR cuando corresponde",
+        "Interpretación contextualizada y limitaciones",
+      ],
     }),
   });
 
@@ -57,10 +69,87 @@
     style.textContent = `
       #kc-scales-library:not([data-kc-paid-access="true"]),
       #kc-special-tests-library:not([data-kc-paid-access="true"]){display:none!important}
-      .kc-clinical-price{display:inline-flex;align-items:center;gap:.35rem;margin:.45rem 0 .2rem;padding:.28rem .55rem;border-radius:999px;background:#ecfdf5;color:#0f766e;font-size:.82rem;font-weight:800}
-      .kc-clinical-category-trigger[data-kc-clinical-owned="false"] b{color:#0f766e}
+
+      .kc-clinical-category-trigger[data-kc-clinical-product]{
+        position:relative;overflow:hidden;isolation:isolate;min-height:350px;padding:24px;
+        border:1px solid rgba(14,116,120,.18);border-radius:24px;
+        box-shadow:0 18px 46px rgba(5,47,55,.09);transform:none!important;
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-product]::before{
+        content:"";position:absolute;z-index:-1;width:210px;height:210px;border-radius:50%;
+        right:-72px;top:-82px;filter:blur(2px);opacity:.8;pointer-events:none;
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-target="kc-scales-library"]{
+        background:linear-gradient(155deg,#ffffff 0%,#f2fbf8 62%,#e6f6f1 100%);
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-target="kc-scales-library"]::before{
+        background:radial-gradient(circle,#7dd3c7 0%,rgba(125,211,199,0) 70%);
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-target="kc-special-tests-library"]{
+        background:linear-gradient(155deg,#ffffff 0%,#f3f7fb 62%,#e7f0f8 100%);
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-target="kc-special-tests-library"]::before{
+        background:radial-gradient(circle,#9fc7e5 0%,rgba(159,199,229,0) 70%);
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-product]:hover{
+        border-color:rgba(14,116,120,.3);box-shadow:0 22px 52px rgba(5,47,55,.12);transform:none!important;
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-product]>span{
+        width:54px;height:54px;border-radius:16px;font-size:1.2rem;box-shadow:0 8px 20px rgba(15,109,114,.12)
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-product]>strong{
+        margin-top:14px;font-size:1.2rem;line-height:1.15;letter-spacing:-.015em
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-product]>p{
+        margin-top:8px;max-width:36rem;font-size:.9rem;line-height:1.5
+      }
+      .kc-clinical-product-label{
+        display:inline-flex;margin-top:16px;color:#0f6d72;font-size:.68rem;font-weight:900;
+        letter-spacing:.12em;text-transform:uppercase
+      }
+      .kc-clinical-product-points{
+        width:100%;display:grid;gap:7px;margin:12px 0 0;padding:0;list-style:none
+      }
+      .kc-clinical-product-points li{
+        position:relative;padding-left:20px;color:#4f6871;font-size:.78rem;line-height:1.4
+      }
+      .kc-clinical-product-points li::before{
+        content:"✓";position:absolute;left:0;top:0;color:#0f7a70;font-weight:900
+      }
+      .kc-clinical-price{
+        display:inline-flex;align-items:baseline;gap:.35rem;margin:16px 0 8px;padding:7px 11px;
+        border-radius:12px;background:#fff;color:#083d45;border:1px solid rgba(15,109,114,.16);
+        box-shadow:0 6px 18px rgba(8,61,69,.06);font-size:1.08rem;font-weight:900
+      }
+      .kc-clinical-price::after{
+        content:"Acceso individual";font-size:.66rem;font-weight:800;color:#6b7f86;letter-spacing:.02em
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price{
+        background:#ecfdf5;color:#0f766e;border-color:#bdebdc
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price::after{
+        content:"Licencia verificada";color:#307665
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-product] b{
+        width:100%;min-height:46px;display:flex;align-items:center;justify-content:center;margin-top:auto;padding:0 16px;
+        border-radius:14px;background:linear-gradient(135deg,#0f777b,#0b5f66);color:#fff!important;
+        box-shadow:0 10px 24px rgba(11,95,102,.18);font-size:.84rem;font-weight:900
+      }
+      .kc-clinical-category-trigger[data-kc-clinical-owned="true"] b{
+        background:linear-gradient(135deg,#0f766e,#115e59)
+      }
       .kc-clinical-category-trigger[data-kc-checkout-ready="false"]{cursor:pointer}
       .kc-clinical-category-trigger[aria-busy="true"]{opacity:.72;cursor:progress}
+
+      @media(max-width:620px){
+        .kc-clinical-category-trigger[data-kc-clinical-product]{min-height:330px;padding:20px;border-radius:20px}
+        .kc-clinical-category-trigger[data-kc-clinical-product]>strong{font-size:1.12rem}
+        .kc-clinical-product-points li{font-size:.76rem}
+        .kc-clinical-price{font-size:1rem}
+      }
+      @media(prefers-reduced-motion:reduce){
+        .kc-clinical-category-trigger[data-kc-clinical-product]{transition:none!important}
+      }
     `;
     document.head.appendChild(style);
   }
@@ -76,6 +165,26 @@
     return document.querySelector(`[data-kc-clinical-target="${CSS.escape(targetId)}"]`);
   }
 
+  function ensureProductPresentation(button, product) {
+    let label = button.querySelector(".kc-clinical-product-label");
+    if (!label) {
+      label = document.createElement("span");
+      label.className = "kc-clinical-product-label";
+      const copy = button.querySelector("p");
+      if (copy) copy.insertAdjacentElement("afterend", label);
+      else button.appendChild(label);
+    }
+    label.textContent = product.label;
+
+    let points = button.querySelector(".kc-clinical-product-points");
+    if (!points) {
+      points = document.createElement("ul");
+      points.className = "kc-clinical-product-points";
+      label.insertAdjacentElement("afterend", points);
+    }
+    points.innerHTML = product.benefits.map((benefit) => `<li>${benefit}</li>`).join("");
+  }
+
   function syncButton(targetId) {
     const product = PRODUCTS[targetId];
     const button = triggerFor(targetId);
@@ -87,18 +196,20 @@
     button.dataset.kcClinicalOwned = String(owned);
     button.dataset.kcCheckoutReady = String(checkoutReady);
 
+    ensureProductPresentation(button, product);
+
     let price = button.querySelector(".kc-clinical-price");
     if (!price) {
       price = document.createElement("span");
       price.className = "kc-clinical-price";
-      const copy = button.querySelector("p");
-      if (copy) copy.insertAdjacentElement("afterend", price);
+      const points = button.querySelector(".kc-clinical-product-points");
+      if (points) points.insertAdjacentElement("afterend", price);
       else button.appendChild(price);
     }
     price.textContent = owned ? "Acceso activo" : `${money(product.price)} CLP`;
 
     const status = button.querySelector("b");
-    if (status) status.textContent = owned ? "Abrir →" : "Comprar";
+    if (status) status.textContent = owned ? "Abrir biblioteca →" : "Comprar";
 
     button.title = owned
       ? `Abrir ${product.name}`
@@ -201,7 +312,7 @@
     if (!document.querySelector('link[data-kc-clinical-library]')) {
       const style = document.createElement("link");
       style.rel = "stylesheet";
-      style.href = "./academy-clinical-library-v1.css?v=20260810-paid1";
+      style.href = "./academy-clinical-library-v1.css?v=20260810-paid2";
       style.dataset.kcClinicalLibrary = "styles";
       document.head.appendChild(style);
     }
@@ -212,7 +323,7 @@
     }
 
     const script = document.createElement("script");
-    script.src = "./academy-clinical-library-v1.js?v=20260810-paid1";
+    script.src = "./academy-clinical-library-v1.js?v=20260810-paid2";
     script.async = false;
     script.dataset.kcClinicalLibrary = "script";
     script.addEventListener("load", () => {
