@@ -53,6 +53,7 @@ async function installHarness(page) {
     window.__openedUnified = [];
     window.__nativeGridClicks = [];
     window.__nativeContinueClicks = [];
+    window.__nativeProxyClicks = [];
 
     window.openCourse = async (slug) => {
       window.__openedCore.push(slug);
@@ -68,12 +69,16 @@ async function installHarness(page) {
     document.querySelector("#continue-button").addEventListener("click", (event) => {
       window.__nativeContinueClicks.push(event.currentTarget.dataset.course);
     });
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-kc-open-product]");
+      if (button) window.__nativeProxyClicks.push(button.dataset.kcOpenProduct);
+    });
   });
 
   await page.addScriptTag({ path: BRIDGE_SCRIPT });
 }
 
-test("tarjetas proxy usan el opener unificado y no duplican el flujo nativo", async ({ page }) => {
+test("tarjetas dinámicas conservan su controlador nativo y el bridge no bloquea el clic", async ({ page }) => {
   await installHarness(page);
 
   await page.locator("#home-clinico").click();
@@ -81,11 +86,13 @@ test("tarjetas proxy usan el opener unificado y no duplican el flujo nativo", as
   await page.locator("#recommended-pain").click();
   await page.locator("#home-recupera").click();
 
-  await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([
+  await expect.poll(async () => page.evaluate(() => window.__nativeProxyClicks)).toEqual([
     "kinecheck-clinico",
+    "kinecheck-recupera",
+  ]);
+  await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([
     "kinecheck-estudiante",
     "mas-alla-del-dolor",
-    "kinecheck-recupera",
   ]);
   await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
 });
@@ -160,7 +167,7 @@ test("si el opener todavía no cargó, el bridge espera su disponibilidad", asyn
   await page.setContent(`
     <!doctype html><html><body>
       <div id="kc-toast" hidden></div>
-      <button id="late" type="button" data-kc-open-product="evidencia-aplicada">Abrir</button>
+      <button id="late" type="button" data-kc-open-owned="evidencia-aplicada">Abrir</button>
     </body></html>
   `);
   await page.evaluate(() => {
