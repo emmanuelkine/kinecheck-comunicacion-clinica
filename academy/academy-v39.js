@@ -853,7 +853,22 @@ async function openCourse(slug) {
       submitSsoAccess(session, course.ssoProduct);
       return;
     }
-    window.location.assign(course.url);
+
+    const destination = new URL(course.url, window.location.href);
+    if (destination.origin !== window.location.origin) {
+      window.name = JSON.stringify({
+        type: SSO_HANDOFF_TYPE,
+        issuedAt: Date.now(),
+        product: course.slug,
+        session: {
+          access_token: session.access_token,
+          expires_at: Number(session.expires_at || accessTokenExpiry(session.access_token) || 0),
+          token_type: session.token_type || "bearer",
+          handoff_access_only: true,
+        },
+      });
+    }
+    window.location.assign(destination.href);
   } catch (error) {
     licenseState.set(slug, "locked");
     renderCourses();
@@ -861,6 +876,18 @@ async function openCourse(slug) {
     showLibraryMessage(`${error.message} El acceso corresponde al producto comprado con este correo.`, true);
   }
 }
+
+window.KineCheckAcademyLauncher = Object.freeze({
+  open(slug) {
+    const course = CONFIG.courses.find((item) => item.slug === slug);
+    if (!course || courseAccess(course) !== "owned") {
+      showLibraryMessage("Este producto no está disponible en tu cuenta.", true);
+      return false;
+    }
+    openCourse(slug);
+    return true;
+  },
+});
 
 function toggleSidebar(force) {
   const open = typeof force === "boolean" ? force : !sidebar.classList.contains("open");

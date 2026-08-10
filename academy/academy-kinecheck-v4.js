@@ -299,19 +299,9 @@ function handleLocationNavigation(source) {
   }
 
   function openProduct(slug) {
-    const attempt = () => {
-      const button = document.querySelector(`#course-grid [data-course="${CSS.escape(slug)}"]`);
-      if (button && !button.disabled) {
-        button.click();
-        return true;
-      }
-      return false;
-    };
-    if (attempt()) return;
-    document.querySelector('[data-filter="all"]')?.click();
-    window.setTimeout(() => {
-      if (!attempt()) showToast("No fue posible abrir este producto. Revisa tu licencia o vuelve a intentarlo.");
-    }, 80);
+    const launcher = window.KineCheckAcademyLauncher;
+    if (launcher?.open?.(slug)) return;
+    showToast("No fue posible abrir este producto. Revisa tu licencia o vuelve a intentarlo.");
   }
 
   function showAuthPanel(name) {
