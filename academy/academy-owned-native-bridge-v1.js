@@ -4,14 +4,13 @@
   if (window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__) return;
   window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__ = true;
 
-  // Solo intercepta entradas proxy creadas por Inicio, Mi KineCheck y recomendaciones.
-  // Todas esas entradas deben usar el mismo opener unificado que ya funciona en las
-  // recomendaciones. Los botones nativos de #course-grid y #continue-button conservan
-  // sus listeners de academy-v39.js y su validación nativa.
+  // Intercepta las entradas proxy y, de forma específica, el botón global Continuar.
+  // Las tarjetas nativas de #course-grid conservan intactos sus listeners probados.
   const PRODUCT_SELECTOR = [
     "[data-kc-open-product]",
     "[data-kc-open-owned]",
     "[data-kc-path-open]",
+    "#continue-button[data-course]",
   ].join(", ");
 
   const STUDENT_ORDER = [

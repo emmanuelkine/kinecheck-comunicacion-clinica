@@ -36,6 +36,7 @@ async function installHarness(page) {
         <button type="button" data-course="kinecheck-clinico-curso">Clínico curso</button>
         <button type="button" data-course="traumatologia-ortopedia-clinica">Trauma</button>
         <button type="button" data-course="kinecheck-recupera">Recupera</button>
+        <button type="button" data-course="evidencia-aplicada">Evidencia</button>
       </section>
 
       <button id="home-clinico" type="button" data-kc-open-product="kinecheck-clinico">Clínico</button>
@@ -89,7 +90,7 @@ test("tarjetas proxy usan el opener unificado y no duplican el flujo nativo", as
   await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
 });
 
-test("botones nativos de course-grid y Continuar no son interceptados por el bridge", async ({ page }) => {
+test("Continuar usa el opener unificado sin alterar los botones nativos del catálogo", async ({ page }) => {
   await installHarness(page);
 
   await page.locator('#course-grid [data-course="comunicacion-clinica"]').click();
@@ -100,11 +101,11 @@ test("botones nativos de course-grid y Continuar no son interceptados por el bri
     "comunicacion-clinica",
     "kinecheck-clinico-curso",
   ]);
-  await expect.poll(async () => page.evaluate(() => window.__nativeContinueClicks)).toEqual([
+  await expect.poll(async () => page.evaluate(() => window.__nativeContinueClicks)).toEqual([]);
+  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
+  await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([
     "evidencia-aplicada",
   ]);
-  await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
-  await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([]);
 });
 
 test("Continuar actividad usa el opener unificado con el producto recordado", async ({ page }) => {
