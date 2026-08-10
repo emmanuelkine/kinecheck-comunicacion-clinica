@@ -280,3 +280,48 @@ test("Academy no conserva overlays invisibles ni bloquea el scroll o los control
   await expect.poll(() => page.evaluate(() => document.body.className)).not.toContain("modal-open");
   await expect.poll(() => page.evaluate(() => document.body.className)).not.toContain("review-open");
 });
+
+test("Academy sigue operativa si falla la capa visual simplificada", async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.addInitScript(() => {
+    localStorage.setItem("kinecheck_secure_session_v1", JSON.stringify({
+      access_token: "qa-owner-access-token-with-safe-runtime-length",
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+      expires_in: 3600,
+      token_type: "bearer",
+      user: { id: "qa-owner-user", email: "emmanuelkine@gmail.com" },
+    }));
+    localStorage.removeItem("kinecheck_learning_stage_v1:emmanuelkine@gmail.com");
+  });
+
+  await page.route("**/mi-kinecheck-simplify-v2.js*", (route) => route.abort("failed"));
+  await page.route("**/auth/v1/user", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json; charset=utf-8",
+    body: JSON.stringify({
+      id: "qa-owner-user",
+      email: "emmanuelkine@gmail.com",
+      created_at: "2026-01-01T00:00:00.000Z",
+    }),
+  }));
+  await page.route("**/functions/v1/metric-event", (route) => route.fulfill({
+    status: 202,
+    contentType: "application/json",
+    body: '{"ok":true}',
+  }));
+
+  await openAcademy(page, "simplify-asset-failure");
+  await expect(page.locator("#dashboard-view")).toBeVisible();
+  await expect(page.locator("#course-grid .course-card")).toHaveCount(9);
+  await page.waitForTimeout(900);
+
+  expect(await page.locator("#kc-stage-modal").count()).toBe(0);
+  await expect(page.locator("body")).not.toHaveClass(/kc-stage-modal-open/);
+  await expect(page.locator("body")).not.toHaveClass(/review-open/);
+  expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe("hidden");
+
+  await page.locator('.topbar-nav [data-kc-view-link="biblioteca"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-kc-view", "biblioteca");
+  await page.evaluate(() => window.scrollTo(0, 600));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+});

@@ -236,19 +236,4 @@
     },
   });
 
-  function loadAcademyCommerce() {
-    if (!window.location.pathname.includes("/academy/")) return;
-    if (document.querySelector('script[data-kinecheck-commerce]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-commerce-v4.js?v=20260801-1";
-    script.defer = true;
-    script.dataset.kinecheckCommerce = "v4";
-    document.head.appendChild(script);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadAcademyCommerce, { once: true });
-  } else {
-    loadAcademyCommerce();
-  }
 })();

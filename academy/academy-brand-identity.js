@@ -9,15 +9,6 @@
     if (element && element.textContent !== value) element.textContent = value;
   }
 
-  function loadScript(path, marker, version) {
-    if (document.querySelector(`script[${marker}]`)) return;
-    const script = document.createElement("script");
-    script.src = `${path}?v=${version}`;
-    script.async = false;
-    script.setAttribute(marker, "true");
-    document.head.appendChild(script);
-  }
-
   function applyIdentity() {
     document.title = BRAND_NAME;
 
@@ -81,20 +72,6 @@
       if (footerCopyright.innerHTML !== copy) footerCopyright.innerHTML = copy;
     }
   }
-
-  loadScript("../assets/runtime-config.js", "data-kc-runtime", "20260807-1");
-  loadScript("../assets/observability.js", "data-kc-observability", "20260807-1");
-  loadScript("./security-hardening-v1.js", "data-kc-security-hardening", "20260807-1");
-  loadScript("../metrics-v1.js", "data-kc-launch-metrics", "20260809-ownedobs1");
-
-  // Orden deliberado: primero existe un único opener; luego el controlador de clicks.
-  loadScript("./academy-open-v6.js", "data-kc-open-v6", "20260809-directnav1");
-  loadScript("./academy-owned-native-bridge-v1.js", "data-kc-owned-native-bridge", "20260809-ownedopener1");
-
-  loadScript("./mi-kinecheck-v1.js", "data-mi-kinecheck", "20260809-directnav2");
-  loadScript("./mi-kinecheck-card-copy-v1.js", "data-mi-kinecheck-card-copy", "20260806-unified1");
-  loadScript("./mi-kinecheck-simplify-v2.js", "data-mi-kinecheck-simplify-v2", "20260810-interactionfix1");
-  loadScript("./academy-clinico-course-v1.js", "data-kc-clinico-course", "20260806-final5");
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", applyIdentity, { once: true });

@@ -77,6 +77,73 @@ test("la portada conserva soporte, precios y accesos canónicos", async () => {
   assert.equal(count(home, 'class="icon" aria-hidden="true"'), 3);
 });
 
+test("portada y Academy tienen una única composición de scripts", async () => {
+  const home = await read("index.html");
+  const academy = await read("academy/index.html");
+
+  assert.match(home, /<script src="\.\/kinecheck\/site-v5\.js\?v=3" defer><\/script>/);
+  for (const legacy of [
+    "home.js",
+    "home-core-20260806.js",
+    "home-commercial-proof-v1.js",
+    "home-experience-unification-v1.js",
+  ]) {
+    assert.ok(!home.includes(legacy), `la portada volvió a cargar ${legacy}`);
+  }
+
+  const orderedRuntime = [
+    "academy-bootstrap-v28.js",
+    "academy-v39.js",
+    "academy-open-v6.js",
+    "academy-owned-native-bridge-v1.js",
+    "mi-kinecheck-v1.js",
+    "mi-kinecheck-simplify-v2.js",
+    "academy-commerce-v4.js",
+    "academy-access-recovery-v1.js",
+    "academy-brand-identity.js",
+  ];
+  let previous = -1;
+  for (const script of orderedRuntime) {
+    assert.equal(count(academy, script), 1, `${script} debe declararse una sola vez`);
+    const position = academy.indexOf(script);
+    assert.ok(position > previous, `${script} quedó fuera del orden canónico`);
+    previous = position;
+  }
+
+  for (const legacy of [
+    "academy-learning-path-v4.js",
+    "academy-integration-guard-v4.js",
+    "academy-launch-router-v4.js",
+  ]) {
+    assert.ok(!academy.includes(legacy), `Academy volvió a cargar el módulo legado ${legacy}`);
+  }
+
+  for (const path of [
+    "academy/academy-bootstrap-v28.js",
+    "watermark.js",
+    "academy/academy-v39.js",
+    "academy/academy-evidence-alerts.js",
+    "academy/academy-reviews.js",
+    "academy/academy-kinecheck-v4.js",
+    "assets/runtime-config.js",
+    "assets/observability.js",
+    "academy/security-hardening-v1.js",
+    "metrics-v1.js",
+    "academy/academy-open-v6.js",
+    "academy/academy-owned-native-bridge-v1.js",
+    "academy/mi-kinecheck-v1.js",
+    "academy/mi-kinecheck-card-copy-v1.js",
+    "academy/mi-kinecheck-simplify-v2.js",
+    "academy/academy-clinico-course-v1.js",
+    "academy/academy-commerce-v4.js",
+    "academy/academy-access-recovery-v1.js",
+    "academy/academy-brand-identity.js",
+  ]) {
+    const source = await read(path);
+    assert.ok(!source.includes('createElement("script")'), `${path} volvió a inyectar scripts dinámicos`);
+  }
+});
+
 test("ninguna superficie pública visible usa /platform/ ni CTAs vacíos", async () => {
   for (const path of await publicHtmlPaths()) {
     const source = await read(path);

@@ -5,6 +5,10 @@ on:
   pull_request:
     paths:
       - 'metrics-v1.js'
+      - 'watermark.js'
+      - 'academy/index.html'
+      - 'academy/academy-bootstrap-v28.js'
+      - 'academy/academy-reviews.js'
       - 'academy/academy-open-v6.js'
       - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'
@@ -33,6 +37,10 @@ on:
     branches: [main]
     paths:
       - 'metrics-v1.js'
+      - 'watermark.js'
+      - 'academy/index.html'
+      - 'academy/academy-bootstrap-v28.js'
+      - 'academy/academy-reviews.js'
       - 'academy/academy-open-v6.js'
       - 'academy/academy-owned-native-bridge-v1.js'
       - 'academy/academy-recommended-buttons-fix.js'
