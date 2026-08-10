@@ -8,7 +8,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   betaTrialDays: 5,
   appSso: Object.freeze({
     enabled: true,
-    baseUrl: "https://kinecheck-clinico.emmanuelkine.chatgpt.site",
+    baseUrl: "https://apps.kinecheck.cl",
     handoffType: "kinecheck-sso-v3-access-only",
     transport: "form-post",
     postPath: "/api/license/sso",
@@ -59,7 +59,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       icon: "KE",
       kind: "application",
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-estudiante",
+      url: "https://apps.kinecheck.cl/sso.html?product=kinecheck-estudiante",
       ssoProduct: "kinecheck-estudiante",
     },
     {
@@ -70,7 +70,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       icon: "KR",
       kind: "application",
       status: "active",
-      url: "https://kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-recupera",
+      url: "https://apps.kinecheck.cl/sso.html?product=kinecheck-recupera",
       ssoProduct: "kinecheck-recupera",
     },
     {
