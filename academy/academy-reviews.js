@@ -21,42 +21,6 @@
     }
   }
 
-  function loadLearningPathExtension() {
-    if (!document.querySelector('link[data-kinecheck-learning-path]')) {
-      const stylesheet = document.createElement("link");
-      stylesheet.rel = "stylesheet";
-      stylesheet.href = "./academy-learning-path-v4.css?v=20260810-interactionfix1";
-      stylesheet.dataset.kinecheckLearningPath = "styles";
-      document.head.appendChild(stylesheet);
-    }
-
-    if (!document.querySelector('script[data-kinecheck-learning-path]')) {
-      const script = document.createElement("script");
-      script.src = "./academy-learning-path-v4.js?v=20260810-interactionfix1";
-      script.dataset.kinecheckLearningPath = "script";
-      script.defer = true;
-      document.head.appendChild(script);
-    }
-  }
-
-  function loadIntegrationGuardExtension() {
-    if (document.querySelector('script[data-kinecheck-integration-guard]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-integration-guard-v4.js?v=20260803-sessionfix2";
-    script.dataset.kinecheckIntegrationGuard = "script";
-    script.defer = true;
-    document.head.appendChild(script);
-  }
-
-  function loadLaunchRouterExtension() {
-    if (document.querySelector('script[data-kinecheck-launch-router]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260803-sessionfix2";
-    script.dataset.kinecheckLaunchRouter = "script";
-    script.defer = true;
-    document.head.appendChild(script);
-  }
-
   function loadCommerceExtension() {
     if (document.querySelector('script[data-kinecheck-commerce]')) return;
     const script = document.createElement("script");
@@ -229,9 +193,6 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     loadAcademyEvidenceExtension();
-    loadLearningPathExtension();
-    loadIntegrationGuardExtension();
-    loadLaunchRouterExtension();
     loadCommerceExtension();
     createModal();
     addReviewActions();
