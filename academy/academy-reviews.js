@@ -3,69 +3,6 @@
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const state = { course: null, rating: 0, existing: null };
 
-  function loadAcademyEvidenceExtension() {
-    if (!document.querySelector('link[data-academy-evidence]')) {
-      const stylesheet = document.createElement("link");
-      stylesheet.rel = "stylesheet";
-      stylesheet.href = "./academy-evidence-alerts.css?v=20260731-2";
-      stylesheet.dataset.academyEvidence = "styles";
-      document.head.appendChild(stylesheet);
-    }
-
-    if (!document.querySelector('script[data-academy-evidence]')) {
-      const script = document.createElement("script");
-      script.src = "./academy-evidence-alerts.js?v=20260731-2";
-      script.dataset.academyEvidence = "script";
-      script.defer = true;
-      document.head.appendChild(script);
-    }
-  }
-
-  function loadLearningPathExtension() {
-    if (!document.querySelector('link[data-kinecheck-learning-path]')) {
-      const stylesheet = document.createElement("link");
-      stylesheet.rel = "stylesheet";
-      stylesheet.href = "./academy-learning-path-v4.css?v=20260810-interactionfix1";
-      stylesheet.dataset.kinecheckLearningPath = "styles";
-      document.head.appendChild(stylesheet);
-    }
-
-    if (!document.querySelector('script[data-kinecheck-learning-path]')) {
-      const script = document.createElement("script");
-      script.src = "./academy-learning-path-v4.js?v=20260810-interactionfix1";
-      script.dataset.kinecheckLearningPath = "script";
-      script.defer = true;
-      document.head.appendChild(script);
-    }
-  }
-
-  function loadIntegrationGuardExtension() {
-    if (document.querySelector('script[data-kinecheck-integration-guard]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-integration-guard-v4.js?v=20260803-sessionfix2";
-    script.dataset.kinecheckIntegrationGuard = "script";
-    script.defer = true;
-    document.head.appendChild(script);
-  }
-
-  function loadLaunchRouterExtension() {
-    if (document.querySelector('script[data-kinecheck-launch-router]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-launch-router-v4.js?v=20260803-sessionfix2";
-    script.dataset.kinecheckLaunchRouter = "script";
-    script.defer = true;
-    document.head.appendChild(script);
-  }
-
-  function loadCommerceExtension() {
-    if (document.querySelector('script[data-kinecheck-commerce]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-commerce-v4.js?v=20260801-stable2";
-    script.dataset.kinecheckCommerce = "v4";
-    script.defer = true;
-    document.head.appendChild(script);
-  }
-
   function session() {
     const provided = window.KINECHECK_ACADEMY_SESSION?.get?.();
     if (provided?.access_token) return provided;
@@ -228,11 +165,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    loadAcademyEvidenceExtension();
-    loadLearningPathExtension();
-    loadIntegrationGuardExtension();
-    loadLaunchRouterExtension();
-    loadCommerceExtension();
     createModal();
     addReviewActions();
     const catalog = document.querySelector("#course-grid");

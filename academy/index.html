@@ -15,12 +15,33 @@
   <link rel="stylesheet" href="./academy-v40.css?v=41">
   <link rel="stylesheet" href="./academy-evidence-alerts.css?v=20260731-2" data-academy-evidence="styles">
   <link rel="stylesheet" href="./academy-kinecheck-v4.css?v=20260731-1">
-  <script src="./academy-bootstrap-v28.js?v=20260809-private1" defer></script>
-  <script src="../watermark.js?v=20260730b" defer></script>
+  <link rel="stylesheet" href="./mi-kinecheck-v1.css?v=20260809-directnav2" data-mi-kinecheck="true">
+  <link rel="stylesheet" href="./mi-kinecheck-simplify-v2.css?v=20260810-runtime1" data-mi-kinecheck-simplify-v2="true">
+
+  <!--
+    Orden canónico del runtime de Academy.
+    Los módulos no deben inyectar otros scripts: todos se declaran aquí con defer
+    para que la inicialización sea determinista incluso con red o caché lentas.
+  -->
+  <script src="./academy-bootstrap-v28.js?v=20260810-runtime1" defer></script>
+  <script src="../watermark.js?v=20260810-runtime1" defer></script>
   <script src="./academy-v39.js?v=20260803-sessionfix2" defer></script>
   <script src="./academy-evidence-alerts.js?v=20260803-stable2" data-academy-evidence="script" defer></script>
-  <script src="./academy-reviews.js?v=20260810-interactionfix1" defer></script>
+  <script src="./academy-reviews.js?v=20260810-runtime1" defer></script>
   <script src="./academy-kinecheck-v4.js?v=20260803-stable2" defer></script>
+  <script src="../assets/runtime-config.js?v=20260807-1" data-kc-runtime="true" defer></script>
+  <script src="../assets/observability.js?v=20260807-1" data-kc-observability="true" defer></script>
+  <script src="./security-hardening-v1.js?v=20260807-1" data-kc-security-hardening="true" defer></script>
+  <script src="../metrics-v1.js?v=20260809-ownedobs1" data-kc-launch-metrics="true" defer></script>
+  <script src="./academy-open-v6.js?v=20260809-directnav1" data-kc-open-v6="true" defer></script>
+  <script src="./academy-owned-native-bridge-v1.js?v=20260809-ownedopener1" data-kc-owned-native-bridge="true" defer></script>
+  <script src="./mi-kinecheck-v1.js?v=20260809-directnav2" data-mi-kinecheck="true" defer></script>
+  <script src="./mi-kinecheck-card-copy-v1.js?v=20260806-unified1" data-mi-kinecheck-card-copy="true" defer></script>
+  <script src="./mi-kinecheck-simplify-v2.js?v=20260810-runtime1" data-mi-kinecheck-simplify-v2="true" defer></script>
+  <script src="./academy-clinico-course-v1.js?v=20260806-final5" data-kc-clinico-course="true" defer></script>
+  <script src="./academy-commerce-v4.js?v=20260801-stable2" data-kinecheck-commerce="v4" defer></script>
+  <script src="./academy-access-recovery-v1.js?v=20260803-accessfix1" data-kc-access-recovery="true" defer></script>
+  <script src="./academy-brand-identity.js?v=20260810-runtime1" data-kc-brand-identity="true" defer></script>
 </head>
 <body data-kc-view="inicio">
   <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>

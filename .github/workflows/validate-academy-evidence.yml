@@ -81,8 +81,9 @@ jobs:
       - name: Confirmar conexión y versión del módulo
         run: |
           grep -Eq 'academy-reviews\.js\?v=[A-Za-z0-9._-]+' academy/index.html
-          grep -q 'academy-evidence-alerts.css' academy/academy-reviews.js
-          grep -q 'academy-evidence-alerts.js' academy/academy-reviews.js
+          grep -Eq 'academy-evidence-alerts\.css\?v=[A-Za-z0-9._-]+' academy/index.html
+          grep -Eq 'academy-evidence-alerts\.js\?v=[A-Za-z0-9._-]+' academy/index.html
+          ! grep -q 'createElement("script")' academy/academy-reviews.js
           grep -q 'evidence-alerts.json' academy/academy-evidence-alerts.js
           grep -q 'evidencia-semanal' academy/academy-evidence-alerts.js
           grep -q 'watchSessionActivation' academy/academy-evidence-alerts.js
