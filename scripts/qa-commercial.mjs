@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 
 const baseUrl = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
+const reportPath = String(process.env.QA_REPORT_PATH || "qa-commercial-report.json");
 const products = [
   ["kinecheck-clinico", "KineCheck Clínico", "https://pay.hotmart.com/L106791841D", 39990, "$39.990"],
   ["kinecheck-estudiante", "KineCheck Estudiante", "https://pay.hotmart.com/G106801166S", 14990, "$14.990"],
@@ -45,6 +46,7 @@ async function checkSource() {
   const betaPage = await read("beta/index.html");
   const supportPage = await read("soporte/index.html");
   const supportScript = await read("soporte/support.js");
+  const demosPage = await read("muestras/index.html");
   const adminPage = await read("admin/index.html");
   const adminScript = await read("admin/admin.js");
 
@@ -75,12 +77,16 @@ async function checkSource() {
 
   const trustSignals = home.includes("Precios visibles")
     && home.includes("Compra segura")
-    && home.includes("Conoce el precio antes de decidir.");
-  record("Public trust layer", trustSignals ? "PASS" : "FAIL", "visible-price, secure-purchase and price-before-decision signals must be present");
+    && home.includes("Conoce el precio antes de decidir.")
+    && home.includes('id="confianza"')
+    && home.includes("Emmanuel Zúñiga")
+    && home.includes("dentro de 2 días hábiles")
+    && home.includes("Abrir demostraciones");
+  record("Public trust layer", trustSignals ? "PASS" : "FAIL", "price, author, method, support and demonstration signals must be present");
   record(
-    "Retired creator section",
-    !/id="confianza"|CREADO POR EMMANUEL ZÚÑIGA/i.test(home) ? "PASS" : "FAIL",
-    "the creator profile intentionally removed from the current public home must not return as stale content",
+    "Verified creator and method",
+    /id="confianza"[\s\S]*Emmanuel Zúñiga[\s\S]*Metodología explícita/i.test(home) ? "PASS" : "FAIL",
+    "the public home must identify the creator and explain the learning method",
   );
   record(
     "No fabricated social proof",
@@ -114,7 +120,24 @@ async function checkSource() {
     && !productExperience.includes("20260806-final5");
   record("Product access route", cleanProductAccess ? "PASS" : "FAIL", "product pages must rewrite private access directly to /academy/ without retired version parameters");
 
-  record("Automated support source", supportPage.includes('id="support-form"') && supportScript.includes("support-request") ? "PASS" : "FAIL", "support portal must submit to diagnostic endpoint");
+  const clinicalArchitecture = productPage.includes('<span id="product-family">KINECHECK FORMACIÓN</span>')
+    && !productPage.includes('<span id="product-family">KINECHECK APPS</span>')
+    && productPage.split('class="module-card"').length - 1 === 10
+    && productPage.includes('id="metodologia"');
+  record("Clinical public architecture", clinicalArchitecture ? "PASS" : "FAIL", "Clinico must be Formation with 10 modules, authorship and method in the static fallback");
+
+  const webAppDelivery = students.includes("APLICACIÓN WEB · SIN INSTALACIÓN")
+    && recovery.includes("APLICACIÓN WEB · SIN INSTALACIÓN")
+    && product.includes("Aplicación web formativa · sin instalación")
+    && product.includes("Aplicación web de seguimiento · sin instalación");
+  record("Web app delivery clarity", webAppDelivery ? "PASS" : "FAIL", "Estudiante and Recupera must be browser-based web apps without installation");
+
+  const demosPresent = ["clinico", "estudiante", "recupera"].every((id) => demosPage.includes(`id="${id}"`))
+    && demosPage.includes("Sin guardar datos")
+    && !/localStorage|sessionStorage/.test(demosPage);
+  record("Public product demonstrations", demosPresent ? "PASS" : "FAIL", "three limited demonstrations must be available without account or persisted data");
+
+  record("Automated support source", supportPage.includes('id="support-form"') && supportPage.includes("dentro de 2 días hábiles") && supportScript.includes("support-request") ? "PASS" : "FAIL", "support portal must state its scope and response target and submit to diagnostic endpoint");
   record("Private automation source", adminPage.includes('id="admin-login"') && adminScript.includes("automation-status") && adminScript.includes("automation-control") ? "PASS" : "FAIL", "admin portal must use protected status and control endpoints");
   record("Beta privacy consent", betaPage.includes("consentPrivacy") && betaPage.includes("../legal/privacidad.html") ? "PASS" : "FAIL", "beta form must require privacy consent");
 }
@@ -152,7 +175,7 @@ async function checkCheckout(name, url) {
 }
 
 async function checkLive() {
-  await checkPage("Public home", "/?qa=commercial-current", ["PRODUCTOS PRINCIPALES", "$39.990 CLP", "$14.990 CLP", "$9.990 CLP", "Precios visibles", "Compra segura"]);
+  await checkPage("Public home", "/?qa=commercial-current", ["PRODUCTOS PRINCIPALES", "$39.990 CLP", "$14.990 CLP", "$9.990 CLP", "Precios visibles", "Compra segura", "Emmanuel Zúñiga"]);
   await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "RECOMENDADO"]);
   await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "RECOMENDADO"]);
   await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "$9.990 CLP", "Acceso por 3 meses"]);
@@ -163,6 +186,7 @@ async function checkLive() {
   await checkPage("Refunds", "/legal/reembolsos.html", ["Retracto y reembolsos", "Hotmart"]);
   await checkPage("External beta", "/beta/", ["PROGRAMA BETA", 'id="beta-form"']);
   await checkPage("Automated support", "/soporte/", ["DIAGNÓSTICO AUTOMÁTICO", 'id="support-form"']);
+  await checkPage("Public demonstrations", "/muestras/", ["MIRA ANTES DE COMPRAR", 'id="clinico"', 'id="estudiante"', 'id="recupera"']);
   await checkPage("Private automation portal", "/admin/", ["Centro de automatización", 'id="admin-login"']);
 
   for (const [slug, name, checkout] of products) {
@@ -181,7 +205,7 @@ const report = {
   results,
   note: "Automated certification does not replace end-to-end purchase, webhook, refund, chargeback and authenticated-license tests with controlled Hotmart transactions.",
 };
-await fs.writeFile("qa-commercial-report.json", JSON.stringify(report, null, 2));
+await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
 
 if (failures > 0) {
   console.error(`Commercial QA failed with ${failures} blocking issue(s).`);

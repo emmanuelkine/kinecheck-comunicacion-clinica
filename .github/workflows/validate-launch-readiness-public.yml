@@ -18,11 +18,13 @@ on:
       - "home.js"
       - "metrics-v1.js"
       - "productos/**"
+      - "muestras/**"
       - "academy/**"
       - "platform/**"
       - "tests/launch-readiness-public.spec.mjs"
       - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
+      - "tests/public-trust-browser.spec.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
   push:
     branches: [main]
@@ -41,11 +43,13 @@ on:
       - "home.js"
       - "metrics-v1.js"
       - "productos/**"
+      - "muestras/**"
       - "academy/**"
       - "platform/**"
       - "tests/launch-readiness-public.spec.mjs"
       - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
+      - "tests/public-trust-browser.spec.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
   workflow_dispatch:
 
@@ -71,7 +75,7 @@ jobs:
         run: |
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
-          npx playwright install --with-deps chromium >/dev/null 2>&1
+          npx playwright install --with-deps chromium webkit >/dev/null 2>&1
       - name: Validar PR contra el checkout exacto
         if: github.event_name == 'pull_request'
         run: |
@@ -82,6 +86,7 @@ jobs:
           BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
           NO_JS=1 BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
           BASE_URL=http://127.0.0.1:4173 node tests/launch-readiness-public.spec.mjs
+          BASE_URL=http://127.0.0.1:4173 node tests/public-trust-browser.spec.mjs
       - name: Diagnosticar overflow móvil de productos en producción
         if: github.event_name != 'pull_request'
         env:

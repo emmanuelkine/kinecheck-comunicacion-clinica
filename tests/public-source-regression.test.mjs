@@ -7,7 +7,7 @@ const count = (source, token) => source.split(token).length - 1;
 
 const PUBLIC_HTML_DIRECTORIES = [
   "profesionales", "estudiantes", "recupera", "productos", "legal",
-  "beta", "ayuda", "soporte", "bienvenida", "kinecheck",
+  "beta", "ayuda", "soporte", "bienvenida", "kinecheck", "muestras",
 ];
 
 const CANONICAL_ACCESS_PAGES = [
@@ -75,6 +75,10 @@ test("la portada conserva soporte, precios y accesos canónicos", async () => {
   for (const price of ["$39.990 CLP", "$14.990 CLP", "$9.990 CLP"]) assert.ok(home.includes(price));
   assertAccessiblePublicShell(home);
   assert.equal(count(home, 'class="icon" aria-hidden="true"'), 3);
+  assert.ok(home.includes('id="confianza"'));
+  assert.ok(home.includes("Emmanuel Zúñiga"));
+  assert.ok(home.includes("dentro de 2 días hábiles"));
+  assert.equal(count(home, "Ver muestra funcional"), 3);
 });
 
 test("ninguna superficie pública visible usa /platform/ ni CTAs vacíos", async () => {
@@ -112,16 +116,36 @@ test("la arquitectura oficial de marca está explícita y es consistente", async
   assert.ok(!professionals.includes("Registro kinésico profesional"));
 
   const students = await read("estudiantes/index.html");
-  assert.equal(count(students, "KINECHECK APPS"), 1);
+  assert.equal(count(students, "KINECHECK APPS"), 2);
   assert.equal(count(students, "KINECHECK PACKS"), 1);
   assert.equal(count(students, "KINECHECK FORMACIÓN · POR KINECHECK"), 2);
 
   const recovery = await read("recupera/index.html");
   assert.ok(recovery.includes("KINECHECK APPS"));
+  assert.ok(students.includes("APLICACIÓN WEB · SIN INSTALACIÓN"));
+  assert.ok(recovery.includes("APLICACIÓN WEB · SIN INSTALACIÓN"));
 
   const reposition = await read("productos/product-clinico-reposition-v1.js");
   assert.ok(reposition.includes('$("#product-family").textContent = "KINECHECK FORMACIÓN"'));
   assert.ok(reposition.includes("CURSO PROFESIONAL + GUÍA COMPLEMENTARIA"));
+
+  const productPage = await read("productos/index.html");
+  assert.ok(productPage.includes('<span id="product-family">KINECHECK FORMACIÓN</span>'));
+  assert.ok(!productPage.includes('<span id="product-family">KINECHECK APPS</span>'));
+  assert.equal(count(productPage, 'class="module-card"'), 10);
+  assert.ok(productPage.includes('id="metodologia"'));
+
+  const productData = await read("productos/product.js");
+  const clinicoBlock = productData.slice(productData.indexOf('"kinecheck-clinico"'), productData.indexOf('"kinecheck-estudiante"'));
+  assert.ok(clinicoBlock.includes('family: "KineCheck Formación"'));
+  assert.ok(clinicoBlock.includes('type: "Curso profesional + guía complementaria"'));
+  assert.ok(!clinicoBlock.includes("Aplicación profesional"));
+  assert.ok(productData.includes('type: "Aplicación web formativa · sin instalación"'));
+  assert.ok(productData.includes('type: "Aplicación web de seguimiento · sin instalación"'));
+
+  const productExperience = await read("productos/product-experience-unification-v1.js");
+  assert.ok(productExperience.includes("APLICACIÓN WEB FORMATIVA · SIN INSTALACIÓN"));
+  assert.ok(productExperience.includes("APLICACIÓN WEB DE SEGUIMIENTO · SIN INSTALACIÓN"));
 
   const brandArchitecture = await read("docs/brand-architecture.md");
   assert.match(brandArchitecture, /### KineCheck Apps[\s\S]*KineCheck Estudiante[\s\S]*KineCheck Recupera/);
@@ -184,11 +208,29 @@ test("Productos entrega un fallback clínico útil sin JavaScript", async () => 
   assertOpenGraph(page, "https://kinecheck.cl/productos/");
   assert.ok(page.includes('<link rel="canonical" href="https://kinecheck.cl/productos/">'));
   assert.ok(page.includes("KineCheck</em> Clínico"));
+  assert.ok(page.includes('<span id="product-family">KINECHECK FORMACIÓN</span>'));
+  assert.ok(!page.includes('<span id="product-family">KINECHECK APPS</span>'));
+  assert.equal(count(page, 'class="module-card"'), 10);
   assert.ok(page.includes("12 meses desde la aprobación"));
   assert.ok(page.includes('data-checkout href="https://pay.hotmart.com/L106791841D"'));
   assert.ok(page.includes('data-access href="../academy/"'));
   assert.ok(!page.includes("../platform/"));
   assert.match(headers, /\/productos\/\*[\s\S]*?Content-Security-Policy:\s*frame-ancestors 'none'/);
+});
+
+test("las demostraciones públicas son limitadas, funcionales y no guardan datos", async () => {
+  const page = await read("muestras/index.html");
+  const script = await read("muestras/demo-v1.js");
+  assertOpenGraph(page, "https://kinecheck.cl/muestras/");
+  assert.equal(count(page, 'class="demo-section'), 3);
+  for (const id of ["clinico", "estudiante", "recupera"]) assert.ok(page.includes(`id="${id}"`));
+  assert.ok(page.includes("Sin guardar datos"));
+  assert.ok(page.includes("SIN INSTALACIÓN"));
+  assert.doesNotMatch(page, /style=/);
+  assert.ok(script.includes("data-clinical-quiz"));
+  assert.ok(script.includes("data-student-step"));
+  assert.ok(script.includes("data-build-summary"));
+  assert.doesNotMatch(`${page}\n${script}`, /localStorage|sessionStorage|fetch\s*\(/);
 });
 
 test("la hidratación conserva ocho checkouts y acceso canónico", async () => {

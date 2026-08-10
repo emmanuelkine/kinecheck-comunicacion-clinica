@@ -6,43 +6,44 @@
   const PRODUCTS = Object.freeze({
     "kinecheck-clinico": {
       name: "KineCheck Clínico",
-      family: "KineCheck Apps",
+      family: "KineCheck Formación",
       shortName: "Clínico",
-      type: "Aplicación profesional",
+      type: "Curso profesional + guía complementaria",
       term: "12 meses",
       accent: "#18c7b7",
       accentSoft: "#77f1e5",
-      subtitle: "Registro kinésico profesional y razonamiento estructurado",
-      description: "Organiza la evaluación, los hallazgos, las hipótesis, los objetivos, la intervención y el seguimiento en un flujo clínico coherente. KineCheck Clínico facilita el registro y la síntesis sin reemplazar el juicio profesional.",
-      audience: "Kinesiólogos y profesionales que necesitan registrar, analizar y continuar casos musculoesqueléticos con mayor orden y claridad.",
+      subtitle: "Evaluación, seguridad y razonamiento musculoesquelético",
+      description: "Curso profesional avanzado para aprender a integrar historia, seguridad, examen, medición, hipótesis y reevaluación. Incluye una guía digital complementaria para aplicar el método sin reemplazar la ficha clínica institucional.",
+      audience: "Kinesiólogos y profesionales de rehabilitación musculoesquelética que buscan profundizar su evaluación y razonamiento clínico.",
       audiences: ["Kinesiólogos", "Profesionales musculoesqueléticos", "Docentes clínicos"],
       checkout: "https://pay.hotmart.com/L106791841D",
       outcomes: [
-        ["Evaluación organizada", "Estructura antecedentes, seguridad, examen físico, función y evolución."],
-        ["Razonamiento visible", "Relaciona hallazgos, hipótesis, prioridades y objetivos clínicos."],
-        ["Seguimiento continuo", "Permite retomar casos, observar cambios y mantener la información relevante."],
-        ["Síntesis profesional", "Genera una visión compacta del caso para revisar, comunicar o documentar."],
+        ["Razonamiento clínico explícito", "Conecta historia, seguridad, examen, medición, hipótesis y decisiones revisables."],
+        ["Evaluación segura", "Prioriza triage, banderas clínicas, deterioro neurológico y criterios de derivación."],
+        ["Medición defendible", "Estandariza movilidad, fuerza, desempeño y resultados informados por la persona."],
+        ["Integración biopsicosocial", "Relaciona función, participación, contexto, expectativas y factores modificadores."],
         ["Seguridad clínica", "Integra banderas, criterios de derivación y límites del manejo kinésico."],
-        ["Acceso multiplataforma", "Funciona desde computador, tablet y teléfono sin instalación."],
+        ["Aplicación mediante guía", "Utiliza la guía complementaria para revisar omisiones sin reemplazar la ficha institucional."],
       ],
       contents: [
-        ["Anamnesis y contexto", "Motivo de consulta, evolución, carga, sueño, antecedentes y objetivos de la persona."],
-        ["Seguridad y complejidad", "Banderas clínicas, irritabilidad, precauciones y necesidad de derivación."],
-        ["Examen físico", "Movimiento, fuerza, sensibilidad, función y pruebas pertinentes según el caso."],
-        ["Hipótesis y prioridades", "Organización del problema, factores contribuyentes y focos de intervención."],
-        ["Plan y seguimiento", "Objetivos, intervención, reevaluación y continuidad del proceso."],
+        ["Curso profesional central", "10 módulos, 30 experiencias clínicas, casos, comprobaciones y progreso guardado."],
+        ["Seguridad y triage", "Banderas clínicas, examen neurológico y marco cervical IFOMPT."],
+        ["Historia y contexto", "Síntomas, irritabilidad, factores psicosociales, metas y decisiones compartidas."],
+        ["Examen y medición", "Movimiento, fuerza, desempeño, examen neurológico, neurodinámica y pruebas especiales."],
+        ["Integración y seguimiento", "CIF, hipótesis, pronóstico, resultados, reevaluación y síntesis final."],
+        ["Guía digital complementaria", "Apoyo para revisar preguntas, hallazgos e hipótesis. No es una ficha clínica oficial ni un repositorio de pacientes."],
       ],
-      disclaimer: "Herramienta de apoyo al registro y razonamiento. No entrega diagnósticos automáticos ni sustituye la evaluación profesional.",
+      disclaimer: "Producto educativo para profesionales. La guía complementaria no reemplaza el registro clínico institucional, no debe utilizarse como repositorio de datos identificables y no sustituye el juicio profesional ni la derivación oportuna.",
       faq: [
-        ["¿Puede usarse con pacientes reales?", "Sí, siempre que registres información anonimizada y cumplas las normas éticas y legales aplicables."],
-        ["¿La aplicación toma decisiones por mí?", "No. Organiza información y facilita el análisis, pero la interpretación y las decisiones corresponden al profesional."],
+        ["¿Qué es KineCheck Clínico?", "Es un curso avanzado para profesionales. La guía digital es una herramienta complementaria para aplicar el método aprendido."],
+        ["¿La guía reemplaza la ficha clínica de mi centro?", "No. La atención debe documentarse en el sistema oficial de la institución y respetar sus exigencias legales, éticas y de seguridad."],
       ],
     },
     "kinecheck-estudiante": {
       name: "KineCheck Estudiante",
       family: "KineCheck Apps",
       shortName: "Estudiante",
-      type: "Aplicación formativa",
+      type: "Aplicación web formativa · sin instalación",
       term: "12 meses",
       accent: "#5c67d7",
       accentSoft: "#b7bcff",
@@ -76,7 +77,7 @@
       name: "KineCheck Recupera",
       family: "KineCheck Apps",
       shortName: "Recupera",
-      type: "Aplicación de seguimiento",
+      type: "Aplicación web de seguimiento · sin instalación",
       term: "3 meses",
       accent: "#31b779",
       accentSoft: "#9bf0c5",
@@ -288,6 +289,9 @@
   document.documentElement.style.setProperty("--accent", product.accent);
   document.documentElement.style.setProperty("--accent-soft", product.accentSoft);
   document.body.dataset.product = slug;
+  document.querySelectorAll("[data-clinico-only]").forEach((node) => {
+    node.hidden = slug !== "kinecheck-clinico";
+  });
   document.title = `${product.name} | KineCheck`;
   document.querySelector('meta[name="description"]')?.setAttribute("content", product.description);
   document.querySelector('meta[property="og:title"]')?.setAttribute("content", `${product.name} | KineCheck`);
@@ -300,6 +304,7 @@
   $("#product-family").textContent = product.family;
   $("#product-type").textContent = product.type;
   $("#product-term").textContent = product.term;
+  $("#fact-format").textContent = product.type;
   $("#product-title").innerHTML = product.name.replace(/(KineCheck|Comunicación|Evidencia|Traumatología|Más allá)/, "<em>$1</em>");
   $("#product-subtitle").textContent = product.subtitle;
   $("#product-description").textContent = product.description;
@@ -327,7 +332,7 @@
     ["¿Cómo ingreso después de comprar?", "Crea o abre tu cuenta en kinecheck.cl/academy utilizando exactamente el mismo correo asociado a la compra en Hotmart."],
     ["¿Cuándo comienza la vigencia?", `La vigencia de ${product.term} comienza cuando el pago queda aprobado. Las compras activas anteriores a la política vigente conservan sus condiciones aplicables.`],
     ["¿Puedo compartir mi acceso?", "No. La licencia es personal e intransferible. No compartas correo, contraseña, capturas ni contenidos protegidos."],
-    ["¿Funciona en celular?", "Sí. La plataforma está diseñada para computador, tablet y teléfono, aunque algunas tareas extensas son más cómodas en una pantalla mayor."],
+    ["¿Debo instalar una aplicación?", "No. KineCheck funciona desde un navegador moderno en computador, tablet o teléfono. Algunas tareas extensas son más cómodas en una pantalla mayor."],
   ];
   $("#faq-grid").innerHTML = list([...product.faq, ...commonFaq], ([question, answer]) => `
     <details><summary>${question}</summary><p>${answer}</p></details>

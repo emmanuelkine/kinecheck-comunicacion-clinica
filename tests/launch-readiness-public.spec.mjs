@@ -95,7 +95,8 @@ try {
     await noJsPage.goto(`${BASE}/productos/?qa=no-js-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 60000 });
     const noJsText = await pageText(noJsPage);
     assert.ok(noJsText.includes("KineCheck Clínico"), "sin JS: falta el producto clínico por defecto");
-    assert.ok(noJsText.includes("KINECHECK APPS"), "sin JS: falta familia del producto clínico");
+    assert.ok(noJsText.includes("KINECHECK FORMACIÓN"), "sin JS: falta familia correcta del producto clínico");
+    assert.ok(!noJsText.includes("KINECHECK APPS"), "sin JS: Clínico sigue clasificado como aplicación");
     assert.ok(noJsText.includes("12 meses desde la aprobación"), "sin JS: falta vigencia clínica");
     assert.ok(noJsText.includes("Kinesiólogos titulados"), "sin JS: falta público objetivo");
     assert.equal(await noJsPage.locator("[data-checkout]").first().getAttribute("href"), "https://pay.hotmart.com/L106791841D", "sin JS: checkout clínico incorrecto");
@@ -139,7 +140,13 @@ try {
     }
     assert.ok(homeText.includes("Precios visibles"), `${device}: falta compromiso de transparencia de precio`);
     assert.ok(homeText.includes("Compra segura"), `${device}: falta compromiso de compra segura`);
-    assert.equal(await page.locator("#confianza").count(), 0, `${device}: reapareció la sección de autor retirada del main vigente`);
+    assert.equal(await page.locator("#confianza").count(), 1, `${device}: falta la sección de autoría y confianza`);
+    assert.ok(homeText.includes("Emmanuel Zúñiga"), `${device}: falta autoría identificable`);
+    assert.ok(homeText.includes("dentro de 2 días hábiles"), `${device}: falta tiempo orientativo de soporte`);
+    assert.equal(await page.locator('a[href^="./muestras/"]').count(), 5, `${device}: faltan enlaces a demostraciones públicas`);
+    const appsFamilyText = await page.locator(".brand-family-card", { hasText: "KINECHECK APPS" }).innerText();
+    assert.ok(appsFamilyText.includes("KineCheck Estudiante") && appsFamilyText.includes("KineCheck Recupera"), `${device}: Apps no enumera Estudiante y Recupera`);
+    assert.ok(!appsFamilyText.includes("Clínico"), `${device}: KineCheck Clínico reapareció dentro de Apps`);
     for (const family of ["KINECHECK APPS", "KINECHECK FORMACIÓN", "KINECHECK PACKS"]) assert.ok(homeText.includes(family), `${device}: falta familia ${family}`);
     assert.ok(!homeText.includes("$59.900"), `${device}: aparece precio antiguo del pack`);
     assert.ok(!/Academy clásica|PLATAFORMA 5\.0/i.test(homeText), `${device}: aparecen experiencias retiradas`);
@@ -147,6 +154,23 @@ try {
     await assertCleanAcademyLinks(page, `${device}/portada`);
     await assertPublicMenu(page, `${device}/portada`, viewport.width <= 900);
     await checkOverflow(page, `${device}/portada`);
+
+    // Demostraciones: las tres muestras funcionan sin cuenta ni persistencia.
+    await openPublicPage(page, "/muestras/", device);
+    const demoText = await pageText(page);
+    assert.equal(await page.locator(".demo-section").count(), 3, `${device}/muestras: deben existir tres demostraciones`);
+    assert.ok(demoText.includes("Sin guardar datos") && demoText.includes("Sin instalación"), `${device}/muestras: faltan condiciones de la muestra`);
+    await page.locator('[data-clinical-quiz] input[value="2"]').check();
+    await page.locator('[data-clinical-quiz] button[type="submit"]').click();
+    assert.ok((await page.locator("[data-clinical-feedback]").innerText()).includes("Decisión defendible"), `${device}/muestras: la retroalimentación clínica no funciona`);
+    await page.locator('[data-student-step="3"]').click();
+    await page.locator("#student-reasoning").fill("Priorizaría seguridad y elegiría un examen que pueda cambiar la conducta.");
+    assert.ok(Number(await page.locator("[data-student-count]").innerText()) > 20, `${device}/muestras: el contador de razonamiento no responde`);
+    await page.locator('[data-recovery-range="pain"]').fill("7");
+    await page.locator("[data-build-summary]").click();
+    assert.ok((await page.locator("[data-daily-summary]").innerText()).includes("Molestia 7/10"), `${device}/muestras: el resumen de Recupera no responde`);
+    await assertOpenGraph(page, `${device}/muestras`);
+    await checkOverflow(page, `${device}/muestras`);
 
     // Profesionales: catálogo completo, precios y CTA honestos.
     await openPublicPage(page, "/profesionales/", device);
@@ -207,6 +231,9 @@ try {
     const defaultProductText = await pageText(page);
     assert.ok(defaultProductText.includes("KineCheck Clínico"), `${device}/productos: la ficha por defecto no se hidrató`);
     assert.equal(await page.locator("[data-checkout]").first().getAttribute("href"), "https://pay.hotmart.com/L106791841D", `${device}/productos: CTA por defecto inválido`);
+    assert.equal(await page.locator("#temario .module-card").count(), 10, `${device}/productos: el temario clínico no muestra 10 módulos`);
+    assert.equal(await page.locator("#metodologia").count(), 1, `${device}/productos: falta autoría y metodología`);
+    assert.ok(defaultProductText.includes("Emmanuel Zúñiga") && defaultProductText.includes("30 experiencias clínicas"), `${device}/productos: faltan credenciales o metodología clínica`);
     await assertOpenGraph(page, `${device}/productos`);
     await checkOverflow(page, `${device}/productos`);
 
@@ -218,6 +245,9 @@ try {
       const text = await pageText(page);
       assert.ok(text.includes(name), `${device}/${slug}: falta nombre del producto`);
       assert.equal((await page.locator("#product-family").textContent() || "").trim(), family, `${device}/${slug}: familia incorrecta`);
+      if (slug === "kinecheck-estudiante" || slug === "kinecheck-recupera") {
+        assert.ok(text.includes("sin instalación"), `${device}/${slug}: no se explica que es una aplicación web sin instalación`);
+      }
       assert.ok(text.includes(price), `${device}/${slug}: falta ${price}`);
       const checkout = page.locator("[data-checkout]").first();
       assert.equal(await checkout.getAttribute("href"), expectedCheckout, `${device}/${slug}: checkout inválido`);
