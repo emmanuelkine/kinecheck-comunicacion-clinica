@@ -70,6 +70,9 @@ test("Mis productos registra el toque, usa el opener real y completa una navegac
   expect(runtime.scripts.some((src) => src.includes("academy-brand-identity.js"))).toBeTruthy();
   expect(runtime.scripts.some((src) => src.includes("academy-open-v6.js"))).toBeTruthy();
   expect(runtime.scripts.some((src) => src.includes("academy-owned-native-bridge-v1.js"))).toBeTruthy();
+  expect(runtime.scripts.some((src) => src.includes("academy-learning-path-v4.js"))).toBeFalsy();
+  expect(runtime.scripts.some((src) => src.includes("academy-launch-router-v4.js"))).toBeFalsy();
+  expect(runtime.scripts.some((src) => src.includes("academy-integration-guard-v4.js"))).toBeFalsy();
   expect(["none", "not-rendered"]).toContain(runtime.watermarkPointerEvents);
 
   await page.route("**/comunicacion-clinica.html?*", async (route) => {
@@ -252,7 +255,7 @@ test("Academy no conserva overlays invisibles ni bloquea el scroll o los control
   expect(interactionState.bodyClass).not.toContain("kc-stage-modal-open");
   expect(interactionState.bodyOverflow).not.toBe("hidden");
   expect(interactionState.documentOverflow).not.toBe("hidden");
-  expect(interactionState.modalHidden || interactionState.modalDisplay === "none").toBeTruthy();
+  expect(interactionState.modalDisplay).toBe("missing");
   expect(interactionState.scrollHeight).toBeGreaterThan(interactionState.viewportHeight);
 
   await page.evaluate(() => window.scrollTo(0, 700));
