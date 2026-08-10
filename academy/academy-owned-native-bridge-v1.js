@@ -5,8 +5,8 @@
   window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__ = true;
 
   // Intercepta únicamente accesos auxiliares y el botón global Continuar.
-  // Las tarjetas dinámicas [data-kc-open-product] conservan su controlador nativo
-  // de academy-kinecheck-v4.js para evitar bloquear su clic antes de abrir el curso.
+  // Las tarjetas dinámicas de cursos se redirigen al botón nativo equivalente
+  // de #course-grid, que es el flujo probado de "Mis productos".
   const PRODUCT_SELECTOR = [
     "[data-kc-open-owned]",
     "[data-kc-path-open]",
@@ -53,6 +53,12 @@
   function activeCourse(slug) {
     return [...document.querySelectorAll("#course-grid [data-course]")]
       .find((button) => !button.disabled && String(button.dataset.course || "").trim() === slug) || null;
+  }
+
+  function courseKind(slug) {
+    const courses = window.KINECHECK_ACADEMY_CONFIG?.courses;
+    if (!Array.isArray(courses)) return "";
+    return String(courses.find((item) => String(item?.slug || "") === slug)?.kind || "").trim();
   }
 
   function firstStudentCourse() {
@@ -165,6 +171,21 @@
   window.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+
+    // En Inicio, los cursos son tarjetas proxy. En vez de abrirlos mediante otro
+    // controlador, dispara el mismo botón nativo que funciona en "Mis productos".
+    const courseProxy = target.closest("[data-kc-open-product]");
+    if (courseProxy && !courseProxy.disabled && courseProxy.getAttribute("aria-disabled") !== "true") {
+      const slug = sourceSlug(courseProxy);
+      if (slug && courseKind(slug) === "course") {
+        const nativeButton = activeCourse(slug);
+        if (nativeButton) {
+          stop(event);
+          nativeButton.click();
+          return;
+        }
+      }
+    }
 
     const product = target.closest(PRODUCT_SELECTOR);
     if (product && !product.disabled && product.getAttribute("aria-disabled") !== "true") {
