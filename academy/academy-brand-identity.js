@@ -28,6 +28,65 @@
     });
   }
 
+  function activateInicioAfterLogin() {
+    const previousUrl = window.location.href;
+    const nextUrl = new URL(previousUrl);
+    nextUrl.hash = "inicio";
+
+    try {
+      window.history.replaceState(window.history.state, "", nextUrl.href);
+    } catch {
+      window.location.hash = "inicio";
+      return;
+    }
+
+    // Fallback visual inmediato; el controlador principal confirma el estado
+    // al recibir hashchange y conserva toda la navegación nativa de Academy.
+    document.body.dataset.kcView = "inicio";
+    document.querySelectorAll("[data-kc-view-link]").forEach((item) => {
+      item.classList.toggle("active", item.dataset.kcViewLink === "inicio");
+    });
+
+    try {
+      window.dispatchEvent(new HashChangeEvent("hashchange", {
+        oldURL: previousUrl,
+        newURL: nextUrl.href,
+      }));
+    } catch {
+      window.dispatchEvent(new Event("hashchange"));
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }
+
+  function wireLoginHomeRedirect() {
+    if (window.__KINECHECK_LOGIN_HOME_REDIRECT__) return;
+    window.__KINECHECK_LOGIN_HOME_REDIRECT__ = true;
+
+    const form = document.querySelector("#auth-form");
+    const dashboard = document.querySelector("#dashboard-view");
+    if (!form || !dashboard) return;
+
+    let explicitLoginPending = false;
+
+    // Solo un envío explícito del formulario activa esta regla. Entrar después
+    // mediante enlaces directos o recargar una vista interna conserva su hash.
+    form.addEventListener("submit", () => {
+      explicitLoginPending = true;
+    }, { capture: true });
+
+    const observer = new MutationObserver(() => {
+      if (!explicitLoginPending || dashboard.hidden) return;
+      explicitLoginPending = false;
+      activateInicioAfterLogin();
+    });
+
+    observer.observe(dashboard, {
+      attributes: true,
+      attributeFilter: ["hidden"],
+    });
+  }
+
   function applyIdentity() {
     document.title = BRAND_NAME;
 
@@ -51,6 +110,7 @@
     setText(".topbar-brand > div > span", BRAND_DESCRIPTOR);
     setText(".kc-home-hero > .eyebrow", "MI KINECHECK");
     setNavigationLabels();
+    wireLoginHomeRedirect();
 
     const topbarBrand = document.querySelector(".topbar-brand");
     if (topbarBrand) topbarBrand.setAttribute("aria-label", `${BRAND_NAME}, inicio`);
