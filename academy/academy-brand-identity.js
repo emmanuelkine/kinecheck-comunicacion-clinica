@@ -16,7 +16,7 @@
     });
     document.querySelectorAll('[data-kc-view-link="biblioteca"]').forEach((item) => {
       const label = item.querySelector("b") || item.querySelector("span:last-child") || item;
-      if (label && !item.hasAttribute("data-kc-scroll-target")) label.textContent = "Mis productos";
+      if (label && !item.hasAttribute("data-kc-scroll-target")) label.textContent = "Biblioteca";
     });
     document.querySelectorAll('[data-kc-view-link="herramientas"]').forEach((item) => {
       const label = item.querySelector("b") || item.querySelector("span:last-child") || item;
@@ -58,8 +58,8 @@
     const onboardingAction = document.querySelector("#onboarding-action");
     if (onboardingAction) {
       onboardingAction.setAttribute("data-kc-view-link", "biblioteca");
-      onboardingAction.setAttribute("aria-label", "Ver mis productos");
-      onboardingAction.textContent = "Ver mis productos";
+      onboardingAction.setAttribute("aria-label", "Ver biblioteca");
+      onboardingAction.textContent = "Ver biblioteca";
     }
 
     const catalogButton = document.querySelector(".kc-catalog-button");
