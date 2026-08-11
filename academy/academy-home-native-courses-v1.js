@@ -88,7 +88,7 @@
     }
 
     const checkoutConfig = document.createElement("script");
-    checkoutConfig.src = "./academy-clinical-checkouts-v1.js?v=20260810-checkout1";
+    checkoutConfig.src = "./academy-clinical-checkouts-v1.js?v=20260810-checkout2";
     checkoutConfig.async = false;
     checkoutConfig.dataset.kcClinicalCheckouts = "v1";
     checkoutConfig.addEventListener("load", loadCommerce, { once: true });
