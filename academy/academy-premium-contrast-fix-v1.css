@@ -159,6 +159,76 @@ body[data-kc-view="herramientas"] #herramientas{
   100%{transform:translate3d(-18px,-10px,0) scale(1.08);opacity:1}
 }
 
+/* Recursos clínicos de pago: neutraliza los fondos claros inyectados por commerce-v1. */
+body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product],
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]{
+  color:#f5fbfc!important;
+  background:
+    radial-gradient(circle at 92% 4%,rgba(77,219,216,.12),transparent 13rem),
+    linear-gradient(145deg,rgba(12,52,62,.98),rgba(5,27,35,.99))!important;
+  border:1px solid rgba(91,205,202,.24)!important;
+  box-shadow:0 18px 46px rgba(0,0,0,.22)!important;
+}
+
+body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-scales-library"],
+body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-special-tests-library"],
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-scales-library"],
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-special-tests-library"]{
+  background:
+    radial-gradient(circle at 88% 7%,rgba(108,188,255,.14),transparent 13rem),
+    linear-gradient(145deg,#0c343e 0%,#082832 54%,#051c23 100%)!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-scales-library"]::before,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-special-tests-library"]::before{
+  background:radial-gradient(circle,rgba(77,219,216,.22) 0%,rgba(77,219,216,0) 70%)!important;
+  opacity:.68!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>strong{
+  color:#f5ffff!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>p,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-points li{
+  color:#b4cbd0!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-label{
+  color:#70e4d3!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>span{
+  color:#042b34!important;
+  background:linear-gradient(145deg,#4ddbd8,#77e4c4)!important;
+  border:0!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-price,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price{
+  color:#eafffa!important;
+  background:rgba(98,224,173,.09)!important;
+  border:1px solid rgba(98,224,173,.24)!important;
+  box-shadow:none!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-price::after,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price::after{
+  color:#9fc0c6!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] b{
+  color:#032128!important;
+  background:linear-gradient(90deg,#4ddbd8,#6cbcff)!important;
+  border:0!important;
+  box-shadow:0 12px 30px rgba(77,219,216,.16)!important;
+}
+
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]:hover{
+  border-color:rgba(77,219,216,.38)!important;
+  box-shadow:0 22px 54px rgba(0,0,0,.28)!important;
+}
+
 @media(max-width:760px){
   #dashboard-view #herramientas{
     border-radius:20px!important;
