@@ -74,7 +74,7 @@
     const loadCommerce = () => {
       if (document.querySelector('script[data-kc-clinical-commerce]')) return;
       const script = document.createElement("script");
-      script.src = "./academy-clinical-commerce-v1.js?v=20260810-paid3";
+      script.src = "./academy-clinical-commerce-v1.js?v=20260810-library4";
       script.async = false;
       script.dataset.kcClinicalCommerce = "v1";
       document.head.appendChild(script);
