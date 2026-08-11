@@ -107,6 +107,56 @@ body[data-kc-view="herramientas"] #herramientas{
   background-position:center center!important;
   filter:saturate(.98) contrast(1.05)!important;
   opacity:.92;
+  transform:scale(1.025);
+  transform-origin:center center;
+  will-change:transform,filter;
+  animation:kcHeroEcosystemDrift 18s ease-in-out infinite alternate;
+}
+
+/* Movimiento ambiental del ecosistema: lento y no intrusivo. */
+@keyframes kcHeroEcosystemDrift{
+  0%{
+    transform:scale(1.025) translate3d(0,0,0);
+    filter:saturate(.96) contrast(1.04) brightness(.96);
+  }
+  48%{
+    transform:scale(1.045) translate3d(-.55%,.35%,0);
+    filter:saturate(1.02) contrast(1.055) brightness(1);
+  }
+  100%{
+    transform:scale(1.035) translate3d(.55%,-.35%,0);
+    filter:saturate(1) contrast(1.05) brightness(.98);
+  }
+}
+
+/* Entrada premium del contenido, sin alterar layout ni eventos. */
+#dashboard-view .hero-panel .hero-copy{
+  animation:kcHeroContentIn .72s cubic-bezier(.22,.8,.24,1) both;
+}
+
+#dashboard-view .hero-panel .continue-panel{
+  animation:kcHeroPanelIn .82s .08s cubic-bezier(.22,.8,.24,1) both;
+}
+
+@keyframes kcHeroContentIn{
+  from{opacity:0;transform:translate3d(0,14px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+
+@keyframes kcHeroPanelIn{
+  from{opacity:0;transform:translate3d(18px,10px,0) scale(.985)}
+  to{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+
+/* Halo vivo sobre la capa decorativa ya existente. */
+#dashboard-view .hero-panel::after{
+  will-change:transform,opacity;
+  animation:kcHeroAmbientGlow 9s ease-in-out infinite alternate;
+}
+
+@keyframes kcHeroAmbientGlow{
+  0%{transform:translate3d(0,0,0) scale(.96);opacity:.68}
+  100%{transform:translate3d(-18px,-10px,0) scale(1.08);opacity:1}
 }
 
 @media(max-width:760px){
@@ -122,5 +172,20 @@ body[data-kc-view="herramientas"] #herramientas{
     background-size:auto 100%!important;
     background-position:68% center!important;
     opacity:.42;
+    animation-duration:22s;
+  }
+  #dashboard-view .hero-panel .continue-panel{
+    animation-delay:.04s;
+  }
+}
+
+/* Accesibilidad: respeta usuarios que prefieren menos movimiento. */
+@media(prefers-reduced-motion:reduce){
+  #dashboard-view .hero-panel::before,
+  #dashboard-view .hero-panel::after,
+  #dashboard-view .hero-panel .hero-copy,
+  #dashboard-view .hero-panel .continue-panel{
+    animation:none!important;
+    transform:none!important;
   }
 }
