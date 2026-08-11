@@ -30,6 +30,22 @@
   Cache-Control: private, no-store, max-age=0
   X-Robots-Tag: noindex, nofollow
 
+/academy/
+  Cache-Control: no-cache, must-revalidate
+  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260811-tools1>; rel=preload; as=style
+  X-Robots-Tag: noindex, nofollow
+
+/academy/index.html
+  Cache-Control: no-cache, must-revalidate
+  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260811-tools1>; rel=preload; as=style
+  X-Robots-Tag: noindex, nofollow
+
+/academy/*.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/academy/academy-hero-ecosistema-v1.webp
+  Cache-Control: public, max-age=31536000, immutable
+
 /academy/academy-open-v6.js
   Cache-Control: private, no-store, max-age=0
 
@@ -40,9 +56,6 @@
   Cache-Control: private, no-store, max-age=0
 
 /academy/academy-brand-identity.js
-  Cache-Control: private, no-store, max-age=0
-
-/academy/academy-premium-contrast-fix-v1.css
   Cache-Control: private, no-store, max-age=0
 
 /academy/*
