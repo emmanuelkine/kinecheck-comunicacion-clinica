@@ -95,9 +95,19 @@
     document.head.appendChild(checkoutConfig);
   }
 
+  function loadClinicalCardDetails() {
+    if (document.querySelector('script[data-kc-clinical-card-details]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-clinical-card-details-v1.js?v=20260810-prof1";
+    script.async = false;
+    script.dataset.kcClinicalCardDetails = "v1";
+    document.head.appendChild(script);
+  }
+
   function initialize() {
     simplifyHome();
     loadClinicalCommerce();
+    loadClinicalCardDetails();
   }
 
   if (document.readyState === "loading") {
