@@ -4,6 +4,8 @@
   if (window.__KINECHECK_HOME_STABLE_V1__) return;
   window.__KINECHECK_HOME_STABLE_V1__ = true;
 
+  let preferredLibraryApplied = false;
+
   function stableLibraryCard() {
     return `
       <article class="kc-summary-card kc-home-stable-card">
@@ -68,6 +70,40 @@
     if (document.documentElement.style.overflow === "hidden") document.documentElement.style.removeProperty("overflow");
   }
 
+  function preferLibraryOnEntry() {
+    if (preferredLibraryApplied) return;
+    const dashboard = document.querySelector("#dashboard-view");
+    if (!dashboard || dashboard.hidden) return;
+
+    const current = String(location.hash || "").replace(/^#/, "").toLowerCase();
+    if (current && current !== "inicio") {
+      preferredLibraryApplied = true;
+      return;
+    }
+
+    const libraryLink = document.querySelector('[data-kc-view-link="biblioteca"]');
+    preferredLibraryApplied = true;
+    if (libraryLink instanceof HTMLElement) {
+      libraryLink.click();
+    } else {
+      history.replaceState(null, "", "#biblioteca");
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    }
+  }
+
+  function watchPreferredLanding() {
+    const dashboard = document.querySelector("#dashboard-view");
+    if (!dashboard) return;
+    preferLibraryOnEntry();
+    if (preferredLibraryApplied) return;
+
+    const observer = new MutationObserver(() => {
+      preferLibraryOnEntry();
+      if (preferredLibraryApplied) observer.disconnect();
+    });
+    observer.observe(dashboard, { attributes: true, attributeFilter: ["hidden"] });
+  }
+
   function loadClinicalCommerce() {
     if (document.querySelector('script[data-kc-clinical-commerce]')) return;
 
@@ -123,6 +159,7 @@
 
   function initialize() {
     simplifyHome();
+    watchPreferredLanding();
     loadClinicalCommerce();
     loadClinicalCardDetails();
     loadClinicalInterior();
