@@ -7,9 +7,12 @@
   const PRODUCTS = Object.freeze({
     "kc-scales-library": Object.freeze({
       slug: "kinecheck-escalas",
-      name: "Escalas clínicas",
+      name: "Escalas Clínicas",
       price: 5000,
-      label: "BIBLIOTECA CLÍNICA",
+      label: "RECURSO CLÍNICO",
+      icon: "EC",
+      audience: "Profesionales y estudiantes",
+      description: "PROMs e instrumentos organizados por región y propósito.",
       benefits: [
         "PROMs organizados por región y propósito",
         "Interpretación, población y dirección del puntaje",
@@ -18,9 +21,12 @@
     }),
     "kc-special-tests-library": Object.freeze({
       slug: "kinecheck-pruebas-especiales",
-      name: "Pruebas especiales",
+      name: "Pruebas Especiales",
       price: 5000,
-      label: "RAZONAMIENTO DIAGNÓSTICO",
+      label: "RECURSO CLÍNICO",
+      icon: "PE",
+      audience: "Profesionales y estudiantes",
+      description: "Pruebas y clusters con utilidad diagnóstica contextualizada.",
       benefits: [
         "Pruebas y clusters organizados por región",
         "Sensibilidad, especificidad y LR cuando corresponde",
@@ -69,6 +75,97 @@
     style.textContent = `
       #kc-scales-library:not([data-kc-paid-access="true"]),
       #kc-special-tests-library:not([data-kc-paid-access="true"]){display:none!important}
+
+      body[data-kc-view="biblioteca"] #productos{
+        position:relative;isolation:isolate;overflow:hidden;
+        padding:clamp(22px,3vw,38px)!important;border:1px solid rgba(77,220,216,.22);
+        border-radius:28px;background:
+          radial-gradient(circle at 92% 4%,rgba(46,210,207,.16),transparent 25rem),
+          radial-gradient(circle at 4% 28%,rgba(88,167,255,.10),transparent 22rem),
+          linear-gradient(145deg,#061923 0%,#082a34 50%,#061a24 100%)!important;
+        box-shadow:0 28px 80px rgba(3,22,29,.24)
+      }
+      body[data-kc-view="biblioteca"] #productos::before{
+        content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+        background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 34%)
+      }
+      body[data-kc-view="biblioteca"] #productos .section-heading h2,
+      body[data-kc-view="biblioteca"] #productos .course-group-heading h3{
+        color:#fff!important
+      }
+      body[data-kc-view="biblioteca"] #productos .section-heading p,
+      body[data-kc-view="biblioteca"] #productos .search-box span,
+      body[data-kc-view="biblioteca"] #productos .course-group-heading p{
+        color:#bfd4d8!important
+      }
+      body[data-kc-view="biblioteca"] #productos .eyebrow{
+        color:#61e0da!important
+      }
+      body[data-kc-view="biblioteca"] #productos .search-box input{
+        border:1px solid rgba(111,221,220,.28)!important;background:#0a2530!important;
+        color:#fff!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+      }
+      body[data-kc-view="biblioteca"] #productos .search-box input::placeholder{color:#95adb3!important}
+      body[data-kc-view="biblioteca"] #productos .kc-library-shortcuts button{
+        border-color:rgba(116,210,211,.24)!important;background:rgba(255,255,255,.055)!important;
+        color:#eefafa!important
+      }
+      body[data-kc-view="biblioteca"] #productos .kc-library-shortcuts button:hover{
+        background:rgba(46,210,207,.12)!important;border-color:rgba(83,223,218,.48)!important
+      }
+      body[data-kc-view="biblioteca"] #productos .filter-tabs{
+        border-color:rgba(95,211,211,.22)!important;background:#0a2530!important
+      }
+      body[data-kc-view="biblioteca"] #productos .filter-tabs .filter{
+        color:#d8e9eb!important
+      }
+      body[data-kc-view="biblioteca"] #productos .filter-tabs .filter.active{
+        background:#155665!important;color:#fff!important;border-color:rgba(64,222,216,.42)!important
+      }
+      body[data-kc-view="biblioteca"] #productos .course-group-count{
+        border-color:rgba(91,213,212,.26)!important;background:rgba(255,255,255,.04)!important;
+        color:#cde3e6!important
+      }
+      body[data-kc-view="biblioteca"] #productos .course-group{
+        min-width:0
+      }
+      body[data-kc-view="biblioteca"] #productos #course-grid{
+        display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:28px!important
+      }
+      body[data-kc-view="biblioteca"] #productos .course-rail,
+      body[data-kc-view="biblioteca"] #productos .kc-clinical-featured-rail{
+        display:grid!important;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))!important;
+        grid-auto-flow:row!important;grid-auto-columns:unset!important;gap:18px!important;
+        overflow:visible!important;scroll-snap-type:none!important;padding:0!important
+      }
+      body[data-kc-view="biblioteca"] #productos .course-card{
+        width:auto!important;max-width:none!important;min-width:0!important;height:100%;
+        scroll-snap-align:none!important
+      }
+      .kc-clinical-featured-group{
+        margin:28px 0 30px;padding:20px;border:1px solid rgba(97,224,218,.18);border-radius:22px;
+        background:linear-gradient(135deg,rgba(12,52,62,.82),rgba(7,33,43,.76));
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.03)
+      }
+      .kc-clinical-featured-group .course-group-heading{margin-bottom:16px}
+      .kc-clinical-catalog-card{
+        --card-accent:#2ed2cf!important;min-height:390px!important
+      }
+      .kc-clinical-catalog-card[data-kc-clinical-owned="false"] .status-badge{
+        border-color:rgba(46,210,207,.34)!important;background:rgba(46,210,207,.12)!important;
+        color:#8ef1eb!important
+      }
+      .kc-clinical-catalog-card[data-kc-clinical-owned="true"] .status-badge{
+        border-color:rgba(110,231,176,.38)!important;background:rgba(52,211,153,.13)!important;
+        color:#a7f3d0!important
+      }
+      .kc-clinical-catalog-card .course-meta{min-height:24px}
+      .kc-clinical-catalog-card .course-progress{
+        margin-top:auto
+      }
+      .kc-clinical-catalog-card .course-button{
+        min-height:54px!important
+      }
 
       .kc-clinical-category-trigger[data-kc-clinical-product]{
         position:relative;overflow:hidden;isolation:isolate;min-height:350px;padding:24px;
@@ -139,8 +236,20 @@
         background:linear-gradient(135deg,#0f766e,#115e59)
       }
       .kc-clinical-category-trigger[data-kc-checkout-ready="false"]{cursor:pointer}
-      .kc-clinical-category-trigger[aria-busy="true"]{opacity:.72;cursor:progress}
+      .kc-clinical-category-trigger[aria-busy="true"],
+      .kc-clinical-catalog-card [aria-busy="true"]{opacity:.72;cursor:progress}
 
+      @media(max-width:760px){
+        body[data-kc-view="biblioteca"] #productos{
+          margin:16px!important;padding:18px!important;border-radius:22px
+        }
+        body[data-kc-view="biblioteca"] #productos .course-rail,
+        body[data-kc-view="biblioteca"] #productos .kc-clinical-featured-rail{
+          grid-template-columns:minmax(0,1fr)!important
+        }
+        .kc-clinical-featured-group{padding:14px;border-radius:18px}
+        .kc-clinical-catalog-card{min-height:360px!important}
+      }
       @media(max-width:620px){
         .kc-clinical-category-trigger[data-kc-clinical-product]{min-height:330px;padding:20px;border-radius:20px}
         .kc-clinical-category-trigger[data-kc-clinical-product]>strong{font-size:1.12rem}
@@ -162,7 +271,11 @@
   }
 
   function triggerFor(targetId) {
-    return document.querySelector(`[data-kc-clinical-target="${CSS.escape(targetId)}"]`);
+    return document.querySelector(`.kc-clinical-category-trigger[data-kc-clinical-target="${CSS.escape(targetId)}"]`);
+  }
+
+  function catalogCardsFor(targetId) {
+    return [...document.querySelectorAll(`[data-kc-clinical-catalog-card="${CSS.escape(targetId)}"]`)];
   }
 
   function ensureProductPresentation(button, product) {
@@ -183,6 +296,92 @@
       label.insertAdjacentElement("afterend", points);
     }
     points.innerHTML = product.benefits.map((benefit) => `<li>${benefit}</li>`).join("");
+  }
+
+  function catalogCardMarkup(targetId, product) {
+    return `
+      <article class="course-card kind-course audience-professionals kc-clinical-catalog-card" data-kc-clinical-catalog-card="${targetId}" data-kc-clinical-owned="false">
+        <div class="course-top">
+          <span class="course-icon" aria-hidden="true">${product.icon}</span>
+          <span class="status-badge">Disponible</span>
+        </div>
+        <div class="course-type">${product.label} · ${product.audience}</div>
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <div class="course-meta">Compra individual · ${money(product.price)} CLP</div>
+        <div class="course-progress course-activity">
+          <div class="course-progress-copy">
+            <span>Acceso individual</span>
+            <strong>${money(product.price)}</strong>
+          </div>
+          <span class="course-progress-detail">Pago único en Hotmart</span>
+        </div>
+        <button class="course-button" type="button" data-kc-clinical-target="${targetId}">Comprar</button>
+      </article>
+    `;
+  }
+
+  function installFeaturedCatalogCards() {
+    const grid = document.querySelector("#course-grid");
+    if (!grid || document.querySelector("#kc-clinical-featured-products")) return;
+
+    const group = document.createElement("section");
+    group.id = "kc-clinical-featured-products";
+    group.className = "course-group kc-clinical-featured-group";
+    group.setAttribute("aria-labelledby", "kc-clinical-featured-title");
+    group.innerHTML = `
+      <div class="course-group-heading">
+        <div>
+          <h3 id="kc-clinical-featured-title">Recursos clínicos</h3>
+          <p>Compra individual o abre directamente tu biblioteca si ya tienes una licencia activa.</p>
+        </div>
+        <span class="course-group-count">2 productos</span>
+      </div>
+      <div class="course-rail kc-clinical-featured-rail">
+        ${Object.entries(PRODUCTS).map(([targetId, product]) => catalogCardMarkup(targetId, product)).join("")}
+      </div>
+    `;
+    grid.before(group);
+  }
+
+  function syncCatalogCard(targetId) {
+    const product = PRODUCTS[targetId];
+    if (!product) return;
+
+    const owned = ACCESS.get(product.slug) === true;
+    const checkoutReady = Boolean(checkoutFor(product));
+
+    catalogCardsFor(targetId).forEach((card) => {
+      card.dataset.kcClinicalOwned = String(owned);
+      card.dataset.kcCheckoutReady = String(checkoutReady);
+
+      const badge = card.querySelector(".status-badge");
+      if (badge) badge.textContent = owned ? "Acceso verificado" : "Disponible";
+
+      const meta = card.querySelector(".course-meta");
+      if (meta) meta.textContent = owned
+        ? "Licencia verificada · Acceso activo"
+        : `Compra individual · ${money(product.price)} CLP`;
+
+      const accessLabel = card.querySelector(".course-progress-copy span");
+      if (accessLabel) accessLabel.textContent = owned ? "Tu acceso" : "Acceso individual";
+
+      const value = card.querySelector(".course-progress-copy strong");
+      if (value) value.textContent = owned ? "Activo" : money(product.price);
+
+      const detail = card.querySelector(".course-progress-detail");
+      if (detail) detail.textContent = owned ? "Tu licencia está activa" : "Pago único en Hotmart";
+
+      const action = card.querySelector("[data-kc-clinical-target]");
+      if (action) {
+        action.textContent = owned ? "Abrir biblioteca" : "Comprar";
+        action.title = owned
+          ? `Abrir ${product.name}`
+          : checkoutReady
+            ? `Comprar ${product.name} en Hotmart por ${money(product.price)}`
+            : `${product.name}: checkout Hotmart no disponible.`;
+      }
+    });
   }
 
   function syncButton(targetId) {
@@ -221,7 +420,10 @@
   }
 
   function syncAll() {
-    Object.keys(PRODUCTS).forEach(syncButton);
+    Object.keys(PRODUCTS).forEach((targetId) => {
+      syncButton(targetId);
+      syncCatalogCard(targetId);
+    });
   }
 
   async function verifyAccess() {
@@ -267,6 +469,23 @@
     }
   }
 
+  function revealOwnedLibrary(targetId) {
+    const reveal = () => {
+      const section = document.getElementById(targetId);
+      section?.scrollIntoView({ behavior: "smooth", block: "start" });
+      section?.querySelector("summary")?.focus?.({ preventScroll: true });
+    };
+
+    if (document.body.dataset.kcView !== "herramientas") {
+      const resourcesLink = document.querySelector('[data-kc-view-link="herramientas"]');
+      resourcesLink?.click();
+      window.setTimeout(reveal, 100);
+      return;
+    }
+
+    reveal();
+  }
+
   async function openOrBuy(targetId, button) {
     const product = PRODUCTS[targetId];
     if (!product) return;
@@ -277,9 +496,7 @@
 
     if (ACCESS.get(product.slug) === true) {
       setSectionAccess(targetId, true);
-      const section = document.getElementById(targetId);
-      section?.scrollIntoView({ behavior: "smooth", block: "start" });
-      section?.querySelector("summary")?.focus?.({ preventScroll: true });
+      revealOwnedLibrary(targetId);
       return;
     }
 
@@ -349,8 +566,10 @@
 
   function start() {
     injectStyles();
+    installFeaturedCatalogCards();
     installCaptureGuard();
     loadLibraryAssets();
+    syncAll();
     void verifyAccess();
     postPurchaseRefresh();
     window.setTimeout(syncAll, 250);
