@@ -42,6 +42,9 @@
 /academy/academy-brand-identity.js
   Cache-Control: private, no-store, max-age=0
 
+/academy/academy-premium-contrast-fix-v1.css
+  Cache-Control: private, no-store, max-age=0
+
 /academy/*
   Cache-Control: no-cache, must-revalidate
   X-Robots-Tag: noindex, nofollow
