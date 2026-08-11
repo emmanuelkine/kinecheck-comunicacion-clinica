@@ -104,10 +104,28 @@
     document.head.appendChild(script);
   }
 
+  function loadClinicalInterior() {
+    if (!document.querySelector('link[data-kc-clinical-interior]')) {
+      const style = document.createElement("link");
+      style.rel = "stylesheet";
+      style.href = "./academy-clinical-interior-v1.css?v=20260810-pro2";
+      style.dataset.kcClinicalInterior = "styles";
+      document.head.appendChild(style);
+    }
+
+    if (document.querySelector('script[data-kc-clinical-interior]')) return;
+    const script = document.createElement("script");
+    script.src = "./academy-clinical-interior-v1.js?v=20260810-pro2";
+    script.async = false;
+    script.dataset.kcClinicalInterior = "script";
+    document.head.appendChild(script);
+  }
+
   function initialize() {
     simplifyHome();
     loadClinicalCommerce();
     loadClinicalCardDetails();
+    loadClinicalInterior();
   }
 
   if (document.readyState === "loading") {
