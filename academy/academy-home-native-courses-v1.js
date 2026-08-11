@@ -138,9 +138,37 @@
       .kc-explorer-actions a{border:1px solid rgba(102,224,215,.24);background:rgba(255,255,255,.045);color:#eefafa;}
       .kc-explorer-actions button{border:0;background:linear-gradient(90deg,#50d6d4,#6bbbf5);color:#04252d;}
       .kc-explorer-actions a:hover,.kc-explorer-actions button:hover{filter:brightness(1.06);}
+
+      .kc-public-product-strip{margin-top:18px;max-width:100%;}
+      .kc-public-product-label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;color:#8fe7dc;font-size:.69rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;}
+      .kc-public-product-label small{color:#93aeb4;font-size:.65rem;font-weight:700;letter-spacing:0;text-transform:none;}
+      .kc-public-product-buttons{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:thin;overscroll-behavior-x:contain;}
+      .kc-public-product-button{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;min-height:38px;padding:6px 10px;border:1px solid rgba(115,226,214,.22);border-radius:999px;background:rgba(5,32,40,.72);color:#e8f5f6;cursor:pointer;font-size:.72rem;font-weight:850;white-space:nowrap;transition:background .18s ease,border-color .18s ease,transform .18s ease;}
+      .kc-public-product-button:hover{transform:translateY(-1px);background:rgba(68,206,198,.13);border-color:rgba(112,228,216,.48);}
+      .kc-public-product-button span{display:grid;place-items:center;width:23px;height:23px;border-radius:8px;background:linear-gradient(135deg,#4fd8d3,#72dbba);color:#052a31;font-size:.58rem;font-weight:950;}
+      .kc-public-products--card{display:none;}
+      .kc-public-product-modal[hidden]{display:none!important;}
+      .kc-public-product-modal{position:fixed;inset:0;z-index:2147482000;display:grid;place-items:center;padding:22px;background:rgba(1,12,17,.76);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+      .kc-public-product-dialog{position:relative;width:min(620px,100%);max-height:min(760px,calc(100dvh - 36px));overflow:auto;padding:27px;border:1px solid rgba(111,225,214,.24);border-radius:24px;background:radial-gradient(circle at 88% 0,rgba(79,183,242,.16),transparent 36%),linear-gradient(145deg,#0b3741,#061f27 72%);box-shadow:0 30px 90px rgba(0,0,0,.48);color:#eef8f9;}
+      .kc-public-product-close{position:absolute;top:15px;right:15px;display:grid;place-items:center;width:38px;height:38px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.055);color:#effafa;font-size:1.2rem;cursor:pointer;}
+      .kc-public-product-dialog .kc-explorer-detail-icon{margin-bottom:13px;}
+      .kc-public-product-dialog .kc-explorer-type{margin-top:0;}
+      .kc-public-product-dialog h2{margin:6px 44px 9px 0;color:#fff;font-size:clamp(1.6rem,4vw,2.35rem);line-height:1.07;}
+      .kc-public-product-dialog .kc-public-audience{display:inline-flex;margin:5px 0 14px;padding:6px 10px;border:1px solid rgba(115,226,214,.24);border-radius:999px;background:rgba(73,205,194,.08);color:#8ee5d8;font-size:.72rem;font-weight:850;}
+      .kc-public-product-dialog p{margin:0;color:#c7d9dd;line-height:1.58;}
+      .kc-public-product-dialog ul{display:grid;gap:8px;margin:17px 0 20px;padding:0;list-style:none;}
+      .kc-public-product-dialog li{position:relative;padding-left:20px;color:#d5e5e7;font-size:.85rem;line-height:1.4;}
+      .kc-public-product-dialog li::before{content:"✓";position:absolute;left:0;color:#53d8c8;font-weight:900;}
+      .kc-public-product-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:5px;}
+      .kc-public-product-price{display:flex;flex-direction:column;gap:3px;}
+      .kc-public-product-price strong{color:#fff;font-size:1.15rem;}
+      .kc-public-product-price small{color:#8facb2;font-size:.7rem;}
+      .kc-public-product-cta{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:14px;background:linear-gradient(90deg,#4fd6d3,#67b9f5);color:#04252d;text-decoration:none;font-size:.8rem;font-weight:950;}
+
       @media(max-width:860px){.kc-product-explorer{grid-template-columns:1fr;}.kc-explorer-buttons{grid-template-columns:repeat(4,minmax(150px,1fr));overflow-x:auto;padding-bottom:5px;scrollbar-width:thin;}.kc-explorer-product{min-width:150px;}.kc-explorer-detail{min-height:350px;}}
-      @media(max-width:620px){.kc-product-explorer{padding:12px;border-radius:20px;gap:12px;}.kc-explorer-picker{padding:4px 2px;}.kc-explorer-buttons{display:flex;gap:8px;margin-right:-10px;padding-right:10px;}.kc-explorer-product{flex:0 0 148px;min-height:58px;padding:9px 10px;}.kc-explorer-detail{padding:19px;border-radius:18px;min-height:365px;}.kc-explorer-detail h3{font-size:1.55rem;}.kc-explorer-summary{font-size:.9rem;}.kc-explorer-meta{align-items:stretch;}.kc-explorer-price{width:100%;padding-bottom:4px;}.kc-explorer-actions{width:100%;}.kc-explorer-actions a,.kc-explorer-actions button{flex:1 1 140px;}}
-      @media(prefers-reduced-motion:reduce){.kc-explorer-product{transition:none!important;}}
+      @media(max-width:720px){.kc-public-products--showcase{display:none!important;}.kc-public-products--card{display:block;margin:16px 0 5px;}.kc-public-product-label{color:#64dcd1;}.kc-public-product-button{background:rgba(255,255,255,.035);}}
+      @media(max-width:620px){.kc-product-explorer{padding:12px;border-radius:20px;gap:12px;}.kc-explorer-picker{padding:4px 2px;}.kc-explorer-buttons{display:flex;gap:8px;margin-right:-10px;padding-right:10px;}.kc-explorer-product{flex:0 0 148px;min-height:58px;padding:9px 10px;}.kc-explorer-detail{padding:19px;border-radius:18px;min-height:365px;}.kc-explorer-detail h3{font-size:1.55rem;}.kc-explorer-summary{font-size:.9rem;}.kc-explorer-meta{align-items:stretch;}.kc-explorer-price{width:100%;padding-bottom:4px;}.kc-explorer-actions{width:100%;}.kc-explorer-actions a,.kc-explorer-actions button{flex:1 1 140px;}.kc-public-product-modal{padding:12px;}.kc-public-product-dialog{padding:22px 18px 19px;border-radius:20px;}.kc-public-product-footer{align-items:stretch;}.kc-public-product-cta{width:100%;}}
+      @media(prefers-reduced-motion:reduce){.kc-explorer-product,.kc-public-product-button{transition:none!important;}}
     `;
     document.head.appendChild(style);
   }
@@ -204,6 +232,99 @@
     `;
   }
 
+  function publicProductStripMarkup(variant) {
+    return `
+      <div class="kc-public-product-strip kc-public-products--${variant}" data-kc-public-product-strip>
+        <div class="kc-public-product-label"><span>CONOCE KINECHECK</span><small>Toca un producto para ver el resumen</small></div>
+        <div class="kc-public-product-buttons" aria-label="Productos KineCheck">
+          ${PRODUCT_EXPLORER.map((product) => `
+            <button class="kc-public-product-button" type="button" data-kc-public-product="${product.slug}">
+              <span aria-hidden="true">${product.icon}</span>${product.title}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  function ensurePublicProductModal() {
+    let modal = document.querySelector("#kc-public-product-modal");
+    if (modal) return modal;
+    modal = document.createElement("div");
+    modal.id = "kc-public-product-modal";
+    modal.className = "kc-public-product-modal";
+    modal.hidden = true;
+    modal.innerHTML = `<article class="kc-public-product-dialog" role="dialog" aria-modal="true" aria-labelledby="kc-public-product-title"><button class="kc-public-product-close" type="button" aria-label="Cerrar">×</button><div data-kc-public-product-content></div></article>`;
+    document.body.appendChild(modal);
+
+    const close = () => {
+      modal.hidden = true;
+      document.body.classList.remove("kc-public-product-open");
+    };
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal || event.target.closest(".kc-public-product-close")) close();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !modal.hidden) close();
+    });
+    return modal;
+  }
+
+  function openPublicProduct(slug) {
+    const product = PRODUCT_EXPLORER.find((item) => item.slug === slug) || PRODUCT_EXPLORER[0];
+    const price = productPrice(product);
+    const modal = ensurePublicProductModal();
+    const content = modal.querySelector("[data-kc-public-product-content]");
+    if (!content) return;
+    content.innerHTML = `
+      <span class="kc-explorer-detail-icon" aria-hidden="true">${product.icon}</span>
+      <span class="kc-explorer-type">${product.type}</span>
+      <h2 id="kc-public-product-title">${product.title}</h2>
+      <span class="kc-public-audience">${product.audience}</span>
+      <p>${product.summary}</p>
+      <ul>${product.points.map((point) => `<li>${point}</li>`).join("")}</ul>
+      <div class="kc-public-product-footer">
+        <div class="kc-public-product-price"><strong>${price.display}</strong><small>${price.term}</small></div>
+        <a class="kc-public-product-cta" href="${product.detailUrl}">Conocer producto →</a>
+      </div>
+    `;
+    modal.hidden = false;
+    modal.querySelector(".kc-public-product-close")?.focus();
+  }
+
+  async function loadPricesOnce() {
+    if (explorerState.prices) return explorerState.prices;
+    try {
+      const response = await fetch("../commercial-prices-cl.json?v=20260811", { cache: "no-cache" });
+      if (!response.ok) return null;
+      const data = await response.json();
+      explorerState.prices = data?.products || null;
+      return explorerState.prices;
+    } catch {
+      return null;
+    }
+  }
+
+  function mountPublicExplorer() {
+    const login = document.querySelector("#login-view");
+    if (!login || login.querySelector("[data-kc-public-product-strip]")) return;
+
+    const showcase = login.querySelector(".login-showcase");
+    const trustRow = showcase?.querySelector(".trust-row");
+    if (showcase && trustRow) trustRow.insertAdjacentHTML("beforebegin", publicProductStripMarkup("showcase"));
+
+    const loginCard = login.querySelector(".login-card");
+    const support = loginCard?.querySelector(".support-link");
+    if (loginCard && support) support.insertAdjacentHTML("beforebegin", publicProductStripMarkup("card"));
+
+    login.addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-kc-public-product]");
+      if (!button) return;
+      await loadPricesOnce();
+      openPublicProduct(button.dataset.kcPublicProduct);
+    });
+  }
+
   function goToLibraryFor(slug) {
     const link = document.querySelector('[data-kc-view-link="biblioteca"]');
     if (link instanceof HTMLElement) link.click();
@@ -250,20 +371,11 @@
   }
 
   async function loadExplorerPrices(container) {
-    try {
-      const response = await fetch("../commercial-prices-cl.json?v=20260811", { cache: "no-cache" });
-      if (!response.ok) return;
-      const data = await response.json();
-      explorerState.prices = data?.products || null;
-      renderExplorerDetail(container, explorerState.selectedSlug);
-    } catch {
-      // El explorador sigue operativo aunque el precio no pueda cargarse.
-    }
+    await loadPricesOnce();
+    renderExplorerDetail(container, explorerState.selectedSlug);
   }
 
   function simplifyHome() {
-    // Las aplicaciones Estudiante y Recupera ya existen en Biblioteca.
-    // Inicio presenta ahora un explorador informativo, sin duplicar botones de acceso/licencia.
     const appGrid = document.querySelector("#home-app-grid");
     if (appGrid) {
       appGrid.removeAttribute("id");
@@ -293,14 +405,11 @@
       }
     }
 
-    // Evidencia, recursos y novedades permanecen disponibles en sus vistas propias.
     ["home-library-title", "home-news-title"].forEach((id) => {
       const section = document.getElementById(id)?.closest(".kc-home-section");
       if (section) section.hidden = true;
     });
 
-    // El antiguo botón "Ver mi actividad" dependía de otro controlador.
-    // Se sustituye por navegación simple a la Biblioteca nativa.
     const oldActivity = document.querySelector("#kc-home-continue");
     if (oldActivity) {
       const replacement = oldActivity.cloneNode(false);
@@ -311,11 +420,9 @@
       oldActivity.replaceWith(replacement);
     }
 
-    // El panel global Continuar duplicaba el mismo destino y podía competir por el clic.
     const continuePanel = document.querySelector(".continue-panel");
     if (continuePanel) continuePanel.hidden = true;
 
-    // Garantiza que un lock antiguo no deje congelada la página en móvil.
     document.body.classList.remove("kc-stage-modal-open", "review-open");
     if (document.body.style.overflow === "hidden") document.body.style.removeProperty("overflow");
     if (document.documentElement.style.overflow === "hidden") document.documentElement.style.removeProperty("overflow");
@@ -377,8 +484,8 @@
   function initialize() {
     loadPremiumTheme();
     injectExplorerStyles();
+    mountPublicExplorer();
     simplifyHome();
-    // Inicio permanece como portada después de autenticar; no se fuerza Biblioteca.
     loadClinicalCommerce();
     loadClinicalCardDetails();
     loadClinicalInterior();
