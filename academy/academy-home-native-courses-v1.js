@@ -14,17 +14,26 @@
           <span class="kc-status">Acceso directo</span>
         </div>
         <div>
-          <small>MIS PRODUCTOS</small>
-          <h3>Tus cursos están en un solo lugar</h3>
+          <small>BIBLIOTECA KINECHECK</small>
+          <h3>Tus productos, cursos y recursos en un solo lugar</h3>
         </div>
-        <p>Abre la biblioteca estable para comenzar o continuar cualquiera de tus cursos.</p>
-        <a href="#biblioteca" data-kc-view-link="biblioteca">Ver mis productos</a>
+        <p>Abre tu Biblioteca para comenzar o continuar cualquier producto asociado a tu cuenta.</p>
+        <a href="#biblioteca" data-kc-view-link="biblioteca">Abrir Biblioteca</a>
       </article>
     `;
   }
 
+  function loadPremiumTheme() {
+    if (document.querySelector('link[data-kc-premium-theme]')) return;
+    const style = document.createElement("link");
+    style.rel = "stylesheet";
+    style.href = "./academy-premium-theme-v1.css?v=20260810-premium1";
+    style.dataset.kcPremiumTheme = "v1";
+    document.head.appendChild(style);
+  }
+
   function simplifyHome() {
-    // Las aplicaciones Estudiante y Recupera ya existen en Mis productos.
+    // Las aplicaciones Estudiante y Recupera ya existen en Biblioteca.
     // Se elimina la copia de Inicio para evitar botones duplicados y render extra.
     const appGrid = document.querySelector("#home-app-grid");
     if (appGrid) {
@@ -34,7 +43,7 @@
     }
 
     // Inicio no replica ni mueve #course-grid. Solo entrega un acceso directo.
-    // Los botones reales permanecen una sola vez en Mis productos.
+    // Los botones reales permanecen una sola vez en Biblioteca.
     const courseGrid = document.querySelector("#home-course-grid");
     if (courseGrid) {
       courseGrid.removeAttribute("id");
@@ -43,19 +52,26 @@
 
       const section = courseGrid.closest(".kc-home-section");
       const heading = section?.querySelector("#home-courses-title");
-      if (heading) heading.textContent = "Tus cursos";
+      if (heading) heading.textContent = "Tu Biblioteca";
       const shortcut = section?.querySelector('.kc-section-heading [data-kc-view-link="biblioteca"]');
-      if (shortcut) shortcut.textContent = "Ver mis productos →";
+      if (shortcut) shortcut.textContent = "Abrir Biblioteca →";
     }
 
+    // El Inicio queda intencionalmente breve: hero + primeros pasos + acceso a Biblioteca.
+    // Evidencia, recursos y novedades permanecen disponibles en sus vistas propias.
+    ["home-library-title", "home-news-title"].forEach((id) => {
+      const section = document.getElementById(id)?.closest(".kc-home-section");
+      if (section) section.hidden = true;
+    });
+
     // El antiguo botón "Ver mi actividad" dependía de otro controlador.
-    // Se sustituye por navegación simple a la biblioteca nativa.
+    // Se sustituye por navegación simple a la Biblioteca nativa.
     const oldActivity = document.querySelector("#kc-home-continue");
     if (oldActivity) {
       const replacement = oldActivity.cloneNode(false);
       replacement.removeAttribute("id");
       replacement.type = "button";
-      replacement.textContent = "Ver mis productos";
+      replacement.textContent = "Abrir Biblioteca";
       replacement.setAttribute("data-kc-view-link", "biblioteca");
       oldActivity.replaceWith(replacement);
     }
@@ -158,6 +174,7 @@
   }
 
   function initialize() {
+    loadPremiumTheme();
     simplifyHome();
     watchPreferredLanding();
     loadClinicalCommerce();
