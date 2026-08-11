@@ -99,7 +99,7 @@ body[data-kc-view="herramientas"] #herramientas{
   color:#b4cbd0!important;
 }
 
-/* Hero Inicio: ecosistema digital clínico. Solo sustituye el recurso visual. */
+/* Hero Inicio: ecosistema digital clínico. */
 #dashboard-view .hero-panel::before{
   background-image:url("./academy-hero-ecosistema-v1.webp")!important;
   background-repeat:no-repeat!important;
@@ -113,23 +113,12 @@ body[data-kc-view="herramientas"] #herramientas{
   animation:kcHeroEcosystemDrift 18s ease-in-out infinite alternate;
 }
 
-/* Movimiento ambiental del ecosistema: lento y no intrusivo. */
 @keyframes kcHeroEcosystemDrift{
-  0%{
-    transform:scale(1.025) translate3d(0,0,0);
-    filter:saturate(.96) contrast(1.04) brightness(.96);
-  }
-  48%{
-    transform:scale(1.045) translate3d(-.55%,.35%,0);
-    filter:saturate(1.02) contrast(1.055) brightness(1);
-  }
-  100%{
-    transform:scale(1.035) translate3d(.55%,-.35%,0);
-    filter:saturate(1) contrast(1.05) brightness(.98);
-  }
+  0%{transform:scale(1.025) translate3d(0,0,0);filter:saturate(.96) contrast(1.04) brightness(.96)}
+  48%{transform:scale(1.045) translate3d(-.55%,.35%,0);filter:saturate(1.02) contrast(1.055) brightness(1)}
+  100%{transform:scale(1.035) translate3d(.55%,-.35%,0);filter:saturate(1) contrast(1.05) brightness(.98)}
 }
 
-/* Entrada premium del contenido, sin alterar layout ni eventos. */
 #dashboard-view .hero-panel .hero-copy{
   animation:kcHeroContentIn .72s cubic-bezier(.22,.8,.24,1) both;
 }
@@ -148,7 +137,6 @@ body[data-kc-view="herramientas"] #herramientas{
   to{opacity:1;transform:translate3d(0,0,0) scale(1)}
 }
 
-/* Halo vivo sobre la capa decorativa ya existente. */
 #dashboard-view .hero-panel::after{
   will-change:transform,opacity;
   animation:kcHeroAmbientGlow 9s ease-in-out infinite alternate;
@@ -159,8 +147,7 @@ body[data-kc-view="herramientas"] #herramientas{
   100%{transform:translate3d(-18px,-10px,0) scale(1.08);opacity:1}
 }
 
-/* Recursos clínicos de pago: neutraliza los fondos claros inyectados por commerce-v1. */
-body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product],
+/* Recursos clínicos de pago: neutraliza fondos claros de commerce-v1. */
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]{
   color:#f5fbfc!important;
   background:
@@ -168,10 +155,18 @@ body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[
     linear-gradient(145deg,rgba(12,52,62,.98),rgba(5,27,35,.99))!important;
   border:1px solid rgba(91,205,202,.24)!important;
   box-shadow:0 18px 46px rgba(0,0,0,.22)!important;
+
+  /* Layout vertical estable: evita que licencia/precio invada el CTA. */
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  min-height:420px!important;
+  height:auto!important;
+  padding-bottom:20px!important;
+  gap:0!important;
+  box-sizing:border-box!important;
 }
 
-body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-scales-library"],
-body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-special-tests-library"],
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-scales-library"],
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-target="kc-special-tests-library"]{
   background:
@@ -185,8 +180,17 @@ body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[
   opacity:.68!important;
 }
 
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>span{
+  flex:0 0 auto!important;
+  align-self:flex-start!important;
+  color:#042b34!important;
+  background:linear-gradient(145deg,#4ddbd8,#77e4c4)!important;
+  border:0!important;
+}
+
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>strong{
   color:#f5ffff!important;
+  flex:0 0 auto!important;
 }
 
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>p,
@@ -194,18 +198,37 @@ body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[
   color:#b4cbd0!important;
 }
 
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>p,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-label,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-points{
+  flex:0 0 auto!important;
+}
+
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-label{
   color:#70e4d3!important;
 }
 
-#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>span{
-  color:#042b34!important;
-  background:linear-gradient(145deg,#4ddbd8,#77e4c4)!important;
-  border:0!important;
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-points{
+  margin-bottom:0!important;
 }
 
+/* Estado/precio ocupa una fila propia. */
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-price,
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:48px!important;
+  margin:16px 0 12px!important;
+  padding:10px 14px!important;
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+  line-height:1.2!important;
+  border-radius:14px!important;
+  box-sizing:border-box!important;
   color:#eafffa!important;
   background:rgba(98,224,173,.09)!important;
   border:1px solid rgba(98,224,173,.24)!important;
@@ -214,13 +237,31 @@ body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[
 
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-price::after,
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price::after{
+  display:inline-block!important;
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+  line-height:1.2!important;
   color:#9fc0c6!important;
 }
 
+/* CTA queda siempre al final, separado del bloque de licencia. */
 #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] b{
+  position:static!important;
+  inset:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:54px!important;
+  margin-top:auto!important;
+  padding:0 16px!important;
+  flex:0 0 54px!important;
+  align-self:stretch!important;
+  box-sizing:border-box!important;
   color:#032128!important;
   background:linear-gradient(90deg,#4ddbd8,#6cbcff)!important;
   border:0!important;
+  border-radius:14px!important;
   box-shadow:0 12px 30px rgba(77,219,216,.16)!important;
 }
 
@@ -230,26 +271,32 @@ body[data-kc-view="herramientas"] #dashboard-view .kc-clinical-category-trigger[
 }
 
 @media(max-width:760px){
-  #dashboard-view #herramientas{
-    border-radius:20px!important;
-  }
+  #dashboard-view #herramientas{border-radius:20px!important}
   #dashboard-view #herramientas .kc-page-heading,
   #dashboard-view #herramientas .kc-summary-card,
-  #dashboard-view #herramientas .kc-tool-category-grid article{
-    border-radius:18px!important;
-  }
+  #dashboard-view #herramientas .kc-tool-category-grid article{border-radius:18px!important}
   #dashboard-view .hero-panel::before{
     background-size:auto 100%!important;
     background-position:68% center!important;
     opacity:.42;
     animation-duration:22s;
   }
-  #dashboard-view .hero-panel .continue-panel{
-    animation-delay:.04s;
+  #dashboard-view .hero-panel .continue-panel{animation-delay:.04s}
+}
+
+@media(max-width:620px){
+  #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]{min-height:400px!important}
+  #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-price,
+  #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price{
+    gap:10px!important;
+    font-size:.95rem!important;
+  }
+  #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-price::after,
+  #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-owned="true"] .kc-clinical-price::after{
+    font-size:.64rem!important;
   }
 }
 
-/* Accesibilidad: respeta usuarios que prefieren menos movimiento. */
 @media(prefers-reduced-motion:reduce){
   #dashboard-view .hero-panel::before,
   #dashboard-view .hero-panel::after,
