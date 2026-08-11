@@ -70,11 +70,29 @@
 
   function loadClinicalCommerce() {
     if (document.querySelector('script[data-kc-clinical-commerce]')) return;
-    const script = document.createElement("script");
-    script.src = "./academy-clinical-commerce-v1.js?v=20260810-paid2";
-    script.async = false;
-    script.dataset.kcClinicalCommerce = "v1";
-    document.head.appendChild(script);
+
+    const loadCommerce = () => {
+      if (document.querySelector('script[data-kc-clinical-commerce]')) return;
+      const script = document.createElement("script");
+      script.src = "./academy-clinical-commerce-v1.js?v=20260810-paid3";
+      script.async = false;
+      script.dataset.kcClinicalCommerce = "v1";
+      document.head.appendChild(script);
+    };
+
+    const existingCheckoutConfig = document.querySelector('script[data-kc-clinical-checkouts]');
+    if (existingCheckoutConfig) {
+      if (window.KINECHECK_CLINICAL_CHECKOUTS) loadCommerce();
+      else existingCheckoutConfig.addEventListener("load", loadCommerce, { once: true });
+      return;
+    }
+
+    const checkoutConfig = document.createElement("script");
+    checkoutConfig.src = "./academy-clinical-checkouts-v1.js?v=20260810-checkout1";
+    checkoutConfig.async = false;
+    checkoutConfig.dataset.kcClinicalCheckouts = "v1";
+    checkoutConfig.addEventListener("load", loadCommerce, { once: true });
+    document.head.appendChild(checkoutConfig);
   }
 
   function initialize() {
