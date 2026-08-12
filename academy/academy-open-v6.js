@@ -6,23 +6,32 @@
 
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const RELEASE = "20260809-private1";
+  const RELEASE = "20260811-sameorigin1";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
     "kinecheck-clinico-curso": `../kinecheck-clinico-curso/?course=kinecheck-clinico-curso&v=${RELEASE}`,
     "comunicacion-clinica": `../comunicacion-clinica.html?course=comunicacion-clinica&v=${RELEASE}`,
+    "mas-alla-del-dolor": `./mas-alla-del-dolor.html?v=${RELEASE}`,
     "traumatologia-ortopedia-clinica": `../traumatologia/?course=traumatologia-ortopedia-clinica&v=${RELEASE}`,
   });
 
   const EXTERNAL = Object.freeze({
-    "mas-alla-del-dolor": `https://emmanuelkine.github.io/mas-alla-del-dolor/?course=mas-alla-del-dolor&v=${RELEASE}`,
     "evidencia-aplicada": `https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/?course=evidencia-aplicada&v=${RELEASE}`,
   });
 
   const APPLICATIONS = new Set(["kinecheck-estudiante", "kinecheck-recupera"]);
   const KNOWN = new Set([...Object.keys(SAME_ORIGIN), ...Object.keys(EXTERNAL), ...APPLICATIONS]);
   let navigating = false;
+
+  // academy-v39.js conserva una referencia al mismo objeto CONFIG. Aunque el
+  // objeto raíz está congelado, sus objetos de curso no lo están. Reescribimos
+  // únicamente el destino de Más allá del dolor para que también los botones
+  // nativos y KineCheckAcademyLauncher usen la ruta same-origin.
+  const masAllaCourse = window.KINECHECK_ACADEMY_CONFIG?.courses?.find?.(
+    (course) => course?.slug === "mas-alla-del-dolor",
+  );
+  if (masAllaCourse) masAllaCourse.url = SAME_ORIGIN["mas-alla-del-dolor"];
 
   function parse(storage) {
     try {
@@ -128,7 +137,7 @@
     try {
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
     } catch {
-      // La sesión en memoria del ecosistema sigue disponible.
+      // La sesión persistente de Academy sigue disponible en el mismo origen.
     }
   }
 
@@ -141,7 +150,12 @@
       return;
     }
     saveSharedSession(session);
-    window.name = JSON.stringify(payload(session, product));
+
+    // Más allá del dolor ya no necesita transportar la sesión: permanece dentro
+    // de kinecheck.cl y lee la sesión existente de Academy directamente.
+    if (product === "mas-alla-del-dolor") window.name = "";
+    else window.name = JSON.stringify(payload(session, product));
+
     try {
       location.assign(SAME_ORIGIN[product]);
     } catch {
