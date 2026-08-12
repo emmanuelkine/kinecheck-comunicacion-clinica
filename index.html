@@ -93,6 +93,20 @@
       font-size:.63rem;
       letter-spacing:.03em;
     }
+    .demo-card-link{
+      display:inline-flex;
+      align-items:center;
+      margin-top:1.15rem;
+      padding:.72rem 1rem;
+      border:1px solid rgba(114,231,223,.25);
+      border-radius:12px;
+      background:rgba(114,231,223,.08);
+      color:#8ef1e7;
+      font-size:.78rem;
+      font-weight:900;
+      text-decoration:none;
+    }
+    .demo-card-link:hover,.demo-card-link:focus-visible{background:rgba(114,231,223,.14);text-decoration:none}
     @media (max-width:700px){
       .hero-explore{margin-top:1.7rem}
       .hero-explore-head{align-items:flex-start;flex-direction:column;gap:.25rem}
@@ -112,6 +126,7 @@
     <nav id="public-navigation" data-public-nav aria-label="Navegación principal">
       <a href="#elige">Elegir perfil</a>
       <a href="./academy/#biblioteca">Biblioteca</a>
+      <a href="./demo/">Probar demo</a>
       <a class="nav-button" href="./academy/">Ingresar</a>
     </nav>
   </header>
@@ -124,6 +139,7 @@
         <p>Selecciona el perfil que mejor representa lo que necesitas. Dentro encontrarás una explicación simple de cada producto, para quién es y su compra oficial en Hotmart.</p>
         <div class="actions">
           <a class="primary" href="#elige">Elegir mi perfil</a>
+          <a class="text-link" href="./demo/">Probar demo →</a>
           <a class="text-link" href="./academy/#biblioteca">Abrir Biblioteca →</a>
           <a class="text-link" href="./academy/">Ya tengo acceso →</a>
         </div>
@@ -145,6 +161,7 @@
         <span class="eyebrow">RECORRIDO SIMPLE</span>
         <h2>Explora. Entiende. Decide.</h2>
         <p>Sin botones intermedios ni lanzadores. Primero ves la información; si te sirve, compras en Hotmart. Si ya tienes acceso, entras a KineCheck.</p>
+        <a class="demo-card-link" href="./demo/">Entrar a la demo interactiva →</a>
       </aside>
     </section>
 
