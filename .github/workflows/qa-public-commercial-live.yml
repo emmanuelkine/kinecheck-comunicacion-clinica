@@ -6,14 +6,12 @@ on:
     branches: [main]
     paths:
       - "index.html"
-      - "home.js"
-      - "home-core-20260806.js"
-      - "home-commercial-proof-v1.js"
-      - "home-commercial-proof-v1.css"
+      - "profesionales/**"
+      - "estudiantes/**"
+      - "recupera/**"
+      - "productos/**"
       - "commercial-prices-cl.json"
-      - "productos/product-price-v1.js"
-      - "productos/product-price-v1.css"
-      - "productos/product-clinico-reposition-v1.js"
+      - "scripts/qa-commercial.mjs"
       - ".github/workflows/qa-public-commercial-live.yml"
 
 permissions:
@@ -33,50 +31,60 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
-      - name: Esperar despliegue y probar portada y fichas
+      - name: Esperar despliegue y probar recorrido público
         run: |
           node <<'NODE'
           const { chromium } = require('playwright');
-          const expected = ['$39.990','$14.990','$9.990','$19.900','$29.990','$35.900','$49.900'];
-          const base = 'https://kinecheck.cl/?v=20260806-pack49900';
-          const evidenceDetail = 'https://kinecheck.cl/productos/?producto=evidencia-aplicada&v=20260806-pack49900';
-          const packDetail = 'https://kinecheck.cl/productos/?producto=pack-estudiante&v=20260806-pack49900';
-          const forbidden = /Creado y dirigido por|Magíster en Docencia|97,1\/100/i;
+          const pages = [
+            ['Inicio', 'https://kinecheck.cl/?qa=live-current', ['Explora KineCheck', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Estudiante', 'KineCheck Recupera', 'Elegir mi perfil', 'Abrir Biblioteca']],
+            ['Profesionales', 'https://kinecheck.cl/profesionales/?qa=live-current', ['KineCheck Clínico', '$39.990 CLP', '$35.900 CLP', 'Información primero. Compra después.']],
+            ['Estudiantes', 'https://kinecheck.cl/estudiantes/?qa=live-current', ['KineCheck Estudiante', '$14.990 CLP', '$49.900 CLP', 'RECOMENDADO']],
+            ['Recupera', 'https://kinecheck.cl/recupera/?qa=live-current', ['KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses']],
+            ['Academy', 'https://kinecheck.cl/academy/?qa=live-current', ['Ingresa a KineCheck', 'Correo utilizado en la compra', 'Olvidé mi contraseña']],
+          ];
+          const details = [
+            ['KineCheck Clínico', 'kinecheck-clinico', '$39.990'],
+            ['KineCheck Estudiante', 'kinecheck-estudiante', '$14.990'],
+            ['KineCheck Recupera', 'kinecheck-recupera', '$9.990'],
+            ['Comunicación Clínica', 'comunicacion-clinica', '$19.900'],
+            ['Más allá del dolor', 'mas-alla-del-dolor', '$39.990'],
+            ['Evidencia Aplicada', 'evidencia-aplicada', '$29.990'],
+            ['Traumatología y Ortopedia Clínica', 'traumatologia-ortopedia-clinica', '$35.900'],
+            ['Pack KineCheck Estudiante', 'pack-estudiante', '$49.900'],
+          ];
+          const forbidden = /Creado y dirigido por|Magíster en Docencia|97,1\/100|testimonio ficticio/i;
+
+          async function textOf(page) {
+            return (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+          }
 
           (async () => {
             const browser = await chromium.launch({ headless: true });
             const page = await browser.newPage({ viewport: { width: 1440, height: 1200 }, locale: 'es-CL' });
             let lastError;
+
             for (let attempt = 1; attempt <= 12; attempt += 1) {
               try {
-                await page.goto(`${base}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
-                await page.waitForSelector('.product-price', { timeout: 15000 });
-                const blocks = await page.locator('.product-price').count();
-                if (blocks !== 8) throw new Error(`Se esperaban 8 precios y aparecieron ${blocks}.`);
-                const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-                for (const amount of new Set(expected)) {
-                  if (!text.includes(amount)) throw new Error(`Falta ${amount} en la portada.`);
+                for (const [label, url, expected] of pages) {
+                  const response = await page.goto(`${url}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
+                  if (!response || response.status() >= 500) throw new Error(`${label} respondió ${response?.status() ?? 'sin respuesta'}.`);
+                  const text = await textOf(page);
+                  for (const item of expected) {
+                    if (!text.includes(item)) throw new Error(`${label}: falta “${item}”.`);
+                  }
+                  if (forbidden.test(text)) throw new Error(`${label}: apareció contenido retirado o no verificable.`);
                 }
-                if (text.includes('$59.900')) throw new Error('La portada conserva el precio anterior del pack.');
-                if (!text.includes('Ahorras $5.080')) throw new Error('La portada no informa el ahorro real del pack.');
-                if (!text.includes('Respaldo verificable')) throw new Error('Falta la sección de respaldo verificable.');
-                if (!text.includes('Las opiniones se incorporarán únicamente con autorización y verificación')) throw new Error('Falta la política de opiniones reales.');
-                if (forbidden.test(text)) throw new Error('Se añadió contenido personal expresamente excluido.');
 
-                await page.goto(`${evidenceDetail}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
-                await page.waitForSelector('.product-detail-price', { timeout: 15000 });
-                const evidenceText = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-                if (!evidenceText.includes('$29.990')) throw new Error('La ficha de Evidencia Aplicada no muestra $29.990.');
-                if (forbidden.test(evidenceText)) throw new Error('La ficha añadió contenido personal expresamente excluido.');
-
-                await page.goto(`${packDetail}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
-                await page.waitForSelector('.product-detail-price', { timeout: 15000 });
-                const packText = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-                if (!packText.includes('$49.900')) throw new Error('La ficha del pack no muestra $49.900.');
-                if (!packText.includes('$54.980') || !packText.includes('$5.080') || !packText.includes('9,2%')) {
-                  throw new Error('La ficha del pack no muestra la comparación y ahorro verificados.');
+                for (const [name, slug, price] of details) {
+                  const url = `https://kinecheck.cl/productos/?producto=${encodeURIComponent(slug)}&qa=live-current&attempt=${attempt}`;
+                  const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+                  if (!response || response.status() >= 500) throw new Error(`${name}: ficha respondió ${response?.status() ?? 'sin respuesta'}.`);
+                  const text = await textOf(page);
+                  if (!text.includes(name) || !text.includes(price) || !text.includes('Comprar en Hotmart') || !text.includes('Ya compré: ingresar')) {
+                    throw new Error(`${name}: ficha pública incompleta.`);
+                  }
+                  if (forbidden.test(text)) throw new Error(`${name}: apareció contenido retirado o no verificable.`);
                 }
-                if (packText.includes('$59.900')) throw new Error('La ficha del pack conserva el precio anterior.');
 
                 console.log(`QA comercial público aprobado en el intento ${attempt}.`);
                 await browser.close();
@@ -87,6 +95,7 @@ jobs:
                 await page.waitForTimeout(10000);
               }
             }
+
             await browser.close();
             throw lastError || new Error('No fue posible validar producción.');
           })().catch((error) => {
