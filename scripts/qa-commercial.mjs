@@ -49,7 +49,7 @@ async function checkSource() {
   const adminScript = await read("admin/admin.js");
 
   const prices = priceData.products || {};
-  const publicCatalog = `${home}\n${professionals}\n${students}\n${recovery}`;
+  const publicCatalog = `${professionals}\n${students}\n${recovery}`;
 
   for (const [slug, name, checkout, expectedPrice, displayPrice] of products) {
     const priceMatches = prices[slug]?.price === expectedPrice;
@@ -66,17 +66,35 @@ async function checkSource() {
   const professionalPrices = count(professionals, 'class="price"');
   const studentPrices = count(students, 'class="price"');
   const recoveryPrices = count(recovery, 'class="price"');
-  const currentArchitecture = homePrices === 3 && professionalPrices === 5 && studentPrices === 4 && recoveryPrices === 1;
+  const currentArchitecture = homePrices === 0 && professionalPrices === 5 && studentPrices === 4 && recoveryPrices === 1;
   record(
-    "Static public prices",
+    "Current public pricing architecture",
     currentArchitecture ? "PASS" : "FAIL",
     `home=${homePrices}, profesionales=${professionalPrices}, estudiantes=${studentPrices}, recupera=${recoveryPrices}`,
   );
 
-  const trustSignals = home.includes("Precios visibles")
-    && home.includes("Compra segura")
-    && home.includes("Conoce el precio antes de decidir.");
-  record("Public trust layer", trustSignals ? "PASS" : "FAIL", "visible-price, secure-purchase and price-before-decision signals must be present");
+  const exploreLinks = [
+    "./productos/kinecheck-clinico/",
+    "./productos/comunicacion-clinica/",
+    "./productos/kinecheck-estudiante/",
+    "./productos/kinecheck-recupera/",
+  ];
+  const exploreCurrent = home.includes("Explora KineCheck")
+    && home.includes("Toca un producto para conocerlo")
+    && exploreLinks.every((href) => home.includes(`href="${href}"`));
+  record(
+    "Public home Explora KineCheck",
+    exploreCurrent ? "PASS" : "FAIL",
+    exploreCurrent ? "home exposes the current four-product exploration rail" : "home exploration rail is missing or incomplete",
+  );
+
+  const directCheckoutCoverage = products.every(([, , checkout]) => publicCatalog.includes(checkout));
+  record(
+    "Public purchase coverage",
+    directCheckoutCoverage ? "PASS" : "FAIL",
+    directCheckoutCoverage ? "all eight products expose their Hotmart checkout in a public profile" : "one or more Hotmart checkout routes are missing",
+  );
+
   record(
     "Retired creator section",
     !/id="confianza"|CREADO POR EMMANUEL ZÚÑIGA/i.test(home) ? "PASS" : "FAIL",
@@ -84,14 +102,14 @@ async function checkSource() {
   );
   record(
     "No fabricated social proof",
-    !/usado por \d+|más de \d+ usuarios|testimonio ficticio|\d+ pacientes satisfechos/i.test(publicCatalog) ? "PASS" : "FAIL",
+    !/usado por \d+|más de \d+ usuarios|testimonio ficticio|\d+ pacientes satisfechos/i.test(`${home}\n${publicCatalog}`) ? "PASS" : "FAIL",
     "unsupported testimonials and user counts must remain absent",
   );
 
   const packSavingValid = prices["pack-estudiante"]?.saving === 5080
     && prices["pack-estudiante"]?.discountPercent === 9.2
     && students.includes("$49.900 CLP")
-    && !publicCatalog.includes("$59.900");
+    && !`${home}\n${publicCatalog}`.includes("$59.900");
   record("Verified pack price", packSavingValid ? "PASS" : "FAIL", "Pack price and verified saving data remain consistent with commercial source");
 
   const legalLinksPresent = ["../legal/terminos.html", "../legal/privacidad.html", "../legal/reembolsos.html"]
@@ -101,9 +119,7 @@ async function checkSource() {
   const platformIsRedirect = platformPage.includes("../academy/")
     && /http-equiv="refresh"/i.test(platformPage)
     && /noindex,nofollow/i.test(platformPage)
-    && !platformPage.includes("20260806-unified1")
-    && platformRedirect.includes('new URL("../academy/"')
-    && !platformRedirect.includes('searchParams.set("v"');
+    && platformRedirect.includes('new URL("../academy/"');
   record("Legacy platform route", platformIsRedirect ? "PASS" : "FAIL", "legacy /platform/ must redirect cleanly to the canonical /academy/ entry point");
 
   const academyLoginPresent = academyPage.includes('id="login-view"')
@@ -123,7 +139,7 @@ async function fetchWithTimeout(url, options = {}, timeout = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/2.1", ...(options.headers || {}) } });
+    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/2.2", ...(options.headers || {}) } });
   } finally {
     clearTimeout(timer);
   }
@@ -152,8 +168,8 @@ async function checkCheckout(name, url) {
 }
 
 async function checkLive() {
-  await checkPage("Public home", "/?qa=commercial-current", ["PRODUCTOS PRINCIPALES", "$39.990 CLP", "$14.990 CLP", "$9.990 CLP", "Precios visibles", "Compra segura"]);
-  await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "RECOMENDADO"]);
+  await checkPage("Public home", "/?qa=commercial-current", ["Explora KineCheck", "KineCheck Clínico", "Comunicación Clínica", "KineCheck Estudiante", "KineCheck Recupera", "Elegir mi perfil", "Abrir Biblioteca"]);
+  await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "Información primero. Compra después."]);
   await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "RECOMENDADO"]);
   await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "$9.990 CLP", "Acceso por 3 meses"]);
   await checkPage("Canonical Academy", "/academy/?qa=commercial-current", ['id="login-view"', "academy-v39.js"]);
@@ -179,7 +195,7 @@ const report = {
   baseUrl,
   failures,
   results,
-  note: "Automated certification does not replace end-to-end purchase, webhook, refund, chargeback and authenticated-license tests with controlled Hotmart transactions.",
+  note: "Automated certification validates public routes, prices, checkout reachability and Academy entry. It does not replace a controlled paid Hotmart transaction followed by webhook, authenticated license, refund and chargeback tests.",
 };
 await fs.writeFile("qa-commercial-report.json", JSON.stringify(report, null, 2));
 
