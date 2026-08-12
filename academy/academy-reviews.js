@@ -217,3 +217,32 @@
     document.querySelector("#review-form").addEventListener("submit", submitReview);
   });
 })();
+
+(() => {
+  "use strict";
+
+  // Security boundary: owner access may be trusted locally because it is an
+  // explicit platform role. Beta access must never be granted by a browser-side
+  // email allow-list; every beta entitlement is verified by course-key/Supabase.
+  function installBackendBetaAuthority() {
+    try {
+      if (typeof hasFullAccess !== "function" || typeof ownerMode === "undefined") return false;
+      hasFullAccess = () => Boolean(ownerMode);
+      window.__KINECHECK_BETA_BACKEND_AUTHORITY__ = true;
+      return true;
+    } catch (error) {
+      console.error("KineCheck beta backend authority", error);
+      return false;
+    }
+  }
+
+  if (installBackendBetaAuthority()) return;
+
+  let attempts = 0;
+  const timer = window.setInterval(() => {
+    attempts += 1;
+    if (installBackendBetaAuthority() || attempts >= 40) {
+      window.clearInterval(timer);
+    }
+  }, 50);
+})();
