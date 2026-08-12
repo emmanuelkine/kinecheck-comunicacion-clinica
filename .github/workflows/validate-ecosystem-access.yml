@@ -16,7 +16,7 @@ on:
       - "kinecheck-clinico-curso/**"
       - "kinecheck-clinico-guia/**"
       - "supabase/functions/course-key/**"
-      - "scripts/validate-ecosystem-access.mjs"
+      - "scripts/validate-ecosystem-access-v2.mjs"
       - ".github/workflows/validate-ecosystem-access.yml"
 
 permissions:
@@ -39,8 +39,8 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Validate all course and application access routes
-        run: node scripts/validate-ecosystem-access.mjs
+      - name: Validate current course and application access routes
+        run: node scripts/validate-ecosystem-access-v2.mjs
 
       - name: Upload access evidence
         if: always()
