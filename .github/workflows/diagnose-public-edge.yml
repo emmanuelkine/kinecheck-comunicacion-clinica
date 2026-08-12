@@ -1,0 +1,37 @@
+name: Diagnose Public Edge
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnose-public-edge.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: DNS and HTTP diagnostics
+        shell: bash
+        run: |
+          set -u
+          echo '=== DNS ==='
+          getent ahosts kinecheck.cl || true
+          echo
+          for ua in 'KineCheck-QA/2.2' 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140 Safari/537.36'; do
+            echo "=== UA: $ua ==="
+            url="https://kinecheck.cl/?diag=$(date +%s%N)"
+            curl -sS --max-time 20 -A "$ua" -H 'Cache-Control: no-cache, no-store, max-age=0' -H 'Pragma: no-cache' -D headers.txt "$url" -o body.html || true
+            sed -n '1,30p' headers.txt || true
+            printf 'bytes='; wc -c < body.html || true
+            printf 'sha256='; sha256sum body.html | awk '{print $1}' || true
+            printf 'explora='; if grep -q 'Explora KineCheck' body.html; then echo yes; else echo no; fi
+            printf 'hero_explore='; if grep -q 'hero-explore' body.html; then echo yes; else echo no; fi
+            printf 'old_products_principales='; if grep -q 'PRODUCTOS PRINCIPALES' body.html; then echo yes; else echo no; fi
+            printf 'title='; grep -o '<title>[^<]*' body.html | head -1 | sed 's/<title>//' || true
+            echo
+          done
