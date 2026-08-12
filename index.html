@@ -17,6 +17,88 @@
   <link rel="icon" href="./assets/kinecheck-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./kinecheck/site-v5.css?v=6">
   <link rel="stylesheet" href="./kinecheck/site-premium-v1.css?v=1">
+  <style>
+    .hero-explore{
+      width:min(780px,100%);
+      margin-top:2.15rem;
+      padding-top:1.15rem;
+      border-top:1px solid rgba(255,255,255,.09);
+    }
+    .hero-explore-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      margin-bottom:.75rem;
+    }
+    .hero-explore-label{
+      color:#72e7df;
+      font-size:.7rem;
+      font-weight:900;
+      letter-spacing:.17em;
+      text-transform:uppercase;
+    }
+    .hero-explore-head small{
+      color:#82a4aa;
+      font-size:.69rem;
+      white-space:nowrap;
+    }
+    .hero-explore-rail{
+      display:flex;
+      gap:.65rem;
+      width:100%;
+      overflow-x:auto;
+      overscroll-behavior-inline:contain;
+      scroll-snap-type:x proximity;
+      padding:.12rem 0 .58rem;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(190,218,218,.55) rgba(255,255,255,.05);
+    }
+    .hero-explore-rail::-webkit-scrollbar{height:6px}
+    .hero-explore-rail::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:999px}
+    .hero-explore-rail::-webkit-scrollbar-thumb{background:rgba(190,218,218,.55);border-radius:999px}
+    .hero-explore-pill{
+      flex:0 0 auto;
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      min-height:42px;
+      padding:.42rem .78rem .42rem .46rem;
+      border:1px solid rgba(158,232,224,.22);
+      border-radius:999px;
+      background:rgba(7,34,40,.8);
+      color:#f4fbfb;
+      font-size:.78rem;
+      font-weight:850;
+      text-decoration:none;
+      scroll-snap-align:start;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      transition:transform .18s ease,border-color .18s ease,background .18s ease;
+    }
+    .hero-explore-pill:hover,
+    .hero-explore-pill:focus-visible{
+      transform:translateY(-2px);
+      border-color:rgba(114,231,223,.48);
+      background:rgba(12,54,61,.94);
+      text-decoration:none;
+    }
+    .hero-explore-pill b{
+      display:grid;
+      place-items:center;
+      width:28px;
+      height:28px;
+      border-radius:9px;
+      background:linear-gradient(135deg,#74e3cf,#63d9e6);
+      color:#073036;
+      font-size:.63rem;
+      letter-spacing:.03em;
+    }
+    @media (max-width:700px){
+      .hero-explore{margin-top:1.7rem}
+      .hero-explore-head{align-items:flex-start;flex-direction:column;gap:.25rem}
+      .hero-explore-head small{white-space:normal}
+    }
+  </style>
   <script src="./kinecheck/site-v5.js?v=5" defer></script>
 </head>
 <body>
@@ -44,6 +126,19 @@
           <a class="primary" href="#elige">Elegir mi perfil</a>
           <a class="text-link" href="./academy/#biblioteca">Abrir Biblioteca →</a>
           <a class="text-link" href="./academy/">Ya tengo acceso →</a>
+        </div>
+
+        <div class="hero-explore" aria-label="Explora productos KineCheck">
+          <div class="hero-explore-head">
+            <span class="hero-explore-label">Explora KineCheck</span>
+            <small>Toca un producto para conocerlo</small>
+          </div>
+          <div class="hero-explore-rail">
+            <a class="hero-explore-pill" href="./productos/kinecheck-clinico/"><b>KC</b><span>KineCheck Clínico</span></a>
+            <a class="hero-explore-pill" href="./productos/comunicacion-clinica/"><b>CC</b><span>Comunicación Clínica</span></a>
+            <a class="hero-explore-pill" href="./productos/kinecheck-estudiante/"><b>KE</b><span>KineCheck Estudiante</span></a>
+            <a class="hero-explore-pill" href="./productos/kinecheck-recupera/"><b>KR</b><span>KineCheck Recupera</span></a>
+          </div>
         </div>
       </div>
       <aside class="hero-card">
