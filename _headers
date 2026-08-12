@@ -8,6 +8,21 @@
   X-Frame-Options: SAMEORIGIN
   X-Permitted-Cross-Domain-Policies: none
 
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/profesionales/
+  Cache-Control: no-cache, must-revalidate
+
+/estudiantes/
+  Cache-Control: no-cache, must-revalidate
+
+/recupera/
+  Cache-Control: no-cache, must-revalidate
+
 /platform/*
   Cache-Control: private, no-store, max-age=0
   X-Robots-Tag: noindex, nofollow
