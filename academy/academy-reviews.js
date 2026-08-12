@@ -24,7 +24,7 @@
   function loadCommerceExtension() {
     if (document.querySelector('script[data-kinecheck-commerce]')) return;
     const script = document.createElement("script");
-    script.src = "./academy-commerce-v4.js?v=20260811-handoff1";
+    script.src = "./academy-commerce-v4.js?v=20260811-handoff2";
     script.dataset.kinecheckCommerce = "v4";
     script.defer = true;
     document.head.appendChild(script);
