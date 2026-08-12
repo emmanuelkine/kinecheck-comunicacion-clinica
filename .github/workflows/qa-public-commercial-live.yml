@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "demo/**"
       - "_headers"
       - "kinecheck/site-v5.js"
       - "profesionales/**"
@@ -38,7 +39,8 @@ jobs:
           node <<'NODE'
           const { chromium } = require('playwright');
           const pages = [
-            ['Inicio', 'https://kinecheck.cl/?qa=live-current', ['Explora KineCheck', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Estudiante', 'KineCheck Recupera', 'Elegir mi perfil', 'Abrir Biblioteca']],
+            ['Inicio', 'https://kinecheck.cl/?qa=live-current', ['Explora KineCheck', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Estudiante', 'KineCheck Recupera', 'Elegir mi perfil', 'Probar demo', 'Abrir Biblioteca']],
+            ['Demo', 'https://kinecheck.cl/demo/?qa=live-current', ['Conoce el ecosistema KineCheck', 'MODO DEMO', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Recupera', 'Sin registro']],
             ['Profesionales', 'https://kinecheck.cl/profesionales/?qa=live-current', ['KineCheck Clínico', '$39.990 CLP', '$35.900 CLP', 'Información primero. Compra después.']],
             ['Estudiantes', 'https://kinecheck.cl/estudiantes/?qa=live-current', ['KineCheck Estudiante', '$14.990 CLP', '$49.900 CLP', 'RECOMENDADO']],
             ['Recupera', 'https://kinecheck.cl/recupera/?qa=live-current', ['KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses']],
@@ -88,6 +90,17 @@ jobs:
                   if (forbidden.test(text)) throw new Error(`${label}: apareció contenido retirado o no verificable.`);
                 }
 
+                const demoResponse = await page.goto(`https://kinecheck.cl/demo/?qa=interaction&attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
+                if (!demoResponse || demoResponse.status() >= 500) throw new Error(`Demo interactiva respondió ${demoResponse?.status() ?? 'sin respuesta'}.`);
+                await page.locator('[data-open="curso"]').first().click();
+                if (!(await page.locator('[data-panel-id="curso"]').evaluate(el => el.classList.contains('active')))) throw new Error('Demo: no abre la muestra de curso.');
+                await page.locator('[data-answer="correct"]').click();
+                const feedback = await page.locator('#quiz-feedback').innerText();
+                if (!includesVisualText(feedback, 'Correcto')) throw new Error('Demo: la microactividad no entrega retroalimentación.');
+                await page.locator('[data-panel="recupera"]').click();
+                await page.locator('#pain').fill('6');
+                if ((await page.locator('#pain-value').innerText()).trim() !== '6') throw new Error('Demo: el seguimiento simulado no actualiza valores.');
+
                 for (const [name, slug, price, checkout] of details) {
                   const url = `https://kinecheck.cl/productos/?producto=${encodeURIComponent(slug)}&qa=live-current&attempt=${attempt}&ts=${Date.now()}`;
                   const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
@@ -110,7 +123,7 @@ jobs:
                   if (forbidden.test(text)) throw new Error(`${name}: apareció contenido retirado o no verificable.`);
                 }
 
-                console.log(`QA comercial público aprobado en el intento ${attempt}.`);
+                console.log(`QA comercial público y demo aprobados en el intento ${attempt}.`);
                 await browser.close();
                 return;
               } catch (error) {
