@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "_headers"
       - "profesionales/**"
       - "estudiantes/**"
       - "recupera/**"
@@ -60,13 +61,21 @@ jobs:
 
           (async () => {
             const browser = await chromium.launch({ headless: true });
-            const page = await browser.newPage({ viewport: { width: 1440, height: 1200 }, locale: 'es-CL' });
+            const context = await browser.newContext({
+              viewport: { width: 1440, height: 1200 },
+              locale: 'es-CL',
+              extraHTTPHeaders: {
+                'Cache-Control': 'no-cache, no-store, max-age=0',
+                'Pragma': 'no-cache',
+              },
+            });
+            const page = await context.newPage();
             let lastError;
 
             for (let attempt = 1; attempt <= 12; attempt += 1) {
               try {
                 for (const [label, url, expected] of pages) {
-                  const response = await page.goto(`${url}&attempt=${attempt}`, { waitUntil: 'networkidle', timeout: 60000 });
+                  const response = await page.goto(`${url}&attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
                   if (!response || response.status() >= 500) throw new Error(`${label} respondió ${response?.status() ?? 'sin respuesta'}.`);
                   const text = await textOf(page);
                   for (const item of expected) {
@@ -76,7 +85,7 @@ jobs:
                 }
 
                 for (const [name, slug, price] of details) {
-                  const url = `https://kinecheck.cl/productos/?producto=${encodeURIComponent(slug)}&qa=live-current&attempt=${attempt}`;
+                  const url = `https://kinecheck.cl/productos/?producto=${encodeURIComponent(slug)}&qa=live-current&attempt=${attempt}&ts=${Date.now()}`;
                   const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
                   if (!response || response.status() >= 500) throw new Error(`${name}: ficha respondió ${response?.status() ?? 'sin respuesta'}.`);
                   const text = await textOf(page);
