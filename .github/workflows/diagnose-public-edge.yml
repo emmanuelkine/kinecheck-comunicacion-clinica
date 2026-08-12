@@ -13,7 +13,7 @@ permissions:
 jobs:
   diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: DNS and HTTP diagnostics
         shell: bash
@@ -35,3 +35,49 @@ jobs:
             printf 'title='; grep -o '<title>[^<]*' body.html | head -1 | sed 's/<title>//' || true
             echo
           done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+
+      - name: Browser DOM diagnostics
+        run: |
+          node <<'NODE'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const context = await browser.newContext({ viewport: { width: 1440, height: 1200 }, locale: 'es-CL' });
+            const page = await context.newPage();
+            page.on('console', m => console.log('console:', m.type(), m.text()));
+            page.on('pageerror', e => console.log('pageerror:', e.message));
+            page.on('requestfailed', r => console.log('requestfailed:', r.url(), r.failure()?.errorText));
+            const response = await page.goto(`https://kinecheck.cl/?browserdiag=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
+            console.log('status=', response?.status());
+            console.log('url=', page.url());
+            console.log('title=', await page.title());
+            const content = await page.content();
+            const bodyTextContent = await page.locator('body').textContent();
+            const bodyInnerText = await page.locator('body').innerText();
+            console.log('content_has_explora=', content.includes('Explora KineCheck'));
+            console.log('textContent_has_explora=', bodyTextContent.includes('Explora KineCheck'));
+            console.log('innerText_has_explora=', bodyInnerText.includes('Explora KineCheck'));
+            console.log('hero_explore_count=', await page.locator('.hero-explore').count());
+            if (await page.locator('.hero-explore').count()) {
+              const info = await page.locator('.hero-explore').first().evaluate(el => {
+                const s = getComputedStyle(el);
+                const r = el.getBoundingClientRect();
+                return { display:s.display, visibility:s.visibility, opacity:s.opacity, width:r.width, height:r.height, text:el.textContent };
+              });
+              console.log('hero_explore_info=', JSON.stringify(info));
+            }
+            console.log('scripts=', JSON.stringify(await page.locator('script[src]').evaluateAll(nodes => nodes.map(n => n.src))));
+            console.log('body_prefix=', bodyInnerText.slice(0,1200).replace(/\s+/g,' '));
+            await browser.close();
+          })().catch(e => { console.error(e); process.exit(1); });
+          NODE
