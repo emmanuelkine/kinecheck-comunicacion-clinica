@@ -7,6 +7,7 @@ on:
     paths:
       - "index.html"
       - "_headers"
+      - "kinecheck/site-v5.js"
       - "profesionales/**"
       - "estudiantes/**"
       - "recupera/**"
@@ -72,7 +73,7 @@ jobs:
             const page = await context.newPage();
             let lastError;
 
-            for (let attempt = 1; attempt <= 12; attempt += 1) {
+            for (let attempt = 1; attempt <= 18; attempt += 1) {
               try {
                 for (const [label, url, expected] of pages) {
                   const response = await page.goto(`${url}&attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
