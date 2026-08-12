@@ -199,3 +199,127 @@
     start();
   }
 })();
+
+(() => {
+  "use strict";
+
+  if (window.__KINECHECK_EXTERNAL_HANDOFF_FIX_V1__) return;
+  window.__KINECHECK_EXTERNAL_HANDOFF_FIX_V1__ = true;
+
+  const EXTERNAL = new Set(["mas-alla-del-dolor", "evidencia-aplicada"]);
+  const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
+
+  function toast(text) {
+    const element = document.querySelector("#kc-toast");
+    if (!element) return;
+    element.textContent = text;
+    element.hidden = false;
+    window.clearTimeout(toast.timer);
+    toast.timer = window.setTimeout(() => { element.hidden = true; }, 4500);
+  }
+
+  function tokenExpiry(token) {
+    try {
+      const parts = String(token || "").split(".");
+      if (parts.length !== 3) return 0;
+      const normalized = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+      const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+      const claims = JSON.parse(atob(padded));
+      return Number(claims?.exp || 0);
+    } catch {
+      return 0;
+    }
+  }
+
+  async function currentSession() {
+    let session = window.KINECHECK_ACADEMY_SESSION?.get?.() || null;
+    const expiry = Number(session?.expires_at || tokenExpiry(session?.access_token));
+    if ((!session?.access_token || (expiry && expiry <= Math.floor(Date.now() / 1000) + 30))
+      && typeof window.KINECHECK_ACADEMY_SESSION?.refresh === "function") {
+      session = await window.KINECHECK_ACADEMY_SESSION.refresh().catch(() => null);
+    }
+    return session?.access_token ? session : null;
+  }
+
+  function encodeBase64Url(value) {
+    const bytes = new TextEncoder().encode(value);
+    let binary = "";
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    return btoa(binary)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/g, "");
+  }
+
+  async function validateLicense(session, slug) {
+    const config = window.KINECHECK_ACADEMY_CONFIG;
+    const response = await fetch(`${config.supabaseUrl}/functions/v1/${config.courseKeyFunction}`, {
+      method: "POST",
+      headers: {
+        apikey: config.supabaseAnonKey,
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ courseSlug: slug }),
+    });
+    if (!response.ok) throw new Error("No encontramos una licencia activa para este curso.");
+  }
+
+  async function openExternal(slug, button) {
+    const config = window.KINECHECK_ACADEMY_CONFIG;
+    const course = config?.courses?.find((item) => item.slug === slug);
+    if (!course?.url) return;
+
+    if (button) {
+      button.setAttribute("aria-busy", "true");
+      button.dataset.kcOriginalText ||= button.textContent;
+      button.textContent = "Abriendo…";
+      button.style.pointerEvents = "none";
+    }
+
+    try {
+      const session = await currentSession();
+      if (!session) throw new Error("Tu sesión terminó. Ingresa nuevamente a KineCheck.");
+      await validateLicense(session, slug);
+
+      const payload = {
+        type: HANDOFF_TYPE,
+        issuedAt: Date.now(),
+        product: slug,
+        session: {
+          access_token: session.access_token,
+          expires_at: Number(session.expires_at || tokenExpiry(session.access_token) || 0),
+          expires_in: Number(session.expires_in || 0) || null,
+          token_type: session.token_type || "bearer",
+          handoff_access_only: true,
+        },
+      };
+
+      const destination = new URL(course.url, window.location.href);
+      destination.hash = new URLSearchParams({
+        kc_handoff: encodeBase64Url(JSON.stringify(payload)),
+      }).toString();
+      window.name = "";
+      window.location.assign(destination.toString());
+    } catch (error) {
+      if (button) {
+        button.removeAttribute("aria-busy");
+        if (button.dataset.kcOriginalText) button.textContent = button.dataset.kcOriginalText;
+        button.style.pointerEvents = "";
+      }
+      toast(error?.message || "No fue posible abrir el curso. Vuelve a intentarlo.");
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-course]");
+    if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
+    const slug = String(button.dataset.course || "").trim();
+    if (!EXTERNAL.has(slug)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    openExternal(slug, button);
+  }, true);
+})();
