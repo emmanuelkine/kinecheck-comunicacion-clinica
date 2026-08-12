@@ -45,14 +45,14 @@ jobs:
             ['Academy', 'https://kinecheck.cl/academy/?qa=live-current', ['Ingresa a KineCheck', 'Correo utilizado en la compra', 'Olvidé mi contraseña']],
           ];
           const details = [
-            ['KineCheck Clínico', 'kinecheck-clinico', '$39.990'],
-            ['KineCheck Estudiante', 'kinecheck-estudiante', '$14.990'],
-            ['KineCheck Recupera', 'kinecheck-recupera', '$9.990'],
-            ['Comunicación Clínica', 'comunicacion-clinica', '$19.900'],
-            ['Más allá del dolor', 'mas-alla-del-dolor', '$39.990'],
-            ['Evidencia Aplicada', 'evidencia-aplicada', '$29.990'],
-            ['Traumatología y Ortopedia Clínica', 'traumatologia-ortopedia-clinica', '$35.900'],
-            ['Pack KineCheck Estudiante', 'pack-estudiante', '$49.900'],
+            ['KineCheck Clínico', 'kinecheck-clinico', '$39.990', 'https://pay.hotmart.com/L106791841D'],
+            ['KineCheck Estudiante', 'kinecheck-estudiante', '$14.990', 'https://pay.hotmart.com/G106801166S'],
+            ['KineCheck Recupera', 'kinecheck-recupera', '$9.990', 'https://pay.hotmart.com/P106806251E'],
+            ['Comunicación Clínica', 'comunicacion-clinica', '$19.900', 'https://pay.hotmart.com/T106883983U'],
+            ['Más allá del dolor', 'mas-alla-del-dolor', '$39.990', 'https://pay.hotmart.com/W106888386Q'],
+            ['Evidencia Aplicada', 'evidencia-aplicada', '$29.990', 'https://pay.hotmart.com/F106921972I'],
+            ['Traumatología y Ortopedia Clínica', 'traumatologia-ortopedia-clinica', '$35.900', 'https://pay.hotmart.com/B106913952R'],
+            ['Pack KineCheck Estudiante', 'pack-estudiante', '$49.900', 'https://pay.hotmart.com/Q106891608M'],
           ];
           const forbidden = /Creado y dirigido por|Magíster en Docencia|97,1\/100|testimonio ficticio/i;
 
@@ -76,7 +76,7 @@ jobs:
             const page = await context.newPage();
             let lastError;
 
-            for (let attempt = 1; attempt <= 18; attempt += 1) {
+            for (let attempt = 1; attempt <= 12; attempt += 1) {
               try {
                 for (const [label, url, expected] of pages) {
                   const response = await page.goto(`${url}&attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
@@ -88,14 +88,25 @@ jobs:
                   if (forbidden.test(text)) throw new Error(`${label}: apareció contenido retirado o no verificable.`);
                 }
 
-                for (const [name, slug, price] of details) {
+                for (const [name, slug, price, checkout] of details) {
                   const url = `https://kinecheck.cl/productos/?producto=${encodeURIComponent(slug)}&qa=live-current&attempt=${attempt}&ts=${Date.now()}`;
                   const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
                   if (!response || response.status() >= 500) throw new Error(`${name}: ficha respondió ${response?.status() ?? 'sin respuesta'}.`);
                   const text = await textOf(page);
-                  if (!includesVisualText(text, name) || !includesVisualText(text, price) || !includesVisualText(text, 'Comprar en Hotmart') || !includesVisualText(text, 'Ya compré: ingresar')) {
-                    throw new Error(`${name}: ficha pública incompleta.`);
+                  if (!includesVisualText(text, name) || !includesVisualText(text, price)) {
+                    throw new Error(`${name}: nombre o precio no visible.`);
                   }
+
+                  const checkoutLinks = await page.locator('[data-checkout]').evaluateAll(nodes => nodes.map(node => node.href));
+                  if (!checkoutLinks.includes(checkout)) {
+                    throw new Error(`${name}: checkout Hotmart renderizado no coincide.`);
+                  }
+
+                  const accessLinks = await page.locator('[data-access]').evaluateAll(nodes => nodes.map(node => node.href));
+                  if (!accessLinks.length || accessLinks.some(href => !href.startsWith('https://kinecheck.cl/academy/'))) {
+                    throw new Error(`${name}: acceso privado no apunta a Academy.`);
+                  }
+
                   if (forbidden.test(text)) throw new Error(`${name}: apareció contenido retirado o no verificable.`);
                 }
 
