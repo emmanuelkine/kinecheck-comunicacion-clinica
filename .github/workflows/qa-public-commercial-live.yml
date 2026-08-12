@@ -59,6 +59,9 @@ jobs:
           async function textOf(page) {
             return (await page.locator('body').innerText()).replace(/\s+/g, ' ');
           }
+          function includesVisualText(text, expected) {
+            return text.toLocaleLowerCase('es-CL').includes(expected.toLocaleLowerCase('es-CL'));
+          }
 
           (async () => {
             const browser = await chromium.launch({ headless: true });
@@ -80,7 +83,7 @@ jobs:
                   if (!response || response.status() >= 500) throw new Error(`${label} respondió ${response?.status() ?? 'sin respuesta'}.`);
                   const text = await textOf(page);
                   for (const item of expected) {
-                    if (!text.includes(item)) throw new Error(`${label}: falta “${item}”.`);
+                    if (!includesVisualText(text, item)) throw new Error(`${label}: falta “${item}”.`);
                   }
                   if (forbidden.test(text)) throw new Error(`${label}: apareció contenido retirado o no verificable.`);
                 }
@@ -90,7 +93,7 @@ jobs:
                   const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
                   if (!response || response.status() >= 500) throw new Error(`${name}: ficha respondió ${response?.status() ?? 'sin respuesta'}.`);
                   const text = await textOf(page);
-                  if (!text.includes(name) || !text.includes(price) || !text.includes('Comprar en Hotmart') || !text.includes('Ya compré: ingresar')) {
+                  if (!includesVisualText(text, name) || !includesVisualText(text, price) || !includesVisualText(text, 'Comprar en Hotmart') || !includesVisualText(text, 'Ya compré: ingresar')) {
                     throw new Error(`${name}: ficha pública incompleta.`);
                   }
                   if (forbidden.test(text)) throw new Error(`${name}: apareció contenido retirado o no verificable.`);
