@@ -40,6 +40,14 @@
   Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260811-tools1>; rel=preload; as=style
   X-Robots-Tag: noindex, nofollow
 
+/academy/mas-alla-del-dolor.html
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
+
+/academy/mas-alla-del-dolor-shell-v1.js
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
+
 /academy/*.html
   Cache-Control: no-cache, must-revalidate
 
@@ -91,7 +99,7 @@
   Cache-Control: public, max-age=3600, must-revalidate
 
 /404.html
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=3600
   X-Robots-Tag: noindex, follow
 
 /robots.txt
