@@ -36,9 +36,7 @@ async function checkSource() {
   const professionals = await read("profesionales/index.html");
   const students = await read("estudiantes/index.html");
   const recovery = await read("recupera/index.html");
-  const product = await read("productos/product.js");
-  const productPage = await read("productos/index.html");
-  const productExperience = await read("productos/product-experience-unification-v1.js");
+  const legacyProductPage = await read("productos/index.html");
   const platformPage = await read("platform/index.html");
   const platformRedirect = await read("platform/redirect-to-mi-kinecheck-v1.js");
   const academyPage = await read("academy/index.html");
@@ -50,15 +48,23 @@ async function checkSource() {
 
   const prices = priceData.products || {};
   const publicCatalog = `${professionals}\n${students}\n${recovery}`;
+  const productPages = new Map();
+  for (const [slug] of products) productPages.set(slug, await read(`productos/${slug}/index.html`));
 
   for (const [slug, name, checkout, expectedPrice, displayPrice] of products) {
+    const page = productPages.get(slug) || "";
+    const canonical = `https://kinecheck.cl/productos/${slug}/`;
     const priceMatches = prices[slug]?.price === expectedPrice;
-    const checkoutMapped = product.includes(`"${slug}"`) && product.includes(checkout) && publicCatalog.includes(checkout);
-    const displayMapped = publicCatalog.includes(`${displayPrice} CLP`);
+    const checkoutMapped = page.includes(checkout) && publicCatalog.includes(checkout);
+    const displayMapped = page.includes(`${displayPrice} CLP`) && publicCatalog.includes(`${displayPrice} CLP`);
+    const canonicalMapped = page.includes(`<link rel="canonical" href="${canonical}">`);
+    const academyMapped = page.includes("../../academy/") && !page.includes("../platform/");
     record(
       `Source mapping ${name}`,
-      priceMatches && checkoutMapped && displayMapped ? "PASS" : "FAIL",
-      priceMatches && checkoutMapped && displayMapped ? "slug, checkout and Chile price match" : "missing or inconsistent public mapping",
+      priceMatches && checkoutMapped && displayMapped && canonicalMapped && academyMapped ? "PASS" : "FAIL",
+      priceMatches && checkoutMapped && displayMapped && canonicalMapped && academyMapped
+        ? "price, checkout, canonical and Academy access match"
+        : "missing or inconsistent canonical commercial mapping",
     );
   }
 
@@ -112,9 +118,16 @@ async function checkSource() {
     && !`${home}\n${publicCatalog}`.includes("$59.900");
   record("Verified pack price", packSavingValid ? "PASS" : "FAIL", "Pack price and verified saving data remain consistent with commercial source");
 
-  const legalLinksPresent = ["../legal/terminos.html", "../legal/privacidad.html", "../legal/reembolsos.html"]
-    .every((href) => productPage.includes(href));
-  record("Product page legal links", legalLinksPresent ? "PASS" : "FAIL", legalLinksPresent ? "terms, privacy and refunds are visible" : "one or more legal links are missing");
+  const legalLinksPresent = [...productPages.values()].every((page) => [
+    "../../legal/terminos.html",
+    "../../legal/privacidad.html",
+    "../../legal/reembolsos.html",
+  ].every((href) => page.includes(href)));
+  record("Product page legal links", legalLinksPresent ? "PASS" : "FAIL", legalLinksPresent ? "all canonical products link terms, privacy and refunds" : "one or more canonical product legal links are missing");
+
+  const legacyCompatibility = /noindex,follow/i.test(legacyProductPage)
+    && legacyProductPage.includes("product-legacy-router-v1.js");
+  record("Legacy product compatibility", legacyCompatibility ? "PASS" : "FAIL", "legacy product endpoint must remain noindex and route to canonical pages");
 
   const platformIsRedirect = platformPage.includes("../academy/")
     && /http-equiv="refresh"/i.test(platformPage)
@@ -123,12 +136,14 @@ async function checkSource() {
   record("Legacy platform route", platformIsRedirect ? "PASS" : "FAIL", "legacy /platform/ must redirect cleanly to the canonical /academy/ entry point");
 
   const academyLoginPresent = academyPage.includes('id="login-view"')
-    && academyPage.includes("academy-v39.js");
-  record("Canonical Academy entry", academyLoginPresent ? "PASS" : "FAIL", "canonical /academy/ must contain the login shell and active runtime");
+    && academyPage.includes("academy-v39.js")
+    && academyPage.includes("academy-open-v6.js")
+    && academyPage.includes("academy-owned-native-bridge-v1.js")
+    && academyPage.includes("../metrics-v1.js");
+  record("Canonical Academy entry", academyLoginPresent ? "PASS" : "FAIL", "canonical /academy/ must contain login shell, secure product runtime and launch metrics");
 
-  const cleanProductAccess = productExperience.includes('new URL("../academy/"')
-    && !productExperience.includes("20260806-final5");
-  record("Product access route", cleanProductAccess ? "PASS" : "FAIL", "product pages must rewrite private access directly to /academy/ without retired version parameters");
+  const cleanProductAccess = [...productPages.values()].every((page) => page.includes("../../academy/"));
+  record("Product access route", cleanProductAccess ? "PASS" : "FAIL", "canonical product pages must route owned access directly to /academy/");
 
   record("Automated support source", supportPage.includes('id="support-form"') && supportScript.includes("support-request") ? "PASS" : "FAIL", "support portal must submit to diagnostic endpoint");
   record("Private automation source", adminPage.includes('id="admin-login"') && adminScript.includes("automation-status") && adminScript.includes("automation-control") ? "PASS" : "FAIL", "admin portal must use protected status and control endpoints");
@@ -139,7 +154,7 @@ async function fetchWithTimeout(url, options = {}, timeout = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/2.2", ...(options.headers || {}) } });
+    return await fetch(url, { ...options, signal: controller.signal, headers: { "User-Agent": "KineCheck-QA/3.0", ...(options.headers || {}) } });
   } finally {
     clearTimeout(timer);
   }
@@ -172,7 +187,7 @@ async function checkLive() {
   await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "Información primero. Compra después."]);
   await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "RECOMENDADO"]);
   await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "$9.990 CLP", "Acceso por 3 meses"]);
-  await checkPage("Canonical Academy", "/academy/?qa=commercial-current", ['id="login-view"', "academy-v39.js"]);
+  await checkPage("Canonical Academy", "/academy/?qa=commercial-current", ['id="login-view"', "academy-v39.js", "academy-open-v6.js", "academy-owned-native-bridge-v1.js", "../metrics-v1.js"]);
   await checkPage("Legacy platform redirect shell", "/platform/?qa=commercial-current", ["Abriendo Mi KineCheck", "../academy/"]);
   await checkPage("Terms", "/legal/terminos.html", ["Términos y condiciones", "KineCheck"]);
   await checkPage("Privacy", "/legal/privacidad.html", ["Política de privacidad", "Ley N.º 21.719"]);
@@ -181,8 +196,13 @@ async function checkLive() {
   await checkPage("Automated support", "/soporte/", ["DIAGNÓSTICO AUTOMÁTICO", 'id="support-form"']);
   await checkPage("Private automation portal", "/admin/", ["Centro de automatización", 'id="admin-login"']);
 
-  for (const [slug, name, checkout] of products) {
-    await checkPage(`Product detail ${name}`, `/productos/?producto=${encodeURIComponent(slug)}`, ['id="product-title"', "Comprar en Hotmart", "Ya compré: ingresar"]);
+  for (const [slug, name, checkout, , displayPrice] of products) {
+    const canonical = `https://kinecheck.cl/productos/${slug}/`;
+    await checkPage(
+      `Product detail ${name}`,
+      `/productos/${encodeURIComponent(slug)}/?qa=commercial-current`,
+      [name, `${displayPrice} CLP`, checkout, canonical, "../../academy/"],
+    );
     await checkCheckout(name, checkout);
   }
 }
@@ -195,7 +215,7 @@ const report = {
   baseUrl,
   failures,
   results,
-  note: "Automated certification validates public routes, prices, checkout reachability and Academy entry. It does not replace a controlled paid Hotmart transaction followed by webhook, authenticated license, refund and chargeback tests.",
+  note: "Automated certification validates canonical public routes, Chile prices, checkout reachability, legal links and Academy entry. It does not replace a controlled paid Hotmart transaction followed by webhook, authenticated license, refund and chargeback tests.",
 };
 await fs.writeFile("qa-commercial-report.json", JSON.stringify(report, null, 2));
 
