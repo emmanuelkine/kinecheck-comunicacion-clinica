@@ -20,7 +20,7 @@ on:
       - "productos/**"
       - "academy/**"
       - "platform/**"
-      - "tests/launch-readiness-public.spec.mjs"
+      - "tests/public-canonical-readiness.spec.mjs"
       - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
@@ -43,7 +43,7 @@ on:
       - "productos/**"
       - "academy/**"
       - "platform/**"
-      - "tests/launch-readiness-public.spec.mjs"
+      - "tests/public-canonical-readiness.spec.mjs"
       - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
@@ -81,7 +81,7 @@ jobs:
           sleep 2
           BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
           NO_JS=1 BASE_URL=http://127.0.0.1:4173 node tests/product-overflow-diagnostic.mjs
-          BASE_URL=http://127.0.0.1:4173 node tests/launch-readiness-public.spec.mjs
+          BASE_URL=http://127.0.0.1:4173 node tests/public-canonical-readiness.spec.mjs
       - name: Diagnosticar overflow móvil de productos en producción
         if: github.event_name != 'pull_request'
         env:
@@ -96,8 +96,8 @@ jobs:
         run: |
           for attempt in $(seq 1 12); do
             echo "Intento ${attempt}/12"
-            if node tests/launch-readiness-public.spec.mjs; then
-              echo "QA pública multidispositivo aprobada." >> "$GITHUB_STEP_SUMMARY"
+            if node tests/public-canonical-readiness.spec.mjs; then
+              echo "QA pública canónica multidispositivo aprobada." >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi
             sleep 10
