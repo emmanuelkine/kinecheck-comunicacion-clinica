@@ -81,7 +81,8 @@ jobs:
             for (let attempt = 1; attempt <= 12; attempt += 1) {
               try {
                 for (const [label, url, expected] of pages) {
-                  const response = await page.goto(`${url}&attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
+                  const separator = url.includes('?') ? '&' : '?';
+                  const response = await page.goto(`${url}${separator}attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
                   if (!response || response.status() >= 500) throw new Error(`${label} respondió ${response?.status() ?? 'sin respuesta'}.`);
                   const text = await textOf(page);
                   for (const item of expected) {
@@ -102,7 +103,7 @@ jobs:
                 if ((await page.locator('#pain-value').innerText()).trim() !== '6') throw new Error('Demo: el seguimiento simulado no actualiza valores.');
 
                 for (const [name, slug, price, checkout] of details) {
-                  const url = `https://kinecheck.cl/productos/?producto=${encodeURIComponent(slug)}&qa=live-current&attempt=${attempt}&ts=${Date.now()}`;
+                  const url = `https://kinecheck.cl/productos/${encodeURIComponent(slug)}/?qa=live-current&attempt=${attempt}&ts=${Date.now()}`;
                   const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
                   if (!response || response.status() >= 500) throw new Error(`${name}: ficha respondió ${response?.status() ?? 'sin respuesta'}.`);
                   const text = await textOf(page);
@@ -110,20 +111,25 @@ jobs:
                     throw new Error(`${name}: nombre o precio no visible.`);
                   }
 
-                  const checkoutLinks = await page.locator('[data-checkout]').evaluateAll(nodes => nodes.map(node => node.href));
+                  const checkoutLinks = await page.locator('a').evaluateAll(nodes => nodes.map(node => node.href).filter(Boolean));
                   if (!checkoutLinks.includes(checkout)) {
-                    throw new Error(`${name}: checkout Hotmart renderizado no coincide.`);
+                    throw new Error(`${name}: checkout Hotmart canónico no coincide.`);
                   }
 
-                  const accessLinks = await page.locator('[data-access]').evaluateAll(nodes => nodes.map(node => node.href));
-                  if (!accessLinks.length || accessLinks.some(href => !href.startsWith('https://kinecheck.cl/academy/'))) {
-                    throw new Error(`${name}: acceso privado no apunta a Academy.`);
+                  if (!checkoutLinks.some(href => href.startsWith('https://kinecheck.cl/academy/'))) {
+                    throw new Error(`${name}: la ficha no contiene acceso a Academy.`);
+                  }
+
+                  const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+                  const expectedCanonical = `https://kinecheck.cl/productos/${slug}/`;
+                  if (canonical !== expectedCanonical) {
+                    throw new Error(`${name}: canonical incorrecta (${canonical}).`);
                   }
 
                   if (forbidden.test(text)) throw new Error(`${name}: apareció contenido retirado o no verificable.`);
                 }
 
-                console.log(`QA comercial público y demo aprobados en el intento ${attempt}.`);
+                console.log(`QA comercial público, fichas canónicas y demo aprobados en el intento ${attempt}.`);
                 await browser.close();
                 return;
               } catch (error) {
