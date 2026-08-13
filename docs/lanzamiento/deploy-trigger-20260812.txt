@@ -1,0 +1,3 @@
+KineCheck public audit production deploy trigger.
+Canonical product pages, refund policy, sitemap and cache revalidation are expected from main.
+Commit date: 2026-08-12 America/Santiago.
