@@ -40,19 +40,22 @@ test("Recupera exige consentimiento expreso para datos de salud", () => {
   assert.match(headers, /\/recupera\/consentimiento\.html[\s\S]*?Cache-Control:\s*private, no-store/);
 });
 
-test("KineCheck Clinico mantiene posicionamiento curso + guia", () => {
+test("KineCheck Clinico mantiene posicionamiento curso + guia en su ficha canonica", () => {
   const home = read("index.html");
+  const product = read("productos/kinecheck-clinico/index.html");
   const professionals = read("profesionales/index.html");
   const terms = read("legal/terminos.html");
   const brand = read("docs/brand-architecture.md");
-  const reposition = read("productos/product-clinico-reposition-v1.js");
-  assert.match(home, /KINECHECK FORMACIÓN[\s\S]*?KineCheck Clínico/);
+
+  assert.match(home, /href="\.\/productos\/kinecheck-clinico\/"[\s\S]*?KineCheck Clínico/);
+  assert.match(product, /curso profesional de evaluación, seguridad y razonamiento musculoesquelético con guía digital complementaria/i);
+  assert.match(product, /El curso es el centro del producto; la guía digital complementaria/i);
+  assert.match(product, /<link rel="canonical" href="https:\/\/kinecheck\.cl\/productos\/kinecheck-clinico\/">/);
   assert.match(professionals, /curso profesional avanzado de evaluación, seguridad y razonamiento musculoesquelético/i);
   assert.match(professionals, /guía digital complementaria/i);
   assert.doesNotMatch(professionals, /Registro kinésico profesional/i);
   assert.match(terms, /KineCheck Clínico:<\/strong> curso profesional avanzado/i);
   assert.match(brand, /### KineCheck Formación[\s\S]*?KineCheck Clínico/);
-  assert.match(reposition, /product-family"\)\.textContent = "KINECHECK FORMACIÓN"/);
 });
 
 test("sitemap publica audiencias y fichas SEO canonicas", () => {
