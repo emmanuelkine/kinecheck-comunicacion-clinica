@@ -11,18 +11,24 @@ try {
     viewport: { width: 390, height: 844 },
     locale: "es-CL",
     timezoneId: "America/Santiago",
+    extraHTTPHeaders: {
+      "Cache-Control": "no-cache, no-store, max-age=0",
+      Pragma: "no-cache",
+    },
   });
   const page = await context.newPage();
-  await page.goto(`${BASE}/productos/?qa=overflow-${NO_JS ? "nojs" : "js"}-${Date.now()}`, {
+  const target = `${BASE}/productos/kinecheck-clinico/?qa=overflow-${NO_JS ? "nojs" : "js"}-${Date.now()}`;
+  const response = await page.goto(target, {
     waitUntil: NO_JS ? "domcontentloaded" : "networkidle",
     timeout: 60000,
   });
-  if (!NO_JS) {
-    await page.waitForFunction(() => {
-      const title = document.querySelector("#product-title")?.textContent || "";
-      return title.includes("KineCheck Clínico") && Boolean(document.querySelector(".product-detail-price"));
-    }, { timeout: 15000 });
-  }
+  assert.ok(response && response.status() < 500, `La ficha canónica respondió ${response?.status() ?? "sin respuesta"}`);
+
+  const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+  assert.ok(text.includes("KineCheck Clínico"), "La ficha canónica no muestra KineCheck Clínico");
+  assert.ok(text.includes("$39.990 CLP"), "La ficha canónica no muestra el precio esperado");
+  const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+  assert.equal(canonical, "https://kinecheck.cl/productos/kinecheck-clinico/");
 
   const result = await page.evaluate(() => {
     const viewport = document.documentElement.clientWidth;
@@ -50,7 +56,6 @@ try {
       .slice(0, 25);
 
     return {
-      mode: document.documentElement.classList.contains("js") ? "js" : "no-js",
       viewport,
       documentScrollWidth: document.documentElement.scrollWidth,
       bodyScrollWidth: document.body.scrollWidth,
@@ -58,10 +63,10 @@ try {
     };
   });
 
-  console.log(JSON.stringify(result, null, 2));
+  console.log(JSON.stringify({ mode: NO_JS ? "no-js" : "js", target, ...result }, null, 2));
   assert.ok(
     result.documentScrollWidth <= result.viewport + 3,
-    `Overflow móvil (${NO_JS ? "sin JS" : "con JS"}) en /productos/: ${result.documentScrollWidth}/${result.viewport}`,
+    `Overflow móvil (${NO_JS ? "sin JS" : "con JS"}) en ficha canónica: ${result.documentScrollWidth}/${result.viewport}`,
   );
   await context.close();
 } finally {
