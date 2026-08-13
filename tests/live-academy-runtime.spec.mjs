@@ -25,7 +25,7 @@ function collectUnexpectedConsoleErrors(page) {
 
 function withoutFakeTokenCourseKeyNoise(errors) {
   return errors.filter((text) => !(
-    /status of 401 \(Unauthorized\)/i.test(text)
+    /status of 401(?:\s|\(|$)/i.test(text)
     && /\/functions\/v1\/course-key(?:\s|$|\?)/i.test(text)
   ));
 }
@@ -97,8 +97,8 @@ test("Mis productos registra el toque, usa el opener real y completa una navegac
     if (dashboard) dashboard.hidden = false;
 
     // Token deliberadamente ficticio: basta para probar el transporte de sesión
-    // y navegación. WebKit puede registrar el 401 del chequeo de course-key en
-    // consola aunque el destino QA se complete correctamente.
+    // y navegación. Los motores pueden registrar el 401 del chequeo de course-key
+    // en consola aunque el destino QA se complete correctamente.
     const session = {
       access_token: "qa-access-token-for-runtime-navigation",
       expires_at: Math.floor(Date.now() / 1000) + 3600,
