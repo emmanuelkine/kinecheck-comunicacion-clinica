@@ -71,13 +71,13 @@ record(robotsSource.includes("Sitemap: https://kinecheck.cl/sitemap.xml"), "Robo
 record(robotsSource.includes("Disallow: /admin/") && robotsSource.includes("Disallow: /platform/"), "Private routes excluded from crawlers");
 
 const sitemapSource = await read("sitemap.xml");
-for (const path of ["/", "/productos/", "/ayuda/", "/bienvenida/", "/soporte/", "/legal/terminos.html", "/legal/privacidad.html", "/legal/reembolsos.html"]) {
+for (const path of ["/", "/productos/kinecheck-clinico/", "/ayuda/", "/bienvenida/", "/soporte/", "/legal/terminos.html", "/legal/privacidad.html", "/legal/reembolsos.html"]) {
   record(sitemapSource.includes(`<loc>https://kinecheck.cl${path}</loc>`), `Sitemap includes ${path}`);
 }
 
 const publicPaths = [
   "/",
-  "/productos/?producto=kinecheck-clinico",
+  "/productos/kinecheck-clinico/",
   "/ayuda/",
   "/bienvenida/?producto=kinecheck-clinico",
   "/soporte/",
