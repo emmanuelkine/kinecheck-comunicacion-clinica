@@ -51,7 +51,7 @@ test("KineCheck Clinico mantiene posicionamiento curso + guia en su ficha canoni
   assert.match(product, /curso profesional de evaluación, seguridad y razonamiento musculoesquelético con guía digital complementaria/i);
   assert.match(product, /El curso es el centro del producto; la guía digital complementaria/i);
   assert.match(product, /<link rel="canonical" href="https:\/\/kinecheck\.cl\/productos\/kinecheck-clinico\/">/);
-  assert.match(professionals, /curso profesional avanzado de evaluación, seguridad y razonamiento musculoesquelético/i);
+  assert.match(professionals, /curso profesional avanzado de evaluación musculoesquelética, seguridad y razonamiento clínico/i);
   assert.match(professionals, /guía digital complementaria/i);
   assert.doesNotMatch(professionals, /Registro kinésico profesional/i);
   assert.match(terms, /KineCheck Clínico:<\/strong> curso profesional avanzado/i);
