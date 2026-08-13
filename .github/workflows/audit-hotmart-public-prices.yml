@@ -1,6 +1,6 @@
 name: Auditar precios públicos Hotmart
 
-# Verificación manual solicitada el 2026-08-06.
+# Revalidación externa solicitada para el cierre técnico del 2026-08-13.
 on:
   push:
     branches: [main]
