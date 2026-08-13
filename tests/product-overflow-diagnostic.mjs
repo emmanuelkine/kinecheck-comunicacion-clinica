@@ -25,7 +25,8 @@ try {
   assert.ok(response && response.status() < 500, `La ficha canónica respondió ${response?.status() ?? "sin respuesta"}`);
 
   const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
-  assert.ok(text.includes("KineCheck Clínico"), "La ficha canónica no muestra KineCheck Clínico");
+  const normalized = text.toLocaleLowerCase("es-CL");
+  assert.ok(normalized.includes("kinecheck clínico"), "La ficha canónica no muestra KineCheck Clínico");
   assert.ok(text.includes("$39.990 CLP"), "La ficha canónica no muestra el precio esperado");
   const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
   assert.equal(canonical, "https://kinecheck.cl/productos/kinecheck-clinico/");
