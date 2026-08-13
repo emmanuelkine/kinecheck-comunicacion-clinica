@@ -31,6 +31,7 @@
   Cache-Control: private, no-store, max-age=0
 
 /productos/*
+  Cache-Control: no-cache, must-revalidate
   Content-Security-Policy: frame-ancestors 'none'
 
 /admin/*
@@ -111,7 +112,7 @@
   Cache-Control: no-cache, must-revalidate
 
 /legal/*
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 
 /404.html
   Cache-Control: public, max-age=3600
