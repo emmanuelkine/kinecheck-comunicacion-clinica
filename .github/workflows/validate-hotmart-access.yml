@@ -1,0 +1,37 @@
+name: Validate Hotmart access consistency
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "supabase/migrations/**"
+      - "supabase/functions/hotmart-webhook/**"
+      - "tests/hotmart-access-regression.test.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/validate-hotmart-access.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - "supabase/functions/hotmart-webhook/**"
+      - "tests/hotmart-access-regression.test.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/validate-hotmart-access.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hotmart-access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run test:hotmart
