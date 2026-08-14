@@ -219,12 +219,34 @@ pase final.
    real controlada. Ante un fallo, detener la prueba comercial y preferir una
    corrección hacia adelante; no eliminar la auditoría ya capturada.
 
+## Estado de staging remoto
+
+`STAGING_REMOTE = BLOCKED_BY_PLAN`
+
+La organización actual no dispone de Supabase Branching ni de otro proyecto de
+staging. El bloqueo corresponde exclusivamente a la limitación del plan actual;
+no es un fallo técnico del parche, de las migraciones ni de los tests. No se
+reintentará crear una branch ni se cambiará el plan durante esta fase.
+
+## Rollback
+
+Mientras el parche siga sólo en Git, el rollback consiste en revertir primero
+el commit documental y luego el funcional. No existe estado de base que
+restaurar porque producción no fue modificada.
+
+Después de un despliegue futuro, cualquier rollback debe hacerse mediante una
+nueva migración forward: retirar el trigger de consistencia si fuera el origen,
+restaurar las definiciones previas de `has_course_access()` y del rollup, y
+conservar la tabla de auditoría y su historial. Las cinco funciones operativas
+versionadas no requieren rollback porque coinciden con producción.
+
 ## Gate recomendado
 
-**NO-GO para producción en este momento**: el cambio está listo para revisión,
-pero aún no se ha aplicado en una branch/staging equivalente a producción ni se
-han ejecutado advisors post-migración. Tras superar esos dos gates y un ciclo
-sintético A/B completo, la recomendación cambia a **GO controlado** para una
-única compra real con correo nuevo, seguida de comprobación de acceso. El
-reembolso debe probarse sólo cuando se haya registrado el estado esperado y
-exista un plan de observación de webhook, compra, licencia y rollup.
+`LOCAL_PATCH = GO`
+
+`PRODUCTION_DEPLOY = GO_CON_CONDICION`
+
+Condición: una revisión humana final del diff y de las dos migraciones antes de
+aplicarlas. Inmediatamente después del despliegue se deben ejecutar advisors,
+invariantes, rollup y la matriz sintética sin compra real. Cualquier hallazgo
+nuevo crítico detiene el despliegue antes de autorizar una compra controlada.
