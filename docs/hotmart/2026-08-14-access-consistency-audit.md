@@ -230,9 +230,9 @@ reintentará crear una branch ni se cambiará el plan durante esta fase.
 
 ## Rollback
 
-Mientras el parche siga sólo en Git, el rollback consiste en revertir primero
-el commit documental y luego el funcional. No existe estado de base que
-restaurar porque producción no fue modificada.
+Mientras el parche siga sólo en Git, el rollback consiste en revertir los
+commits documentales en orden inverso y luego el funcional. No existe estado de
+base que restaurar porque producción no fue modificada.
 
 Después de un despliegue futuro, cualquier rollback debe hacerse mediante una
 nueva migración forward: retirar el trigger de consistencia si fuera el origen,
@@ -244,9 +244,16 @@ versionadas no requieren rollback porque coinciden con producción.
 
 `LOCAL_PATCH = GO`
 
-`PRODUCTION_DEPLOY = GO_CON_CONDICION`
+`PRODUCTION_DEPLOY = NO_GO`
 
-Condición: una revisión humana final del diff y de las dos migraciones antes de
-aplicarlas. Inmediatamente después del despliegue se deben ejecutar advisors,
-invariantes, rollup y la matriz sintética sin compra real. Cualquier hallazgo
-nuevo crítico detiene el despliegue antes de autorizar una compra controlada.
+El staging remoto fue definido como gate obligatorio y no existe actualmente
+otro mecanismo aislado equivalente que reproduzca Supabase con fidelidad
+suficiente. La validación local con PGlite respalda `LOCAL_PATCH = GO`, pero no
+autoriza por sí sola un despliegue a producción.
+
+Para reconsiderar este `NO_GO` se debe disponer de staging remoto o de un
+entorno aislado equivalente, aplicar y reaplicar las dos migraciones, ejecutar
+advisors antes y después, el workflow completo y la matriz sintética. Sólo si
+ese gate queda verde corresponde hacer la revisión humana final del diff y
+definir un nuevo gate de producción. La compra real controlada continúa fuera
+de alcance hasta entonces.
