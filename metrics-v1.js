@@ -93,6 +93,28 @@
     if (path.startsWith("/platform/")) send("platform_login_view");
   }
 
+  function cleanAcademyTrackingParams() {
+    if (!location.pathname.startsWith("/academy/")) return;
+
+    const url = new URL(location.href);
+    const removableKeys = [];
+    url.searchParams.forEach((_, key) => {
+      const normalized = key.toLowerCase();
+      if (normalized.startsWith("utm_") || ["gclid", "fbclid", "msclkid"].includes(normalized)) {
+        removableKeys.push(key);
+      }
+    });
+
+    if (!removableKeys.length) return;
+    removableKeys.forEach((key) => url.searchParams.delete(key));
+
+    try {
+      history.replaceState(history.state, document.title, `${url.pathname}${url.search}${url.hash}`);
+    } catch {
+      // No recargamos ni alteramos autenticación si History API no está disponible.
+    }
+  }
+
   // El bridge de Academy captura en window y puede detener propagación antes de document.
   // Escuchar aquí garantiza que los toques de tarjetas proxy queden observables.
   window.addEventListener("click", (event) => {
@@ -132,6 +154,11 @@
 
   window.KINECHECK_METRIC = (eventName, options = {}) => send(String(eventName || ""), options);
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialEvent, { once: true });
-  else initialEvent();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initialEvent, { once: true });
+    document.addEventListener("DOMContentLoaded", cleanAcademyTrackingParams, { once: true });
+  } else {
+    initialEvent();
+    cleanAcademyTrackingParams();
+  }
 })();
