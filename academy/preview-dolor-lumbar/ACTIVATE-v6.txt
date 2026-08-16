@@ -1,0 +1,1 @@
+The preview index should load ./loader-v6.js. Existing main production files remain untouched.
