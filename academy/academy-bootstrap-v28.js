@@ -116,6 +116,23 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       url: "../traumatologia/?course=traumatologia-ortopedia-clinica&v=20260803-sessionfix2"
     },
     {
+      slug: "dolor-lumbar-persistente",
+      title: "Dolor Lumbar Persistente",
+      subtitle: "Razonamiento clínico, PROMs, evidencia, casos y progresión en una aplicación formativa premium.",
+      productId: "PENDIENTE_HOTMART",
+      icon: "DL",
+      kind: "course",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
+      modules: 9,
+      lessons: 54,
+      priceCLP: 39990,
+      accessMonths: 12,
+      status: "preparing",
+      url: "../dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=20260816-product1"
+    },
+    {
       slug: "kinecheck-lab-clinico",
       title: "KineCheck Lab Clínico",
       subtitle: "Simulación de razonamiento y decisiones clínicas.",
