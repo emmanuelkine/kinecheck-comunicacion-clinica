@@ -44,11 +44,12 @@ jobs:
             'mas-alla-del-dolor': { price: 39990, display: '$39.990', term: '12 meses' },
             'evidencia-aplicada': { price: 29990, display: '$29.990', term: '12 meses' },
             'traumatologia-ortopedia-clinica': { price: 35900, display: '$35.900', term: '12 meses' },
+            'dolor-lumbar-persistente': { price: 39990, display: '$39.990', term: '12 meses' },
             'pack-estudiante': { price: 49900, display: '$49.900', term: '12 meses' },
           };
           if (prices.country !== 'Chile' || prices.currency !== 'CLP') throw new Error('País o moneda incorrectos.');
           const rows = prices.products || {};
-          if (Object.keys(rows).length !== 8) throw new Error('Deben existir exactamente ocho productos en la fuente comercial.');
+          if (Object.keys(rows).length !== 9) throw new Error('Deben existir exactamente nueve productos en la fuente comercial.');
           for (const [slug, expectedRow] of Object.entries(expected)) {
             const row = rows[slug];
             if (!row) throw new Error(`Falta ${slug} en commercial-prices-cl.json.`);
@@ -59,7 +60,7 @@ jobs:
           if (rows['pack-estudiante']?.saving !== 5080 || rows['pack-estudiante']?.discountPercent !== 9.2) {
             throw new Error('El ahorro verificado del pack es incorrecto.');
           }
-          console.log('Fuente comercial: 8/8 productos CLP verificados.');
+          console.log('Fuente comercial: 9/9 productos CLP verificados.');
           NODE
 
       - name: Validar precios visibles en la arquitectura pública actual
@@ -75,6 +76,8 @@ jobs:
 
           // La portada se simplificó deliberadamente: solo muestra tres perfiles.
           // Los precios y checkouts oficiales viven dentro de cada perfil.
+          // Dolor Lumbar usa la clase compuesta "offer-price price", por eso no altera
+          // el conteo histórico de bloques class="price" pero sí se valida explícitamente.
           const expectedCounts = { home: 0, profesionales: 5, estudiantes: 4, recupera: 1 };
           for (const [pageName, expected] of Object.entries(expectedCounts)) {
             const blocks = (pages[pageName].match(/class="price"/g) || []).length;
@@ -83,12 +86,14 @@ jobs:
 
           const products = [
             ['profesionales', 'KineCheck Clínico', '$39.990 CLP', 'Acceso por 12 meses', 'L106791841D'],
+            ['profesionales', 'Dolor Lumbar Persistente', '$39.990 CLP', 'Acceso por 12 meses', 'W107198798E'],
             ['profesionales', 'Comunicación Clínica', '$19.900 CLP', 'Acceso por 12 meses', 'T106883983U'],
             ['profesionales', 'Más allá del Dolor', '$39.990 CLP', 'Acceso por 12 meses', 'W106888386Q'],
             ['profesionales', 'Evidencia Aplicada', '$29.990 CLP', 'Acceso por 12 meses', 'F106921972I'],
             ['profesionales', 'Traumatología y Ortopedia Clínica', '$35.900 CLP', 'Acceso por 12 meses', 'B106913952R'],
             ['estudiantes', 'KineCheck Estudiante', '$14.990 CLP', 'Acceso por 12 meses', 'G106801166S'],
             ['estudiantes', 'Pack KineCheck Estudiante', '$49.900 CLP', 'Acceso por 12 meses', 'Q106891608M'],
+            ['estudiantes', 'Dolor Lumbar Persistente', '$39.990 CLP', 'Acceso por 12 meses', 'W107198798E'],
             ['estudiantes', 'Comunicación Clínica', '$19.900 CLP', 'Acceso por 12 meses', 'T106883983U'],
             ['estudiantes', 'Evidencia Aplicada', '$29.990 CLP', 'Acceso por 12 meses', 'F106921972I'],
             ['recupera', 'KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses', 'P106806251E'],
