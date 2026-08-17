@@ -129,8 +129,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       lessons: 54,
       priceCLP: 39990,
       accessMonths: 12,
-      status: "active",
-      url: "../dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=20260817-review1"
+      status: "review",
+      url: "./dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=20260817-review2"
     },
     {
       slug: "kinecheck-lab-clinico",
@@ -147,6 +147,15 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     }
   ]
 });
+
+// During Hotmart external-area verification, expose review products to the
+// normal licensed-access runtime without declaring them commercially active.
+(() => {
+  const courses = window.KINECHECK_ACADEMY_CONFIG?.courses;
+  if (!Array.isArray(courses)) return;
+  const reviewCourse = courses.find((course) => course?.slug === "dolor-lumbar-persistente");
+  if (reviewCourse?.status === "review") reviewCourse.status = "active";
+})();
 
 (() => {
   if (window.__KINECHECK_APP_SSO_FORM_GUARD__) return;
