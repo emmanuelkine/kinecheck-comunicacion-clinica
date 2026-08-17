@@ -1,5 +1,5 @@
 -- KineCheck
--- Snapshot de producción actualizado: 2026-08-04
+-- Snapshot de producción actualizado: 2026-08-17
 -- Tabla: public.hotmart_product_grants
 --
 -- Este archivo contiene únicamente identificadores públicos de productos,
@@ -26,7 +26,8 @@ values
   (8195982, 'kinecheck-estudiante', 'Pack KineCheck Estudiante', 12),
   (8195982, 'mas-alla-del-dolor', 'Pack KineCheck Estudiante', 12),
   (8205453, 'traumatologia-ortopedia-clinica', null, 12),
-  (8208817, 'evidencia-aplicada', 'KineCheck Evidencia Aplicada', 12)
+  (8208817, 'evidencia-aplicada', 'KineCheck Evidencia Aplicada', 12),
+  (8330940, 'dolor-lumbar-persistente', 'KineCheck · Dolor Lumbar Persistente', 12)
 on conflict (product_id, course_slug) do update
 set
   product_name = excluded.product_name,
