@@ -1,6 +1,6 @@
 {
-  "version": "2026-08-06.2",
-  "auditedAt": "2026-08-06",
+  "version": "2026-08-17.1",
+  "auditedAt": "2026-08-17",
   "country": "Chile",
   "currency": "CLP",
   "source": "Precio base confirmado en el panel oficial de Hotmart para Chile",
@@ -54,6 +54,13 @@
       "display": "$35.900",
       "term": "12 meses",
       "installments": "Hasta 12 cuotas de $2.992"
+    },
+    "dolor-lumbar-persistente": {
+      "name": "Dolor Lumbar Persistente",
+      "price": 39990,
+      "display": "$39.990",
+      "term": "12 meses",
+      "installments": "Hotmart confirma las cuotas disponibles antes del pago"
     },
     "pack-estudiante": {
       "name": "Pack KineCheck Estudiante",
