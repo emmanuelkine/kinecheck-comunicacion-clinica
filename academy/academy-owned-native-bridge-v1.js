@@ -15,6 +15,7 @@
 
   const STUDENT_ORDER = [
     "kinecheck-estudiante",
+    "dolor-lumbar-persistente",
     "mas-alla-del-dolor",
     "comunicacion-clinica",
     "evidencia-aplicada",
@@ -30,6 +31,8 @@
     "mi-cuenta": "perfil",
   });
   const VIEWS = new Set(["inicio", "biblioteca", "herramientas", "perfil", "explorar"]);
+  let libraryReorderFrame = 0;
+  let libraryObserver = null;
 
   function toast(text) {
     const element = document.querySelector("#kc-toast");
@@ -144,6 +147,135 @@
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
+  }
+
+  function setGroupHeading(group, title, description, count) {
+    const heading = group?.querySelector(".course-group-heading");
+    if (!heading) return;
+    const titleNode = heading.querySelector("h3");
+    const descriptionNode = heading.querySelector("p");
+    const countNode = heading.querySelector(".course-group-count");
+    if (titleNode) titleNode.textContent = title;
+    if (descriptionNode) descriptionNode.textContent = description;
+    if (countNode) countNode.textContent = `${count} ${count === 1 ? "producto" : "productos"}`;
+  }
+
+  function createDiscoverGroup() {
+    const group = document.createElement("section");
+    group.className = "course-group";
+    group.dataset.courseGroup = "discover";
+    group.innerHTML = `
+      <div class="course-group-heading">
+        <div><h3>Otros productos KineCheck</h3><p>Formaciones y herramientas que puedes adquirir cuando las necesites.</p></div>
+        <span class="course-group-count">0 productos</span>
+      </div>
+      <div class="course-rail"></div>
+    `;
+    return group;
+  }
+
+  function cardOwned(card) {
+    const button = card?.querySelector("button[data-course]");
+    return Boolean(button && !button.disabled);
+  }
+
+  function organizeLibraryProducts() {
+    const grid = document.querySelector("#course-grid");
+    if (!grid) return;
+
+    // Espera a que la verificación de licencias termine para evitar reordenar
+    // tarjetas mientras aún están en estado transitorio.
+    const checking = [...grid.querySelectorAll(".status-badge")]
+      .some((badge) => /verificando/i.test(String(badge.textContent || "")));
+    if (checking) return;
+
+    const baseGroup = grid.querySelector('[data-course-group="not-started"]');
+    if (!baseGroup) return;
+    const baseRail = baseGroup.querySelector(".course-rail");
+    if (!baseRail) return;
+
+    let discoverGroup = grid.querySelector('[data-course-group="discover"]');
+    const discoverRail = discoverGroup?.querySelector(".course-rail") || null;
+    const cards = [
+      ...baseRail.querySelectorAll(":scope > .course-card"),
+      ...(discoverRail ? [...discoverRail.querySelectorAll(":scope > .course-card")] : []),
+    ];
+    if (!cards.length) return;
+
+    const owned = cards.filter(cardOwned);
+    const locked = cards.filter((card) => !cardOwned(card));
+    const startedGroup = grid.querySelector('[data-course-group="started"]');
+    const hasStarted = Boolean(startedGroup?.querySelector(".course-card"));
+
+    if (!owned.length) {
+      cards.forEach((card) => baseRail.appendChild(card));
+      if (discoverGroup) {
+        discoverGroup.remove();
+        discoverGroup = null;
+      }
+      setGroupHeading(
+        baseGroup,
+        hasStarted ? "Otros productos KineCheck" : "Tu biblioteca",
+        hasStarted
+          ? "Formaciones y herramientas disponibles para adquirir cuando las necesites."
+          : "Explora tus cursos, aplicaciones y herramientas disponibles.",
+        cards.length,
+      );
+      return;
+    }
+
+    owned.forEach((card) => baseRail.appendChild(card));
+    setGroupHeading(
+      baseGroup,
+      hasStarted ? "Listos para comenzar" : "Mis productos adquiridos",
+      hasStarted
+        ? "Productos incluidos en tu cuenta que aún no has iniciado."
+        : "Tus compras verificadas aparecen primero para que puedas comenzar de inmediato.",
+      owned.length,
+    );
+
+    if (!locked.length) {
+      discoverGroup?.remove();
+      return;
+    }
+
+    if (!discoverGroup) {
+      discoverGroup = createDiscoverGroup();
+      baseGroup.insertAdjacentElement("afterend", discoverGroup);
+    }
+    const nextDiscoverRail = discoverGroup.querySelector(".course-rail");
+    locked.forEach((card) => nextDiscoverRail.appendChild(card));
+    setGroupHeading(
+      discoverGroup,
+      "Otros productos KineCheck",
+      "Formaciones y herramientas que puedes adquirir cuando las necesites.",
+      locked.length,
+    );
+  }
+
+  function scheduleLibraryOrganization() {
+    if (libraryReorderFrame) return;
+    libraryReorderFrame = window.requestAnimationFrame(() => {
+      libraryReorderFrame = 0;
+      organizeLibraryProducts();
+    });
+  }
+
+  function startLibraryOrganizer() {
+    const grid = document.querySelector("#course-grid");
+    if (!grid || libraryObserver) {
+      scheduleLibraryOrganization();
+      return;
+    }
+
+    libraryObserver = new MutationObserver(scheduleLibraryOrganization);
+    libraryObserver.observe(grid, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["disabled", "class"],
+    });
+    scheduleLibraryOrganization();
   }
 
   function reconcileInteractionLocks() {
@@ -284,12 +416,17 @@
   window.addEventListener("pageshow", () => {
     window.KINECHECK_RESET_PRODUCT_NAVIGATION?.();
     reconcileInteractionLocks();
+    startLibraryOrganizer();
   });
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", reconcileInteractionLocks, { once: true });
+    document.addEventListener("DOMContentLoaded", () => {
+      reconcileInteractionLocks();
+      startLibraryOrganizer();
+    }, { once: true });
   } else {
     reconcileInteractionLocks();
+    startLibraryOrganizer();
   }
 
   const lockObserver = new MutationObserver(reconcileInteractionLocks);

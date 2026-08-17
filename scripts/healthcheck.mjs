@@ -14,6 +14,7 @@ const CHECKOUT_EXPECTATIONS = [
   { label: "Más allá del Dolor", url: "https://pay.hotmart.com/W106888386Q", keywords: ["más allá del dolor", "mas alla del dolor"] },
   { label: "KineCheck Evidencia Aplicada", url: "https://pay.hotmart.com/F106921972I", keywords: ["kinecheck evidencia aplicada", "evidencia aplicada", "razonamiento clínico con evidencia", "razonamiento clinico con evidencia"] },
   { label: "Traumatología y Ortopedia Clínica", url: "https://pay.hotmart.com/B106913952R", keywords: ["traumatología", "traumatologia", "ortopedia clínica", "ortopedia clinica"] },
+  { label: "Dolor Lumbar Persistente", url: "https://pay.hotmart.com/W107198798E", keywords: ["dolor lumbar persistente", "kinecheck"] },
 ];
 
 const PRODUCT_CHECKOUT_BY_ID = Object.freeze({
@@ -24,6 +25,7 @@ const PRODUCT_CHECKOUT_BY_ID = Object.freeze({
   "8194777": "https://pay.hotmart.com/W106888386Q",
   "8208817": "https://pay.hotmart.com/F106921972I",
   "8205453": "https://pay.hotmart.com/B106913952R",
+  "8330940": "https://pay.hotmart.com/W107198798E",
 });
 
 let failures = 0;
@@ -74,7 +76,7 @@ async function fetchWithTimeout(url, options = {}) {
       const response = await fetch(url, {
         redirect: "manual",
         headers: {
-          "user-agent": "KineCheck-Healthcheck/2.0",
+          "user-agent": "KineCheck-Healthcheck/2.1",
           ...(options.headers || {}),
         },
         ...options,
@@ -182,11 +184,13 @@ async function main() {
   const professionalPage = await fileText("profesionales/index.html");
   const studentPage = await fileText("estudiantes/index.html");
   const recoveryPage = await fileText("recupera/index.html");
-  const publicCommerce = [home, professionalPage, studentPage, recoveryPage].join("\n");
+  const lumbarProductPage = await fileText("productos/dolor-lumbar-persistente/index.html");
+  const publicCommerce = [home, professionalPage, studentPage, recoveryPage, lumbarProductPage].join("\n");
   const academyIndex = await fileText("academy/index.html");
   const academyConfig = await fileText("academy/academy-bootstrap-v28.js");
   const academyCore = await fileText("academy/academy-v39.js");
   const opener = await fileText("academy/academy-open-v6.js");
+  const ownedBridge = await fileText("academy/academy-owned-native-bridge-v1.js");
   const launchRouter = await fileText("academy/academy-launch-router-v4.js");
   const integrationGuard = await fileText("academy/academy-integration-guard-v4.js");
   const courseAuthGate = await fileText("auth-gate.js");
@@ -198,9 +202,11 @@ async function main() {
     ensureLocalFile("recupera/index.html"),
     ensureLocalFile("productos/index.html"),
     ensureLocalFile("productos/product.js"),
+    ensureLocalFile("productos/dolor-lumbar-persistente/index.html"),
     ensureLocalFile("academy/index.html"),
     ensureLocalFile("academy/academy-v39.js"),
     ensureLocalFile("academy/academy-open-v6.js"),
+    ensureLocalFile("academy/academy-owned-native-bridge-v1.js"),
     ensureLocalFile("academy/academy-launch-router-v4.js"),
     ensureLocalFile("academy/academy-integration-guard-v4.js"),
     ensureLocalFile("academy/salir.html"),
@@ -218,6 +224,14 @@ async function main() {
   const academyScriptMatch = academyIndex.match(/academy-v39\.js\?v=([A-Za-z0-9._-]+)/);
   if (!academyScriptMatch) logFail("Academy no apunta al runtime estable con una versión de caché válida.");
   else logOk(`Academy utiliza el runtime estable con caché v${academyScriptMatch[1]}.`);
+
+  if (!academyIndex.includes("academy-owned-native-bridge-v1.js")) {
+    logFail("Academy no carga el puente de apertura y priorización de productos adquiridos.");
+  } else if (!ownedBridge.includes("Mis productos adquiridos") || !ownedBridge.includes("Otros productos KineCheck")) {
+    logFail("La Biblioteca no conserva la separación entre productos adquiridos y productos por explorar.");
+  } else {
+    logOk("La Biblioteca prioriza productos adquiridos y separa los productos por explorar.");
+  }
 
   const publicAcademyLinks = [...publicCommerce.matchAll(/href=["']([^"']*academy\/[^"']*)["']/g)].map((match) => match[1]);
   if (!publicAcademyLinks.length) {
@@ -271,6 +285,15 @@ async function main() {
   const checkoutUrls = [...new Set(extractCheckoutUrls(publicCommerce))];
   const expectedUrls = new Set(CHECKOUT_EXPECTATIONS.map((item) => item.url));
 
+  const lumbar = activeProducts.find((product) => product.slug === "dolor-lumbar-persistente");
+  if (!lumbar) {
+    logFail("Dolor Lumbar Persistente no está activo en Academy.");
+  } else if (lumbar.productId !== "8330940") {
+    logFail(`Dolor Lumbar Persistente no usa el Product ID oficial 8330940: ${lumbar.productId}`);
+  } else {
+    logOk("Dolor Lumbar Persistente está activo con Product ID Hotmart 8330940.");
+  }
+
   for (const [productId, products] of activeProductGroups) {
     const expectedCheckout = PRODUCT_CHECKOUT_BY_ID[productId];
     const labels = products.map((product) => product.title).join(" / ");
@@ -300,6 +323,7 @@ async function main() {
   await checkUrl("Página para estudiantes", `${PUBLIC_BASE}/estudiantes/`);
   await checkUrl("Página Recupera", `${PUBLIC_BASE}/recupera/`);
   await checkUrl("Detalle de productos", `${PUBLIC_BASE}/productos/`);
+  await checkUrl("Detalle Dolor Lumbar Persistente", `${PUBLIC_BASE}/productos/dolor-lumbar-persistente/`);
   await checkUrl("Ruta heredada KineCheck", `${PUBLIC_BASE}/kinecheck/`);
   await checkUrl("Acceso Comunicación Clínica", `${PUBLIC_BASE}/comunicacion-clinica.html?course=comunicacion-clinica`);
   await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/`);

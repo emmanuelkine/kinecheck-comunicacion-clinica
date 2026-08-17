@@ -1,6 +1,8 @@
-# Certificación manual Hotmart — 8 productos KineCheck
+# Certificación manual Hotmart — 9 productos KineCheck
 
-Actualizado: 2026-08-05
+Actualizado: 2026-08-17
+
+> Nota de compatibilidad: el nombre histórico de este archivo conserva `hotmart-8-product-certification.md`, pero el contrato vigente incluye nueve productos comerciales.
 
 ## Regla de cierre
 
@@ -14,7 +16,7 @@ Un producto solo se considera **Certificado** cuando existe evidencia de:
 6. progreso persistente;
 7. devolución, cancelación y contracargo bloqueando el acceso;
 8. funcionamiento en celular y computador; tablet cuando corresponda;
-9. PDF, correo, pospago y enlace de Hotmart Academy actualizados.
+9. correo, pospago y enlace de acceso de Hotmart actualizados cuando apliquen.
 
 El workflow `KineCheck Commercial QA` verifica diariamente rutas públicas, checkouts y coherencia de código. No sustituye las pruebas de compra y devolución.
 
@@ -29,7 +31,17 @@ El workflow `KineCheck Commercial QA` verifica diariamente rutas públicas, chec
 | Más allá del dolor | https://pay.hotmart.com/W106888386Q | 8194777 | 12 meses | mas-alla-del-dolor |
 | Evidencia Aplicada | https://pay.hotmart.com/F106921972I | 8208817 | 12 meses | evidencia-aplicada |
 | Traumatología y Ortopedia Clínica | https://pay.hotmart.com/B106913952R | 8205453 | 12 meses | traumatologia-ortopedia-clinica |
+| Dolor Lumbar Persistente | https://pay.hotmart.com/W107198798E | 8330940 | 12 meses | dolor-lumbar-persistente |
 | Pack KineCheck Estudiante | https://pay.hotmart.com/Q106891608M | 8195982 | 12 meses | kinecheck-estudiante + mas-alla-del-dolor |
+
+## Dolor Lumbar Persistente · área de miembros externa
+
+- El contenido principal se aloja en KineCheck Academy: `https://kinecheck.cl/academy/`.
+- Hotmart actúa como checkout, origen de los eventos de compra y plataforma de validación comercial.
+- No se duplican los 9 módulos ni las 54 microlecciones dentro de Hotmart Club.
+- Si se utiliza contenido administrativo en Hotmart, debe limitarse a una bienvenida/acceso y nunca convertirse en una segunda copia del curso.
+- Webhook: `https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/hotmart-webhook`.
+- La configuración de prueba del webhook fue procesada con HTTP 200 para compra completa, reembolso, chargeback, compra aprobada, compra atrasada, compra con plazo vencido y compra cancelada.
 
 ## Evidencia requerida por producto
 
@@ -38,10 +50,9 @@ Guardar una carpeta o registro por producto con:
 - captura de la página de producto y precio;
 - captura de la garantía mostrada en checkout;
 - URL del checkout;
-- PDF de bienvenida cargado;
-- copia del correo de bienvenida;
+- copia del correo o material de bienvenida cuando corresponda;
 - URL de la página posterior al pago;
-- URL del enlace de Hotmart Academy;
+- URL del acceso externo configurado en Hotmart;
 - identificación del webhook asignado;
 - ID de una transacción de prueba aprobada;
 - hora del evento y hora de activación en Supabase;
@@ -61,12 +72,11 @@ No guardar contraseñas, números completos de tarjetas ni datos clínicos.
 1. Abrir el producto en Hotmart.
 2. Confirmar nombre, imagen, descripción, precio y moneda.
 3. Confirmar plazo de garantía mostrado al comprador.
-4. Cargar el PDF específico del producto.
-5. Actualizar el correo o material de bienvenida.
-6. Establecer como acceso general: `https://kinecheck.cl/platform/`.
-7. Confirmar la página posterior al pago.
-8. Confirmar el webhook de producción.
-9. Eliminar enlaces antiguos con versiones `?v=39`, `?v=41` o correos anteriores.
+4. Configurar material de bienvenida solo cuando sea necesario.
+5. Establecer como acceso general: `https://kinecheck.cl/academy/`.
+6. Confirmar la página posterior al pago.
+7. Confirmar el webhook de producción.
+8. Eliminar enlaces antiguos con versiones `?v=39`, `?v=41`, rutas `/platform/` o correos anteriores.
 
 ### B. Compra aprobada
 

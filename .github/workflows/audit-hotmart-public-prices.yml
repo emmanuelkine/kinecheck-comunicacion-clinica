@@ -1,6 +1,6 @@
 name: Auditar precios públicos Hotmart
 
-# Revalidación externa solicitada para el cierre técnico del 2026-08-13.
+# Revalidación externa solicitada para el cierre técnico del 2026-08-17.
 on:
   push:
     branches: [main]
@@ -38,6 +38,7 @@ jobs:
               'mas-alla-del-dolor': 'https://pay.hotmart.com/W106888386Q',
               'evidencia-aplicada': 'https://pay.hotmart.com/F106921972I',
               'traumatologia-ortopedia-clinica': 'https://pay.hotmart.com/B106913952R',
+              'dolor-lumbar-persistente': 'https://pay.hotmart.com/W107198798E',
               'pack-estudiante': 'https://pay.hotmart.com/Q106891608M'
             };
             const browser = await chromium.launch({ headless: true });

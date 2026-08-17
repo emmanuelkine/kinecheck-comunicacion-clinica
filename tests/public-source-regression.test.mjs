@@ -28,6 +28,8 @@ const PRODUCT_CHECKOUTS = [
   ["pack-estudiante", "https://pay.hotmart.com/Q106891608M"],
 ];
 
+const DOLOR_LUMBAR_CHECKOUT = "https://pay.hotmart.com/W107198798E";
+
 const OFFICIAL_COMMERCE = [
   { slug: "kinecheck-clinico", name: "KineCheck Clínico", productId: "8150019", price: 39990, display: "$39.990", term: "12 meses" },
   { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", productId: "8154796", price: 14990, display: "$14.990", term: "12 meses" },
@@ -36,6 +38,7 @@ const OFFICIAL_COMMERCE = [
   { slug: "mas-alla-del-dolor", name: "Más allá del dolor", productId: "8194777", price: 39990, display: "$39.990", term: "12 meses" },
   { slug: "evidencia-aplicada", name: "Evidencia Aplicada", productId: "8208817", price: 29990, display: "$29.990", term: "12 meses" },
   { slug: "traumatologia-ortopedia-clinica", name: "Traumatología y Ortopedia Clínica", productId: "8205453", price: 35900, display: "$35.900", term: "12 meses" },
+  { slug: "dolor-lumbar-persistente", name: "Dolor Lumbar Persistente", productId: "8330940", price: 39990, display: "$39.990", term: "12 meses" },
   { slug: "pack-estudiante", name: "Pack KineCheck Estudiante", productId: "8195982", price: 49900, display: "$49.900", term: "12 meses" },
 ];
 
@@ -114,11 +117,15 @@ test("la arquitectura de marca queda distribuida por perfil sin duplicarse en po
   assert.ok(professionals.includes("curso profesional avanzado"));
   assert.ok(professionals.includes("guía digital complementaria"));
   assert.ok(!professionals.includes("Registro kinésico profesional"));
+  assert.ok(professionals.includes("Dolor Lumbar Persistente"));
+  assert.ok(professionals.includes(DOLOR_LUMBAR_CHECKOUT));
 
   const students = await read("estudiantes/index.html");
   assert.equal(count(students, "KINECHECK APPS"), 1);
   assert.equal(count(students, "KINECHECK PACKS"), 1);
   assert.equal(count(students, "KINECHECK FORMACIÓN"), 2);
+  assert.ok(students.includes("Dolor Lumbar Persistente"));
+  assert.ok(students.includes(DOLOR_LUMBAR_CHECKOUT));
 
   const recovery = await read("recupera/index.html");
   assert.ok(recovery.includes("KINECHECK APPS"));
@@ -135,11 +142,11 @@ test("la arquitectura de marca queda distribuida por perfil sin duplicarse en po
   assert.ok(brandArchitecture.includes("No usar **ECOSISTEMA CLÍNICO**"));
 });
 
-test("precios, vigencias y ocho IDs Hotmart conservan el contrato oficial", async () => {
+test("precios, vigencias y nueve IDs Hotmart conservan el contrato oficial", async () => {
   const priceData = JSON.parse(await read("commercial-prices-cl.json"));
   assert.equal(priceData.country, "Chile");
   assert.equal(priceData.currency, "CLP");
-  assert.equal(Object.keys(priceData.products || {}).length, 8);
+  assert.equal(Object.keys(priceData.products || {}).length, 9);
   for (const expected of OFFICIAL_COMMERCE) {
     const actual = priceData.products[expected.slug];
     assert.deepEqual(
@@ -155,6 +162,7 @@ test("precios, vigencias y ocho IDs Hotmart conservan el contrato oficial", asyn
   const certification = await read("docs/qa/hotmart-8-product-certification.md");
   for (const { productId } of OFFICIAL_COMMERCE) assert.ok(certification.includes(productId));
   for (const [, checkout] of PRODUCT_CHECKOUTS) assert.ok(certification.includes(checkout));
+  assert.ok(certification.includes(DOLOR_LUMBAR_CHECKOUT));
 });
 
 test("los perfiles publican precios, Open Graph y acceso directo a Academy", async () => {
@@ -193,9 +201,14 @@ test("Productos entrega un fallback clínico útil sin JavaScript", async () => 
   assert.ok(page.includes('data-access href="../academy/"'));
   assert.ok(!page.includes("../platform/"));
   assert.match(headers, /\/productos\/\*[\s\S]*?Content-Security-Policy:\s*frame-ancestors 'none'/);
+
+  const lumbar = await read("productos/dolor-lumbar-persistente/index.html");
+  assert.ok(lumbar.includes("Dolor Lumbar Persistente"));
+  assert.ok(lumbar.includes(DOLOR_LUMBAR_CHECKOUT));
+  assert.ok(lumbar.includes("$39.990"));
 });
 
-test("la hidratación conserva ocho checkouts y acceso canónico", async () => {
+test("la hidratación conserva ocho checkouts históricos y acceso canónico", async () => {
   const product = await read("productos/product.js");
   for (const [slug, checkout] of PRODUCT_CHECKOUTS) {
     assert.ok(product.includes(`"${slug}"`));
@@ -225,7 +238,7 @@ test("las rutas de compatibilidad siguen siendo redirecciones", async () => {
   }
 });
 
-test("la política conserva la advertencia sin certificación de ocho garantías", async () => {
+test("la política conserva la advertencia sin certificación completa de nueve garantías", async () => {
   const refunds = await read("legal/reembolsos.html");
   const certification = await read("docs/qa/hotmart-8-product-certification.md");
   assert.ok(refunds.includes("Pendiente de certificación comercial"));

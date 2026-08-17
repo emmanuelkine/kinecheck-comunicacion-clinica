@@ -9,8 +9,10 @@ on:
       - "productos/product-clinico-reposition-v1.js"
       - "productos/product-experience-unification-v1.js"
       - "productos/product-experience-unification-v1.css"
+      - "academy/index.html"
       - "academy/academy-owned-native-bridge-v1.js"
       - "academy/academy-brand-identity.js"
+      - "academy/academy-open-v6.js"
       - "academy/mi-kinecheck-v1.js"
       - "academy/mi-kinecheck-card-copy-v1.js"
       - "academy/mi-kinecheck-v1.css"
@@ -30,8 +32,10 @@ on:
       - "productos/product-clinico-reposition-v1.js"
       - "productos/product-experience-unification-v1.js"
       - "productos/product-experience-unification-v1.css"
+      - "academy/index.html"
       - "academy/academy-owned-native-bridge-v1.js"
       - "academy/academy-brand-identity.js"
+      - "academy/academy-open-v6.js"
       - "academy/mi-kinecheck-v1.js"
       - "academy/mi-kinecheck-card-copy-v1.js"
       - "academy/mi-kinecheck-v1.css"
@@ -68,6 +72,8 @@ jobs:
           node --check productos/product-clinico-reposition-v1.js
           node --check productos/product-experience-unification-v1.js
           node --check academy/academy-brand-identity.js
+          node --check academy/academy-open-v6.js
+          node --check academy/academy-owned-native-bridge-v1.js
           node --check academy/mi-kinecheck-v1.js
           node --check academy/mi-kinecheck-card-copy-v1.js
           node --check academy/mi-kinecheck-simplify-v2.js
@@ -78,9 +84,9 @@ jobs:
       - name: Confirmar una sola puerta visible
         run: |
           grep -q 'home-experience-unification-v1.js' home.js
-          grep -q 'mi-kinecheck-v1.js' academy/academy-brand-identity.js
-          grep -q 'mi-kinecheck-card-copy-v1.js' academy/academy-brand-identity.js
-          grep -q 'mi-kinecheck-simplify-v2.js' academy/academy-brand-identity.js
+          grep -q 'academy-brand-identity.js' academy/index.html
+          grep -q 'academy-open-v6.js' academy/index.html
+          grep -q 'academy-owned-native-bridge-v1.js' academy/index.html
           grep -q 'product-experience-unification-v1.js' productos/product-clinico-reposition-v1.js
           grep -q 'redirect-to-mi-kinecheck-v1.js' platform/index.html
           grep -q 'Abriendo Mi KineCheck' platform/index.html
