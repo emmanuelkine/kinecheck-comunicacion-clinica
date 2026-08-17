@@ -129,8 +129,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       lessons: 54,
       priceCLP: 39990,
       accessMonths: 12,
-      status: "preparing",
-      url: "../dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=20260816-product1"
+      status: "active",
+      url: "../dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=20260817-review1"
     },
     {
       slug: "kinecheck-lab-clinico",
