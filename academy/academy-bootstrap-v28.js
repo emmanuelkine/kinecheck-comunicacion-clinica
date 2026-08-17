@@ -116,6 +116,23 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       url: "../traumatologia/?course=traumatologia-ortopedia-clinica&v=20260803-sessionfix2"
     },
     {
+      slug: "dolor-lumbar-persistente",
+      title: "Dolor Lumbar Persistente",
+      subtitle: "Razonamiento clínico, PROMs, evidencia, casos y progresión en una aplicación formativa premium.",
+      productId: "PENDIENTE_HOTMART",
+      icon: "DL",
+      kind: "course",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
+      modules: 9,
+      lessons: 54,
+      priceCLP: 39990,
+      accessMonths: 12,
+      status: "review",
+      url: "./dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=20260817-review2"
+    },
+    {
       slug: "kinecheck-lab-clinico",
       title: "KineCheck Lab Clínico",
       subtitle: "Simulación de razonamiento y decisiones clínicas.",
@@ -130,6 +147,15 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     }
   ]
 });
+
+// During Hotmart external-area verification, expose review products to the
+// normal licensed-access runtime without declaring them commercially active.
+(() => {
+  const courses = window.KINECHECK_ACADEMY_CONFIG?.courses;
+  if (!Array.isArray(courses)) return;
+  const reviewCourse = courses.find((course) => course?.slug === "dolor-lumbar-persistente");
+  if (reviewCourse?.status === "review") reviewCourse.status = "active";
+})();
 
 (() => {
   if (window.__KINECHECK_APP_SSO_FORM_GUARD__) return;
