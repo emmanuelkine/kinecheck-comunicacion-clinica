@@ -133,6 +133,23 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       url: "./dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=20260817-active1"
     },
     {
+      slug: "dolor-musculoesqueletico",
+      title: "Dolor Musculoesquelético: del mecanismo a la decisión clínica",
+      subtitle: "Ciencia del dolor, fenotipos, evaluación, PROMs y razonamiento clínico aplicado.",
+      productId: "8340185",
+      icon: "DM",
+      kind: "course",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
+      modules: 6,
+      lessons: 12,
+      priceCLP: 39990,
+      accessMonths: 12,
+      status: "active",
+      url: "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/dolor-musculoesqueletico/?course=dolor-musculoesqueletico&v=20260818-active1"
+    },
+    {
       slug: "kinecheck-lab-clinico",
       title: "KineCheck Lab Clínico",
       subtitle: "Simulación de razonamiento y decisiones clínicas.",

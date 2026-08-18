@@ -16,6 +16,7 @@
   const STUDENT_ORDER = [
     "kinecheck-estudiante",
     "dolor-lumbar-persistente",
+    "dolor-musculoesqueletico",
     "mas-alla-del-dolor",
     "comunicacion-clinica",
     "evidencia-aplicada",
