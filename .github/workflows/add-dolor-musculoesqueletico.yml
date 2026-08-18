@@ -1,0 +1,60 @@
+name: Add Dolor Musculoesquelético to Academy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/add-dolor-musculoesqueletico.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Register product in Academy catalog
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('academy/academy-bootstrap-v28.js')
+          text = path.read_text(encoding='utf-8')
+          slug = 'dolor-musculoesqueletico'
+          if f'slug: "{slug}"' not in text:
+              marker = '''    {\n      slug: "kinecheck-lab-clinico",'''
+              block = '''    {\n      slug: "dolor-musculoesqueletico",\n      title: "Dolor Musculoesquelético: del mecanismo a la decisión clínica",\n      subtitle: "Ciencia del dolor, fenotipos, evaluación, PROMs y razonamiento clínico aplicado.",\n      productId: "8340185",\n      icon: "DM",\n      kind: "course",\n      audience: "Profesionales y estudiantes",\n      audienceKey: "professionals",\n      audiences: ["professionals", "students"],\n      modules: 6,\n      lessons: 12,\n      priceCLP: 39990,\n      accessMonths: 12,\n      status: "active",\n      url: "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/dolor-musculoesqueletico/?course=dolor-musculoesqueletico&v=20260818-active1"\n    },\n'''
+              if marker not in text:
+                  raise SystemExit('Catalog insertion marker not found')
+              text = text.replace(marker, block + marker, 1)
+              path.write_text(text, encoding='utf-8')
+
+          # Put the course early in the student route ordering when the bridge file is present.
+          bridge = Path('academy/academy-owned-native-bridge-v1.js')
+          if bridge.exists():
+              b = bridge.read_text(encoding='utf-8')
+              if '"dolor-musculoesqueletico"' not in b:
+                  marker = '    "dolor-lumbar-persistente",\n'
+                  if marker in b:
+                      b = b.replace(marker, marker + '    "dolor-musculoesqueletico",\n', 1)
+                      bridge.write_text(b, encoding='utf-8')
+
+          # Cache bust the bootstrap reference so current users receive the new catalog immediately.
+          index = Path('academy/index.html')
+          h = index.read_text(encoding='utf-8')
+          h = h.replace('academy-bootstrap-v28.js?v=20260809-private1', 'academy-bootstrap-v28.js?v=20260818-pain1')
+          index.write_text(h, encoding='utf-8')
+          PY
+      - name: Commit catalog update
+        run: |
+          if git diff --quiet; then
+            echo "No changes required"
+            exit 0
+          fi
+          git config user.name "KineCheck Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add academy/academy-bootstrap-v28.js academy/academy-owned-native-bridge-v1.js academy/index.html
+          git commit -m "Add Dolor Musculoesquelético to KineCheck Academy"
+          git push
