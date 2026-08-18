@@ -6,7 +6,7 @@
 
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const RELEASE = "20260818-pain3";
+  const RELEASE = "20260818-audit1";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
@@ -14,6 +14,7 @@
     "comunicacion-clinica": `../comunicacion-clinica.html?course=comunicacion-clinica&v=${RELEASE}`,
     "mas-alla-del-dolor": `./mas-alla-del-dolor.html?v=${RELEASE}`,
     "traumatologia-ortopedia-clinica": `../traumatologia/?course=traumatologia-ortopedia-clinica&v=${RELEASE}`,
+    "dolor-lumbar-persistente": `./dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=${RELEASE}`,
   });
 
   const EXTERNAL = Object.freeze({
@@ -210,9 +211,6 @@
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
 
-    // Safari/iOS puede perder window.name al salir de kinecheck.cl. Las tarjetas
-    // nativas de cursos externos deben pasar siempre por el handoff en fragmento,
-    // que es el mismo mecanismo robusto usado por el opener unificado.
     const nativeCourseButton = target.closest("#course-grid [data-course]");
     if (nativeCourseButton && !nativeCourseButton.disabled && nativeCourseButton.getAttribute("aria-disabled") !== "true") {
       const product = String(nativeCourseButton.dataset.course || "").trim();
