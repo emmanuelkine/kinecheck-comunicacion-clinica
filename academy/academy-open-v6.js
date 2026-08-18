@@ -6,7 +6,7 @@
 
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const RELEASE = "20260818-pain2";
+  const RELEASE = "20260818-pain3";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
@@ -207,14 +207,32 @@
   window.KINECHECK_RESET_PRODUCT_NAVIGATION = resetNavigationState;
 
   document.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-kc-path-open]");
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target) return;
+
+    // Safari/iOS puede perder window.name al salir de kinecheck.cl. Las tarjetas
+    // nativas de cursos externos deben pasar siempre por el handoff en fragmento,
+    // que es el mismo mecanismo robusto usado por el opener unificado.
+    const nativeCourseButton = target.closest("#course-grid [data-course]");
+    if (nativeCourseButton && !nativeCourseButton.disabled && nativeCourseButton.getAttribute("aria-disabled") !== "true") {
+      const product = String(nativeCourseButton.dataset.course || "").trim();
+      if (EXTERNAL[product]) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        void openProduct(product, nativeCourseButton);
+        return;
+      }
+    }
+
+    const button = target.closest("[data-kc-path-open]");
     if (!button || button.disabled || button.getAttribute("aria-disabled") === "true") return;
     const product = String(button.dataset.kcPathOpen || "").trim();
     if (!KNOWN.has(product)) return;
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
-    openProduct(product, button);
+    void openProduct(product, button);
   }, true);
 
   window.addEventListener("pageshow", resetNavigationState);
