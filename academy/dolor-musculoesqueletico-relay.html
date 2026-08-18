@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Abriendo Dolor Musculoesquelético | KineCheck</title>
+</head>
+<body>
+  <p>Abriendo tu curso…</p>
+  <script>
+  (() => {
+    const SESSION_KEY = 'kinecheck_secure_session_v1';
+    const PRODUCT = 'dolor-musculoesqueletico';
+    const TARGET = 'https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/dolor-musculoesqueletico/?course=dolor-musculoesqueletico&v=20260818-relay1';
+    const HANDOFF_TYPE = 'kinecheck-sso-v3-access-only';
+
+    function readSession() {
+      try {
+        const value = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+        if (!value?.access_token) return null;
+        const expiresAt = Number(value.expires_at || 0);
+        if (expiresAt && expiresAt <= Math.floor(Date.now() / 1000) + 20) return null;
+        return value;
+      } catch {
+        return null;
+      }
+    }
+
+    function encodeBase64Url(value) {
+      const bytes = new TextEncoder().encode(value);
+      let binary = '';
+      bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+
+    const session = readSession();
+    if (!session) {
+      location.replace('https://kinecheck.cl/academy/#biblioteca');
+      return;
+    }
+
+    const payload = {
+      type: HANDOFF_TYPE,
+      issuedAt: Date.now(),
+      product: PRODUCT,
+      session: {
+        access_token: session.access_token,
+        expires_at: session.expires_at,
+        expires_in: session.expires_in,
+        token_type: session.token_type || 'bearer',
+        handoff_access_only: true,
+      },
+    };
+
+    const url = new URL(TARGET);
+    url.hash = new URLSearchParams({ kc_handoff: encodeBase64Url(JSON.stringify(payload)) }).toString();
+    location.replace(url.toString());
+  })();
+  </script>
+</body>
+</html>
