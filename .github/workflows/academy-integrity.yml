@@ -1,0 +1,37 @@
+name: Academy integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'academy/**'
+      - 'kinecheck-clinico-curso/**'
+      - 'kinecheck-clinico-guia/**'
+      - 'traumatologia/**'
+      - 'comunicacion-clinica.html'
+      - 'scripts/validate-academy-integrity.mjs'
+      - '.github/workflows/academy-integrity.yml'
+  pull_request:
+    paths:
+      - 'academy/**'
+      - 'kinecheck-clinico-curso/**'
+      - 'kinecheck-clinico-guia/**'
+      - 'traumatologia/**'
+      - 'comunicacion-clinica.html'
+      - 'scripts/validate-academy-integrity.mjs'
+      - '.github/workflows/academy-integrity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Academy catalog and access routes
+        run: node scripts/validate-academy-integrity.mjs
