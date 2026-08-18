@@ -6,7 +6,7 @@
 
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const RELEASE = "20260818-audit1";
+  const RELEASE = "20260818-audit2";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
@@ -235,4 +235,12 @@
 
   window.addEventListener("pageshow", resetNavigationState);
   window.addEventListener("pagehide", () => { navigating = false; });
+
+  if (!document.querySelector('script[data-kc-personalization="v1"]')) {
+    const script = document.createElement("script");
+    script.src = `./academy-personalization-v1.js?v=${RELEASE}`;
+    script.defer = true;
+    script.dataset.kcPersonalization = "v1";
+    document.head.appendChild(script);
+  }
 })();
