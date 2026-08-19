@@ -6,7 +6,7 @@
 
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const RELEASE = "20260818-audit2";
+  const RELEASE = "20260819-library-hotfix1";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
@@ -102,6 +102,125 @@
     element.hidden = false;
     clearTimeout(toast.timer);
     toast.timer = setTimeout(() => { element.hidden = true; }, 5000);
+  }
+
+  function installVisualHotfix() {
+    if (document.querySelector('style[data-kc-hotfix="20260819-library"]')) return;
+    const style = document.createElement("style");
+    style.dataset.kcHotfix = "20260819-library";
+    style.textContent = `
+      #dashboard-view .kc-clinical-library{
+        --kc-ink:#17333b!important;
+        --kc-muted:#5d747d!important;
+      }
+      #dashboard-view .kc-clinical-library.kc-interior-enhanced{
+        background:#eaf3f3!important;
+      }
+      #dashboard-view .kc-interior-enhanced .kc-interior-guide,
+      #dashboard-view .kc-interior-enhanced .kc-interior-quicknav,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-group,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-card,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-references{
+        background:#f7fbfb!important;
+        color:#17333b!important;
+      }
+      #dashboard-view .kc-interior-enhanced .kc-interior-guide h3,
+      #dashboard-view .kc-interior-enhanced .kc-interior-guide p,
+      #dashboard-view .kc-interior-enhanced .kc-interior-step strong,
+      #dashboard-view .kc-interior-enhanced .kc-interior-step span,
+      #dashboard-view .kc-interior-enhanced .kc-interior-quicknav>strong,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-group>summary,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-card h3,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-card p,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-card p strong,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-scale-meta span,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-references h3,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-references,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-pro-value span{
+        color:#17333b!important;
+      }
+      #dashboard-view .kc-interior-enhanced .kc-interior-step,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-card,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-group>summary,
+      #dashboard-view .kc-interior-enhanced .kc-clinical-scale-meta div{
+        background:#ffffff!important;
+      }
+      #dashboard-view .kc-interior-enhanced .kc-interior-navbutton{
+        color:#36565e!important;
+        background:#f6fafa!important;
+      }
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]{
+        position:relative!important;
+        display:flex!important;
+        flex-direction:column!important;
+        align-items:stretch!important;
+        min-height:430px!important;
+        height:auto!important;
+        overflow:hidden!important;
+      }
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>span,
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>strong,
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>p,
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-label,
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-points,
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-price,
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>b{
+        position:static!important;
+        inset:auto!important;
+        transform:none!important;
+      }
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>span{
+        flex:0 0 auto!important;
+        align-self:flex-start!important;
+      }
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product] .kc-clinical-product-points{
+        flex:1 1 auto!important;
+      }
+      #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>b{
+        display:flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        width:100%!important;
+        min-height:54px!important;
+        margin:16px 0 0!important;
+        padding:0 16px!important;
+        flex:0 0 54px!important;
+        border-radius:14px!important;
+      }
+      #support-launcher{
+        width:48px!important;
+        min-width:48px!important;
+        height:48px!important;
+        min-height:48px!important;
+        right:18px!important;
+        bottom:18px!important;
+        padding:0!important;
+        border-radius:50%!important;
+        display:grid!important;
+        place-items:center!important;
+      }
+      #support-launcher>span{
+        margin:0!important;
+        line-height:1!important;
+      }
+      #support-launcher>b{
+        position:absolute!important;
+        width:1px!important;
+        height:1px!important;
+        padding:0!important;
+        margin:-1px!important;
+        overflow:hidden!important;
+        clip:rect(0,0,0,0)!important;
+        white-space:nowrap!important;
+        border:0!important;
+      }
+      @media(max-width:760px){
+        #dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]{min-height:400px!important}
+        #support-launcher{right:12px!important;bottom:76px!important;width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important}
+      }
+    `;
+    document.head.appendChild(style);
+    document.querySelector("#support-launcher")?.setAttribute("aria-label", "Abrir soporte KineCheck");
   }
 
   function restoreButton(button) {
@@ -214,7 +333,7 @@
     const nativeCourseButton = target.closest("#course-grid [data-course]");
     if (nativeCourseButton && !nativeCourseButton.disabled && nativeCourseButton.getAttribute("aria-disabled") !== "true") {
       const product = String(nativeCourseButton.dataset.course || "").trim();
-      if (EXTERNAL[product]) {
+      if (EXTERNAL[product] || APPLICATIONS.has(product)) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -235,6 +354,8 @@
 
   window.addEventListener("pageshow", resetNavigationState);
   window.addEventListener("pagehide", () => { navigating = false; });
+
+  installVisualHotfix();
 
   if (!document.querySelector('script[data-kc-personalization="v1"]')) {
     const script = document.createElement("script");
