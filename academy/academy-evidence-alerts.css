@@ -3,3 +3,44 @@
 /* Contraste estable para la interfaz clara de Academy. */
 #evidencia-semanal,.evidence-section{color:#102d35!important}.evidence-heading h2{color:#102d35!important;text-shadow:none!important}.evidence-heading p{color:#4f6e76!important}.evidence-section>.eyebrow,.evidence-heading .eyebrow{color:#0c9b9b!important}.evidence-editorial-note{border-color:#8bd8d0!important;background:#e4f6f3!important;color:#385a62!important;box-shadow:0 10px 26px rgba(17,89,96,.07)}.evidence-editorial-note strong{color:#173c46!important}.topbar .menu-button{color:#073d45!important;background:#e5f4f2!important;border:1px solid #bddfdb!important;border-radius:11px!important}.topbar .topbar-brand strong{color:#102d35!important}.topbar .topbar-brand span{color:#0c8d91!important}.catalog-section .section-heading h2,.resource-section h2{color:#102d35!important}.catalog-section .section-heading p,.resource-section p{color:#55727a!important}
 @media(max-width:640px){.evidence-heading h2{color:#102d35!important}.evidence-heading p{color:#4f6e76!important}.evidence-editorial-note{color:#385a62!important;background:#e4f6f3!important}.topbar .menu-button{color:#073d45!important}}
+
+/* Hotfix 2026-08-19: evita que la etiqueta RECURSO CLÍNICO herede el tamaño del icono. */
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>.kc-clinical-product-label{
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  align-self:flex-start!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:14px 0 0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#70e4d3!important;
+  font-size:.68rem!important;
+  line-height:1.2!important;
+  font-weight:900!important;
+  letter-spacing:.12em!important;
+  text-transform:uppercase!important;
+  flex:0 0 auto!important;
+}
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>.kc-clinical-product-label::before,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>.kc-clinical-product-label::after{
+  content:none!important;
+  display:none!important;
+}
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>.kc-clinical-product-points,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>.kc-clinical-price,
+#dashboard-view .kc-clinical-category-trigger[data-kc-clinical-product]>b{
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+}
