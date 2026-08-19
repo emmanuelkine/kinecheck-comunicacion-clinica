@@ -55,8 +55,16 @@
     }
   }
 
+  function normalizeIssuedAt(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return NaN;
+    // El opener unificado usa milisegundos; el flujo legado de academy-v39 usa segundos.
+    // Aceptar ambos evita marcar como vencido un handoff recién creado.
+    return numeric > 0 && numeric < 1e12 ? numeric * 1000 : numeric;
+  }
+
   const handoff = readHandoff();
-  const issuedAt = Number(handoff?.issuedAt);
+  const issuedAt = normalizeIssuedAt(handoff?.issuedAt);
   const product = String(handoff?.product || "").trim();
   const accessToken = String(
     handoff?.access_token || handoff?.session?.access_token || "",
