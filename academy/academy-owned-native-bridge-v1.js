@@ -180,6 +180,18 @@
     return Boolean(button && !button.disabled);
   }
 
+  function decorateConstructionCards() {
+    const card = document.querySelector('[data-card-course="banderas-clinicas"]');
+    if (!card || card.dataset.kcConstruction === "true") return;
+    const badge = card.querySelector(".status-badge");
+    if (!badge || /verificando/i.test(String(badge.textContent || ""))) return;
+    badge.textContent = "EN CONSTRUCCIÓN";
+    badge.classList.add("preparing");
+    const meta = card.querySelector(".course-meta");
+    if (meta) meta.textContent = "Próximo lanzamiento · contenido en desarrollo";
+    card.dataset.kcConstruction = "true";
+  }
+
   function organizeLibraryProducts() {
     const grid = document.querySelector("#course-grid");
     if (!grid) return;
@@ -189,6 +201,8 @@
     const checking = [...grid.querySelectorAll(".status-badge")]
       .some((badge) => /verificando/i.test(String(badge.textContent || "")));
     if (checking) return;
+
+    decorateConstructionCards();
 
     const baseGroup = grid.querySelector('[data-course-group="not-started"]');
     if (!baseGroup) return;
