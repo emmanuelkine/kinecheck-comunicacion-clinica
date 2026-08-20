@@ -1,0 +1,75 @@
+name: Integrate Banderas Clinicas
+
+on:
+  push:
+    branches:
+      - feat/banderas-clinicas-integration
+    paths:
+      - .github/workflows/integrate-banderas-clinicas.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-academy:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/banderas-clinicas-integration
+      - name: Register course in Academy
+        shell: python
+        run: |
+          from pathlib import Path
+
+          bootstrap = Path('academy/academy-bootstrap-v28.js')
+          text = bootstrap.read_text(encoding='utf-8')
+          if 'slug: "banderas-clinicas"' not in text:
+              needle = '    {\n      slug: "kinecheck-lab-clinico",'
+              block = '''    {
+      slug: "banderas-clinicas",
+      title: "KineCheck Banderas Clínicas",
+      subtitle: "Screening, riesgo y toma de decisiones musculoesqueléticas.",
+      productId: "PROPIETARIO",
+      icon: "BC",
+      kind: "course",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
+      modules: 9,
+      lessons: 13,
+      status: "active",
+      url: "../banderas-clinicas/?course=banderas-clinicas&v=20260820-owner1"
+    },
+'''
+              if needle not in text:
+                  raise SystemExit('No se encontró punto de inserción en academy-bootstrap-v28.js')
+              text = text.replace(needle, block + needle, 1)
+              bootstrap.write_text(text, encoding='utf-8')
+
+          bridge = Path('academy/academy-owned-native-bridge-v1.js')
+          bridge_text = bridge.read_text(encoding='utf-8')
+          if '"banderas-clinicas"' not in bridge_text:
+              needle = '    "dolor-musculoesqueletico",\n'
+              if needle not in bridge_text:
+                  raise SystemExit('No se encontró punto de inserción en academy-owned-native-bridge-v1.js')
+              bridge_text = bridge_text.replace(needle, needle + '    "banderas-clinicas",\n', 1)
+              bridge.write_text(bridge_text, encoding='utf-8')
+      - name: Verify integration syntax
+        run: |
+          node --check academy/academy-bootstrap-v28.js
+          node --check academy/academy-owned-native-bridge-v1.js
+          node --check banderas-clinicas/config.js
+          node --check banderas-clinicas/data.js
+          node --check banderas-clinicas/app.js
+          node --check banderas-clinicas/gate.js
+          grep -q 'slug: "banderas-clinicas"' academy/academy-bootstrap-v28.js
+      - name: Commit generated integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- academy/academy-bootstrap-v28.js academy/academy-owned-native-bridge-v1.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Register Banderas Clínicas in Academy"
+          git push origin HEAD:feat/banderas-clinicas-integration
