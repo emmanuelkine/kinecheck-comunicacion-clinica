@@ -6,15 +6,19 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FIX_SCRIPT = path.join(ROOT, "academy", "academy-recommended-buttons-fix.js");
 
 const products = [
-  "mas-alla-del-dolor",
-  "traumatologia-ortopedia-clinica",
+  "kinecheck-clinico-curso",
   "comunicacion-clinica",
+  "mas-alla-del-dolor",
   "evidencia-aplicada",
+  "traumatologia-ortopedia-clinica",
+  "dolor-lumbar-persistente",
+  "dolor-musculoesqueletico",
+  "banderas-clinicas",
 ];
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
-test("los cuatro botones dinámicos abren su producto exacto", async ({ page }) => {
+test("los botones dinámicos de los cursos activos abren su producto exacto", async ({ page }) => {
   await page.setContent(`
     <!doctype html>
     <html><head></head><body>

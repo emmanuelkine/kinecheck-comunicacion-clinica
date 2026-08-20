@@ -28,6 +28,16 @@ const PRODUCT_CHECKOUT_BY_ID = Object.freeze({
   "8330940": "https://pay.hotmart.com/W107198798E",
 });
 
+const NON_COMMERCIAL_ACTIVE_SLUGS = new Set([
+  "dolor-musculoesqueletico",
+  "banderas-clinicas",
+]);
+
+const PREDEPLOY_PRODUCT_URLS = new Set([
+  `${PUBLIC_BASE}/productos/dolor-musculoesqueletico/`,
+  `${PUBLIC_BASE}/productos/banderas-clinicas/`,
+]);
+
 let failures = 0;
 let warnings = 0;
 
@@ -101,6 +111,13 @@ function isReachableStatus(status) {
 async function checkUrl(label, url, options = {}) {
   try {
     const response = await fetchWithTimeout(url, options);
+    const predeployPage = process.env.GITHUB_EVENT_NAME === "pull_request"
+      && PREDEPLOY_PRODUCT_URLS.has(url)
+      && response.status === 404;
+    if (predeployPage) {
+      logOk(`${label} existe en el checkout de la PR; se verificará públicamente después del despliegue.`);
+      return true;
+    }
     if (response.status === 404 || response.status === 410 || response.status >= 500) {
       logFail(`${label} respondió HTTP ${response.status}: ${url}`);
       return false;
@@ -203,6 +220,8 @@ async function main() {
     ensureLocalFile("productos/index.html"),
     ensureLocalFile("productos/product.js"),
     ensureLocalFile("productos/dolor-lumbar-persistente/index.html"),
+    ensureLocalFile("productos/dolor-musculoesqueletico/index.html"),
+    ensureLocalFile("productos/banderas-clinicas/index.html"),
     ensureLocalFile("academy/index.html"),
     ensureLocalFile("academy/academy-v39.js"),
     ensureLocalFile("academy/academy-open-v6.js"),
@@ -281,7 +300,11 @@ async function main() {
 
   const academyProducts = extractAcademyProducts(academyConfig);
   const activeProducts = academyProducts.filter((product) => product.status === "active");
-  const activeProductGroups = groupProductsById(activeProducts);
+  const commercialActiveProducts = activeProducts.filter((product) => !NON_COMMERCIAL_ACTIVE_SLUGS.has(product.slug));
+  const activeProductGroups = groupProductsById(commercialActiveProducts);
+  activeProducts
+    .filter((product) => NON_COMMERCIAL_ACTIVE_SLUGS.has(product.slug))
+    .forEach((product) => logOk(`Producto activo en modo no comercial: ${product.title}`));
   const checkoutUrls = [...new Set(extractCheckoutUrls(publicCommerce))];
   const expectedUrls = new Set(CHECKOUT_EXPECTATIONS.map((item) => item.url));
 
@@ -324,6 +347,8 @@ async function main() {
   await checkUrl("Página Recupera", `${PUBLIC_BASE}/recupera/`);
   await checkUrl("Detalle de productos", `${PUBLIC_BASE}/productos/`);
   await checkUrl("Detalle Dolor Lumbar Persistente", `${PUBLIC_BASE}/productos/dolor-lumbar-persistente/`);
+  await checkUrl("Detalle Dolor Musculoesquelético", `${PUBLIC_BASE}/productos/dolor-musculoesqueletico/`);
+  await checkUrl("Detalle Banderas Clínicas", `${PUBLIC_BASE}/productos/banderas-clinicas/`);
   await checkUrl("Ruta heredada KineCheck", `${PUBLIC_BASE}/kinecheck/`);
   await checkUrl("Acceso Comunicación Clínica", `${PUBLIC_BASE}/comunicacion-clinica.html?course=comunicacion-clinica`);
   await checkUrl("KineCheck Academy", `${PUBLIC_BASE}/academy/`);
