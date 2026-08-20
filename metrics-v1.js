@@ -6,6 +6,7 @@
 
   const ENDPOINT = "https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/metric-event";
   const SESSION_KEY = "kc_metric_session_v1";
+  const AUTH_SESSION_KEY = "kinecheck_secure_session_v1";
   const ALLOWED_PRODUCTS = new Set([
     "kinecheck-clinico",
     "kinecheck-estudiante",
@@ -57,6 +58,22 @@
     return ALLOWED_PRODUCTS.has(slug) ? slug : null;
   }
 
+  function authAccessToken() {
+    try {
+      const session = window.KINECHECK_ACADEMY_SESSION?.get?.();
+      if (session?.access_token) return String(session.access_token);
+    } catch {
+      // Fallback al storage compartido de Academy.
+    }
+
+    try {
+      const session = JSON.parse(localStorage.getItem(AUTH_SESSION_KEY) || "null");
+      return session?.access_token ? String(session.access_token) : null;
+    } catch {
+      return null;
+    }
+  }
+
   function send(eventName, options = {}) {
     const payload = {
       eventId: uuid(),
@@ -69,9 +86,13 @@
       metadata: options.metadata && typeof options.metadata === "object" ? options.metadata : {},
     };
 
+    const headers = { "Content-Type": "application/json" };
+    const token = authAccessToken();
+    if (token) headers.Authorization = `Bearer ${token}`;
+
     fetch(ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(payload),
       keepalive: true,
       credentials: "omit",
