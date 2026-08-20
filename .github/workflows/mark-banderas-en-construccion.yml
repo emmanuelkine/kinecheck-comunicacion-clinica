@@ -1,11 +1,9 @@
 name: Marcar Banderas Clinicas en construccion
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-    paths:
-      - .github/workflows/mark-banderas-en-construccion.yml
 
 permissions:
   contents: write
@@ -16,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: feat/banderas-construction-label
       - name: Add construction state without blocking owner access
         shell: python
         run: |
@@ -79,11 +77,11 @@ jobs:
           node --check academy/academy-v39.js
           grep -q 'developmentLabel: "EN CONSTRUCCIÓN"' academy/academy-bootstrap-v28.js
           grep -q 'Próximo lanzamiento · contenido en desarrollo' academy/academy-v39.js
-      - name: Commit and remove one-time workflow
+      - name: Commit generated change and remove one-time workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm .github/workflows/mark-banderas-en-construccion.yml
           git add academy/academy-bootstrap-v28.js academy/academy-v39.js
           git commit -m "Mark Banderas Clínicas as en construcción"
-          git push origin HEAD:main
+          git push origin HEAD:feat/banderas-construction-label
