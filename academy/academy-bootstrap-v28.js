@@ -150,6 +150,21 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       url: "https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/dolor-musculoesqueletico/?course=dolor-musculoesqueletico&v=20260818-active1"
     },
     {
+      slug: "banderas-clinicas",
+      title: "KineCheck Banderas Clínicas",
+      subtitle: "Screening, riesgo y toma de decisiones musculoesqueléticas.",
+      productId: "PROPIETARIO",
+      icon: "BC",
+      kind: "course",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
+      modules: 9,
+      lessons: 13,
+      status: "active",
+      url: "../banderas-clinicas/?course=banderas-clinicas&v=20260820-owner1"
+    },
+    {
       slug: "kinecheck-lab-clinico",
       title: "KineCheck Lab Clínico",
       subtitle: "Simulación de razonamiento y decisiones clínicas.",
