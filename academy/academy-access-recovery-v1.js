@@ -8,6 +8,48 @@
   const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "https://kinecheck-clinico.emmanuelkine.chatgpt.site").replace(/\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;
   const SSO_HANDOFF_TYPE = CONFIG.appSso?.handoffType || "kinecheck-sso-v3-access-only";
 
+  const PREPARING_PRODUCTS = Object.freeze({
+    "dolor-musculoesqueletico": Object.freeze({
+      badge: "PRÓXIMAMENTE",
+      meta: "Próximo lanzamiento · contenido en desarrollo",
+      lockedLabel: "Próximamente",
+      reviewLabel: "Abrir versión de revisión",
+    }),
+    "banderas-clinicas": Object.freeze({
+      badge: "EN CONSTRUCCIÓN",
+      meta: "Próximo lanzamiento · contenido en desarrollo",
+      lockedLabel: "En construcción",
+      reviewLabel: "Abrir versión de revisión",
+    }),
+  });
+
+  const CATALOG_EXTENSION = Object.freeze([
+    Object.freeze({
+      slug: "dolor-lumbar-persistente",
+      icon: "DL",
+      title: "Dolor Lumbar Persistente",
+      status: "Disponible",
+      summary: "Razonamiento clínico, PROMs, evidencia, casos y progresión.",
+      href: "../productos/dolor-lumbar-persistente/",
+    }),
+    Object.freeze({
+      slug: "dolor-musculoesqueletico",
+      icon: "DM",
+      title: "Dolor Musculoesquelético",
+      status: "Próximamente",
+      summary: "Ciencia del dolor, fenotipos, evaluación, PROMs y decisión clínica.",
+      href: "../productos/dolor-musculoesqueletico/",
+    }),
+    Object.freeze({
+      slug: "banderas-clinicas",
+      icon: "BC",
+      title: "KineCheck Banderas Clínicas",
+      status: "En construcción",
+      summary: "Screening, riesgo, banderas clínicas y toma de decisiones musculoesqueléticas.",
+      href: "../productos/banderas-clinicas/",
+    }),
+  ]);
+
   function accessTokenExpiry(token) {
     if (typeof token !== "string" || !/^[A-Za-z0-9._~-]{20,8192}$/.test(token)) return 0;
     try {
@@ -66,8 +108,43 @@
     form.submit();
   }
 
+  function decoratePreparingProducts(root = document) {
+    Object.entries(PREPARING_PRODUCTS).forEach(([slug, readiness]) => {
+      const card = root.querySelector?.(`[data-card-course="${slug}"]`);
+      if (!card) return;
+
+      const badge = card.querySelector(".status-badge");
+      if (badge && /verificando/i.test(String(badge.textContent || ""))) return;
+
+      if (badge) {
+        badge.textContent = readiness.badge;
+        badge.classList.add("preparing");
+      }
+
+      const meta = card.querySelector(".course-meta");
+      if (meta) meta.textContent = readiness.meta;
+
+      const button = card.querySelector(`button[data-course="${slug}"]`);
+      if (!button) return;
+
+      const retry = button.nextElementSibling?.matches?.("[data-kc-retry-access]")
+        ? button.nextElementSibling
+        : null;
+      retry?.remove();
+
+      button.hidden = false;
+      button.textContent = button.disabled ? readiness.lockedLabel : readiness.reviewLabel;
+      button.dataset.kcReadiness = "preparing";
+      button.setAttribute("aria-label", `${card.querySelector("h3")?.textContent || slug}: ${button.textContent}`);
+    });
+  }
+
   function installRetryButtons(root = document) {
+    decoratePreparingProducts(root);
+
     root.querySelectorAll?.("button[data-course][disabled]").forEach((original) => {
+      const slug = String(original.dataset.course || "").trim();
+      if (PREPARING_PRODUCTS[slug]) return;
       if (original.textContent.trim() !== LOCKED_LABEL) return;
       if (original.nextElementSibling?.matches?.("[data-kc-retry-access]")) return;
 
@@ -79,6 +156,61 @@
       retry.textContent = RETRY_LABEL;
       original.insertAdjacentElement("afterend", retry);
     });
+  }
+
+  function installCatalogStyles() {
+    if (document.querySelector("#kc-catalog-extension-styles")) return;
+    const style = document.createElement("style");
+    style.id = "kc-catalog-extension-styles";
+    style.textContent = `
+      .kc-catalog-extension{margin-top:18px;padding:18px;border:1px solid rgba(23,107,91,.18);border-radius:22px;background:rgba(255,255,255,.04)}
+      .kc-catalog-extension-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:12px}
+      .kc-catalog-extension-head span{color:#6fd9cf;font-size:.7rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+      .kc-catalog-extension-head h3{margin:4px 0 0;color:inherit;font-size:1.05rem}
+      .kc-catalog-extension-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+      .kc-catalog-extension-card{display:flex;flex-direction:column;gap:8px;min-height:150px;padding:14px;border:1px solid rgba(113,226,214,.16);border-radius:16px;background:rgba(5,32,40,.48);color:#eef8f9;text-decoration:none}
+      .kc-catalog-extension-card:hover{border-color:rgba(113,226,214,.42);transform:translateY(-1px)}
+      .kc-catalog-extension-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+      .kc-catalog-extension-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#53dbd5,#72d9ba);color:#052a31;font-size:.7rem;font-weight:950}
+      .kc-catalog-extension-status{padding:5px 8px;border-radius:999px;background:rgba(97,218,204,.1);border:1px solid rgba(97,218,204,.18);color:#8fe7dc;font-size:.65rem;font-weight:850}
+      .kc-catalog-extension-card strong{font-size:.87rem;line-height:1.2}
+      .kc-catalog-extension-card p{margin:0;color:#a9c1c6;font-size:.76rem;line-height:1.45}
+      .kc-catalog-extension-card em{margin-top:auto;color:#7de1d5;font-size:.7rem;font-style:normal;font-weight:850}
+      @media(max-width:760px){.kc-catalog-extension-grid{grid-template-columns:1fr}.kc-catalog-extension-card{min-height:0}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function installCatalogExtension() {
+    if (document.querySelector("[data-kc-catalog-extension]")) return true;
+    const explorer = document.querySelector(".kc-home-product-explorer");
+    if (!explorer) return false;
+
+    installCatalogStyles();
+    const section = document.createElement("section");
+    section.className = "kc-catalog-extension";
+    section.dataset.kcCatalogExtension = "true";
+    section.setAttribute("aria-label", "Nuevos productos KineCheck");
+    section.innerHTML = `
+      <div class="kc-catalog-extension-head">
+        <div><span>NUEVOS EN KINECHECK</span><h3>También forman parte del ecosistema</h3></div>
+      </div>
+      <div class="kc-catalog-extension-grid">
+        ${CATALOG_EXTENSION.map((product) => `
+          <a class="kc-catalog-extension-card" href="${product.href}" data-kc-catalog-product="${product.slug}">
+            <div class="kc-catalog-extension-top">
+              <span class="kc-catalog-extension-icon" aria-hidden="true">${product.icon}</span>
+              <span class="kc-catalog-extension-status">${product.status}</span>
+            </div>
+            <strong>${product.title}</strong>
+            <p>${product.summary}</p>
+            <em>Ver detalle →</em>
+          </a>
+        `).join("")}
+      </div>
+    `;
+    explorer.insertAdjacentElement("afterend", section);
+    return true;
   }
 
   async function retryAccess(button) {
@@ -122,20 +254,30 @@
 
   function init() {
     const grid = document.querySelector("#course-grid");
-    if (!grid) return;
+    if (grid) {
+      installRetryButtons(grid);
+      new MutationObserver(() => installRetryButtons(grid)).observe(grid, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["disabled", "class"],
+      });
 
-    installRetryButtons(grid);
-    new MutationObserver(() => installRetryButtons(grid)).observe(grid, {
-      childList: true,
-      subtree: true,
-    });
+      grid.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-kc-retry-access]");
+        if (!button) return;
+        event.preventDefault();
+        retryAccess(button);
+      });
+    }
 
-    grid.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-kc-retry-access]");
-      if (!button) return;
-      event.preventDefault();
-      retryAccess(button);
-    });
+    if (!installCatalogExtension()) {
+      const catalogObserver = new MutationObserver(() => {
+        if (installCatalogExtension()) catalogObserver.disconnect();
+      });
+      catalogObserver.observe(document.documentElement, { childList: true, subtree: true });
+      window.setTimeout(() => catalogObserver.disconnect(), 10000);
+    }
   }
 
   if (document.readyState === "loading") {
