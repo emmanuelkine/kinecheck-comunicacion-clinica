@@ -15,6 +15,7 @@
     "mas-alla-del-dolor": `./mas-alla-del-dolor.html?v=${RELEASE}`,
     "traumatologia-ortopedia-clinica": `../traumatologia/?course=traumatologia-ortopedia-clinica&v=${RELEASE}`,
     "dolor-lumbar-persistente": `./dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=${RELEASE}`,
+    "banderas-clinicas": `../banderas-clinicas/?course=banderas-clinicas&v=${RELEASE}`,
   });
 
   const EXTERNAL = Object.freeze({
