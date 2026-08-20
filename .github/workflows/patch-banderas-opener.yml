@@ -1,0 +1,41 @@
+name: Patch Banderas opener
+
+on:
+  push:
+    branches:
+      - feat/banderas-clinicas-integration
+    paths:
+      - .github/workflows/patch-banderas-opener.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/banderas-clinicas-integration
+      - name: Add Banderas Clínicas to unified opener
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path('academy/academy-open-v6.js')
+          text = path.read_text(encoding='utf-8')
+          if '"banderas-clinicas"' not in text:
+              needle = '    "dolor-lumbar-persistente": `./dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=${RELEASE}`,\n'
+              replacement = needle + '    "banderas-clinicas": `../banderas-clinicas/?course=banderas-clinicas&v=${RELEASE}`,\n'
+              if needle not in text:
+                  raise SystemExit('No se encontró el punto de inserción del opener')
+              path.write_text(text.replace(needle, replacement, 1), encoding='utf-8')
+      - name: Validate JavaScript
+        run: node --check academy/academy-open-v6.js
+      - name: Commit opener registration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- academy/academy-open-v6.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Add Banderas Clínicas to unified opener"
+          git push origin HEAD:feat/banderas-clinicas-integration
