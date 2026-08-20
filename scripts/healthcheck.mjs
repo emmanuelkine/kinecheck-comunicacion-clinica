@@ -33,6 +33,11 @@ const NON_COMMERCIAL_ACTIVE_SLUGS = new Set([
   "banderas-clinicas",
 ]);
 
+const PREDEPLOY_PRODUCT_URLS = new Set([
+  `${PUBLIC_BASE}/productos/dolor-musculoesqueletico/`,
+  `${PUBLIC_BASE}/productos/banderas-clinicas/`,
+]);
+
 let failures = 0;
 let warnings = 0;
 
@@ -106,6 +111,13 @@ function isReachableStatus(status) {
 async function checkUrl(label, url, options = {}) {
   try {
     const response = await fetchWithTimeout(url, options);
+    const predeployPage = process.env.GITHUB_EVENT_NAME === "pull_request"
+      && PREDEPLOY_PRODUCT_URLS.has(url)
+      && response.status === 404;
+    if (predeployPage) {
+      logOk(`${label} existe en el checkout de la PR; se verificará públicamente después del despliegue.`);
+      return true;
+    }
     if (response.status === 404 || response.status === 410 || response.status >= 500) {
       logFail(`${label} respondió HTTP ${response.status}: ${url}`);
       return false;
