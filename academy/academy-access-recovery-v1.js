@@ -7,6 +7,8 @@
   const RETRY_LABEL = "Verificar acceso";
   const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "https://kinecheck-clinico.emmanuelkine.chatgpt.site").replace(/\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;
   const SSO_HANDOFF_TYPE = CONFIG.appSso?.handoffType || "kinecheck-sso-v3-access-only";
+  const SESSION_KEY = "kinecheck_secure_session_v1";
+  const LOGIN_RELOAD_GUARD_KEY = "kinecheck_login_reload_once_v1";
 
   const PREPARING_PRODUCTS = Object.freeze({
     "dolor-musculoesqueletico": Object.freeze({
@@ -252,7 +254,65 @@
     }
   }
 
+  function installAuthStallGuard() {
+    const authForm = document.querySelector("#auth-form");
+    const progress = document.querySelector("#auth-progress");
+    const message = document.querySelector("#auth-message");
+    const dashboard = document.querySelector("#dashboard-view");
+    if (!authForm || !progress || !message) return;
+
+    let transitionTimer = 0;
+
+    function freshStoredSession() {
+      try {
+        const session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+        const token = String(session?.access_token || "");
+        const expiresAt = accessTokenExpiry(token) || Number(session?.expires_at || 0);
+        if (!token || expiresAt <= Math.floor(Date.now() / 1000) + 30) return null;
+        return session;
+      } catch {
+        return null;
+      }
+    }
+
+    function recoverTransition() {
+      window.clearTimeout(transitionTimer);
+      transitionTimer = window.setTimeout(() => {
+        if (progress.hidden || !authForm.hidden) return;
+
+        if (freshStoredSession() && sessionStorage.getItem(LOGIN_RELOAD_GUARD_KEY) !== "1") {
+          sessionStorage.setItem(LOGIN_RELOAD_GUARD_KEY, "1");
+          window.location.replace("./#biblioteca");
+          return;
+        }
+
+        progress.hidden = true;
+        authForm.hidden = false;
+        message.textContent = "El ingreso está tardando más de lo normal. Revisa tu conexión y vuelve a pulsar Ingresar; no necesitas cambiar tu contraseña.";
+        message.className = "notice error";
+        message.hidden = false;
+      }, 13000);
+    }
+
+    authForm.addEventListener("submit", () => {
+      window.setTimeout(recoverTransition, 0);
+    }, true);
+
+    const observer = new MutationObserver(() => {
+      if (!progress.hidden && authForm.hidden) recoverTransition();
+      if (dashboard && !dashboard.hidden) {
+        window.clearTimeout(transitionTimer);
+        sessionStorage.removeItem(LOGIN_RELOAD_GUARD_KEY);
+      }
+    });
+    observer.observe(progress, { attributes: true, attributeFilter: ["hidden"] });
+    observer.observe(authForm, { attributes: true, attributeFilter: ["hidden"] });
+    if (dashboard) observer.observe(dashboard, { attributes: true, attributeFilter: ["hidden"] });
+  }
+
   function init() {
+    installAuthStallGuard();
+
     const grid = document.querySelector("#course-grid");
     if (grid) {
       installRetryButtons(grid);
