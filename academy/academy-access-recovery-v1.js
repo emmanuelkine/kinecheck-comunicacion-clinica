@@ -13,12 +13,6 @@
   const SSO_HANDOFF_TYPE = CONFIG.appSso?.handoffType || "kinecheck-sso-v3-access-only";
 
   const PREPARING_PRODUCTS = Object.freeze({
-    "dolor-musculoesqueletico": Object.freeze({
-      badge: "PRÓXIMAMENTE",
-      meta: "Próximo lanzamiento · contenido en desarrollo",
-      lockedLabel: "Próximamente",
-      reviewLabel: "Abrir versión de revisión",
-    }),
     "banderas-clinicas": Object.freeze({
       badge: "EN CONSTRUCCIÓN",
       meta: "Próximo lanzamiento · contenido en desarrollo",
@@ -40,7 +34,7 @@
       slug: "dolor-musculoesqueletico",
       icon: "DM",
       title: "Dolor Musculoesquelético",
-      status: "Próximamente",
+      status: "Disponible",
       summary: "Ciencia del dolor, fenotipos, evaluación, PROMs y decisión clínica.",
       href: "../productos/dolor-musculoesqueletico/",
     }),
