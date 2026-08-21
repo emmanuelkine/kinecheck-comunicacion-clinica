@@ -228,8 +228,18 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   const nativeFetch = window.fetch.bind(window);
   const TIMEOUT_MS = 12000;
   const BATCH_WINDOW_MS = 0;
+  const AUTH_HANDOFF_TTL_MS = 15000;
   const batchQueue = [];
   let batchTimer = null;
+  let trustedAuthHandoff = null;
+
+  function requestUrl(input) {
+    return typeof input === "string" ? input : String(input?.url || "");
+  }
+
+  function requestMethod(input, init = {}) {
+    return String(init.method || (typeof input !== "string" ? input?.method : "GET") || "GET").toUpperCase();
+  }
 
   function headerValue(headers, name) {
     if (!headers) return "";
@@ -252,8 +262,33 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     });
   }
 
+  function isAuthSessionRequest(input, init = {}) {
+    const url = requestUrl(input);
+    const method = requestMethod(input, init);
+    return method === "POST" && /\.supabase\.co\/auth\/v1\/(?:token|signup)(?:\?|$)/.test(url);
+  }
+
+  function trustedIdentityResponse(input, init = {}) {
+    if (!trustedAuthHandoff || trustedAuthHandoff.expiresAt <= Date.now()) {
+      trustedAuthHandoff = null;
+      return null;
+    }
+
+    const url = requestUrl(input);
+    const method = requestMethod(input, init);
+    if (method !== "GET" || !/\.supabase\.co\/auth\/v1\/user(?:\?|$)/.test(url)) return null;
+
+    const authorization = headerValue(init.headers || (typeof input !== "string" ? input?.headers : null), "authorization");
+    const token = authorization.replace(/^Bearer\s+/i, "").trim();
+    if (!token || token !== trustedAuthHandoff.accessToken) return null;
+
+    const response = responseJson(trustedAuthHandoff.user, 200);
+    trustedAuthHandoff = null;
+    return response;
+  }
+
   async function fetchWithTimeout(input, init = {}) {
-    const url = typeof input === "string" ? input : String(input?.url || "");
+    const url = requestUrl(input);
     const isSupabaseRequest = url.includes(".supabase.co");
     if (!isSupabaseRequest || init.signal) return nativeFetch(input, init);
 
@@ -261,7 +296,18 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     try {
-      return await nativeFetch(input, { ...init, signal: controller.signal });
+      const response = await nativeFetch(input, { ...init, signal: controller.signal });
+      if (response.ok && isAuthSessionRequest(input, init)) {
+        const data = await response.clone().json().catch(() => null);
+        if (data?.access_token && data?.user?.id && data?.user?.email) {
+          trustedAuthHandoff = {
+            accessToken: String(data.access_token),
+            user: data.user,
+            expiresAt: Date.now() + AUTH_HANDOFF_TTL_MS,
+          };
+        }
+      }
+      return response;
     } catch (error) {
       if (error?.name === "AbortError") {
         throw new Error("La conexión tardó demasiado. Revisa tu señal o Wi-Fi y vuelve a intentar.");
@@ -273,8 +319,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   }
 
   function isBatchableCourseKeyRequest(input, init = {}) {
-    const url = typeof input === "string" ? input : String(input?.url || "");
-    const method = String(init.method || (typeof input !== "string" ? input?.method : "GET") || "GET").toUpperCase();
+    const url = requestUrl(input);
+    const method = requestMethod(input, init);
 
     if (
       method !== "POST"
@@ -315,7 +361,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
 
     const groups = new Map();
     pending.forEach((item) => {
-      const url = typeof item.input === "string" ? item.input : String(item.input?.url || "");
+      const url = requestUrl(item.input);
       const authorization = headerValue(item.init.headers, "authorization");
       const apikey = headerValue(item.init.headers, "apikey");
       const key = `${url}\n${authorization}\n${apikey}`;
@@ -386,6 +432,8 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
   }
 
   window.fetch = (input, init = {}) => {
+    const trusted = trustedIdentityResponse(input, init);
+    if (trusted) return Promise.resolve(trusted);
     if (isBatchableCourseKeyRequest(input, init)) {
       return enqueueCourseKeyRequest(input, init);
     }
