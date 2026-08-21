@@ -156,9 +156,10 @@
     const titleNode = heading.querySelector("h3");
     const descriptionNode = heading.querySelector("p");
     const countNode = heading.querySelector(".course-group-count");
-    if (titleNode) titleNode.textContent = title;
-    if (descriptionNode) descriptionNode.textContent = description;
-    if (countNode) countNode.textContent = `${count} ${count === 1 ? "producto" : "productos"}`;
+    const countText = `${count} ${count === 1 ? "producto" : "productos"}`;
+    if (titleNode && titleNode.textContent !== title) titleNode.textContent = title;
+    if (descriptionNode && descriptionNode.textContent !== description) descriptionNode.textContent = description;
+    if (countNode && countNode.textContent !== countText) countNode.textContent = countText;
   }
 
   function createDiscoverGroup() {
@@ -223,7 +224,9 @@
     const hasStarted = Boolean(startedGroup?.querySelector(".course-card"));
 
     if (!owned.length) {
-      cards.forEach((card) => baseRail.appendChild(card));
+      cards.forEach((card) => {
+        if (card.parentElement !== baseRail) baseRail.appendChild(card);
+      });
       if (discoverGroup) {
         discoverGroup.remove();
         discoverGroup = null;
@@ -239,7 +242,9 @@
       return;
     }
 
-    owned.forEach((card) => baseRail.appendChild(card));
+    owned.forEach((card) => {
+      if (card.parentElement !== baseRail) baseRail.appendChild(card);
+    });
     setGroupHeading(
       baseGroup,
       hasStarted ? "Listos para comenzar" : "Mis productos adquiridos",
@@ -259,7 +264,9 @@
       baseGroup.insertAdjacentElement("afterend", discoverGroup);
     }
     const nextDiscoverRail = discoverGroup.querySelector(".course-rail");
-    locked.forEach((card) => nextDiscoverRail.appendChild(card));
+    locked.forEach((card) => {
+      if (card.parentElement !== nextDiscoverRail) nextDiscoverRail.appendChild(card);
+    });
     setGroupHeading(
       discoverGroup,
       "Otros productos KineCheck",
