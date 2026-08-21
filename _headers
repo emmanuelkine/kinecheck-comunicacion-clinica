@@ -47,13 +47,13 @@
   X-Robots-Tag: noindex, nofollow
 
 /academy/
-  Cache-Control: no-cache, must-revalidate
-  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260811-tools1>; rel=preload; as=style
+  Cache-Control: no-store, max-age=0, must-revalidate
+  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260821-mobilegap1>; rel=preload; as=style
   X-Robots-Tag: noindex, nofollow
 
 /academy/index.html
-  Cache-Control: no-cache, must-revalidate
-  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260811-tools1>; rel=preload; as=style
+  Cache-Control: no-store, max-age=0, must-revalidate
+  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260821-mobilegap1>; rel=preload; as=style
   X-Robots-Tag: noindex, nofollow
 
 /academy/mas-alla-del-dolor.html
@@ -65,10 +65,10 @@
   X-Robots-Tag: noindex, nofollow
 
 /academy/*.html
-  Cache-Control: no-cache, must-revalidate
+  Cache-Control: no-store, max-age=0, must-revalidate
 
 /academy/*.css
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: no-store, max-age=0, must-revalidate
 
 /academy/*.webp
   Cache-Control: public, max-age=31536000, immutable
@@ -89,7 +89,7 @@
   Cache-Control: private, no-store, max-age=0
 
 /academy/*.js
-  Cache-Control: no-cache, must-revalidate
+  Cache-Control: no-store, max-age=0, must-revalidate
 
 /academy/*
   X-Robots-Tag: noindex, nofollow
