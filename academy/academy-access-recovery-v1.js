@@ -1,14 +1,16 @@
 (() => {
+  "use strict";
+
   const CONFIG = window.KINECHECK_ACADEMY_CONFIG;
   if (!CONFIG || window.__KINECHECK_ACCESS_RECOVERY_V1__) return;
   window.__KINECHECK_ACCESS_RECOVERY_V1__ = true;
 
   const LOCKED_LABEL = "No disponible en tu cuenta";
   const RETRY_LABEL = "Verificar acceso";
-  const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "https://kinecheck-clinico.emmanuelkine.chatgpt.site").replace(/\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;
-  const SSO_HANDOFF_TYPE = CONFIG.appSso?.handoffType || "kinecheck-sso-v3-access-only";
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const LOGIN_RELOAD_GUARD_KEY = "kinecheck_login_reload_once_v1";
+  const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "https://kinecheck-clinico.emmanuelkine.chatgpt.site").replace(/\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;
+  const SSO_HANDOFF_TYPE = CONFIG.appSso?.handoffType || "kinecheck-sso-v3-access-only";
 
   const PREPARING_PRODUCTS = Object.freeze({
     "dolor-musculoesqueletico": Object.freeze({
@@ -52,6 +54,8 @@
     }),
   ]);
 
+  let readinessFrame = 0;
+
   function accessTokenExpiry(token) {
     if (typeof token !== "string" || !/^[A-Za-z0-9._~-]{20,8192}$/.test(token)) return 0;
     try {
@@ -67,12 +71,21 @@
     }
   }
 
+  function setText(node, value) {
+    if (node && node.textContent !== value) node.textContent = value;
+  }
+
+  function setAttributeIfChanged(node, name, value) {
+    if (node && node.getAttribute(name) !== value) node.setAttribute(name, value);
+  }
+
   function showLibraryMessage(text, error = false) {
     const message = document.querySelector("#library-message");
     if (!message) return;
-    message.textContent = text;
-    message.className = error ? "notice error" : "notice";
-    message.hidden = false;
+    setText(message, text);
+    const className = error ? "notice error" : "notice";
+    if (message.className !== className) message.className = className;
+    if (message.hidden) message.hidden = false;
     message.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
@@ -119,12 +132,11 @@
       if (badge && /verificando/i.test(String(badge.textContent || ""))) return;
 
       if (badge) {
-        badge.textContent = readiness.badge;
-        badge.classList.add("preparing");
+        setText(badge, readiness.badge);
+        if (!badge.classList.contains("preparing")) badge.classList.add("preparing");
       }
 
-      const meta = card.querySelector(".course-meta");
-      if (meta) meta.textContent = readiness.meta;
+      setText(card.querySelector(".course-meta"), readiness.meta);
 
       const button = card.querySelector(`button[data-course="${slug}"]`);
       if (!button) return;
@@ -132,12 +144,13 @@
       const retry = button.nextElementSibling?.matches?.("[data-kc-retry-access]")
         ? button.nextElementSibling
         : null;
-      retry?.remove();
+      if (retry) retry.remove();
 
-      button.hidden = false;
-      button.textContent = button.disabled ? readiness.lockedLabel : readiness.reviewLabel;
-      button.dataset.kcReadiness = "preparing";
-      button.setAttribute("aria-label", `${card.querySelector("h3")?.textContent || slug}: ${button.textContent}`);
+      if (button.hidden) button.hidden = false;
+      const label = button.disabled ? readiness.lockedLabel : readiness.reviewLabel;
+      setText(button, label);
+      if (button.dataset.kcReadiness !== "preparing") button.dataset.kcReadiness = "preparing";
+      setAttributeIfChanged(button, "aria-label", `${card.querySelector("h3")?.textContent || slug}: ${label}`);
     });
   }
 
@@ -150,13 +163,21 @@
       if (original.textContent.trim() !== LOCKED_LABEL) return;
       if (original.nextElementSibling?.matches?.("[data-kc-retry-access]")) return;
 
-      original.hidden = true;
+      if (!original.hidden) original.hidden = true;
       const retry = document.createElement("button");
       retry.type = "button";
       retry.className = original.className;
       retry.dataset.kcRetryAccess = original.dataset.course;
       retry.textContent = RETRY_LABEL;
       original.insertAdjacentElement("afterend", retry);
+    });
+  }
+
+  function scheduleReadiness(grid) {
+    if (readinessFrame) return;
+    readinessFrame = window.requestAnimationFrame(() => {
+      readinessFrame = 0;
+      installRetryButtons(grid);
     });
   }
 
@@ -225,7 +246,7 @@
 
     const previousLabel = button.textContent;
     button.disabled = true;
-    button.textContent = "Verificando acceso…";
+    setText(button, "Verificando acceso…");
 
     try {
       const sessionApi = window.KINECHECK_ACADEMY_SESSION;
@@ -249,7 +270,7 @@
       await window.openCourse(slug);
     } catch (error) {
       button.disabled = false;
-      button.textContent = previousLabel;
+      setText(button, previousLabel);
       showLibraryMessage(error?.message || "No fue posible verificar el acceso.", true);
     }
   }
@@ -288,9 +309,9 @@
 
         progress.hidden = true;
         authForm.hidden = false;
-        message.textContent = "El ingreso está tardando más de lo normal. Revisa tu conexión y vuelve a pulsar Ingresar; no necesitas cambiar tu contraseña.";
-        message.className = "notice error";
-        message.hidden = false;
+        setText(message, "El ingreso está tardando más de lo normal. Revisa tu conexión y vuelve a pulsar Ingresar; no necesitas cambiar tu contraseña.");
+        if (message.className !== "notice error") message.className = "notice error";
+        if (message.hidden) message.hidden = false;
       }, 13000);
     }
 
@@ -316,11 +337,17 @@
     const grid = document.querySelector("#course-grid");
     if (grid) {
       installRetryButtons(grid);
-      new MutationObserver(() => installRetryButtons(grid)).observe(grid, {
+      new MutationObserver((records) => {
+        const relevant = records.some((record) => (
+          record.type === "childList"
+          || (record.type === "attributes" && record.attributeName === "disabled")
+        ));
+        if (relevant) scheduleReadiness(grid);
+      }).observe(grid, {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ["disabled", "class"],
+        attributeFilter: ["disabled"],
       });
 
       grid.addEventListener("click", (event) => {
