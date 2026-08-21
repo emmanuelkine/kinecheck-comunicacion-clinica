@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#073c4a">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://eqhcdclyeoapmqtlduwf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
+  <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./admin.css?v=20260820-status1">
+  <link rel="stylesheet" href="./status-center.css?v=20260820-status1">
+  <script src="./status-page.js?v=20260820-status1" defer></script>
+  <title>KineCheck Status Center</title>
+</head>
+<body>
+  <section id="status-login" class="login-view">
+    <form id="status-login-form" class="login-card">
+      <img src="../assets/kinecheck-mark.svg" alt="">
+      <span>ADMINISTRACIÓN PRIVADA</span>
+      <h1>KineCheck Status Center</h1>
+      <p>Panel visual de salud, testers, incidencias y correcciones.</p>
+      <label>Correo<input id="status-email" type="email" autocomplete="email" required></label>
+      <label>Contraseña<input id="status-password" type="password" autocomplete="current-password" required minlength="8"></label>
+      <button id="status-login-button" type="submit">Ingresar</button>
+      <div id="status-login-message" class="message" hidden></div>
+    </form>
+  </section>
+
+  <section id="status-app" hidden>
+    <header class="topbar">
+      <a class="brand" href="../"><img src="../assets/kinecheck-mark.svg" alt=""><span><strong>KineCheck</strong><small>STATUS CENTER</small></span></a>
+      <div class="top-actions"><span id="status-account"></span><button id="status-refresh" type="button">Actualizar</button><a href="./" style="text-decoration:none">Admin</a><button id="status-logout" type="button">Salir</button></div>
+    </header>
+    <main>
+      <section class="hero"><div><span class="eyebrow">CONTROL DE PRODUCCIÓN</span><h1>Estado visual de KineCheck</h1><p id="status-generated">Cargando…</p></div></section>
+      <section id="kinecheck-status-center" class="status-center"><div class="status-empty">Cargando Status Center…</div></section>
+    </main>
+  </section>
+</body>
+</html>
