@@ -281,6 +281,56 @@ body[data-kc-view="herramientas"] #herramientas{
   box-shadow:0 22px 54px rgba(0,0,0,.28)!important;
 }
 
+/* Mobile surface guard: evita que el fondo claro legado aparezca al hacer scroll
+   y fuerza el panel del explorador a conservar la superficie premium. */
+html,
+body{
+  background:#031318!important;
+}
+
+#dashboard-view.academy-app{
+  min-height:100dvh!important;
+}
+
+#dashboard-view .academy-main,
+#dashboard-view #contenido-principal{
+  background:transparent!important;
+}
+
+#dashboard-view .kc-home-product-explorer,
+#dashboard-view .kc-product-explorer{
+  background:linear-gradient(145deg,rgba(9,43,52,.96),rgba(4,25,32,.99))!important;
+  color:#f5fbfc!important;
+}
+
+#dashboard-view .kc-explorer-detail{
+  background:
+    radial-gradient(circle at 92% 5%,rgba(88,188,244,.14),transparent 36%),
+    linear-gradient(145deg,rgba(13,55,65,.98),rgba(5,31,38,.99))!important;
+  color:#f5fbfc!important;
+  border-color:rgba(110,224,216,.18)!important;
+}
+
+#dashboard-view .kc-explorer-detail h3,
+#dashboard-view .kc-explorer-detail strong{
+  color:#f7fbfc!important;
+}
+
+#dashboard-view .kc-explorer-detail p,
+#dashboard-view .kc-explorer-detail small,
+#dashboard-view .kc-explorer-detail li{
+  color:#c0d3d7!important;
+}
+
+@media(max-width:760px){
+  #dashboard-view .academy-main{
+    min-height:100dvh!important;
+  }
+  #dashboard-view #contenido-principal{
+    min-height:calc(100dvh - 84px)!important;
+  }
+}
+
 @media(max-width:760px){
   #dashboard-view #herramientas{border-radius:20px!important}
   #dashboard-view #herramientas .kc-page-heading,
