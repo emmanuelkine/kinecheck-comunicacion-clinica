@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="./academy-kinecheck-v4.css?v=20260731-1">
   <link rel="stylesheet" href="./academy-premium-theme-v1.css?v=20260810-premium2" data-kc-premium-theme="direct">
   <link rel="stylesheet" href="./academy-premium-contrast-fix-v1.css?v=20260821-mobilegap1">
+  <style>
+    .kc-access-rescue-link{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 2px;padding:12px 14px;border:1px solid rgba(84,220,207,.28);border-radius:14px;background:rgba(70,210,197,.08);color:#dff9f6;text-decoration:none;font-size:.82rem;line-height:1.35}.kc-access-rescue-link span{min-width:0}.kc-access-rescue-link strong{flex:0 0 auto;color:#71e3d7;font-size:.77rem}.kc-access-rescue-link:hover,.kc-access-rescue-link:focus-visible{border-color:rgba(84,220,207,.55);background:rgba(70,210,197,.13);outline:none;box-shadow:0 0 0 3px rgba(84,220,207,.11)}@media(max-width:560px){.kc-access-rescue-link{align-items:flex-start;flex-direction:column;gap:4px}}
+  </style>
   <script src="./academy-bootstrap-v28.js?v=20260823-ejercicio-private1" defer></script>
   <script src="../watermark.js?v=20260730b" defer></script>
   <script src="./academy-v39.js?v=20260810-homecontinue2" defer></script>
@@ -68,6 +71,7 @@
           <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
           <button id="auth-submit" class="primary" type="submit">Ingresar a KineCheck</button>
         </form>
+        <a class="kc-access-rescue-link" href="../soporte/?flow=hotmart-access"><span>¿Acabas de comprar en Hotmart y aún no tienes acceso?</span><strong>Resolver acceso →</strong></a>
         <button id="forgot-password" class="kc-text-button" type="button">Olvidé mi contraseña</button>
         <div id="auth-progress" class="progress" hidden>Verificando tu cuenta…</div>
         <div id="auth-message" class="notice" hidden></div>
@@ -99,7 +103,7 @@
         <div id="recovery-update-message" class="notice" hidden></div>
       </div>
 
-      <a class="support-link" href="mailto:soporte.kinecheck@gmail.com">¿Necesitas ayuda? Contactar soporte</a>
+      <a class="support-link" href="../soporte/">¿Necesitas ayuda? Abrir centro de soporte</a>
     </div>
   </section>
 
@@ -314,7 +318,7 @@
     <span class="eyebrow">SOPORTE KINECHECK</span>
     <h2 id="support-title">¿En qué podemos ayudarte?</h2>
     <p>Indica tu correo de compra y el producto con el que necesitas ayuda. No envíes datos clínicos de pacientes.</p>
-    <a href="mailto:soporte.kinecheck@gmail.com">Escribir a soporte</a>
+    <a href="../soporte/">Abrir centro de soporte</a>
   </section>
   <button id="support-launcher" class="support-launcher" type="button" data-open-support aria-controls="support-center" aria-expanded="false"><span aria-hidden="true">•••</span>Soporte</button>
 </body>
