@@ -127,6 +127,12 @@ test("productos activos permiten verificar acceso y los que están en preparaci�
           <div class="course-meta">Licencia asociada a la compra</div>
           <button class="course-button" type="button" data-course="dolor-musculoesqueletico" disabled>No disponible en tu cuenta</button>
         </article>
+        <article data-card-course="ejercicio-terapeutico">
+          <span class="status-badge">Disponible</span>
+          <h3>Ejercicio Terapéutico</h3>
+          <div class="course-meta">Versión en desarrollo</div>
+          <button class="course-button" type="button" data-course="ejercicio-terapeutico">Comenzar curso</button>
+        </article>
         <article data-card-course="banderas-clinicas">
           <span class="status-badge">Disponible</span>
           <h3>KineCheck Banderas Clínicas</h3>
@@ -141,6 +147,7 @@ test("productos activos permiten verificar acceso y los que están en preparaci�
     window.KINECHECK_ACADEMY_CONFIG = {
       courses: [
         { slug: "dolor-musculoesqueletico" },
+        { slug: "ejercicio-terapeutico" },
         { slug: "banderas-clinicas" },
       ],
     };
@@ -153,6 +160,20 @@ test("productos activos permiten verificar acceso y los que están en preparaci�
   await expect(dm.locator('button[data-course="dolor-musculoesqueletico"]')).toBeHidden();
   await expect(page.locator('[data-kc-retry-access="dolor-musculoesqueletico"]')).toHaveText("Verificar acceso");
   await expect(page.locator('[data-kc-retry-access="dolor-musculoesqueletico"]')).toBeEnabled();
+
+  const exercise = page.locator('[data-card-course="ejercicio-terapeutico"]');
+  const exerciseButton = exercise.locator('button[data-course="ejercicio-terapeutico"]');
+  await expect(exercise.locator(".status-badge")).toHaveText("PRÓXIMAMENTE");
+  await expect(exercise.locator(".course-meta")).toContainText("Próximo lanzamiento");
+  await expect(exerciseButton).toHaveText("Abrir versión de revisión");
+  await expect(exerciseButton).toBeEnabled();
+
+  await exerciseButton.evaluate((button) => {
+    button.disabled = true;
+  });
+  await expect(exerciseButton).toHaveText("Próximamente");
+  await expect(exerciseButton).toBeDisabled();
+  await expect(page.locator('[data-kc-retry-access="ejercicio-terapeutico"]')).toHaveCount(0);
 
   const flags = page.locator('[data-card-course="banderas-clinicas"]');
   await expect(flags.locator(".status-badge")).toHaveText("EN CONSTRUCCIÓN");
