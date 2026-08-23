@@ -56,13 +56,13 @@
       <div id="auth-default-panel">
         <span class="eyebrow compact">BIENVENIDO</span>
         <h2>Ingresa a KineCheck</h2>
-        <p>Usa el mismo correo con el que realizaste tu compra en Hotmart.</p>
+        <p>Ingresa con el correo asociado a tu acceso KineCheck. Si compraste en Hotmart, usa el mismo correo de la compra.</p>
         <div class="tabs">
           <button id="login-tab" class="tab active" type="button">Ingresar</button>
           <button id="signup-tab" class="tab" type="button">Crear cuenta</button>
         </div>
         <form id="auth-form" novalidate>
-          <label for="email">Correo utilizado en la compra</label>
+          <label for="email">Correo de tu cuenta KineCheck</label>
           <input id="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
           <label for="password">Contraseña</label>
           <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mínimo 8 caracteres">
@@ -173,129 +173,149 @@
             <p id="continue-copy">Tus aplicaciones y cursos están organizados en un solo lugar.</p>
             <button id="continue-button" class="continue-button" type="button" hidden>Continuar</button>
             <div class="access-summary">
-              <strong id="active-count">0</strong>
-              <span>licencias activas</span>
+              <strong id="active-license-count">0 licencias activas</strong>
+              <span id="next-expiry"></span>
             </div>
           </aside>
         </section>
 
-        <section id="onboarding" class="onboarding-section" data-kc-section="inicio" hidden aria-labelledby="onboarding-title">
-          <div>
-            <span class="eyebrow compact">PRIMEROS PASOS</span>
-            <h2 id="onboarding-title">Tu ruta comienza aquí</h2>
-            <p>Aún no has iniciado un producto. Abre una aplicación o un curso y KineCheck guardará tu último acceso.</p>
+        <section class="kc-home-strip kc-primary-view" aria-label="Primeros pasos">
+          <div class="kc-home-strip-head">
+            <span class="eyebrow">PRIMEROS PASOS</span>
+            <h2>Tu ruta comienza aquí</h2>
           </div>
-          <ol class="onboarding-steps">
-            <li><strong>1</strong><span><b>Elige un producto</b>Revisa tus aplicaciones y cursos activos.</span></li>
-            <li><strong>2</strong><span><b>Comienza</b>KineCheck registra tu actividad en este dispositivo.</span></li>
-            <li><strong>3</strong><span><b>Retoma</b>Tu último acceso aparecerá primero al volver.</span></li>
-          </ol>
-          <button id="onboarding-action" class="onboarding-action" type="button">Ver mi biblioteca</button>
+          <div class="kc-home-strip-grid">
+            <article><b>1</b><div><strong>Elige un producto</strong><span>Revisa tus aplicaciones y cursos activos.</span></div></article>
+            <article><b>2</b><div><strong>Comienza</strong><span>KineCheck registra tu actividad en este dispositivo.</span></div></article>
+            <article><b>3</b><div><strong>Retoma</strong><span>Tu último acceso aparecerá primero al volver.</span></div></article>
+          </div>
+          <button type="button" data-kc-view-link="biblioteca">Ver mi biblioteca</button>
         </section>
 
-        <section class="kc-home-section" data-kc-section="inicio" aria-labelledby="home-apps-title">
-          <div class="kc-section-heading">
-            <div><span class="eyebrow compact">MIS APLICACIONES</span><h2 id="home-apps-title">Herramientas que ya tienes</h2></div>
-            <button type="button" data-kc-view-link="herramientas">Ver herramientas →</button>
-          </div>
-          <div id="home-app-grid" class="kc-product-grid"><div class="kc-empty-state">Verificando tus aplicaciones…</div></div>
-        </section>
-
-        <section class="kc-home-section" data-kc-section="inicio" aria-labelledby="home-courses-title">
-          <div class="kc-section-heading">
-            <div><span class="eyebrow compact">MIS CURSOS</span><h2 id="home-courses-title">Aprende y continúa avanzando</h2></div>
-            <button type="button" data-kc-view-link="biblioteca">Abrir biblioteca →</button>
-          </div>
-          <div id="home-course-grid" class="kc-product-grid"><div class="kc-empty-state">Verificando tus cursos…</div></div>
-        </section>
-
-        <section class="kc-home-section" data-kc-section="inicio" aria-labelledby="home-library-title">
-          <div class="kc-section-heading"><div><span class="eyebrow compact">BIBLIOTECA</span><h2 id="home-library-title">Evidencia y recursos para tu práctica</h2></div></div>
-          <div class="kc-feature-grid">
-            <button type="button" data-kc-view-link="biblioteca" data-kc-scroll-target="evidencia-semanal"><span>⌁</span><strong>Evidencia semanal</strong><small>Nuevas revisiones, ensayos y guías con implicaciones clínicas.</small></button>
-            <button type="button" data-kc-view-link="biblioteca" data-kc-scroll-target="recursos"><span>◇</span><strong>Recursos</strong><small>Plantillas, escalas, guías e infografías descargables.</small></button>
-            <button type="button" data-kc-view-link="biblioteca" data-kc-scroll-target="productos"><span>▤</span><strong>Mis cursos</strong><small>Todo tu aprendizaje reunido en una sola biblioteca.</small></button>
-          </div>
-        </section>
-
-        <section class="kc-home-section" data-kc-section="inicio" aria-labelledby="home-news-title">
-          <div class="kc-section-heading"><div><span class="eyebrow compact">NOVEDADES</span><h2 id="home-news-title">Qué cambió en KineCheck</h2></div></div>
-          <div id="home-news-grid" class="kc-news-grid">
-            <article><span>NUEVO</span><strong>KineCheck 4.0</strong><p>Aplicaciones, cursos, evidencia y herramientas reunidos bajo una sola experiencia.</p></article>
-            <article><span>EVIDENCIA</span><strong>Actualización semanal</strong><p>Revisa nuevas síntesis críticas y guías desde la Biblioteca.</p></article>
-            <article><span>PRÓXIMAMENTE</span><strong>KineCheck Lab</strong><p>Simulación de casos y entrenamiento del razonamiento clínico.</p></article>
-          </div>
-        </section>
-
-        <section id="productos" class="catalog-section kc-primary-view" data-kc-section="biblioteca">
-          <div class="section-heading">
-            <div>
-              <span class="eyebrow compact">BIBLIOTECA KINECHECK</span>
-              <h2>Mis cursos</h2>
-              <p>Retoma tus cursos, revisa tu progreso y comparte tu experiencia.</p>
+        <section id="kc-home-native-courses" class="kc-home-native-courses kc-primary-view" aria-label="Productos activos de KineCheck">
+          <div class="kc-home-native-section" data-kc-home-apps>
+            <div class="kc-home-section-heading">
+              <div><span class="eyebrow">MIS APLICACIONES</span><h2>Herramientas que ya tienes</h2></div>
+              <button type="button" data-kc-view-link="herramientas">Ver herramientas →</button>
             </div>
-            <label class="search-box">
-              <span>Buscar en mis cursos</span>
-              <input id="course-search" type="search" placeholder="Nombre o categoría" autocomplete="off">
-            </label>
+            <div class="kc-home-native-grid" data-kc-home-apps-grid><div class="kc-home-empty">Verificando tus aplicaciones…</div></div>
           </div>
-
-          <div class="kc-library-shortcuts" aria-label="Secciones de Biblioteca">
-            <button type="button" data-kc-scroll-target="productos">Mis cursos</button>
-            <button type="button" data-kc-scroll-target="evidencia-semanal">Evidencia</button>
-            <button type="button" data-kc-scroll-target="recursos">Recursos</button>
-            <button type="button" data-kc-coming-soon="certificados">Certificados</button>
-            <button type="button" data-kc-coming-soon="favoritos">Favoritos</button>
-            <button type="button" data-kc-coming-soon="descargas">Descargas</button>
+          <div class="kc-home-native-section" data-kc-home-courses>
+            <div class="kc-home-section-heading">
+              <div><span class="eyebrow">MIS CURSOS</span><h2>Aprende y continúa avanzando</h2></div>
+              <button type="button" data-kc-view-link="biblioteca">Abrir biblioteca →</button>
+            </div>
+            <div class="kc-home-native-grid" data-kc-home-courses-grid><div class="kc-home-empty">Verificando tus cursos…</div></div>
           </div>
-
-          <div class="filter-tabs" role="group" aria-label="Filtrar cursos por audiencia">
-            <button class="filter active" data-filter="all" type="button">Todos</button>
-            <button class="filter" data-filter="professionals" type="button">Profesionales</button>
-            <button class="filter" data-filter="students" type="button">Estudiantes</button>
-            <button class="filter" data-filter="patients" type="button">Pacientes</button>
-          </div>
-
-          <div id="library-message" class="notice" hidden></div>
-          <div id="course-grid" class="course-grid" aria-live="polite"></div>
         </section>
 
-        <section id="recursos" class="resource-section kc-primary-view" data-kc-section="biblioteca">
-          <div class="kc-section-heading kc-wide-heading">
-            <div><span class="eyebrow compact">RECURSOS</span><h2>Tu biblioteca clínica</h2><p>Materiales complementarios para aprender, enseñar y aplicar.</p></div>
+        <section class="kc-home-shelf kc-primary-view" aria-label="Biblioteca KineCheck">
+          <div class="kc-home-shelf-head"><span class="eyebrow">BIBLIOTECA</span><h2>Evidencia y recursos para tu práctica</h2></div>
+          <div class="kc-home-shelf-grid">
+            <article><span>⌁</span><div><strong>Evidencia semanal</strong><small>Nuevas revisiones, ensayos y guías con implicaciones clínicas.</small></div></article>
+            <article><span>◇</span><div><strong>Recursos</strong><small>Plantillas, escalas, guías e infografías descargables.</small></div></article>
+            <article><span>▤</span><div><strong>Mis cursos</strong><small>Todo tu aprendizaje reunido en una sola biblioteca.</small></div></article>
           </div>
-          <div class="resource-card"><span class="resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg></span><div><strong>Recursos exclusivos</strong><p>Plantillas, guías, escalas e infografías asociadas a tus productos.</p></div></div>
-          <div class="resource-card"><span class="resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v4h4M17 21v-4h-4M6.4 17A7.5 7.5 0 0 0 19 13M17.6 7A7.5 7.5 0 0 0 5 11"/></svg></span><div><strong>Contenido actualizado</strong><p>Los cursos y herramientas evolucionan con nueva evidencia y mejoras verificadas.</p></div></div>
-          <button class="resource-card resource-link" type="button" data-support-open><span class="resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H8l-5 2 1.6-4.4A8 8 0 1 1 21 12ZM8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span><span class="resource-copy"><strong>¿Necesitas ayuda?</strong><span class="resource-description">Abre el centro de soporte para resolver problemas de acceso o funcionamiento.</span></span></button>
         </section>
 
-        <section id="herramientas" class="kc-primary-view kc-tools-section" data-kc-section="herramientas" aria-labelledby="tools-title">
-          <div class="kc-page-heading"><span class="eyebrow compact">HERRAMIENTAS</span><h1 id="tools-title">Apoyo para aprender y decidir mejor</h1><p>Abre tus aplicaciones y descubre las herramientas que se incorporarán al ecosistema.</p></div>
-          <div id="tools-grid" class="kc-tool-grid"><div class="kc-empty-state">Verificando tus herramientas…</div></div>
-          <div class="kc-tool-category-grid"><article><span>Σ</span><strong>Calculadoras</strong><p>Dosificación, carga, función y seguimiento.</p><b>Próximamente</b></article><article><span>≋</span><strong>Escalas</strong><p>Instrumentos clínicos organizados por región y propósito.</p><b>Próximamente</b></article><article><span>✓</span><strong>Pruebas especiales</strong><p>Utilidad, límites e interpretación contextualizada.</p><b>Próximamente</b></article><article><span>□</span><strong>Plantillas</strong><p>Recursos para evaluación, docencia y seguimiento.</p><b>En preparación</b></article><article><span>◇</span><strong>Casos clínicos</strong><p>Práctica progresiva de razonamiento y decisiones.</p><b>En preparación</b></article><article><span>LB</span><strong>KineCheck Lab</strong><p>Simulador clínico con retroalimentación inmediata.</p><b>Próximamente</b></article></div>
+        <section class="kc-home-updates kc-primary-view" aria-label="Novedades KineCheck">
+          <div class="kc-home-section-heading"><div><span class="eyebrow">NOVEDADES</span><h2>Qué cambió en KineCheck</h2></div></div>
+          <div class="kc-home-update-grid">
+            <article><span>NUEVO</span><strong>KineCheck 4.0</strong><small>Aplicaciones, cursos, evidencia y herramientas reunidos bajo una sola experiencia.</small></article>
+            <article><span>EVIDENCIA</span><strong>Actualización semanal</strong><small>Revisa nuevas síntesis críticas y guías desde la Biblioteca.</small></article>
+            <article><span>PRÓXIMAMENTE</span><strong>KineCheck Lab</strong><small>Simulación de casos y entrenamiento del razonamiento clínico.</small></article>
+          </div>
         </section>
 
-        <section id="explorar" class="kc-primary-view kc-explore-section" data-kc-section="explorar" aria-labelledby="explore-title">
-          <div class="kc-page-heading"><span class="eyebrow compact">EXPLORAR KINECHECK</span><h1 id="explore-title">Descubre nuevas formas de aprender y trabajar</h1><p>Aplicaciones, cursos y packs para profesionales, estudiantes, pacientes y universidades.</p></div>
-          <div class="kc-explore-categories"><article><span>✚</span><strong>Aplicaciones</strong><p>Clínico, Estudiante y Recupera.</p></article><article><span>▤</span><strong>Cursos</strong><p>Formación clínica interactiva y aplicada.</p></article><article><span>◆</span><strong>Packs</strong><p>Combinaciones con acceso integrado.</p></article><article><span>U</span><strong>Universidades</strong><p>Soluciones para docencia y práctica formativa.</p></article></div>
-          <div id="explore-grid" class="kc-product-grid"></div>
-          <a class="kc-catalog-button" href="../kinecheck/">Abrir catálogo completo</a>
+        <section id="biblioteca" data-kc-section="biblioteca" hidden>
+          <div class="section-heading">
+            <div><span class="eyebrow">BIBLIOTECA KINECHECK</span><h2>Mis cursos</h2><p>Retoma tus cursos, revisa tu progreso y comparte tu experiencia.</p></div>
+            <div id="library-message" class="notice" hidden></div>
+          </div>
+          <div class="library-tools">
+            <label class="search-box" for="library-search"><span class="sr-only">Buscar en mis cursos</span><input id="library-search" type="search" placeholder="Nombre o categoría"></label>
+            <div class="library-tabs" role="tablist" aria-label="Secciones de biblioteca">
+              <button class="library-tab active" type="button" data-library-tab="courses" aria-selected="true">Mis cursos</button>
+              <button class="library-tab" type="button" data-library-tab="evidence" aria-selected="false">Evidencia</button>
+              <button class="library-tab" type="button" data-library-tab="resources" aria-selected="false">Recursos</button>
+              <button class="library-tab" type="button" data-library-tab="certificates" aria-selected="false">Certificados</button>
+              <button class="library-tab" type="button" data-library-tab="favorites" aria-selected="false">Favoritos</button>
+              <button class="library-tab" type="button" data-library-tab="downloads" aria-selected="false">Descargas</button>
+            </div>
+          </div>
+          <div class="library-filter-row" aria-label="Filtros de biblioteca">
+            <button class="filter-chip active" type="button" data-library-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-library-filter="professionals">Profesionales</button>
+            <button class="filter-chip" type="button" data-library-filter="students">Estudiantes</button>
+            <button class="filter-chip" type="button" data-library-filter="patients">Pacientes</button>
+          </div>
+          <div id="course-grid" class="course-grid"></div>
+          <section class="library-resources">
+            <span class="eyebrow">RECURSOS</span><h2>Tu biblioteca clínica</h2><p>Materiales complementarios para aprender, enseñar y aplicar.</p>
+            <div class="resource-grid">
+              <article><strong>Recursos exclusivos</strong><p>Plantillas, guías, escalas e infografías asociadas a tus productos.</p></article>
+              <article><strong>Contenido actualizado</strong><p>Los cursos y herramientas evolucionan con nueva evidencia y mejoras verificadas.</p></article>
+              <article><strong>¿Necesitas ayuda?</strong><p>Abre el centro de soporte para resolver problemas de acceso o funcionamiento.</p></article>
+            </div>
+          </section>
         </section>
 
-        <section id="cuenta" class="account-section kc-primary-view" data-kc-section="perfil" aria-labelledby="account-title">
-          <div class="kc-page-heading"><span class="eyebrow compact">PERFIL</span><h1 id="account-title">Tu cuenta KineCheck</h1><p>Administra tu identidad, licencias, compras, preferencias y soporte desde un solo lugar.</p></div>
-          <div class="account-grid"><article><span class="account-card-icon">ID</span><div><strong>Mi cuenta</strong><p id="profile-email">Cuenta activa</p><small id="profile-access">Licencias verificadas antes de abrir cada producto.</small></div></article><article><span class="account-card-icon">H</span><div><strong>Historial reciente</strong><ol id="access-history"><li>Aún no hay accesos registrados.</li></ol></div></article><article><span class="account-card-icon">Aa</span><div><strong>Configuración</strong><p>Ajusta la visualización de KineCheck.</p><button id="contrast-toggle" type="button" aria-pressed="false">Activar alto contraste</button></div></article></div>
-          <section class="kc-profile-block" aria-labelledby="licenses-title"><div class="kc-section-heading"><div><span class="eyebrow compact">MIS LICENCIAS</span><h2 id="licenses-title">Accesos activos</h2></div></div><div id="license-grid" class="kc-license-grid"><div class="kc-empty-state">Verificando licencias…</div></div></section>
-          <section class="kc-profile-block" aria-labelledby="purchases-title"><div class="kc-section-heading"><div><span class="eyebrow compact">MIS COMPRAS</span><h2 id="purchases-title">Productos asociados a tu cuenta</h2></div></div><div id="purchase-grid" class="kc-purchase-grid"><div class="kc-empty-state">Verificando productos…</div></div></section>
-          <section class="kc-profile-actions" aria-label="Ayuda y seguridad"><button type="button" data-support-open><strong>Ayuda y soporte</strong><span>Resolver problemas de acceso o funcionamiento →</span></button><button type="button" id="profile-password-reset"><strong>Cambiar contraseña</strong><span>Recibir un enlace seguro por correo →</span></button><a href="./salir.html?v=39"><strong>Cerrar sesión</strong><span>Salir de forma segura →</span></a></section>
+        <section id="herramientas" data-kc-section="herramientas" hidden>
+          <div class="section-heading"><div><span class="eyebrow">HERRAMIENTAS</span><h1>Apoyo para aprender y decidir mejor</h1><p>Abre tus aplicaciones y descubre las herramientas que se incorporarán al ecosistema.</p></div></div>
+          <div id="apps-grid" class="apps-grid"></div>
+          <div class="tool-grid">
+            <article><span>Σ</span><h3>Calculadoras</h3><p>Dosificación, carga, función y seguimiento.</p><small>Próximamente</small></article>
+            <article><span>≋</span><h3>Escalas</h3><p>Instrumentos clínicos organizados por región y propósito.</p><small>Próximamente</small></article>
+            <article><span>✓</span><h3>Pruebas especiales</h3><p>Utilidad, límites e interpretación contextualizada.</p><small>Próximamente</small></article>
+            <article><span>□</span><h3>Plantillas</h3><p>Recursos para evaluación, docencia y seguimiento.</p><small>En preparación</small></article>
+            <article><span>◇</span><h3>Casos clínicos</h3><p>Práctica progresiva de razonamiento y decisiones.</p><small>En preparación</small></article>
+            <article><span>LB</span><h3>KineCheck Lab</h3><p>Simulador clínico con retroalimentación inmediata.</p><small>Próximamente</small></article>
+          </div>
+        </section>
+
+        <section id="explorar" data-kc-section="explorar" hidden>
+          <div class="section-heading"><div><span class="eyebrow">EXPLORAR KINECHECK</span><h1>Descubre nuevas formas de aprender y trabajar</h1><p>Aplicaciones, cursos y packs para profesionales, estudiantes, pacientes y universidades.</p></div><a class="primary" href="../#productos">Abrir catálogo completo</a></div>
+          <div class="explore-grid">
+            <article><span>✚</span><h3>Aplicaciones</h3><p>Clínico, Estudiante y Recupera.</p></article>
+            <article><span>▤</span><h3>Cursos</h3><p>Formación clínica interactiva y aplicada.</p></article>
+            <article><span>◆</span><h3>Packs</h3><p>Combinaciones con acceso integrado.</p></article>
+            <article><span>U</span><h3>Universidades</h3><p>Soluciones para docencia y práctica formativa.</p></article>
+          </div>
+        </section>
+
+        <section id="perfil" data-kc-section="perfil" hidden>
+          <div class="section-heading"><div><span class="eyebrow">PERFIL</span><h1>Tu cuenta KineCheck</h1><p>Administra tu identidad, licencias, compras, preferencias y soporte desde un solo lugar.</p></div></div>
+          <div class="profile-grid">
+            <article class="profile-card identity-card"><span class="profile-icon">ID</span><div><strong id="profile-email">Mi cuenta</strong><small id="profile-user-id"></small></div><span id="profile-status">Cuenta activa</span></article>
+            <article class="profile-card"><strong>Licencias verificadas antes de abrir cada producto.</strong><small id="profile-license-copy"></small></article>
+            <article class="profile-card history-card"><span class="profile-icon">H</span><div><strong>Historial reciente</strong><ol id="profile-history"><li>Aún no hay accesos registrados.</li></ol></div></article>
+            <article class="profile-card settings-card"><span class="profile-icon">Aa</span><div><strong>Configuración</strong><small>Ajusta la visualización de KineCheck.</small><button id="high-contrast-toggle" type="button">Activar alto contraste</button></div></article>
+          </div>
+          <div class="account-sections">
+            <section><span class="eyebrow">MIS LICENCIAS</span><h2>Accesos activos</h2><div id="profile-licenses" class="profile-list"><p>Verificando licencias…</p></div></section>
+            <section><span class="eyebrow">MIS COMPRAS</span><h2>Productos asociados a tu cuenta</h2><div id="profile-purchases" class="profile-list"><p>Verificando productos…</p></div></section>
+          </div>
+          <div class="profile-actions"><button type="button" data-open-support>Ayuda y soporte <span>Resolver problemas de acceso o funcionamiento →</span></button><button id="profile-reset-password" type="button">Cambiar contraseña <span>Recibir un enlace seguro por correo →</span></button><a id="profile-sign-out" href="./salir.html?v=39">Cerrar sesión<span>Salir de forma segura →</span></a></div>
+          <p class="profile-legal">© KineCheck · Aprendizaje, práctica clínica y seguimiento del paciente.</p>
         </section>
       </main>
-      <footer class="academy-footer"><span>© <span id="current-year"></span> KineCheck</span><span>Aprendizaje, práctica clínica y seguimiento del paciente.</span></footer>
     </div>
-    <nav id="kc-bottom-nav" class="kc-bottom-nav" aria-label="Navegación móvil"><a href="#inicio" data-kc-view-link="inicio"><span>⌂</span><b>Inicio</b></a><a href="#biblioteca" class="active" data-kc-view-link="biblioteca"><span>▤</span><b>Biblioteca</b></a><a href="#herramientas" data-kc-view-link="herramientas"><span>✚</span><b>Herramientas</b></a><a href="#perfil" data-kc-view-link="perfil"><span>○</span><b>Perfil</b></a></nav>
+
+    <nav class="mobile-bottom-nav" aria-label="Navegación móvil">
+      <a href="#inicio" data-kc-view-link="inicio"><span>⌂</span><small>Inicio</small></a>
+      <a class="active" href="#biblioteca" data-kc-view-link="biblioteca"><span>▤</span><small>Biblioteca</small></a>
+      <a href="#herramientas" data-kc-view-link="herramientas"><span>✚</span><small>Herramientas</small></a>
+      <a href="#perfil" data-kc-view-link="perfil"><span>○</span><small>Perfil</small></a>
+    </nav>
   </section>
-  <div id="kc-toast" class="kc-toast" role="status" aria-live="polite" hidden></div>
-  <div class="support-widget"><div id="support-panel" class="support-panel" hidden><button class="support-close" type="button" aria-label="Cerrar soporte" data-support-close>×</button><span class="eyebrow compact">SOPORTE KINECHECK</span><strong>¿En qué podemos ayudarte?</strong><p>Indica tu correo de compra y el producto con el que necesitas ayuda. No envíes datos clínicos de pacientes.</p><a href="mailto:soporte.kinecheck@gmail.com?subject=Soporte%20KineCheck">Escribir a soporte</a></div><button id="support-launcher" class="support-launcher" type="button" aria-expanded="false" aria-controls="support-panel" data-support-open><span aria-hidden="true">•••</span><b>Soporte</b></button></div>
-  <noscript>Necesitas activar JavaScript para acceder a KineCheck.</noscript>
+
+  <section id="support-center" class="support-center" hidden aria-labelledby="support-title">
+    <button class="support-close" type="button" data-close-support aria-label="Cerrar soporte">×</button>
+    <span class="eyebrow">SOPORTE KINECHECK</span>
+    <h2 id="support-title">¿En qué podemos ayudarte?</h2>
+    <p>Indica tu correo de compra y el producto con el que necesitas ayuda. No envíes datos clínicos de pacientes.</p>
+    <a href="mailto:soporte.kinecheck@gmail.com">Escribir a soporte</a>
+  </section>
+  <button id="support-launcher" class="support-launcher" type="button" data-open-support aria-controls="support-center" aria-expanded="false"><span aria-hidden="true">•••</span>Soporte</button>
 </body>
 </html>
