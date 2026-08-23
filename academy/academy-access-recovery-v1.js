@@ -13,6 +13,12 @@
   const SSO_HANDOFF_TYPE = CONFIG.appSso?.handoffType || "kinecheck-sso-v3-access-only";
 
   const PREPARING_PRODUCTS = Object.freeze({
+    "ejercicio-terapeutico": Object.freeze({
+      badge: "PRÓXIMAMENTE",
+      meta: "Próximo lanzamiento · curso en revisión",
+      lockedLabel: "Próximamente",
+      reviewLabel: "Abrir versión de revisión",
+    }),
     "banderas-clinicas": Object.freeze({
       badge: "EN CONSTRUCCIÓN",
       meta: "Próximo lanzamiento · contenido en desarrollo",
