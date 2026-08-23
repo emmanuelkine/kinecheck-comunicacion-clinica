@@ -31,11 +31,13 @@ const PRODUCT_CHECKOUT_BY_ID = Object.freeze({
 const NON_COMMERCIAL_ACTIVE_SLUGS = new Set([
   "dolor-musculoesqueletico",
   "banderas-clinicas",
+  "ejercicio-terapeutico",
 ]);
 
 const PREDEPLOY_PRODUCT_URLS = new Set([
   `${PUBLIC_BASE}/productos/dolor-musculoesqueletico/`,
   `${PUBLIC_BASE}/productos/banderas-clinicas/`,
+  `${PUBLIC_BASE}/academy/ejercicio-terapeutico/`,
 ]);
 
 let failures = 0;

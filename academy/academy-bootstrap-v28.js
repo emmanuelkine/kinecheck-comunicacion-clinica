@@ -165,6 +165,21 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       url: "../banderas-clinicas/?course=banderas-clinicas&v=20260820-owner1"
     },
     {
+      slug: "ejercicio-terapeutico",
+      title: "Ejercicio Terapéutico",
+      subtitle: "Prescripción clínica FITT‑VP, seguridad, modalidades y progresión basadas en evidencia.",
+      productId: "PROPIETARIO",
+      icon: "ET",
+      kind: "course",
+      audience: "Profesionales y estudiantes",
+      audienceKey: "professionals",
+      audiences: ["professionals", "students"],
+      modules: 5,
+      lessons: 10,
+      status: "active",
+      url: "./ejercicio-terapeutico/"
+    },
+    {
       slug: "kinecheck-lab-clinico",
       title: "KineCheck Lab Clínico",
       subtitle: "Simulación de razonamiento y decisiones clínicas.",
