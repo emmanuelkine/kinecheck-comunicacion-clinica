@@ -115,7 +115,7 @@ test("los cursos nuevos conservan el controlador nativo de la Biblioteca", async
   ]);
 });
 
-test("productos en preparación muestran CTA correcto sin crear reintentos falsos", async ({ page }) => {
+test("productos activos permiten verificar acceso y los que están en preparación usan CTA correcto", async ({ page }) => {
   await page.setContent(`
     <!doctype html><html><head></head><body>
       <div id="library-message" hidden></div>
@@ -148,11 +148,11 @@ test("productos en preparación muestran CTA correcto sin crear reintentos falso
   await page.addScriptTag({ path: ACCESS_RECOVERY_SCRIPT });
 
   const dm = page.locator('[data-card-course="dolor-musculoesqueletico"]');
-  await expect(dm.locator(".status-badge")).toHaveText("PRÓXIMAMENTE");
-  await expect(dm.locator(".course-meta")).toContainText("Próximo lanzamiento");
-  await expect(dm.locator('button[data-course="dolor-musculoesqueletico"]')).toHaveText("Próximamente");
-  await expect(dm.locator('button[data-course="dolor-musculoesqueletico"]')).toBeDisabled();
-  await expect(page.locator('[data-kc-retry-access="dolor-musculoesqueletico"]')).toHaveCount(0);
+  await expect(dm.locator(".status-badge")).toHaveText("No adquirido");
+  await expect(dm.locator(".course-meta")).toContainText("Licencia asociada a la compra");
+  await expect(dm.locator('button[data-course="dolor-musculoesqueletico"]')).toBeHidden();
+  await expect(page.locator('[data-kc-retry-access="dolor-musculoesqueletico"]')).toHaveText("Verificar acceso");
+  await expect(page.locator('[data-kc-retry-access="dolor-musculoesqueletico"]')).toBeEnabled();
 
   const flags = page.locator('[data-card-course="banderas-clinicas"]');
   await expect(flags.locator(".status-badge")).toHaveText("EN CONSTRUCCIÓN");
