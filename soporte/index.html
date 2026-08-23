@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#073c4a">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://eqhcdclyeoapmqtlduwf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'">
   <link rel="icon" href="../assets/kinecheck-mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./support.css?v=20260805-1">
-  <script src="./support.js?v=20260805-1" defer></script>
+  <link rel="stylesheet" href="./support.css?v=20260823-access-rescue1">
+  <script src="./support.js?v=20260823-access-rescue1" defer></script>
   <title>Soporte inteligente | KineCheck</title>
 </head>
 <body>
@@ -19,18 +19,36 @@
 
   <main>
     <section class="intro">
-      <span class="eyebrow">DIAGNÓSTICO AUTOMÁTICO</span>
-      <h1>Cuéntanos qué ocurrió.</h1>
-      <p>Antes de crear el ticket, KineCheck revisará automáticamente compra, licencia, vigencia, reembolso y sincronización. Si detecta un desfase seguro, intentará corregirlo.</p>
+      <span id="support-eyebrow" class="eyebrow">DIAGNÓSTICO AUTOMÁTICO</span>
+      <h1 id="support-title">Cuéntanos qué ocurrió.</h1>
+      <p id="support-intro-copy">Antes de crear el ticket, KineCheck revisará automáticamente compra, licencia, vigencia, reembolso y sincronización. Si detecta un desfase seguro, intentará corregirlo.</p>
+    </section>
+
+    <section id="access-rescue-guide" class="rescue-guide" hidden aria-labelledby="access-rescue-title">
+      <div class="rescue-head">
+        <span class="eyebrow">RESCATE DE ACCESO</span>
+        <h2 id="access-rescue-title">Primero descarta las dos causas más frecuentes.</h2>
+        <p>Si Hotmart ya aprobó tu compra y KineCheck todavía no reconoce el acceso, este flujo registra el caso sin obligarte a redactar un correo.</p>
+      </div>
+      <div class="rescue-steps">
+        <article><b>1</b><div><strong>Confirma el correo exacto de compra</strong><p>Revisa el mensaje de confirmación de Hotmart y usa exactamente ese correo en KineCheck. Comprueba también Spam, Promociones y si utilizaste una cuenta secundaria.</p></div></article>
+        <article><b>2</b><div><strong>Confirma que el pago diga “aprobado”</strong><p>Si Hotmart ya lo aprobó, dale hasta 15 minutos a KineCheck para sincronizar. Si el pago sigue pendiente, la liberación depende del método utilizado; algunos pagos no inmediatos pueden tardar varios días hábiles.</p></div></article>
+        <article><b>3</b><div><strong>Si sigue sin aparecer, activa el fast-track</strong><p>Ten a mano el código de transacción que aparece en el correo de Hotmart. Con esos datos crearemos una solicitud trazable para revisión.</p></div></article>
+      </div>
+      <div class="rescue-note"><strong>Importante:</strong> KineCheck no activa compras pendientes ni reemplaza la confirmación de Hotmart. Si la compra está aprobada y existe una desincronización verificable, el sistema puede intentar conciliarla de forma segura o dejar el caso priorizado para revisión.</div>
     </section>
 
     <section class="layout">
       <form id="support-form" class="support-card" novalidate>
-        <label>Correo asociado a tu compra
+        <label id="rescue-name-field" class="rescue-only" hidden>Nombre
+          <input id="support-name" name="name" type="text" autocomplete="name" maxlength="120" placeholder="Tu nombre">
+        </label>
+
+        <label id="support-email-label">Correo asociado a tu compra
           <input id="support-email" name="email" type="email" autocomplete="email" required placeholder="nombre@correo.cl">
         </label>
 
-        <div class="two-cols">
+        <div class="two-cols" data-generic-only>
           <label>Tipo de solicitud
             <select id="support-category" name="category" required>
               <option value="access">No puedo ingresar</option>
@@ -57,30 +75,32 @@
           </label>
         </div>
 
-        <label>Código de transacción de Hotmart <small>Opcional</small>
+        <label id="support-transaction-label">Código de transacción de Hotmart <small>Opcional</small>
           <input id="support-transaction" name="transactionId" type="text" maxlength="180" placeholder="Ej.: HP123456789">
         </label>
 
-        <label>Describe el problema
+        <label data-generic-only>Describe el problema
           <textarea id="support-message" name="message" rows="7" minlength="10" maxlength="2000" required placeholder="Indica qué intentaste, qué esperabas y qué mensaje apareció."></textarea>
         </label>
 
         <label class="honeypot" aria-hidden="true">Sitio web<input id="support-website" name="website" tabindex="-1" autocomplete="off"></label>
 
-        <div class="warning"><strong>No ingreses contraseñas ni datos clínicos identificables.</strong> No incluyas nombres, RUT, teléfonos, fichas ni imágenes de pacientes.</div>
+        <div class="warning"><strong>No ingreses contraseñas ni datos clínicos identificables.</strong> No incluyas RUT, teléfonos, fichas ni imágenes de pacientes.</div>
         <button id="support-submit" type="submit">Revisar y crear solicitud</button>
-        <div id="support-result" class="result" role="status" hidden></div>
+        <div id="support-result" class="result" role="status" aria-live="polite" hidden></div>
+        <p id="rescue-sla" class="rescue-sla" hidden>Si tu pago ya fue aprobado por Hotmart y el acceso no se sincronizó, revisaremos el cruce de datos. Objetivo de respuesta: <strong>hasta 12 horas hábiles</strong>. Conserva el código de solicitud que aparecerá al enviar.</p>
       </form>
 
       <aside class="side-card">
-        <span class="eyebrow">QUÉ OCURRE DESPUÉS</span>
-        <ol>
+        <span id="support-side-eyebrow" class="eyebrow">QUÉ OCURRE DESPUÉS</span>
+        <ol id="support-side-steps">
           <li><b>1</b><span>Se comprueba si existe compra y licencia.</span></li>
           <li><b>2</b><span>Se identifica vencimiento, devolución o correo incorrecto.</span></li>
           <li><b>3</b><span>Se intenta conciliar una compra activa desincronizada.</span></li>
           <li><b>4</b><span>Se crea un ticket con prioridad y diagnóstico inicial.</span></li>
         </ol>
-        <p>Las solicitudes de privacidad reciben prioridad alta. Para urgencias de salud, utiliza los canales sanitarios correspondientes: KineCheck no presta atención de urgencia.</p>
+        <p id="support-side-copy">Las solicitudes de privacidad reciben prioridad alta. Para urgencias de salud, utiliza los canales sanitarios correspondientes: KineCheck no presta atención de urgencia.</p>
+        <a class="back-academy" href="../academy/">← Volver a KineCheck Academy</a>
       </aside>
     </section>
   </main>
