@@ -146,8 +146,8 @@
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data?.message || "No fue posible crear la solicitud.");
 
-      const prefix = accessRescue ? "Solicitud registrada." : data.message;
-      setResult(`${prefix} ${data.message} Código de solicitud: ${data.ticketId}. Prioridad asignada: ${data.priority}.`);
+      const statusMessage = accessRescue ? `Solicitud registrada. ${data.message}` : data.message;
+      setResult(`${statusMessage} Código de solicitud: ${data.ticketId}. Prioridad asignada: ${data.priority}.`);
       window.KINECHECK_METRIC?.("support_submit_success", {
         productSlug: payload.productSlug,
         metadata: {
