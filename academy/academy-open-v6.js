@@ -16,6 +16,7 @@
     "traumatologia-ortopedia-clinica": `../traumatologia/?course=traumatologia-ortopedia-clinica&v=${RELEASE}`,
     "dolor-lumbar-persistente": `./dolor-lumbar-persistente/?course=dolor-lumbar-persistente&v=${RELEASE}`,
     "banderas-clinicas": `../banderas-clinicas/?course=banderas-clinicas&v=${RELEASE}`,
+    "ejercicio-terapeutico": `./ejercicio-terapeutico/?course=ejercicio-terapeutico&v=${RELEASE}`,
   });
 
   const EXTERNAL = Object.freeze({
