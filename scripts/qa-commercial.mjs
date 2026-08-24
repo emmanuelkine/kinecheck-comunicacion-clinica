@@ -26,8 +26,12 @@ async function read(path) {
   return await fs.readFile(path, "utf8");
 }
 
-function count(source, needle) {
-  return source.split(needle).length - 1;
+function countClass(source, className) {
+  const classAttrs = source.match(/class=(?:"[^"]*"|'[^']*')/g) || [];
+  return classAttrs.filter((attr) => {
+    const value = attr.slice(7, -1);
+    return value.split(/\s+/).includes(className);
+  }).length;
 }
 
 async function checkSource() {
@@ -68,10 +72,10 @@ async function checkSource() {
     );
   }
 
-  const homePrices = count(home, 'class="price"');
-  const professionalPrices = count(professionals, 'class="price"');
-  const studentPrices = count(students, 'class="price"');
-  const recoveryPrices = count(recovery, 'class="price"');
+  const homePrices = countClass(home, "price");
+  const professionalPrices = countClass(professionals, "price");
+  const studentPrices = countClass(students, "price");
+  const recoveryPrices = countClass(recovery, "price");
   const currentArchitecture = homePrices === 0 && professionalPrices === 6 && studentPrices === 4 && recoveryPrices === 1;
   record(
     "Current public pricing architecture",
