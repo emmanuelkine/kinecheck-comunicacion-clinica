@@ -72,7 +72,7 @@ async function checkSource() {
   const professionalPrices = count(professionals, 'class="price"');
   const studentPrices = count(students, 'class="price"');
   const recoveryPrices = count(recovery, 'class="price"');
-  const currentArchitecture = homePrices === 0 && professionalPrices === 5 && studentPrices === 4 && recoveryPrices === 1;
+  const currentArchitecture = homePrices === 0 && professionalPrices === 6 && studentPrices === 4 && recoveryPrices === 1;
   record(
     "Current public pricing architecture",
     currentArchitecture ? "PASS" : "FAIL",
@@ -184,7 +184,7 @@ async function checkCheckout(name, url) {
 
 async function checkLive() {
   await checkPage("Public home", "/?qa=commercial-current", ["Explora KineCheck", "KineCheck Clínico", "Comunicación Clínica", "KineCheck Estudiante", "KineCheck Recupera", "Elegir mi perfil", "Abrir Biblioteca"]);
-  await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "Información primero. Compra después."]);
+  await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "Formación diseñada para la práctica clínica."]);
   await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "RECOMENDADO"]);
   await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "$9.990 CLP", "Acceso por 3 meses"]);
   await checkPage("Canonical Academy", "/academy/?qa=commercial-current", ['id="login-view"', "academy-v39.js", "academy-open-v6.js", "academy-owned-native-bridge-v1.js", "../metrics-v1.js"]);
