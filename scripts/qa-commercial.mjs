@@ -76,7 +76,7 @@ async function checkSource() {
   const professionalPrices = countClass(professionals, "price");
   const studentPrices = countClass(students, "price");
   const recoveryPrices = countClass(recovery, "price");
-  const currentArchitecture = homePrices === 0 && professionalPrices === 6 && studentPrices === 4 && recoveryPrices === 1;
+  const currentArchitecture = homePrices === 0 && professionalPrices === 6 && studentPrices === 5 && recoveryPrices === 1;
   record(
     "Current public pricing architecture",
     currentArchitecture ? "PASS" : "FAIL",
