@@ -41,7 +41,7 @@ jobs:
           const pages = [
             ['Inicio', 'https://kinecheck.cl/?qa=live-current', ['Explora KineCheck', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Estudiante', 'KineCheck Recupera', 'Elegir mi perfil', 'Probar demo', 'Abrir Biblioteca']],
             ['Demo', 'https://kinecheck.cl/demo/?qa=live-current', ['Conoce el ecosistema KineCheck', 'MODO DEMO', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Recupera', 'Sin registro']],
-            ['Profesionales', 'https://kinecheck.cl/profesionales/?qa=live-current', ['KineCheck Clínico', '$39.990 CLP', '$35.900 CLP', 'Información primero. Compra después.']],
+            ['Profesionales', 'https://kinecheck.cl/profesionales/?qa=live-current', ['KineCheck Clínico', '$39.990 CLP', '$35.900 CLP', 'Formación diseñada para la práctica clínica.']],
             ['Estudiantes', 'https://kinecheck.cl/estudiantes/?qa=live-current', ['KineCheck Estudiante', '$14.990 CLP', '$49.900 CLP', 'RECOMENDADO']],
             ['Recupera', 'https://kinecheck.cl/recupera/?qa=live-current', ['KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses']],
             ['Academy', 'https://kinecheck.cl/academy/?qa=live-current', ['Ingresa a KineCheck', 'Correo utilizado en la compra', 'Olvidé mi contraseña']],
