@@ -5,12 +5,13 @@ const PUBLIC_BASE = "https://kinecheck.cl";
 const SUPABASE_BASE = "https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1";
 const TIMEOUT_MS = 20000;
 
+// Sólo productos actualmente habilitados para comercio público. Recupera conserva
+// referencias históricas para reconciliación, pero no debe verificarse como checkout activo.
 const CHECKOUT_EXPECTATIONS = [
   { label: "KineCheck Clínico", url: "https://pay.hotmart.com/L106791841D", keywords: ["kinecheck clínico", "kinecheck clinico"] },
   { label: "Comunicación Clínica", url: "https://pay.hotmart.com/T106883983U", keywords: ["comunicación clínica", "comunicacion clinica"] },
   { label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"] },
   { label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"] },
-  { label: "KineCheck Recupera", url: "https://pay.hotmart.com/P106806251E", keywords: ["kinecheck recupera"] },
   { label: "Más allá del Dolor", url: "https://pay.hotmart.com/W106888386Q", keywords: ["más allá del dolor", "mas alla del dolor"] },
   { label: "KineCheck Evidencia Aplicada", url: "https://pay.hotmart.com/F106921972I", keywords: ["kinecheck evidencia aplicada", "evidencia aplicada", "razonamiento clínico con evidencia", "razonamiento clinico con evidencia"] },
   { label: "Traumatología y Ortopedia Clínica", url: "https://pay.hotmart.com/B106913952R", keywords: ["traumatología", "traumatologia", "ortopedia clínica", "ortopedia clinica"] },
@@ -20,6 +21,7 @@ const CHECKOUT_EXPECTATIONS = [
 const PRODUCT_CHECKOUT_BY_ID = Object.freeze({
   "8150019": "https://pay.hotmart.com/L106791841D",
   "8154796": "https://pay.hotmart.com/G106801166S",
+  // Referencia histórica. KineCheck Recupera permanece pausado y se excluye de activeProducts.
   "8157431": "https://pay.hotmart.com/P106806251E",
   "8192814": "https://pay.hotmart.com/T106883983U",
   "8194777": "https://pay.hotmart.com/W106888386Q",
@@ -27,6 +29,8 @@ const PRODUCT_CHECKOUT_BY_ID = Object.freeze({
   "8205453": "https://pay.hotmart.com/B106913952R",
   "8330940": "https://pay.hotmart.com/W107198798E",
 });
+
+const PAUSED_COMMERCIAL_SLUGS = new Set(["kinecheck-recupera"]);
 
 const NON_COMMERCIAL_ACTIVE_SLUGS = new Set([
   "dolor-musculoesqueletico",
@@ -213,6 +217,7 @@ async function main() {
   const launchRouter = await fileText("academy/academy-launch-router-v4.js");
   const integrationGuard = await fileText("academy/academy-integration-guard-v4.js");
   const courseAuthGate = await fileText("auth-gate.js");
+  const privacyGuard = await fileText("academy/academy-personalization-v1.js");
 
   await Promise.all([
     ensureLocalFile("index.html"),
@@ -230,6 +235,7 @@ async function main() {
     ensureLocalFile("academy/academy-owned-native-bridge-v1.js"),
     ensureLocalFile("academy/academy-launch-router-v4.js"),
     ensureLocalFile("academy/academy-integration-guard-v4.js"),
+    ensureLocalFile("academy/academy-personalization-v1.js"),
     ensureLocalFile("academy/salir.html"),
     ensureLocalFile("academy/compra-aprobada.html"),
     ensureLocalFile("academy/pago-pendiente.html"),
@@ -300,8 +306,18 @@ async function main() {
     logOk("Los cursos protegidos conservan la sesión aislada y el traspaso SSO vigente.");
   }
 
+  if (!privacyGuard.includes('const PAUSED_PRODUCT = "kinecheck-recupera"')
+      || !privacyGuard.includes('course.status = "preparing"')
+      || !privacyGuard.includes('course.url = ""')) {
+    logFail("La política runtime de Academy no mantiene Recupera pausado.");
+  } else {
+    logOk("Academy mantiene Recupera pausado por política de privacidad.");
+  }
+
   const academyProducts = extractAcademyProducts(academyConfig);
-  const activeProducts = academyProducts.filter((product) => product.status === "active");
+  const activeProducts = academyProducts.filter(
+    (product) => product.status === "active" && !PAUSED_COMMERCIAL_SLUGS.has(product.slug),
+  );
   const commercialActiveProducts = activeProducts.filter((product) => !NON_COMMERCIAL_ACTIVE_SLUGS.has(product.slug));
   const activeProductGroups = groupProductsById(commercialActiveProducts);
   activeProducts
@@ -309,6 +325,12 @@ async function main() {
     .forEach((product) => logOk(`Producto activo en modo no comercial: ${product.title}`));
   const checkoutUrls = [...new Set(extractCheckoutUrls(publicCommerce))];
   const expectedUrls = new Set(CHECKOUT_EXPECTATIONS.map((item) => item.url));
+
+  if (checkoutUrls.includes(PRODUCT_CHECKOUT_BY_ID["8157431"])) {
+    logFail("Recupera expone un checkout en las páginas públicas canónicas pese a estar pausado.");
+  } else {
+    logOk("Recupera no expone checkout en las páginas públicas canónicas.");
+  }
 
   const lumbar = activeProducts.find((product) => product.slug === "dolor-lumbar-persistente");
   if (!lumbar) {
