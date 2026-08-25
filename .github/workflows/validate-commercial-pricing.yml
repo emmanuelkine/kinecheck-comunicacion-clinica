@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Validar fuente comercial de Chile
+      - name: Validar fuente comercial histórica de Chile
         run: |
           node <<'NODE'
           const fs = require('node:fs');
@@ -49,7 +49,7 @@ jobs:
           };
           if (prices.country !== 'Chile' || prices.currency !== 'CLP') throw new Error('País o moneda incorrectos.');
           const rows = prices.products || {};
-          if (Object.keys(rows).length !== 9) throw new Error('Deben existir exactamente nueve productos en la fuente comercial.');
+          if (Object.keys(rows).length !== 9) throw new Error('Deben existir exactamente nueve productos en la fuente comercial histórica.');
           for (const [slug, expectedRow] of Object.entries(expected)) {
             const row = rows[slug];
             if (!row) throw new Error(`Falta ${slug} en commercial-prices-cl.json.`);
@@ -60,10 +60,10 @@ jobs:
           if (rows['pack-estudiante']?.saving !== 5080 || rows['pack-estudiante']?.discountPercent !== 9.2) {
             throw new Error('El ahorro verificado del pack es incorrecto.');
           }
-          console.log('Fuente comercial: 9/9 productos CLP verificados.');
+          console.log('Fuente comercial histórica: 9/9 productos CLP verificados. Recupera no se expone públicamente mientras esté pausado.');
           NODE
 
-      - name: Validar precios visibles en la arquitectura pública actual
+      - name: Validar precios visibles y Recupera pausado
         run: |
           node <<'NODE'
           const fs = require('node:fs');
@@ -74,11 +74,9 @@ jobs:
             recupera: fs.readFileSync('recupera/index.html', 'utf8'),
           };
 
-          // La portada se simplificó deliberadamente: solo muestra tres perfiles.
-          // Los precios y checkouts oficiales viven dentro de cada perfil.
-          // Dolor Lumbar usa la clase compuesta "offer-price price", por eso no altera
-          // el conteo histórico de bloques class="price" pero sí se valida explícitamente.
-          const expectedCounts = { home: 0, profesionales: 5, estudiantes: 4, recupera: 1 };
+          // La portada no duplica precios. Recupera tampoco debe mostrar precio ni
+          // checkout mientras permanezca Próximamente por revisión de privacidad.
+          const expectedCounts = { home: 0, profesionales: 5, estudiantes: 4, recupera: 0 };
           for (const [pageName, expected] of Object.entries(expectedCounts)) {
             const blocks = (pages[pageName].match(/class="price"/g) || []).length;
             if (blocks !== expected) throw new Error(`${pageName}: se esperaban ${expected} bloques de precio y hay ${blocks}.`);
@@ -96,7 +94,6 @@ jobs:
             ['estudiantes', 'Dolor Lumbar Persistente', '$39.990 CLP', 'Acceso por 12 meses', 'W107198798E'],
             ['estudiantes', 'Comunicación Clínica', '$19.900 CLP', 'Acceso por 12 meses', 'T106883983U'],
             ['estudiantes', 'Evidencia Aplicada', '$29.990 CLP', 'Acceso por 12 meses', 'F106921972I'],
-            ['recupera', 'KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses', 'P106806251E'],
           ];
 
           for (const [pageName, product, price, term, checkoutId] of products) {
@@ -106,10 +103,19 @@ jobs:
             }
           }
 
+          const recovery = pages.recupera;
+          if (!recovery.includes('PRÓXIMAMENTE')) throw new Error('Recupera no está marcado como Próximamente.');
+          if (!recovery.includes('No se encuentra disponible para compra ni para registro de datos.')) {
+            throw new Error('Recupera no declara el bloqueo de compra/registro.');
+          }
+          for (const forbidden of ['$9.990', 'Acceso por 3 meses', 'P106806251E', 'Comprar en Hotmart']) {
+            if (recovery.includes(forbidden)) throw new Error(`Recupera expone contenido comercial prohibido mientras está pausado: ${forbidden}`);
+          }
+
           if (Object.values(pages).some((html) => html.includes('$59.900'))) {
             throw new Error('Se conserva el precio anterior del pack.');
           }
-          console.log('Precios, vigencias y checkouts visibles en los perfiles públicos.');
+          console.log('Precios visibles verificados; Recupera permanece fuera de comercio público.');
           NODE
 
       - name: Validar correcciones de auditoría pública
@@ -139,6 +145,9 @@ jobs:
           }
           for (const file of ['profesionales/index.html', 'estudiantes/index.html', 'recupera/index.html']) {
             if (!pages[file].includes('<small>SALUD MUSCULOESQUELÉTICA</small>')) throw new Error(`${file}: footer de marca no unificado.`);
+          }
+          if (!pages['recupera/index.html'].includes('PRÓXIMAMENTE')) {
+            throw new Error('Recupera debe permanecer Próximamente.');
           }
           console.log('Hallazgos de auditoría pública cubiertos por CI.');
           NODE
