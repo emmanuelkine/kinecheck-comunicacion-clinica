@@ -17,8 +17,8 @@ const CANONICAL_ACCESS_PAGES = [
   "ayuda/index.html", "soporte/index.html", "bienvenida/index.html", "404.html",
 ];
 
-// Checkouts históricos que siguen documentados para reconciliación comercial. La
-// presencia de Recupera aquí NO autoriza a mostrar su checkout en una superficie pública.
+// Referencias comerciales históricas para reconciliación. Recupera puede conservarse
+// en documentación interna, pero no debe exponer precio o checkout en páginas públicas.
 const PRODUCT_CHECKOUTS = [
   ["kinecheck-clinico", "https://pay.hotmart.com/L106791841D"],
   ["kinecheck-estudiante", "https://pay.hotmart.com/G106801166S"],
@@ -74,7 +74,7 @@ function assertAccessiblePublicShell(source) {
   assert.equal(count(source, "<h1"), 1, "la página debe tener un único h1");
 }
 
-test("la portada simplificada conserva soporte, tres perfiles y acceso canónico", async () => {
+test("la portada conserva soporte, tres perfiles, acceso canónico y Recupera Próximamente", async () => {
   const home = await read("index.html");
   assert.ok(home.includes('href="mailto:soporte.kinecheck@gmail.com"'));
   assertAccessiblePublicShell(home);
@@ -86,7 +86,7 @@ test("la portada simplificada conserva soporte, tres perfiles y acceso canónico
   assert.ok(home.includes('href="./recupera/"'));
   assert.ok(home.includes('href="./academy/"'));
   assert.ok(home.includes("KineCheck Recupera · Próximamente"));
-  assert.equal(count(home, 'class="price"'), 0, "la portada ya no debe duplicar precios ni checkouts");
+  assert.equal(count(home, 'class="price"'), 0);
 });
 
 test("ninguna superficie pública visible usa /platform/ ni CTAs vacíos", async () => {
@@ -106,7 +106,7 @@ test("ninguna superficie pública visible usa /platform/ ni CTAs vacíos", async
   assert.ok(!manifest.includes('"start_url": "/platform/"'));
 });
 
-test("la arquitectura de marca mantiene Recupera como Próximamente", async () => {
+test("la arquitectura de marca mantiene los productos activos y Recupera pausado", async () => {
   const home = await read("index.html");
   assert.equal(count(home, 'class="audience-card'), 3);
   assert.equal(count(home, 'class="brand-family-card"'), 0);
@@ -117,8 +117,9 @@ test("la arquitectura de marca mantiene Recupera como Próximamente", async () =
   const professionals = await read("profesionales/index.html");
   assert.equal(count(professionals, "KINECHECK FORMACIÓN"), 5);
   assert.equal(count(professionals, "PRÓXIMAMENTE"), 0);
-  assert.ok(professionals.includes("curso profesional avanzado"));
-  assert.ok(professionals.includes("guía digital complementaria"));
+  assert.ok(professionals.includes("KineCheck Clínico"));
+  assert.ok(professionals.includes("Razonamiento clínico basado en probabilidad."));
+  assert.ok(professionals.includes("EVALUACIÓN Y RAZONAMIENTO"));
   assert.ok(!professionals.includes("Registro kinésico profesional"));
   assert.ok(professionals.includes("Dolor Lumbar Persistente"));
   assert.ok(professionals.includes(DOLOR_LUMBAR_CHECKOUT));
@@ -147,7 +148,7 @@ test("la arquitectura de marca mantiene Recupera como Próximamente", async () =
   assert.ok(brandArchitecture.includes("No usar **ECOSISTEMA CLÍNICO**"));
 });
 
-test("precios, vigencias y nueve IDs Hotmart conservan el contrato histórico", async () => {
+test("precios, vigencias e IDs Hotmart conservan el contrato histórico", async () => {
   const priceData = JSON.parse(await read("commercial-prices-cl.json"));
   assert.equal(priceData.country, "Chile");
   assert.equal(priceData.currency, "CLP");
@@ -157,13 +158,11 @@ test("precios, vigencias y nueve IDs Hotmart conservan el contrato histórico", 
     assert.deepEqual(
       { name: actual?.name, price: actual?.price, display: actual?.display, term: actual?.term },
       { name: expected.name, price: expected.price, display: expected.display, term: expected.term },
-      `${expected.slug}: cambió precio o vigencia histórica`,
     );
   }
   const grants = await read("supabase/seeds/20260729_hotmart_product_grants.sql");
   const actualProductIds = [...new Set([...grants.matchAll(/\((\d{7}),/g)].map((match) => match[1]))].sort();
-  const expectedProductIds = OFFICIAL_COMMERCE.map(({ productId }) => productId).sort();
-  assert.deepEqual(actualProductIds, expectedProductIds);
+  assert.deepEqual(actualProductIds, OFFICIAL_COMMERCE.map(({ productId }) => productId).sort());
   const certification = await read("docs/qa/hotmart-8-product-certification.md");
   for (const { productId } of OFFICIAL_COMMERCE) assert.ok(certification.includes(productId));
   for (const [, checkout] of PRODUCT_CHECKOUTS) assert.ok(certification.includes(checkout));
@@ -171,11 +170,10 @@ test("precios, vigencias y nueve IDs Hotmart conservan el contrato histórico", 
 });
 
 test("los perfiles activos publican precios y Recupera no publica checkout", async () => {
-  const activeCases = [
+  for (const [path, url, priceCount] of [
     ["profesionales/index.html", "https://kinecheck.cl/profesionales/", 5],
     ["estudiantes/index.html", "https://kinecheck.cl/estudiantes/", 4],
-  ];
-  for (const [path, url, priceCount] of activeCases) {
+  ]) {
     const source = await read(path);
     assert.equal(count(source, 'class="price"'), priceCount, `${path}: cantidad de precios incorrecta`);
     assertOpenGraph(source, url);
@@ -183,14 +181,15 @@ test("los perfiles activos publican precios y Recupera no publica checkout", asy
     assert.ok(source.includes('href="../academy/"'));
     assert.ok(!source.includes("../platform/"));
   }
+
   const professionals = await read("profesionales/index.html");
-  assert.ok(professionals.includes("curso profesional avanzado"));
-  assert.ok(professionals.includes("guía digital complementaria"));
+  assert.ok(professionals.includes("KineCheck Clínico"));
+  assert.ok(professionals.includes("Razonamiento clínico basado en probabilidad."));
   const students = await read("estudiantes/index.html");
   assert.ok(students.includes("RECOMENDADO"));
 
   const recovery = await read("recupera/index.html");
-  assert.equal(count(recovery, 'class="price"'), 0, "Recupera no debe mostrar precio mientras esté pausado");
+  assert.equal(count(recovery, 'class="price"'), 0);
   assertOpenGraph(recovery, "https://kinecheck.cl/recupera/");
   assert.ok(recovery.includes('class="skip-link" href="#contenido"'));
   assert.ok(recovery.includes('aria-label="Navegación principal"'));
@@ -201,7 +200,7 @@ test("los perfiles activos publican precios y Recupera no publica checkout", asy
   assert.doesNotMatch(recovery, /\$9\.990|Acceso por 3 meses|P106806251E|Comprar en Hotmart/i);
 });
 
-test("Productos entrega un fallback clínico útil sin JavaScript", async () => {
+test("Productos conserva fallback útil y la ficha de Recupera no expone comercio", async () => {
   const page = await read("productos/index.html");
   const headers = await read("_headers");
   assertOpenGraph(page, "https://kinecheck.cl/productos/");
@@ -224,7 +223,7 @@ test("Productos entrega un fallback clínico útil sin JavaScript", async () => 
   assert.doesNotMatch(recupera, /P106806251E|Comprar en Hotmart|\$9\.990/i);
 });
 
-test("la hidratación conserva checkouts históricos y acceso canónico sin exponerlos en Recupera", async () => {
+test("la fuente legacy conserva reconciliación histórica sin exponerla en la ficha Recupera", async () => {
   const product = await read("productos/product.js");
   for (const [slug, checkout] of PRODUCT_CHECKOUTS) {
     assert.ok(product.includes(`"${slug}"`));
@@ -243,20 +242,19 @@ test("las rutas de compatibilidad siguen siendo redirecciones", async () => {
   assert.ok(platform.includes('name="robots" content="noindex,nofollow"'));
   assert.ok(!platform.includes('id="login-view"'));
   assert.ok(platformScript.includes('new URL("../academy/"'));
-  const legacyRoutes = [
+  for (const [path, destination] of [
     ["kinecheck/index.html", "../#productos"],
     ["kinecheck/profesionales/index.html", "../../profesionales/"],
     ["kinecheck/estudiantes/index.html", "../../estudiantes/"],
     ["kinecheck/recupera/index.html", "../../recupera/"],
-  ];
-  for (const [path, destination] of legacyRoutes) {
+  ]) {
     const source = await read(path);
     assert.ok(source.includes(`url=${destination}`));
     assert.ok(source.includes(`href="${destination}"`));
   }
 });
 
-test("la política conserva la advertencia sin certificación completa de nueve garantías", async () => {
+test("la política conserva la advertencia sin certificación completa de garantías", async () => {
   const refunds = await read("legal/reembolsos.html");
   const certification = await read("docs/qa/hotmart-8-product-certification.md");
   assert.ok(refunds.includes("Pendiente de certificación comercial"));
