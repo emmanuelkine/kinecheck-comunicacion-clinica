@@ -14,7 +14,6 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     postPath: "/api/license/sso",
     routes: Object.freeze({
       "kinecheck-estudiante": "/sso.html?product=kinecheck-estudiante",
-      "kinecheck-recupera": "/sso.html?product=kinecheck-recupera",
     }),
   }),
   courses: [
@@ -54,7 +53,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     {
       slug: "kinecheck-estudiante",
       title: "KineCheck Estudiante",
-      subtitle: "Evaluación y razonamiento clínico",
+      subtitle: "Evaluación y razonamiento clínico educativo. Utiliza exclusivamente casos ficticios, simulados o debidamente anonimizados.",
       productId: "8154796",
       icon: "KE",
       kind: "application",
@@ -65,13 +64,13 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     {
       slug: "kinecheck-recupera",
       title: "KineCheck Recupera",
-      subtitle: "Mi plan y progreso",
+      subtitle: "Próximamente. No disponible para registrar información mientras se revisa privacidad y protección de datos.",
       productId: "8157431",
       icon: "KR",
       kind: "application",
-      status: "active",
-      url: "https://apps.kinecheck.cl/sso.html?product=kinecheck-recupera",
-      ssoProduct: "kinecheck-recupera",
+      status: "preparing",
+      url: "",
+      ssoProduct: "",
     },
     {
       slug: "mas-alla-del-dolor",
