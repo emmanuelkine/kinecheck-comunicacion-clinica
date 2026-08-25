@@ -4,13 +4,9 @@
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const MAX_AGE_MS = 120000;
   const POST_URL = "https://apps.kinecheck.cl/api/license/sso";
-  const PRODUCTS = new Set([
-    "kinecheck-estudiante",
-    "kinecheck-recupera",
-  ]);
-  const RECUPERA_CONSENT_VERSION = "2026-08-09-health-v1";
-  const RECUPERA_CONSENT_KEY = "kinecheck_recupera_health_consent_v1";
-  const RECUPERA_HANDOFF_KEY = "kinecheck_recupera_consent_handoff_v1";
+  const PRODUCTS = new Set(["kinecheck-estudiante"]);
+  const PAUSED_PRODUCT = "kinecheck-recupera";
+  const PAUSED_MESSAGE = "KineCheck Recupera está Próximamente y no está disponible para registrar información mientras se revisa privacidad y protección de datos.";
 
   const status = document.querySelector("#relay-status");
   const errorBox = document.querySelector("#relay-error");
@@ -45,21 +41,9 @@
     }
   }
 
-  function currentRecuperaConsent() {
-    try {
-      const record = JSON.parse(localStorage.getItem(RECUPERA_CONSENT_KEY) || "null");
-      if (record?.version !== RECUPERA_CONSENT_VERSION || !record?.acceptedAt) return null;
-      return record;
-    } catch {
-      return null;
-    }
-  }
-
   function normalizeIssuedAt(value) {
     const numeric = Number(value);
     if (!Number.isFinite(numeric)) return NaN;
-    // El opener unificado usa milisegundos; el flujo legado de academy-v39 usa segundos.
-    // Aceptar ambos evita marcar como vencido un handoff recién creado.
     return numeric > 0 && numeric < 1e12 ? numeric * 1000 : numeric;
   }
 
@@ -83,8 +67,12 @@
     fail("El acceso temporal venció. Vuelve a KineCheck e inténtalo nuevamente.");
     return;
   }
+  if (product === PAUSED_PRODUCT) {
+    fail(PAUSED_MESSAGE);
+    return;
+  }
   if (!PRODUCTS.has(product)) {
-    fail("La aplicación solicitada no está permitida. KineCheck Clínico se abre mediante su curso y guía complementaria dentro del ecosistema.");
+    fail("La aplicación solicitada no está permitida desde este relay.");
     return;
   }
   if (!accessToken) {
@@ -94,30 +82,6 @@
   if (expiresAt && expiresAt <= nowSeconds) {
     fail("La sesión venció. Vuelve a KineCheck e inicia sesión nuevamente.");
     return;
-  }
-
-  const recuperaConsent = product === "kinecheck-recupera" ? currentRecuperaConsent() : null;
-  if (product === "kinecheck-recupera" && !recuperaConsent) {
-    try {
-      sessionStorage.setItem(RECUPERA_HANDOFF_KEY, JSON.stringify({
-        type: HANDOFF_TYPE,
-        issuedAt,
-        product,
-        access_token: accessToken,
-        expires_at: expiresAt || "",
-        session: {
-          access_token: accessToken,
-          expires_at: expiresAt || "",
-          token_type: "bearer",
-          handoff_access_only: true,
-        },
-      }));
-      location.assign("../recupera/consentimiento.html");
-      return;
-    } catch {
-      fail("No fue posible preparar el consentimiento de privacidad de KineCheck Recupera.");
-      return;
-    }
   }
 
   const form = document.createElement("form");
@@ -131,12 +95,8 @@
   hidden(form, "expires_at", expiresAt || "");
   hidden(form, "issued_at", issuedAt);
   hidden(form, "handoff_type", HANDOFF_TYPE);
-  if (recuperaConsent) {
-    hidden(form, "privacy_consent_version", recuperaConsent.version);
-    hidden(form, "privacy_consent_at", recuperaConsent.acceptedAt);
-  }
 
   document.body.appendChild(form);
-  if (status) status.textContent = `Validando la licencia específica de ${product === "kinecheck-estudiante" ? "KineCheck Estudiante" : "KineCheck Recupera"}…`;
+  if (status) status.textContent = "Validando la licencia específica de KineCheck Estudiante…";
   form.submit();
 })();

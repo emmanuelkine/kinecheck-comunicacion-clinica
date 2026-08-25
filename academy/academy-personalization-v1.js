@@ -5,11 +5,15 @@
   window.__KINECHECK_PERSONALIZATION_V1__ = true;
 
   const FAVORITES_KEY = "kinecheck_favorite_products_v1";
+  const PAUSED_PRODUCT = "kinecheck-recupera";
+  const PAUSED_MESSAGE = "Próximamente. No disponible para registro de información mientras se revisa privacidad y protección de datos.";
   const style = document.createElement("style");
   style.textContent = `
     .kc-favorite{position:absolute;top:14px;right:14px;z-index:2;display:grid;place-items:center;width:36px;height:36px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(5,28,36,.78);color:#cfe2e5;font-size:18px;cursor:pointer;backdrop-filter:blur(8px)}
     .kc-favorite[aria-pressed="true"]{color:#ffd76a;border-color:rgba(255,215,106,.48);background:rgba(94,75,20,.30)}
     .course-card{position:relative}
+    .course-card.kc-product-paused{opacity:.86}
+    .course-card.kc-product-paused .course-button,[data-kc-privacy-paused="true"]{cursor:not-allowed!important;pointer-events:none!important}
     .kc-recommendations{margin:26px 0 0;padding:22px;border:1px solid rgba(95,222,210,.18);border-radius:22px;background:linear-gradient(145deg,rgba(8,38,47,.78),rgba(5,26,34,.68))}
     .kc-recommendations__head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}.kc-recommendations__head h2{margin:4px 0 0}.kc-recommendations__head span{color:#7bded1;font-size:.7rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
     .kc-recommendations__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -38,6 +42,40 @@
   function isOwned(slug) {
     const button = cardFor(slug)?.querySelector("button[data-course]");
     return Boolean(button && !button.disabled);
+  }
+
+  function setText(element, value) {
+    if (element && element.textContent !== value) element.textContent = value;
+  }
+
+  function pauseRecuperaConfig() {
+    const course = window.KINECHECK_ACADEMY_CONFIG?.courses?.find?.((item) => item?.slug === PAUSED_PRODUCT);
+    if (!course || Object.isFrozen(course)) return;
+    course.status = "preparing";
+    course.url = "";
+    course.subtitle = PAUSED_MESSAGE;
+    course.ssoProduct = "";
+  }
+
+  function enforcePausedProduct() {
+    pauseRecuperaConfig();
+
+    const card = cardFor(PAUSED_PRODUCT);
+    if (card) {
+      card.classList.add("kc-product-paused");
+      setText(card.querySelector(".status-badge"), "PRÓXIMAMENTE");
+      card.querySelector(".status-badge")?.classList.add("preparing");
+      setText(card.querySelector("p"), PAUSED_MESSAGE);
+      setText(card.querySelector(".course-meta"), "Acceso temporalmente deshabilitado");
+    }
+
+    document.querySelectorAll(`[data-course="${PAUSED_PRODUCT}"], [data-kc-path-open="${PAUSED_PRODUCT}"]`).forEach((control) => {
+      control.setAttribute("aria-disabled", "true");
+      control.setAttribute("data-kc-privacy-paused", "true");
+      if ("disabled" in control) control.disabled = true;
+      if (control.matches("button")) setText(control, "Próximamente");
+      if (control.matches("a")) control.removeAttribute("href");
+    });
   }
 
   function addFavoriteButtons() {
@@ -123,15 +161,32 @@
   }
 
   function refresh() {
+    enforcePausedProduct();
     addFavoriteButtons();
     renderRecommendations();
   }
 
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    const pausedControl = target?.closest?.(`[data-course="${PAUSED_PRODUCT}"], [data-kc-path-open="${PAUSED_PRODUCT}"]`);
+    if (!pausedControl) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    const toast = document.querySelector("#kc-toast");
+    if (toast) {
+      toast.textContent = PAUSED_MESSAGE;
+      toast.hidden = false;
+    }
+  }, true);
+
   const observer = new MutationObserver(refresh);
+  const privacyObserver = new MutationObserver(enforcePausedProduct);
   const start = () => {
     const grid = document.querySelector("#course-grid");
     if (!grid) return window.setTimeout(start, 120);
     observer.observe(grid, { childList: true, subtree: true, attributes: true, attributeFilter: ["disabled"] });
+    privacyObserver.observe(document.body, { childList: true, subtree: true });
     refresh();
   };
   start();
