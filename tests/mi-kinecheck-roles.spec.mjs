@@ -64,10 +64,11 @@ try {
     assert.ok((await page.locator('[data-kc-view-link="biblioteca"]').first().getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
     assert.ok((await page.locator('[data-kc-view-link="herramientas"]').first().getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
     assert.ok((await page.locator(".continue-panel").getAttribute("class") || "").includes("mi-kc-simplified-hidden"));
-    assert.equal(await page.locator("#kc-guided-experience .kc-guided-heading h2").textContent(), "Tres acciones. Nada más.");
+    assert.equal(await page.locator("#kc-guided-experience .kc-guided-heading h2").textContent(), "Registro temporalmente deshabilitado.");
     assert.equal(await page.locator(".mi-kc-patient-help").count(), 1);
-    await page.locator("#kc-home-continue").click();
-    assert.deepEqual(await page.evaluate(() => window.__opened), ["kinecheck-recupera"]);
+    assert.equal(await page.locator("#kc-home-continue").isDisabled(), true);
+    assert.equal(await page.locator('[data-course="kinecheck-recupera"]').first().isDisabled(), true);
+    assert.deepEqual(await page.evaluate(() => window.__opened), []);
     await context.close();
   }
 

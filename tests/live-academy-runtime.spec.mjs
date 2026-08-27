@@ -64,6 +64,11 @@ async function openAcademy(page, label) {
 test("Mis productos registra el toque, usa el opener real y completa una navegación de curso", async ({ page }) => {
   const consoleErrors = collectUnexpectedConsoleErrors(page);
   const metricEvents = await captureMetrics(page);
+  await page.route("**/functions/v1/course-key", (route) => route.fulfill({
+    status: 401,
+    contentType: "application/json; charset=utf-8",
+    body: '{"error":"invalid QA token"}',
+  }));
   await openAcademy(page, "owned-real-open");
 
   await expect.poll(() => metricEvents.some((event) => event.eventName === "page_view")).toBe(true);
@@ -137,6 +142,7 @@ test("Mis productos registra el toque, usa el opener real y completa una navegac
 
 test("Mis productos muestra un error visible si la sesión no permite navegar", async ({ page }) => {
   const consoleErrors = collectUnexpectedConsoleErrors(page);
+  await captureMetrics(page);
   await openAcademy(page, "owned-visible-error");
 
   await page.evaluate(() => {
@@ -168,6 +174,7 @@ test("Mis productos muestra un error visible si la sesión no permite navegar", 
 
 test("navegación móvil real y botones nativos conservan eventos de puntero", async ({ page }) => {
   const consoleErrors = collectUnexpectedConsoleErrors(page);
+  await captureMetrics(page);
   await openAcademy(page, "mobile-pointer");
 
   await page.evaluate(() => {
@@ -196,6 +203,7 @@ test("navegación móvil real y botones nativos conservan eventos de puntero", a
 
 test("Academy no conserva overlays invisibles ni bloquea el scroll o los controles", async ({ page }) => {
   const consoleErrors = collectUnexpectedConsoleErrors(page);
+  await captureMetrics(page);
   await openAcademy(page, "overlay-scroll");
 
   await page.evaluate(() => {

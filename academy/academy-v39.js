@@ -6,13 +6,9 @@ const ACCESS_HISTORY_KEY = "kinecheck_academy_history_v1";
 const CONTRAST_KEY = "kinecheck_academy_high_contrast_v1";
 const POST_PURCHASE_RETRIES = 4;
 const POST_PURCHASE_DELAY_MS = 5000;
-const SSO_ENDPOINT = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
 const SSO_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-const SSO_PRODUCTS = new Set([
-  "kinecheck-clinico",
-  "kinecheck-estudiante",
-  "kinecheck-recupera",
-]);
+const SSO_PRODUCTS = new Set(["kinecheck-estudiante"]);
+const PAUSED_PRODUCT = "kinecheck-recupera";
 
 const $ = (selector) => document.querySelector(selector);
 const loginView = $("#login-view");
@@ -34,7 +30,7 @@ const accountGreeting = $("#account-greeting");
 const activeCount = $("#active-count");
 const sidebarAccess = $("#sidebar-access");
 const sidebarEmail = $("#sidebar-email");
-const searchInput = $("#course-search");
+const searchInput = $("#library-search");
 const continueHeading = $("#continue-heading");
 const continueCopy = $("#continue-copy");
 const continueButton = $("#continue-button");
@@ -801,31 +797,28 @@ function submitSsoAccess(session, product) {
     throw new Error("La sesión venció. Ingresa nuevamente para abrir esta aplicación.");
   }
 
-  const ssoForm = document.createElement("form");
-  ssoForm.method = "post";
-  ssoForm.action = SSO_ENDPOINT;
-  ssoForm.enctype = "application/x-www-form-urlencoded";
-  ssoForm.hidden = true;
-  const fields = {
+  window.name = JSON.stringify({
+    type: SSO_HANDOFF_TYPE,
+    issuedAt: Date.now(),
     product,
     access_token: accessToken,
-    expires_at: String(expiresAt),
-    issued_at: String(issuedAt),
-    handoff_type: SSO_HANDOFF_TYPE,
-  };
-  for (const [name, value] of Object.entries(fields)) {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = name;
-    input.value = value;
-    ssoForm.appendChild(input);
-  }
-  document.body.appendChild(ssoForm);
-  ssoForm.submit();
+    expires_at: expiresAt,
+    session: {
+      access_token: accessToken,
+      expires_at: expiresAt,
+      token_type: session.token_type || "bearer",
+      handoff_access_only: true,
+    },
+  });
+  window.location.assign(`./app-sso-relay.html?product=${encodeURIComponent(product)}`);
 }
 
 async function openCourse(slug) {
   libraryMessage.hidden = true;
+  if (slug === PAUSED_PRODUCT) {
+    showLibraryMessage("KineCheck Recupera está Próximamente y no está disponible para registrar información.");
+    return;
+  }
   const course = CONFIG.courses.find((item) => item.slug === slug);
 
   if (!course || course.status !== "active" || !course.url) {
@@ -1058,7 +1051,7 @@ window.addEventListener("storage", (event) => {
 });
 
 signOut.addEventListener("click", () => clearSession());
-currentYear.textContent = String(new Date().getFullYear());
+if (currentYear) currentYear.textContent = String(new Date().getFullYear());
 setHighContrast(localStorage.getItem(CONTRAST_KEY) === "true");
 
 window.addEventListener("kinecheck:native-session", () => {

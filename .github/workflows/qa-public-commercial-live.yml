@@ -43,13 +43,12 @@ jobs:
             ['Demo', 'https://kinecheck.cl/demo/?qa=live-current', ['Conoce el ecosistema KineCheck', 'MODO DEMO', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Recupera', 'Sin registro']],
             ['Profesionales', 'https://kinecheck.cl/profesionales/?qa=live-current', ['KineCheck Clínico', '$39.990 CLP', '$35.900 CLP', 'Formación diseñada para la práctica clínica.']],
             ['Estudiantes', 'https://kinecheck.cl/estudiantes/?qa=live-current', ['KineCheck Estudiante', '$14.990 CLP', '$49.900 CLP', 'RECOMENDADO']],
-            ['Recupera', 'https://kinecheck.cl/recupera/?qa=live-current', ['KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses']],
-            ['Academy', 'https://kinecheck.cl/academy/?qa=live-current', ['Ingresa a KineCheck', 'Correo utilizado en la compra', 'Olvidé mi contraseña']],
+            ['Recupera', 'https://kinecheck.cl/recupera/?qa=live-current', ['KineCheck Recupera', 'PRÓXIMAMENTE', 'No se encuentra disponible para compra ni para registro de datos']],
+            ['Academy', 'https://kinecheck.cl/academy/?qa=live-current', ['Ingresa a KineCheck', 'Si compraste en Hotmart, usa el mismo correo de la compra.', 'Olvidé mi contraseña']],
           ];
           const details = [
             ['KineCheck Clínico', 'kinecheck-clinico', '$39.990', 'https://pay.hotmart.com/L106791841D'],
             ['KineCheck Estudiante', 'kinecheck-estudiante', '$14.990', 'https://pay.hotmart.com/G106801166S'],
-            ['KineCheck Recupera', 'kinecheck-recupera', '$9.990', 'https://pay.hotmart.com/P106806251E'],
             ['Comunicación Clínica', 'comunicacion-clinica', '$19.900', 'https://pay.hotmart.com/T106883983U'],
             ['Más allá del dolor', 'mas-alla-del-dolor', '$39.990', 'https://pay.hotmart.com/W106888386Q'],
             ['Evidencia Aplicada', 'evidencia-aplicada', '$29.990', 'https://pay.hotmart.com/F106921972I'],
@@ -87,6 +86,10 @@ jobs:
                   const text = await textOf(page);
                   for (const item of expected) {
                     if (!includesVisualText(text, item)) throw new Error(`${label}: falta “${item}”.`);
+                  }
+                  if (label === 'Recupera') {
+                    if (/\$9\.990|P106806251E|Acceso por 3 meses/i.test(text)) throw new Error('Recupera: expone condiciones comerciales mientras está pausado.');
+                    if (await page.locator('a[href*="pay.hotmart.com"], form, input, textarea, select').count()) throw new Error('Recupera: expone checkout o captura de datos mientras está pausado.');
                   }
                   if (forbidden.test(text)) throw new Error(`${label}: apareció contenido retirado o no verificable.`);
                 }
@@ -128,6 +131,18 @@ jobs:
 
                   if (forbidden.test(text)) throw new Error(`${name}: apareció contenido retirado o no verificable.`);
                 }
+
+                const pausedUrl = `https://kinecheck.cl/productos/kinecheck-recupera/?qa=live-current&attempt=${attempt}&ts=${Date.now()}`;
+                const pausedResponse = await page.goto(pausedUrl, { waitUntil: 'networkidle', timeout: 60000 });
+                if (!pausedResponse || pausedResponse.status() >= 500) throw new Error(`KineCheck Recupera: ficha respondió ${pausedResponse?.status() ?? 'sin respuesta'}.`);
+                const pausedText = await textOf(page);
+                for (const item of ['KineCheck Recupera', 'PRÓXIMAMENTE', 'No disponible para compra ni registro de información']) {
+                  if (!includesVisualText(pausedText, item)) throw new Error(`KineCheck Recupera: falta “${item}”.`);
+                }
+                if (/\$9\.990|P106806251E|Comprar en Hotmart/i.test(pausedText)) throw new Error('KineCheck Recupera: la ficha expone condiciones comerciales.');
+                if (await page.locator('a[href*="pay.hotmart.com"], form, input, textarea, select').count()) throw new Error('KineCheck Recupera: la ficha expone checkout o captura de datos.');
+                const pausedCanonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+                if (pausedCanonical !== 'https://kinecheck.cl/productos/kinecheck-recupera/') throw new Error(`KineCheck Recupera: canonical incorrecta (${pausedCanonical}).`);
 
                 console.log(`QA comercial público, fichas canónicas y demo aprobados en el intento ${attempt}.`);
                 await browser.close();

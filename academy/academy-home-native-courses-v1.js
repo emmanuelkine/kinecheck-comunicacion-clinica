@@ -40,9 +40,9 @@
       icon: "KR",
       title: "KineCheck Recupera",
       audience: "Personas y pacientes",
-      type: "Aplicación",
-      summary: "Espacio personal para registrar evolución, seguir un plan y visualizar variables relevantes del proceso de recuperación sin sustituir la atención profesional.",
-      points: ["Registro de evolución", "Plan y seguimiento", "Visualización del progreso"],
+      type: "Próximamente",
+      summary: "No disponible para compra, activación ni registro de información mientras se revisa privacidad y protección de datos.",
+      points: ["Acceso bloqueado", "Sin registro de información", "Revisión de privacidad en curso"],
       detailUrl: "../productos/kinecheck-recupera/",
     },
     {

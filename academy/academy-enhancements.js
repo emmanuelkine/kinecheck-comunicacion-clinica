@@ -2,7 +2,7 @@ const PRODUCT_META = {
   CL: { category: "tool", label: "GUÍA COMPLEMENTARIA", productId: "8150019", checkoutUrl: "https://pay.hotmart.com/L106791841D" },
   KC: { category: "course", label: "CURSO PROFESIONAL", productId: "8150019", checkoutUrl: "https://pay.hotmart.com/L106791841D" },
   KE: { category: "application", label: "APLICACIÓN PARA ESTUDIANTES", productId: "8154796", checkoutUrl: "https://pay.hotmart.com/G106801166S" },
-  KR: { category: "tool", label: "HERRAMIENTA DE SEGUIMIENTO", productId: "8157431", checkoutUrl: "https://pay.hotmart.com/P106806251E" },
+  KR: { category: "tool", label: "PRÓXIMAMENTE", productId: "8157431", paused: true },
   CC: { category: "course", label: "CURSO / MASTERCLASS", productId: "8192814", checkoutUrl: "https://pay.hotmart.com/T106883983U" },
   MD: { category: "course", label: "CURSO / MASTERCLASS", productId: "8194777", checkoutUrl: "https://pay.hotmart.com/W106888386Q" },
   LB: { category: "tool", label: "SIMULADOR CLÍNICO", productId: "PROPIETARIO" },
@@ -51,6 +51,14 @@ function enhanceCards() {
 
     const button = card.querySelector(".course-button");
     if (!button) return;
+
+    if (meta.paused) {
+      card.querySelector(".purchase-button")?.remove();
+      button.disabled = true;
+      button.setAttribute("aria-disabled", "true");
+      button.textContent = "Próximamente";
+      return;
+    }
 
     const title = card.querySelector("h3")?.textContent?.trim() || "este producto";
     const locked = button.disabled && button.textContent.trim() === "Sin acceso";

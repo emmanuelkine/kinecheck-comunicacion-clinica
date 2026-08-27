@@ -151,9 +151,9 @@
     text(".kc-home-hero .eyebrow", "MI RECUPERACIÓN");
     html(".kc-home-hero h1", "Tu plan.<br><em>Claro y a mano.</em>");
     text("#welcome", "Aquí verás solo lo necesario para seguir tu plan y registrar cómo te sientes.");
-    text("#kc-home-continue", "Abrir mi plan");
+    text("#kc-home-continue", "Próximamente");
     text("#continue-heading", "KineCheck Recupera");
-    text("#continue-copy", "Revisa lo indicado para hoy, registra cómo estás y observa tu avance.");
+    text("#continue-copy", "No disponible para registrar información mientras se revisa privacidad y protección de datos.");
     document.querySelector('.kc-home-actions [data-kc-view-link="explorar"]')?.classList.add("kc-role-hidden");
     document.querySelector("#onboarding")?.classList.add("kc-role-hidden");
     document.querySelector(".kc-explore-link")?.classList.add("kc-role-hidden");
@@ -163,18 +163,15 @@
     section.id = "kc-guided-experience";
     section.className = "kc-guided-experience patient";
     section.innerHTML = `
-      <div class="kc-guided-heading"><span>ASÍ DE SIMPLE</span><h2>Tres acciones para tu día.</h2><p>No necesitas navegar cursos, evidencia ni herramientas clínicas.</p></div>
-      <div class="kc-patient-actions">
-        <article><b>1</b><strong>Revisa tu plan</strong><p>Mira qué corresponde hacer hoy.</p></article>
-        <article><b>2</b><strong>Registra cómo estás</strong><p>Responde preguntas breves y comprensibles.</p></article>
-        <article><b>3</b><strong>Observa tu avance</strong><p>Usa la información para conversar con tu profesional.</p></article>
-      </div>
-      ${action("kinecheck-recupera", "Abrir KineCheck Recupera")}
-      <small>Recupera no diagnostica ni reemplaza la atención profesional o de urgencia.</small>
+      <div class="kc-guided-heading"><span>PRÓXIMAMENTE</span><h2>KineCheck Recupera permanece bloqueado.</h2><p>No está disponible para compra, acceso ni registro de información mientras se revisa privacidad y protección de datos.</p></div>
+      <button type="button" data-course="kinecheck-recupera" disabled aria-disabled="true">Próximamente</button>
+      <small>No ingreses información de salud en esta aplicación.</small>
     `;
     document.querySelector("#inicio")?.after(section);
     document.querySelectorAll('[data-course="kinecheck-recupera"]').forEach((button) => {
-      if (!button.disabled && button.textContent !== "Abrir mi plan") button.textContent = "Abrir mi plan";
+      button.disabled = true;
+      button.setAttribute("aria-disabled", "true");
+      button.textContent = "Próximamente";
     });
   }
 

@@ -5,7 +5,6 @@ const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$
 const PRODUCTS = [
   { slug: "kinecheck-clinico", name: "KineCheck Clínico", price: "$39.990 CLP", checkout: "https://pay.hotmart.com/L106791841D" },
   { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", price: "$14.990 CLP", checkout: "https://pay.hotmart.com/G106801166S" },
-  { slug: "kinecheck-recupera", name: "KineCheck Recupera", price: "$9.990 CLP", checkout: "https://pay.hotmart.com/P106806251E" },
   { slug: "comunicacion-clinica", name: "Comunicación Clínica", price: "$19.900 CLP", checkout: "https://pay.hotmart.com/T106883983U" },
   { slug: "mas-alla-del-dolor", name: "Más allá del dolor", price: "$39.990 CLP", checkout: "https://pay.hotmart.com/W106888386Q" },
   { slug: "evidencia-aplicada", name: "Evidencia Aplicada", price: "$29.990 CLP", checkout: "https://pay.hotmart.com/F106921972I" },
@@ -84,7 +83,6 @@ try {
     for (const [path, expectedPrice] of [
       ["/profesionales/", "$39.990 CLP"],
       ["/estudiantes/", "$14.990 CLP"],
-      ["/recupera/", "$9.990 CLP"],
     ]) {
       await open(page, path, `${device}${path}`);
       const text = await bodyText(page);
@@ -93,6 +91,16 @@ try {
       await assertOpenGraph(page, `${device}${path}`);
       await assertNoHorizontalOverflow(page, `${device}${path}`);
     }
+
+    await open(page, "/recupera/", `${device}/recupera`);
+    const recoveryProfileText = normalized(await bodyText(page));
+    assert.ok(recoveryProfileText.includes("próximamente"), `${device}/recupera: falta estado Próximamente`);
+    assert.ok(recoveryProfileText.includes("no se encuentra disponible para compra ni para registro de datos"), `${device}/recupera: falta bloqueo explícito`);
+    assert.ok(!recoveryProfileText.includes("$9.990"), `${device}/recupera: expone precio mientras está pausado`);
+    assert.equal(await page.locator('a[href*="pay.hotmart.com"]').count(), 0, `${device}/recupera: expone checkout mientras está pausado`);
+    assert.ok((await page.locator('a[href*="academy/"]').count()) >= 1, `${device}/recupera: falta acceso a Academy`);
+    await assertOpenGraph(page, `${device}/recupera`);
+    await assertNoHorizontalOverflow(page, `${device}/recupera`);
 
     for (const product of PRODUCTS) {
       const path = `/productos/${product.slug}/`;
@@ -108,6 +116,17 @@ try {
       await assertOpenGraph(page, `${device}/${product.slug}`);
       await assertNoHorizontalOverflow(page, `${device}/${product.slug}`);
     }
+
+    await open(page, "/productos/kinecheck-recupera/", `${device}/kinecheck-recupera`);
+    const pausedProductText = normalized(await bodyText(page));
+    assert.ok(pausedProductText.includes("kinecheck recupera"), `${device}/kinecheck-recupera: falta identidad`);
+    assert.ok(pausedProductText.includes("próximamente"), `${device}/kinecheck-recupera: falta estado Próximamente`);
+    assert.ok(pausedProductText.includes("no disponible para compra ni registro de información"), `${device}/kinecheck-recupera: falta bloqueo explícito`);
+    assert.ok(!pausedProductText.includes("$9.990"), `${device}/kinecheck-recupera: expone precio mientras está pausado`);
+    assert.equal(await page.locator('a[href*="pay.hotmart.com"]').count(), 0, `${device}/kinecheck-recupera: expone checkout mientras está pausado`);
+    assert.equal(await page.locator('link[rel="canonical"]').getAttribute("href"), "https://kinecheck.cl/productos/kinecheck-recupera/");
+    assert.equal(await page.locator('script[type="application/ld+json"]').count(), 1, `${device}/kinecheck-recupera: falta JSON-LD`);
+    await assertNoHorizontalOverflow(page, `${device}/kinecheck-recupera`);
 
     // Compatibilidad: el endpoint antiguo no debe seguir siendo una ficha indexable.
     await open(page, "/productos/?producto=comunicacion-clinica", `${device}/legacy-product-query`);

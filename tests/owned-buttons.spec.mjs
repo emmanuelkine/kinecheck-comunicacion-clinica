@@ -92,13 +92,15 @@ test("tarjetas dinámicas conservan su controlador nativo y el bridge no bloquea
 
   await expect.poll(async () => page.evaluate(() => window.__nativeProxyClicks)).toEqual([
     "kinecheck-clinico",
-    "kinecheck-recupera",
   ]);
   await expect.poll(async () => page.evaluate(() => window.__openedUnified)).toEqual([
     "kinecheck-estudiante",
     "mas-alla-del-dolor",
   ]);
   await expect.poll(async () => page.evaluate(() => window.__openedCore)).toEqual([]);
+  await expect(page.locator("#home-recupera")).toBeDisabled();
+  await expect(page.locator("#home-recupera")).toHaveAttribute("aria-disabled", "true");
+  await expect(page.locator("#kc-toast")).toContainText("Próximamente");
 });
 
 test("los cursos nuevos conservan el controlador nativo de la Biblioteca", async ({ page }) => {

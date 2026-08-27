@@ -74,18 +74,18 @@
     },
     patient: {
       label: "Paciente",
-      shortLabel: "Ruta de recuperación",
+      shortLabel: "Próximamente",
       number: "R",
-      hero: "Comprende y acompaña tu recuperación.",
-      welcome: "KineCheck organiza el seguimiento, los registros y los recursos de apoyo para ayudarte a comunicar mejor tu evolución con el profesional tratante.",
-      focusTitle: "Registra tu evolución con claridad",
-      focusCopy: "Utiliza KineCheck Recupera para registrar síntomas, función, sueño, adherencia y dificultades sin reemplazar la atención profesional.",
-      appsTitle: "Tu aplicación de seguimiento",
+      hero: "KineCheck Recupera estará disponible próximamente.",
+      welcome: "La aplicación permanece bloqueada mientras se revisan privacidad, protección de datos y seguridad.",
+      focusTitle: "Registro temporalmente deshabilitado",
+      focusCopy: "No ingreses información de salud: KineCheck Recupera todavía no está disponible.",
+      appsTitle: "Aplicación en preparación",
       coursesTitle: "Recursos disponibles en tu cuenta",
       libraryTitle: "Materiales para comprender y comunicar tu progreso",
       toolsTitle: "Herramientas para tu seguimiento",
-      toolsCopy: "Registra información útil para conversar con tu kinesiólogo. KineCheck no entrega diagnósticos ni reemplaza una evaluación clínica.",
-      recommendations: ["kinecheck-recupera"]
+      toolsCopy: "KineCheck Recupera no admite registros mientras permanece Próximamente.",
+      recommendations: []
     }
   });
 

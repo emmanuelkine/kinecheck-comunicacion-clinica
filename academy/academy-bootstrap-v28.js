@@ -51,16 +51,16 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     {
       slug: "kinecheck-recupera",
       title: "KineCheck Recupera",
-      subtitle: "Registro de progreso, síntomas y ejercicios para pacientes.",
+      subtitle: "Próximamente. No disponible para registrar información mientras se revisa privacidad y protección de datos.",
       productId: "8157431",
       icon: "KR",
       kind: "application",
       audience: "Pacientes",
       audienceKey: "patients",
       audiences: ["patients"],
-      status: "active",
-      url: "https://apps.kinecheck.cl/sso.html?product=kinecheck-recupera",
-      ssoProduct: "kinecheck-recupera"
+      status: "preparing",
+      url: "",
+      ssoProduct: ""
     },
     {
       slug: "comunicacion-clinica",
@@ -201,7 +201,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
 
   const nativeSubmit = HTMLFormElement.prototype.submit;
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-  const APPLICATIONS = new Set(["kinecheck-estudiante", "kinecheck-recupera"]);
+  const APPLICATIONS = new Set(["kinecheck-estudiante"]);
 
   HTMLFormElement.prototype.submit = function guardedKineCheckSubmit() {
     try {

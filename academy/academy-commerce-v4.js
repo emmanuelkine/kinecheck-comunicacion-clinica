@@ -129,7 +129,6 @@
   const CHECKOUTS = Object.freeze({
     "kinecheck-clinico": "https://pay.hotmart.com/L106791841D",
     "kinecheck-estudiante": "https://pay.hotmart.com/G106801166S",
-    "kinecheck-recupera": "https://pay.hotmart.com/P106806251E",
     "comunicacion-clinica": "https://pay.hotmart.com/T106883983U",
     "mas-alla-del-dolor": "https://pay.hotmart.com/W106888386Q",
     "evidencia-aplicada": "https://pay.hotmart.com/F106921972I",

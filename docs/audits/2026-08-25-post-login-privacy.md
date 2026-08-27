@@ -66,3 +66,49 @@ El Security Advisor de Supabase reportó, entre otros, funciones `SECURITY DEFIN
 - **Clínico:** protección post-login reforzada en esta rama; puede mantenerse como herramienta educativa.
 - **Recupera:** debe continuar **Próximamente** y sin registro de información.
 - **Estudiante:** **no debe declararse auditado/cerrado** hasta revisar el código o despliegue interno de `apps.kinecheck.cl` campo por campo, incluyendo almacenamiento y PDF/CSV si existen.
+
+## Seguimiento de cierre de Sprint 0 — 26-08-2026
+
+### Estado de auditoría
+
+**LOCAL_VERIFIED / PRODUCTION_BLOCKED**
+
+El repositorio deja Clínico y las superficies de Estudiante que contiene con protecciones educativas verificables, y bloquea Recupera en profundidad. Sprint 0 no puede declararse `VERIFIED_PRODUCTION` ni cerrarse globalmente mientras el despliegue independiente de `apps.kinecheck.cl` continúe exponiendo Recupera y no se pueda auditar la aplicación autenticada de Estudiante.
+
+### Correcciones y defensa en profundidad en este repositorio
+
+- Clínico conserva su posicionamiento de curso profesional con guía complementaria, advierte junto a campos libres que solo se usen casos ficticios, simulados o anonimizados, prohíbe identificadores reales y marca la salida PDF como documento educativo.
+- El catálogo dinámico de Clínico quedó alineado con esos límites; ya no lo describe como ficha o registro clínico ni permite datos identificables de pacientes.
+- El portal de Estudiante incluido en este repositorio advierte antes de sus campos libres y prohíbe nombre, RUT, teléfono, correo, número de ficha y otros datos identificables de pacientes.
+- Recupera queda `Próximamente` en portada, perfiles, ficha canónica, Academy y Mi KineCheck; no publica precio, checkout, formulario ni captura de datos.
+- La ruta histórica `recupera/consentimiento.html` ya no recopila datos, limpia estado transitorio y no reanuda handoffs.
+- El relay SSO permite únicamente Estudiante y rechaza Recupera antes de transferir sesión; bootstrap, opener y bridge bloquean además sus controles.
+- Los controles de CI y QA ya no esperan precio, checkout, acceso o activación pública de Recupera.
+- La validación de navegador detectó y corrigió dos errores reales de Academy: el selector del buscador (`#library-search`) y la escritura sobre un pie de página retirado.
+
+### Evidencia local ejecutada
+
+- `npm test`: 35/35.
+- `node academy/verify-kinecheck-access.mjs`: aprobado.
+- `node scripts/validate-ecosystem-access.mjs`: 82/82.
+- `node scripts/validate-ecosystem-access-v2.mjs`: 15/15.
+- `node scripts/qa-commercial.mjs` contra servidor local: aprobado sin incidencias bloqueantes.
+- `tests/launch-readiness-public.spec.mjs`: móvil, tablet y escritorio aprobados; siete fichas activas y tres perfiles públicos.
+- `tests/public-canonical-readiness.spec.mjs`: siete fichas en móvil, tablet y escritorio.
+- Chromium: 17/17 controles consolidados de runtime, SSO, botones y recomendaciones.
+- WebKit: 6/6 controles de runtime y SSO.
+- Diagnóstico de overflow de Clínico con y sin JavaScript: ancho de documento 390/390, sin desbordamiento horizontal.
+- `tests/mi-kinecheck-roles.spec.mjs`: 3/3 perfiles.
+
+### Bloqueo independiente: `apps.kinecheck.cl`
+
+Comprobación pública de solo lectura realizada el 26-08-2026 a las 20:39 (America/Santiago):
+
+- `/` responde 200, presenta Recupera como opción activa y no contiene el estado `Próximamente`.
+- `/patient-access.html` responde 200 y expone tres formularios, siete campos y flujos de activación para Recupera.
+- `/patient-checkout` responde 302 hacia `https://pay.hotmart.com/P106806251E`.
+- `/sso.js` todavía mapea `kinecheck-recupera` a `/patient-access.html`.
+- `/access.js` todavía trata el rol `patient` como `KineCheck Recupera` y conserva lógica de activación.
+- `/app.js` responde 401 sin una sesión autorizada. Su fuente no está en este repositorio, por lo que la revisión campo por campo de Estudiante autenticado, almacenamiento y exportaciones continúa pendiente.
+
+Hasta corregir y desplegar esa superficie independiente, no corresponde hacer merge, desplegar ni marcar Sprint 0 como `VERIFIED_PRODUCTION`.

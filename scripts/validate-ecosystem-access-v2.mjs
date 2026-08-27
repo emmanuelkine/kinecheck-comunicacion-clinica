@@ -24,7 +24,8 @@ test("Academy publica Inicio y Biblioteca", academy.includes('data-kc-view-link=
 // Apertura de productos desde todos los puntos de la interfaz.
 test("Bridge cubre Continuar y productos", bridge.includes("continue-button") && bridge.includes("data-kc-open-product") && bridge.includes("data-kc-open-owned") && bridge.includes("data-course"));
 test("Opener vigente", opener.includes("__KINECHECK_OPEN_V6__") && /const RELEASE = "\d{8}[^"]*";/.test(opener));
-test("Estudiante y Recupera usan relay", opener.includes('new Set(["kinecheck-estudiante", "kinecheck-recupera"])') && relay.includes('"kinecheck-estudiante"') && relay.includes('"kinecheck-recupera"'));
+test("Solo Estudiante usa relay", opener.includes('new Set(["kinecheck-estudiante"])') && relay.includes('const PRODUCTS = new Set(["kinecheck-estudiante"])'));
+test("Recupera permanece bloqueado", opener.includes('PAUSED_PRODUCT = "kinecheck-recupera"') && relay.includes('PAUSED_PRODUCT = "kinecheck-recupera"') && relay.includes("product === PAUSED_PRODUCT"));
 test("Evidencia usa handoff externo", opener.includes('"evidencia-aplicada"') && opener.includes("externalHandoffUrl"));
 test("Más allá del dolor queda same-origin", opener.includes('"mas-alla-del-dolor": `./mas-alla-del-dolor.html') && shell.includes("Validando tu acceso dentro de KineCheck"));
 

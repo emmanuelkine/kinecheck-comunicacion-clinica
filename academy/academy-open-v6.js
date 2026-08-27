@@ -7,6 +7,8 @@
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
   const RELEASE = "20260819-library-hotfix1";
+  const PAUSED_PRODUCT = "kinecheck-recupera";
+  const PAUSED_MESSAGE = "KineCheck Recupera está Próximamente y no está disponible para registrar información.";
 
   const SAME_ORIGIN = Object.freeze({
     "kinecheck-clinico": `../kinecheck-clinico-guia/?product=kinecheck-clinico&v=${RELEASE}`,
@@ -24,8 +26,8 @@
     "dolor-musculoesqueletico": `https://emmanuelkine.github.io/kinecheck-evidencia-aplicada/dolor-musculoesqueletico/?course=dolor-musculoesqueletico&v=${RELEASE}`,
   });
 
-  const APPLICATIONS = new Set(["kinecheck-estudiante", "kinecheck-recupera"]);
-  const KNOWN = new Set([...Object.keys(SAME_ORIGIN), ...Object.keys(EXTERNAL), ...APPLICATIONS]);
+  const APPLICATIONS = new Set(["kinecheck-estudiante"]);
+  const KNOWN = new Set([...Object.keys(SAME_ORIGIN), ...Object.keys(EXTERNAL), ...APPLICATIONS, PAUSED_PRODUCT]);
   let navigating = false;
 
   const masAllaCourse = window.KINECHECK_ACADEMY_CONFIG?.courses?.find?.(
@@ -319,6 +321,11 @@
 
   async function openProduct(product, button = null) {
     if (!KNOWN.has(product)) return;
+    if (product === PAUSED_PRODUCT) {
+      resetNavigationState();
+      toast(PAUSED_MESSAGE);
+      return;
+    }
     if (navigating) resetNavigationState();
     if (SAME_ORIGIN[product]) return openSameOrigin(product, button);
     if (EXTERNAL[product]) return openExternal(product, button);
@@ -335,7 +342,7 @@
     const nativeCourseButton = target.closest("#course-grid [data-course]");
     if (nativeCourseButton && !nativeCourseButton.disabled && nativeCourseButton.getAttribute("aria-disabled") !== "true") {
       const product = String(nativeCourseButton.dataset.course || "").trim();
-      if (EXTERNAL[product] || APPLICATIONS.has(product)) {
+      if (EXTERNAL[product] || APPLICATIONS.has(product) || product === PAUSED_PRODUCT) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
