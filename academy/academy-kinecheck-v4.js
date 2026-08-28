@@ -205,7 +205,7 @@ function handleLocationNavigation(source) {
   }
 
   function renderHomeApplications() {
-    const container = $("#home-app-grid");
+    const container = $("[data-kc-home-apps-grid]");
     if (!container) return;
     const applications = CONFIG.courses.filter((course) => course.kind === "application");
     const owned = applications.filter((course) => statusFromCard(course) === "owned");
@@ -220,7 +220,7 @@ function handleLocationNavigation(source) {
   }
 
   function renderHomeCourses() {
-    const container = $("#home-course-grid");
+    const container = $("[data-kc-home-courses-grid]");
     if (!container) return;
     const courses = CONFIG.courses.filter((course) => course.kind === "course");
     const owned = courses.filter((course) => statusFromCard(course) === "owned");

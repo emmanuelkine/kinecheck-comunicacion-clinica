@@ -31,10 +31,10 @@ const libraryMessage = $("#library-message");
 const welcome = $("#welcome");
 const accountEmail = $("#account-email");
 const accountGreeting = $("#account-greeting");
-const activeCount = $("#active-count");
+const activeCount = $("#active-license-count");
 const sidebarAccess = $("#sidebar-access");
 const sidebarEmail = $("#sidebar-email");
-const searchInput = $("#course-search");
+const searchInput = $("#library-search");
 const continueHeading = $("#continue-heading");
 const continueCopy = $("#continue-copy");
 const continueButton = $("#continue-button");
@@ -346,6 +346,11 @@ function hasFullAccess() {
   return ownerMode || betaMode;
 }
 
+function updateActiveCount(value) {
+  const count = Math.max(0, Number(value) || 0);
+  activeCount.textContent = `${count} licencia${count === 1 ? "" : "s"} activa${count === 1 ? "" : "s"}`;
+}
+
 function formatDate(date) {
   if (!(date instanceof Date) || Number.isNaN(date.getTime())) return "fecha no disponible";
   return new Intl.DateTimeFormat("es-CL", {
@@ -648,7 +653,7 @@ async function loadLicenses(session) {
 
   if (!hasFullAccess()) await checkLicenses(session, activeCourses);
 
-  activeCount.textContent = String([...licenseState.values()].filter((state) => state === "owned").length);
+  updateActiveCount([...licenseState.values()].filter((state) => state === "owned").length);
   renderCourses();
   updateContinuePanel();
   await syncBuyerWatermark(session);
@@ -672,7 +677,7 @@ async function retryPostPurchaseLicenses(session, courses) {
     await new Promise((resolve) => setTimeout(resolve, POST_PURCHASE_DELAY_MS));
     await checkLicenses(session, locked);
     locked = locked.filter((course) => licenseState.get(course.slug) !== "owned");
-    activeCount.textContent = String([...licenseState.values()].filter((state) => state === "owned").length);
+    updateActiveCount([...licenseState.values()].filter((state) => state === "owned").length);
     renderCourses();
     updateContinuePanel();
     await syncBuyerWatermark(session);
@@ -788,7 +793,7 @@ async function renderLibrary(session) {
   loginView.hidden = true;
   dashboardView.hidden = false;
   updateAccountPresentation(session);
-  activeCount.textContent = "0";
+  updateActiveCount(0);
   await loadLicenses(session);
 }
 
@@ -1058,7 +1063,7 @@ window.addEventListener("storage", (event) => {
 });
 
 signOut.addEventListener("click", () => clearSession());
-currentYear.textContent = String(new Date().getFullYear());
+if (currentYear) currentYear.textContent = String(new Date().getFullYear());
 setHighContrast(localStorage.getItem(CONTRAST_KEY) === "true");
 
 window.addEventListener("kinecheck:native-session", () => {
