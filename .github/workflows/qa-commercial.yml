@@ -15,7 +15,7 @@ on:
       - "platform/**"
       - "legal/**"
       - "beta/**"
-      - "scripts/qa-commercial.mjs"
+      - "scripts/qa-commercial-post-privacy.mjs"
       - ".github/workflows/qa-commercial.yml"
 
 permissions:
@@ -38,10 +38,10 @@ jobs:
         if: github.event_name == 'push'
         run: sleep 45
 
-      - name: Run commercial QA
+      - name: Run commercial QA post-privacy
         env:
           BASE_URL: https://kinecheck.cl
-        run: node scripts/qa-commercial.mjs
+        run: node scripts/qa-commercial-post-privacy.mjs
 
       - name: Upload QA report
         if: always()
