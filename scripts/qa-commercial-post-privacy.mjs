@@ -1,13 +1,16 @@
 import fs from "node:fs/promises";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
+const IS_PULL_REQUEST = process.env.GITHUB_EVENT_NAME === "pull_request";
 const ACTIVE = [
   ["kinecheck-clinico", "KineCheck Clínico", "$39.990", "https://pay.hotmart.com/L106791841D"],
-  ["kinecheck-estudiante", "KineCheck Estudiante", "$14.990", "https://pay.hotmart.com/G106801166S"],
   ["comunicacion-clinica", "Comunicación Clínica", "$19.900", "https://pay.hotmart.com/T106883983U"],
   ["mas-alla-del-dolor", "Más allá del dolor", "$39.990", "https://pay.hotmart.com/W106888386Q"],
   ["evidencia-aplicada", "Evidencia Aplicada", "$29.990", "https://pay.hotmart.com/F106921972I"],
   ["traumatologia-ortopedia-clinica", "Traumatología y Ortopedia Clínica", "$35.900", "https://pay.hotmart.com/B106913952R"],
+];
+const PAUSED = [
+  ["kinecheck-estudiante", "KineCheck Estudiante", "$14.990", "https://pay.hotmart.com/G106801166S"],
   ["pack-estudiante", "Pack KineCheck Estudiante", "$49.900", "https://pay.hotmart.com/Q106891608M"],
 ];
 const RECUPERA_CHECKOUT = "https://pay.hotmart.com/P106806251E";
@@ -24,10 +27,24 @@ async function read(path) {
   return fs.readFile(path, "utf8");
 }
 
+function pausedOk(html, name, formerPrice, checkout) {
+  return html.includes(name)
+    && /Próximamente/i.test(html)
+    && !html.includes(checkout)
+    && !html.includes(`href="${checkout}"`)
+    && !new RegExp(formerPrice.replace(/[.$]/g, "\\$&") + "(?:\\s*CLP)?", "i").test(html.replace(/data-commercial-reference="[^"]*"/g, ""))
+    && html.includes("../../academy/");
+}
+
 async function sourceChecks() {
   for (const [slug, name, price, checkout] of ACTIVE) {
     const html = await read(`productos/${slug}/index.html`);
     record(`Source ${name}`, html.includes(name) && html.includes(price) && html.includes(checkout) && html.includes("../../academy/"), "producto activo conserva precio, checkout canónico y acceso a Academy");
+  }
+
+  for (const [slug, name, formerPrice, checkout] of PAUSED) {
+    const html = await read(`productos/${slug}/index.html`);
+    record(`Source ${name} pausado`, pausedOk(html, name, formerPrice, checkout), "nuevas ventas pausadas, sin checkout público y con ingreso para accesos vigentes");
   }
 
   const recovery = await read("recupera/index.html");
@@ -60,6 +77,19 @@ async function liveChecks() {
     }
   }
 
+  if (IS_PULL_REQUEST) {
+    for (const [, name] of PAUSED) record(`Live ${name} pausado`, true, "validación de producción diferida al push de main");
+  } else {
+    for (const [slug, name, formerPrice, checkout] of PAUSED) {
+      try {
+        const { response, text } = await get(`/productos/${slug}/`);
+        record(`Live ${name} pausado`, response.ok && pausedOk(text, name, formerPrice, checkout), `${response.status} nuevas ventas pausadas`);
+      } catch (error) {
+        record(`Live ${name} pausado`, false, error instanceof Error ? error.message : String(error));
+      }
+    }
+  }
+
   try {
     const { response, text } = await get("/recupera/");
     record("Live Recupera Próximamente", response.ok && /Próximamente/i.test(text), `${response.status} Recupera pausado`);
@@ -71,7 +101,7 @@ async function liveChecks() {
 
 await sourceChecks();
 await liveChecks();
-await fs.writeFile("qa-commercial-report.json", JSON.stringify({ generatedAt: new Date().toISOString(), baseUrl: BASE, failures, results }, null, 2));
+await fs.writeFile("qa-commercial-report.json", JSON.stringify({ generatedAt: new Date().toISOString(), baseUrl: BASE, pullRequest: IS_PULL_REQUEST, failures, results }, null, 2));
 
 if (failures) {
   console.error(`Commercial QA post-privacy failed with ${failures} blocking issue(s).`);
