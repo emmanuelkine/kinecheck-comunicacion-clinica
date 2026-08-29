@@ -1,0 +1,131 @@
+name: Authenticated Estudiante SSO E2E
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authenticated-sso-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      E2E_EMAIL: ${{ secrets.KINECHECK_E2E_EMAIL }}
+      E2E_PASSWORD: ${{ secrets.KINECHECK_E2E_PASSWORD }}
+      SUPABASE_ANON_KEY: ${{ secrets.KINECHECK_SUPABASE_ANON_KEY }}
+      SUPABASE_URL: https://eqhcdclyeoapmqtlduwf.supabase.co
+      SSO_URL: https://apps.kinecheck.cl/api/license/sso
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require dedicated E2E credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$E2E_EMAIL" || { echo 'Missing KINECHECK_E2E_EMAIL' >&2; exit 2; }
+          test -n "$E2E_PASSWORD" || { echo 'Missing KINECHECK_E2E_PASSWORD' >&2; exit 2; }
+          test -n "$SUPABASE_ANON_KEY" || { echo 'Missing KINECHECK_SUPABASE_ANON_KEY' >&2; exit 2; }
+
+      - name: Obtain Supabase session without exposing credentials
+        id: auth
+        shell: bash
+        run: |
+          set -euo pipefail
+          response_file="$(mktemp)"
+          status=$(curl -sS --max-time 30 -o "$response_file" -w '%{http_code}' \
+            -X POST "$SUPABASE_URL/auth/v1/token?grant_type=password" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H 'Content-Type: application/json' \
+            --data-binary "$(jq -nc --arg email "$E2E_EMAIL" --arg password "$E2E_PASSWORD" '{email:$email,password:$password}')")
+          test "$status" = '200' || { echo "Supabase auth failed with HTTP $status" >&2; exit 1; }
+          access_token=$(jq -r '.access_token // empty' "$response_file")
+          expires_in=$(jq -r '.expires_in // 0' "$response_file")
+          test -n "$access_token" || { echo 'Supabase session did not return access_token' >&2; exit 1; }
+          echo "::add-mask::$access_token"
+          expires_at=$(( $(date +%s) + expires_in ))
+          printf '%s' "$access_token" > "$RUNNER_TEMP/kc_access_token"
+          printf '%s' "$expires_at" > "$RUNNER_TEMP/kc_expires_at"
+
+      - name: Verify positive SSO 303 and application cookie
+        shell: bash
+        run: |
+          set -euo pipefail
+          access_token="$(cat "$RUNNER_TEMP/kc_access_token")"
+          expires_at="$(cat "$RUNNER_TEMP/kc_expires_at")"
+          headers="$RUNNER_TEMP/sso.headers"
+          body="$RUNNER_TEMP/sso.body"
+          status=$(curl -sS --max-time 30 -D "$headers" -o "$body" -w '%{http_code}' \
+            --max-redirs 0 \
+            -X POST "$SSO_URL" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'product=kinecheck-estudiante' \
+            --data-urlencode "access_token=$access_token" \
+            --data-urlencode "expires_at=$expires_at")
+          test "$status" = '303' || { echo "Expected 303, got HTTP $status" >&2; sed -n '1,20p' "$headers" >&2; exit 1; }
+
+          location=$(awk 'BEGIN{IGNORECASE=1} /^location:/{sub(/\r$/, "", $2); print $2; exit}' "$headers")
+          test -n "$location" || { echo '303 response missing Location' >&2; exit 1; }
+          case "$location" in
+            /app|/app/*|https://apps.kinecheck.cl/app|https://apps.kinecheck.cl/app/*) ;;
+            *) echo "Unexpected redirect target: $location" >&2; exit 1;;
+          esac
+
+          cookie_line=$(awk 'BEGIN{IGNORECASE=1} /^set-cookie:/{sub(/^set-cookie:[[:space:]]*/i, ""); print; exit}' "$headers")
+          test -n "$cookie_line" || { echo '303 response missing Set-Cookie' >&2; exit 1; }
+          echo '::add-mask::'"$cookie_line"
+          printf '%s' "$cookie_line" > "$RUNNER_TEMP/kc_cookie_line"
+
+          echo "$cookie_line" | grep -qi ';[[:space:]]*HttpOnly' || { echo 'Cookie missing HttpOnly' >&2; exit 1; }
+          echo "$cookie_line" | grep -qi ';[[:space:]]*Secure' || { echo 'Cookie missing Secure' >&2; exit 1; }
+          echo "$cookie_line" | grep -qi ';[[:space:]]*SameSite=Lax' || { echo 'Cookie missing SameSite=Lax' >&2; exit 1; }
+          if echo "$cookie_line" | grep -qi ';[[:space:]]*Domain='; then
+            domain=$(printf '%s' "$cookie_line" | sed -nE 's/.*;[[:space:]]*[Dd]omain=([^;]+).*/\1/p')
+            case "$domain" in
+              apps.kinecheck.cl|.apps.kinecheck.cl) ;;
+              *) echo "Unexpected cookie Domain=$domain" >&2; exit 1;;
+            esac
+          else
+            echo 'Cookie is host-only for apps.kinecheck.cl (no Domain attribute).'
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Verify final private navigation in Chromium and WebKit
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium webkit >/dev/null 2>&1
+          node <<'NODE'
+          const fs = require('fs');
+          const { chromium, webkit } = require('playwright');
+          const raw = fs.readFileSync(process.env.RUNNER_TEMP + '/kc_cookie_line', 'utf8');
+          const first = raw.split(';', 1)[0];
+          const idx = first.indexOf('=');
+          if (idx <= 0) throw new Error('Cannot parse application cookie');
+          const name = first.slice(0, idx).trim();
+          const value = first.slice(idx + 1).trim();
+          const legacyHost = 'chatgpt' + '.site';
+          const engines = [['chromium', chromium], ['webkit', webkit]];
+          (async () => {
+            for (const [engineName, engine] of engines) {
+              const browser = await engine.launch({ headless: true });
+              const context = await browser.newContext();
+              await context.addCookies([{ name, value, domain: 'apps.kinecheck.cl', path: '/', httpOnly: true, secure: true, sameSite: 'Lax' }]);
+              const page = await context.newPage();
+              const touched = [];
+              page.on('request', req => touched.push(req.url()));
+              const response = await page.goto('https://apps.kinecheck.cl/app', { waitUntil: 'domcontentloaded', timeout: 60000 });
+              if (!response || response.status() >= 400) throw new Error(`${engineName}: /app returned ${response?.status()}`);
+              if (!page.url().startsWith('https://apps.kinecheck.cl/')) throw new Error(`${engineName}: final URL outside apps.kinecheck.cl: ${page.url()}`);
+              if (page.url().toLowerCase().includes(legacyHost) || touched.some(u => u.toLowerCase().includes(legacyHost))) {
+                throw new Error(`${engineName}: legacy host touched during authenticated navigation`);
+              }
+              await browser.close();
+              console.log(`${engineName}: authenticated /app navigation OK`);
+            }
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
