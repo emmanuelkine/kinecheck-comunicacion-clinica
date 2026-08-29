@@ -12,10 +12,10 @@
       action: "Empezar práctica guiada",
     },
     "kinecheck-recupera": {
-      type: "MI RECUPERACIÓN",
+      type: "PRÓXIMAMENTE",
       title: "KineCheck Recupera",
-      copy: "Revisa tu plan, registra cómo estás y observa tu avance con instrucciones simples.",
-      action: "Abrir mi plan",
+      copy: "No disponible para registrar información mientras se revisa privacidad y protección de datos.",
+      action: "Próximamente",
     },
   });
 

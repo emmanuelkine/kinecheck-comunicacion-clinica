@@ -97,13 +97,16 @@ jobs:
         run: |
           grep -q 'MI RUTA DE APRENDIZAJE' academy/mi-kinecheck-v1.js
           grep -q 'ORDEN RECOMENDADO' academy/mi-kinecheck-v1.js
-          grep -q 'Tres acciones para tu día' academy/mi-kinecheck-v1.js
-          grep -q 'No necesitas navegar cursos, evidencia ni herramientas clínicas' academy/mi-kinecheck-v1.js
+          grep -q 'KineCheck Recupera permanece bloqueado' academy/mi-kinecheck-v1.js
+          grep -q 'No está disponible para compra, acceso ni registro de información' academy/mi-kinecheck-v1.js
+          ! grep -q 'Abrir KineCheck Recupera' academy/mi-kinecheck-v1.js
           grep -q 'PASO RECOMENDADO AHORA' academy/mi-kinecheck-simplify-v2.js
-          grep -q 'Tres acciones. Nada más.' academy/mi-kinecheck-simplify-v2.js
+          grep -q 'Registro temporalmente deshabilitado' academy/mi-kinecheck-simplify-v2.js
+          grep -q 'No ingreses información de salud' academy/mi-kinecheck-simplify-v2.js
           grep -q 'removeStageChooser' academy/mi-kinecheck-simplify-v2.js
           grep -q 'Empezar práctica guiada' academy/mi-kinecheck-card-copy-v1.js
-          grep -q 'Abrir mi plan' academy/mi-kinecheck-card-copy-v1.js
+          grep -q 'action: "Próximamente"' academy/mi-kinecheck-card-copy-v1.js
+          ! grep -q 'action: "Abrir mi plan"' academy/mi-kinecheck-card-copy-v1.js
           grep -q 'No estudies todo al mismo tiempo' productos/product-experience-unification-v1.js
           grep -q 'Tres acciones. Nada más' productos/product-experience-unification-v1.js
           grep -q 'related.hidden = true' productos/product-experience-unification-v1.js

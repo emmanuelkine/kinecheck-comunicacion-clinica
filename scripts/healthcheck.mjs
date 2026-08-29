@@ -10,7 +10,7 @@ const CHECKOUT_EXPECTATIONS = [
   { label: "Comunicación Clínica", url: "https://pay.hotmart.com/T106883983U", keywords: ["comunicación clínica", "comunicacion clinica"] },
   { label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"] },
   { label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"] },
-  { label: "KineCheck Recupera", url: "https://pay.hotmart.com/P106806251E", keywords: ["kinecheck recupera"] },
+  { label: "KineCheck Recupera", url: "https://pay.hotmart.com/P106806251E", keywords: ["kinecheck recupera"], publiclyActive: false },
   { label: "Más allá del Dolor", url: "https://pay.hotmart.com/W106888386Q", keywords: ["más allá del dolor", "mas alla del dolor"] },
   { label: "KineCheck Evidencia Aplicada", url: "https://pay.hotmart.com/F106921972I", keywords: ["kinecheck evidencia aplicada", "evidencia aplicada", "razonamiento clínico con evidencia", "razonamiento clinico con evidencia"] },
   { label: "Traumatología y Ortopedia Clínica", url: "https://pay.hotmart.com/B106913952R", keywords: ["traumatología", "traumatologia", "ortopedia clínica", "ortopedia clinica"] },
@@ -308,7 +308,9 @@ async function main() {
     .filter((product) => NON_COMMERCIAL_ACTIVE_SLUGS.has(product.slug))
     .forEach((product) => logOk(`Producto activo en modo no comercial: ${product.title}`));
   const checkoutUrls = [...new Set(extractCheckoutUrls(publicCommerce))];
-  const expectedUrls = new Set(CHECKOUT_EXPECTATIONS.map((item) => item.url));
+  const activeCheckoutExpectations = CHECKOUT_EXPECTATIONS.filter((item) => item.publiclyActive !== false);
+  const expectedUrls = new Set(activeCheckoutExpectations.map((item) => item.url));
+  const recuperaCheckout = CHECKOUT_EXPECTATIONS.find((item) => item.label === "KineCheck Recupera")?.url || "";
 
   const lumbar = activeProducts.find((product) => product.slug === "dolor-lumbar-persistente");
   if (!lumbar) {
@@ -335,7 +337,17 @@ async function main() {
     if (!expectedUrls.has(url)) logWarn(`Checkout público no incorporado al mapa de pruebas: ${url}`);
   }
 
-  for (const expectation of CHECKOUT_EXPECTATIONS) {
+  const recuperaIsPaused = /próximamente/i.test(recoveryPage)
+    && !recoveryPage.includes("$9.990 CLP")
+    && !recoveryPage.includes(recuperaCheckout)
+    && !publicCommerce.includes(recuperaCheckout);
+  if (!recuperaIsPaused) {
+    logFail("KineCheck Recupera debe permanecer Próximamente, sin precio ni checkout público.");
+  } else {
+    logOk("KineCheck Recupera permanece Próximamente, sin precio ni checkout público.");
+  }
+
+  for (const expectation of activeCheckoutExpectations) {
     if (!checkoutUrls.includes(expectation.url)) {
       logFail(`Las páginas públicas no contienen el checkout esperado de ${expectation.label}: ${expectation.url}`);
     } else {
