@@ -28,7 +28,7 @@ const manualRoutes = ["access.html#activar", "student-access.html#activar", "pat
 assert.match(index, /form-action 'self'/, "La política principal debe conservar form-action restringido al origen propio para el flujo local.");
 assert.doesNotMatch(index, /form-action[^>]*\*/i, "form-action no debe usar comodines.");
 assert.match(relayHtml, new RegExp(`form-action ${appOrigin.replaceAll(".", "\\.")}`));
-assert.doesNotMatch([bootstrap, config, relayHtml, relayJs].join("\n"), /chatgpt\.site/i, "El flujo activo de aplicaciones no debe depender de chatgpt.site.");
+assert.doesNotMatch([bootstrap, config, relayHtml, relayJs].join("\n"), new RegExp("chatgpt" + "\\.site", "i"), "El flujo activo de aplicaciones no debe depender del host técnico heredado.");
 assert.match(bootstrap, /__KINECHECK_APP_SSO_FORM_GUARD__/);
 assert.match(bootstrap, /app-sso-relay\.html/);
 assert.match(bootstrap, /https:\/\/apps\.kinecheck\.cl\/sso\.html\?product=kinecheck-estudiante/);
