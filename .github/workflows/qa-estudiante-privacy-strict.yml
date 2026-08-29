@@ -1,0 +1,98 @@
+name: Estudiante strict privacy audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qa-estudiante-privacy-strict.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  strict-privacy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      E2E_EMAIL: ${{ secrets.KINECHECK_E2E_EMAIL }}
+      E2E_PASSWORD: ${{ secrets.KINECHECK_E2E_PASSWORD }}
+      SUPABASE_ANON_KEY: ${{ secrets.KINECHECK_SUPABASE_ANON_KEY }}
+      SUPABASE_URL: https://eqhcdclyeoapmqtlduwf.supabase.co
+      SSO_URL: https://apps.kinecheck.cl/api/license/sso
+      APP_ORIGIN: https://apps.kinecheck.cl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Authenticate and obtain app cookie
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$E2E_EMAIL"; test -n "$E2E_PASSWORD"; test -n "$SUPABASE_ANON_KEY"
+          auth="$RUNNER_TEMP/auth.json"
+          code=$(curl -sS -o "$auth" -w '%{http_code}' -X POST "$SUPABASE_URL/auth/v1/token?grant_type=password" -H "apikey: $SUPABASE_ANON_KEY" -H 'Content-Type: application/json' --data-binary "$(jq -nc --arg email "$E2E_EMAIL" --arg password "$E2E_PASSWORD" '{email:$email,password:$password}')")
+          test "$code" = 200
+          token=$(jq -r '.access_token // empty' "$auth"); exp=$(( $(date +%s) + $(jq -r '.expires_in // 0' "$auth") )); issued=$(date +%s)
+          test -n "$token"; echo "::add-mask::$token"
+          headers="$RUNNER_TEMP/sso.headers"
+          code=$(curl -sS -D "$headers" -o /dev/null -w '%{http_code}' --max-redirs 0 -X POST "$SSO_URL" -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'product=kinecheck-estudiante' --data-urlencode "access_token=$token" --data-urlencode "expires_at=$exp" --data-urlencode "issued_at=$issued" --data-urlencode 'handoff_type=kinecheck-sso-v3-access-only')
+          test "$code" = 303
+          cookie=$(awk 'BEGIN{IGNORECASE=1} /^set-cookie:/{sub(/^[^:]+:[[:space:]]*/,""); sub(/\r$/,""); print; exit}' "$headers")
+          test -n "$cookie"; echo "::add-mask::$cookie"; printf '%s' "$cookie" > "$RUNNER_TEMP/app-cookie"
+      - name: Install Chromium
+        shell: bash
+        run: |
+          npm install --no-save playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+      - name: Strict post-login privacy checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs'); const {chromium}=require('playwright');
+          const origin=process.env.APP_ORIGIN; const raw=fs.readFileSync(process.env.RUNNER_TEMP+'/app-cookie','utf8');
+          const first=raw.split(';',1)[0], i=first.indexOf('='); if(i<1) throw new Error('cookie parse');
+          const cookie={name:first.slice(0,i),value:first.slice(i+1),domain:'apps.kinecheck.cl',path:'/',httpOnly:true,secure:true,sameSite:'Lax'};
+          const warnings=['ficticio','ficticia','simulado','simulada','anonimiz','no ingreses datos reales','no uses datos reales','uso educativo'];
+          const prohibited=['nombre','rut','teléfono','telefono','correo','fotograf','ficha'];
+          const legacy='chatgpt'+'.site';
+          const safe=u=>{try{const x=new URL(u);return x.origin+x.pathname}catch{return u}};
+          (async()=>{
+            const browser=await chromium.launch({headless:true}); const ctx=await browser.newContext(); await ctx.addCookies([cookie]); const page=await ctx.newPage();
+            const reqs=new Set(); page.on('request',r=>reqs.add(r.method()+' '+safe(r.url())));
+            await page.goto(origin+'/app',{waitUntil:'networkidle',timeout:60000});
+            const result=await page.evaluate(({warnings,prohibited})=>{
+              const n=s=>String(s||'').replace(/\s+/g,' ').trim().toLowerCase(); const body=n(document.body.innerText);
+              const explicitProhibition=prohibited.every(t=>body.includes(t)) && (body.includes('no ingres')||body.includes('no uses')||body.includes('prohib'));
+              const els=[...document.querySelectorAll('textarea,[contenteditable="true"],input')];
+              const fields=[];
+              for(const el of els){
+                const type=(el.getAttribute('type')||'text').toLowerCase(); if(['hidden','password','email','checkbox','radio','range','number','date','time','button','submit','reset'].includes(type)) continue;
+                const id=el.id||''; const label=id?document.querySelector(`label[for="${CSS.escape(id)}"]`)?.innerText||'':'';
+                const d=n([el.getAttribute('name'),el.getAttribute('placeholder'),el.getAttribute('aria-label'),label].filter(Boolean).join(' '));
+                if(type==='search'||/buscar|search/.test(d)) continue;
+                const near=n([el.parentElement?.innerText,el.parentElement?.parentElement?.innerText].filter(Boolean).join(' '));
+                const warned=warnings.some(w=>near.includes(w));
+                fields.push({tag:el.tagName.toLowerCase(),type,label,name:el.getAttribute('name')||'',placeholder:el.getAttribute('placeholder')||'',warned});
+              }
+              const exportCtl=[...document.querySelectorAll('a,button')].filter(el=>/pdf|csv|export|descargar|download/i.test((el.innerText||'')+' '+(el.getAttribute('href')||''))).length;
+              const exportDisclaimer=body.includes('documento educativo')&&body.includes('no corresponde a una ficha clínica');
+              return {fields,explicitProhibition,exportCtl,exportDisclaimer,local:Object.keys(localStorage),session:Object.keys(sessionStorage)};
+            },{warnings,prohibited});
+            const bad=result.fields.filter(f=>!f.warned);
+            const endpoints=[...reqs].sort();
+            console.log('Potential free-text/file fields:',result.fields.length);
+            console.log('Fields without nearby warning:',bad.length);
+            console.log('Explicit prohibition visible:',result.explicitProhibition);
+            console.log('Export controls:',result.exportCtl,'export disclaimer:',result.exportDisclaimer);
+            console.log('Client storage keys:',result.local.length+result.session.length);
+            console.log('Network endpoints:'); endpoints.forEach(e=>console.log('- '+e));
+            if(page.url().toLowerCase().includes(legacy)||endpoints.some(e=>e.toLowerCase().includes(legacy))) throw new Error('legacy host touched');
+            if(!result.explicitProhibition) throw new Error('Explicit prohibition of real patient identifiers is not visible');
+            if(bad.length){ bad.slice(0,20).forEach(f=>console.error('UNWARNED FIELD',JSON.stringify(f))); throw new Error(`${bad.length} potential free-text/file fields lack nearby educational warning`); }
+            if(result.exportCtl>0&&!result.exportDisclaimer) throw new Error('Export controls lack required educational disclaimer');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
