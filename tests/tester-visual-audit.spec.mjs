@@ -37,7 +37,11 @@ async function exposeDashboard(page) {
 }
 
 function intersects(a, b) {
-  return !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
+  const aRight = a.x + a.width;
+  const aBottom = a.y + a.height;
+  const bRight = b.x + b.width;
+  const bBottom = b.y + b.height;
+  return !(aRight <= b.x || a.x >= bRight || aBottom <= b.y || a.y >= bBottom);
 }
 
 for (const viewport of [
