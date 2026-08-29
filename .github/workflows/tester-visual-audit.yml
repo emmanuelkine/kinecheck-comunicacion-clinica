@@ -1,0 +1,45 @@
+name: Tester Visual Audit
+
+on:
+  pull_request:
+    paths:
+      - 'academy/**'
+      - 'tests/tester-visual-audit.spec.mjs'
+      - '.github/workflows/tester-visual-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visual-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    strategy:
+      matrix:
+        browser: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Serve exact PR checkout
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/kinecheck-http.log 2>&1 &
+          echo $! > /tmp/kinecheck-http.pid
+          for attempt in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:4173/academy/ > /dev/null; then
+              exit 0
+            fi
+            sleep 0.5
+          done
+          cat /tmp/kinecheck-http.log
+          exit 1
+      - name: Audit exact PR checkout visual contracts
+        env:
+          BASE_URL: http://127.0.0.1:4173
+        run: npx playwright test tests/tester-visual-audit.spec.mjs --browser=${{ matrix.browser }}
