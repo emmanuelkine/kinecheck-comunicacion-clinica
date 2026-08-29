@@ -1,0 +1,220 @@
+name: Estudiante post-login privacy audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qa-estudiante-privacy-postlogin.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  privacy-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      E2E_EMAIL: ${{ secrets.KINECHECK_E2E_EMAIL }}
+      E2E_PASSWORD: ${{ secrets.KINECHECK_E2E_PASSWORD }}
+      SUPABASE_ANON_KEY: ${{ secrets.KINECHECK_SUPABASE_ANON_KEY }}
+      SUPABASE_URL: https://eqhcdclyeoapmqtlduwf.supabase.co
+      SSO_URL: https://apps.kinecheck.cl/api/license/sso
+      APP_ORIGIN: https://apps.kinecheck.cl
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require E2E secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$E2E_EMAIL"
+          test -n "$E2E_PASSWORD"
+          test -n "$SUPABASE_ANON_KEY"
+
+      - name: Obtain session and application cookie
+        shell: bash
+        run: |
+          set -euo pipefail
+          auth_file="$RUNNER_TEMP/auth.json"
+          status=$(curl -sS --max-time 30 -o "$auth_file" -w '%{http_code}' \
+            -X POST "$SUPABASE_URL/auth/v1/token?grant_type=password" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H 'Content-Type: application/json' \
+            --data-binary "$(jq -nc --arg email "$E2E_EMAIL" --arg password "$E2E_PASSWORD" '{email:$email,password:$password}')")
+          test "$status" = 200 || { echo "Supabase auth failed: HTTP $status" >&2; exit 1; }
+          token=$(jq -r '.access_token // empty' "$auth_file")
+          expires_in=$(jq -r '.expires_in // 0' "$auth_file")
+          test -n "$token"
+          echo "::add-mask::$token"
+          expires_at=$(( $(date +%s) + expires_in ))
+          issued_at=$(date +%s)
+          headers="$RUNNER_TEMP/sso.headers"
+          status=$(curl -sS --max-time 30 -D "$headers" -o /dev/null -w '%{http_code}' \
+            --max-redirs 0 -X POST "$SSO_URL" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'product=kinecheck-estudiante' \
+            --data-urlencode "access_token=$token" \
+            --data-urlencode "expires_at=$expires_at" \
+            --data-urlencode "issued_at=$issued_at" \
+            --data-urlencode 'handoff_type=kinecheck-sso-v3-access-only')
+          test "$status" = 303 || { echo "Expected SSO 303, got $status" >&2; exit 1; }
+          cookie_line=$(awk 'BEGIN{IGNORECASE=1} /^set-cookie:/{sub(/^[^:]+:[[:space:]]*/, ""); sub(/\r$/, ""); print; exit}' "$headers")
+          test -n "$cookie_line"
+          echo "::add-mask::$cookie_line"
+          printf '%s' "$cookie_line" > "$RUNNER_TEMP/app-cookie"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install browser
+        shell: bash
+        run: |
+          npm install --no-save playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+
+      - name: Audit post-login UI, storage and network
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+          const origin = process.env.APP_ORIGIN;
+          const raw = fs.readFileSync(process.env.RUNNER_TEMP + '/app-cookie', 'utf8');
+          const first = raw.split(';', 1)[0];
+          const idx = first.indexOf('=');
+          if (idx <= 0) throw new Error('Cannot parse app cookie');
+          const cookie = { name: first.slice(0, idx), value: first.slice(idx + 1), domain: 'apps.kinecheck.cl', path: '/', httpOnly: true, secure: true, sameSite: 'Lax' };
+
+          const sensitiveTerms = [
+            'rut','teléfono','telefono','correo del paciente','email del paciente','nombre del paciente',
+            'foto del paciente','fotografía del paciente','fotografia del paciente','número de ficha','numero de ficha',
+            'ficha clínica','ficha clinica','historia clínica','historia clinica','registro clínico','registro clinico'
+          ];
+          const warningTerms = ['ficticio','ficticia','simulado','simulada','anonimiz','no ingreses datos reales','no uses datos reales','uso educativo'];
+          const exportTerms = ['pdf','csv','export','descargar','download'];
+          const requiredExportDisclaimer = 'documento educativo';
+          const forbiddenHost = 'chatgpt' + '.site';
+          const safePath = (u) => { try { const x = new URL(u); return x.origin + x.pathname; } catch { return u; } };
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const context = await browser.newContext();
+            await context.addCookies([cookie]);
+            const page = await context.newPage();
+            const requests = new Map();
+            page.on('request', r => {
+              const u = safePath(r.url());
+              requests.set(`${r.method()} ${u}`, true);
+            });
+            await page.goto(origin + '/app', { waitUntil: 'networkidle', timeout: 60000 });
+            if (!page.url().startsWith(origin + '/')) throw new Error(`Final URL outside canonical origin: ${page.url()}`);
+            if (page.url().toLowerCase().includes(forbiddenHost)) throw new Error('Legacy host reached');
+
+            const candidatePaths = await page.$$eval('a[href]', links => [...new Set(links.map(a => a.href).filter(Boolean))]);
+            const sameOrigin = candidatePaths.filter(u => {
+              try {
+                const x = new URL(u);
+                return x.origin === location.origin && !/(logout|signout|delete|remove|borrar|eliminar)/i.test(x.pathname + x.search);
+              } catch { return false; }
+            }).slice(0, 20);
+            const urls = [...new Set([origin + '/app', ...sameOrigin])];
+
+            const findings = [];
+            const inventory = [];
+            const storageKeys = new Set();
+            let exportControls = 0;
+            let exportDisclaimers = 0;
+
+            for (const url of urls) {
+              await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+              await page.waitForTimeout(500);
+              if (!page.url().startsWith(origin + '/')) findings.push(`Non-canonical navigation: ${safePath(page.url())}`);
+              const audit = await page.evaluate(({ sensitiveTerms, warningTerms, exportTerms, requiredExportDisclaimer }) => {
+                const norm = s => String(s || '').replace(/\s+/g,' ').trim().toLowerCase();
+                const bodyText = norm(document.body.innerText);
+                const fields = [...document.querySelectorAll('input, textarea, [contenteditable="true"]')].map(el => {
+                  const id = el.id || '';
+                  const label = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`)?.innerText || '' : '';
+                  const parent = norm(el.closest('label,fieldset,form,section,article,div')?.innerText || '');
+                  const descriptor = norm([el.getAttribute('name'), el.getAttribute('placeholder'), el.getAttribute('aria-label'), label].filter(Boolean).join(' '));
+                  const sensitive = sensitiveTerms.filter(t => descriptor.includes(t));
+                  const warned = warningTerms.some(t => parent.includes(t));
+                  return {
+                    tag: el.tagName.toLowerCase(),
+                    type: el.getAttribute('type') || '',
+                    name: el.getAttribute('name') || '',
+                    placeholder: el.getAttribute('placeholder') || '',
+                    aria: el.getAttribute('aria-label') || '',
+                    label,
+                    sensitive,
+                    warned
+                  };
+                });
+                const controls = [...document.querySelectorAll('a,button')].map(el => norm(el.innerText + ' ' + (el.getAttribute('href') || '')));
+                const exports = controls.filter(t => exportTerms.some(x => t.includes(x))).length;
+                const disclaimer = bodyText.includes(requiredExportDisclaimer) && bodyText.includes('no corresponde a una ficha clínica');
+                return { fields, exports, disclaimer, local: Object.keys(localStorage), session: Object.keys(sessionStorage), title: document.title };
+              }, { sensitiveTerms, warningTerms, exportTerms, requiredExportDisclaimer });
+
+              audit.local.forEach(k => storageKeys.add('localStorage:' + k));
+              audit.session.forEach(k => storageKeys.add('sessionStorage:' + k));
+              exportControls += audit.exports;
+              if (audit.disclaimer) exportDisclaimers += 1;
+              for (const f of audit.fields) {
+                inventory.push({ path: safePath(page.url()), ...f });
+                if (f.sensitive.length && !f.warned) findings.push(`Sensitive field without nearby educational warning at ${safePath(page.url())}: ${[f.label,f.name,f.placeholder,f.aria].filter(Boolean).join(' | ')}`);
+              }
+              if (audit.exports > 0 && !audit.disclaimer) findings.push(`Export control without visible educational disclaimer at ${safePath(page.url())}`);
+            }
+
+            const requestList = [...requests.keys()].sort();
+            if (requestList.some(x => x.toLowerCase().includes(forbiddenHost))) findings.push('Network request touched legacy host');
+
+            const report = {
+              pagesAudited: urls.length,
+              fieldsInventoried: inventory.length,
+              exportControls,
+              exportDisclaimerPages: exportDisclaimers,
+              storageKeys: [...storageKeys].sort(),
+              networkEndpoints: requestList,
+              fieldInventory: inventory,
+              findings
+            };
+            fs.writeFileSync(process.env.RUNNER_TEMP + '/privacy-report.json', JSON.stringify(report, null, 2));
+            console.log(`Pages audited: ${report.pagesAudited}`);
+            console.log(`Fields inventoried: ${report.fieldsInventoried}`);
+            console.log(`Export controls: ${report.exportControls}`);
+            console.log(`Storage keys: ${report.storageKeys.length}`);
+            console.log(`Network endpoints: ${report.networkEndpoints.length}`);
+            if (findings.length) {
+              console.error('Privacy findings:');
+              findings.forEach(x => console.error('- ' + x));
+              process.exitCode = 1;
+            } else {
+              console.log('No UI privacy regressions detected by automated audit.');
+            }
+            await browser.close();
+          })().catch(e => { console.error(e); process.exit(1); });
+          NODE
+
+      - name: Publish sanitized audit summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/privacy-report.json" ]; then
+            {
+              echo '## KineCheck Estudiante — post-login privacy audit'
+              echo
+              jq -r '"- Pages audited: \(.pagesAudited)\n- Fields inventoried: \(.fieldsInventoried)\n- Export controls: \(.exportControls)\n- Storage keys observed: \(.storageKeys|length)\n- Network endpoints observed: \(.networkEndpoints|length)\n- Findings: \(.findings|length)"' "$RUNNER_TEMP/privacy-report.json"
+              echo
+              echo '<details><summary>Storage keys and network endpoints (no values)</summary>'
+              echo
+              jq -r '.storageKeys[]? | "- `" + . + "`"' "$RUNNER_TEMP/privacy-report.json"
+              jq -r '.networkEndpoints[]? | "- `" + . + "`"' "$RUNNER_TEMP/privacy-report.json"
+              echo
+              echo '</details>'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
