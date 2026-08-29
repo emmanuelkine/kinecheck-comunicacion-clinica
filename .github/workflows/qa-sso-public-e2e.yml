@@ -1,0 +1,81 @@
+name: QA SSO public E2E
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/qa-sso-public-e2e.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-sso-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: DNS and HTTP probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '=== DNS apps.kinecheck.cl ==='
+          getent ahosts apps.kinecheck.cl
+
+          echo '=== GET SSO relay ==='
+          curl -sS --max-time 30 -A 'KineCheck-SSO-QA/1.0' \
+            -D relay.headers \
+            'https://apps.kinecheck.cl/sso.html?product=kinecheck-estudiante' \
+            -o relay.html
+          sed -n '1,30p' relay.headers
+          test "$(awk 'NR==1{print $2}' relay.headers)" = '200'
+          ! grep -qi 'chatgpt\.site' relay.html
+
+          echo '=== POST invalid/empty SSO ==='
+          curl -sS --max-time 30 -A 'KineCheck-SSO-QA/1.0' \
+            -X POST \
+            -H 'content-type: application/json' \
+            -D post.headers \
+            'https://apps.kinecheck.cl/api/license/sso' \
+            --data '{"product":"kinecheck-estudiante","access_token":"invalid-e2e-probe"}' \
+            -o post.body || true
+          sed -n '1,40p' post.headers
+          cat post.body
+          status="$(awk 'NR==1{print $2}' post.headers)"
+          case "$status" in
+            400|401|403|422) ;;
+            *) echo "Unexpected invalid-token status: $status"; exit 1;;
+          esac
+          ! grep -qi 'chatgpt\.site' post.headers
+          if grep -qi '^location:' post.headers; then
+            ! grep -qi 'chatgpt\.site' post.headers
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Chromium and WebKit public navigation
+        shell: bash
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium webkit >/dev/null 2>&1
+          node <<'NODE'
+          const { chromium, webkit } = require('playwright');
+          const engines = [['chromium', chromium], ['webkit', webkit]];
+          (async () => {
+            for (const [name, engine] of engines) {
+              const browser = await engine.launch({ headless: true });
+              const context = await browser.newContext({ locale: 'es-CL' });
+              const page = await context.newPage();
+              const touched = [];
+              page.on('request', r => touched.push(r.url()));
+              const response = await page.goto('https://apps.kinecheck.cl/sso.html?product=kinecheck-estudiante', { waitUntil: 'domcontentloaded', timeout: 60000 });
+              console.log(name, 'status=', response?.status(), 'url=', page.url(), 'title=', await page.title());
+              if (response?.status() !== 200) throw new Error(`${name}: relay status ${response?.status()}`);
+              if (touched.some(u => /chatgpt\.site/i.test(u))) throw new Error(`${name}: request to chatgpt.site detected`);
+              if (/chatgpt\.site/i.test(page.url())) throw new Error(`${name}: navigation to chatgpt.site detected`);
+              await browser.close();
+            }
+          })().catch(e => { console.error(e); process.exit(1); });
+          NODE
