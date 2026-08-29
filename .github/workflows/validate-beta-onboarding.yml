@@ -1,0 +1,32 @@
+name: Validate Beta Onboarding
+
+on:
+  pull_request:
+    paths:
+      - 'beta/**'
+      - 'tests/beta-onboarding-regression.test.mjs'
+      - '.github/workflows/validate-beta-onboarding.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'beta/**'
+      - 'tests/beta-onboarding-regression.test.mjs'
+      - '.github/workflows/validate-beta-onboarding.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  beta-onboarding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check beta script syntax
+        run: node --check beta/beta.js
+      - name: Validate beta onboarding contract
+        run: node --test tests/beta-onboarding-regression.test.mjs
