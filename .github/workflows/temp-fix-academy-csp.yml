@@ -23,6 +23,7 @@ jobs:
           from pathlib import Path
 
           root = Path('.')
+          temp_workflow = '.github/workflows/temp-fix-academy-csp.yml'
           old = 'https://kinecheck-clinico.emmanuelkine.' + 'chatgpt' + '.site'
           new = 'https://apps.kinecheck.cl'
           needle = 'chatgpt' + '.site'
@@ -91,11 +92,14 @@ jobs:
 
           leftovers = []
           for path in root.rglob('*'):
+              rel = path.as_posix()
+              if rel == temp_workflow:
+                  continue
               if not path.is_file() or '.git' in path.parts or path.suffix.lower() in skip_suffixes:
                   continue
               try:
                   if needle in path.read_text(encoding='utf-8'):
-                      leftovers.append(path.as_posix())
+                      leftovers.append(rel)
               except Exception:
                   pass
           if leftovers:
