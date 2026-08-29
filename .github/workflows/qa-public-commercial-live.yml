@@ -2,6 +2,19 @@ name: QA comercial público en producción
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "index.html"
+      - "demo/**"
+      - "_headers"
+      - "kinecheck/site-v5.js"
+      - "profesionales/**"
+      - "estudiantes/**"
+      - "recupera/**"
+      - "productos/**"
+      - "commercial-prices-cl.json"
+      - "tests/launch-readiness-post-privacy.spec.mjs"
+      - ".github/workflows/qa-public-commercial-live.yml"
   push:
     branches: [main]
     paths:
