@@ -13,6 +13,48 @@
   const form = document.querySelector("#beta-form");
   const button = document.querySelector("#beta-submit");
   const message = document.querySelector("#beta-message");
+  const PAUSED_PRODUCT = "kinecheck-recupera";
+  const PAUSED_ROLE = "patient";
+  const BETA_ACCESS_COPY = "Si eres seleccionado, KineCheck te asignará el acceso temporal de prueba. No necesitas comprar un producto para participar en la beta.";
+
+  function applyCurrentBetaEligibility() {
+    const productSelect = document.querySelector("#productInterest");
+    productSelect?.querySelector(`option[value="${PAUSED_PRODUCT}"]`)?.remove();
+    if (productSelect?.value === PAUSED_PRODUCT) productSelect.value = "";
+
+    const roleSelect = document.querySelector("#role");
+    roleSelect?.querySelector(`option[value="${PAUSED_ROLE}"]`)?.remove();
+    if (roleSelect?.value === PAUSED_ROLE) roleSelect.value = "";
+
+    document.querySelectorAll(".track").forEach((track) => {
+      const title = String(track.querySelector("h3")?.textContent || "").trim();
+      if (title === "Personas en recuperación") track.remove();
+    });
+
+    document.querySelectorAll(".section-heading h2").forEach((heading) => {
+      if (heading.textContent?.includes("Cuatro miradas")) {
+        heading.textContent = heading.textContent.replace("Cuatro miradas", "Tres miradas");
+      }
+    });
+
+    const heroCard = document.querySelector(".hero-card .check-list");
+    if (heroCard && !heroCard.querySelector("[data-beta-no-purchase]")) {
+      const item = document.createElement("div");
+      item.dataset.betaNoPurchase = "true";
+      item.innerHTML = `<b>✓</b><span>${BETA_ACCESS_COPY}</span>`;
+      heroCard.appendChild(item);
+    }
+
+    const formCopy = document.querySelector(".form-copy");
+    if (formCopy && !formCopy.querySelector("[data-beta-access-note]")) {
+      const note = document.createElement("p");
+      note.dataset.betaAccessNote = "true";
+      note.textContent = BETA_ACCESS_COPY;
+      formCopy.appendChild(note);
+    }
+  }
+
+  applyCurrentBetaEligibility();
 
   function setMessage(text, error = false) {
     message.textContent = text;
@@ -39,6 +81,11 @@
       consentContact: data.get("consentContact") === "on",
       company: String(data.get("company") || ""),
     };
+
+    if (payload.productInterest === PAUSED_PRODUCT || payload.role === PAUSED_ROLE) {
+      setMessage("Esta convocatoria beta no está aceptando pruebas de KineCheck Recupera mientras el producto permanece Próximamente.", true);
+      return;
+    }
 
     button.disabled = true;
     button.textContent = "Enviando postulación…";
