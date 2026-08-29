@@ -68,7 +68,8 @@ jobs:
           grep -q 'No constituye ficha clínica' kinecheck-clinico-guia/index.html
           grep -q 'sessionStorage' kinecheck-clinico-guia/gate.js
           grep -q 'courseSlug: CONFIG.accessSlug' kinecheck-clinico-guia/gate.js
-          if grep -Rqi 'kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-clinico' academy/academy-bootstrap-v28.js academy/academy-launch-router-v4.js academy/academy-clinico-course-v1.js; then
+          legacy_host="kinecheck-clinico.emmanuelkine.""chatgpt"".site"
+          if grep -RqFi "${legacy_host}/sso.html?product=kinecheck-clinico" academy/academy-bootstrap-v28.js academy/academy-launch-router-v4.js academy/academy-clinico-course-v1.js; then
             echo 'Legacy Clinico route is still active' >&2
             exit 1
           fi
