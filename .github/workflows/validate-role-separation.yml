@@ -1,0 +1,33 @@
+name: Validate Owner and Beta Role Separation
+
+on:
+  pull_request:
+    paths:
+      - 'academy/academy-v39.js'
+      - 'watermark.js'
+      - 'tests/role-separation-regression.test.mjs'
+      - '.github/workflows/validate-role-separation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'academy/academy-v39.js'
+      - 'watermark.js'
+      - 'tests/role-separation-regression.test.mjs'
+      - '.github/workflows/validate-role-separation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  role-separation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check academy/academy-v39.js
+      - run: node --check watermark.js
+      - run: node --test tests/role-separation-regression.test.mjs
