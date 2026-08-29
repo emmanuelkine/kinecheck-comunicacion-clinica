@@ -2,14 +2,16 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
-const PRODUCTS = [
+const ACTIVE_PRODUCTS = [
   { slug: "kinecheck-clinico", name: "KineCheck Clínico", price: "$39.990 CLP", checkout: "https://pay.hotmart.com/L106791841D" },
-  { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", price: "$14.990 CLP", checkout: "https://pay.hotmart.com/G106801166S" },
   { slug: "comunicacion-clinica", name: "Comunicación Clínica", price: "$19.900 CLP", checkout: "https://pay.hotmart.com/T106883983U" },
   { slug: "mas-alla-del-dolor", name: "Más allá del dolor", price: "$39.990 CLP", checkout: "https://pay.hotmart.com/W106888386Q" },
   { slug: "evidencia-aplicada", name: "Evidencia Aplicada", price: "$29.990 CLP", checkout: "https://pay.hotmart.com/F106921972I" },
   { slug: "traumatologia-ortopedia-clinica", name: "Traumatología y Ortopedia Clínica", price: "$35.900 CLP", checkout: "https://pay.hotmart.com/B106913952R" },
-  { slug: "pack-estudiante", name: "Pack KineCheck Estudiante", price: "$49.900 CLP", checkout: "https://pay.hotmart.com/Q106891608M" },
+];
+const PAUSED_PRODUCTS = [
+  { slug: "kinecheck-estudiante", name: "KineCheck Estudiante", formerPrice: "$14.990 CLP" },
+  { slug: "pack-estudiante", name: "Pack KineCheck Estudiante", formerPrice: "$49.900 CLP" },
 ];
 const VIEWPORTS = [
   ["mobile", { width: 390, height: 844 }],
@@ -49,7 +51,6 @@ async function open(page, path, label) {
 }
 
 try {
-  // La ficha canónica debe ser útil incluso sin JavaScript.
   const noJs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 }, locale: "es-CL" });
   try {
     const page = await noJs.newPage();
@@ -82,7 +83,7 @@ try {
 
     for (const [path, expectedPrice] of [
       ["/profesionales/", "$39.990 CLP"],
-      ["/estudiantes/", "$14.990 CLP"],
+      ["/estudiantes/", "$39.990 CLP"],
     ]) {
       await open(page, path, `${device}${path}`);
       const text = await bodyText(page);
@@ -91,6 +92,11 @@ try {
       await assertOpenGraph(page, `${device}${path}`);
       await assertNoHorizontalOverflow(page, `${device}${path}`);
     }
+
+    const studentsText = await bodyText(page);
+    assert.ok(normalized(studentsText).includes("próximamente"), `${device}/estudiantes/: no informa productos pausados`);
+    assert.equal(await page.locator('a[href="https://pay.hotmart.com/G106801166S"]').count(), 0, `${device}/estudiantes/: Estudiante conserva checkout activo`);
+    assert.equal(await page.locator('a[href="https://pay.hotmart.com/Q106891608M"]').count(), 0, `${device}/estudiantes/: pack conserva checkout activo`);
 
     await open(page, "/recupera/", `${device}/recupera/`);
     const recuperaText = await bodyText(page);
@@ -111,7 +117,7 @@ try {
     await assertOpenGraph(page, `${device}/kinecheck-recupera`);
     await assertNoHorizontalOverflow(page, `${device}/kinecheck-recupera`);
 
-    for (const product of PRODUCTS) {
+    for (const product of ACTIVE_PRODUCTS) {
       const path = `/productos/${product.slug}/`;
       await open(page, path, `${device}/${product.slug}`);
       const text = await bodyText(page);
@@ -126,7 +132,21 @@ try {
       await assertNoHorizontalOverflow(page, `${device}/${product.slug}`);
     }
 
-    // Compatibilidad: el endpoint antiguo no debe seguir siendo una ficha indexable.
+    for (const product of PAUSED_PRODUCTS) {
+      const path = `/productos/${product.slug}/`;
+      await open(page, path, `${device}/${product.slug}`);
+      const text = await bodyText(page);
+      const lower = normalized(text);
+      assert.ok(lower.includes(normalized(product.name)), `${device}/${product.slug}: falta nombre`);
+      assert.ok(lower.includes("próximamente"), `${device}/${product.slug}: falta estado Próximamente`);
+      assert.ok(!text.includes(product.formerPrice), `${device}/${product.slug}: se muestra precio de un producto pausado`);
+      assert.equal(await page.locator('a[href*="pay.hotmart.com"]').count(), 0, `${device}/${product.slug}: producto pausado conserva checkout`);
+      assert.ok((await page.locator('a[href*="academy/"]').count()) >= 1, `${device}/${product.slug}: falta ingreso para accesos vigentes`);
+      assert.equal(await page.locator('link[rel="canonical"]').getAttribute("href"), `https://kinecheck.cl/productos/${product.slug}/`, `${device}/${product.slug}: canonical incorrecta`);
+      await assertOpenGraph(page, `${device}/${product.slug}`);
+      await assertNoHorizontalOverflow(page, `${device}/${product.slug}`);
+    }
+
     await open(page, "/productos/?producto=comunicacion-clinica", `${device}/legacy-product-query`);
     await page.waitForURL((url) => url.pathname === "/productos/comunicacion-clinica/", { timeout: 15000 });
     assert.equal(page.url().split("?")[0], `${BASE}/productos/comunicacion-clinica/`, `${device}: query antigua no redirige a canonical`);
@@ -134,7 +154,6 @@ try {
     await open(page, "/productos/", `${device}/legacy-product-root`);
     await page.waitForURL((url) => url.pathname === "/" && url.hash === "#productos", { timeout: 15000 });
 
-    // La política pública no debe mostrar notas internas de lanzamiento.
     await open(page, "/legal/reembolsos.html", `${device}/reembolsos`);
     const refund = await bodyText(page);
     assert.ok(refund.includes("Última actualización: 12 de agosto de 2026"), `${device}/reembolsos: versión antigua en producción`);
@@ -145,7 +164,7 @@ try {
     await context.close();
   }
 
-  console.log(JSON.stringify({ status: "passed", products: PRODUCTS.length, viewports: VIEWPORTS.map(([name]) => name) }, null, 2));
+  console.log(JSON.stringify({ status: "passed", activeProducts: ACTIVE_PRODUCTS.length, pausedProducts: PAUSED_PRODUCTS.length, viewports: VIEWPORTS.map(([name]) => name) }, null, 2));
 } finally {
   await browser.close();
 }
