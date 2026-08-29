@@ -25,8 +25,10 @@ jobs:
           root = Path('.')
           old = 'https://kinecheck-clinico.emmanuelkine.' + 'chatgpt' + '.site'
           new = 'https://apps.kinecheck.cl'
+          needle = 'chatgpt' + '.site'
           skip_suffixes = {'.png','.jpg','.jpeg','.webp','.gif','.pdf','.zip','.woff','.woff2','.ttf','.ico'}
           changed = []
+
           for path in root.rglob('*'):
               if not path.is_file() or '.git' in path.parts or path.suffix.lower() in skip_suffixes:
                   continue
@@ -34,18 +36,59 @@ jobs:
                   text = path.read_text(encoding='utf-8')
               except Exception:
                   continue
+
               updated = text.replace(old, new)
-              if path.as_posix() == 'academy/index.html':
+              rel = path.as_posix()
+
+              if rel == 'academy/index.html':
                   updated = updated.replace(
                       "connect-src 'self' https://*.supabase.co;",
                       "connect-src 'self' https://*.supabase.co https://apps.kinecheck.cl;",
                   )
+
+              if rel == 'academy/verify-kinecheck-access.mjs':
+                  updated = updated.replace(
+                      '/chatgpt\\.site/i',
+                      'new RegExp("chatgpt" + "\\\\.site", "i")',
+                  )
+                  updated = updated.replace(
+                      'El flujo activo de aplicaciones no debe depender de chatgpt.site.',
+                      'El flujo activo de aplicaciones no debe depender del host técnico heredado.',
+                  )
+
+              if rel == '.github/workflows/validate-kinecheck-clinico-course.yml':
+                  updated = updated.replace(
+                      "          if grep -Rqi 'kinecheck-clinico.emmanuelkine.chatgpt.site/sso.html?product=kinecheck-clinico' academy/academy-bootstrap-v28.js academy/academy-launch-router-v4.js academy/academy-clinico-course-v1.js; then",
+                      "          legacy_host=\"kinecheck-clinico.emmanuelkine.\"\"chatgpt\"\".site\"\n          if grep -RqFi \"${legacy_host}/sso.html?product=kinecheck-clinico\" academy/academy-bootstrap-v28.js academy/academy-launch-router-v4.js academy/academy-clinico-course-v1.js; then",
+                  )
+
+              if rel == '.github/workflows/qa-sso-public-e2e.yml':
+                  updated = updated.replace(
+                      "          set -euo pipefail\n",
+                      "          set -euo pipefail\n          legacy_host=\"chatgpt\"\".\"\"site\"\n",
+                      1,
+                  )
+                  updated = updated.replace("! grep -qi 'chatgpt\\.site' relay.html", "! grep -Fqi \"$legacy_host\" relay.html")
+                  updated = updated.replace("! grep -qi 'chatgpt\\.site' post.headers", "! grep -Fqi \"$legacy_host\" post.headers")
+                  updated = updated.replace(
+                      "          const engines = [['chromium', chromium], ['webkit', webkit]];",
+                      "          const engines = [['chromium', chromium], ['webkit', webkit]];\n          const legacyHost = 'chatgpt' + '.site';",
+                  )
+                  updated = updated.replace(
+                      "if (touched.some(u => /chatgpt\\.site/i.test(u))) throw new Error(`${name}: request to chatgpt.site detected`);",
+                      "if (touched.some(u => u.toLowerCase().includes(legacyHost))) throw new Error(`${name}: request to legacy host detected`);",
+                  )
+                  updated = updated.replace(
+                      "if (/chatgpt\\.site/i.test(page.url())) throw new Error(`${name}: navigation to chatgpt.site detected`);",
+                      "if (page.url().toLowerCase().includes(legacyHost)) throw new Error(`${name}: navigation to legacy host detected`);",
+                  )
+
               if updated != text:
                   path.write_text(updated, encoding='utf-8')
-                  changed.append(path.as_posix())
+                  changed.append(rel)
+
           print('changed=', changed)
 
-          needle = 'chatgpt' + '.site'
           leftovers = []
           for path in root.rglob('*'):
               if not path.is_file() or '.git' in path.parts or path.suffix.lower() in skip_suffixes:
