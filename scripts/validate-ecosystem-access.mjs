@@ -81,7 +81,7 @@ const bootstrap = read("academy/academy-bootstrap-v28.js");
 const legacyRouter = read("academy/academy-launch-router-v4.js");
 const integrationGuard = read("academy/academy-integration-guard-v4.js");
 const relay = read("academy/app-sso-relay.js");
-const expectedApps = ["kinecheck-estudiante", "kinecheck-recupera"];
+const expectedApps = ["kinecheck-estudiante"];
 const expectedExternalCourses = ["evidencia-aplicada", "mas-alla-del-dolor"];
 
 check("Opener final está instalado", /__KINECHECK_OPEN_V6__/.test(opener));
@@ -107,13 +107,15 @@ check("Bootstrap publica brand identity private1", /academy-brand-identity\.js\?
 check("Router legado solo delega", /academy-open-v6\.js/.test(legacyRouter) && !/location\.assign\(destination\)/.test(legacyRouter));
 check("Guard antiguo no intercepta clicks", !/addEventListener\(["']click["']/.test(integrationGuard));
 check("Relay limita aplicaciones externas", sameItems(setItems(relay, "PRODUCTS"), expectedApps));
+check("Relay rechaza Recupera antes del POST", /product === PAUSED_PRODUCT[\s\S]*?fail\(PAUSED_MESSAGE\)[\s\S]*?return/.test(relay));
 check("Ruta Clínica antigua excluida del relay", !setItems(relay, "PRODUCTS").includes("kinecheck-clinico"));
 check("Relay envía product al servidor", /hidden\(form,\s*["']product["'],\s*product\)/.test(relay));
 
 const academyConfig = read("academy/config.js");
 check("Clínico se abre como guía local", /slug:\s*["']kinecheck-clinico["'][\s\S]*?kinecheck-clinico-guia/.test(academyConfig));
 check("Clínico incluye curso central", /slug:\s*["']kinecheck-clinico-curso["']/.test(academyConfig));
-check("Config SSO solo expone Estudiante y Recupera", !/routes:[\s\S]*?["']kinecheck-clinico["']\s*:/.test(academyConfig));
+check("Config SSO solo expone Estudiante", /routes:\s*Object\.freeze\(\{[\s\S]*?kinecheck-estudiante/.test(academyConfig) && !/sso\.html\?product=kinecheck-recupera/.test(academyConfig));
+check("Config mantiene Recupera Próximamente", /slug:\s*["']kinecheck-recupera["'][\s\S]*?status:\s*["']preparing["'][\s\S]*?url:\s*["']["'][\s\S]*?ssoProduct:\s*["']["']/.test(academyConfig));
 
 const externalSources = {
   masIndex: await fetchText("https://raw.githubusercontent.com/emmanuelkine/mas-alla-del-dolor/main/index.html"),

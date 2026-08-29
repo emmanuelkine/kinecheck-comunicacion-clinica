@@ -12,6 +12,8 @@
     "[data-kc-path-open]",
     "#continue-button[data-course]",
   ].join(", ");
+  const PAUSED_PRODUCT = "kinecheck-recupera";
+  const PAUSED_MESSAGE = "KineCheck Recupera está Próximamente y no está disponible para registrar información.";
 
   const STUDENT_ORDER = [
     "kinecheck-estudiante",
@@ -326,6 +328,20 @@
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
 
+    const pausedControl = target.closest([
+      `[data-kc-open-product="${PAUSED_PRODUCT}"]`,
+      `[data-kc-open-owned="${PAUSED_PRODUCT}"]`,
+      `[data-kc-path-open="${PAUSED_PRODUCT}"]`,
+      `[data-course="${PAUSED_PRODUCT}"]`,
+    ].join(", "));
+    if (pausedControl) {
+      stop(event);
+      pausedControl.setAttribute("aria-disabled", "true");
+      if ("disabled" in pausedControl) pausedControl.disabled = true;
+      toast(PAUSED_MESSAGE);
+      return;
+    }
+
     // En Inicio, los cursos son tarjetas proxy. En vez de abrirlos mediante otro
     // controlador, dispara el mismo botón nativo que funciona en "Mis productos".
     const courseProxy = target.closest("[data-kc-open-product]");
@@ -355,9 +371,7 @@
       stop(event);
       const remembered = String(document.querySelector("#continue-button")?.dataset?.course || "").trim();
       const role = String(document.body.dataset.kcExperience || "").trim();
-      const fallback = role === "patient"
-        ? (activeCourse("kinecheck-recupera") ? "kinecheck-recupera" : "")
-        : role === "student"
+      const fallback = role === "student"
           ? firstStudentCourse()
           : "";
       const slug = remembered || fallback;

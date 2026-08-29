@@ -114,7 +114,7 @@ test("la arquitectura de marca queda distribuida por perfil sin duplicarse en po
   const professionals = await read("profesionales/index.html");
   assert.equal(count(professionals, "KINECHECK FORMACIÓN"), 5);
   assert.equal(count(professionals, "PRÓXIMAMENTE"), 0);
-  assert.ok(professionals.includes("curso profesional avanzado"));
+  assert.match(professionals, /curso profesional avanzado/i);
   assert.ok(professionals.includes("guía digital complementaria"));
   assert.ok(!professionals.includes("Registro kinésico profesional"));
   assert.ok(professionals.includes("Dolor Lumbar Persistente"));
@@ -128,7 +128,8 @@ test("la arquitectura de marca queda distribuida por perfil sin duplicarse en po
   assert.ok(students.includes(DOLOR_LUMBAR_CHECKOUT));
 
   const recovery = await read("recupera/index.html");
-  assert.ok(recovery.includes("KINECHECK APPS"));
+  assert.ok(recovery.includes("PRÓXIMAMENTE"));
+  assert.ok(recovery.includes("No se encuentra disponible para compra ni para registro de datos"));
 
   const reposition = await read("productos/product-clinico-reposition-v1.js");
   assert.ok(reposition.includes('$("#product-family").textContent = "KINECHECK FORMACIÓN"'));
@@ -165,11 +166,10 @@ test("precios, vigencias y nueve IDs Hotmart conservan el contrato oficial", asy
   assert.ok(certification.includes(DOLOR_LUMBAR_CHECKOUT));
 });
 
-test("los perfiles publican precios, Open Graph y acceso directo a Academy", async () => {
+test("los perfiles activos publican precios y Recupera permanece sin compra", async () => {
   const cases = [
     ["profesionales/index.html", "https://kinecheck.cl/profesionales/", 5],
     ["estudiantes/index.html", "https://kinecheck.cl/estudiantes/", 4],
-    ["recupera/index.html", "https://kinecheck.cl/recupera/", 1],
   ];
   for (const [path, url, priceCount] of cases) {
     const source = await read(path);
@@ -180,14 +180,19 @@ test("los perfiles publican precios, Open Graph y acceso directo a Academy", asy
     assert.ok(!source.includes("../platform/"));
   }
   const professionals = await read("profesionales/index.html");
-  assert.ok(professionals.includes("curso profesional avanzado"));
+  assert.match(professionals, /curso profesional avanzado/i);
   assert.ok(professionals.includes("guía digital complementaria"));
   const students = await read("estudiantes/index.html");
   assert.ok(students.includes("RECOMENDADO"));
   const recovery = await read("recupera/index.html");
-  assert.ok(recovery.includes("$9.990 CLP"));
-  assert.ok(recovery.includes("Acceso por 3 meses"));
-  assert.ok(recovery.includes("No diagnostica ni reemplaza una evaluación profesional"));
+  assert.equal(count(recovery, 'class="price"'), 0);
+  assertOpenGraph(recovery, "https://kinecheck.cl/recupera/");
+  assert.ok(recovery.includes('class="skip-link" href="#contenido"'));
+  assert.ok(recovery.includes('aria-label="Navegación principal"'));
+  assert.ok(recovery.includes('href="../academy/"'));
+  assert.ok(recovery.includes("PRÓXIMAMENTE"));
+  assert.ok(recovery.includes("No se encuentra disponible para compra ni para registro de datos"));
+  assert.ok(!recovery.includes("pay.hotmart.com"));
 });
 
 test("Productos entrega un fallback clínico útil sin JavaScript", async () => {

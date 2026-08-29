@@ -204,16 +204,21 @@
     hide(document.querySelector(".access-summary"), true);
 
     setText(".kc-home-hero .eyebrow", "MI RECUPERACIÓN");
-    setHtml(".kc-home-hero h1", "Lo de hoy.<br><em>Sin menús complicados.</em>");
-    setText("#welcome", "Abre tu plan, registra cómo estás y revisa tu avance. No necesitas navegar cursos ni herramientas clínicas.");
-    setText("#kc-home-continue", "Abrir mi plan de hoy");
+    setHtml(".kc-home-hero h1", "KineCheck Recupera.<br><em>Próximamente.</em>");
+    setText("#welcome", "La aplicación permanece bloqueada mientras se revisan privacidad, protección de datos y seguridad.");
+    setText("#kc-home-continue", "Próximamente");
+    const continueButton = document.querySelector("#kc-home-continue");
+    if (continueButton) {
+      continueButton.disabled = true;
+      continueButton.setAttribute("aria-disabled", "true");
+    }
 
     const guided = document.querySelector("#kc-guided-experience.patient");
     if (guided) {
       document.querySelector("#inicio")?.insertAdjacentElement("afterend", guided);
-      setText("#kc-guided-experience .kc-guided-heading > span", "HOY");
-      setText("#kc-guided-experience .kc-guided-heading h2", "Tres acciones. Nada más.");
-      setText("#kc-guided-experience .kc-guided-heading p", "La información está pensada para acompañar tu plan y conversar con tu profesional, no para que interpretes datos clínicos.");
+      setText("#kc-guided-experience .kc-guided-heading > span", "PRÓXIMAMENTE");
+      setText("#kc-guided-experience .kc-guided-heading h2", "Registro temporalmente deshabilitado.");
+      setText("#kc-guided-experience .kc-guided-heading p", "No ingreses información de salud: KineCheck Recupera todavía no está disponible.");
       installPatientHelp(guided);
     }
 

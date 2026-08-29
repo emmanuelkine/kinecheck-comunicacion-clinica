@@ -136,6 +136,7 @@
     "traumatologia-ortopedia-clinica": "https://pay.hotmart.com/B106913952R",
     "pack-kinecheck-estudiante": "https://pay.hotmart.com/Q106891608M",
   });
+  const PAUSED_PRODUCT = "kinecheck-recupera";
 
   const PACK = Object.freeze({
     slug: "pack-kinecheck-estudiante",
@@ -164,6 +165,10 @@
 
   function openCheckout(slug, button) {
     if (leavingForCheckout) return;
+    if (slug === PAUSED_PRODUCT) {
+      showToast("KineCheck Recupera estará disponible próximamente.");
+      return;
+    }
     const checkout = CHECKOUTS[slug];
     if (!checkout) {
       showToast("Todavía no hay un checkout configurado para este producto.");
@@ -214,6 +219,13 @@
   function enhanceExploreButtons() {
     document.querySelectorAll("[data-kc-explore-product], [data-kc-path-explore]").forEach((button) => {
       const slug = button.dataset.kcExploreProduct || button.dataset.kcPathExplore;
+      if (slug === PAUSED_PRODUCT) {
+        button.disabled = true;
+        button.setAttribute("aria-disabled", "true");
+        button.textContent = "Próximamente";
+        button.title = "KineCheck Recupera estará disponible próximamente";
+        return;
+      }
       if (!CHECKOUTS[slug]) return;
       if (button.textContent.trim() !== "Comprar en Hotmart") {
         button.textContent = "Comprar en Hotmart";
@@ -302,6 +314,13 @@
     const explore = event.target.closest("[data-kc-explore-product], [data-kc-path-explore]");
     if (explore) {
       const slug = explore.dataset.kcExploreProduct || explore.dataset.kcPathExplore;
+      if (slug === PAUSED_PRODUCT) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        showToast("KineCheck Recupera estará disponible próximamente.");
+        return;
+      }
       if (!CHECKOUTS[slug]) return;
       event.preventDefault();
       event.stopPropagation();

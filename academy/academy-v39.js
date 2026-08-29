@@ -8,11 +8,8 @@ const POST_PURCHASE_RETRIES = 4;
 const POST_PURCHASE_DELAY_MS = 5000;
 const SSO_ENDPOINT = "https://kinecheck-clinico.emmanuelkine.chatgpt.site/api/license/sso";
 const SSO_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
-const SSO_PRODUCTS = new Set([
-  "kinecheck-clinico",
-  "kinecheck-estudiante",
-  "kinecheck-recupera",
-]);
+const SSO_PRODUCTS = new Set(["kinecheck-estudiante"]);
+const PAUSED_PRODUCT = "kinecheck-recupera";
 
 const $ = (selector) => document.querySelector(selector);
 const loginView = $("#login-view");
@@ -831,6 +828,10 @@ function submitSsoAccess(session, product) {
 
 async function openCourse(slug) {
   libraryMessage.hidden = true;
+  if (slug === PAUSED_PRODUCT) {
+    showLibraryMessage("KineCheck Recupera está Próximamente y no está disponible para registrar información.");
+    return;
+  }
   const course = CONFIG.courses.find((item) => item.slug === slug);
 
   if (!course || course.status !== "active" || !course.url) {
