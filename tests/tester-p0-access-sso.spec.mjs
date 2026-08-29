@@ -29,16 +29,14 @@ function activeStudentHandoff({ issuedAt = Date.now(), expiresOffset = 3600 } = 
 }
 
 test("TF-001: handoff reciente en milisegundos no se marca como vencido", async ({ page }) => {
-  let method = "";
   await page.route(POST_URL, async (route) => {
-    method = route.request().method();
     await route.fulfill({ status: 200, contentType: "text/html", body: "<main id='ok'>ok</main>" });
   });
   await relayHarness(page, activeStudentHandoff());
-  const request = page.waitForRequest((r) => r.url() === POST_URL && r.method() === "POST");
+  const pendingRequest = page.waitForRequest((r) => r.url() === POST_URL && r.method() === "POST");
   await page.addScriptTag({ path: RELAY });
-  await request;
-  expect(method).toBe("POST");
+  const request = await pendingRequest;
+  expect(request.method()).toBe("POST");
   await expect(page.locator("#relay-error")).toBeHidden();
 });
 
@@ -66,7 +64,7 @@ test("TF-001: un handoff realmente vencido sí es rechazado y no hace POST", asy
   expect(postCount).toBe(0);
 });
 
-test("TF-002: botón Estudiante usa opener unificado y Recupera permanece bloqueado", async ({ page }) => {
+test("TF-002: botón Estudiante usa opener unificado y Recupera se bloquea al intentar abrir", async ({ page }) => {
   await page.setContent(`<!doctype html><html><body>
     <div id="kc-toast" hidden></div>
     <button id="student" data-kc-open-owned="kinecheck-estudiante">Estudiante</button>
@@ -79,7 +77,11 @@ test("TF-002: botón Estudiante usa opener unificado y Recupera permanece bloque
   await page.addScriptTag({ path: BRIDGE });
   await page.locator("#student").click();
   await expect.poll(async () => page.evaluate(() => window.__opened)).toEqual(["kinecheck-estudiante"]);
+
+  await page.locator("#recupera").click();
   await expect(page.locator("#recupera")).toBeDisabled();
+  await expect(page.locator("#kc-toast")).toContainText("Próximamente");
+  await expect.poll(async () => page.evaluate(() => window.__opened)).toEqual(["kinecheck-estudiante"]);
 });
 
 test("TF-002: relay Estudiante conserva POST y campos contractuales", async ({ page }) => {
