@@ -59,10 +59,36 @@ for (const viewport of [
       const bottomNav = page.locator("#kc-bottom-nav");
       await expect(launcher).toBeVisible();
       await expect(bottomNav).toBeVisible();
-      const [launcherBox, navBox] = await Promise.all([launcher.boundingBox(), bottomNav.boundingBox()]);
+      const [launcherBox, navBox, geometry] = await Promise.all([
+        launcher.boundingBox(),
+        bottomNav.boundingBox(),
+        page.evaluate(() => {
+          const launcherNode = document.querySelector("#support-launcher");
+          const navNode = document.querySelector("#kc-bottom-nav");
+          const launcherStyle = launcherNode ? getComputedStyle(launcherNode) : null;
+          const navStyle = navNode ? getComputedStyle(navNode) : null;
+          return {
+            viewportHeight: window.innerHeight,
+            launcher: launcherStyle ? {
+              position: launcherStyle.position,
+              bottom: launcherStyle.bottom,
+              height: launcherStyle.height,
+              zIndex: launcherStyle.zIndex,
+            } : null,
+            nav: navStyle ? {
+              position: navStyle.position,
+              bottom: navStyle.bottom,
+              height: navStyle.height,
+              paddingBottom: navStyle.paddingBottom,
+              zIndex: navStyle.zIndex,
+            } : null,
+          };
+        }),
+      ]);
       expect(launcherBox).not.toBeNull();
       expect(navBox).not.toBeNull();
-      expect(intersects(launcherBox, navBox)).toBe(false);
+      const diagnostic = JSON.stringify({ launcherBox, navBox, geometry });
+      expect(intersects(launcherBox, navBox), diagnostic).toBe(false);
     }
 
     const clipped = await page.locator("h1:visible,h2:visible,h3:visible").evaluateAll((nodes) => nodes
@@ -89,7 +115,6 @@ test("TF-004: tokens premium mantienen contraste mínimo", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await exposeDashboard(page);
   const tokens = await page.locator("#dashboard-view").evaluate((node) => {
-    const style = getComputedStyle(node);
     const probe = document.createElement("div");
     probe.style.cssText = "position:absolute;visibility:hidden;color:var(--kc-ink);background:var(--kc-surface)";
     node.appendChild(probe);
