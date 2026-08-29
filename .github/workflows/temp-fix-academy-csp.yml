@@ -1,0 +1,70 @@
+name: Temporary Academy CSP repair
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/temp-fix-academy-csp.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Remove legacy app host and canonicalize Academy CSP
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          root = Path('.')
+          old = 'https://kinecheck-clinico.emmanuelkine.' + 'chatgpt' + '.site'
+          new = 'https://apps.kinecheck.cl'
+          skip_suffixes = {'.png','.jpg','.jpeg','.webp','.gif','.pdf','.zip','.woff','.woff2','.ttf','.ico'}
+          changed = []
+          for path in root.rglob('*'):
+              if not path.is_file() or '.git' in path.parts or path.suffix.lower() in skip_suffixes:
+                  continue
+              try:
+                  text = path.read_text(encoding='utf-8')
+              except Exception:
+                  continue
+              updated = text.replace(old, new)
+              if path.as_posix() == 'academy/index.html':
+                  updated = updated.replace(
+                      "connect-src 'self' https://*.supabase.co;",
+                      "connect-src 'self' https://*.supabase.co https://apps.kinecheck.cl;",
+                  )
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+                  changed.append(path.as_posix())
+          print('changed=', changed)
+
+          needle = 'chatgpt' + '.site'
+          leftovers = []
+          for path in root.rglob('*'):
+              if not path.is_file() or '.git' in path.parts or path.suffix.lower() in skip_suffixes:
+                  continue
+              try:
+                  if needle in path.read_text(encoding='utf-8'):
+                      leftovers.append(path.as_posix())
+              except Exception:
+                  pass
+          if leftovers:
+              raise SystemExit('Legacy host remains in: ' + ', '.join(leftovers))
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No repair needed"
+          else
+            git commit -m "Security: remove legacy app host references"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
