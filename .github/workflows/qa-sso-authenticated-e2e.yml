@@ -28,7 +28,6 @@ jobs:
           test -n "$SUPABASE_ANON_KEY" || { echo 'Missing KINECHECK_SUPABASE_ANON_KEY' >&2; exit 2; }
 
       - name: Obtain Supabase session without exposing credentials
-        id: auth
         shell: bash
         run: |
           set -euo pipefail
@@ -62,7 +61,7 @@ jobs:
             --data-urlencode 'product=kinecheck-estudiante' \
             --data-urlencode "access_token=$access_token" \
             --data-urlencode "expires_at=$expires_at")
-          test "$status" = '303' || { echo "Expected 303, got HTTP $status" >&2; sed -n '1,20p' "$headers" >&2; exit 1; }
+          test "$status" = '303' || { echo "Expected 303, got HTTP $status" >&2; exit 1; }
 
           location=$(awk 'BEGIN{IGNORECASE=1} /^location:/{sub(/\r$/, "", $2); print $2; exit}' "$headers")
           test -n "$location" || { echo '303 response missing Location' >&2; exit 1; }
@@ -71,7 +70,7 @@ jobs:
             *) echo "Unexpected redirect target: $location" >&2; exit 1;;
           esac
 
-          cookie_line=$(awk 'BEGIN{IGNORECASE=1} /^set-cookie:/{sub(/^set-cookie:[[:space:]]*/i, ""); print; exit}' "$headers")
+          cookie_line=$(awk 'BEGIN{IGNORECASE=1} /^set-cookie:/{sub(/^[^:]+:[[:space:]]*/, ""); sub(/\r$/, ""); print; exit}' "$headers")
           test -n "$cookie_line" || { echo '303 response missing Set-Cookie' >&2; exit 1; }
           echo '::add-mask::'"$cookie_line"
           printf '%s' "$cookie_line" > "$RUNNER_TEMP/kc_cookie_line"
