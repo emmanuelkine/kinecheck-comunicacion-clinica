@@ -13,10 +13,7 @@ function blockBetween(source, start, end) {
 }
 
 test("tester beta nunca activa ownerMode por la lógica de presentación", () => {
-  const block = blockBetween(academy, "function updateAccountPresentation(session)", "function renderProfile");
-  assert.match(block, /ownerMode = isOwnerEmail\(userEmail\)/);
-  assert.match(block, /betaState = getBetaState\(session\)/);
-  assert.match(block, /betaMode = !ownerMode && betaState\.active/);
+  assert.match(academy, /function updateAccountPresentation\(session\)[\s\S]*?ownerMode = isOwnerEmail\(userEmail\)[\s\S]*?betaState = getBetaState\(session\)[\s\S]*?betaMode = !ownerMode && betaState\.active/);
 });
 
 test("badges distinguen propietario, prueba y licencia normal", () => {
