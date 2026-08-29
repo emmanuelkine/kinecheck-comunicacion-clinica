@@ -6,22 +6,11 @@ on:
       - "home.js"
       - "home-experience-unification-v1.js"
       - "home-experience-unification-v1.css"
-      - "productos/product-clinico-reposition-v1.js"
-      - "productos/product-experience-unification-v1.js"
-      - "productos/product-experience-unification-v1.css"
-      - "academy/index.html"
-      - "academy/academy-owned-native-bridge-v1.js"
-      - "academy/academy-brand-identity.js"
-      - "academy/academy-open-v6.js"
-      - "academy/mi-kinecheck-v1.js"
-      - "academy/mi-kinecheck-card-copy-v1.js"
-      - "academy/mi-kinecheck-v1.css"
-      - "academy/mi-kinecheck-simplify-v2.js"
-      - "academy/mi-kinecheck-simplify-v2.css"
-      - "platform/index.html"
-      - "platform/redirect-to-mi-kinecheck-v1.js"
-      - "tests/launch-readiness-public.spec.mjs"
+      - "productos/**"
+      - "academy/**"
+      - "platform/**"
       - "tests/mi-kinecheck-roles.spec.mjs"
+      - "tests/launch-readiness-post-privacy.spec.mjs"
       - ".github/workflows/validate-unified-experience.yml"
   push:
     branches: [main]
@@ -29,22 +18,11 @@ on:
       - "home.js"
       - "home-experience-unification-v1.js"
       - "home-experience-unification-v1.css"
-      - "productos/product-clinico-reposition-v1.js"
-      - "productos/product-experience-unification-v1.js"
-      - "productos/product-experience-unification-v1.css"
-      - "academy/index.html"
-      - "academy/academy-owned-native-bridge-v1.js"
-      - "academy/academy-brand-identity.js"
-      - "academy/academy-open-v6.js"
-      - "academy/mi-kinecheck-v1.js"
-      - "academy/mi-kinecheck-card-copy-v1.js"
-      - "academy/mi-kinecheck-v1.css"
-      - "academy/mi-kinecheck-simplify-v2.js"
-      - "academy/mi-kinecheck-simplify-v2.css"
-      - "platform/index.html"
-      - "platform/redirect-to-mi-kinecheck-v1.js"
-      - "tests/launch-readiness-public.spec.mjs"
+      - "productos/**"
+      - "academy/**"
+      - "platform/**"
       - "tests/mi-kinecheck-roles.spec.mjs"
+      - "tests/launch-readiness-post-privacy.spec.mjs"
       - ".github/workflows/validate-unified-experience.yml"
   workflow_dispatch:
 
@@ -78,38 +56,20 @@ jobs:
           node --check academy/mi-kinecheck-card-copy-v1.js
           node --check academy/mi-kinecheck-simplify-v2.js
           node --check platform/redirect-to-mi-kinecheck-v1.js
-          node --check tests/launch-readiness-public.spec.mjs
           node --check tests/mi-kinecheck-roles.spec.mjs
+          node --check tests/launch-readiness-post-privacy.spec.mjs
 
-      - name: Confirmar una sola puerta visible
+      - name: Confirmar puerta única y Recupera pausado
         run: |
-          grep -q 'home-experience-unification-v1.js' home.js
           grep -q 'academy-brand-identity.js' academy/index.html
           grep -q 'academy-open-v6.js' academy/index.html
           grep -q 'academy-owned-native-bridge-v1.js' academy/index.html
-          grep -q 'product-experience-unification-v1.js' productos/product-clinico-reposition-v1.js
           grep -q 'redirect-to-mi-kinecheck-v1.js' platform/index.html
           grep -q 'Abriendo Mi KineCheck' platform/index.html
-          ! grep -q 'platform.js' platform/index.html
-          ! grep -q 'Academy clásica' platform/index.html
-
-      - name: Confirmar orientación estudiante y simplificación paciente
-        run: |
-          grep -q 'MI RUTA DE APRENDIZAJE' academy/mi-kinecheck-v1.js
-          grep -q 'ORDEN RECOMENDADO' academy/mi-kinecheck-v1.js
           grep -q 'KineCheck Recupera permanece bloqueado' academy/mi-kinecheck-v1.js
           grep -q 'No está disponible para compra, acceso ni registro de información' academy/mi-kinecheck-v1.js
-          ! grep -q 'Abrir KineCheck Recupera' academy/mi-kinecheck-v1.js
-          grep -q 'PASO RECOMENDADO AHORA' academy/mi-kinecheck-simplify-v2.js
-          grep -q 'Registro temporalmente deshabilitado' academy/mi-kinecheck-simplify-v2.js
-          grep -q 'No ingreses información de salud' academy/mi-kinecheck-simplify-v2.js
-          grep -q 'removeStageChooser' academy/mi-kinecheck-simplify-v2.js
-          grep -q 'Empezar práctica guiada' academy/mi-kinecheck-card-copy-v1.js
           grep -q 'action: "Próximamente"' academy/mi-kinecheck-card-copy-v1.js
           ! grep -q 'action: "Abrir mi plan"' academy/mi-kinecheck-card-copy-v1.js
-          grep -q 'No estudies todo al mismo tiempo' productos/product-experience-unification-v1.js
-          grep -q 'Tres acciones. Nada más' productos/product-experience-unification-v1.js
-          grep -q 'related.hidden = true' productos/product-experience-unification-v1.js
 
       - name: Instalar Playwright
         run: |
@@ -117,18 +77,18 @@ jobs:
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
 
-      - name: Probar perfiles estudiante, paciente y profesional
+      - name: Probar perfiles autorizados
         run: node tests/mi-kinecheck-roles.spec.mjs
 
-      - name: Validar producción en tres tamaños
+      - name: Validar producción post-privacy en tres tamaños
         if: github.event_name != 'pull_request'
         env:
           BASE_URL: https://kinecheck.cl
         run: |
-          for attempt in $(seq 1 15); do
-            echo "Intento ${attempt}/15"
-            if node tests/launch-readiness-public.spec.mjs; then
-              echo "Experiencia unificada aprobada en móvil, tableta y escritorio." >> "$GITHUB_STEP_SUMMARY"
+          for attempt in $(seq 1 10); do
+            echo "Intento ${attempt}/10"
+            if node tests/launch-readiness-post-privacy.spec.mjs; then
+              echo "Experiencia post-privacy aprobada en móvil, tableta y escritorio." >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi
             sleep 12

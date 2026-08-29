@@ -2,6 +2,19 @@ name: QA comercial público en producción
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "index.html"
+      - "demo/**"
+      - "_headers"
+      - "kinecheck/site-v5.js"
+      - "profesionales/**"
+      - "estudiantes/**"
+      - "recupera/**"
+      - "productos/**"
+      - "commercial-prices-cl.json"
+      - "tests/launch-readiness-post-privacy.spec.mjs"
+      - ".github/workflows/qa-public-commercial-live.yml"
   push:
     branches: [main]
     paths:
@@ -14,7 +27,7 @@ on:
       - "recupera/**"
       - "productos/**"
       - "commercial-prices-cl.json"
-      - "scripts/qa-commercial.mjs"
+      - "tests/launch-readiness-post-privacy.spec.mjs"
       - ".github/workflows/qa-public-commercial-live.yml"
 
 permissions:
@@ -34,115 +47,10 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
-      - name: Esperar despliegue y probar recorrido público
-        run: |
-          node <<'NODE'
-          const { chromium } = require('playwright');
-          const pages = [
-            ['Inicio', 'https://kinecheck.cl/?qa=live-current', ['Explora KineCheck', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Estudiante', 'KineCheck Recupera', 'Elegir mi perfil', 'Probar demo', 'Abrir Biblioteca']],
-            ['Demo', 'https://kinecheck.cl/demo/?qa=live-current', ['Conoce el ecosistema KineCheck', 'MODO DEMO', 'KineCheck Clínico', 'Comunicación Clínica', 'KineCheck Recupera', 'Sin registro']],
-            ['Profesionales', 'https://kinecheck.cl/profesionales/?qa=live-current', ['KineCheck Clínico', '$39.990 CLP', '$35.900 CLP', 'Formación diseñada para la práctica clínica.']],
-            ['Estudiantes', 'https://kinecheck.cl/estudiantes/?qa=live-current', ['KineCheck Estudiante', '$14.990 CLP', '$49.900 CLP', 'RECOMENDADO']],
-            ['Recupera', 'https://kinecheck.cl/recupera/?qa=live-current', ['KineCheck Recupera', '$9.990 CLP', 'Acceso por 3 meses']],
-            ['Academy', 'https://kinecheck.cl/academy/?qa=live-current', ['Ingresa a KineCheck', 'Correo utilizado en la compra', 'Olvidé mi contraseña']],
-          ];
-          const details = [
-            ['KineCheck Clínico', 'kinecheck-clinico', '$39.990', 'https://pay.hotmart.com/L106791841D'],
-            ['KineCheck Estudiante', 'kinecheck-estudiante', '$14.990', 'https://pay.hotmart.com/G106801166S'],
-            ['KineCheck Recupera', 'kinecheck-recupera', '$9.990', 'https://pay.hotmart.com/P106806251E'],
-            ['Comunicación Clínica', 'comunicacion-clinica', '$19.900', 'https://pay.hotmart.com/T106883983U'],
-            ['Más allá del dolor', 'mas-alla-del-dolor', '$39.990', 'https://pay.hotmart.com/W106888386Q'],
-            ['Evidencia Aplicada', 'evidencia-aplicada', '$29.990', 'https://pay.hotmart.com/F106921972I'],
-            ['Traumatología y Ortopedia Clínica', 'traumatologia-ortopedia-clinica', '$35.900', 'https://pay.hotmart.com/B106913952R'],
-            ['Pack KineCheck Estudiante', 'pack-estudiante', '$49.900', 'https://pay.hotmart.com/Q106891608M'],
-          ];
-          const forbidden = /Creado y dirigido por|Magíster en Docencia|97,1\/100|testimonio ficticio/i;
-
-          async function textOf(page) {
-            return (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-          }
-          function includesVisualText(text, expected) {
-            return text.toLocaleLowerCase('es-CL').includes(expected.toLocaleLowerCase('es-CL'));
-          }
-
-          (async () => {
-            const browser = await chromium.launch({ headless: true });
-            const context = await browser.newContext({
-              viewport: { width: 1440, height: 1200 },
-              locale: 'es-CL',
-              extraHTTPHeaders: {
-                'Cache-Control': 'no-cache, no-store, max-age=0',
-                'Pragma': 'no-cache',
-              },
-            });
-            const page = await context.newPage();
-            let lastError;
-
-            for (let attempt = 1; attempt <= 12; attempt += 1) {
-              try {
-                for (const [label, url, expected] of pages) {
-                  const separator = url.includes('?') ? '&' : '?';
-                  const response = await page.goto(`${url}${separator}attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
-                  if (!response || response.status() >= 500) throw new Error(`${label} respondió ${response?.status() ?? 'sin respuesta'}.`);
-                  const text = await textOf(page);
-                  for (const item of expected) {
-                    if (!includesVisualText(text, item)) throw new Error(`${label}: falta “${item}”.`);
-                  }
-                  if (forbidden.test(text)) throw new Error(`${label}: apareció contenido retirado o no verificable.`);
-                }
-
-                const demoResponse = await page.goto(`https://kinecheck.cl/demo/?qa=interaction&attempt=${attempt}&ts=${Date.now()}`, { waitUntil: 'networkidle', timeout: 60000 });
-                if (!demoResponse || demoResponse.status() >= 500) throw new Error(`Demo interactiva respondió ${demoResponse?.status() ?? 'sin respuesta'}.`);
-                await page.locator('[data-open="curso"]').first().click();
-                if (!(await page.locator('[data-panel-id="curso"]').evaluate(el => el.classList.contains('active')))) throw new Error('Demo: no abre la muestra de curso.');
-                await page.locator('[data-answer="correct"]').click();
-                const feedback = await page.locator('#quiz-feedback').innerText();
-                if (!includesVisualText(feedback, 'Correcto')) throw new Error('Demo: la microactividad no entrega retroalimentación.');
-                await page.locator('[data-panel="recupera"]').click();
-                await page.locator('#pain').fill('6');
-                if ((await page.locator('#pain-value').innerText()).trim() !== '6') throw new Error('Demo: el seguimiento simulado no actualiza valores.');
-
-                for (const [name, slug, price, checkout] of details) {
-                  const url = `https://kinecheck.cl/productos/${encodeURIComponent(slug)}/?qa=live-current&attempt=${attempt}&ts=${Date.now()}`;
-                  const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
-                  if (!response || response.status() >= 500) throw new Error(`${name}: ficha respondió ${response?.status() ?? 'sin respuesta'}.`);
-                  const text = await textOf(page);
-                  if (!includesVisualText(text, name) || !includesVisualText(text, price)) {
-                    throw new Error(`${name}: nombre o precio no visible.`);
-                  }
-
-                  const checkoutLinks = await page.locator('a').evaluateAll(nodes => nodes.map(node => node.href).filter(Boolean));
-                  if (!checkoutLinks.includes(checkout)) {
-                    throw new Error(`${name}: checkout Hotmart canónico no coincide.`);
-                  }
-
-                  if (!checkoutLinks.some(href => href.startsWith('https://kinecheck.cl/academy/'))) {
-                    throw new Error(`${name}: la ficha no contiene acceso a Academy.`);
-                  }
-
-                  const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
-                  const expectedCanonical = `https://kinecheck.cl/productos/${slug}/`;
-                  if (canonical !== expectedCanonical) {
-                    throw new Error(`${name}: canonical incorrecta (${canonical}).`);
-                  }
-
-                  if (forbidden.test(text)) throw new Error(`${name}: apareció contenido retirado o no verificable.`);
-                }
-
-                console.log(`QA comercial público, fichas canónicas y demo aprobados en el intento ${attempt}.`);
-                await browser.close();
-                return;
-              } catch (error) {
-                lastError = error;
-                console.log(`Intento ${attempt} pendiente: ${error.message}`);
-                await page.waitForTimeout(10000);
-              }
-            }
-
-            await browser.close();
-            throw lastError || new Error('No fue posible validar producción.');
-          })().catch((error) => {
-            console.error(error);
-            process.exit(1);
-          });
-          NODE
+      - name: Esperar despliegue
+        if: github.event_name == 'push'
+        run: sleep 45
+      - name: Validar producción post-privacy
+        env:
+          BASE_URL: https://kinecheck.cl
+        run: node tests/launch-readiness-post-privacy.spec.mjs

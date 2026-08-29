@@ -4,6 +4,18 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "15 11 * * *"
+  pull_request:
+    paths:
+      - "index.html"
+      - "home.js"
+      - "home.css"
+      - "catalog-professional.css"
+      - "productos/**"
+      - "platform/**"
+      - "legal/**"
+      - "beta/**"
+      - "scripts/qa-commercial-post-privacy.mjs"
+      - ".github/workflows/qa-commercial.yml"
   push:
     branches: [main]
     paths:
@@ -15,7 +27,7 @@ on:
       - "platform/**"
       - "legal/**"
       - "beta/**"
-      - "scripts/qa-commercial.mjs"
+      - "scripts/qa-commercial-post-privacy.mjs"
       - ".github/workflows/qa-commercial.yml"
 
 permissions:
@@ -38,10 +50,10 @@ jobs:
         if: github.event_name == 'push'
         run: sleep 45
 
-      - name: Run commercial QA
+      - name: Run commercial QA post-privacy
         env:
           BASE_URL: https://kinecheck.cl
-        run: node scripts/qa-commercial.mjs
+        run: node scripts/qa-commercial-post-privacy.mjs
 
       - name: Upload QA report
         if: always()

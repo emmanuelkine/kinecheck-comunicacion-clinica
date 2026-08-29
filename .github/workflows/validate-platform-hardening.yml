@@ -8,18 +8,25 @@ on:
       - 'functions/api/**'
       - 'assets/runtime-config.js'
       - 'assets/observability.js'
-      - 'kinecheck/site-v5.js'
-      - 'academy/academy-brand-identity.js'
-      - 'academy/security-hardening-v1.js'
+      - 'academy/**'
       - '_headers'
-      - 'tests/platform-hardening.spec.mjs'
+      - 'tests/platform-hardening-post-privacy.spec.mjs'
+      - '.github/workflows/validate-platform-hardening.yml'
+  pull_request:
+    paths:
+      - 'functions/api/**'
+      - 'assets/runtime-config.js'
+      - 'assets/observability.js'
+      - 'academy/**'
+      - '_headers'
+      - 'tests/platform-hardening-post-privacy.spec.mjs'
       - '.github/workflows/validate-platform-hardening.yml'
 
 permissions:
   contents: read
 
 concurrency:
-  group: validate-platform-hardening
+  group: validate-platform-hardening-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -29,11 +36,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-
-      - name: Validate hardening contracts
-        run: node tests/platform-hardening.spec.mjs
+      - name: Validate post-privacy hardening contracts
+        run: node tests/platform-hardening-post-privacy.spec.mjs
