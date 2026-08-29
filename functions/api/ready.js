@@ -32,7 +32,7 @@ export async function onRequestGet({ request, env }) {
   const origin = url.origin;
   const supabaseUrl = env?.SUPABASE_URL || "https://eqhcdclyeoapmqtlduwf.supabase.co";
   const supabaseAnonKey = env?.SUPABASE_ANON_KEY || "";
-  const ssoOrigin = env?.KINECHECK_SSO_ORIGIN || "https://kinecheck-clinico.emmanuelkine.chatgpt.site";
+  const ssoOrigin = env?.KINECHECK_SSO_ORIGIN || "https://apps.kinecheck.cl";
 
   const [publicSite, academy, auth, licenseService, sso] = await Promise.all([
     check(`${origin}/`),

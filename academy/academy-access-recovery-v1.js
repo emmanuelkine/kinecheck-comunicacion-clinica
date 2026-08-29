@@ -9,7 +9,7 @@
   const RETRY_LABEL = "Verificar acceso";
   const SESSION_KEY = "kinecheck_secure_session_v1";
   const LOGIN_RELOAD_GUARD_KEY = "kinecheck_login_reload_once_v1";
-  const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "https://kinecheck-clinico.emmanuelkine.chatgpt.site").replace(/\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;
+  const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "https://apps.kinecheck.cl").replace(/\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;
   const SSO_HANDOFF_TYPE = CONFIG.appSso?.handoffType || "kinecheck-sso-v3-access-only";
 
   const PREPARING_PRODUCTS = Object.freeze({
