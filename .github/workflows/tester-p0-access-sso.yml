@@ -1,0 +1,32 @@
+name: Tester P0 Access and SSO
+
+on:
+  pull_request:
+    paths:
+      - 'academy/app-sso-relay.js'
+      - 'academy/academy-owned-native-bridge-v1.js'
+      - 'tests/tester-p0-access-sso.spec.mjs'
+      - '.github/workflows/tester-p0-access-sso.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce-p0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        browser: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run TF-001 and TF-002 reproduction suite
+        run: npx playwright test tests/tester-p0-access-sso.spec.mjs --browser=${{ matrix.browser }}
