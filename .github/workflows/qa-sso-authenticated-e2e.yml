@@ -52,6 +52,7 @@ jobs:
           set -euo pipefail
           access_token="$(cat "$RUNNER_TEMP/kc_access_token")"
           expires_at="$(cat "$RUNNER_TEMP/kc_expires_at")"
+          issued_at="$(date +%s)"
           headers="$RUNNER_TEMP/sso.headers"
           body="$RUNNER_TEMP/sso.body"
           status=$(curl -sS --max-time 30 -D "$headers" -o "$body" -w '%{http_code}' \
@@ -60,7 +61,9 @@ jobs:
             -H 'Content-Type: application/x-www-form-urlencoded' \
             --data-urlencode 'product=kinecheck-estudiante' \
             --data-urlencode "access_token=$access_token" \
-            --data-urlencode "expires_at=$expires_at")
+            --data-urlencode "expires_at=$expires_at" \
+            --data-urlencode "issued_at=$issued_at" \
+            --data-urlencode 'handoff_type=kinecheck-sso-v3-access-only')
           test "$status" = '303' || { echo "Expected 303, got HTTP $status" >&2; exit 1; }
 
           location=$(awk 'BEGIN{IGNORECASE=1} /^location:/{sub(/\r$/, "", $2); print $2; exit}' "$headers")
