@@ -7,6 +7,8 @@
   const ENDPOINT = "https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/metric-event";
   const SESSION_KEY = "kc_metric_session_v1";
   const AUTH_SESSION_KEY = "kinecheck_secure_session_v1";
+  const COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:";
+  const FUNNEL_ONCE_PREFIX = "kc_tf008_once:";
   const ALLOWED_PRODUCTS = new Set([
     "kinecheck-clinico",
     "kinecheck-estudiante",
@@ -58,27 +60,56 @@
     return ALLOWED_PRODUCTS.has(slug) ? slug : null;
   }
 
+  function parseSession(raw) {
+    try {
+      const session = JSON.parse(raw || "null");
+      return session?.access_token ? session : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function courseSessionRecord() {
+    try {
+      for (let index = 0; index < sessionStorage.length; index += 1) {
+        const key = sessionStorage.key(index) || "";
+        if (!key.startsWith(COURSE_SESSION_PREFIX)) continue;
+        const session = parseSession(sessionStorage.getItem(key));
+        const product = cleanProduct(key.slice(COURSE_SESSION_PREFIX.length));
+        if (session?.access_token && product) return { session, product };
+      }
+    } catch {
+      // Storage puede estar restringido; las métricas no deben interrumpir la aplicación.
+    }
+    return null;
+  }
+
   function authAccessToken() {
     try {
       const session = window.KINECHECK_ACADEMY_SESSION?.get?.();
       if (session?.access_token) return String(session.access_token);
     } catch {
-      // Fallback al storage compartido de Academy.
+      // Fallback a storages compartidos.
     }
 
     try {
-      const session = JSON.parse(localStorage.getItem(AUTH_SESSION_KEY) || "null");
-      return session?.access_token ? String(session.access_token) : null;
+      const session = parseSession(localStorage.getItem(AUTH_SESSION_KEY));
+      if (session?.access_token) return String(session.access_token);
     } catch {
-      return null;
+      // Continuar al storage de curso.
     }
+
+    return courseSessionRecord()?.session?.access_token
+      ? String(courseSessionRecord().session.access_token)
+      : null;
   }
 
   function send(eventName, options = {}) {
     const payload = {
       eventId: uuid(),
       eventName,
-      path: `${location.pathname}${location.search}`.slice(0, 300),
+      // Privacidad TF-008: nunca enviar query string ni hash en métricas.
+      path: String(location.pathname || "/").slice(0, 300),
       productSlug: cleanProduct(options.productSlug),
       sessionId: sessionId(),
       referrerHost: referrerHost(),
@@ -90,18 +121,43 @@
     const token = authAccessToken();
     if (token) headers.Authorization = `Bearer ${token}`;
 
-    fetch(ENDPOINT, {
+    return fetch(ENDPOINT, {
       method: "POST",
       headers,
       body: JSON.stringify(payload),
       keepalive: true,
       credentials: "omit",
-    }).catch(() => {});
+    }).catch(() => null);
   }
 
   function currentProduct() {
     const params = new URLSearchParams(location.search);
-    return cleanProduct(params.get("producto") || params.get("course"));
+    const fromQuery = cleanProduct(params.get("producto") || params.get("course"));
+    if (fromQuery) return fromQuery;
+
+    const fromDom = cleanProduct(
+      document.body?.getAttribute("data-course")
+      || document.documentElement?.getAttribute("data-course")
+      || document.querySelector("[data-course]")?.getAttribute("data-course"),
+    );
+    if (fromDom) return fromDom;
+
+    return courseSessionRecord()?.product || null;
+  }
+
+  function onceKey(eventName, product = "") {
+    return `${FUNNEL_ONCE_PREFIX}${eventName}:${product || "global"}:${location.pathname}`;
+  }
+
+  function markOnce(eventName, product = "") {
+    try {
+      const key = onceKey(eventName, product);
+      if (sessionStorage.getItem(key) === "1") return false;
+      sessionStorage.setItem(key, "1");
+      return true;
+    } catch {
+      return true;
+    }
   }
 
   function initialEvent() {
@@ -136,8 +192,57 @@
     }
   }
 
+  function instrumentAuthenticatedAcademyOpen() {
+    if (!location.pathname.startsWith("/academy/")) return;
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (authAccessToken()) {
+        window.clearInterval(timer);
+        if (markOnce("academy_opened")) send("academy_opened");
+        return;
+      }
+      if (attempts >= 50) window.clearInterval(timer);
+    }, 400);
+  }
+
+  function activityRoot() {
+    return document.querySelector("#root:not([hidden]), #app-view:not([hidden]), main") || document.body;
+  }
+
+  function instrumentAuthenticatedProductUse() {
+    if (location.pathname.startsWith("/academy/")) return;
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      const product = currentProduct();
+      const token = authAccessToken();
+      const root = activityRoot();
+      const explicitRoot = document.querySelector("#root");
+      const ready = !explicitRoot || !explicitRoot.hidden;
+
+      if (product && token && root && ready) {
+        window.clearInterval(timer);
+        if (markOnce("product_opened", product)) send("product_opened", { productSlug: product });
+
+        let activitySent = false;
+        const recordActivity = (event) => {
+          if (activitySent || event?.isTrusted === false) return;
+          activitySent = true;
+          if (markOnce("first_activity", product)) send("first_activity", { productSlug: product });
+          ["pointerdown", "keydown", "input", "change"].forEach((name) => root.removeEventListener(name, recordActivity, true));
+        };
+        ["pointerdown", "keydown", "input", "change"].forEach((name) => root.addEventListener(name, recordActivity, { capture: true, passive: true }));
+        return;
+      }
+
+      if (attempts >= 75) window.clearInterval(timer);
+    }, 400);
+  }
+
   // El bridge de Academy captura en window y puede detener propagación antes de document.
-  // Escuchar aquí garantiza que los toques de tarjetas proxy queden observables.
+  // Estos eventos históricos siguen siendo útiles como intención, pero no sustituyen
+  // los estados autenticados TF-008 academy_opened/product_opened.
   window.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target.closest("a,button") : null;
     if (!target) return;
@@ -175,11 +280,13 @@
 
   window.KINECHECK_METRIC = (eventName, options = {}) => send(String(eventName || ""), options);
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initialEvent, { once: true });
-    document.addEventListener("DOMContentLoaded", cleanAcademyTrackingParams, { once: true });
-  } else {
+  function init() {
     initialEvent();
     cleanAcademyTrackingParams();
+    instrumentAuthenticatedAcademyOpen();
+    instrumentAuthenticatedProductUse();
   }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
+  else init();
 })();
