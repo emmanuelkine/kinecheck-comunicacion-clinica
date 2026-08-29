@@ -4,6 +4,18 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "15 11 * * *"
+  pull_request:
+    paths:
+      - "index.html"
+      - "home.js"
+      - "home.css"
+      - "catalog-professional.css"
+      - "productos/**"
+      - "platform/**"
+      - "legal/**"
+      - "beta/**"
+      - "scripts/qa-commercial-post-privacy.mjs"
+      - ".github/workflows/qa-commercial.yml"
   push:
     branches: [main]
     paths:
