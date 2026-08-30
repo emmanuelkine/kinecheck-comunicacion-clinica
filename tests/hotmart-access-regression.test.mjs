@@ -21,6 +21,18 @@ const automationMigrationUrl = new URL(
   "../supabase/migrations/20260814184550_version_critical_automation_functions.sql",
   import.meta.url,
 );
+const productGrantsSeedUrl = new URL(
+  "../supabase/seeds/20260729_hotmart_product_grants.sql",
+  import.meta.url,
+);
+const webhookUrl = new URL(
+  "../supabase/functions/hotmart-webhook/index.ts",
+  import.meta.url,
+);
+const approvedPurchasePageUrl = new URL(
+  "../academy/compra-aprobada.html",
+  import.meta.url,
+);
 
 const schema = String.raw`
   create role anon;
@@ -195,6 +207,151 @@ test("approval after an earlier refund restores the same transaction", async (t)
     access_source: "hotmart",
     last_event: "PURCHASE_APPROVED",
   });
+});
+
+test("unknown product is recorded for reconciliation but grants no access", async (t) => {
+  const db = await makeDatabase(t);
+  assert.equal(await event(db, {
+    id: "unknown-product", name: "PURCHASE_APPROVED", transaction: "tx-unknown",
+    product: 9999999, status: "active", at: "2026-02-02T10:00:00Z",
+  }), "unmapped_product");
+
+  const purchases = await db.query(
+    "select status from public.hotmart_purchases where transaction_id='tx-unknown'",
+  );
+  assert.deepEqual(purchases.rows, [{ status: "active" }]);
+  assert.equal(await access(db), null);
+});
+
+test("one pack approval grants every mapped course", async (t) => {
+  const db = await makeDatabase(t);
+  await db.exec(`
+    insert into public.hotmart_product_grants (product_id, course_slug)
+    values (303, 'pack-course-a'), (303, 'pack-course-b');
+  `);
+
+  assert.equal(await event(db, {
+    id: "pack-approved", name: "PURCHASE_APPROVED", transaction: "tx-pack",
+    product: 303, status: "active", at: "2026-02-03T10:00:00Z",
+  }), "active");
+
+  const grants = await db.query(`
+    select course_slug, active, transaction_id
+    from public.course_access
+    where transaction_id='tx-pack'
+    order by course_slug
+  `);
+  assert.deepEqual(grants.rows, [
+    { course_slug: "pack-course-a", active: true, transaction_id: "tx-pack" },
+    { course_slug: "pack-course-b", active: true, transaction_id: "tx-pack" },
+  ]);
+});
+
+test("approval retry with a new event id never extends the same transaction", async (t) => {
+  const db = await makeDatabase(t);
+  await db.exec(`
+    update public.kinecheck_access_policy
+    set effective_at='2025-01-01T00:00:00Z', enabled=true;
+    update public.hotmart_product_grants
+    set access_term_months=12
+    where product_id=101 and course_slug='course-a';
+  `);
+
+  await event(db, {
+    id: "retry-approval-1", name: "PURCHASE_APPROVED", transaction: "tx-retry",
+    status: "active", at: "2026-02-04T10:00:00Z",
+  });
+  const before = await db.query(`
+    select access_expires_at, access_term_months
+    from public.course_access where transaction_id='tx-retry'
+  `);
+
+  await event(db, {
+    id: "retry-approval-2", name: "PURCHASE_COMPLETE", transaction: "tx-retry",
+    status: "active", at: "2026-02-05T10:00:00Z",
+  });
+  const after = await db.query(`
+    select access_expires_at, access_term_months
+    from public.course_access where transaction_id='tx-retry'
+  `);
+  assert.deepEqual(after.rows, before.rows);
+});
+
+test("cancel, expiry, refund and chargeback revoke the final active purchase", async (t) => {
+  for (const eventName of [
+    "PURCHASE_CANCELED",
+    "PURCHASE_EXPIRED",
+    "PURCHASE_REFUNDED",
+    "PURCHASE_CHARGEBACK",
+  ]) {
+    const db = await makeDatabase(t);
+    await event(db, {
+      id: `${eventName}-approved`, name: "PURCHASE_APPROVED",
+      transaction: `tx-${eventName}`, status: "active",
+      at: "2026-02-06T10:00:00Z",
+    });
+    await event(db, {
+      id: `${eventName}-revoked`, name: eventName,
+      transaction: `tx-${eventName}`, status: "revoked",
+      at: "2026-02-07T10:00:00Z",
+    });
+    const row = await access(db);
+    assert.equal(row.active, false, eventName);
+    assert.equal(row.last_event, eventName, eventName);
+  }
+});
+
+test("production grant snapshot contains 12 products and only two documented NULL terms", async (t) => {
+  const db = new PGlite();
+  t.after(async () => db.close());
+  await db.exec(`
+    create table public.hotmart_product_grants (
+      product_id bigint not null,
+      course_slug text not null,
+      product_name text,
+      created_at timestamptz not null default now(),
+      access_term_months smallint,
+      primary key (product_id, course_slug)
+    );
+  `);
+  await db.exec(await readFile(productGrantsSeedUrl, "utf8"));
+
+  const counts = await db.query(`
+    select count(*)::int as grants, count(distinct product_id)::int as products
+    from public.hotmart_product_grants
+  `);
+  assert.deepEqual(counts.rows[0], { grants: 14, products: 12 });
+
+  const indefinite = await db.query(`
+    select product_id::text as product_id, course_slug
+    from public.hotmart_product_grants
+    where access_term_months is null
+    order by product_id
+  `);
+  assert.deepEqual(indefinite.rows, [
+    { product_id: "8289351", course_slug: "kinecheck-escalas" },
+    { product_id: "8289677", course_slug: "kinecheck-pruebas-especiales" },
+  ]);
+});
+
+test("webhook handles unmapped products without logging PII or secrets", async () => {
+  const source = await readFile(webhookUrl, "utf8");
+  assert.match(source, /result === "unmapped_product"[\s\S]*?status: "unmapped_product"[\s\S]*?422/);
+  assert.doesNotMatch(source, /console\.error\([\s\S]{0,260}\bbuyerEmail\s*:/);
+  assert.doesNotMatch(source, /console\.error\([\s\S]{0,260}\btransactionId\s*:/);
+  assert.doesNotMatch(source, /console\.error\([\s\S]{0,260}(receivedHottok|expectedHottok)/);
+  assert.doesNotMatch(source, /console\.error\([\s\S]{0,260}processError\.message/);
+  assert.doesNotMatch(source, /message:\s*processError\.message/);
+});
+
+test("approved purchase returns to Academy for license refresh", async () => {
+  const page = await readFile(approvedPurchasePageUrl, "utf8");
+  assert.match(page, /content="4;url=\.\/\?purchase=approved"/);
+  assert.match(page, /href="\.\/\?purchase=approved"/);
+  assert.match(page, /mismo correo/i);
+  assert.match(page, /No compres nuevamente/i);
+  assert.match(page, /Actualizar mis licencias/i);
+  assert.doesNotMatch(page, /platform\/|pages\.dev/);
 });
 
 async function lateRevocationScenario(t, eventName, { hardened }) {

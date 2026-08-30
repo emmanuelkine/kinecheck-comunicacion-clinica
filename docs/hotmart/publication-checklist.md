@@ -5,8 +5,8 @@ Usar en cada producto y en el Pack KineCheck Estudiante.
 ## Datos comunes
 
 - **Correo de atención al cliente:** `soporte.kinecheck@gmail.com`
-- **Entrada oficial a KineCheck:** `https://kinecheck-comunicacion-clinica.pages.dev/academy/`
-- **Página posterior al pago:** `https://kinecheck-comunicacion-clinica.pages.dev/academy/compra-aprobada.html`
+- **Entrada oficial a KineCheck:** `https://kinecheck.cl/academy/`
+- **Página posterior al pago:** `https://kinecheck.cl/academy/compra-aprobada.html`
 - No publicar códigos compartidos de acceso.
 - No usar enlaces antiguos de Academy, GitHub Pages o versiones `?v=39`, `?v=40` o `?v=41`.
 - No cambiar precios, ofertas, nombre de facturación ni estado de ventas durante esta tarea.
@@ -15,14 +15,18 @@ Usar en cada producto y en el Pack KineCheck Estudiante.
 
 | ID | Producto | PDF a adjuntar | Estado técnico |
 |---:|---|---|---|
-| 8150019 | KineCheck Clínico | `Bienvenida_Acceso_KineCheck_Clinico.pdf` | Checkout conectado; verificar Hotmart |
-| 8154796 | KineCheck Estudiante | `Bienvenida_Acceso_KineCheck_Estudiante.pdf` | Checkout conectado; verificar Hotmart |
-| 8157431 | KineCheck Recupera | `Bienvenida_Acceso_KineCheck_Recupera.pdf` | Checkout conectado; verificar Hotmart |
-| 8192814 | Comunicación Clínica | `Bienvenida_Acceso_Comunicacion_Clinica.pdf` | Checkout conectado; verificar Hotmart |
-| 8194777 | Más allá del dolor | `Bienvenida_Acceso_Mas_Alla_del_Dolor.pdf` | Checkout conectado; verificar Hotmart |
-| 8208817 | KineCheck Evidencia Aplicada | `Bienvenida_Acceso_KineCheck_Evidencia_Aplicada.pdf` | Checkout y migración de licencia preparados |
-| 8205453 | Traumatología y Ortopedia Clínica | `Bienvenida_Acceso_Traumatologia_Ortopedia_Clinica.pdf` | Checkout conectado; verificar Hotmart |
-| 8195982 | Pack KineCheck Estudiante | Adjuntar las guías de Estudiante y Más allá del dolor | Checkout y concesiones múltiples preparados |
+| 8150019 | KineCheck Clínico | `Bienvenida_Acceso_KineCheck_Clinico.pdf` | Técnico preparado; verificar panel |
+| 8154796 | KineCheck Estudiante | `Bienvenida_Acceso_KineCheck_Estudiante.pdf` | Activo públicamente; verificar panel |
+| 8157431 | KineCheck Recupera | No publicar mientras permanezca Próximamente | Sin venta pública; no reactivar |
+| 8192814 | Comunicación Clínica | `Bienvenida_Acceso_Comunicacion_Clinica.pdf` | Técnico preparado; verificar panel |
+| 8194777 | Más allá del dolor | `Bienvenida_Acceso_Mas_Alla_del_Dolor.pdf` | Técnico preparado; verificar panel |
+| 8195982 | Pack KineCheck Estudiante | Adjuntar las guías de Estudiante y Más allá del dolor | Activo públicamente; grants múltiples preparados |
+| 8205453 | Traumatología y Ortopedia Clínica | `Bienvenida_Acceso_Traumatologia_Ortopedia_Clinica.pdf` | Técnico preparado; verificar panel |
+| 8208817 | KineCheck Evidencia Aplicada | `Bienvenida_Acceso_KineCheck_Evidencia_Aplicada.pdf` | Técnico preparado; verificar panel |
+| 8289351 | KineCheck Escalas Clínicas | Confirmar material en Hotmart | Vigencia pendiente; verificar panel |
+| 8289677 | KineCheck Pruebas Especiales | Confirmar material en Hotmart | Vigencia pendiente; verificar panel |
+| 8330940 | Dolor Lumbar Persistente | Confirmar material en Hotmart | Técnico preparado; verificar panel |
+| 8340185 | Dolor Musculoesquelético | Confirmar material en Hotmart | Técnico preparado; verificar panel |
 
 ## Procedimiento por producto
 
@@ -30,8 +34,8 @@ Usar en cada producto y en el Pack KineCheck Estudiante.
 2. Confirmar que el checkout corresponde al producto correcto.
 3. Confirmar que el webhook de KineCheck está asignado.
 4. Cambiar **Email de Atención al Cliente** a `soporte.kinecheck@gmail.com`.
-5. Configurar la página posterior al pago como `https://kinecheck-comunicacion-clinica.pages.dev/academy/compra-aprobada.html`.
-6. En el contenido inicial o material de bienvenida, usar la entrada oficial `https://kinecheck-comunicacion-clinica.pages.dev/academy/`.
+5. Configurar la página posterior al pago como `https://kinecheck.cl/academy/compra-aprobada.html`.
+6. En el contenido inicial o material de bienvenida, usar la entrada oficial `https://kinecheck.cl/academy/`.
 7. Adjuntar el PDF correspondiente en **Material adicional**.
 8. Guardar y mantener el contenido como **Publicado**.
 9. Visualizar como alumno y comprobar enlace, texto y descarga.

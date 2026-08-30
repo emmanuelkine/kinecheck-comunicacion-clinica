@@ -2,7 +2,7 @@
 
 ## Estado comercial público
 
-Los cursos independientes habilitados continúan disponibles. KineCheck Estudiante y Pack KineCheck Estudiante mantienen nuevas ventas pausadas hasta cerrar las validaciones de SSO/privacidad. KineCheck Recupera continúa en estado Próximamente y sin checkout público.
+Producción y `main` publican KineCheck Estudiante a $14.990 CLP y Pack KineCheck Estudiante a $49.900 CLP con sus checkouts Hotmart. Los validadores versionados protegen ese contrato para no volver a pausar productos activos. KineCheck Recupera continúa en estado Próximamente y sin checkout público.
 
 ## Inventario técnico server-side observado
 
@@ -28,10 +28,11 @@ Este inventario técnico es más amplio que la lista histórica de ocho IDs del 
 - El webhook principal `hotmart-webhook` está desplegado y autentica solicitudes mediante HOTTOK almacenado como secreto; no se publica su valor.
 - Los eventos de compra/revocación se procesan server-side mediante `process_hotmart_event` y grants por producto.
 - La tabla operativa `kinecheck_reconciliation_issues` no contiene incidencias registradas al momento de esta revisión.
-- Las pruebas comerciales públicas verifican precios/checkouts de los productos habilitados y que Recupera, Estudiante y Pack permanezcan pausados cuando corresponde.
+- La inspección pública y los validadores versionados confirman precios/checkouts activos de Estudiante y Pack.
+- Recupera permanece Próximamente, sin precio ni checkout operativo.
 
 ## Pendiente exclusivamente de administración Hotmart
 
-Antes de cerrar #11 se requiere evidencia directa del panel Hotmart para confirmar, producto por producto, webhook configurado y páginas pospago. La ausencia de esa evidencia no bloquea las ventas de los cursos independientes que ya pasaron las pruebas públicas, pero impide declarar la reconciliación administrativa completa.
+Antes de cerrar #11 se requiere evidencia directa del panel Hotmart para confirmar, producto por producto, webhook configurado y páginas pospago. También debe resolverse con evidencia la vigencia de `8289351` y `8289677`; ambas permanecen `NULL` para evitar inventarla. La ausencia de esa evidencia no bloquea los productos que ya pasaron las pruebas públicas, pero impide declarar la reconciliación administrativa completa. La matriz vigente está en `docs/hotmart/issue-11-reconciliation.md`.
 
 No registrar en este documento HOTTOK, tokens, correos de compradores ni códigos de transacción reales.

@@ -42,6 +42,11 @@ const OFFICIAL_COMMERCE = [
   { slug: "pack-estudiante", name: "Pack KineCheck Estudiante", productId: "8195982", price: 49900, display: "$49.900", term: "12 meses" },
 ];
 
+const TECHNICAL_PRODUCT_IDS = [
+  "8150019", "8154796", "8157431", "8192814", "8194777", "8195982",
+  "8205453", "8208817", "8289351", "8289677", "8330940", "8340185",
+];
+
 async function publicHtmlPaths() {
   const files = ["index.html", "404.html"];
   async function visit(directory) {
@@ -143,7 +148,7 @@ test("la arquitectura de marca queda distribuida por perfil sin duplicarse en po
   assert.ok(brandArchitecture.includes("No usar **ECOSISTEMA CLÍNICO**"));
 });
 
-test("precios, vigencias y nueve IDs Hotmart conservan el contrato oficial", async () => {
+test("precios públicos y 12 Product IDs técnicos conservan contratos separados", async () => {
   const priceData = JSON.parse(await read("commercial-prices-cl.json"));
   assert.equal(priceData.country, "Chile");
   assert.equal(priceData.currency, "CLP");
@@ -158,12 +163,15 @@ test("precios, vigencias y nueve IDs Hotmart conservan el contrato oficial", asy
   }
   const grants = await read("supabase/seeds/20260729_hotmart_product_grants.sql");
   const actualProductIds = [...new Set([...grants.matchAll(/\((\d{7}),/g)].map((match) => match[1]))].sort();
-  const expectedProductIds = OFFICIAL_COMMERCE.map(({ productId }) => productId).sort();
-  assert.deepEqual(actualProductIds, expectedProductIds);
+  assert.deepEqual(actualProductIds, [...TECHNICAL_PRODUCT_IDS].sort());
   const certification = await read("docs/qa/hotmart-8-product-certification.md");
   for (const { productId } of OFFICIAL_COMMERCE) assert.ok(certification.includes(productId));
   for (const [, checkout] of PRODUCT_CHECKOUTS) assert.ok(certification.includes(checkout));
   assert.ok(certification.includes(DOLOR_LUMBAR_CHECKOUT));
+  const reconciliation = await read("docs/hotmart/issue-11-reconciliation.md");
+  for (const productId of TECHNICAL_PRODUCT_IDS) assert.ok(reconciliation.includes(productId));
+  assert.match(reconciliation, /14 filas, 12 Product IDs/);
+  assert.match(reconciliation, /Pack Profesional activo/i);
 });
 
 test("los perfiles activos publican precios y Recupera permanece sin compra", async () => {
@@ -184,6 +192,9 @@ test("los perfiles activos publican precios y Recupera permanece sin compra", as
   assert.ok(professionals.includes("guía digital complementaria"));
   const students = await read("estudiantes/index.html");
   assert.ok(students.includes("RECOMENDADO"));
+  assert.match(students, /Uso exclusivamente educativo/);
+  assert.match(students, /casos ficticios, simulados o debidamente anonimizados/);
+  assert.match(students, /no ingreses datos identificatorios de pacientes reales/);
   const recovery = await read("recupera/index.html");
   assert.equal(count(recovery, 'class="price"'), 0);
   assertOpenGraph(recovery, "https://kinecheck.cl/recupera/");
@@ -193,6 +204,19 @@ test("los perfiles activos publican precios y Recupera permanece sin compra", as
   assert.ok(recovery.includes("PRÓXIMAMENTE"));
   assert.ok(recovery.includes("No se encuentra disponible para compra ni para registro de datos"));
   assert.ok(!recovery.includes("pay.hotmart.com"));
+});
+
+test("no existe una oferta activa de Pack Profesional", async () => {
+  const sources = await Promise.all([
+    read("index.html"),
+    read("profesionales/index.html"),
+    read("estudiantes/index.html"),
+    read("productos/product.js"),
+    read("academy/academy-commerce-v4.js"),
+  ]);
+  for (const source of sources) {
+    assert.doesNotMatch(source, /pack-profesional|Pack Profesional/i);
+  }
 });
 
 test("Productos entrega un fallback clínico útil sin JavaScript", async () => {

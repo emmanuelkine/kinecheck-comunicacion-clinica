@@ -46,7 +46,7 @@ Demostrar que, a partir de los respaldos versionados, es posible reconstruir:
 4. Mantenerlas sin políticas explícitas, de acuerdo con la arquitectura certificada.
 5. Aplicar `process_hotmart_event`.
 6. Aplicar las migraciones de hardening.
-7. Cargar las ocho concesiones de productos.
+7. Cargar los 14 grants correspondientes a 12 Product IDs.
 
 ### 3. Storage
 
@@ -84,7 +84,8 @@ Usar exclusivamente datos ficticios.
 ## Criterios de aprobación
 
 - todas las tablas, restricciones e índices coinciden con el respaldo;
-- ocho concesiones cargadas sin duplicados;
+- 14 grants para 12 Product IDs cargados sin duplicados;
+- las únicas vigencias `NULL` son `8289351` y `8289677`, documentadas como pendientes de evidencia comercial;
 - webhooks aceptan eventos válidos y rechazan tokens inválidos;
 - aprobación concede acceso;
 - reembolso bloquea acceso;
