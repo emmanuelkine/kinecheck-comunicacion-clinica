@@ -1,0 +1,102 @@
+name: Issue 78 production gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/issue-78-production-gate
+    paths:
+      - .github/workflows/issue-78-production-gate.yml
+      - playwright.issue78.config.mjs
+      - tests/issue-78-production-gate.spec.mjs
+
+permissions:
+  contents: read
+
+jobs:
+  production-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      E2E_EMAIL: ${{ secrets.KINECHECK_E2E_EMAIL }}
+      E2E_PASSWORD: ${{ secrets.KINECHECK_E2E_PASSWORD }}
+      SUPABASE_ANON_KEY: ${{ secrets.KINECHECK_SUPABASE_ANON_KEY }}
+      SUPABASE_URL: https://eqhcdclyeoapmqtlduwf.supabase.co
+      SSO_URL: https://apps.kinecheck.cl/api/license/sso
+      APP_ORIGIN: https://apps.kinecheck.cl
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Authenticate and verify SSO handoff
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$E2E_EMAIL"
+          test -n "$E2E_PASSWORD"
+          test -n "$SUPABASE_ANON_KEY"
+
+          auth_file="$RUNNER_TEMP/auth.json"
+          status=$(curl -sS --max-time 30 -o "$auth_file" -w '%{http_code}' \
+            -X POST "$SUPABASE_URL/auth/v1/token?grant_type=password" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H 'Content-Type: application/json' \
+            --data-binary "$(jq -nc --arg email "$E2E_EMAIL" --arg password "$E2E_PASSWORD" '{email:$email,password:$password}')")
+          test "$status" = 200
+
+          access_token=$(jq -r '.access_token // empty' "$auth_file")
+          expires_in=$(jq -r '.expires_in // 0' "$auth_file")
+          test -n "$access_token"
+          echo "::add-mask::$access_token"
+
+          expires_at=$(( $(date +%s) + expires_in ))
+          issued_at=$(date +%s)
+          headers="$RUNNER_TEMP/sso.headers"
+          status=$(curl -sS --max-time 30 -D "$headers" -o /dev/null -w '%{http_code}' \
+            --max-redirs 0 -X POST "$SSO_URL" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'product=kinecheck-estudiante' \
+            --data-urlencode "access_token=$access_token" \
+            --data-urlencode "expires_at=$expires_at" \
+            --data-urlencode "issued_at=$issued_at" \
+            --data-urlencode 'handoff_type=kinecheck-sso-v3-access-only')
+          test "$status" = 303
+
+          location=$(awk 'BEGIN{IGNORECASE=1} /^location:/{sub(/\r$/, "", $2); print $2; exit}' "$headers")
+          case "$location" in
+            /app|/app/*|https://apps.kinecheck.cl/app|https://apps.kinecheck.cl/app/*) ;;
+            *) echo "Unexpected redirect target: $location" >&2; exit 1 ;;
+          esac
+
+          cookie=$(awk 'BEGIN{IGNORECASE=1} /^set-cookie:/{sub(/^[^:]+:[[:space:]]*/, ""); sub(/\r$/, ""); print; exit}' "$headers")
+          test -n "$cookie"
+          echo "::add-mask::$cookie"
+          echo "$cookie" | grep -qi ';[[:space:]]*HttpOnly'
+          echo "$cookie" | grep -qi ';[[:space:]]*Secure'
+          echo "$cookie" | grep -qi ';[[:space:]]*SameSite=Lax'
+          printf '%s' "$cookie" > "$RUNNER_TEMP/app-cookie"
+          echo "APP_COOKIE_FILE=$RUNNER_TEMP/app-cookie" >> "$GITHUB_ENV"
+
+      - name: Install Chromium and WebKit
+        shell: bash
+        run: |
+          npm install --no-save @playwright/test@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium webkit >/dev/null 2>&1
+
+      - name: Run authenticated privacy gates
+        shell: bash
+        run: npx playwright test tests/issue-78-production-gate.spec.mjs --config=playwright.issue78.config.mjs
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-78-production-gate-${{ github.run_attempt }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14
