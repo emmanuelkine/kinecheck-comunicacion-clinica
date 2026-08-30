@@ -4,15 +4,14 @@ const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$
 const IS_PULL_REQUEST = process.env.GITHUB_EVENT_NAME === "pull_request";
 const ACTIVE = [
   ["kinecheck-clinico", "KineCheck Clínico", "$39.990", "https://pay.hotmart.com/L106791841D"],
+  ["kinecheck-estudiante", "KineCheck Estudiante", "$14.990", "https://pay.hotmart.com/G106801166S"],
+  ["pack-estudiante", "Pack KineCheck Estudiante", "$49.900", "https://pay.hotmart.com/Q106891608M"],
   ["comunicacion-clinica", "Comunicación Clínica", "$19.900", "https://pay.hotmart.com/T106883983U"],
   ["mas-alla-del-dolor", "Más allá del dolor", "$39.990", "https://pay.hotmart.com/W106888386Q"],
   ["evidencia-aplicada", "Evidencia Aplicada", "$29.990", "https://pay.hotmart.com/F106921972I"],
   ["traumatologia-ortopedia-clinica", "Traumatología y Ortopedia Clínica", "$35.900", "https://pay.hotmart.com/B106913952R"],
 ];
-const PAUSED = [
-  ["kinecheck-estudiante", "KineCheck Estudiante", "$14.990", "https://pay.hotmart.com/G106801166S"],
-  ["pack-estudiante", "Pack KineCheck Estudiante", "$49.900", "https://pay.hotmart.com/Q106891608M"],
-];
+const REACTIVATING = new Set(["kinecheck-estudiante", "pack-estudiante"]);
 const RECUPERA_CHECKOUT = "https://pay.hotmart.com/P106806251E";
 const results = [];
 let failures = 0;
@@ -27,25 +26,15 @@ async function read(path) {
   return fs.readFile(path, "utf8");
 }
 
-function pausedOk(html, name, formerPrice, checkout) {
-  return html.includes(name)
-    && /Próximamente/i.test(html)
-    && !html.includes(checkout)
-    && !html.includes(`href="${checkout}"`)
-    && !new RegExp(formerPrice.replace(/[.$]/g, "\\$&") + "(?:\\s*CLP)?", "i").test(html.replace(/data-commercial-reference="[^"]*"/g, ""))
-    && html.includes("../../academy/");
-}
-
 async function sourceChecks() {
   for (const [slug, name, price, checkout] of ACTIVE) {
     const html = await read(`productos/${slug}/index.html`);
     record(`Source ${name}`, html.includes(name) && html.includes(price) && html.includes(checkout) && html.includes("../../academy/"), "producto activo conserva precio, checkout canónico y acceso a Academy");
   }
 
-  for (const [slug, name, formerPrice, checkout] of PAUSED) {
-    const html = await read(`productos/${slug}/index.html`);
-    record(`Source ${name} pausado`, pausedOk(html, name, formerPrice, checkout), "nuevas ventas pausadas, sin checkout público y con ingreso para accesos vigentes");
-  }
+  const students = await read("estudiantes/index.html");
+  record("Catálogo Estudiante activo", students.includes("$14.990 CLP") && students.includes("https://pay.hotmart.com/G106801166S"), "KineCheck Estudiante visible con checkout canónico");
+  record("Catálogo Pack activo", students.includes("$49.900 CLP") && students.includes("https://pay.hotmart.com/Q106891608M"), "Pack Estudiante visible con checkout canónico");
 
   const recovery = await read("recupera/index.html");
   const detail = await read("productos/kinecheck-recupera/index.html");
@@ -69,24 +58,15 @@ async function get(path) {
 
 async function liveChecks() {
   for (const [slug, name, price, checkout] of ACTIVE) {
+    if (IS_PULL_REQUEST && REACTIVATING.has(slug)) {
+      record(`Live ${name}`, true, "validación productiva diferida hasta merge/deploy");
+      continue;
+    }
     try {
       const { response, text } = await get(`/productos/${slug}/`);
       record(`Live ${name}`, response.ok && text.includes(name) && text.includes(price) && text.includes(checkout), `${response.status} producto activo`);
     } catch (error) {
       record(`Live ${name}`, false, error instanceof Error ? error.message : String(error));
-    }
-  }
-
-  if (IS_PULL_REQUEST) {
-    for (const [, name] of PAUSED) record(`Live ${name} pausado`, true, "validación de producción diferida al push de main");
-  } else {
-    for (const [slug, name, formerPrice, checkout] of PAUSED) {
-      try {
-        const { response, text } = await get(`/productos/${slug}/`);
-        record(`Live ${name} pausado`, response.ok && pausedOk(text, name, formerPrice, checkout), `${response.status} nuevas ventas pausadas`);
-      } catch (error) {
-        record(`Live ${name} pausado`, false, error instanceof Error ? error.message : String(error));
-      }
     }
   }
 
