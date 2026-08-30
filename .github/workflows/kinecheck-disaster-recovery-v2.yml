@@ -8,7 +8,15 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/kinecheck-disaster-recovery-v2.yml"
+      - "scripts/validate-disaster-recovery.mjs"
       - "docs/continuidad/plan-recuperacion-kinecheck.md"
+      - "docs/continuidad/recuperacion-servicios-administrados.md"
+  pull_request:
+    paths:
+      - ".github/workflows/kinecheck-disaster-recovery-v2.yml"
+      - "scripts/validate-disaster-recovery.mjs"
+      - "docs/continuidad/plan-recuperacion-kinecheck.md"
+      - "docs/continuidad/recuperacion-servicios-administrados.md"
 
 permissions:
   contents: read
@@ -18,7 +26,21 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  contract-check:
+    name: Validate disaster-recovery contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate workflow and recovery documentation
+        run: node scripts/validate-disaster-recovery.mjs
+
   backup-restore-verify:
+    name: Encrypted public-schema backup and PostgreSQL 17 restore
+    needs: contract-check
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     services:
@@ -62,6 +84,8 @@ jobs:
             echo "Configure both repository secrets before the external backup can run."
             exit 1
           fi
+          echo "::add-mask::${SUPABASE_DB_URL}"
+          echo "::add-mask::${BACKUP_ENCRYPTION_PASSPHRASE}"
 
       - name: Create public-schema database dump
         shell: bash
@@ -139,6 +163,10 @@ jobs:
             'feature_flags', (select count(*) from public.platform_feature_flags),
             'legal_acceptances', (select count(*) from public.kinecheck_legal_acceptances)
           )" > disaster-recovery/restored-counts.json
+          jq -e '
+            type == "object" and
+            ([.course_access, .product_grants, .purchases, .feature_flags, .legal_acceptances] | all(type == "number" and . >= 0))
+          ' disaster-recovery/restored-counts.json > /dev/null
 
       - name: Build recovery manifest
         shell: bash
@@ -160,18 +188,56 @@ jobs:
             "auth_users_included": false
           }
           EOF
+          jq -e '
+            .scope == "public_schema" and
+            .postgres_version == "17" and
+            .restore_validation == "passed" and
+            .storage_objects_included == false and
+            .auth_users_included == false and
+            (.dump_sha256 | test("^[0-9a-f]{64}$")) and
+            (.restored_counts | type == "object")
+          ' disaster-recovery/manifest.json > /dev/null
 
-      - name: Encrypt backup
+      - name: Encrypt and verify recovery package
         shell: bash
         run: |
           set -euo pipefail
+          verification_dump="${RUNNER_TEMP}/kinecheck-public.verify.dump"
+          cleanup_plaintext() {
+            rm -f \
+              disaster-recovery/kinecheck-public.dump \
+              disaster-recovery/kinecheck-public.dump.sha256 \
+              "$verification_dump"
+          }
+          trap cleanup_plaintext EXIT
+
+          expected_checksum=$(cut -d' ' -f1 disaster-recovery/kinecheck-public.dump.sha256)
           openssl enc -aes-256-cbc -salt -pbkdf2 -iter 250000 \
             -in disaster-recovery/kinecheck-public.dump \
             -out disaster-recovery/kinecheck-public.dump.enc \
             -pass env:BACKUP_ENCRYPTION_PASSPHRASE
           test -s disaster-recovery/kinecheck-public.dump.enc
+
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 250000 \
+            -in disaster-recovery/kinecheck-public.dump.enc \
+            -out "$verification_dump" \
+            -pass env:BACKUP_ENCRYPTION_PASSPHRASE
+          actual_checksum=$(sha256sum "$verification_dump" | cut -d' ' -f1)
+          test "$actual_checksum" = "$expected_checksum"
+          docker run --rm \
+            -v "${RUNNER_TEMP}:/verify:ro" \
+            postgres:17 \
+            pg_restore --list /verify/kinecheck-public.verify.dump > /dev/null
+
           sha256sum disaster-recovery/kinecheck-public.dump.enc > disaster-recovery/kinecheck-public.dump.enc.sha256
-          rm -f disaster-recovery/kinecheck-public.dump disaster-recovery/kinecheck-public.dump.sha256
+
+      - name: Confirm plaintext removal
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e disaster-recovery/kinecheck-public.dump
+          test ! -e disaster-recovery/kinecheck-public.dump.sha256
+          test ! -e "${RUNNER_TEMP}/kinecheck-public.verify.dump"
 
       - name: Upload encrypted recovery package
         uses: actions/upload-artifact@v4
@@ -192,7 +258,9 @@ jobs:
           {
             echo "## KineCheck Disaster Recovery"
             echo
-            if [ -f disaster-recovery/manifest.json ]; then
+            if [ -s disaster-recovery/manifest.json ] && \
+               [ -s disaster-recovery/kinecheck-public.dump.enc ] && \
+               [ -s disaster-recovery/kinecheck-public.dump.enc.sha256 ]; then
               echo "External encrypted database backup: **created**"
               echo
               echo "Temporary PostgreSQL restore: **passed**"
@@ -202,3 +270,12 @@ jobs:
               echo "Backup package was not created. Review the failed step and required repository secrets."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove plaintext recovery material
+        if: always()
+        shell: bash
+        run: |
+          rm -f \
+            disaster-recovery/kinecheck-public.dump \
+            disaster-recovery/kinecheck-public.dump.sha256 \
+            "${RUNNER_TEMP}/kinecheck-public.verify.dump"
