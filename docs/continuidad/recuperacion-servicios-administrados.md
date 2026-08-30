@@ -88,6 +88,8 @@ Diez funciones activas no tienen directorio fuente local verificado:
 
 Esta diferencia es una brecha de recuperación. Antes de declarar restaurabilidad integral se debe recuperar la fuente autorizada, revisarla para evitar secretos embebidos, versionarla y registrar la versión desplegada y su huella.
 
+El inventario de metadatos, clasificación provisional por uso/criticidad y plan de regularización sin copiar código productivo está en [Inventario y regularización de Edge Functions — 30 de agosto de 2026](./inventario-edge-functions-2026-08-30.md).
+
 Checklist:
 
 1. Comparar inventario de producción con `supabase/functions/`.

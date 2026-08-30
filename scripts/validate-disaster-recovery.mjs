@@ -3,10 +3,11 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-const [workflow, plan, managedServices] = await Promise.all([
+const [workflow, plan, managedServices, edgeInventory] = await Promise.all([
   read(".github/workflows/kinecheck-disaster-recovery-v2.yml"),
   read("docs/continuidad/plan-recuperacion-kinecheck.md"),
   read("docs/continuidad/recuperacion-servicios-administrados.md"),
+  read("docs/continuidad/inventario-edge-functions-2026-08-30.md"),
 ]);
 
 const requireTokens = (source, tokens, label) => {
@@ -105,5 +106,24 @@ requireTokens(managedServices, [
   "8",
   "Diez",
 ], "checklist de servicios administrados");
+
+requireTokens(edgeInventory, [
+  "18 Edge Functions `ACTIVE`",
+  "ocho tienen fuente",
+  "diez no tienen fuente",
+  "automation-control",
+  "beta-password-once",
+  "dolor-lumbar-course-key",
+  "evidence-access",
+  "evidence-content",
+  "pain-content",
+  "pain-hotmart-webhook",
+  "platform-login",
+  "student-semester-intake",
+  "support-request",
+  "No copiar el cuerpo desde producción",
+  "No crear branches/proyectos Supabase con costo",
+  "fuente autorizada y trazable",
+], "inventario de Edge Functions");
 
 console.log("Disaster-recovery contract: PASS");
