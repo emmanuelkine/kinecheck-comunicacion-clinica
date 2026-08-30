@@ -1,6 +1,6 @@
 # Plan de recuperación KineCheck
 
-Última actualización: 5 de agosto de 2026
+Última actualización: 30 de agosto de 2026
 
 ## Objetivo
 
@@ -16,8 +16,12 @@ El workflow `KineCheck Disaster Recovery v2`:
 4. Comprueba tablas y funciones críticas.
 5. Registra conteos restaurados y manifiesto técnico.
 6. Cifra el respaldo con AES-256-CBC, PBKDF2 y 250.000 iteraciones.
-7. Elimina el archivo sin cifrar antes de subir el artefacto.
-8. Conserva el paquete cifrado en GitHub Actions durante 30 días.
+7. Descifra una copia temporal, compara su SHA-256 con el dump original y verifica el catálogo con `pg_restore --list`.
+8. Valida la estructura JSON del manifiesto y los conteos restaurados.
+9. Elimina el dump y toda copia temporal sin cifrar antes de subir el artefacto.
+10. Conserva el paquete cifrado en GitHub Actions durante 30 días.
+
+Los eventos `push` y `pull_request` ejecutan únicamente el validador estático del contrato. El respaldo real se ejecuta solo por agenda o despacho manual, porque requiere secretos de producción.
 
 ## Secretos requeridos
 
@@ -38,6 +42,8 @@ La ejecución debe terminar en verde y el artefacto debe contener:
 - `restored-counts.json`
 
 El manifiesto debe indicar `restore_validation: passed`.
+
+Además, la ejecución debe demostrar que el archivo cifrado se descifra con la frase configurada, que conserva la huella del dump restaurado y que no se sube ningún archivo PostgreSQL sin cifrar.
 
 ## Restauración controlada
 
@@ -72,7 +78,15 @@ pg_restore --no-owner --no-acl --exit-on-error \
 - Configuración de DNS y cuenta de Cloudflare.
 - Configuración interna de productos y webhooks en Hotmart.
 
-Estos componentes requieren inventario y procedimientos separados.
+Estos componentes requieren inventario y procedimientos separados. El checklist vigente está en [Recuperación de servicios administrados](./recuperacion-servicios-administrados.md).
+
+## Estado y criterio de cierre de #10
+
+La restauración lógica interna ya fue verificada. El respaldo externo permanece bloqueado mientras no existan en GitHub Actions `SUPABASE_DB_URL` y `BACKUP_ENCRYPTION_PASSPHRASE`.
+
+La incidencia #10 no se puede cerrar hasta que exista una ejecución verde que genere el paquete cifrado, restaure el dump en PostgreSQL 17 y conserve sus artefactos, y hasta que los procedimientos separados de Storage y Auth hayan sido ejecutados con evidencia. Configurar los secretos requiere autorización del propietario; este plan no crea ni cambia credenciales.
+
+El respaldo del esquema `public` no contiene los binarios de Storage ni usuarios de Auth. Tampoco reemplaza el respaldo de Edge Functions, secretos por nombre, configuración de proveedores, DNS o Cloudflare.
 
 ## Frecuencia
 

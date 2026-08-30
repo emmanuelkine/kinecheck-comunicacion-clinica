@@ -1,6 +1,6 @@
 # Checklist de seguridad administrativa KineCheck
 
-Última actualización: 5 de agosto de 2026
+Última actualización: 30 de agosto de 2026
 
 ## Controles técnicos ya implementados
 
@@ -75,6 +75,8 @@
 - Trimestral: cambiar secretos críticos cuando exista riesgo o exposición; probar recuperación de cuentas.
 - Inmediata: ante pérdida de dispositivo, correo comprometido, acceso inesperado o secreto expuesto.
 
-## Resultado de auditoría del 5 de agosto de 2026
+## Resultado de auditoría del 30 de agosto de 2026
 
 Supabase no reportó vulnerabilidades críticas de base de datos. El aviso de seguridad pendiente es la protección contra contraseñas filtradas desactivada. Los avisos informativos de RLS sin políticas corresponden a tablas privadas deliberadamente inaccesibles para usuarios `anon` y `authenticated`; no deben abrirse solo para eliminar el aviso.
+
+La evidencia por tabla, incluida la excepción de grants nominales de `evidence_library`, está documentada en [Supabase Advisors — 30 de agosto de 2026](./supabase-advisors-2026-08-30.md).

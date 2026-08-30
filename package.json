@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "test:hotmart": "node --test tests/hotmart-access-regression.test.mjs"
+    "test:hotmart": "node --test tests/hotmart-access-regression.test.mjs",
+    "test:disaster-recovery": "node scripts/validate-disaster-recovery.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.4"
