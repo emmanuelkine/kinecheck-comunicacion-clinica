@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
+const IS_PULL_REQUEST = process.env.GITHUB_EVENT_NAME === "pull_request";
 const ACTIVE = [
   ["kinecheck-clinico", "KineCheck Clínico", "$39.990", "https://pay.hotmart.com/L106791841D"],
   ["kinecheck-estudiante", "KineCheck Estudiante", "$14.990", "https://pay.hotmart.com/G106801166S"],
@@ -10,6 +11,7 @@ const ACTIVE = [
   ["evidencia-aplicada", "Evidencia Aplicada", "$29.990", "https://pay.hotmart.com/F106921972I"],
   ["traumatologia-ortopedia-clinica", "Traumatología y Ortopedia Clínica", "$35.900", "https://pay.hotmart.com/B106913952R"],
 ];
+const REACTIVATING = new Set(["kinecheck-estudiante", "pack-estudiante"]);
 const RECUPERA_CHECKOUT = "https://pay.hotmart.com/P106806251E";
 const results = [];
 let failures = 0;
@@ -56,6 +58,10 @@ async function get(path) {
 
 async function liveChecks() {
   for (const [slug, name, price, checkout] of ACTIVE) {
+    if (IS_PULL_REQUEST && REACTIVATING.has(slug)) {
+      record(`Live ${name}`, true, "validación productiva diferida hasta merge/deploy");
+      continue;
+    }
     try {
       const { response, text } = await get(`/productos/${slug}/`);
       record(`Live ${name}`, response.ok && text.includes(name) && text.includes(price) && text.includes(checkout), `${response.status} producto activo`);
@@ -75,7 +81,7 @@ async function liveChecks() {
 
 await sourceChecks();
 await liveChecks();
-await fs.writeFile("qa-commercial-report.json", JSON.stringify({ generatedAt: new Date().toISOString(), baseUrl: BASE, failures, results }, null, 2));
+await fs.writeFile("qa-commercial-report.json", JSON.stringify({ generatedAt: new Date().toISOString(), baseUrl: BASE, pullRequest: IS_PULL_REQUEST, failures, results }, null, 2));
 
 if (failures) {
   console.error(`Commercial QA post-privacy failed with ${failures} blocking issue(s).`);
