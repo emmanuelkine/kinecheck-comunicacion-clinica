@@ -5,7 +5,9 @@ on:
   pull_request:
     paths:
       - "supabase/migrations/**"
+      - "supabase/seeds/**"
       - "supabase/functions/hotmart-webhook/**"
+      - "docs/hotmart/**"
       - "tests/hotmart-access-regression.test.mjs"
       - "package.json"
       - "package-lock.json"
@@ -14,7 +16,9 @@ on:
     branches: [main]
     paths:
       - "supabase/migrations/**"
+      - "supabase/seeds/**"
       - "supabase/functions/hotmart-webhook/**"
+      - "docs/hotmart/**"
       - "tests/hotmart-access-regression.test.mjs"
       - "package.json"
       - "package-lock.json"

@@ -371,7 +371,6 @@ Deno.serve(async (request) => {
       "process-hotmart-event",
       {
         code: processError.code,
-        message: processError.message,
         event: event.event,
         productId: event.productId,
       },
@@ -384,6 +383,21 @@ Deno.serve(async (request) => {
           "No fue posible actualizar el acceso.",
       },
       500,
+    );
+  }
+
+  if (result === "unmapped_product") {
+    console.error("unmapped-hotmart-product", {
+      event: event.event,
+      productId: event.productId,
+    });
+    return json(
+      request,
+      {
+        message: "Producto sin configuración de acceso.",
+        status: "unmapped_product",
+      },
+      422,
     );
   }
 

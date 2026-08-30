@@ -1,6 +1,6 @@
 # Matriz de acceso por producto KineCheck
 
-Última verificación: 5 de agosto de 2026.
+Última verificación técnica: 30 de agosto de 2026.
 
 ## Principio obligatorio
 
@@ -17,6 +17,10 @@ La sesión de KineCheck identifica a la persona una sola vez. La sesión no conc
 | 8194777 | Más allá del dolor | `mas-alla-del-dolor` |
 | 8205453 | Traumatología y Ortopedia Clínica | `traumatologia-ortopedia-clinica` |
 | 8208817 | KineCheck Evidencia Aplicada | `evidencia-aplicada` |
+| 8289351 | KineCheck Escalas Clínicas | `kinecheck-escalas` |
+| 8289677 | KineCheck Pruebas Especiales | `kinecheck-pruebas-especiales` |
+| 8330940 | Dolor Lumbar Persistente | `dolor-lumbar-persistente` |
+| 8340185 | Dolor Musculoesquelético | `dolor-musculoesqueletico` |
 
 KineCheck Clínico concede dos componentes porque ambos forman un único producto comercial: el curso profesional central y su guía complementaria. No concede KineCheck Estudiante, Recupera ni otro curso.
 
@@ -30,10 +34,7 @@ El pack no concede Comunicación Clínica, Evidencia Aplicada, Traumatología, R
 
 ## Aplicaciones externas
 
-El SSO externo solo acepta:
-
-- `kinecheck-estudiante`
-- `kinecheck-recupera`
+El SSO externo solo acepta `kinecheck-estudiante`. `kinecheck-recupera` permanece bloqueado y no debe entrar al relay.
 
 La antigua aplicación externa de KineCheck Clínico fue retirada del relay. KineCheck Clínico se abre dentro del ecosistema mediante su curso y guía complementaria.
 
@@ -43,7 +44,7 @@ La antigua aplicación externa de KineCheck Clínico fue retirada del relay. Kin
 2. El botón se habilita únicamente para un `course_slug` activo.
 3. La ruta protegida vuelve a validar identidad y licencia en el servidor.
 4. Los cursos externos rechazan un handoff cuyo producto no coincide con el producto esperado.
-5. Estudiante y Recupera envían el producto exacto a `POST /api/license/sso`.
+5. Estudiante envía el producto exacto a `POST /api/license/sso`; Recupera se rechaza antes de crear el POST.
 6. Una URL modificada o una sesión válida sin licencia no debe abrir contenido.
 7. Los accesos vencidos, reembolsados, cancelados o con contracargo deben permanecer desactivados.
 
