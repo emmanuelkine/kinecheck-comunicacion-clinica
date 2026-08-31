@@ -61,6 +61,25 @@ for (const routine of [
   assert.ok(workflow.includes(routine), `workflow v2: falta función crítica ${routine}`);
 }
 
+const restoreBlock = workflow.slice(
+  workflow.indexOf("- name: Restore dump into temporary PostgreSQL 17"),
+  workflow.indexOf("- name: Validate restored application structure"),
+);
+assert.ok(restoreBlock.length > 0, "workflow v2: falta bloque de restauración PostgreSQL 17");
+requireTokens(restoreBlock, [
+  "postgres:17",
+  "psql",
+  "--dbname=kinecheck_restore",
+  "--set=ON_ERROR_STOP=1",
+  "DROP SCHEMA IF EXISTS public CASCADE;",
+  "pg_restore",
+  "--exit-on-error",
+], "restauración PostgreSQL 17");
+assert.ok(
+  restoreBlock.indexOf("DROP SCHEMA IF EXISTS public CASCADE;") < restoreBlock.indexOf("pg_restore"),
+  "la base temporal debe quedar sin public antes de pg_restore",
+);
+
 assert.doesNotMatch(workflow, /set\s+-[^\n]*x/, "workflow v2 no debe habilitar trazas de shell");
 for (const line of workflow.split(/\r?\n/)) {
   if (/echo/.test(line) && /\$\{?(?:SUPABASE_DB_URL|BACKUP_ENCRYPTION_PASSPHRASE)/.test(line)) {
