@@ -100,12 +100,150 @@ jobs:
           test -s disaster-recovery/kinecheck-public.dump
           sha256sum disaster-recovery/kinecheck-public.dump | tee disaster-recovery/kinecheck-public.dump.sha256
 
+      - name: Inventory external dependencies in public dump
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -v "$PWD/disaster-recovery:/backup" \
+            postgres:17 \
+            pg_restore \
+              --schema-only \
+              --no-owner \
+              --no-acl \
+              --file=/backup/kinecheck-public-schema.sql \
+              /backup/kinecheck-public.dump
+
+          docker run --rm \
+            postgres:17 \
+            psql "$SUPABASE_DB_URL" \
+              --no-psqlrc \
+              --set=ON_ERROR_STOP=1 \
+              --tuples-only \
+              --no-align \
+              --command="select nspname from pg_catalog.pg_namespace where nspname <> 'public' and nspname <> 'information_schema' and nspname !~ '^pg_' order by nspname" \
+            > disaster-recovery/source-nonpublic-schemas.txt
+
+          : > disaster-recovery/public-external-schema-references.txt
+          while IFS= read -r schema; do
+            if [[ ! "$schema" =~ ^[A-Za-z_][A-Za-z0-9_$]*$ ]]; then
+              echo "::error::Unexpected schema identifier in source catalog"
+              exit 1
+            fi
+            if grep -Eq "(^|[^[:alnum:]_])\"?${schema}\"?\." disaster-recovery/kinecheck-public-schema.sql; then
+              printf '%s\n' "$schema" >> disaster-recovery/public-external-schema-references.txt
+            fi
+          done < disaster-recovery/source-nonpublic-schemas.txt
+          sort -u -o disaster-recovery/public-external-schema-references.txt \
+            disaster-recovery/public-external-schema-references.txt
+
+          printf '%s\n' auth extensions > disaster-recovery/expected-external-schemas.txt
+          if ! diff -u \
+            disaster-recovery/expected-external-schemas.txt \
+            disaster-recovery/public-external-schema-references.txt; then
+            echo "::error::The public dump has an unreviewed external schema dependency"
+            exit 1
+          fi
+          for reference in auth.jwt auth.users auth.uid extensions.digest; do
+            if ! grep -Fq "$reference" disaster-recovery/kinecheck-public-schema.sql; then
+              echo "::error::Missing reviewed external dependency ${reference}"
+              exit 1
+            fi
+          done
+          grep -Eo '\b(auth|extensions)\.[A-Za-z_][A-Za-z0-9_]*' \
+            disaster-recovery/kinecheck-public-schema.sql \
+            | sort -u \
+            > disaster-recovery/public-external-object-references.txt
+          printf '%s\n' auth.jwt auth.uid auth.users extensions.digest \
+            > disaster-recovery/expected-external-objects.txt
+          if ! diff -u \
+            disaster-recovery/expected-external-objects.txt \
+            disaster-recovery/public-external-object-references.txt; then
+            echo "::error::The public dump has an unreviewed external object dependency"
+            exit 1
+          fi
+
+          grep -Eio 'TO[[:space:]]+(anon|authenticated|service_role)' \
+            disaster-recovery/kinecheck-public-schema.sql \
+            | awk '{print tolower($2)}' \
+            | sort -u \
+            > disaster-recovery/restore-roles.txt
+          test -s disaster-recovery/restore-roles.txt
+          : > disaster-recovery/restore-role-stubs.sql
+          while IFS= read -r role; do
+            case "$role" in
+              anon|authenticated|service_role) ;;
+              *)
+                echo "::error::Unreviewed role dependency ${role}"
+                exit 1
+                ;;
+            esac
+            printf 'CREATE ROLE "%s" NOLOGIN;\n' "$role" \
+              >> disaster-recovery/restore-role-stubs.sql
+          done < disaster-recovery/restore-roles.txt
+
+          docker run --rm \
+            postgres:17 \
+            psql "$SUPABASE_DB_URL" \
+              --no-psqlrc \
+              --set=ON_ERROR_STOP=1 \
+              --tuples-only \
+              --no-align \
+              --field-separator='|' \
+              --command="
+                select
+                  src.relname,
+                  src_att.attname,
+                  ref_ns.nspname,
+                  ref.relname,
+                  ref_att.attname,
+                  pg_catalog.format_type(ref_att.atttypid, ref_att.atttypmod),
+                  pg_catalog.cardinality(c.conkey),
+                  c.conname
+                from pg_catalog.pg_constraint c
+                join pg_catalog.pg_class src on src.oid = c.conrelid
+                join pg_catalog.pg_namespace src_ns on src_ns.oid = src.relnamespace
+                join pg_catalog.pg_class ref on ref.oid = c.confrelid
+                join pg_catalog.pg_namespace ref_ns on ref_ns.oid = ref.relnamespace
+                cross join lateral unnest(c.conkey) with ordinality as src_key(attnum, ord)
+                join lateral unnest(c.confkey) with ordinality as ref_key(attnum, ord)
+                  on ref_key.ord = src_key.ord
+                join pg_catalog.pg_attribute src_att
+                  on src_att.attrelid = src.oid and src_att.attnum = src_key.attnum
+                join pg_catalog.pg_attribute ref_att
+                  on ref_att.attrelid = ref.oid and ref_att.attnum = ref_key.attnum
+                where c.contype = 'f'
+                  and src_ns.nspname = 'public'
+                  and ref_ns.nspname <> 'public'
+                order by c.conname, src_key.ord
+              " \
+            > disaster-recovery/public-external-fks.tsv
+          test -s disaster-recovery/public-external-fks.tsv
+
+          while IFS='|' read -r source_table source_column target_schema target_table target_column target_type key_width constraint_name; do
+            for identifier in "$source_table" "$source_column" "$constraint_name"; do
+              if [[ ! "$identifier" =~ ^[A-Za-z_][A-Za-z0-9_$]*$ ]]; then
+                echo "::error::Unsafe identifier in external FK inventory"
+                exit 1
+              fi
+            done
+            if [ "$target_schema" != "auth" ] || \
+               [ "$target_table" != "users" ] || \
+               [ "$target_column" != "id" ] || \
+               [ "$target_type" != "uuid" ] || \
+               [ "$key_width" != "1" ]; then
+              echo "::error::Unsupported external FK ${constraint_name}: public.${source_table}.${source_column} -> ${target_schema}.${target_table}.${target_column} (${target_type}, width ${key_width})"
+              exit 1
+            fi
+          done < disaster-recovery/public-external-fks.tsv
+
       - name: Restore dump into temporary PostgreSQL 17
         shell: bash
         run: |
           set -euo pipefail
           docker run --rm --network host \
             -e PGPASSWORD="$PGPASSWORD" \
+            -v "$PWD/disaster-recovery:/backup" \
             postgres:17 \
             psql \
               --host=127.0.0.1 \
@@ -113,7 +251,52 @@ jobs:
               --username=postgres \
               --dbname=kinecheck_restore \
               --set=ON_ERROR_STOP=1 \
-              --command='DROP SCHEMA IF EXISTS public CASCADE;'
+              --file=/backup/restore-role-stubs.sql \
+              --command='
+                DROP SCHEMA IF EXISTS public CASCADE;
+                CREATE SCHEMA auth;
+                CREATE TABLE auth.users (id uuid PRIMARY KEY, email text);
+                CREATE FUNCTION auth.jwt() RETURNS jsonb LANGUAGE sql STABLE AS $$ SELECT jsonb_build_object() $$;
+                CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS $$ SELECT NULL::uuid $$;
+                CREATE SCHEMA extensions;
+                CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
+              '
+
+          for section in pre-data data; do
+            docker run --rm --network host \
+              -e PGPASSWORD="$PGPASSWORD" \
+              -v "$PWD/disaster-recovery:/backup" \
+              postgres:17 \
+              pg_restore \
+                --host=127.0.0.1 \
+                --port=5432 \
+                --username=postgres \
+                --dbname=kinecheck_restore \
+                --no-owner \
+                --no-acl \
+                --section="$section" \
+                --exit-on-error \
+                /backup/kinecheck-public.dump
+          done
+
+          : > disaster-recovery/auth-user-stub-seed.sql
+          while IFS='|' read -r source_table source_column target_schema target_table target_column target_type key_width constraint_name; do
+            printf 'INSERT INTO auth.users (id) SELECT DISTINCT "%s" FROM public."%s" WHERE "%s" IS NOT NULL ON CONFLICT DO NOTHING;\n' \
+              "$source_column" "$source_table" "$source_column" \
+              >> disaster-recovery/auth-user-stub-seed.sql
+          done < disaster-recovery/public-external-fks.tsv
+          docker run --rm --network host \
+            -e PGPASSWORD="$PGPASSWORD" \
+            -v "$PWD/disaster-recovery:/backup" \
+            postgres:17 \
+            psql \
+              --host=127.0.0.1 \
+              --port=5432 \
+              --username=postgres \
+              --dbname=kinecheck_restore \
+              --set=ON_ERROR_STOP=1 \
+              --file=/backup/auth-user-stub-seed.sql
+
           docker run --rm --network host \
             -e PGPASSWORD="$PGPASSWORD" \
             -v "$PWD/disaster-recovery:/backup" \
@@ -125,8 +308,48 @@ jobs:
               --dbname=kinecheck_restore \
               --no-owner \
               --no-acl \
+              --section=post-data \
               --exit-on-error \
               /backup/kinecheck-public.dump
+
+          expected_external_fks=$(wc -l < disaster-recovery/public-external-fks.tsv | tr -d ' ')
+          restored_external_fks=$(docker run --rm --network host \
+            -e PGPASSWORD="$PGPASSWORD" \
+            postgres:17 \
+            psql \
+              --host=127.0.0.1 \
+              --port=5432 \
+              --username=postgres \
+              --dbname=kinecheck_restore \
+              --tuples-only \
+              --no-align \
+              --command="
+                select count(*)
+                from pg_catalog.pg_constraint c
+                join pg_catalog.pg_class src on src.oid = c.conrelid
+                join pg_catalog.pg_namespace src_ns on src_ns.oid = src.relnamespace
+                join pg_catalog.pg_class ref on ref.oid = c.confrelid
+                join pg_catalog.pg_namespace ref_ns on ref_ns.oid = ref.relnamespace
+                where c.contype = 'f'
+                  and src_ns.nspname = 'public'
+                  and ref_ns.nspname <> 'public'
+                  and c.convalidated
+              " | tr -d '[:space:]')
+          test "$restored_external_fks" = "$expected_external_fks"
+
+          copied_auth_rows=$(docker run --rm --network host \
+            -e PGPASSWORD="$PGPASSWORD" \
+            postgres:17 \
+            psql \
+              --host=127.0.0.1 \
+              --port=5432 \
+              --username=postgres \
+              --dbname=kinecheck_restore \
+              --tuples-only \
+              --no-align \
+              --command="select count(*) from auth.users where email is not null" \
+            | tr -d '[:space:]')
+          test "$copied_auth_rows" = "0"
 
       - name: Validate restored application structure
         shell: bash
@@ -217,6 +440,16 @@ jobs:
             rm -f \
               disaster-recovery/kinecheck-public.dump \
               disaster-recovery/kinecheck-public.dump.sha256 \
+              disaster-recovery/kinecheck-public-schema.sql \
+              disaster-recovery/source-nonpublic-schemas.txt \
+              disaster-recovery/public-external-schema-references.txt \
+              disaster-recovery/expected-external-schemas.txt \
+              disaster-recovery/public-external-object-references.txt \
+              disaster-recovery/expected-external-objects.txt \
+              disaster-recovery/restore-roles.txt \
+              disaster-recovery/restore-role-stubs.sql \
+              disaster-recovery/public-external-fks.tsv \
+              disaster-recovery/auth-user-stub-seed.sql \
               "$verification_dump"
           }
           trap cleanup_plaintext EXIT
@@ -247,6 +480,16 @@ jobs:
           set -euo pipefail
           test ! -e disaster-recovery/kinecheck-public.dump
           test ! -e disaster-recovery/kinecheck-public.dump.sha256
+          test ! -e disaster-recovery/kinecheck-public-schema.sql
+          test ! -e disaster-recovery/source-nonpublic-schemas.txt
+          test ! -e disaster-recovery/public-external-schema-references.txt
+          test ! -e disaster-recovery/expected-external-schemas.txt
+          test ! -e disaster-recovery/public-external-object-references.txt
+          test ! -e disaster-recovery/expected-external-objects.txt
+          test ! -e disaster-recovery/restore-roles.txt
+          test ! -e disaster-recovery/restore-role-stubs.sql
+          test ! -e disaster-recovery/public-external-fks.tsv
+          test ! -e disaster-recovery/auth-user-stub-seed.sql
           test ! -e "${RUNNER_TEMP}/kinecheck-public.verify.dump"
 
       - name: Upload encrypted recovery package
@@ -288,4 +531,14 @@ jobs:
           rm -f \
             disaster-recovery/kinecheck-public.dump \
             disaster-recovery/kinecheck-public.dump.sha256 \
+            disaster-recovery/kinecheck-public-schema.sql \
+            disaster-recovery/source-nonpublic-schemas.txt \
+            disaster-recovery/public-external-schema-references.txt \
+            disaster-recovery/expected-external-schemas.txt \
+            disaster-recovery/public-external-object-references.txt \
+            disaster-recovery/expected-external-objects.txt \
+            disaster-recovery/restore-roles.txt \
+            disaster-recovery/restore-role-stubs.sql \
+            disaster-recovery/public-external-fks.tsv \
+            disaster-recovery/auth-user-stub-seed.sql \
             "${RUNNER_TEMP}/kinecheck-public.verify.dump"

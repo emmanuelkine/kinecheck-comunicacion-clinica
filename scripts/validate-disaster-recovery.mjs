@@ -21,6 +21,10 @@ requireTokens(workflow, [
   "postgres:17",
   "pg_dump",
   "--schema=public",
+  "Inventory external dependencies in public dump",
+  "kinecheck-public-schema.sql",
+  "public-external-schema-references.txt",
+  "public-external-fks.tsv",
   "pg_restore",
   "--exit-on-error",
   "restored-counts.json",
@@ -72,6 +76,18 @@ requireTokens(restoreBlock, [
   "--dbname=kinecheck_restore",
   "--set=ON_ERROR_STOP=1",
   "DROP SCHEMA IF EXISTS public CASCADE;",
+  "CREATE SCHEMA auth;",
+  "CREATE TABLE auth.users (id uuid PRIMARY KEY, email text);",
+  "CREATE FUNCTION auth.jwt() RETURNS jsonb",
+  "CREATE FUNCTION auth.uid() RETURNS uuid",
+  "CREATE SCHEMA extensions;",
+  "CREATE EXTENSION pgcrypto WITH SCHEMA extensions;",
+  "restore-role-stubs.sql",
+  "--section=\"$section\"",
+  "auth-user-stub-seed.sql",
+  "--section=post-data",
+  "c.convalidated",
+  "where email is not null",
   "pg_restore",
   "--exit-on-error",
 ], "restauración PostgreSQL 17");
@@ -79,6 +95,53 @@ assert.ok(
   restoreBlock.indexOf("DROP SCHEMA IF EXISTS public CASCADE;") < restoreBlock.indexOf("pg_restore"),
   "la base temporal debe quedar sin public antes de pg_restore",
 );
+assert.ok(
+  restoreBlock.indexOf("--section=\"$section\"") < restoreBlock.indexOf("auth-user-stub-seed.sql") &&
+    restoreBlock.indexOf("auth-user-stub-seed.sql") < restoreBlock.indexOf("--section=post-data"),
+  "los IDs placeholder deben insertarse después de los datos y antes de restaurar constraints",
+);
+assert.doesNotMatch(
+  restoreBlock,
+  /--disable-triggers/,
+  "la restauración no debe omitir validación de constraints mediante --disable-triggers",
+);
+assert.equal(
+  (restoreBlock.match(/pg_restore/g) ?? []).length,
+  2,
+  "la restauración debe ejecutar pg_restore por pre-data/data y luego post-data",
+);
+assert.equal(
+  (restoreBlock.match(/--exit-on-error/g) ?? []).length,
+  2,
+  "cada invocación de pg_restore debe conservar --exit-on-error",
+);
+
+const dependencyBlock = workflow.slice(
+  workflow.indexOf("- name: Inventory external dependencies in public dump"),
+  workflow.indexOf("- name: Restore dump into temporary PostgreSQL 17"),
+);
+requireTokens(dependencyBlock, [
+  "pg_restore",
+  "--schema-only",
+  "source-nonpublic-schemas.txt",
+  "public-external-schema-references.txt",
+  "public-external-object-references.txt",
+  "expected-external-objects.txt",
+  "printf '%s\\n' auth extensions",
+  "auth.jwt",
+  "auth.users",
+  "auth.uid",
+  "extensions.digest",
+  "restore-roles.txt",
+  "anon|authenticated|service_role",
+  "public-external-fks.tsv",
+  "target_schema",
+  'target_schema" != "auth"',
+  'target_table" != "users"',
+  'target_column" != "id"',
+  'target_type" != "uuid"',
+  'key_width" != "1"',
+], "inventario de dependencias externas");
 
 assert.doesNotMatch(workflow, /set\s+-[^\n]*x/, "workflow v2 no debe habilitar trazas de shell");
 for (const line of workflow.split(/\r?\n/)) {
@@ -102,6 +165,27 @@ assert.doesNotMatch(
   /kinecheck-public\.dump\.sha256/,
   "el artefacto no debe incluir la huella del dump sin cifrar",
 );
+for (const transient of [
+  "kinecheck-public-schema.sql",
+  "source-nonpublic-schemas.txt",
+  "public-external-schema-references.txt",
+  "expected-external-schemas.txt",
+  "public-external-object-references.txt",
+  "expected-external-objects.txt",
+  "restore-roles.txt",
+  "restore-role-stubs.sql",
+  "public-external-fks.tsv",
+  "auth-user-stub-seed.sql",
+]) {
+  assert.ok(
+    workflow.includes(`test ! -e disaster-recovery/${transient}`),
+    `workflow v2 debe verificar la eliminación de ${transient}`,
+  );
+  assert.ok(
+    !uploadBlock.includes(transient),
+    `el artefacto no debe incluir ${transient}`,
+  );
+}
 
 requireTokens(plan, [
   "KineCheck Disaster Recovery v2",
