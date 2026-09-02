@@ -24,7 +24,7 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
-      - name: Audit public KineCheck and Hotmart surfaces
+      - name: Audit public KineCheck and Hotmart surfaces for Chile
         shell: bash
         run: |
           set -euo pipefail
@@ -44,14 +44,28 @@ jobs:
             ];
             const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
             const browser = await chromium.launch({headless:true});
-            const context = await browser.newContext({locale:'es-CL', timezoneId:'America/Santiago', viewport:{width:1440,height:1200}});
-            const result = { checkedAt: new Date().toISOString(), products:{}, publicPages:{} };
+            const context = await browser.newContext({
+              locale:'es-CL', timezoneId:'America/Santiago',
+              geolocation:{latitude:-33.4489,longitude:-70.6693}, permissions:['geolocation'],
+              viewport:{width:1440,height:1200}
+            });
+            const result = { checkedAt: new Date().toISOString(), country:'Chile', products:{}, publicPages:{} };
             let failures = 0;
             for (const p of products) {
               const page = await context.newPage();
               try {
                 const response = await page.goto(p.checkout,{waitUntil:'domcontentloaded',timeout:60000});
-                await page.waitForTimeout(3500);
+                await page.waitForTimeout(3000);
+                const changeCountry = page.getByText(/change country|cambiar pa[ií]s/i).first();
+                if (await changeCountry.isVisible().catch(()=>false)) {
+                  await changeCountry.click();
+                  await page.waitForTimeout(600);
+                  const chile = page.getByText(/^Chile$/i).last();
+                  if (await chile.isVisible().catch(()=>false)) {
+                    await chile.click();
+                    await page.waitForTimeout(3000);
+                  }
+                }
                 const body = await page.locator('body').innerText().catch(()=> '');
                 const norm = normalize(body);
                 const finalUrl = page.url();
@@ -90,7 +104,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: hotmart-public-audit-2026-09-02
+          name: hotmart-public-audit-chile-2026-09-02
           path: hotmart-public-audit-2026-09-02.json
           if-no-files-found: warn
           retention-days: 14
