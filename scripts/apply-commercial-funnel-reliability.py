@@ -35,7 +35,7 @@ def insert_before_head_close(path: Path, script: str) -> None:
 
 def replace_set(text: str, constant_name: str, values: list[str]) -> str:
     body = "\n".join(f'    "{value}",' for value in values)
-    pattern = rf"const {re.escape(constant_name)} = new Set\(\[\n.*?\n  \]\);"
+    pattern = rf"const {re.escape(constant_name)} = new Set\(\[\n.*?\n\s*\]\);"
     replacement = f"const {constant_name} = new Set([\n{body}\n  ]);"
     updated, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
     if count != 1:
