@@ -19,20 +19,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          response="$(curl --fail --show-error --silent --request POST \
-            'https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/migrate-premium-assets-20260902')"
+          response="$(curl --fail --show-error --silent --request POST 'https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/migrate-premium-assets-20260902')"
           printf '%s\n' "$response"
-          RESULT="$response" node - <<'NODE'
-          const result = JSON.parse(process.env.RESULT || '{}');
-          if (!result.ok || !Array.isArray(result.results) || result.results.length !== 4) {
-            console.error('Premium asset migration did not complete all four objects.');
-            process.exit(1);
-          }
-          for (const item of result.results) {
-            if (!item.sha256 || !item.bytes || !['uploaded', 'already-exists'].includes(item.status)) {
-              console.error('Invalid migration verification result:', item);
-              process.exit(1);
-            }
-            console.log(`${item.target} ${item.status} ${item.bytes}B sha256=${item.sha256}`);
-          }
-NODE
+          RESULT="$response" node -e 'const r=JSON.parse(process.env.RESULT||"{}"); if(!r.ok||!Array.isArray(r.results)||r.results.length!==4) process.exit(1); for(const i of r.results){if(!i.sha256||!i.bytes||!["uploaded","already-exists"].includes(i.status)) process.exit(1); console.log(`${i.target} ${i.status} ${i.bytes}B sha256=${i.sha256}`)}'
