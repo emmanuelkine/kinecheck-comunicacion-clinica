@@ -1,0 +1,115 @@
+name: One-off Hotmart public audit 2026-09-02
+
+on:
+  push:
+    branches:
+      - ops/hotmart-public-audit-20260902
+    paths:
+      - .github/workflows/ops-hotmart-public-audit-20260902.yml
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install browser
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+      - name: Audit public KineCheck and Hotmart surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+
+          const products = [
+            { slug:'kinecheck-clinico', checkout:'https://pay.hotmart.com/L106791841D', terms:['kinecheck clínico','kinecheck clinico'] },
+            { slug:'kinecheck-estudiante', checkout:'https://pay.hotmart.com/G106801166S', terms:['kinecheck estudiante'] },
+            { slug:'comunicacion-clinica', checkout:'https://pay.hotmart.com/T106883983U', terms:['comunicación clínica','comunicacion clinica'] },
+            { slug:'mas-alla-del-dolor', checkout:'https://pay.hotmart.com/W106888386Q', terms:['más allá del dolor','mas alla del dolor'] },
+            { slug:'evidencia-aplicada', checkout:'https://pay.hotmart.com/F106921972I', terms:['evidencia aplicada','kinecheck'] },
+            { slug:'traumatologia-ortopedia-clinica', checkout:'https://pay.hotmart.com/B106913952R', terms:['traumatología','traumatologia','ortopedia'] },
+            { slug:'dolor-lumbar-persistente', checkout:'https://pay.hotmart.com/W107198798E', terms:['dolor lumbar persistente','kinecheck'] },
+            { slug:'pack-estudiante', checkout:'https://pay.hotmart.com/Q106891608M', terms:['pack kinecheck estudiante','kinecheck estudiante'] },
+          ];
+
+          const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+          const browser = await chromium.launch({headless:true});
+          const context = await browser.newContext({locale:'es-CL', timezoneId:'America/Santiago', viewport:{width:1440,height:1200}});
+          const result = { checkedAt: new Date().toISOString(), products:{}, publicPages:{} };
+          let failures = 0;
+
+          for (const p of products) {
+            const page = await context.newPage();
+            try {
+              const response = await page.goto(p.checkout,{waitUntil:'domcontentloaded',timeout:60000});
+              await page.waitForTimeout(3500);
+              const body = (await page.locator('body').innerText().catch(()=>''));
+              const norm = normalize(body);
+              const matched = p.terms.some(t => norm.includes(normalize(t)));
+              const finalUrl = page.url();
+              const status = response?.status() ?? null;
+              const hotmart = /hotmart\.com/i.test(finalUrl);
+              const priceSnippets = [...new Set((body.match(/(?:CLP\s*)?\$\s?[\d.]+(?:,\d+)?|[\d.]+\s*CLP/gi) || []).slice(0,8))];
+              result.products[p.slug] = { status, finalUrl, hotmart, matchedName: matched, priceSnippets, title: await page.title() };
+              if (!hotmart || (status && status >= 500)) failures++;
+              console.log(`${p.slug}: status=${status} hotmart=${hotmart} name=${matched} prices=${JSON.stringify(priceSnippets)}`);
+            } catch (e) {
+              result.products[p.slug] = { error:String(e.message || e) };
+              failures++;
+              console.error(`${p.slug}: ${e.message || e}`);
+            } finally { await page.close(); }
+          }
+
+          for (const [label,url] of Object.entries({
+            estudiantes:'https://kinecheck.cl/estudiantes/',
+            recupera:'https://kinecheck.cl/recupera/',
+            profesionales:'https://kinecheck.cl/profesionales/'
+          })) {
+            const page = await context.newPage();
+            try {
+              const response = await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
+              const text = normalize(await page.locator('body').innerText().catch(()=>''));
+              result.publicPages[label] = {
+                status: response?.status() ?? null,
+                hasHotmart: /pay\.hotmart\.com/i.test(await page.content()),
+                saysProximamente: text.includes('proximamente')
+              };
+              if ((response?.status() ?? 500) >= 500) failures++;
+            } catch(e) {
+              result.publicPages[label] = {error:String(e.message || e)};
+              failures++;
+            } finally { await page.close(); }
+          }
+
+          await browser.close();
+          fs.writeFileSync('hotmart-public-audit-2026-09-02.json', JSON.stringify(result,null,2));
+          console.log('PUBLIC_PAGES', JSON.stringify(result.publicPages));
+          if (result.publicPages.recupera?.hasHotmart) {
+            console.error('Recupera unexpectedly exposes a Hotmart checkout on its public page');
+            failures++;
+          }
+          if (!result.publicPages.recupera?.saysProximamente) {
+            console.error('Recupera no longer says Próximamente');
+            failures++;
+          }
+          if (failures) process.exit(1);
+          NODE
+      - name: Upload public audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hotmart-public-audit-2026-09-02
+          path: hotmart-public-audit-2026-09-02.json
+          if-no-files-found: warn
+          retention-days: 14
