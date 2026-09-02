@@ -38,12 +38,12 @@ jobs:
               if text.count(old) != 1:
                   raise SystemExit(f'Expected one exact match: {old[:80]}')
               text = text.replace(old, new)
-          start_marker = '  const estudianteSalesPaused = !studentPage.includes("$14.990 CLP")'
+          start_marker = '  const estudianteSalesPaused = /próximamente|en revisión|ventas pausadas/i.test(studentPage)'
           end_marker = '    logOk("KineCheck Estudiante y Pack mantienen nuevas ventas pausadas sin bloquear accesos vigentes.");\n  }'
           start = text.find(start_marker)
           end_start = text.find(end_marker, start)
           if start < 0 or end_start < 0:
-              raise SystemExit('Stale Estudiante sales assertion block not found exactly once')
+              raise SystemExit('Stale Estudiante sales assertion block not found')
           end = end_start + len(end_marker)
           new_block = (
               '  const estudianteSalesActive = studentPage.includes("$14.990 CLP")\n'
