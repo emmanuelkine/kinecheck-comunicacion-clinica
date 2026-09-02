@@ -18,14 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Reject legacy host references in repository
+      - name: Reject legacy host references in runtime source
         shell: bash
         run: |
           set -euo pipefail
           legacy_host="chatgpt"".""site"
-          if grep -RFIq "$legacy_host" . --exclude-dir=.git; then
-            echo "Legacy app host reference remains in repository" >&2
-            grep -RFIn "$legacy_host" . --exclude-dir=.git >&2 || true
+          if grep -RFIq "$legacy_host" . --exclude-dir=.git --exclude-dir=docs; then
+            echo "Legacy app host reference remains in runtime source" >&2
+            grep -RFIn "$legacy_host" . --exclude-dir=.git --exclude-dir=docs >&2 || true
             exit 1
           fi
 

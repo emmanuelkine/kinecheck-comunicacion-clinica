@@ -6,6 +6,7 @@ on:
     paths:
       - 'kinecheck-clinico-curso/**'
       - 'kinecheck-clinico-guia/**'
+      - 'supabase/functions/protected-course-key/**'
       - 'academy/academy-bootstrap-v28.js'
       - 'academy/academy-clinico-course-v1.js'
       - 'academy/academy-launch-router-v4.js'
@@ -27,10 +28,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check JavaScript syntax
+      - name: Check public JavaScript syntax
         run: |
-          node --check kinecheck-clinico-curso/course-data.js
-          node --check kinecheck-clinico-curso/renderer.js
           node --check kinecheck-clinico-curso/config.js
           node --check kinecheck-clinico-guia/config.js
           node --check kinecheck-clinico-guia/guide.js
@@ -41,26 +40,18 @@ jobs:
           node --check academy/academy-open-v6.js
           node --check academy/academy-enhancements.js
           node --check productos/product-clinico-reposition-v1.js
-      - name: Validate curriculum structure
+      - name: Validate private premium-content boundary
         run: |
-          node <<'NODE'
-          global.window = {};
-          require('./kinecheck-clinico-curso/course-data.js');
-          const course = window.__KINECHECK_COURSE_PAYLOAD__;
-          if (!course) throw new Error('Course payload missing');
-          if (course.modules.length !== 10) throw new Error(`Expected 10 modules, got ${course.modules.length}`);
-          const lessons = course.modules.flatMap((module) => module.lessons || []);
-          if (lessons.length !== 30) throw new Error(`Expected 30 experiences, got ${lessons.length}`);
-          const ids = lessons.map((lesson) => lesson.id);
-          if (new Set(ids).size !== ids.length) throw new Error('Duplicate lesson IDs');
-          for (const lesson of lessons) {
-            if (!lesson.title || !lesson.core || !lesson.case || !lesson.task) throw new Error(`Incomplete lesson ${lesson.id}`);
-            if (!lesson.quiz || !Array.isArray(lesson.quiz.options) || lesson.quiz.options.length < 3) throw new Error(`Invalid quiz ${lesson.id}`);
-            if (!Number.isInteger(lesson.quiz.answer) || lesson.quiz.answer < 0 || lesson.quiz.answer >= lesson.quiz.options.length) throw new Error(`Invalid answer ${lesson.id}`);
-          }
-          if (!Array.isArray(course.references) || course.references.length < 15) throw new Error('Insufficient reference base');
-          console.log(`Validated ${course.modules.length} modules, ${lessons.length} experiences and ${course.references.length} references.`);
-          NODE
+          test ! -e kinecheck-clinico-curso/course-data.js
+          test ! -e kinecheck-clinico-curso/renderer.js
+          grep -q 'courseKeyFunction: "protected-course-key"' kinecheck-clinico-curso/config.js
+          grep -q 'kinecheck-clinico-curso/course-data.js' supabase/functions/protected-course-key/index.ts
+          grep -q 'kinecheck-clinico-curso/renderer.js' supabase/functions/protected-course-key/index.ts
+          grep -q 'from("course-assets")' supabase/functions/protected-course-key/index.ts
+          if grep -Rqs 'https://kinecheck.cl/kinecheck-clinico-curso/course-data.js' supabase/functions; then
+            echo 'A public Clinico payload URL is still referenced by server functions.' >&2
+            exit 1
+          fi
       - name: Validate guide positioning and privacy
         run: |
           grep -q 'No reemplaces tu ficha clínica' kinecheck-clinico-guia/index.html
@@ -81,7 +72,7 @@ jobs:
           grep -q 'CURSO PROFESIONAL' academy/academy-enhancements.js
           grep -q '/kinecheck-clinico-guia/' academy/academy-open-v6.js
           grep -q '/kinecheck-clinico-guia/' _headers
-      - name: Validate public routes
+      - name: Validate public shells
         run: |
           for attempt in 1 2 3 4 5; do
             course_status=$(curl -sS -o /tmp/course.html -w '%{http_code}' https://kinecheck.cl/kinecheck-clinico-curso/ || true)
