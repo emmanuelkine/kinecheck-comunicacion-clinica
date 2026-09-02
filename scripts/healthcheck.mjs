@@ -8,8 +8,8 @@ const TIMEOUT_MS = 20000;
 const CHECKOUT_EXPECTATIONS = [
   { label: "KineCheck Clínico", url: "https://pay.hotmart.com/L106791841D", keywords: ["kinecheck clínico", "kinecheck clinico"] },
   { label: "Comunicación Clínica", url: "https://pay.hotmart.com/T106883983U", keywords: ["comunicación clínica", "comunicacion clinica"] },
-  { label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"], publiclyActive: false },
-  { label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"], publiclyActive: false },
+  { label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"] },
+  { label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"] },
   { label: "KineCheck Recupera", url: "https://pay.hotmart.com/P106806251E", keywords: ["kinecheck recupera"], publiclyActive: false },
   { label: "Más allá del Dolor", url: "https://pay.hotmart.com/W106888386Q", keywords: ["más allá del dolor", "mas alla del dolor"] },
   { label: "KineCheck Evidencia Aplicada", url: "https://pay.hotmart.com/F106921972I", keywords: ["kinecheck evidencia aplicada", "evidencia aplicada", "razonamiento clínico con evidencia", "razonamiento clinico con evidencia"] },
@@ -34,9 +34,7 @@ const NON_COMMERCIAL_ACTIVE_SLUGS = new Set([
   "ejercicio-terapeutico",
 ]);
 
-const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set([
-  "8154796", // KineCheck Estudiante: acceso vigente permitido, nuevas ventas pausadas.
-]);
+const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set();
 
 const PREDEPLOY_PRODUCT_URLS = new Set([
   `${PUBLIC_BASE}/productos/dolor-musculoesqueletico/`,
@@ -343,15 +341,16 @@ async function main() {
 
   const studentCheckout = CHECKOUT_EXPECTATIONS.find((item) => item.label === "KineCheck Estudiante")?.url || "";
   const studentPackCheckout = CHECKOUT_EXPECTATIONS.find((item) => item.label === "Pack KineCheck Estudiante")?.url || "";
-  const estudianteSalesPaused = /próximamente|en revisión|ventas pausadas/i.test(studentPage)
-    && !studentPage.includes(studentCheckout)
-    && !studentPage.includes(studentPackCheckout)
-    && !publicCommerce.includes(studentCheckout)
-    && !publicCommerce.includes(studentPackCheckout);
-  if (!estudianteSalesPaused) {
-    logFail("KineCheck Estudiante y Pack deben mantener nuevas ventas pausadas mientras el E2E autenticado siga pendiente.");
+  const estudianteSalesActive = studentPage.includes("$14.990 CLP")
+    && studentPage.includes("$49.900 CLP")
+    && studentPage.includes(studentCheckout)
+    && studentPage.includes(studentPackCheckout)
+    && publicCommerce.includes(studentCheckout)
+    && publicCommerce.includes(studentPackCheckout);
+  if (!estudianteSalesActive) {
+    logFail("KineCheck Estudiante y Pack deben mantener precio y checkout públicos coherentes tras su reactivación.");
   } else {
-    logOk("KineCheck Estudiante y Pack mantienen nuevas ventas pausadas sin bloquear accesos vigentes.");
+    logOk("KineCheck Estudiante y Pack mantienen ventas activas tras el cierre de #56 y #78.");
   }
 
   const recuperaIsPaused = /próximamente/i.test(recoveryPage)
