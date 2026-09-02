@@ -1,0 +1,69 @@
+name: QA commercial funnel live
+
+on:
+  push:
+    branches:
+      - codex/commercial-funnel-reliability-v2
+    paths:
+      - ".github/workflows/qa-commercial-funnel-live.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-funnel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public instrumentation is deployed
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 4 --retry-delay 3 https://kinecheck.cl/ | grep -F 'metrics-v1.js?v=20260902-commercial1'
+          curl -fsSL --retry 4 --retry-delay 3 https://kinecheck.cl/productos/kinecheck-estudiante/ | grep -F 'metrics-v1.js?v=20260902-commercial1'
+
+      - name: Send synthetic QA funnel with one anonymous session
+        id: funnel
+        run: |
+          set -euo pipefail
+          SESSION_ID=$(python - <<'PY'
+          import uuid
+          print(uuid.uuid4())
+          PY
+          )
+          echo "session_id=$SESSION_ID" >> "$GITHUB_OUTPUT"
+          ENDPOINT='https://eqhcdclyeoapmqtlduwf.supabase.co/functions/v1/metric-event'
+          post_event() {
+            EVENT="$1"; PATH_VALUE="$2"; PRODUCT="$3"
+            EVENT_ID=$(python - <<'PY'
+          import uuid
+          print(uuid.uuid4())
+          PY
+          )
+            BODY=$(python - "$EVENT_ID" "$EVENT" "$PATH_VALUE" "$PRODUCT" "$SESSION_ID" <<'PY'
+          import json,sys
+          event_id,event,path,product,session=sys.argv[1:]
+          print(json.dumps({
+            'eventId': event_id,
+            'eventName': event,
+            'path': path,
+            'productSlug': product or None,
+            'sessionId': session,
+            'referrerHost': 'qa.kinecheck.internal',
+            'deviceClass': 'desktop',
+            'metadata': {'qa': True},
+            'isQa': True,
+          }))
+          PY
+          )
+            RESPONSE=$(curl -fsS -X POST "$ENDPOINT" \
+              -H 'Origin: https://kinecheck.cl' \
+              -H 'Content-Type: application/json' \
+              --data "$BODY")
+            echo "$EVENT => $RESPONSE"
+            echo "$RESPONSE" | grep -F '"ok":true'
+          }
+          post_event page_view '/?qa=commercial-funnel-live' ''
+          post_event product_view '/productos/kinecheck-estudiante/?qa=commercial-funnel-live' 'kinecheck-estudiante'
+          post_event buy_click '/productos/kinecheck-estudiante/?qa=commercial-funnel-live' 'kinecheck-estudiante'
+          post_event hotmart_outbound '/productos/kinecheck-estudiante/?qa=commercial-funnel-live' 'kinecheck-estudiante'
+          echo "QA_SESSION_ID=$SESSION_ID"
