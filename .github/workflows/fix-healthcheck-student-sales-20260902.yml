@@ -29,58 +29,40 @@ jobs:
           from pathlib import Path
           path = Path('scripts/healthcheck.mjs')
           text = path.read_text()
-
-          replacements = [
-            (
-              '{ label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"], publiclyActive: false },',
-              '{ label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"] },'
-            ),
-            (
-              '{ label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"], publiclyActive: false },',
-              '{ label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"] },'
-            ),
-            (
-              'const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set([\n  "8154796", // KineCheck Estudiante: acceso vigente permitido, nuevas ventas pausadas.\n]);',
-              'const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set();'
-            ),
-            (
-              '''  const estudianteSalesPaused = !studentPage.includes("$14.990 CLP")
-    && !studentPage.includes("$49.900 CLP")
-    && !studentPage.includes(studentCheckout)
-    && !studentPage.includes(studentPackCheckout)
-    && !publicCommerce.includes(studentCheckout)
-    && !publicCommerce.includes(studentPackCheckout);
-  if (!estudianteSalesPaused) {
-    logFail("KineCheck Estudiante y Pack deben mantener nuevas ventas pausadas mientras el E2E autenticado siga pendiente.");
-  } else {
-    logOk("KineCheck Estudiante y Pack mantienen nuevas ventas pausadas sin bloquear accesos vigentes.");
-  }''',
-              '''  const estudianteSalesActive = studentPage.includes("$14.990 CLP")
-    && studentPage.includes("$49.900 CLP")
-    && studentPage.includes(studentCheckout)
-    && studentPage.includes(studentPackCheckout)
-    && publicCommerce.includes(studentCheckout)
-    && publicCommerce.includes(studentPackCheckout);
-  if (!estudianteSalesActive) {
-    logFail("KineCheck Estudiante y Pack deben mantener precio y checkout públicos coherentes tras su reactivación.");
-  } else {
-    logOk("KineCheck Estudiante y Pack mantienen ventas activas tras el cierre de #56 y #78.");
-  }'''
-            ),
+          pairs = [
+              ('{ label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"], publiclyActive: false },', '{ label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"] },'),
+              ('{ label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"], publiclyActive: false },', '{ label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"] },'),
+              ('const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set([\n  "8154796", // KineCheck Estudiante: acceso vigente permitido, nuevas ventas pausadas.\n]);', 'const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set();'),
           ]
-
-          for old, new in replacements:
-              count = text.count(old)
-              if count != 1:
-                  raise SystemExit(f'Expected exactly one match, got {count}: {old[:100]}')
+          for old, new in pairs:
+              if text.count(old) != 1:
+                  raise SystemExit(f'Expected one exact match: {old[:80]}')
               text = text.replace(old, new)
-
+          start_marker = '  const estudianteSalesPaused = !studentPage.includes("$14.990 CLP")'
+          end_marker = '    logOk("KineCheck Estudiante y Pack mantienen nuevas ventas pausadas sin bloquear accesos vigentes.");\n  }'
+          start = text.find(start_marker)
+          end_start = text.find(end_marker, start)
+          if start < 0 or end_start < 0:
+              raise SystemExit('Stale Estudiante sales assertion block not found exactly once')
+          end = end_start + len(end_marker)
+          new_block = (
+              '  const estudianteSalesActive = studentPage.includes("$14.990 CLP")\n'
+              '    && studentPage.includes("$49.900 CLP")\n'
+              '    && studentPage.includes(studentCheckout)\n'
+              '    && studentPage.includes(studentPackCheckout)\n'
+              '    && publicCommerce.includes(studentCheckout)\n'
+              '    && publicCommerce.includes(studentPackCheckout);\n'
+              '  if (!estudianteSalesActive) {\n'
+              '    logFail("KineCheck Estudiante y Pack deben mantener precio y checkout públicos coherentes tras su reactivación.");\n'
+              '  } else {\n'
+              '    logOk("KineCheck Estudiante y Pack mantienen ventas activas tras el cierre de #56 y #78.");\n'
+              '  }'
+          )
+          text = text[:start] + new_block + text[end:]
           path.write_text(text)
           PY
-
           node --check scripts/healthcheck.mjs
           node scripts/healthcheck.mjs
-
       - name: Commit corrected healthcheck
         shell: bash
         run: |
