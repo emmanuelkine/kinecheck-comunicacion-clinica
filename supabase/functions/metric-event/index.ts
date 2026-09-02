@@ -10,6 +10,9 @@ const allowedEvents = new Set([
   "page_view",
   "product_view",
   "checkout_start",
+  "access_error",
+  "hotmart_outbound",
+  "buy_click",
   "academy_open",
   "beta_view",
   "beta_submit_success",
@@ -30,15 +33,19 @@ const authenticatedFunnelEvents = new Set([
 ]);
 
 const allowedProducts = new Set([
-  "kinecheck-clinico",
-  "kinecheck-estudiante",
-  "kinecheck-recupera",
-  "comunicacion-clinica",
-  "mas-alla-del-dolor",
-  "evidencia-aplicada",
-  "traumatologia-ortopedia-clinica",
-  "pack-estudiante",
-]);
+    "banderas-clinicas",
+    "comunicacion-clinica",
+    "dolor-lumbar-persistente",
+    "dolor-musculoesqueletico",
+    "evidencia-aplicada",
+    "kinecheck-clinico",
+    "kinecheck-estudiante",
+    "kinecheck-recupera",
+    "mas-alla-del-dolor",
+    "pack-estudiante",
+    "pack-kinecheck-estudiante",
+    "traumatologia-ortopedia-clinica",
+  ]);
 
 function cors(origin: string | null) {
   const selected = origin && allowedOrigins.has(origin) ? origin : "https://kinecheck.cl";

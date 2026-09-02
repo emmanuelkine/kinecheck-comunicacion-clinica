@@ -10,14 +10,18 @@
   const COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:";
   const FUNNEL_ONCE_PREFIX = "kc_tf008_once:";
   const ALLOWED_PRODUCTS = new Set([
+    "banderas-clinicas",
+    "comunicacion-clinica",
+    "dolor-lumbar-persistente",
+    "dolor-musculoesqueletico",
+    "evidencia-aplicada",
     "kinecheck-clinico",
     "kinecheck-estudiante",
     "kinecheck-recupera",
-    "comunicacion-clinica",
     "mas-alla-del-dolor",
-    "evidencia-aplicada",
-    "traumatologia-ortopedia-clinica",
     "pack-estudiante",
+    "pack-kinecheck-estudiante",
+    "traumatologia-ortopedia-clinica",
   ]);
 
   function uuid() {
@@ -134,6 +138,10 @@
     const params = new URLSearchParams(location.search);
     const fromQuery = cleanProduct(params.get("producto") || params.get("course"));
     if (fromQuery) return fromQuery;
+
+    const pathMatch = String(location.pathname || "").match(/^\/productos\/([^/]+)(?:\/|$)/i);
+    const fromPath = cleanProduct(pathMatch ? decodeURIComponent(pathMatch[1]) : "");
+    if (fromPath) return fromPath;
 
     const fromDom = cleanProduct(
       document.body?.getAttribute("data-course")
@@ -259,7 +267,9 @@
     const href = target instanceof HTMLAnchorElement ? target.href : "";
 
     if (href && /pay\.hotmart\.com/i.test(href)) {
-      send("checkout_start", { productSlug: slug });
+      if (markOnce("buy_click", slug || "unknown")) send("buy_click", { productSlug: slug });
+      if (markOnce("checkout_start", slug || "unknown")) send("checkout_start", { productSlug: slug });
+      if (markOnce("hotmart_outbound", slug || "unknown")) send("hotmart_outbound", { productSlug: slug });
       return;
     }
 
