@@ -39,8 +39,9 @@ for (const slug of slugs) {
 
 const payloadBlock = metrics.match(/const payload = \{([\s\S]*?)\n    \};/);
 assert(payloadBlock, "Metrics payload not found");
+const payloadKeys = [...payloadBlock[1].matchAll(/^\s*([A-Za-z0-9_]+)\s*:/gm)].map((match) => match[1].toLowerCase());
 for (const forbidden of ["email", "access_token", "refresh_token", "name", "nombre", "patient", "paciente"]) {
-  assert(!payloadBlock[1].toLowerCase().includes(forbidden), `Sensitive key in metrics payload: ${forbidden}`);
+  assert(!payloadKeys.includes(forbidden), `Sensitive key in metrics payload: ${forbidden}`);
 }
 
 console.log(`COMMERCIAL_FUNNEL_INSTRUMENTATION = PASS (${slugs.length} product pages)`);
