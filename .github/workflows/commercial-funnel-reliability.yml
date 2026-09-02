@@ -1,0 +1,48 @@
+name: Commercial funnel reliability
+
+on:
+  push:
+    branches:
+      - codex/commercial-funnel-reliability
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commercial-funnel-reliability
+  cancel-in-progress: false
+
+jobs:
+  patch-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply minimal commercial instrumentation patch
+        run: python scripts/apply-commercial-funnel-reliability.py
+
+      - name: Validate instrumentation contract
+        run: node scripts/validate-commercial-funnel-instrumentation.mjs
+
+      - name: Verify scope excludes sensitive configuration
+        run: |
+          git diff --name-only | tee /tmp/changed.txt
+          if grep -E '^(supabase/config\.toml|.*auth.*|.*sso.*|_redirects|wrangler.*|.*cloudflare.*|docs/hotmart/.*)$' /tmp/changed.txt; then
+            echo 'Sensitive or out-of-scope file modified.' >&2
+            exit 1
+          fi
+
+      - name: Commit branch-only patch
+        run: |
+          if git diff --quiet; then
+            echo 'Commercial funnel patch already applied and validated.'
+            exit 0
+          fi
+          git config user.name 'KineCheck Automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html productos/*/index.html metrics-v1.js supabase/functions/metric-event/index.ts academy/academy-commerce-v4.js
+          git commit -m 'fix: make public commercial funnel measurable'
+          git push origin HEAD:codex/commercial-funnel-reliability
