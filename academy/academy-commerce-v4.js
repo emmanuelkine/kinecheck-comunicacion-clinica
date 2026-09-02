@@ -179,6 +179,11 @@
       button.setAttribute("aria-busy", "true");
       button.style.pointerEvents = "none";
     }
+    if (typeof window.KINECHECK_METRIC === "function") {
+      window.KINECHECK_METRIC("buy_click", { productSlug: slug });
+      window.KINECHECK_METRIC("checkout_start", { productSlug: slug });
+      window.KINECHECK_METRIC("hotmart_outbound", { productSlug: slug });
+    }
     window.location.assign(checkout);
   }
 
