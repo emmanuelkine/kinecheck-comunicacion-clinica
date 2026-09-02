@@ -1,0 +1,93 @@
+name: One-off align student sales healthcheck
+
+on:
+  push:
+    branches:
+      - fix/healthcheck-student-sales-20260902
+    paths:
+      - .github/workflows/fix-healthcheck-student-sales-20260902.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/healthcheck-student-sales-20260902
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Align stale commercial readiness assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/healthcheck.mjs')
+          text = path.read_text()
+
+          replacements = [
+            (
+              '{ label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"], publiclyActive: false },',
+              '{ label: "KineCheck Estudiante", url: "https://pay.hotmart.com/G106801166S", keywords: ["kinecheck estudiante"] },'
+            ),
+            (
+              '{ label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"], publiclyActive: false },',
+              '{ label: "Pack KineCheck Estudiante", url: "https://pay.hotmart.com/Q106891608M", keywords: ["pack kinecheck estudiante", "kinecheck estudiante"] },'
+            ),
+            (
+              'const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set([\n  "8154796", // KineCheck Estudiante: acceso vigente permitido, nuevas ventas pausadas.\n]);',
+              'const PAUSED_COMMERCIAL_PRODUCT_IDS = new Set();'
+            ),
+            (
+              '''  const estudianteSalesPaused = !studentPage.includes("$14.990 CLP")
+    && !studentPage.includes("$49.900 CLP")
+    && !studentPage.includes(studentCheckout)
+    && !studentPage.includes(studentPackCheckout)
+    && !publicCommerce.includes(studentCheckout)
+    && !publicCommerce.includes(studentPackCheckout);
+  if (!estudianteSalesPaused) {
+    logFail("KineCheck Estudiante y Pack deben mantener nuevas ventas pausadas mientras el E2E autenticado siga pendiente.");
+  } else {
+    logOk("KineCheck Estudiante y Pack mantienen nuevas ventas pausadas sin bloquear accesos vigentes.");
+  }''',
+              '''  const estudianteSalesActive = studentPage.includes("$14.990 CLP")
+    && studentPage.includes("$49.900 CLP")
+    && studentPage.includes(studentCheckout)
+    && studentPage.includes(studentPackCheckout)
+    && publicCommerce.includes(studentCheckout)
+    && publicCommerce.includes(studentPackCheckout);
+  if (!estudianteSalesActive) {
+    logFail("KineCheck Estudiante y Pack deben mantener precio y checkout públicos coherentes tras su reactivación.");
+  } else {
+    logOk("KineCheck Estudiante y Pack mantienen ventas activas tras el cierre de #56 y #78.");
+  }'''
+            ),
+          ]
+
+          for old, new in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'Expected exactly one match, got {count}: {old[:100]}')
+              text = text.replace(old, new)
+
+          path.write_text(text)
+          PY
+
+          node --check scripts/healthcheck.mjs
+          node scripts/healthcheck.mjs
+
+      - name: Commit corrected healthcheck
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'emmanuelkine'
+          git config user.email 'emmanuelkine@gmail.com'
+          git add scripts/healthcheck.mjs
+          git diff --cached --check
+          git commit -m 'fix: align healthcheck with reactivated student sales'
+          git push origin HEAD:fix/healthcheck-student-sales-20260902
