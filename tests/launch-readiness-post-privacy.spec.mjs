@@ -33,12 +33,17 @@ try {
       if (message.type() === "error" && !/favicon|metric-event|cloudflareinsights/i.test(`${message.text()} ${message.location().url || ""}`)) errors.push(message.text());
     });
 
-    await page.goto(`${BASE}/?qa=post-privacy-${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+    await page.goto(`${BASE}/?qa=post-privacy-${device}-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 60000 });
     const home = await text(page);
-    assert.ok(home.includes("KineCheck Clínico") && home.includes("KineCheck Estudiante") && home.includes("KineCheck Recupera"), `${device}: portada incompleta`);
+    assert.ok(home.includes("Evaluación musculoesquelética y razonamiento clínico"), `${device}: falta propuesta principal actual`);
+    assert.ok((await page.locator('a[href*="profesionales/"]').count()) >= 1, `${device}: falta perfil profesional`);
+    assert.ok((await page.locator('a[href*="estudiantes/"]').count()) >= 1, `${device}: falta perfil estudiante`);
+    assert.ok((await page.locator('a[href*="recupera/"]').count()) >= 1, `${device}: falta perfil Recupera`);
+    assert.equal(await page.locator(".kc-testimonial").count(), 6, `${device}: testimonios incompletos`);
+    assert.equal(await page.locator(".kc-stars").count(), 0, `${device}: reapareció rating cuantitativo no verificado`);
     await noOverflow(page, `${device}/home`);
 
-    await page.goto(`${BASE}/recupera/?qa=post-privacy-${device}-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+    await page.goto(`${BASE}/recupera/?qa=post-privacy-${device}-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 60000 });
     const recovery = await text(page);
     assert.ok(/Próximamente/i.test(recovery), `${device}: Recupera no aparece como Próximamente`);
     assert.ok(!recovery.includes("$9.990"), `${device}: Recupera vuelve a publicar precio operativo`);
