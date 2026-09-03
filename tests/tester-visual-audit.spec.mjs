@@ -119,7 +119,7 @@ for (const viewport of [
     await expect(page.locator(".kc-testimonial")).toHaveCount(6);
     await expect(page.locator('.kc-stars[aria-label="5 de 5 estrellas"]')).toHaveCount(6);
 
-    for (const href of ["./profesionales/", "./estudiantes/", "./recupera/", "./demo/", "./academy/", "./metodologia/"]) {
+    for (const href of ["./profesionales/", "./estudiantes/", "/recupera/", "./demo/", "./academy/", "./metodologia/"]) {
       await expect(page.locator(`a[href="${href}"]`).first()).toBeAttached();
     }
 
