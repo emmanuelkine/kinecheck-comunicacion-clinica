@@ -35,6 +35,13 @@ async function assertNoHorizontalOverflow(page, label) {
   assert.ok(size.scroll <= size.client + 3, `${label}: overflow horizontal ${size.scroll}/${size.client}`);
 }
 
+async function assertImagesLoaded(page, label) {
+  const broken = await page.locator("img").evaluateAll((images) => images
+    .filter((image) => !image.complete || image.naturalWidth <= 0 || image.naturalHeight <= 0)
+    .map((image) => image.currentSrc || image.getAttribute("src") || "imagen sin src"));
+  assert.deepEqual(broken, [], `${label}: imágenes sin cargar: ${broken.join(", ")}`);
+}
+
 async function assertOpenGraph(page, label) {
   for (const property of ["og:type", "og:locale", "og:site_name", "og:title", "og:description", "og:url"]) {
     const value = await page.locator(`meta[property="${property}"]`).getAttribute("content") || "";
@@ -61,6 +68,7 @@ try {
     assert.equal(await page.locator('link[rel="canonical"]').getAttribute("href"), "https://kinecheck.cl/productos/kinecheck-clinico/");
     await assertOpenGraph(page, "sin JS/Clínico");
     await assertNoHorizontalOverflow(page, "sin JS/Clínico");
+    await assertImagesLoaded(page, "sin JS/Clínico");
   } finally {
     await noJs.close();
   }
@@ -71,13 +79,18 @@ try {
 
     await open(page, "/", `${device}/inicio`);
     const home = await bodyText(page);
-    assert.ok(normalized(home).includes("elige tu experiencia"), `${device}/inicio: falta propuesta principal`);
+    assert.ok(normalized(home).includes("evaluación musculoesquelética y razonamiento clínico"), `${device}/inicio: falta propuesta principal actual`);
     assert.ok((await page.locator('a[href*="profesionales/"]').count()) >= 1, `${device}/inicio: falta perfil profesional`);
     assert.ok((await page.locator('a[href*="estudiantes/"]').count()) >= 1, `${device}/inicio: falta perfil estudiante`);
     assert.ok((await page.locator('a[href*="recupera/"]').count()) >= 1, `${device}/inicio: falta perfil recuperación`);
+    assert.ok((await page.locator('a[href*="demo/"]').count()) >= 1, `${device}/inicio: falta acceso a demo`);
+    assert.ok((await page.locator('a[href*="metodologia/"]').count()) >= 1, `${device}/inicio: falta acceso a metodología`);
     assert.ok((await page.locator('a[href*="academy/"]').count()) >= 1, `${device}/inicio: falta acceso a Academy`);
+    assert.equal(await page.locator('.kc-testimonial').count(), 6, `${device}/inicio: deben existir exactamente 6 testimonios`);
+    assert.equal(await page.locator('.kc-stars[aria-label="5 de 5 estrellas"]').count(), 6, `${device}/inicio: los 6 testimonios deben conservar su rating accesible`);
     await assertOpenGraph(page, `${device}/inicio`);
     await assertNoHorizontalOverflow(page, `${device}/inicio`);
+    await assertImagesLoaded(page, `${device}/inicio`);
 
     for (const [path, expectedPrice] of [
       ["/profesionales/", "$39.990 CLP"],
@@ -89,6 +102,7 @@ try {
       assert.ok((await page.locator('a[href*="academy/"]').count()) >= 1, `${device}${path}: falta acceso a Academy`);
       await assertOpenGraph(page, `${device}${path}`);
       await assertNoHorizontalOverflow(page, `${device}${path}`);
+      await assertImagesLoaded(page, `${device}${path}`);
     }
 
     await open(page, "/recupera/", `${device}/recupera/`);
@@ -99,6 +113,7 @@ try {
     assert.ok(!/comprar/i.test(recuperaText), `${device}/recupera/: reapareció CTA de compra`);
     await assertOpenGraph(page, `${device}/recupera/`);
     await assertNoHorizontalOverflow(page, `${device}/recupera/`);
+    await assertImagesLoaded(page, `${device}/recupera/`);
 
     await open(page, "/productos/kinecheck-recupera/", `${device}/kinecheck-recupera`);
     const recuperaProductText = await bodyText(page);
@@ -109,6 +124,7 @@ try {
     assert.equal(await page.locator('link[rel="canonical"]').getAttribute("href"), "https://kinecheck.cl/productos/kinecheck-recupera/", `${device}/kinecheck-recupera: canonical incorrecta`);
     await assertOpenGraph(page, `${device}/kinecheck-recupera`);
     await assertNoHorizontalOverflow(page, `${device}/kinecheck-recupera`);
+    await assertImagesLoaded(page, `${device}/kinecheck-recupera`);
 
     for (const product of PRODUCTS) {
       const path = `/productos/${product.slug}/`;
@@ -123,6 +139,7 @@ try {
       assert.equal(await page.locator('link[rel="canonical"]').getAttribute("href"), `https://kinecheck.cl/productos/${product.slug}/`, `${device}/${product.slug}: canonical incorrecta`);
       await assertOpenGraph(page, `${device}/${product.slug}`);
       await assertNoHorizontalOverflow(page, `${device}/${product.slug}`);
+      await assertImagesLoaded(page, `${device}/${product.slug}`);
     }
 
     await open(page, "/productos/?producto=comunicacion-clinica", `${device}/legacy-product-query`);
