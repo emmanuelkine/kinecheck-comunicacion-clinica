@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "home-public-v1.css"
+      - "kinecheck/**"
       - "profesionales/index.html"
       - "estudiantes/index.html"
       - "recupera/index.html"
@@ -28,6 +30,8 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "home-public-v1.css"
+      - "kinecheck/**"
       - "profesionales/index.html"
       - "estudiantes/index.html"
       - "recupera/index.html"
