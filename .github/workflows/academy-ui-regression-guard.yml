@@ -1,0 +1,39 @@
+name: Academy UI regression guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'academy/**'
+      - '_headers'
+      - 'scripts/validate-academy-ui-contracts.mjs'
+      - '.github/workflows/academy-ui-regression-guard.yml'
+  pull_request:
+    paths:
+      - 'academy/**'
+      - '_headers'
+      - 'scripts/validate-academy-ui-contracts.mjs'
+      - '.github/workflows/academy-ui-regression-guard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  academy-ui-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check critical Academy JavaScript syntax
+        run: |
+          node --check academy/academy-kinecheck-v4.js
+          node --check academy/academy-view-contract-fix-v1.js
+          node --check academy/academy-owned-native-bridge-v1.js
+          node --check academy/academy-home-native-courses-v1.js
+          node --check academy/academy-open-v6.js
+          node --check academy/academy-brand-identity.js
+      - name: Validate Academy UI contracts
+        run: node scripts/validate-academy-ui-contracts.mjs
