@@ -44,6 +44,112 @@ function intersects(a, b) {
   return !(aRight <= b.x || a.x >= bRight || aBottom <= b.y || a.y >= bBottom);
 }
 
+async function assertNoOverflow(page) {
+  const pageOverflow = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(pageOverflow.scrollWidth).toBeLessThanOrEqual(pageOverflow.clientWidth + 3);
+}
+
+async function assertNoClippedHeadings(page) {
+  const clipped = await page.locator("h1:visible,h2:visible,h3:visible").evaluateAll((nodes) => nodes
+    .map((node) => {
+      const style = getComputedStyle(node);
+      const horizontal = node.scrollWidth > node.clientWidth + 2 && ["hidden", "clip"].includes(style.overflowX);
+      const vertical = node.scrollHeight > node.clientHeight + 2 && ["hidden", "clip"].includes(style.overflowY);
+      return horizontal || vertical ? {
+        text: (node.textContent || "").trim().slice(0, 100),
+        clientWidth: node.clientWidth,
+        scrollWidth: node.scrollWidth,
+        clientHeight: node.clientHeight,
+        scrollHeight: node.scrollHeight,
+        overflowX: style.overflowX,
+        overflowY: style.overflowY,
+      } : null;
+    })
+    .filter(Boolean));
+  expect(clipped, JSON.stringify(clipped)).toEqual([]);
+}
+
+async function assertImagesLoaded(page) {
+  const broken = await page.locator("img").evaluateAll((images) => images
+    .filter((image) => !image.complete || image.naturalWidth <= 0 || image.naturalHeight <= 0)
+    .map((image) => image.currentSrc || image.getAttribute("src") || "imagen sin src"));
+  expect(broken, JSON.stringify(broken)).toEqual([]);
+}
+
+async function assertVisibleControlsAreReachable(page) {
+  const blocked = await page.locator('a[href],button').evaluateAll(async (nodes) => {
+    const problems = [];
+    for (const node of nodes) {
+      const style = getComputedStyle(node);
+      if (style.display === "none" || style.visibility === "hidden" || style.pointerEvents === "none") continue;
+      if (node instanceof HTMLButtonElement && node.disabled) continue;
+      if (node.getAttribute("aria-disabled") === "true") continue;
+      const initial = node.getBoundingClientRect();
+      if (initial.width <= 0 || initial.height <= 0) continue;
+
+      node.scrollIntoView({ block: "center", inline: "center", behavior: "auto" });
+      await new Promise((resolve) => requestAnimationFrame(() => resolve()));
+      const rect = node.getBoundingClientRect();
+      const x = Math.min(Math.max(rect.left + rect.width / 2, 1), innerWidth - 1);
+      const y = Math.min(Math.max(rect.top + rect.height / 2, 1), innerHeight - 1);
+      const hit = document.elementFromPoint(x, y);
+      if (!hit || (hit !== node && !node.contains(hit))) {
+        problems.push({
+          tag: node.tagName,
+          text: (node.textContent || node.getAttribute("aria-label") || "").trim().slice(0, 80),
+          href: node instanceof HTMLAnchorElement ? node.getAttribute("href") : null,
+          hit: hit ? `${hit.tagName}.${hit.className || ""}` : null,
+        });
+      }
+    }
+    return problems;
+  });
+  expect(blocked, JSON.stringify(blocked)).toEqual([]);
+}
+
+for (const viewport of [
+  { name: "public-mobile", width: 390, height: 844 },
+  { name: "public-tablet", width: 820, height: 1180 },
+  { name: "public-desktop", width: 1440, height: 1000 },
+]) {
+  test(`${viewport.name}: portada, imágenes y controles están utilizables`, async ({ page }) => {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.goto(`${BASE}/?qa=public-visual-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+
+    await expect(page.locator("h1")).toContainText("Evaluación musculoesquelética y razonamiento clínico");
+    await expect(page.locator(".kc-testimonial")).toHaveCount(6);
+    await expect(page.locator('.kc-stars[aria-label="5 de 5 estrellas"]')).toHaveCount(6);
+
+    for (const href of ["./profesionales/", "./estudiantes/", "./recupera/", "./demo/", "./academy/", "./metodologia/"]) {
+      await expect(page.locator(`a[href="${href}"]`).first()).toBeAttached();
+    }
+
+    await assertNoOverflow(page);
+    await assertNoClippedHeadings(page);
+    await assertImagesLoaded(page);
+
+    if (viewport.width <= 700) {
+      const menu = page.locator("[data-menu-button]");
+      const nav = page.locator("[data-public-nav]");
+      await expect(menu).toBeVisible();
+      await menu.click();
+      await expect(menu).toHaveAttribute("aria-expanded", "true");
+      await expect(nav).toBeVisible();
+      await menu.click();
+      await expect(menu).toHaveAttribute("aria-expanded", "false");
+    }
+
+    const profileCta = page.getByRole("link", { name: "Elegir mi perfil" }).first();
+    await profileCta.click();
+    await expect(page).toHaveURL(/#elige$/);
+
+    await assertVisibleControlsAreReachable(page);
+  });
+}
+
 for (const viewport of [
   { name: "mobile", width: 390, height: 844 },
   { name: "tablet", width: 820, height: 1180 },
@@ -52,11 +158,7 @@ for (const viewport of [
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await exposeDashboard(page);
 
-    const pageOverflow = await page.evaluate(() => ({
-      scrollWidth: document.documentElement.scrollWidth,
-      clientWidth: document.documentElement.clientWidth,
-    }));
-    expect(pageOverflow.scrollWidth).toBeLessThanOrEqual(pageOverflow.clientWidth + 3);
+    await assertNoOverflow(page);
 
     if (viewport.width <= 760) {
       const launcher = page.locator("#support-launcher");
@@ -95,23 +197,8 @@ for (const viewport of [
       expect(intersects(launcherBox, navBox), diagnostic).toBe(false);
     }
 
-    const clipped = await page.locator("h1:visible,h2:visible,h3:visible").evaluateAll((nodes) => nodes
-      .map((node) => {
-        const style = getComputedStyle(node);
-        const horizontal = node.scrollWidth > node.clientWidth + 2 && ["hidden", "clip"].includes(style.overflowX);
-        const vertical = node.scrollHeight > node.clientHeight + 2 && ["hidden", "clip"].includes(style.overflowY);
-        return horizontal || vertical ? {
-          text: (node.textContent || "").trim().slice(0, 100),
-          clientWidth: node.clientWidth,
-          scrollWidth: node.scrollWidth,
-          clientHeight: node.clientHeight,
-          scrollHeight: node.scrollHeight,
-          overflowX: style.overflowX,
-          overflowY: style.overflowY,
-        } : null;
-      })
-      .filter(Boolean));
-    expect(clipped, JSON.stringify(clipped)).toEqual([]);
+    await assertNoClippedHeadings(page);
+    await assertImagesLoaded(page);
   });
 }
 
