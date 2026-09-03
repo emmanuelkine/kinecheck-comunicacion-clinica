@@ -23,7 +23,6 @@ jobs:
           python3 <<'PY'
           from pathlib import Path
 
-          # 1) Restore the functional support email contract without removing the support page.
           p = Path('index.html')
           s = p.read_text()
           old = '<a href="./soporte/">Soporte</a><small>© 2026 KineCheck</small>'
@@ -32,7 +31,6 @@ jobs:
               raise SystemExit('index.html: expected footer anchor not found')
           p.write_text(s.replace(old, new, 1))
 
-          # 2) Align visual CI with the canonical no-invented-rating policy.
           p = Path('tests/tester-visual-audit.spec.mjs')
           s = p.read_text()
           old = '    await expect(page.locator(\'.kc-stars[aria-label="5 de 5 estrellas"]\')).toHaveCount(6);'
@@ -41,18 +39,33 @@ jobs:
               raise SystemExit('tester visual: stale rating assertion not found')
           p.write_text(s.replace(old, new, 1))
 
-          # 3) Align post-privacy readiness with the simplified profile-based home and avoid networkidle hangs caused by telemetry.
           p = Path('tests/launch-readiness-post-privacy.spec.mjs')
           s = p.read_text().replace('waitUntil: "networkidle"', 'waitUntil: "domcontentloaded"')
           old = '    assert.ok(home.includes("KineCheck Clínico") && home.includes("KineCheck Estudiante") && home.includes("KineCheck Recupera"), `${device}: portada incompleta`);'
-          new = '''    assert.ok(home.includes("Evaluación musculoesquelética y razonamiento clínico"), `${device}: falta propuesta principal actual`);
-    assert.ok((await page.locator('a[href*="profesionales/"]').count()) >= 1, `${device}: falta perfil profesional`);
-    assert.ok((await page.locator('a[href*="estudiantes/"]').count()) >= 1, `${device}: falta perfil estudiante`);
-    assert.ok((await page.locator('a[href*="recupera/"]').count()) >= 1, `${device}: falta perfil Recupera`);
-    assert.equal(await page.locator(".kc-testimonial").count(), 6, `${device}: testimonios incompletos`);
-    assert.equal(await page.locator(".kc-stars").count(), 0, `${device}: reapareció rating cuantitativo no verificado`);'''
+          new = ('    assert.ok(home.includes("Evaluación musculoesquelética y razonamiento clínico"), `${device}: falta propuesta principal actual`);\n'
+                 '    assert.ok((await page.locator(\'a[href*="profesionales/"]\').count()) >= 1, `${device}: falta perfil profesional`);\n'
+                 '    assert.ok((await page.locator(\'a[href*="estudiantes/"]\').count()) >= 1, `${device}: falta perfil estudiante`);\n'
+                 '    assert.ok((await page.locator(\'a[href*="recupera/"]\').count()) >= 1, `${device}: falta perfil Recupera`);\n'
+                 '    assert.equal(await page.locator(".kc-testimonial").count(), 6, `${device}: testimonios incompletos`);\n'
+                 '    assert.equal(await page.locator(".kc-stars").count(), 0, `${device}: reapareció rating cuantitativo no verificado`);')
           if old not in s:
               raise SystemExit('launch readiness: stale home assertion not found')
+          p.write_text(s.replace(old, new, 1))
+
+          p = Path('kinecheck/site-v5.css')
+          s = p.read_text()
+          old = '@media(max-width:620px){.hero{padding-top:3rem}'
+          new = '@media(max-width:620px){.section-head h2{overflow-wrap:anywhere}.hero{padding-top:3rem}'
+          if old not in s:
+              raise SystemExit('site-v5.css: mobile media block not found')
+          p.write_text(s.replace(old, new, 1))
+
+          p = Path('productos/mas-alla-del-dolor/index.html')
+          s = p.read_text()
+          old = '../../kinecheck/site-v5.css?v=7'
+          new = '../../kinecheck/site-v5.css?v=8'
+          if old not in s:
+              raise SystemExit('mas-alla-del-dolor: stylesheet version not found')
           p.write_text(s.replace(old, new, 1))
           PY
 
@@ -60,12 +73,14 @@ jobs:
           grep -q 'href="mailto:soporte.kinecheck@gmail.com"' index.html
           ! grep -q '5 de 5 estrellas' tests/tester-visual-audit.spec.mjs
           ! grep -q 'waitUntil: "networkidle"' tests/launch-readiness-post-privacy.spec.mjs
+          grep -q 'overflow-wrap:anywhere' kinecheck/site-v5.css
+          grep -q 'site-v5.css?v=8' productos/mas-alla-del-dolor/index.html
 
       - name: Commit staged fixes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html tests/tester-visual-audit.spec.mjs tests/launch-readiness-post-privacy.spec.mjs
+          git add index.html tests/tester-visual-audit.spec.mjs tests/launch-readiness-post-privacy.spec.mjs kinecheck/site-v5.css productos/mas-alla-del-dolor/index.html
           git diff --cached --check
           git commit -m "fix: repair audit regressions without invented ratings"
           git push origin HEAD:fix/audit-regressions-20260903
