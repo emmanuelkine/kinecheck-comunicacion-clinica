@@ -1,0 +1,267 @@
+/* KineCheck Academy home/layout contract repair. Scoped to authenticated dashboard only. */
+#dashboard-view .kc-home-strip,
+#dashboard-view .kc-home-native-courses,
+#dashboard-view .kc-home-shelf,
+#dashboard-view .kc-home-updates{
+  width:min(1450px,calc(100% - 56px));
+  margin:28px auto 0;
+  min-width:0;
+}
+
+/* Only the Inicio surface should keep these panels visible. */
+body:not([data-kc-view="inicio"]) #dashboard-view .kc-primary-view{
+  display:none!important;
+}
+
+#dashboard-view .kc-home-strip{
+  display:grid;
+  grid-template-columns:minmax(190px,.58fr) minmax(0,1.7fr) auto;
+  align-items:center;
+  gap:24px;
+  padding:24px;
+  border:1px solid rgba(111,236,213,.18);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(10,43,52,.94),rgba(4,25,31,.97));
+  box-shadow:0 18px 52px rgba(0,0,0,.18);
+}
+#dashboard-view .kc-home-strip-head h2,
+#dashboard-view .kc-home-section-heading h2,
+#dashboard-view .kc-home-shelf-head h2,
+#dashboard-view .kc-home-updates h2{
+  margin:.35rem 0 0;
+  color:#f5fbfc;
+  letter-spacing:-.025em;
+}
+#dashboard-view .kc-home-strip-head h2{font-size:clamp(1.45rem,2.2vw,2rem)}
+#dashboard-view .kc-home-strip-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  min-width:0;
+}
+#dashboard-view .kc-home-strip-grid article{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  min-width:0;
+  min-height:92px;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+}
+#dashboard-view .kc-home-strip-grid article>b{
+  display:grid;
+  place-items:center;
+  flex:0 0 32px;
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  color:#032128;
+  background:linear-gradient(145deg,#4ddbd8,#77e4c4);
+  font-weight:950;
+}
+#dashboard-view .kc-home-strip-grid article>div{min-width:0}
+#dashboard-view .kc-home-strip-grid strong{
+  display:block;
+  margin:1px 0 4px;
+  color:#f5ffff;
+  font-size:.9rem;
+  line-height:1.25;
+}
+#dashboard-view .kc-home-strip-grid span{
+  display:block;
+  color:#abc4c9;
+  font-size:.78rem;
+  line-height:1.45;
+}
+#dashboard-view .kc-home-strip>button,
+#dashboard-view .kc-home-section-heading>button{
+  min-height:44px;
+  padding:.7rem 1rem;
+  border:1px solid rgba(111,236,213,.2);
+  border-radius:13px;
+  background:rgba(255,255,255,.045);
+  color:#eefafb;
+  font-weight:850;
+  cursor:pointer;
+  white-space:nowrap;
+}
+#dashboard-view .kc-home-strip>button:hover,
+#dashboard-view .kc-home-strip>button:focus-visible,
+#dashboard-view .kc-home-section-heading>button:hover,
+#dashboard-view .kc-home-section-heading>button:focus-visible{
+  background:rgba(77,219,216,.11);
+  border-color:rgba(77,219,216,.38);
+}
+
+#dashboard-view .kc-home-native-courses{
+  display:grid;
+  gap:28px;
+}
+#dashboard-view .kc-home-native-section{
+  min-width:0;
+}
+#dashboard-view .kc-home-section-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:14px;
+}
+#dashboard-view .kc-home-section-heading>div{min-width:0}
+#dashboard-view .kc-home-section-heading h2{
+  font-size:clamp(1.55rem,2.5vw,2.15rem);
+}
+#dashboard-view .kc-home-native-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  min-width:0;
+}
+#dashboard-view [data-kc-home-apps-grid]>.kc-summary-card:only-child{
+  grid-column:1/-1;
+}
+#dashboard-view .kc-home-native-grid .kc-summary-card{
+  min-width:0;
+  min-height:250px;
+  padding:22px!important;
+  border-radius:22px!important;
+}
+#dashboard-view .kc-home-native-grid .kc-summary-card>div:nth-of-type(2) small{
+  display:block;
+  margin-bottom:5px;
+  color:#a8c0c5!important;
+}
+#dashboard-view .kc-home-native-grid .kc-summary-card h3{
+  margin:0;
+  font-size:clamp(1.18rem,1.7vw,1.45rem);
+}
+#dashboard-view .kc-home-native-grid .kc-summary-card p{
+  line-height:1.55;
+}
+#dashboard-view .kc-home-native-grid .kc-summary-card>button,
+#dashboard-view .kc-home-native-grid .kc-summary-card>a{
+  width:100%;
+  margin-top:auto;
+  min-height:48px;
+}
+#dashboard-view .kc-home-empty{
+  grid-column:1/-1;
+  padding:22px;
+  border:1px dashed rgba(111,236,213,.2);
+  border-radius:18px;
+  background:rgba(255,255,255,.025);
+  color:#adc5ca;
+}
+
+#dashboard-view .kc-home-shelf,
+#dashboard-view .kc-home-updates{
+  padding:24px;
+  border:1px solid rgba(111,236,213,.14);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(8,36,44,.72),rgba(4,24,30,.86));
+}
+#dashboard-view .kc-home-shelf-grid,
+#dashboard-view .kc-home-update-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:16px;
+}
+#dashboard-view .kc-home-shelf-grid article,
+#dashboard-view .kc-home-update-grid article{
+  min-width:0;
+  padding:17px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:17px;
+  background:rgba(255,255,255,.028);
+}
+#dashboard-view .kc-home-shelf-grid article{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+#dashboard-view .kc-home-shelf-grid article>span{
+  display:grid;
+  place-items:center;
+  flex:0 0 38px;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:rgba(77,219,216,.11);
+  color:#70e4d3;
+  font-weight:900;
+}
+#dashboard-view .kc-home-shelf-grid strong,
+#dashboard-view .kc-home-update-grid strong{
+  display:block;
+  color:#f5ffff;
+  line-height:1.3;
+}
+#dashboard-view .kc-home-shelf-grid small,
+#dashboard-view .kc-home-update-grid small{
+  display:block;
+  margin-top:5px;
+  color:#a9c2c7;
+  font-size:.78rem;
+  line-height:1.48;
+}
+#dashboard-view .kc-home-update-grid article>span{
+  display:inline-flex;
+  margin-bottom:9px;
+  padding:5px 8px;
+  border:1px solid rgba(77,219,216,.16);
+  border-radius:999px;
+  background:rgba(77,219,216,.065);
+  color:#73e4d7;
+  font-size:.65rem;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+/* Interaction safety: hidden overlays must never block the dashboard. */
+#dashboard-view [hidden]{display:none!important}
+#dashboard-view button:not(:disabled),
+#dashboard-view a[href]{pointer-events:auto}
+#kinecheck-dynamic-watermark{pointer-events:none!important}
+
+@media(max-width:1100px){
+  #dashboard-view .kc-home-strip{
+    grid-template-columns:1fr;
+    align-items:stretch;
+  }
+  #dashboard-view .kc-home-strip>button{justify-self:start}
+}
+@media(max-width:820px){
+  #dashboard-view .kc-home-strip,
+  #dashboard-view .kc-home-native-courses,
+  #dashboard-view .kc-home-shelf,
+  #dashboard-view .kc-home-updates{
+    width:calc(100% - 32px);
+    margin-top:16px;
+  }
+  #dashboard-view .kc-home-strip-grid,
+  #dashboard-view .kc-home-native-grid,
+  #dashboard-view .kc-home-shelf-grid,
+  #dashboard-view .kc-home-update-grid{
+    grid-template-columns:1fr;
+  }
+  #dashboard-view .kc-home-section-heading{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  #dashboard-view .kc-home-section-heading>button,
+  #dashboard-view .kc-home-strip>button{
+    width:100%;
+    white-space:normal;
+  }
+}
+@media(max-width:520px){
+  #dashboard-view .kc-home-strip,
+  #dashboard-view .kc-home-shelf,
+  #dashboard-view .kc-home-updates{
+    padding:18px;
+    border-radius:20px;
+  }
+}
