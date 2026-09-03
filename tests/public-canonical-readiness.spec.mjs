@@ -87,7 +87,8 @@ try {
     assert.ok((await page.locator('a[href*="metodologia/"]').count()) >= 1, `${device}/inicio: falta acceso a metodología`);
     assert.ok((await page.locator('a[href*="academy/"]').count()) >= 1, `${device}/inicio: falta acceso a Academy`);
     assert.equal(await page.locator('.kc-testimonial').count(), 6, `${device}/inicio: deben existir exactamente 6 testimonios`);
-    assert.equal(await page.locator('.kc-stars[aria-label="5 de 5 estrellas"]').count(), 6, `${device}/inicio: los 6 testimonios deben conservar su rating accesible`);
+    assert.equal(await page.locator('.kc-stars').count(), 0, `${device}/inicio: no deben existir ratings numéricos en los testimonios`);
+    assert.ok(!home.includes("★★★★★"), `${device}/inicio: reaparecieron estrellas en los testimonios`);
     await assertOpenGraph(page, `${device}/inicio`);
     await assertNoHorizontalOverflow(page, `${device}/inicio`);
     await assertImagesLoaded(page, `${device}/inicio`);
