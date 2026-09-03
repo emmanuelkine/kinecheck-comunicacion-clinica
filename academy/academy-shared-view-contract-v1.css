@@ -1,0 +1,364 @@
+/* KineCheck Academy shared view contract — keeps Inicio, Biblioteca and Recursos visually coherent. */
+#dashboard-view #inicio.hero-panel,
+#dashboard-view #biblioteca,
+#dashboard-view #herramientas,
+#dashboard-view #perfil,
+#dashboard-view #explorar{
+  width:min(1450px,calc(100% - 56px));
+  max-width:1450px;
+  margin:28px auto 0;
+  min-width:0;
+}
+
+#dashboard-view #biblioteca,
+#dashboard-view #herramientas,
+#dashboard-view #perfil,
+#dashboard-view #explorar{
+  color:#f5fbfc;
+}
+
+#dashboard-view #biblioteca>.section-heading,
+#dashboard-view #herramientas>.section-heading,
+#dashboard-view #perfil>.section-heading,
+#dashboard-view #explorar>.section-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:22px;
+  margin:0 0 18px;
+  padding:28px;
+  border:1px solid rgba(111,236,213,.18);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 90% 5%,rgba(108,188,255,.10),transparent 22rem),
+    linear-gradient(145deg,rgba(10,43,52,.95),rgba(4,25,31,.98));
+  box-shadow:0 18px 52px rgba(0,0,0,.18);
+}
+
+#dashboard-view #biblioteca>.section-heading h1,
+#dashboard-view #biblioteca>.section-heading h2,
+#dashboard-view #herramientas>.section-heading h1,
+#dashboard-view #herramientas>.section-heading h2,
+#dashboard-view #perfil>.section-heading h1,
+#dashboard-view #perfil>.section-heading h2,
+#dashboard-view #explorar>.section-heading h1,
+#dashboard-view #explorar>.section-heading h2{
+  margin:.4rem 0 .45rem;
+  color:#f7fbfc!important;
+  font-size:clamp(1.8rem,3vw,2.7rem);
+  line-height:1.08;
+  letter-spacing:-.035em;
+}
+
+#dashboard-view #biblioteca>.section-heading p,
+#dashboard-view #herramientas>.section-heading p,
+#dashboard-view #perfil>.section-heading p,
+#dashboard-view #explorar>.section-heading p{
+  max-width:780px;
+  margin:0;
+  color:#b7cdd2!important;
+  font-size:.98rem;
+  line-height:1.6;
+}
+
+/* Biblioteca: same visual language as Inicio. */
+#dashboard-view #biblioteca .library-tools{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin:0 0 12px;
+  padding:16px;
+  border:1px solid rgba(111,236,213,.13);
+  border-radius:18px;
+  background:rgba(8,38,47,.72);
+}
+
+#dashboard-view #biblioteca .search-box{
+  flex:1 1 300px;
+  max-width:420px;
+  margin:0;
+}
+
+#dashboard-view #biblioteca .library-tabs,
+#dashboard-view #biblioteca .library-filter-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+#dashboard-view #biblioteca .library-filter-row{
+  margin:0 0 18px;
+  padding:0 2px;
+}
+
+#dashboard-view #biblioteca .library-tab,
+#dashboard-view #biblioteca .filter-chip{
+  min-height:38px;
+  padding:.55rem .85rem;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:999px;
+  background:rgba(255,255,255,.04);
+  color:#c6dadd;
+  font-weight:800;
+  cursor:pointer;
+}
+
+#dashboard-view #biblioteca .library-tab:hover,
+#dashboard-view #biblioteca .filter-chip:hover,
+#dashboard-view #biblioteca .library-tab.active,
+#dashboard-view #biblioteca .filter-chip.active{
+  color:#f4ffff;
+  border-color:rgba(77,219,216,.34);
+  background:rgba(77,219,216,.11);
+}
+
+#dashboard-view #biblioteca .library-resources{
+  margin-top:26px;
+  padding:24px;
+  border:1px solid rgba(111,236,213,.14);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(9,41,50,.90),rgba(4,24,30,.96));
+}
+
+#dashboard-view #biblioteca .resource-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-top:16px;
+}
+
+#dashboard-view #biblioteca .resource-grid article{
+  min-width:0;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:17px;
+  background:rgba(255,255,255,.035);
+}
+
+#dashboard-view #biblioteca .resource-grid strong{
+  display:block;
+  color:#f5ffff;
+  margin-bottom:6px;
+}
+
+#dashboard-view #biblioteca .resource-grid p{
+  margin:0;
+  color:#a9c1c6;
+  line-height:1.5;
+}
+
+/* Recursos / Herramientas. */
+#dashboard-view #herramientas .apps-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin:0 0 22px;
+}
+
+#dashboard-view #herramientas .apps-grid:empty{
+  display:none;
+}
+
+#dashboard-view #herramientas .kc-resource-app-card{
+  display:grid;
+  gap:12px;
+  min-width:0;
+  padding:20px;
+  border:1px solid rgba(91,205,202,.20);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 90% 0,rgba(108,188,255,.10),transparent 16rem),
+    linear-gradient(145deg,rgba(12,50,60,.94),rgba(5,28,35,.98));
+  box-shadow:0 16px 42px rgba(0,0,0,.16);
+}
+
+#dashboard-view #herramientas .kc-resource-app-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+#dashboard-view #herramientas .kc-resource-app-icon{
+  display:grid;
+  place-items:center;
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  color:#032a33;
+  background:linear-gradient(145deg,#4ddbd8,#77e4c4);
+  font-weight:950;
+}
+
+#dashboard-view #herramientas .kc-resource-app-status{
+  padding:6px 9px;
+  border:1px solid rgba(98,224,173,.20);
+  border-radius:999px;
+  background:rgba(98,224,173,.08);
+  color:#9af0d1;
+  font-size:.72rem;
+  font-weight:900;
+}
+
+#dashboard-view #herramientas .kc-resource-app-card small{
+  color:#79dfd3;
+  font-size:.7rem;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+#dashboard-view #herramientas .kc-resource-app-card h3{
+  margin:0;
+  color:#f5ffff;
+  font-size:1.25rem;
+}
+
+#dashboard-view #herramientas .kc-resource-app-card p{
+  margin:0;
+  color:#b3c9ce;
+  line-height:1.52;
+}
+
+#dashboard-view #herramientas .kc-resource-app-card button{
+  width:100%;
+  min-height:46px;
+  margin-top:3px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(90deg,#4ddbd8,#6cbcff);
+  color:#032128;
+  font-weight:950;
+  cursor:pointer;
+}
+
+#dashboard-view #herramientas .tool-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin-top:0;
+}
+
+#dashboard-view #herramientas .tool-grid article{
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  gap:10px;
+  min-width:0;
+  min-height:210px;
+  padding:20px;
+  border:1px solid rgba(91,205,202,.18);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(11,47,57,.94),rgba(5,27,34,.98));
+  box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+#dashboard-view #herramientas .tool-grid article>span{
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  background:rgba(77,219,216,.10);
+  border:1px solid rgba(77,219,216,.18);
+  color:#75e3d7;
+  font-weight:950;
+}
+
+#dashboard-view #herramientas .tool-grid h3{
+  margin:2px 0 0;
+  color:#f5ffff;
+  font-size:1.12rem;
+}
+
+#dashboard-view #herramientas .tool-grid p{
+  margin:0;
+  color:#adc5ca;
+  line-height:1.5;
+}
+
+#dashboard-view #herramientas .tool-grid small{
+  justify-self:start;
+  padding:6px 9px;
+  border:1px solid rgba(111,236,213,.15);
+  border-radius:999px;
+  background:rgba(255,255,255,.035);
+  color:#9dc1c5;
+  font-size:.72rem;
+  font-weight:800;
+}
+
+/* Explorar and profile get the same content rhythm. */
+#dashboard-view #explorar .explore-grid,
+#dashboard-view #perfil .profile-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+#dashboard-view #explorar .explore-grid article,
+#dashboard-view #perfil .profile-card,
+#dashboard-view #perfil .account-sections>section{
+  min-width:0;
+  padding:20px;
+  border:1px solid rgba(91,205,202,.18);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(11,47,57,.94),rgba(5,27,34,.98));
+  color:#f5fbfc;
+}
+
+@media(max-width:1050px){
+  #dashboard-view #herramientas .apps-grid,
+  #dashboard-view #herramientas .tool-grid,
+  #dashboard-view #biblioteca .resource-grid,
+  #dashboard-view #explorar .explore-grid,
+  #dashboard-view #perfil .profile-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #dashboard-view #biblioteca .library-tools{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  #dashboard-view #biblioteca .search-box{max-width:none}
+}
+
+@media(max-width:720px){
+  #dashboard-view #inicio.hero-panel,
+  #dashboard-view #biblioteca,
+  #dashboard-view #herramientas,
+  #dashboard-view #perfil,
+  #dashboard-view #explorar{
+    width:calc(100% - 28px);
+    margin:14px auto 0;
+  }
+  #dashboard-view #biblioteca>.section-heading,
+  #dashboard-view #herramientas>.section-heading,
+  #dashboard-view #perfil>.section-heading,
+  #dashboard-view #explorar>.section-heading{
+    align-items:flex-start;
+    flex-direction:column;
+    padding:21px;
+    border-radius:20px;
+  }
+  #dashboard-view #herramientas .apps-grid,
+  #dashboard-view #herramientas .tool-grid,
+  #dashboard-view #biblioteca .resource-grid,
+  #dashboard-view #explorar .explore-grid,
+  #dashboard-view #perfil .profile-grid{
+    grid-template-columns:1fr;
+  }
+  #dashboard-view #biblioteca .library-tabs{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:4px;
+  }
+  #dashboard-view #biblioteca .library-tab{
+    flex:0 0 auto;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #dashboard-view #herramientas .kc-resource-app-card button{
+    transition:none!important;
+  }
+}
