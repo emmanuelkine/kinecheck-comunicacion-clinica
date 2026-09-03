@@ -53,12 +53,12 @@
 
 /academy/
   Cache-Control: no-store, max-age=0, must-revalidate
-  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260821-mobilegap1>; rel=preload; as=style
+  Link: </academy/academy.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-v40.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-home-contract-v1.css?v=20260902-repair1>; rel=preload; as=style
   X-Robots-Tag: noindex, nofollow
 
 /academy/index.html
   Cache-Control: no-store, max-age=0, must-revalidate
-  Link: </academy/academy.css?v=41>; rel=preload; as=style, </academy/academy-v40.css?v=41>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260810-premium2>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260821-mobilegap1>; rel=preload; as=style
+  Link: </academy/academy.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-v40.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-premium-theme-v1.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-premium-contrast-fix-v1.css?v=20260902-repair1>; rel=preload; as=style, </academy/academy-home-contract-v1.css?v=20260902-repair1>; rel=preload; as=style
   X-Robots-Tag: noindex, nofollow
 
 /academy/mas-alla-del-dolor.html
