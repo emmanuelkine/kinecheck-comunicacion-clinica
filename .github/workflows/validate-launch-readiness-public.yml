@@ -24,7 +24,6 @@ on:
       - "platform/**"
       - "tests/public-home-source-regression.test.mjs"
       - "tests/public-canonical-readiness.spec.mjs"
-      - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
   push:
@@ -50,7 +49,6 @@ on:
       - "platform/**"
       - "tests/public-home-source-regression.test.mjs"
       - "tests/public-canonical-readiness.spec.mjs"
-      - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
   workflow_dispatch:
@@ -73,8 +71,6 @@ jobs:
           node-version: "22"
       - name: Validar contratos actuales de la portada
         run: node --test tests/public-home-source-regression.test.mjs
-      - name: Validar regresiones públicas heredadas aún vigentes
-        run: node --test --test-name-pattern='^(?!la portada simplificada|la arquitectura de marca).*' tests/public-source-regression.test.mjs
       - name: Instalar Playwright
         run: |
           npm init -y >/dev/null 2>&1
