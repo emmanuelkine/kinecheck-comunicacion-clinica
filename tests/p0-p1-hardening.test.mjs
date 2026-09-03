@@ -4,10 +4,9 @@ import fs from "node:fs";
 
 const read = (path) => fs.readFileSync(path, "utf8");
 
-const seoSlugs = [
+const indexedSeoSlugs = [
   "kinecheck-clinico",
   "kinecheck-estudiante",
-  "kinecheck-recupera",
   "comunicacion-clinica",
   "mas-alla-del-dolor",
   "evidencia-aplicada",
@@ -32,6 +31,7 @@ test("Recupera permanece bloqueado y el consentimiento legacy no activa el flujo
   const page = read("recupera/consentimiento.html");
   const legacy = read("recupera/consentimiento-recupera.js");
   const policy = read("legal/privacidad.html");
+  const product = read("productos/kinecheck-recupera/index.html");
   const headers = read("_headers");
   assert.match(relay, /const PRODUCTS = new Set\(\["kinecheck-estudiante"\]\)/);
   assert.match(relay, /product === PAUSED_PRODUCT[\s\S]*?fail\(PAUSED_MESSAGE\)[\s\S]*?return/);
@@ -41,7 +41,9 @@ test("Recupera permanece bloqueado y el consentimiento legacy no activa el flujo
   assert.match(legacy, /sessionStorage\.removeItem\(HANDOFF_KEY\)/);
   assert.doesNotMatch(legacy, /location\.assign|form\?\.addEventListener/);
   assert.match(policy, /no declara un tratamiento operativo actual de datos de salud/i);
-  assert.match(policy, /25 de agosto de 2026/);
+  assert.match(policy, /Última actualización:/i);
+  assert.match(product, /robots" content="noindex,follow"/i);
+  assert.match(product, /no está disponible/i);
   assert.match(headers, /\/recupera\/consentimiento\.html[\s\S]*?Cache-Control:\s*private, no-store/);
 });
 
@@ -52,10 +54,11 @@ test("KineCheck Clinico mantiene posicionamiento curso + guia en su ficha canoni
   const terms = read("legal/terminos.html");
   const brand = read("docs/brand-architecture.md");
 
-  assert.match(home, /href="\.\/productos\/kinecheck-clinico\/"[\s\S]*?KineCheck Clínico/);
+  assert.match(home, /href="\.\/profesionales\/"/);
   assert.match(product, /curso profesional de evaluación, seguridad y razonamiento musculoesquelético con guía digital complementaria/i);
   assert.match(product, /El curso es el centro del producto; la guía digital complementaria/i);
   assert.match(product, /<link rel="canonical" href="https:\/\/kinecheck\.cl\/productos\/kinecheck-clinico\/">/);
+  assert.match(professionals, /href="\.\.\/productos\/kinecheck-clinico\/"/);
   assert.match(professionals, /curso profesional avanzado de evaluación musculoesquelética, seguridad y razonamiento clínico/i);
   assert.match(professionals, /guía digital complementaria/i);
   assert.doesNotMatch(professionals, /Registro kinésico profesional/i);
@@ -64,16 +67,22 @@ test("KineCheck Clinico mantiene posicionamiento curso + guia en su ficha canoni
   assert.match(brand, /### KineCheck Formación[\s\S]*?KineCheck Clínico/);
 });
 
-test("sitemap publica audiencias y fichas SEO canonicas", () => {
+test("sitemap publica audiencias y fichas SEO indexables", () => {
   const sitemap = read("sitemap.xml");
   for (const route of ["profesionales", "estudiantes", "recupera"]) {
     assert.match(sitemap, new RegExp(`https://kinecheck\\.cl/${route}/`));
   }
-  for (const slug of seoSlugs) {
+  for (const slug of indexedSeoSlugs) {
     const url = `https://kinecheck.cl/productos/${slug}/`;
     assert.ok(sitemap.includes(url), `Falta ${url} en sitemap`);
     const html = read(`productos/${slug}/index.html`);
     assert.ok(html.includes(`<link rel="canonical" href="${url}">`), `Canonical incorrecto: ${slug}`);
     assert.match(html, /application\/ld\+json/);
   }
+
+  const recuperaUrl = "https://kinecheck.cl/productos/kinecheck-recupera/";
+  const recupera = read("productos/kinecheck-recupera/index.html");
+  assert.equal(sitemap.includes(recuperaUrl), false, "La ficha noindex de Recupera no debe publicarse en sitemap");
+  assert.match(recupera, /<meta name="robots" content="noindex,follow">/i);
+  assert.ok(recupera.includes(`<link rel="canonical" href="${recuperaUrl}">`));
 });

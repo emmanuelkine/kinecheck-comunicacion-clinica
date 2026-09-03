@@ -142,8 +142,9 @@ jobs:
           for (const file of ['profesionales/index.html', 'estudiantes/index.html']) {
             if (pages[file].includes('>Ver curso<')) throw new Error(`${file}: conserva CTA “Ver curso” hacia checkout.`);
           }
-          if (!pages['estudiantes/index.html'].includes('<span class="tag">RECOMENDADO</span>')) {
-            throw new Error('Estudiantes no usa el badge unificado RECOMENDADO.');
+          const student = pages['estudiantes/index.html'];
+          if (!student.includes('class="product featured recommended"') || !student.includes('class="recommendation-badge">Empieza aquí</span>')) {
+            throw new Error('Estudiantes no identifica KineCheck Estudiante como inicio recomendado de la ruta.');
           }
           for (const file of ['profesionales/index.html', 'estudiantes/index.html', 'recupera/index.html']) {
             if (!pages[file].includes('<small>SALUD MUSCULOESQUELÉTICA</small>')) throw new Error(`${file}: footer de marca no unificado.`);
