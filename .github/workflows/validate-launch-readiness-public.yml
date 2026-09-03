@@ -22,6 +22,7 @@ on:
       - "productos/**"
       - "academy/**"
       - "platform/**"
+      - "tests/public-home-source-regression.test.mjs"
       - "tests/public-canonical-readiness.spec.mjs"
       - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
@@ -47,6 +48,7 @@ on:
       - "productos/**"
       - "academy/**"
       - "platform/**"
+      - "tests/public-home-source-regression.test.mjs"
       - "tests/public-canonical-readiness.spec.mjs"
       - "tests/public-source-regression.test.mjs"
       - "tests/product-overflow-diagnostic.mjs"
@@ -69,8 +71,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Validar regresiones del HTML inicial
-        run: node --test tests/public-source-regression.test.mjs
+      - name: Validar contratos actuales de la portada
+        run: node --test tests/public-home-source-regression.test.mjs
+      - name: Validar regresiones públicas heredadas aún vigentes
+        run: node --test --test-name-pattern='^(?!la portada simplificada|la arquitectura de marca).*' tests/public-source-regression.test.mjs
       - name: Instalar Playwright
         run: |
           npm init -y >/dev/null 2>&1
