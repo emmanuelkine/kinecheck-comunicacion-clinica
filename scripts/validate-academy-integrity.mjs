@@ -37,6 +37,13 @@ for (const course of active) {
 }
 ok(`${active.length} productos activos están cubiertos por el opener unificado.`);
 
+for (const slug of ['banderas-clinicas', 'ejercicio-terapeutico']) {
+  const course = active.find((item) => item.slug === slug);
+  if (!course) fail(`Curso disponible requerido no está activo: ${slug}`);
+  if (!recognized.has(slug)) fail(`Curso disponible requerido fuera del opener: ${slug}`);
+}
+ok('Banderas Clínicas y Ejercicio Terapéutico permanecen disponibles en Academy.');
+
 for (const course of preparing) {
   if (recognized.has(course.slug)) fail(`Producto en preparación expuesto por opener: ${course.slug}`);
 }
@@ -70,6 +77,8 @@ const requiredFiles = [
   'academy/academy-personalization-v1.js',
   'academy/dolor-musculoesqueletico-relay.html',
   'academy/dolor-lumbar-persistente/index.html',
+  'academy/ejercicio-terapeutico/index.html',
+  'banderas-clinicas/index.html',
   'comunicacion-clinica.html',
   'traumatologia/index.html',
   'kinecheck-clinico-curso/index.html',
