@@ -1,0 +1,71 @@
+name: One-off apply audit fixes 2026-09-03
+
+on:
+  push:
+    branches:
+      - fix/audit-regressions-20260903
+    paths:
+      - .github/workflows/ops-apply-audit-fixes-20260903.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/audit-regressions-20260903
+      - name: Apply exact non-destructive fixes
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          # 1) Restore the functional support email contract without removing the support page.
+          p = Path('index.html')
+          s = p.read_text()
+          old = '<a href="./soporte/">Soporte</a><small>© 2026 KineCheck</small>'
+          new = '<a href="./soporte/">Soporte</a><a href="mailto:soporte.kinecheck@gmail.com">soporte.kinecheck@gmail.com</a><small>© 2026 KineCheck</small>'
+          if old not in s:
+              raise SystemExit('index.html: expected footer anchor not found')
+          p.write_text(s.replace(old, new, 1))
+
+          # 2) Align visual CI with the canonical no-invented-rating policy.
+          p = Path('tests/tester-visual-audit.spec.mjs')
+          s = p.read_text()
+          old = '    await expect(page.locator(\'.kc-stars[aria-label="5 de 5 estrellas"]\')).toHaveCount(6);'
+          new = '    await expect(page.locator(".kc-stars")).toHaveCount(0);\n    await expect(page.locator("body")).not.toContainText("★★★★★");'
+          if old not in s:
+              raise SystemExit('tester visual: stale rating assertion not found')
+          p.write_text(s.replace(old, new, 1))
+
+          # 3) Align post-privacy readiness with the simplified profile-based home and avoid networkidle hangs caused by telemetry.
+          p = Path('tests/launch-readiness-post-privacy.spec.mjs')
+          s = p.read_text().replace('waitUntil: "networkidle"', 'waitUntil: "domcontentloaded"')
+          old = '    assert.ok(home.includes("KineCheck Clínico") && home.includes("KineCheck Estudiante") && home.includes("KineCheck Recupera"), `${device}: portada incompleta`);'
+          new = '''    assert.ok(home.includes("Evaluación musculoesquelética y razonamiento clínico"), `${device}: falta propuesta principal actual`);
+    assert.ok((await page.locator('a[href*="profesionales/"]').count()) >= 1, `${device}: falta perfil profesional`);
+    assert.ok((await page.locator('a[href*="estudiantes/"]').count()) >= 1, `${device}: falta perfil estudiante`);
+    assert.ok((await page.locator('a[href*="recupera/"]').count()) >= 1, `${device}: falta perfil Recupera`);
+    assert.equal(await page.locator(".kc-testimonial").count(), 6, `${device}: testimonios incompletos`);
+    assert.equal(await page.locator(".kc-stars").count(), 0, `${device}: reapareció rating cuantitativo no verificado`);'''
+          if old not in s:
+              raise SystemExit('launch readiness: stale home assertion not found')
+          p.write_text(s.replace(old, new, 1))
+          PY
+
+          node --test tests/public-home-source-regression.test.mjs
+          grep -q 'href="mailto:soporte.kinecheck@gmail.com"' index.html
+          ! grep -q '5 de 5 estrellas' tests/tester-visual-audit.spec.mjs
+          ! grep -q 'waitUntil: "networkidle"' tests/launch-readiness-post-privacy.spec.mjs
+
+      - name: Commit staged fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html tests/tester-visual-audit.spec.mjs tests/launch-readiness-post-privacy.spec.mjs
+          git diff --cached --check
+          git commit -m "fix: repair audit regressions without invented ratings"
+          git push origin HEAD:fix/audit-regressions-20260903
