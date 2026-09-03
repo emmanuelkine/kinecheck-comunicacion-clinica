@@ -1,8 +1,28 @@
 name: Tester Visual Audit
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'home-public-v1.css'
+      - 'kinecheck/**'
+      - 'profesionales/**'
+      - 'estudiantes/**'
+      - 'productos/**'
+      - 'demo/**'
+      - 'academy/**'
+      - 'tests/tester-visual-audit.spec.mjs'
+      - '.github/workflows/tester-visual-audit.yml'
   pull_request:
     paths:
+      - 'index.html'
+      - 'home-public-v1.css'
+      - 'kinecheck/**'
+      - 'profesionales/**'
+      - 'estudiantes/**'
+      - 'productos/**'
+      - 'demo/**'
       - 'academy/**'
       - 'tests/tester-visual-audit.spec.mjs'
       - '.github/workflows/tester-visual-audit.yml'
@@ -27,7 +47,7 @@ jobs:
         run: |
           npm install --no-save @playwright/test@1.55.0
           npx playwright install --with-deps ${{ matrix.browser }}
-      - name: Serve exact PR checkout
+      - name: Serve exact checkout
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/kinecheck-http.log 2>&1 &
           echo $! > /tmp/kinecheck-http.pid
@@ -39,7 +59,7 @@ jobs:
           done
           cat /tmp/kinecheck-http.log
           exit 1
-      - name: Audit exact PR checkout visual contracts
+      - name: Audit exact checkout visual contracts
         env:
           BASE_URL: http://127.0.0.1:4173
         run: npx playwright test tests/tester-visual-audit.spec.mjs --browser=${{ matrix.browser }}
