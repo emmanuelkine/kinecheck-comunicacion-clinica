@@ -27,18 +27,19 @@ test("la portada canónica conserva navegación, accesibilidad y rutas públicas
   assert.equal(count(home, 'class="price"'), 0, "la portada no debe duplicar precios ni checkouts");
 });
 
-test("la portada conserva exactamente seis testimonios anónimos con cinco estrellas accesibles", async () => {
+test("la portada conserva exactamente seis testimonios anónimos sin rating numérico", async () => {
   const home = await read("index.html");
   const css = await read("home-public-v1.css");
+  const js = await read("kinecheck/site-v5.js");
 
   assert.equal(count(home, '<article class="kc-testimonial">'), 6, "deben existir exactamente 6 testimonios");
-  assert.equal(count(home, 'class="kc-testimonial-head"'), 6, "cada testimonio debe tener cabecera visual");
-  assert.equal(count(home, 'class="kc-stars" aria-label="5 de 5 estrellas">★★★★★</span>'), 6, "cada testimonio debe conservar cinco estrellas accesibles");
+  assert.equal(count(home, 'class="kc-stars"'), 0, "no deben existir estrellas en el HTML canónico");
+  assert.equal(count(home, "★★★★★"), 0, "no debe existir un rating visual de cinco estrellas");
   assert.equal(count(home, '<strong>Beta tester profesional</strong>') + count(home, '<strong>Beta tester estudiante</strong>'), 6, "solo deben usarse etiquetas beta genéricas");
   assert.ok(home.includes("no se publican nombres, apellidos, correos electrónicos, instituciones ni otros datos de identificación o contacto"), "falta aviso de privacidad de testimonios");
 
-  assert.ok(css.includes('.kc-testimonial-head{'), "falta estilo de cabecera de testimonio");
-  assert.ok(css.includes('.kc-stars{color:#ffd166'), "falta color dorado de estrellas");
+  assert.ok(css.includes('.kc-stars{display:none!important}'), "falta defensa CSS contra ratings heredados");
+  assert.ok(js.includes("document.querySelectorAll('.kc-stars').forEach(stars=>stars.remove())"), "falta defensa JS contra ratings heredados");
 });
 
 test("la portada referencia assets críticos existentes y versionados", async () => {
@@ -47,8 +48,8 @@ test("la portada referencia assets críticos existentes y versionados", async ()
     "./assets/kinecheck-mark.svg",
     "./kinecheck/site-v5.css?v=7",
     "./kinecheck/site-premium-v1.css?v=1",
-    "./home-public-v1.css?v=20260903-stars1",
-    "./kinecheck/site-v5.js?v=6",
+    "./home-public-v1.css?v=20260903-nostars2",
+    "./kinecheck/site-v5.js?v=7",
     "./metrics-v1.js?v=20260902-commercial1",
   ]) {
     assert.ok(home.includes(asset), `falta asset crítico ${asset}`);
