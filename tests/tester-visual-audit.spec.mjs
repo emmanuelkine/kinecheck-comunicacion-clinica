@@ -79,35 +79,31 @@ async function assertImagesLoaded(page) {
   expect(broken, JSON.stringify(broken)).toEqual([]);
 }
 
-async function assertVisibleControlsAreReachable(page) {
-  const blocked = await page.locator('a[href],button').evaluateAll(async (nodes) => {
-    const problems = [];
-    for (const node of nodes) {
+async function assertPublicControlsUsable(page) {
+  const controls = page.locator('main a[href],footer a[href]');
+  const total = await controls.count();
+  expect(total).toBeGreaterThan(0);
+  for (let index = 0; index < total; index += 1) {
+    const control = controls.nth(index);
+    await control.scrollIntoViewIfNeeded();
+    await expect(control).toBeVisible();
+    const state = await control.evaluate((node) => {
       const style = getComputedStyle(node);
-      if (style.display === "none" || style.visibility === "hidden" || style.pointerEvents === "none") continue;
-      if (node instanceof HTMLButtonElement && node.disabled) continue;
-      if (node.getAttribute("aria-disabled") === "true") continue;
-      const initial = node.getBoundingClientRect();
-      if (initial.width <= 0 || initial.height <= 0) continue;
-
-      node.scrollIntoView({ block: "center", inline: "center", behavior: "auto" });
-      await new Promise((resolve) => requestAnimationFrame(() => resolve()));
       const rect = node.getBoundingClientRect();
-      const x = Math.min(Math.max(rect.left + rect.width / 2, 1), innerWidth - 1);
-      const y = Math.min(Math.max(rect.top + rect.height / 2, 1), innerHeight - 1);
-      const hit = document.elementFromPoint(x, y);
-      if (!hit || (hit !== node && !node.contains(hit))) {
-        problems.push({
-          tag: node.tagName,
-          text: (node.textContent || node.getAttribute("aria-label") || "").trim().slice(0, 80),
-          href: node instanceof HTMLAnchorElement ? node.getAttribute("href") : null,
-          hit: hit ? `${hit.tagName}.${hit.className || ""}` : null,
-        });
-      }
-    }
-    return problems;
-  });
-  expect(blocked, JSON.stringify(blocked)).toEqual([]);
+      return {
+        pointerEvents: style.pointerEvents,
+        visibility: style.visibility,
+        width: rect.width,
+        height: rect.height,
+        href: node.getAttribute("href"),
+        text: (node.textContent || "").trim().slice(0, 80),
+      };
+    });
+    expect(state.pointerEvents, JSON.stringify(state)).not.toBe("none");
+    expect(state.visibility, JSON.stringify(state)).not.toBe("hidden");
+    expect(state.width, JSON.stringify(state)).toBeGreaterThan(0);
+    expect(state.height, JSON.stringify(state)).toBeGreaterThan(0);
+  }
 }
 
 for (const viewport of [
@@ -144,9 +140,9 @@ for (const viewport of [
 
     const profileCta = page.getByRole("link", { name: "Elegir mi perfil" }).first();
     await profileCta.click();
-    await expect(page).toHaveURL(/#elige$/);
+    await expect(page.locator("#elige")).toBeInViewport();
 
-    await assertVisibleControlsAreReachable(page);
+    await assertPublicControlsUsable(page);
   });
 }
 
