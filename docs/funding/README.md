@@ -18,6 +18,9 @@ Esta carpeta separa la **verdad del producto** de la **evidencia de una postulac
 | `BUDGET-AND-PROJECT-PLAN.md` | Presupuesto modular, paquetes de trabajo, Gantt de 12 meses y riesgos. |
 | `ALLIANCE-PIPELINE.md` | Instituciones candidatas, rol esperado, evidencia de encaje y estado real de cada vínculo. |
 | `PITCH-KINECHECK.md` | Pitch maestro en versiones de 40 s, 90 s y 3–5 min. |
+| `UOH-PILOT-DISCOVERY.md` | Ficha de descubrimiento para explorar un piloto con UOH sin afirmar una alianza ni integración inexistente. |
+| `../integrations/INSTITUTIONAL-INTEGRATION-ROADMAP.md` | Roadmap B2B/B2B2C para cohortes, SSO, LTI/API y analítica institucional. |
+| `../integrations/INSTITUTIONAL-API-DRAFT.md` | Contrato conceptual de una futura API institucional; no desplegado. |
 
 ## Estado de las brechas
 
@@ -34,6 +37,8 @@ Esta carpeta separa la **verdad del producto** de la **evidencia de una postulac
 | Riesgos | **Matriz base creada**. |
 | Impacto | **Línea base y protocolo de medición creados**; no se declara eficacia educativa aún. |
 | Alianzas | **Pipeline de candidatos creado**; ninguna se presenta como comprometida sin carta o convenio. |
+| Integración institucional | **Roadmap creado**; API/LTI/SSO institucional siguen sin implementación y requieren descubrimiento con una institución real. |
+| UOH | **Ficha de descubrimiento creada**; no existe todavía alianza, piloto autorizado ni integración técnica. |
 | Pitch | **Versiones reutilizables creadas**. |
 | Persona jurídica/RUT/inicio SII/giro/ventas tributarias | **Hard gate pendiente**: requiere documentación del postulante, no se infiere desde fuentes públicas. |
 
