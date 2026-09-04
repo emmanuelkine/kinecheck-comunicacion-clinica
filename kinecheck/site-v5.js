@@ -7,8 +7,6 @@
 })();
 
 document.addEventListener('DOMContentLoaded',()=>{
-  document.querySelectorAll('.kc-stars').forEach(stars=>stars.remove());
-
   const path=location.pathname;
   const educational=path.includes('/estudiantes')||path.includes('/profesionales');
   if(educational){const main=document.querySelector('main');if(main&&!document.querySelector('.kc-privacy-notice')){const n=document.createElement('div');n.className='kc-privacy-notice';n.innerHTML='<strong>Uso educativo y formativo.</strong> KineCheck Clínico y KineCheck Estudiante no son fichas clínicas ni repositorios de pacientes. En ejercicios, casos, notas o campos de práctica utiliza exclusivamente información ficticia, simulada o debidamente anonimizada. No ingreses nombres, RUT, teléfonos, correos, fotografías identificables, números de ficha ni otros datos que permitan identificar a un paciente real.';main.insertBefore(n,main.children[1]||null);}}
