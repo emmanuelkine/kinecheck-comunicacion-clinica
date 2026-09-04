@@ -23,6 +23,8 @@ on:
       - "academy/**"
       - "platform/**"
       - "tests/public-home-source-regression.test.mjs"
+      - "tests/recupera-commerce-state.test.mjs"
+      - "tests/public-internal-markers.test.mjs"
       - "tests/public-canonical-readiness.spec.mjs"
       - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
@@ -48,6 +50,8 @@ on:
       - "academy/**"
       - "platform/**"
       - "tests/public-home-source-regression.test.mjs"
+      - "tests/recupera-commerce-state.test.mjs"
+      - "tests/public-internal-markers.test.mjs"
       - "tests/public-canonical-readiness.spec.mjs"
       - "tests/product-overflow-diagnostic.mjs"
       - ".github/workflows/validate-launch-readiness-public.yml"
@@ -69,8 +73,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Validar contratos actuales de la portada
-        run: node --test tests/public-home-source-regression.test.mjs
+      - name: Validar contratos y regresiones públicas de lanzamiento
+        run: |
+          node --test \
+            tests/public-home-source-regression.test.mjs \
+            tests/recupera-commerce-state.test.mjs \
+            tests/public-internal-markers.test.mjs
       - name: Instalar Playwright
         run: |
           npm init -y >/dev/null 2>&1
