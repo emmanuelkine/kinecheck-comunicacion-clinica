@@ -13,9 +13,10 @@
     "mi-cuenta": "perfil",
   });
   const VIEWS = new Set(["inicio", "biblioteca", "herramientas", "perfil", "explorar"]);
-  const CONTRAST_KEY = "kinecheck_academy_high_contrast_v1";
-  const SESSION_KEY = "kinecheck_secure_session_v1";
+  const FAVORITES_KEY = "kinecheck_favorite_products_v1";
   let resourcesFrame = 0;
+  let activeLibraryTab = "courses";
+  let libraryFrame = 0;
 
   function normalizeView(value) {
     const raw = String(value || "").replace(/^#/, "").trim().toLowerCase();
@@ -133,7 +134,10 @@
     const grid = document.querySelector("#course-grid");
     if (!grid || grid.dataset.kcResourceObserver === "true") return;
     grid.dataset.kcResourceObserver = "true";
-    const observer = new MutationObserver(scheduleResourceRender);
+    const observer = new MutationObserver(() => {
+      scheduleResourceRender();
+      scheduleLibraryTabApply();
+    });
     observer.observe(grid, {
       childList: true,
       subtree: true,
@@ -142,120 +146,88 @@
     });
   }
 
-  function showToast(text) {
-    const toast = document.querySelector("#kc-toast");
-    if (!toast) return;
-    toast.textContent = text;
-    toast.hidden = false;
-    window.clearTimeout(showToast.timer);
-    showToast.timer = window.setTimeout(() => { toast.hidden = true; }, 4500);
-  }
-
-  function academySession() {
-    const provided = window.KINECHECK_ACADEMY_SESSION?.get?.();
-    if (provided?.access_token) return provided;
+  function readFavorites() {
     try {
-      return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+      const value = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
+      return new Set(Array.isArray(value) ? value.map(String) : []);
     } catch {
-      return null;
+      return new Set();
     }
   }
 
-  function setContrast(enabled) {
-    const active = Boolean(enabled);
-    document.body.classList.toggle("high-contrast", active);
-    try {
-      localStorage.setItem(CONTRAST_KEY, active ? "true" : "false");
-    } catch {
-      // Preferencia visual de mejor esfuerzo.
-    }
-    const button = document.querySelector("#high-contrast-toggle, #contrast-toggle");
-    if (button) {
-      button.textContent = active ? "Desactivar alto contraste" : "Activar alto contraste";
-      button.setAttribute("aria-pressed", active ? "true" : "false");
-    }
+  function setLibraryMessage(text) {
+    const message = document.querySelector("#library-message");
+    if (!message) return;
+    message.textContent = text;
+    message.className = "notice";
+    message.hidden = !text;
   }
 
-  function toggleSupport(force) {
-    const panel = document.querySelector("#support-center");
-    const launcher = document.querySelector("#support-launcher");
-    if (!panel) return;
-    const open = typeof force === "boolean" ? force : panel.hidden;
-    panel.hidden = !open;
-    if (launcher) launcher.setAttribute("aria-expanded", open ? "true" : "false");
-    if (open) panel.querySelector("[data-close-support]")?.focus?.();
+  function applyLibraryTab() {
+    const grid = document.querySelector("#course-grid");
+    if (!grid) return;
+    const favorites = readFavorites();
+    const favoriteMode = activeLibraryTab === "favorites";
+    let visible = 0;
+
+    document.querySelectorAll("[data-library-tab]").forEach((button) => {
+      const selected = String(button.dataset.libraryTab || "") === activeLibraryTab;
+      button.classList.toggle("active", selected);
+      button.setAttribute("aria-selected", selected ? "true" : "false");
+    });
+
+    grid.querySelectorAll(".course-card[data-card-course]").forEach((card) => {
+      const show = !favoriteMode || favorites.has(String(card.dataset.cardCourse || "").trim());
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    grid.querySelectorAll(".course-group").forEach((group) => {
+      group.hidden = favoriteMode && !group.querySelector(".course-card[data-card-course]:not([hidden])");
+    });
+
+    const filterRow = document.querySelector(".library-filter-row");
+    const searchBox = document.querySelector(".library-tools .search-box");
+    const resources = document.querySelector("#biblioteca .library-resources");
+    if (filterRow) filterRow.hidden = favoriteMode;
+    if (searchBox) searchBox.hidden = favoriteMode;
+    if (resources) resources.hidden = favoriteMode;
+
+    setLibraryMessage(favoriteMode && visible === 0
+      ? "Aún no tienes cursos guardados como favoritos. Usa la estrella de una tarjeta para añadirlos aquí."
+      : "");
   }
 
-  async function sendPasswordRecovery() {
-    const CONFIG = window.KINECHECK_ACADEMY_CONFIG;
-    const button = document.querySelector("#profile-reset-password");
-    const email = String(academySession()?.user?.email || "").trim().toLowerCase();
-    if (!CONFIG?.supabaseUrl || !CONFIG?.supabaseAnonKey || !email || !button) {
-      showToast("No pudimos identificar el correo de esta cuenta.");
+  function scheduleLibraryTabApply() {
+    if (libraryFrame) return;
+    libraryFrame = window.requestAnimationFrame(() => {
+      libraryFrame = 0;
+      applyLibraryTab();
+    });
+  }
+
+  function activateLibraryTab(tab) {
+    const next = String(tab || "courses").trim().toLowerCase();
+    if (next === "courses" || next === "favorites") {
+      activeLibraryTab = next;
+      applyLibraryTab();
       return;
     }
 
-    const original = button.innerHTML;
-    button.disabled = true;
-    button.textContent = "Enviando enlace seguro…";
-    try {
-      const redirectTo = `${location.origin}${location.pathname}`;
-      const url = new URL(`${CONFIG.supabaseUrl}/auth/v1/recover`);
-      url.searchParams.set("redirect_to", redirectTo);
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          apikey: CONFIG.supabaseAnonKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data.error_description || data.msg || data.message || "No fue posible enviar el enlace.");
-      }
-      showToast(`Enviamos un enlace de cambio de contraseña a ${email}.`);
-    } catch (error) {
-      showToast(error?.message || "No fue posible enviar el enlace de cambio de contraseña.");
-    } finally {
-      button.disabled = false;
-      button.innerHTML = original;
+    activeLibraryTab = "courses";
+    applyLibraryTab();
+    if (next === "resources") {
+      document.querySelector("#biblioteca .library-resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
     }
-  }
-
-  function wireProfileRc1Controls() {
-    const contrast = document.querySelector("#high-contrast-toggle, #contrast-toggle");
-    if (contrast && contrast.dataset.kcRc1Wired !== "true") {
-      contrast.dataset.kcRc1Wired = "true";
-      let stored = false;
-      try { stored = localStorage.getItem(CONTRAST_KEY) === "true"; } catch { /* noop */ }
-      setContrast(stored);
-      contrast.addEventListener("click", () => setContrast(!document.body.classList.contains("high-contrast")));
+    if (next === "evidence") {
+      const evidence = document.querySelector("#evidencia-semanal");
+      if (evidence) evidence.scrollIntoView({ behavior: "smooth", block: "start" });
+      else setLibraryMessage("La evidencia disponible se encuentra integrada en tus productos y recursos KineCheck.");
+      return;
     }
-
-    const reset = document.querySelector("#profile-reset-password");
-    if (reset && reset.dataset.kcRc1Wired !== "true") {
-      reset.dataset.kcRc1Wired = "true";
-      reset.addEventListener("click", sendPasswordRecovery);
-    }
-
-    document.querySelectorAll("[data-open-support]").forEach((control) => {
-      if (control.dataset.kcRc1Wired === "true") return;
-      control.dataset.kcRc1Wired = "true";
-      control.addEventListener("click", (event) => {
-        event.preventDefault();
-        toggleSupport(true);
-      });
-    });
-
-    document.querySelectorAll("[data-close-support]").forEach((control) => {
-      if (control.dataset.kcRc1Wired === "true") return;
-      control.dataset.kcRc1Wired = "true";
-      control.addEventListener("click", (event) => {
-        event.preventDefault();
-        toggleSupport(false);
-      });
-    });
+    setLibraryMessage(next === "certificates"
+      ? "Los certificados disponibles aparecerán aquí al completar productos que los incluyan."
+      : "Las descargas disponibles aparecen dentro de cada producto y en Recursos.");
   }
 
   function applyView(view) {
@@ -276,7 +248,7 @@
     });
 
     if (next === "herramientas") scheduleResourceRender();
-    if (next === "perfil") wireProfileRc1Controls();
+    if (next === "biblioteca") scheduleLibraryTabApply();
     return next;
   }
 
@@ -292,8 +264,8 @@
     normalizeResourceCopy();
     observeResourceState();
     scheduleResourceRender();
-    wireProfileRc1Controls();
     applyView(currentView());
+    scheduleLibraryTabApply();
 
     const bodyObserver = new MutationObserver(() => {
       applyView(document.body.dataset.kcView || currentView());
@@ -301,21 +273,37 @@
     bodyObserver.observe(document.body, { attributes: true, attributeFilter: ["data-kc-view"] });
   }
 
+  // This listener is intentionally registered before the legacy bridge. It only
+  // repairs which view is visible; product opening remains in the licensed opener.
   window.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
+    const libraryTab = target?.closest?.("[data-library-tab]");
+    if (libraryTab) {
+      event.preventDefault();
+      event.stopPropagation();
+      activateLibraryTab(libraryTab.dataset.libraryTab);
+      return;
+    }
+    const favorite = target?.closest?.(".kc-favorite");
+    if (favorite && activeLibraryTab === "favorites") {
+      window.setTimeout(scheduleLibraryTabApply, 0);
+    }
     const link = target?.closest?.("[data-kc-view-link]");
     if (!link) return;
     applyView(link.dataset.kcViewLink || "inicio");
   }, true);
 
+  window.addEventListener("storage", (event) => {
+    if (event.key === FAVORITES_KEY) scheduleLibraryTabApply();
+  });
   window.addEventListener("popstate", () => applyView(currentView()));
   window.addEventListener("hashchange", () => applyView(currentView()));
   window.addEventListener("pageshow", () => {
     fixBrandAndNavigationStructure();
     normalizeResourceCopy();
     scheduleResourceRender();
-    wireProfileRc1Controls();
     applyView(currentView());
+    scheduleLibraryTabApply();
   });
 
   if (document.readyState === "loading") {
