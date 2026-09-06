@@ -13,6 +13,8 @@
     "mi-cuenta": "perfil",
   });
   const VIEWS = new Set(["inicio", "biblioteca", "herramientas", "perfil", "explorar"]);
+  const CONTRAST_KEY = "kinecheck_academy_high_contrast_v1";
+  const SESSION_KEY = "kinecheck_secure_session_v1";
   let resourcesFrame = 0;
 
   function normalizeView(value) {
@@ -140,6 +142,122 @@
     });
   }
 
+  function showToast(text) {
+    const toast = document.querySelector("#kc-toast");
+    if (!toast) return;
+    toast.textContent = text;
+    toast.hidden = false;
+    window.clearTimeout(showToast.timer);
+    showToast.timer = window.setTimeout(() => { toast.hidden = true; }, 4500);
+  }
+
+  function academySession() {
+    const provided = window.KINECHECK_ACADEMY_SESSION?.get?.();
+    if (provided?.access_token) return provided;
+    try {
+      return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+    } catch {
+      return null;
+    }
+  }
+
+  function setContrast(enabled) {
+    const active = Boolean(enabled);
+    document.body.classList.toggle("high-contrast", active);
+    try {
+      localStorage.setItem(CONTRAST_KEY, active ? "true" : "false");
+    } catch {
+      // Preferencia visual de mejor esfuerzo.
+    }
+    const button = document.querySelector("#high-contrast-toggle, #contrast-toggle");
+    if (button) {
+      button.textContent = active ? "Desactivar alto contraste" : "Activar alto contraste";
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    }
+  }
+
+  function toggleSupport(force) {
+    const panel = document.querySelector("#support-center");
+    const launcher = document.querySelector("#support-launcher");
+    if (!panel) return;
+    const open = typeof force === "boolean" ? force : panel.hidden;
+    panel.hidden = !open;
+    if (launcher) launcher.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) panel.querySelector("[data-close-support]")?.focus?.();
+  }
+
+  async function sendPasswordRecovery() {
+    const CONFIG = window.KINECHECK_ACADEMY_CONFIG;
+    const button = document.querySelector("#profile-reset-password");
+    const email = String(academySession()?.user?.email || "").trim().toLowerCase();
+    if (!CONFIG?.supabaseUrl || !CONFIG?.supabaseAnonKey || !email || !button) {
+      showToast("No pudimos identificar el correo de esta cuenta.");
+      return;
+    }
+
+    const original = button.innerHTML;
+    button.disabled = true;
+    button.textContent = "Enviando enlace seguro…";
+    try {
+      const redirectTo = `${location.origin}${location.pathname}`;
+      const url = new URL(`${CONFIG.supabaseUrl}/auth/v1/recover`);
+      url.searchParams.set("redirect_to", redirectTo);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          apikey: CONFIG.supabaseAnonKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error_description || data.msg || data.message || "No fue posible enviar el enlace.");
+      }
+      showToast(`Enviamos un enlace de cambio de contraseña a ${email}.`);
+    } catch (error) {
+      showToast(error?.message || "No fue posible enviar el enlace de cambio de contraseña.");
+    } finally {
+      button.disabled = false;
+      button.innerHTML = original;
+    }
+  }
+
+  function wireProfileRc1Controls() {
+    const contrast = document.querySelector("#high-contrast-toggle, #contrast-toggle");
+    if (contrast && contrast.dataset.kcRc1Wired !== "true") {
+      contrast.dataset.kcRc1Wired = "true";
+      let stored = false;
+      try { stored = localStorage.getItem(CONTRAST_KEY) === "true"; } catch { /* noop */ }
+      setContrast(stored);
+      contrast.addEventListener("click", () => setContrast(!document.body.classList.contains("high-contrast")));
+    }
+
+    const reset = document.querySelector("#profile-reset-password");
+    if (reset && reset.dataset.kcRc1Wired !== "true") {
+      reset.dataset.kcRc1Wired = "true";
+      reset.addEventListener("click", sendPasswordRecovery);
+    }
+
+    document.querySelectorAll("[data-open-support]").forEach((control) => {
+      if (control.dataset.kcRc1Wired === "true") return;
+      control.dataset.kcRc1Wired = "true";
+      control.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggleSupport(true);
+      });
+    });
+
+    document.querySelectorAll("[data-close-support]").forEach((control) => {
+      if (control.dataset.kcRc1Wired === "true") return;
+      control.dataset.kcRc1Wired = "true";
+      control.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggleSupport(false);
+      });
+    });
+  }
+
   function applyView(view) {
     const next = normalizeView(view);
     if (document.body.dataset.kcView !== next) document.body.dataset.kcView = next;
@@ -158,6 +276,7 @@
     });
 
     if (next === "herramientas") scheduleResourceRender();
+    if (next === "perfil") wireProfileRc1Controls();
     return next;
   }
 
@@ -173,6 +292,7 @@
     normalizeResourceCopy();
     observeResourceState();
     scheduleResourceRender();
+    wireProfileRc1Controls();
     applyView(currentView());
 
     const bodyObserver = new MutationObserver(() => {
@@ -181,8 +301,6 @@
     bodyObserver.observe(document.body, { attributes: true, attributeFilter: ["data-kc-view"] });
   }
 
-  // This listener is intentionally registered before the legacy bridge. It only
-  // repairs which view is visible; product opening remains in the licensed opener.
   window.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     const link = target?.closest?.("[data-kc-view-link]");
@@ -196,6 +314,7 @@
     fixBrandAndNavigationStructure();
     normalizeResourceCopy();
     scheduleResourceRender();
+    wireProfileRc1Controls();
     applyView(currentView());
   });
 
