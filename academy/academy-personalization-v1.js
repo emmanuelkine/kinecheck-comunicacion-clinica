@@ -7,6 +7,8 @@
   const FAVORITES_KEY = "kinecheck_favorite_products_v1";
   const PAUSED_PRODUCT = "kinecheck-recupera";
   const PAUSED_MESSAGE = "Próximamente. No disponible para registro de información mientras se revisa privacidad y protección de datos.";
+  let activeLibraryTab = "courses";
+
   const style = document.createElement("style");
   style.textContent = `
     .kc-favorite{position:absolute;top:14px;right:14px;z-index:2;display:grid;place-items:center;width:36px;height:36px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(5,28,36,.78);color:#cfe2e5;font-size:18px;cursor:pointer;backdrop-filter:blur(8px)}
@@ -19,6 +21,8 @@
     .kc-recommendations__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
     .kc-recommendation{display:grid;gap:8px;min-height:140px;padding:16px;border:1px solid rgba(255,255,255,.10);border-radius:17px;background:rgba(255,255,255,.035);color:inherit;text-align:left;cursor:pointer}.kc-recommendation:hover{border-color:rgba(95,222,210,.36);transform:translateY(-1px)}
     .kc-recommendation small{color:#79dcd0;font-weight:850}.kc-recommendation strong{font-size:1rem;line-height:1.25}.kc-recommendation p{margin:0;color:#a9c0c5;font-size:.78rem;line-height:1.45}
+    #course-grid[data-kc-library-tab="favorites"] .course-card[hidden]{display:none!important}
+    #course-grid[data-kc-library-tab="favorites"] .course-group[hidden]{display:none!important}
     @media(max-width:800px){.kc-recommendations__grid{grid-template-columns:1fr}.kc-recommendations{padding:18px}}
     @media(prefers-reduced-motion:reduce){.kc-recommendation{transform:none!important}}
   `;
@@ -46,6 +50,89 @@
 
   function setText(element, value) {
     if (element && element.textContent !== value) element.textContent = value;
+  }
+
+  function showLibraryMessage(text) {
+    const message = document.querySelector("#library-message");
+    if (!message) return;
+    message.textContent = text;
+    message.className = "notice";
+    message.hidden = !text;
+  }
+
+  function updateLibraryTabUi(tab) {
+    document.querySelectorAll("[data-library-tab]").forEach((button) => {
+      const selected = String(button.dataset.libraryTab || "") === tab;
+      button.classList.toggle("active", selected);
+      button.setAttribute("aria-selected", selected ? "true" : "false");
+    });
+  }
+
+  function applyLibraryTab() {
+    const grid = document.querySelector("#course-grid");
+    if (!grid) return;
+    const filterRow = document.querySelector(".library-filter-row");
+    const search = document.querySelector(".library-tools .search-box");
+    const resources = document.querySelector("#biblioteca .library-resources");
+    const favorites = readFavorites();
+
+    grid.dataset.kcLibraryTab = activeLibraryTab;
+    updateLibraryTabUi(activeLibraryTab);
+
+    if (activeLibraryTab === "favorites") {
+      let visible = 0;
+      grid.querySelectorAll(".course-card[data-card-course]").forEach((card) => {
+        const keep = favorites.has(String(card.dataset.cardCourse || "").trim());
+        card.hidden = !keep;
+        if (keep) visible += 1;
+      });
+      grid.querySelectorAll(".course-group").forEach((group) => {
+        group.hidden = !group.querySelector(".course-card[data-card-course]:not([hidden])");
+      });
+      if (filterRow) filterRow.hidden = true;
+      if (search) search.hidden = true;
+      if (resources) resources.hidden = true;
+      showLibraryMessage(visible ? "" : "Aún no tienes cursos guardados como favoritos. Usa la estrella de una tarjeta para añadirlos aquí.");
+      return;
+    }
+
+    grid.querySelectorAll(".course-card[data-card-course]").forEach((card) => { card.hidden = false; });
+    grid.querySelectorAll(".course-group").forEach((group) => { group.hidden = false; });
+    if (filterRow) filterRow.hidden = false;
+    if (search) search.hidden = false;
+    if (resources) resources.hidden = false;
+    showLibraryMessage("");
+  }
+
+  function activateLibraryTab(tab) {
+    const next = String(tab || "courses");
+    if (next === "courses" || next === "favorites") {
+      activeLibraryTab = next;
+      applyLibraryTab();
+      return;
+    }
+
+    if (next === "resources") {
+      activeLibraryTab = "courses";
+      applyLibraryTab();
+      document.querySelector("#biblioteca .library-resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    if (next === "evidence") {
+      activeLibraryTab = "courses";
+      applyLibraryTab();
+      const evidence = document.querySelector("#evidencia-semanal");
+      if (evidence) evidence.scrollIntoView({ behavior: "smooth", block: "start" });
+      else showLibraryMessage("La evidencia disponible se encuentra integrada en tus productos y recursos KineCheck.");
+      return;
+    }
+
+    activeLibraryTab = "courses";
+    applyLibraryTab();
+    showLibraryMessage(next === "certificates"
+      ? "Los certificados disponibles aparecerán aquí al completar productos que los incluyan."
+      : "Las descargas disponibles aparecen dentro de cada producto y en Recursos.");
   }
 
   function pauseRecuperaConfig() {
@@ -106,6 +193,7 @@
         button.setAttribute("aria-pressed", next.has(slug) ? "true" : "false");
         button.textContent = next.has(slug) ? "★" : "☆";
         renderRecommendations();
+        if (activeLibraryTab === "favorites") applyLibraryTab();
       });
       card.appendChild(button);
     });
@@ -171,10 +259,19 @@
     enforcePausedProduct();
     addFavoriteButtons();
     renderRecommendations();
+    applyLibraryTab();
   }
 
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
+    const libraryTab = target?.closest?.("[data-library-tab]");
+    if (libraryTab) {
+      event.preventDefault();
+      event.stopPropagation();
+      activateLibraryTab(libraryTab.dataset.libraryTab);
+      return;
+    }
+
     const pausedControl = target?.closest?.(pausedSelector());
     if (!pausedControl) return;
     event.preventDefault();
