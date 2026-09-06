@@ -187,7 +187,7 @@ async function fetchWithRetry(url, init = {}, attempts = NETWORK_ATTEMPTS) {
     copy,
     linkVisible = true,
     linkText = "Ingresar al ecosistema KineCheck",
-    linkHref = "../academy/#biblioteca",
+    linkHref = "/academy/#biblioteca",
     retryVisible = true,
     retryText = "Volver a comprobar mi sesión",
   } = {}) {
@@ -411,7 +411,7 @@ async function fetchWithRetry(url, init = {}, attempts = NETWORK_ATTEMPTS) {
   signOut?.addEventListener("click", () => {
     window.KineCheckWatermark?.hide();
     clearAllKineCheckSessions();
-    location.replace("../academy/");
+    location.replace("/academy/");
   });
 
   setProgress(true);
