@@ -44,3 +44,9 @@
   inset:auto!important;
   transform:none!important;
 }
+
+/* RC1: evidence cards remain dark, so their text must stay light in every OS theme. */
+#dashboard-view .evidence-card .evidence-title-block strong{color:#eefbfc!important;text-shadow:none!important}
+#dashboard-view .evidence-card .evidence-title-block span{color:#a9c8ce!important}
+#dashboard-view .evidence-card .evidence-summary-state{color:#b9d4d8!important}
+#dashboard-view .evidence-card .evidence-reference{color:#b8cfd4!important}
