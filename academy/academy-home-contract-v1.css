@@ -226,6 +226,22 @@ body:not([data-kc-view="inicio"]) #dashboard-view .kc-primary-view{
 #dashboard-view a[href]{pointer-events:auto}
 #kinecheck-dynamic-watermark{pointer-events:none!important}
 
+/* RC1 mobile: long names and headings must never escape the viewport. */
+#dashboard-view .hero-panel,
+#dashboard-view .hero-copy,
+#dashboard-view .kc-home-hero,
+#dashboard-view .kc-home-hero h1,
+#dashboard-view .kc-home-hero h1 span,
+#dashboard-view .kc-home-hero h1 em{
+  min-width:0;
+  max-width:100%;
+}
+#dashboard-view #kc-welcome-name{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  hyphens:auto;
+}
+
 @media(max-width:1100px){
   #dashboard-view .kc-home-strip{
     grid-template-columns:1fr;
@@ -257,11 +273,24 @@ body:not([data-kc-view="inicio"]) #dashboard-view .kc-primary-view{
     white-space:normal;
   }
 }
+@media(max-width:640px){
+  #dashboard-view .kc-home-hero h1{
+    font-size:clamp(2.45rem,11vw,3.45rem)!important;
+    line-height:1.04!important;
+    letter-spacing:-.035em!important;
+    overflow-wrap:anywhere;
+  }
+  #dashboard-view #kc-welcome-name{display:inline}
+}
 @media(max-width:520px){
   #dashboard-view .kc-home-strip,
   #dashboard-view .kc-home-shelf,
   #dashboard-view .kc-home-updates{
     padding:18px;
     border-radius:20px;
+  }
+  #dashboard-view .kc-home-hero h1{
+    font-size:clamp(2.15rem,10.6vw,2.9rem)!important;
+    letter-spacing:-.025em!important;
   }
 }
