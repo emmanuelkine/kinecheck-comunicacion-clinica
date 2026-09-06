@@ -1,3 +1,6 @@
+/academy/academy /academy/ 301
+/academy/academy/ /academy/ 301
+/academy/academy/* /academy/:splat 301
 /c/academy/* /academy/:splat 301
 /kinecheck-comunicacion-clinica/academy/* /academy/:splat 301
 /kinecheck-comunicacion-clinica/kinecheck/* /kinecheck/:splat 301
