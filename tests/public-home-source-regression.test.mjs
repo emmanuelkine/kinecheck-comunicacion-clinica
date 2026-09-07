@@ -27,15 +27,15 @@ test("la portada canónica conserva navegación, accesibilidad y rutas públicas
   assert.equal(count(home, 'class="price"'), 0, "la portada no debe duplicar precios ni checkouts");
 });
 
-test("la portada conserva exactamente seis testimonios anónimos sin rating numérico", async () => {
+test("la portada conserva exactamente siete testimonios anónimos sin rating numérico", async () => {
   const home = await read("index.html");
   const css = await read("home-public-v1.css");
   const js = await read("kinecheck/site-v5.js");
 
-  assert.equal(count(home, '<article class="kc-testimonial">'), 6, "deben existir exactamente 6 testimonios");
+  assert.equal(count(home, '<article class="kc-testimonial">'), 7, "deben existir exactamente 7 testimonios");
   assert.equal(count(home, 'class="kc-stars"'), 0, "no deben existir estrellas en el HTML canónico");
   assert.equal(count(home, "★★★★★"), 0, "no debe existir un rating visual de cinco estrellas");
-  assert.equal(count(home, '<strong>Beta tester profesional</strong>') + count(home, '<strong>Beta tester estudiante</strong>'), 6, "solo deben usarse etiquetas beta genéricas");
+  assert.equal(count(home, '<strong>Beta tester profesional</strong>') + count(home, '<strong>Beta tester estudiante</strong>'), 7, "solo deben usarse etiquetas beta genéricas");
   assert.ok(home.includes("no se publican nombres, apellidos, correos electrónicos, instituciones ni otros datos de identificación o contacto"), "falta aviso de privacidad de testimonios");
 
   assert.ok(css.includes('.kc-stars{display:none!important}'), "falta defensa CSS contra ratings heredados");
