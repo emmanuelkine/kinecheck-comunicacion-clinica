@@ -39,7 +39,7 @@ try {
     assert.ok((await page.locator('a[href*="profesionales/"]').count()) >= 1, `${device}: falta perfil profesional`);
     assert.ok((await page.locator('a[href*="estudiantes/"]').count()) >= 1, `${device}: falta perfil estudiante`);
     assert.ok((await page.locator('a[href*="recupera/"]').count()) >= 1, `${device}: falta perfil Recupera`);
-    assert.equal(await page.locator(".kc-testimonial").count(), 7, `${device}: testimonios incompletos`);
+    assert.equal(await page.locator(".kc-testimonial").count(), 8, `${device}: testimonios incompletos`);
     assert.equal(await page.locator(".kc-stars").count(), 0, `${device}: reapareció rating cuantitativo no verificado`);
     await noOverflow(page, `${device}/home`);
 
