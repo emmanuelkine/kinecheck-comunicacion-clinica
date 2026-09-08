@@ -86,7 +86,7 @@ try {
     assert.ok((await page.locator('a[href*="demo/"]').count()) >= 1, `${device}/inicio: falta acceso a demo`);
     assert.ok((await page.locator('a[href*="metodologia/"]').count()) >= 1, `${device}/inicio: falta acceso a metodología`);
     assert.ok((await page.locator('a[href*="academy/"]').count()) >= 1, `${device}/inicio: falta acceso a Academy`);
-    assert.equal(await page.locator('.kc-testimonial').count(), 7, `${device}/inicio: deben existir exactamente 7 testimonios`);
+    assert.equal(await page.locator('.kc-testimonial').count(), 8, `${device}/inicio: deben existir exactamente 8 testimonios`);
     assert.equal(await page.locator('.kc-stars').count(), 0, `${device}/inicio: no deben existir ratings numéricos en los testimonios`);
     assert.ok(!home.includes("★★★★★"), `${device}/inicio: reaparecieron estrellas en los testimonios`);
     await assertOpenGraph(page, `${device}/inicio`);
