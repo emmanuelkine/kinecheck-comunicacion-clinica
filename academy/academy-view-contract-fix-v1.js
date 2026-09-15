@@ -73,6 +73,12 @@
     if (copy) copy.textContent = "Accede a tus aplicaciones activas y consulta las herramientas y recursos que se incorporan al ecosistema.";
   }
 
+  function normalizeProfileDecorativeIcons() {
+    document.querySelectorAll("#perfil .profile-icon").forEach((icon) => {
+      icon.setAttribute("aria-hidden", "true");
+    });
+  }
+
   function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, (character) => ({
       "&": "&amp;",
@@ -262,6 +268,7 @@
     ensureSharedStyles();
     fixBrandAndNavigationStructure();
     normalizeResourceCopy();
+    normalizeProfileDecorativeIcons();
     observeResourceState();
     scheduleResourceRender();
     applyView(currentView());
@@ -301,6 +308,7 @@
   window.addEventListener("pageshow", () => {
     fixBrandAndNavigationStructure();
     normalizeResourceCopy();
+    normalizeProfileDecorativeIcons();
     scheduleResourceRender();
     applyView(currentView());
     scheduleLibraryTabApply();
