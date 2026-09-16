@@ -1,0 +1,117 @@
+{
+  "version": "2026-09-15.1",
+  "lastReviewed": "2026-09-15",
+  "publicUrl": "https://kinecheck.cl/evidencia-msk/",
+  "updates": [
+    {
+      "id": "weekly-2026-09-15",
+      "date": "2026-09-15",
+      "title": "Actualización MSK — septiembre 2026",
+      "status": "publicada",
+      "summary": "Actualización sobre comunicación diagnóstica, dolor musculoesquelético persistente, educación en neurociencia del dolor, precisión diagnóstica cervical e inteligencia artificial aplicada a fisioterapia musculoesquelética.",
+      "items": [
+        {
+          "topic": "Comunicación diagnóstica",
+          "evidenceLevel": "Revisión sistemática — baja certeza",
+          "finding": "Las etiquetas diagnósticas específicas pueden modificar creencias, percepción de gravedad y preferencias de tratamiento; el efecto depende del contexto.",
+          "kinecheckImplication": "Enseñar a comunicar diagnósticos con contexto, pronóstico, función e incertidumbre, evitando explicaciones estructurales deterministas.",
+          "limitations": "La certeza global es baja y los resultados no permiten una regla universal sobre qué etiqueta usar.",
+          "changeType": "matiza",
+          "references": [
+            {
+              "title": "The Effect of Diagnostic Labels on Treatment Preferences and Beliefs in People With Musculoskeletal Pain",
+              "source": "J Orthop Sports Phys Ther",
+              "pmid": "41476426",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41476426/"
+            }
+          ]
+        },
+        {
+          "topic": "Comunicación de hallazgos estructurales",
+          "evidenceLevel": "Editorial — opinión experta",
+          "finding": "Evitar sistemáticamente información anatomopatológica puede ser tan poco útil como presentarla de forma alarmista; la relevancia está en la contextualización.",
+          "kinecheckImplication": "No ocultar hallazgos pertinentes; explicar su significado clínico sin sobredimensionarlos ni minimizarlos.",
+          "limitations": "Es una pieza editorial y no demuestra eficacia clínica.",
+          "changeType": "matiza",
+          "references": [
+            {
+              "title": "Physical Therapists Diagnosing Musculoskeletal Conditions: Don't Hide What Matters—Just Say It the Right Way",
+              "source": "J Orthop Sports Phys Ther",
+              "pmid": "42676083",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42676083/"
+            }
+          ]
+        },
+        {
+          "topic": "Dolor musculoesquelético persistente",
+          "evidenceLevel": "Guía clínica",
+          "finding": "La evaluación y el tratamiento deben centrarse también en función, automanejo, preferencias y resultados significativos para la persona, no solo en dolor o impairments.",
+          "kinecheckImplication": "Dar mayor peso docente a función significativa, participación, autoeficacia, objetivos y decisión compartida.",
+          "limitations": "Las recomendaciones varían según condición clínica y tipo de intervención.",
+          "changeType": "refuerza",
+          "references": [
+            {
+              "title": "Psychological and Other Nonpharmacological Treatment of Chronic Musculoskeletal Pain in Adults",
+              "source": "American Psychological Association",
+              "url": "https://www.apa.org/about/offices/directorates/guidelines/clinical-practice"
+            },
+            {
+              "title": "Clinical practice guideline summary",
+              "source": "American Psychologist",
+              "pmid": "42622855",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42622855/"
+            }
+          ]
+        },
+        {
+          "topic": "Educación en neurociencia del dolor",
+          "evidenceLevel": "Revisión sistemática y metaanálisis",
+          "finding": "La PNE muestra un efecto pequeño sobre dolor y no produce beneficios consistentes en todos los resultados psicosociales o de sueño.",
+          "kinecheckImplication": "No presentar PNE como intervención universal ni afirmar que añadirla siempre mejora los resultados del ejercicio; usarla de forma contextualizada.",
+          "limitations": "Heterogeneidad importante entre estudios y magnitud de efecto pequeña.",
+          "changeType": "matiza",
+          "references": [
+            {
+              "title": "Effect of Pain Neuroscience Education on Pain, Sleep, and Psychosocial Factors in Chronic Musculoskeletal Pain Conditions",
+              "source": "Clinical Journal of Pain",
+              "pmid": "42219959",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42219959/"
+            }
+          ]
+        },
+        {
+          "topic": "Precisión diagnóstica — radiculopatía cervical",
+          "evidenceLevel": "Revisión sistemática y metaanálisis — certeza baja/muy baja",
+          "finding": "Spurling y las pruebas neurodinámicas pueden aportar al razonamiento, pero la evidencia no respalda interpretar una prueba o cluster como diagnóstico definitivo.",
+          "kinecheckImplication": "Mantener el enfoque de probabilidad pretest, historia y examen, pruebas seleccionadas y actualización probabilística.",
+          "limitations": "Base de evidencia escasa y de baja certeza.",
+          "changeType": "refuerza",
+          "references": [
+            {
+              "title": "Diagnostic accuracy of physical examination tests for painful cervical radiculopathy",
+              "source": "BMC Musculoskeletal Disorders",
+              "pmid": "41680685",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41680685/"
+            }
+          ]
+        },
+        {
+          "topic": "IA en fisioterapia musculoesquelética",
+          "evidenceLevel": "Scoping review — evidencia emergente",
+          "finding": "La evidencia sobre modelos generativos en fisioterapia MSK sigue siendo exploratoria, heterogénea y metodológicamente inmadura.",
+          "kinecheckImplication": "Usar IA como apoyo formativo, práctica y feedback; no como evaluador autónomo validado de competencia clínica.",
+          "limitations": "Pocos estudios, marcos de evaluación heterogéneos y rápida evolución tecnológica.",
+          "changeType": "refuerza",
+          "references": [
+            {
+              "title": "Usefulness of ChatGPT in physiotherapy practice: A scoping review",
+              "source": "Physiotherapy",
+              "pmid": "42365742",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42365742/"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
