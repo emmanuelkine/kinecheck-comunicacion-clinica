@@ -1,3 +1,5 @@
+/evidencia-msk /evidencia-msk/index.html 200
+/evidencia-msk/ /evidencia-msk/index.html 200
 /academy/academy /academy/ 301
 /academy/academy/ /academy/ 301
 /academy/academy/* /academy/:splat 301
