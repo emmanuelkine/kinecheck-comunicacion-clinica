@@ -1,8 +1,15 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 
 const baseUrl = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
 const results = [];
 let failed = false;
+
+const spellingRules = [
+  { typo: "mencanismo", correction: "mecanismo" },
+  { typo: "mecanizmo", correction: "mecanismo" },
+  { typo: "mecansimo", correction: "mecanismo" },
+  { typo: "incertumbre", correction: "incertidumbre" },
+];
 
 function record(ok, label, detail = "") {
   results.push({ ok, label, detail });
@@ -12,6 +19,45 @@ function record(ok, label, detail = "") {
 
 async function read(path) {
   return await readFile(new URL(`../${path}`, import.meta.url), "utf8");
+}
+
+function checkSpelling(text, label) {
+  const normalized = String(text || "").toLocaleLowerCase("es");
+  const findings = spellingRules.filter(({ typo }) => normalized.includes(typo));
+
+  if (!findings.length) {
+    record(true, `Ortografía ${label}`);
+    return;
+  }
+
+  for (const { typo, correction } of findings) {
+    record(false, `Ortografía ${label}`, `"${typo}" debe ser "${correction}"`);
+  }
+}
+
+function isPublicCopyFile(path) {
+  return /\.(?:html?|js|json|svg)$/i.test(path);
+}
+
+async function collectPublicCopyFiles(relativePath) {
+  const target = new URL(`../${relativePath}`, import.meta.url);
+  const info = await stat(target);
+
+  if (info.isFile()) {
+    return isPublicCopyFile(relativePath) ? [relativePath] : [];
+  }
+
+  const entries = await readdir(target, { withFileTypes: true });
+  const collected = [];
+  for (const entry of entries) {
+    const child = `${relativePath.replace(/\/$/, "")}/${entry.name}`;
+    if (entry.isDirectory()) {
+      collected.push(...await collectPublicCopyFiles(child));
+    } else if (entry.isFile() && isPublicCopyFile(child)) {
+      collected.push(child);
+    }
+  }
+  return collected;
 }
 
 async function fetchText(path, expectedStatus = 200) {
@@ -53,6 +99,42 @@ for (const path of requiredFiles) {
   }
 }
 
+const publicCopyRoots = [
+  "index.html",
+  "home.js",
+  "home-core-20260806.js",
+  "home-commercial-proof-v1.js",
+  "demo",
+  "evidencia-msk",
+  "metodologia",
+  "productos",
+  "profesionales",
+  "estudiantes",
+  "recupera",
+  "ayuda",
+  "bienvenida",
+  "soporte",
+  "legal",
+  "assets",
+];
+
+const scannedPublicCopy = new Set();
+for (const root of publicCopyRoots) {
+  try {
+    const paths = await collectPublicCopyFiles(root);
+    for (const path of paths) {
+      if (scannedPublicCopy.has(path)) continue;
+      scannedPublicCopy.add(path);
+      const source = await read(path);
+      checkSpelling(source, `fuente pública ${path}`);
+    }
+  } catch (error) {
+    record(false, `Escaneo ortográfico ${root}`, error?.message || "unavailable");
+  }
+}
+
+record(scannedPublicCopy.size > 0, "Escaneo ortográfico de contenido público", `${scannedPublicCopy.size} archivos revisados`);
+
 const securityBootstrap = await read("platform/security-bootstrap.js");
 record(securityBootstrap.includes("onboarding.js"), "Platform loads onboarding", "security bootstrap reference");
 record(securityBootstrap.includes("../soporte/"), "Platform routes support", "automated support path");
@@ -77,6 +159,13 @@ for (const path of ["/", "/productos/kinecheck-clinico/", "/ayuda/", "/bienvenid
 
 const publicPaths = [
   "/",
+  "/demo/",
+  "/evidencia-msk/",
+  "/metodologia/",
+  "/productos/",
+  "/profesionales/",
+  "/estudiantes/",
+  "/recupera/",
   "/productos/kinecheck-clinico/",
   "/ayuda/",
   "/bienvenida/?producto=kinecheck-clinico",
@@ -94,6 +183,11 @@ const publicPaths = [
 for (const path of publicPaths) {
   const { response, text } = await fetchText(path);
   if (!response) continue;
+
+  if ((response.headers.get("content-type") || "").match(/(?:text\/html|application\/json|image\/svg\+xml|text\/plain)/i)) {
+    checkSpelling(text, `despliegue ${path}`);
+  }
+
   if (path === "/ayuda/") record(text.includes("Centro de Ayuda"), "Deployed help center has expected content");
   if (path.startsWith("/bienvenida/")) record(text.includes("Primeros pasos") || text.includes("BIENVENIDO A KINECHECK"), "Deployed welcome guide has expected content");
   if (path === "/robots.txt") record(text.includes("sitemap.xml"), "Deployed robots is valid");
@@ -104,9 +198,11 @@ const report = {
   generatedAt: new Date().toISOString(),
   baseUrl,
   passed: !failed,
+  spellingRules,
+  scannedPublicCopyFiles: scannedPublicCopy.size,
   results,
 };
-await import("node:fs/promises").then(({ writeFile }) => writeFile("qa-publication-readiness-report.json", JSON.stringify(report, null, 2)));
+await writeFile("qa-publication-readiness-report.json", JSON.stringify(report, null, 2));
 
 if (failed) {
   console.error("Publication readiness QA found blocking issues.");
