@@ -34,7 +34,7 @@
     if (!latestRoot || !archiveRoot) return;
 
     try {
-      const response = await fetch('/evidencia-msk/actualizaciones.json?v=20260916-1', {
+      const response = await fetch('/evidencia-msk/actualizaciones.json?v=20260916-2', {
         cache: 'no-store'
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -51,6 +51,7 @@
 
       const premiumUrl = latest.premiumUrl || data.premiumUrl || '/productos/evidencia-aplicada/';
       const premiumLabel = latest.premiumLabel || 'Ver análisis completo';
+      const sourceUrl = latest.sourceUrl || '';
 
       latestRoot.innerHTML = `
         <article class="digest">
@@ -61,7 +62,10 @@
             ${(latest.highlights || []).map((item) => `<div class="highlight">${esc(item)}</div>`).join('')}
           </div>
           <div class="practice"><strong>Qué cambia:</strong> ${esc(latest.practiceMessage)}</div>
-          <div class="actions"><a class="primary" href="${esc(premiumUrl)}">${esc(premiumLabel)}</a></div>
+          <div class="actions">
+            <a class="primary" href="${esc(premiumUrl)}">${esc(premiumLabel)}</a>
+            ${sourceUrl ? `<a class="secondary" href="${esc(sourceUrl)}" target="_blank" rel="noopener noreferrer">Abrir fuente original</a>` : ''}
+          </div>
         </article>`;
 
       archiveRoot.innerHTML = updates.map((update, index) => `
