@@ -1,9 +1,27 @@
 {
-  "version": "2026-09-15.3",
-  "lastReviewed": "2026-09-15",
+  "version": "2026-09-16.1",
+  "lastReviewed": "2026-09-16",
   "contentClassification": "public-evidence-digest",
   "editorialNote": "Academy muestra solo un resumen breve de la actualización semanal. El análisis metodológico, limitaciones, aplicabilidad clínica, implicaciones docentes y desarrollo completo están reservados para KineCheck Evidencia Aplicada.",
   "items": [
+    {
+      "id": "summary-2026-09-16-manual-therapy-mechanisms",
+      "alertDate": "2026-09-16",
+      "source": "Complementary Therapies in Medicine",
+      "status": "Verificada",
+      "title": "Terapia manual: respuesta observada no equivale a mecanismo causal",
+      "authors": "Cook CE, Keter D, Napadow V, et al.",
+      "citation": "Comentario metodológico. Complement Ther Med. 2026;100:103393.",
+      "publicationDate": "2026-09",
+      "studyType": "Comentario metodológico",
+      "population": "Discute investigación mecanística sobre manipulaciones basadas en fuerza; no corresponde a un ensayo clínico con una población única.",
+      "mainFinding": "Los mecanismos propuestos son interrelacionados, dinámicos y variables entre personas. Un cambio posterior a una técnica no demuestra por sí solo que ese cambio sea el mediador causal del resultado clínico.",
+      "quality": "No evalúa eficacia ni superioridad de técnicas. Su aporte es metodológico y orienta cómo investigar causalidad con mayor rigor.",
+      "clinicalImplication": "Reevaluar respuestas clínicas sin convertirlas automáticamente en narrativas causales específicas.",
+      "teachingImplication": "Separar hallazgo observado, hipótesis mecanística y mecanismo causal demostrado.",
+      "topics": ["Terapia manual", "Mecanismos", "Causalidad", "Razonamiento clínico"],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42250858/"
+    },
     {
       "id": "summary-2026-09-15-diagnostico",
       "alertDate": "2026-09-15",
