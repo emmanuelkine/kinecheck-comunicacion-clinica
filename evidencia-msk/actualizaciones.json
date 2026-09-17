@@ -1,9 +1,26 @@
 {
-  "version": "2026-09-15.2",
-  "lastReviewed": "2026-09-15",
+  "version": "2026-09-16.1",
+  "lastReviewed": "2026-09-16",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
   "updates": [
+    {
+      "id": "manual-therapy-mechanisms-2026",
+      "date": "2026-09-16",
+      "title": "Terapia manual: una respuesta no demuestra el mecanismo causal",
+      "summary": "Cook y colaboradores (2026) plantean que investigar cómo actúa la terapia manual exige superar explicaciones lineales. Los mecanismos propuestos interactúan entre sistemas, cambian con el tiempo y el contexto, varían entre personas y con frecuencia se estudian con diseños que no permiten demostrar causalidad.",
+      "highlights": [
+        "Cambio observado ≠ mecanismo causal: menos dolor, mayor ROM o una respuesta fisiológica después de una técnica no demuestran por sí solos qué proceso produjo la mejoría.",
+        "Los mecanismos son multisistémicos: el artículo integra dominios biomecánicos, neurológicos, neuroinmunes, neurovasculares, neuroendocrinos, neuromusculares y otros que pueden interactuar entre sí.",
+        "La respuesta es dinámica y contextual: tiempo, profesional, ambiente, parámetros de fuerza y características individuales pueden modificar lo que se mide.",
+        "Este artículo no evalúa eficacia clínica. Es un comentario metodológico que pide mejor estandarización, mediciones longitudinales y diseños capaces de estudiar mediación y causalidad."
+      ],
+      "practiceMessage": "Usa las respuestas inmediatas como información para reevaluar, pero evita convertirlas automáticamente en explicaciones causales específicas. Separar hallazgo observado, hipótesis mecanística y mecanismo demostrado mejora la comunicación y el razonamiento clínico.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42250858/",
+      "doi": "10.1016/j.ctim.2026.103393"
+    },
     {
       "id": "weekly-2026-09-15",
       "date": "2026-09-15",
