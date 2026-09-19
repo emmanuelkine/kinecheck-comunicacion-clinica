@@ -84,7 +84,11 @@ function authHeaders(token) {
 }
 
 async function request(path, options = {}) {
-  const response = await fetch(`${CONFIG.supabaseUrl}${path}`, {
+  // Password authentication uses the server-side limiter instead of the direct Auth endpoint.
+  const safePath = path === "/auth/v1/token?grant_type=password"
+    ? "/functions/v1/platform-login"
+    : path;
+  const response = await fetch(`${CONFIG.supabaseUrl}${safePath}`, {
     ...options,
     headers: { ...authHeaders(options.token), ...(options.headers || {}) },
   });
