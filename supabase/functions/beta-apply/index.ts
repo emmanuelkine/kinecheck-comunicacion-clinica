@@ -98,13 +98,21 @@ Deno.serve(async (req: Request) => {
 
   const { data: existing, error: readError } = await admin
     .from("beta_applications")
-    .select("id,submission_count,status")
+    .select("id,submission_count,status,last_submitted_at")
     .eq("email", email)
     .maybeSingle();
 
   if (readError) {
     console.error("beta-apply read", readError.code);
     return json(origin, { message: "No fue posible registrar la postulación." }, 500);
+  }
+
+  // Throttle repeated submissions for the same email without exposing applicant status.
+  const lastSubmittedAt = existing?.last_submitted_at
+    ? new Date(existing.last_submitted_at).getTime()
+    : 0;
+  if (Number.isFinite(lastSubmittedAt) && lastSubmittedAt > 0 && Date.now() - lastSubmittedAt < 15 * 60 * 1000) {
+    return json(origin, { message: "Ya recibimos una postulación reciente. Espera 15 minutos antes de volver a enviarla." }, 429);
   }
 
   const payload = {
