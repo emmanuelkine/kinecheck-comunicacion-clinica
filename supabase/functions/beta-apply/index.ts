@@ -96,6 +96,37 @@ Deno.serve(async (req: Request) => {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
+  // Atomic server-side throttling: do not store raw IP addresses or applicant emails.
+  // The per-email limit also applies if the edge does not supply a trusted client IP.
+  const hashLimitKey = async (kind: string, value: string) => {
+    const input = new TextEncoder().encode(`${serviceRoleKey}|beta-apply|${kind}|${value}`);
+    const digest = await crypto.subtle.digest("SHA-256", input);
+    return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+  };
+  const applyLimit = async (kind: string, value: string, limit: number, windowSeconds: number) => {
+    const keyHash = await hashLimitKey(kind, value);
+    const { data, error } = await admin.rpc("kinecheck_try_public_rate_limit", {
+      p_key_hash: keyHash,
+      p_limit: limit,
+      p_window_seconds: windowSeconds,
+    });
+    if (error) {
+      console.error("beta-apply limit", error.code);
+      return "unavailable";
+    }
+    return data === true ? "allowed" : "limited";
+  };
+
+  const ip = String(req.headers.get("cf-connecting-ip") || "").trim().slice(0, 64);
+  if (ip) {
+    const ipCheck = await applyLimit("ip", ip, 30, 3600);
+    if (ipCheck === "unavailable") return json(origin, { message: "El registro beta no está disponible temporalmente." }, 503);
+    if (ipCheck === "limited") return json(origin, { message: "Demasiadas solicitudes recientes. Espera antes de volver a intentar." }, 429);
+  }
+  const emailCheck = await applyLimit("email", email, 4, 3600);
+  if (emailCheck === "unavailable") return json(origin, { message: "El registro beta no está disponible temporalmente." }, 503);
+  if (emailCheck === "limited") return json(origin, { message: "Demasiadas solicitudes recientes. Espera antes de volver a intentar." }, 429);
+
   const { data: existing, error: readError } = await admin
     .from("beta_applications")
     .select("id,submission_count,status,last_submitted_at")
