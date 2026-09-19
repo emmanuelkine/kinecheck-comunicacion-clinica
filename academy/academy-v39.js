@@ -966,7 +966,7 @@ form.addEventListener("submit", async (event) => {
 
   try {
     let session = mode === "login"
-      ? await request("/auth/v1/token?grant_type=password", {
+      ? await request("/functions/v1/platform-login", {
           method: "POST",
           body: JSON.stringify({ email, password }),
         })
