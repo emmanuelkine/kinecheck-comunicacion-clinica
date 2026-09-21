@@ -1,9 +1,24 @@
 {
-  "version": "2026-09-16.1",
-  "lastReviewed": "2026-09-16",
+  "version": "2026-09-21.1",
+  "lastReviewed": "2026-09-21",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
   "updates": [
+    {
+      "id": "weekly-2026-09-21",
+      "date": "2026-09-21",
+      "title": "Ejercicio MSK: dosificar sin convertir promedios en recetas",
+      "summary": "La evidencia reciente refuerza una idea práctica: frecuencia, intensidad, volumen y modalidad pueden orientar la prescripción, pero la dosis útil sigue dependiendo de tolerancia, objetivos, factibilidad y adherencia.",
+      "highlights": [
+        "Dolor lumbar crónico: una mayor frecuencia de ejercicio puede mejorar discapacidad a largo plazo, pero no aparece un componente FITT único con superioridad clínicamente relevante.",
+        "Artrosis de rodilla: la intensidad moderada muestra estimaciones favorables, pero la certeza es baja a muy baja y las cifras de volumen no son dosis óptimas universales.",
+        "Restricción de flujo sanguíneo: puede aportar cuando se necesitan cargas externas bajas; no mostró ventaja sobre entrenamiento de intensidad moderada-alta para fuerza.",
+        "Dolor plantar: el estiramiento no ha demostrado superioridad global frente a otras opciones conservadoras y la certeza disponible es muy baja."
+      ],
+      "practiceMessage": "Prescribe una dosis que la persona pueda sostener y progresar. Usa los promedios de la literatura como punto de partida, no como umbrales rígidos, y reevalúa función, tolerancia y adherencia.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/"
+    },
     {
       "id": "manual-therapy-mechanisms-2026",
       "date": "2026-09-16",
