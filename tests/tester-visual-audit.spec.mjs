@@ -148,6 +148,50 @@ for (const viewport of [
 }
 
 for (const viewport of [
+  { name: "resource-mobile", width: 390, height: 844 },
+  { name: "resource-tablet", width: 820, height: 1180 },
+  { name: "resource-desktop", width: 1440, height: 1000 },
+]) {
+  test(`${viewport.name}: recurso gratuito, referencias y desafío son utilizables`, async ({ page }) => {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    const response = await page.goto(`${BASE}/recursos/etiquetas-diagnosticas-y-dolor/?qa=resource-visual-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
+
+    expect(response?.status()).toBe(200);
+    await expect(page.locator("h1")).toContainText("No basta con nombrar el dolor");
+    await expect(page.locator('input[name="q"]')).toHaveCount(3);
+    await expect(page.locator('input[type="password"]')).toHaveCount(0);
+    await expect(page.locator('#referencias a[href="https://doi.org/10.1016/j.jphys.2025.06.011"]')).toHaveCount(1);
+    await expect(page.locator('#referencias a[href="https://doi.org/10.2519/jospt.2025.13759"]')).toHaveCount(1);
+
+    await assertNoOverflow(page);
+    await assertNoClippedHeadings(page);
+    await assertImagesLoaded(page);
+
+    if (viewport.width <= 700) {
+      const menu = page.locator("[data-menu-button]");
+      const nav = page.locator("[data-public-nav]");
+      await expect(menu).toBeVisible();
+      await menu.click();
+      await expect(menu).toHaveAttribute("aria-expanded", "true");
+      await expect(nav).toBeVisible();
+      await menu.click();
+      await expect(menu).toHaveAttribute("aria-expanded", "false");
+    }
+
+    await page.locator("#check").click();
+    await expect(page.locator("#feedback")).toContainText("Selecciona una respuesta");
+    await page.locator('input[value="a"]').check();
+    await page.locator("#check").click();
+    await expect(page.locator("#feedback")).toContainText("Revisa tu elección");
+    await page.locator('input[value="b"]').check();
+    await page.locator("#check").click();
+    await expect(page.locator("#feedback")).toContainText("Correcto");
+
+    await assertPublicControlsUsable(page);
+  });
+}
+
+for (const viewport of [
   { name: "mobile", width: 390, height: 844 },
   { name: "tablet", width: 820, height: 1180 },
 ]) {
