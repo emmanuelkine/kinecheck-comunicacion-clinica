@@ -1,0 +1,28 @@
+/* The free library has a single-column intro. Shared commercial hero rules
+   are intentionally overridden here so its heading and calls to action flow. */
+body.kc-free .hero {
+  display: block;
+  grid-template-columns: none;
+  min-height: 0;
+  margin: 26px 0 34px;
+  padding: clamp(30px, 5vw, 58px);
+  border: 1px solid rgba(114, 220, 225, .3);
+  border-radius: 24px;
+  background: linear-gradient(115deg, rgba(3, 18, 29, .96), rgba(7, 36, 48, .9));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .26);
+}
+body.kc-free .hero h1 {
+  max-width: 830px;
+  margin: 12px 0 20px;
+  font-size: clamp(2.35rem, 5vw, 4rem);
+  line-height: 1.07;
+  letter-spacing: -.04em;
+}
+body.kc-free .hero p { max-width: 760px; }
+body.kc-free .hero .actions { justify-content: flex-start; }
+body.kc-free .top { background: rgba(3, 17, 25, .95); }
+
+@media (max-width: 620px) {
+  body.kc-free .hero { margin: 16px 0 28px; padding: 26px 20px; }
+  body.kc-free .hero h1 { font-size: clamp(2.05rem, 9vw, 2.65rem); }
+}
