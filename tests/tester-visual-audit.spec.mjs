@@ -2,6 +2,14 @@ import { test, expect } from "@playwright/test";
 
 const BASE = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/\/$/, "");
 
+// Visual QA follows the same explicit refusal path available to any visitor.
+// The optional analytics preference must never block the clinical exercise controls.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    try { localStorage.setItem("kc_optional_metrics_choice_v1", "no"); } catch { /* Restricted storage. */ }
+  });
+});
+
 function rgb(value) {
   const match = String(value).match(/rgba?\((\d+)[, ]+(\d+)[, ]+(\d+)/i);
   if (!match) throw new Error(`Color no interpretable: ${value}`);
