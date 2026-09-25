@@ -290,15 +290,20 @@ for (const viewport of [
       const response = await page.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: 60000 });
       expect(response?.status()).toBe(200);
 
-      const logo = page.locator(".kc-brand-3d:visible picture img:visible").first();
+      const logo = route.name === "academy-acceso"
+        ? page.locator(`${viewport.name === "mobile" ? ".login-card" : ".login-showcase"} .kc-brand-3d picture img:visible`).first()
+        : page.locator("header .kc-brand-3d picture img:visible").first();
       await expect(logo).toBeVisible();
       await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
+      await logo.evaluate((image) => image.decode());
       const geometry = await logo.evaluate((image) => {
         const rect = image.getBoundingClientRect();
-        return { x: rect.x, right: rect.right, width: rect.width, source: image.currentSrc };
+        return { x: rect.x, y: rect.y, right: rect.right, bottom: rect.bottom, width: rect.width, source: image.currentSrc };
       });
       expect(geometry.x, JSON.stringify(geometry)).toBeGreaterThanOrEqual(-1);
+      expect(geometry.y, JSON.stringify(geometry)).toBeGreaterThanOrEqual(-1);
       expect(geometry.right, JSON.stringify(geometry)).toBeLessThanOrEqual(viewport.width + 1);
+      expect(geometry.bottom, JSON.stringify(geometry)).toBeLessThanOrEqual(viewport.height + 1);
       expect(geometry.width).toBeGreaterThan(100);
       expect(geometry.source).toContain(viewport.name === "mobile" ? "compact.webp" : "header.webp");
       await assertNoOverflow(page);

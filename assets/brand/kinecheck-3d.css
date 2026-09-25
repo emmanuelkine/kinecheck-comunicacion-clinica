@@ -70,4 +70,11 @@ header:has(> .kc-resource-logo) {
   .site-header:has(.kc-brand-3d):not(:has(.menu-button)),
   .guide-header:has(.kc-brand-3d) { flex-wrap: wrap; }
   .kc-resource-logo img { width: min(165px, 54vw); }
+  /* Long course titles should remain readable beside the compact mark. */
+  .page-hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.15rem, 8.7vw, 2.7rem);
+    line-height: 1.04;
+    overflow-wrap: anywhere;
+  }
 }
