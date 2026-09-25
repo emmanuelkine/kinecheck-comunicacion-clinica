@@ -46,11 +46,11 @@ test("la portada referencia assets críticos existentes y versionados", async ()
   const home = await read("index.html");
   const baseCss = await read("kinecheck/site-v5.css");
   const sharedCss = await read("assets/kc-clinical-site-v1.css");
-  assert.ok(baseCss.includes("kc-clinical-site-v1.css?v=20260924-1"), "falta tema clínico compartido");
-  assert.ok(sharedCss.includes("academy-hero-clean.jpg"), "falta recurso fotográfico de la nueva identidad");
+  assert.ok(baseCss.includes("kc-clinical-site-v1.css?v=20260924-room2"), "falta tema clínico compartido");
+  assert.ok(sharedCss.includes("clinical-room-no-people-20260924.png"), "falta fondo clínico sin personas");
   for (const asset of [
     "./assets/kinecheck-mark.svg",
-    "./kinecheck/site-v5.css?v=20260924-clinical1",
+    "./kinecheck/site-v5.css?v=20260924-room2",
     "./kinecheck/site-premium-v1.css?v=1",
     "./home-public-v1.css?v=20260903-nostars2",
     "./kinecheck/site-v5.js?v=7",

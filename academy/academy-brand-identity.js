@@ -176,7 +176,7 @@
       .login-layout::before{
         background-image:
           linear-gradient(90deg,rgba(2,13,20,.96) 0%,rgba(2,13,20,.86) 42%,rgba(2,13,20,.55) 100%),
-          url("./academy-hero-ecosistema-v1.webp")!important;
+          var(--kc-clinical-photo)!important;
         background-size:cover!important;
         background-position:center center!important;
         opacity:.82!important;
