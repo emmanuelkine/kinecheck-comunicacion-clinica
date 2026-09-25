@@ -134,6 +134,12 @@ Deno.serve(async (req: Request) => {
   const body = await req.json().catch(() => null);
   if (!body || typeof body !== "object") return json(origin, { message: "Solicitud inválida." }, 400);
 
+  // Privacy safeguard: legacy cached clients cannot persist optional analytics.
+  // This marker is a compatibility check, not independent proof of consent.
+  if ((body as any).consentVersion !== "20260925-v1") {
+    return json(origin, { ok: true, recorded: false, reason: "consent_required" }, 202);
+  }
+
   const eventId = clean((body as any).eventId, 36).toLowerCase();
   const eventName = clean((body as any).eventName, 40);
   const rawPath = clean((body as any).path, 300);
