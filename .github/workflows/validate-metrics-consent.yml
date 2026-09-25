@@ -1,0 +1,33 @@
+name: Validate optional metrics consent
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - metrics-v1.js
+      - assets/metrics-privacy-v1.css
+      - legal/privacidad.html
+      - tests/metrics-consent.test.mjs
+      - .github/workflows/validate-metrics-consent.yml
+  pull_request:
+    paths:
+      - metrics-v1.js
+      - assets/metrics-privacy-v1.css
+      - legal/privacidad.html
+      - tests/metrics-consent.test.mjs
+      - .github/workflows/validate-metrics-consent.yml
+
+permissions:
+  contents: read
+
+jobs:
+  consent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify consent-first analytics and policy
+        run: node --test tests/metrics-consent.test.mjs
