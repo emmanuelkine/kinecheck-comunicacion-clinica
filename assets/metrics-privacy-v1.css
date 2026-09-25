@@ -1,0 +1,16 @@
+/* Preferencias de medición opcional: UI accesible, CSS de primera parte. */
+#kc-metrics-panel,#kc-metrics-toggle{font:inherit;box-sizing:border-box}
+#kc-metrics-panel *,#kc-metrics-toggle *{box-sizing:border-box}
+#kc-metrics-panel[hidden],#kc-metrics-toggle[hidden]{display:none!important}
+#kc-metrics-panel{position:fixed;z-index:2147483000;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));width:min(440px,calc(100vw - 24px));max-height:min(78vh,530px);overflow:auto;padding:19px;border:1px solid #67d5d8;border-radius:18px;background:#062530;color:#f5ffff;box-shadow:0 15px 55px rgba(0,0,0,.72);font-family:Inter,system-ui,-apple-system,sans-serif}
+#kc-metrics-panel h2{font-size:1.1rem;line-height:1.3;color:#fff;margin:0 0 8px}
+#kc-metrics-panel p{font-size:.91rem;line-height:1.55;color:#e0eeee;margin:0 0 12px}
+#kc-metrics-panel a{color:#a9fff3;text-decoration:underline}
+#kc-metrics-panel .kc-metrics-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+#kc-metrics-panel button,#kc-metrics-toggle{font:inherit;cursor:pointer;min-height:44px;border-radius:11px;font-size:.88rem;font-weight:700}
+#kc-metrics-panel button{padding:10px 14px;border:1px solid #76ded8;color:#f5ffff;background:#155160}
+#kc-metrics-panel button[data-kc-metrics="yes"]{background:#61dace;border-color:#61dace;color:#06262a}
+#kc-metrics-panel button:hover,#kc-metrics-toggle:hover{filter:brightness(1.1)}
+#kc-metrics-panel button:focus-visible,#kc-metrics-toggle:focus-visible,#kc-metrics-panel a:focus-visible{outline:3px solid #ffde7c;outline-offset:3px}
+#kc-metrics-toggle{position:fixed;z-index:2147482999;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));padding:8px 13px;border:1px solid #6cbdc3;background:#082c37;color:#f5ffff;box-shadow:0 7px 26px rgba(0,0,0,.35)}
+@media(max-width:560px){#kc-metrics-panel{max-height:65vh;padding:16px}#kc-metrics-panel .kc-metrics-actions button{flex:1 1 auto}}
