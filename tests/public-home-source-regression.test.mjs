@@ -42,6 +42,17 @@ test("la portada conserva exactamente ocho testimonios anónimos sin rating num�
   assert.ok(js.includes("document.querySelectorAll('.kc-stars').forEach(stars=>stars.remove())"), "falta defensa JS contra ratings heredados");
 });
 
+test("la portada agrupa el título móvil sin partir palabras clínicas", async () => {
+  const home = await read("index.html");
+  const css = await read("home-public-v1.css");
+  assert.ok(home.includes('class="hero-title-line">Evaluación</span>'), "falta primera línea");
+  assert.ok(home.includes('class="hero-title-line hero-title-long">Musculoesquelética</span>'), "falta segunda línea");
+  assert.ok(home.includes('class="hero-title-line hero-title-clinical">Y razonamiento clínico,</span>'), "falta tercera línea");
+  assert.ok(home.includes('<em class="hero-title-line">Convertidos en aprendizaje aplicable.</em>'), "falta frase final");
+  assert.ok(css.includes(".home-hero h1 .hero-title-line"), "falta estilo por línea");
+  assert.match(css, /hyphens:\\s*none/, "el título no debe separar palabras con guiones");
+});
+
 test("la portada referencia assets críticos existentes y versionados", async () => {
   const home = await read("index.html");
   const baseCss = await read("kinecheck/site-v5.css");
@@ -52,7 +63,7 @@ test("la portada referencia assets críticos existentes y versionados", async ()
     "./assets/kinecheck-mark.svg",
     "./kinecheck/site-v5.css?v=20260924-room2",
     "./kinecheck/site-premium-v1.css?v=1",
-    "./home-public-v1.css?v=20260903-nostars2",
+    "./home-public-v1.css?v=20260925-mobile-title1",
     "./kinecheck/site-v5.js?v=7",
     "./metrics-v1.js?v=20260925-consent1",
   ]) {
