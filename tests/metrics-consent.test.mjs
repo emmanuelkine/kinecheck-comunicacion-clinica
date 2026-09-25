@@ -13,6 +13,7 @@ test("las métricas opcionales requieren aceptación", async () => {
   assert.match(source, /data-kc-metrics="no"/);
   assert.match(source, /data-kc-metrics="yes"/);
   assert.match(source, /kc_optional_metrics_choice_v1/);
+  assert.match(source, /consentVersion: "20260925-v1"/);
 });
 
 test("el visitante puede informarse y cambiar su elección", async () => {
@@ -27,4 +28,10 @@ test("el visitante puede informarse y cambiar su elección", async () => {
   assert.match(styles, /#kc-metrics-panel/);
   assert.match(styles, /:focus-visible/);
   assert.match(home, /metrics-v1\.js\?v=20260925-consent1/);
+});
+
+test("el servidor descarta métricas enviadas por clientes antiguos sin preferencia", async () => {
+  const source = await read("supabase/functions/metric-event/index.ts");
+  assert.match(source, /consentVersion !== "20260925-v1"/);
+  assert.match(source, /recorded: false, reason: "consent_required"/);
 });
