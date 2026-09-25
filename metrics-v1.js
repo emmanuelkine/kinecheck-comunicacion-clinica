@@ -9,6 +9,14 @@
   const AUTH_SESSION_KEY = "kinecheck_secure_session_v1";
   const COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:";
   const FUNNEL_ONCE_PREFIX = "kc_tf008_once:";
+  const METRICS_CHOICE_KEY = "kc_optional_metrics_choice_v1";
+  let metricsChoice = null;
+  let metricsStarted = false;
+  try {
+    const saved = localStorage.getItem(METRICS_CHOICE_KEY);
+    if (saved === "yes" || saved === "no") metricsChoice = saved;
+  } catch { /* Browsers may block optional storage. */ }
+
   const ALLOWED_PRODUCTS = new Set([
     "banderas-clinicas",
     "comunicacion-clinica",
@@ -109,6 +117,7 @@
   }
 
   function send(eventName, options = {}) {
+    if (metricsChoice !== "yes") return Promise.resolve(null);
     const payload = {
       eventId: uuid(),
       eventName,
@@ -290,11 +299,92 @@
 
   window.KINECHECK_METRIC = (eventName, options = {}) => send(String(eventName || ""), options);
 
-  function init() {
+  function startMetrics() {
+    if (metricsStarted || metricsChoice !== "yes") return;
+    metricsStarted = true;
     initialEvent();
-    cleanAcademyTrackingParams();
     instrumentAuthenticatedAcademyOpen();
     instrumentAuthenticatedProductUse();
+  }
+
+  function removeOptionalSession() {
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+      for (let index = sessionStorage.length - 1; index >= 0; index -= 1) {
+        const key = sessionStorage.key(index);
+        if (key && key.startsWith(FUNNEL_ONCE_PREFIX)) sessionStorage.removeItem(key);
+      }
+    } catch { /* Browser storage is optional. */ }
+  }
+
+  function setMetricsChoice(choice) {
+    metricsChoice = choice;
+    try { localStorage.setItem(METRICS_CHOICE_KEY, choice); } catch { /* In-memory fallback. */ }
+    if (choice === "no") removeOptionalSession();
+    const panel = document.querySelector("#kc-metrics-panel");
+    const toggle = document.querySelector("#kc-metrics-toggle");
+    if (panel) panel.hidden = true;
+    if (toggle) toggle.hidden = false;
+    if (choice === "yes") startMetrics();
+  }
+
+  function mountMetricsPreferences() {
+    const css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = "/assets/metrics-privacy-v1.css?v=20260925-1";
+    document.head.appendChild(css);
+
+    const panel = document.createElement("section");
+    panel.id = "kc-metrics-panel";
+    panel.setAttribute("role", "region");
+    panel.setAttribute("aria-label", "Preferencias de medición");
+    panel.innerHTML = '<h2>Preferencias de medición</h2>'
+      + '<p>El almacenamiento necesario mantiene tu sesión, seguridad y progreso. '
+      + 'Las métricas opcionales nos ayudan a entender el uso del sitio: páginas visitadas, '
+      + 'tipo de dispositivo, identificador aleatorio de sesión y, si iniciaste sesión, '
+      + 'actividad asociada a tu cuenta. No incluyen el contenido de formularios ni datos clínicos.</p>'
+      + '<p>Las métricas opcionales permanecen desactivadas hasta que las aceptes. '
+      + 'Puedes cambiar tu elección cuando quieras. '
+      + '<a href="/legal/privacidad.html#almacenamiento">Más información sobre privacidad y almacenamiento</a>.</p>'
+      + '<div class="kc-metrics-actions">'
+      + '<button type="button" data-kc-metrics="no">Rechazar métricas</button>'
+      + '<button type="button" data-kc-metrics="yes">Aceptar métricas</button>'
+      + '</div>';
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.id = "kc-metrics-toggle";
+    toggle.textContent = "Preferencias de métricas";
+    toggle.setAttribute("aria-controls", "kc-metrics-panel");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.hidden = true;
+    const showPanel = () => {
+      panel.hidden = false;
+      toggle.hidden = true;
+      toggle.setAttribute("aria-expanded", "true");
+      panel.querySelector("button")?.focus();
+    };
+    toggle.addEventListener("click", showPanel);
+    panel.addEventListener("click", (event) => {
+      const button = event.target instanceof Element
+        ? event.target.closest("button[data-kc-metrics]") : null;
+      if (!button) return;
+      setMetricsChoice(button.getAttribute("data-kc-metrics"));
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.focus();
+    });
+    document.body.append(panel, toggle);
+    if (metricsChoice === "yes" || metricsChoice === "no") {
+      panel.hidden = true;
+      toggle.hidden = false;
+    }
+    if (location.hash === "#preferencias-metricas") showPanel();
+  }
+
+  function init() {
+    cleanAcademyTrackingParams();
+    mountMetricsPreferences();
+    startMetrics();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
