@@ -119,6 +119,7 @@
   function send(eventName, options = {}) {
     if (metricsChoice !== "yes") return Promise.resolve(null);
     const payload = {
+      consentVersion: "20260925-v1",
       eventId: uuid(),
       eventName,
       // Privacidad TF-008: nunca enviar query string ni hash en métricas.
