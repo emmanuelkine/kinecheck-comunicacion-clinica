@@ -188,6 +188,9 @@ for (const path of publicPaths) {
     checkSpelling(text, `despliegue ${path}`);
   }
 
+  if (path === "/legal/privacidad.html") {
+    record(text.includes("25 de septiembre de 2026") && text.includes("3 bis. Cookies, almacenamiento del navegador y medición") && text.includes("KineCheck Recupera está actualmente marcado como Próximamente"), "Deployed privacy is latest, discloses analytics and does not imply active Recupera");
+  }
   if (path === "/ayuda/") record(text.includes("Centro de Ayuda"), "Deployed help center has expected content");
   if (path.startsWith("/bienvenida/")) record(text.includes("Primeros pasos") || text.includes("BIENVENIDO A KINECHECK"), "Deployed welcome guide has expected content");
   if (path === "/robots.txt") record(text.includes("sitemap.xml"), "Deployed robots is valid");
