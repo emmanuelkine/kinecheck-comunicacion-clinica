@@ -54,7 +54,7 @@ test("la portada referencia assets críticos existentes y versionados", async ()
     "./kinecheck/site-premium-v1.css?v=1",
     "./home-public-v1.css?v=20260903-nostars2",
     "./kinecheck/site-v5.js?v=7",
-    "./metrics-v1.js?v=20260902-commercial1",
+    "./metrics-v1.js?v=20260925-consent1",
   ]) {
     assert.ok(home.includes(asset), `falta asset crítico ${asset}`);
   }
