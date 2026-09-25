@@ -50,7 +50,7 @@ test("la portada agrupa el título móvil sin partir palabras clínicas", async 
   assert.ok(home.includes('class="hero-title-line hero-title-clinical">Y razonamiento clínico,</span>'), "falta tercera línea");
   assert.ok(home.includes('<em class="hero-title-line">Convertidos en aprendizaje aplicable.</em>'), "falta frase final");
   assert.ok(css.includes(".home-hero h1 .hero-title-line"), "falta estilo por línea");
-  assert.match(css, /hyphens:\\s*none/, "el título no debe separar palabras con guiones");
+  assert.match(css, /hyphens:\s*none/, "el título no debe separar palabras con guiones");
 });
 
 test("la portada referencia assets críticos existentes y versionados", async () => {
