@@ -276,6 +276,7 @@ test("TF-004: tokens premium mantienen contraste mínimo", async ({ page }) => {
 // existing navigation and free-resource links available.
 for (const viewport of [
   { name: "mobile", width: 390, height: 844 },
+  { name: "tablet", width: 820, height: 1180 },
   { name: "desktop", width: 1440, height: 1000 },
 ]) {
   for (const route of [
@@ -291,7 +292,7 @@ for (const viewport of [
       expect(response?.status()).toBe(200);
 
       const logo = route.name === "academy-acceso"
-        ? page.locator(`${viewport.name === "mobile" ? ".login-card" : ".login-showcase"} .kc-brand-3d picture img:visible`).first()
+        ? page.locator(`${viewport.width <= 980 ? ".login-card" : ".login-showcase"} .kc-brand-3d picture img:visible`).first()
         : page.locator("header .kc-brand-3d picture img:visible").first();
       await expect(logo).toBeVisible();
       await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
