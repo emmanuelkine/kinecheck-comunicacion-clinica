@@ -1,9 +1,30 @@
 {
-  "version": "2026-09-21.1",
-  "lastReviewed": "2026-09-21",
+  "version": "2026-09-25.1",
+  "lastReviewed": "2026-09-25",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
   "updates": [
+    {
+      "id": "weekly-2026-09-25-dose-lbp",
+      "date": "2026-09-25",
+      "title": "Dolor lumbar crónico: la dosis orienta, pero no existe una receta óptima universal",
+      "summary": "Arora y colaboradores (2026) reunieron 239 ensayos en una revisión sistemática con metaanálisis en red dosis–respuesta. Las dosis bajas a moderadas se asociaron con mejoras de corto plazo en dolor y discapacidad, pero la evidencia no permite establecer una dosis única válida para todas las personas.",
+      "highlights": [
+        "Qué aporta: los modelos estimaron 4 sesiones por semana de 25 minutos durante 13 semanas para discapacidad y 3 sesiones por semana de 30 minutos durante 8 semanas para dolor, ambos a corto plazo.",
+        "Por qué importa: los intervalos creíbles de la mayoría de las dosis se superpusieron y hubo poco beneficio adicional con exposiciones mayores; estas cifras son estimaciones poblacionales, no prescripciones individuales.",
+        "Certeza y límites: el 84% de los ensayos tuvo alto riesgo de sesgo, la certeza fue baja o muy baja y pocas combinaciones conservaron relevancia clínica más allá del corto plazo. Solo dos ensayos incluyeron presentaciones radiculares.",
+        "Tipo de evidencia y fuente: revisión sistemática con metaanálisis en red dosis–respuesta. Arora NK et al. (2026). DOI: 10.1136/bjsports-2026-111988 · PMID: 42785965."
+      ],
+      "practiceMessage": "Puedes usar estos rangos como referencia inicial, nunca como una dosis obligatoria. Ajusta frecuencia y duración según objetivos, capacidad, tolerancia, recuperación y adherencia; reevalúa la función. En cuadros radiculares, reconoce que la evidencia de dosificación sigue siendo insuficiente.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42785965/",
+      "authors": "Arora NK et al.",
+      "evidenceType": "Revisión sistemática con metaanálisis en red dosis–respuesta",
+      "certainty": "Baja a muy baja",
+      "doi": "10.1136/bjsports-2026-111988",
+      "pmid": "42785965"
+    },
     {
       "id": "weekly-2026-09-21",
       "date": "2026-09-21",
