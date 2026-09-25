@@ -270,3 +270,44 @@ test("TF-004: tokens premium mantienen contraste mínimo", async ({ page }) => {
   expect(mainRatio).toBeGreaterThanOrEqual(4.5);
   expect(mutedRatio).toBeGreaterThanOrEqual(4.5);
 });
+
+// Capture the principal public routes at both header sizes. These checks cover
+// image loading, clipping and horizontal overflow while keeping the page's
+// existing navigation and free-resource links available.
+for (const viewport of [
+  { name: "mobile", width: 390, height: 844 },
+  { name: "desktop", width: 1440, height: 1000 },
+]) {
+  for (const route of [
+    { path: "/", name: "portada" },
+    { path: "/gratis/", name: "biblioteca-gratuita" },
+    { path: "/profesionales/", name: "catalogo" },
+    { path: "/productos/kinecheck-clinico/", name: "ficha-curso" },
+    { path: "/academy/", name: "academy-acceso" },
+  ]) {
+    test(`identidad 3D ${route.name} ${viewport.name}`, async ({ page }, testInfo) => {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      const response = await page.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: 60000 });
+      expect(response?.status()).toBe(200);
+
+      const logo = page.locator(".kc-brand-3d:visible picture img:visible").first();
+      await expect(logo).toBeVisible();
+      await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
+      const geometry = await logo.evaluate((image) => {
+        const rect = image.getBoundingClientRect();
+        return { x: rect.x, right: rect.right, width: rect.width, source: image.currentSrc };
+      });
+      expect(geometry.x, JSON.stringify(geometry)).toBeGreaterThanOrEqual(-1);
+      expect(geometry.right, JSON.stringify(geometry)).toBeLessThanOrEqual(viewport.width + 1);
+      expect(geometry.width).toBeGreaterThan(100);
+      expect(geometry.source).toContain(viewport.name === "mobile" ? "compact.webp" : "header.webp");
+      await assertNoOverflow(page);
+
+      if (route.name === "biblioteca-gratuita") {
+        await expect(page.locator(".card")).toHaveCount(7);
+        await expect(page.locator('.card a[href^="https://kinecheck-diagnostico-y-dolor-"]')).toHaveCount(1);
+      }
+      await page.screenshot({ path: testInfo.outputPath(`${route.name}-${viewport.name}.png`) });
+    });
+  }
+}
