@@ -1,7 +1,7 @@
 body{
   background:
     linear-gradient(110deg,rgba(3,18,24,.72) 0%,rgba(5,28,36,.55) 48%,rgba(3,18,24,.76) 100%),
-    url("./academy-bg.png") center top/cover no-repeat fixed;
+    url("../assets/clinical-room-no-people-20260924.png") center top/cover no-repeat fixed;
 }
 body::before{
   content:"";

@@ -98,7 +98,7 @@ input:focus-visible {
   z-index: -2;
   background-image:
     linear-gradient(90deg, rgba(2, 13, 20, 0.98) 0%, rgba(2, 13, 20, 0.88) 45%, rgba(2, 13, 20, 0.5) 100%),
-    url("./academy-hero-clean.jpg");
+    var(--kc-clinical-photo);
   background-size: cover;
   background-position: center top;
   opacity: 0.64;
@@ -295,10 +295,10 @@ input:focus-visible {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background-image: url("./academy-hero-clean.jpg");
+  background-image: var(--kc-clinical-photo);
   background-repeat: no-repeat;
-  background-size: auto 285%;
-  background-position: 55% top;
+  background-size: cover;
+  background-position: center center;
   filter: saturate(0.92) contrast(1.04);
 }
 

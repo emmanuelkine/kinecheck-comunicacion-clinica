@@ -101,7 +101,7 @@ body[data-kc-view="herramientas"] #herramientas{
 
 /* Hero Inicio: ecosistema digital clínico. */
 #dashboard-view .hero-panel::before{
-  background-image:url("./academy-hero-ecosistema-v1.webp")!important;
+  background-image:var(--kc-clinical-photo)!important;
   background-repeat:no-repeat!important;
   background-size:cover!important;
   background-position:center center!important;

@@ -2,7 +2,7 @@
    Shared, presentation-only theme. Do not change form behavior, routing, entitlements
    or the appearance of light-mode content panels. All imagery is first-party. */
 :root {
-  --kc-clinical-photo: url("/academy/academy-hero-clean.jpg");
+  --kc-clinical-photo: url("/assets/clinical-room-no-people-20260924.png");
   --kc-clinical-edge: rgba(114,220,225,.27);
   --kc-clinical-shadow: 0 18px 54px rgba(0,0,0,.25);
 }
@@ -16,6 +16,12 @@ html body {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+/* Academy keeps a plain canvas behind lessons, quizzes and forms. Its entry
+   showcase and dashboard hero use the shared photograph separately. */
+html body[data-kc-view] {
+  background-color: #06151f;
+  background-image: none;
 }
 /* Home and public product headers: allow a little more of the photograph to show. */
 html body .hero.home-hero,
