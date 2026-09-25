@@ -1,0 +1,73 @@
+/* The 3D mark and lettering are baked into the approved raster artwork.
+   These rules only size the assets; course reading surfaces stay untouched. */
+.kc-brand-3d {
+  display: inline-flex !important;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  gap: 0 !important;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.kc-brand-3d > :not(picture) {
+  display: none !important;
+}
+
+.kc-brand-3d > picture {
+  display: block;
+  flex: 0 1 auto;
+  width: clamp(178px, 18vw, 246px);
+  max-width: 100%;
+  line-height: 0;
+}
+
+.kc-brand-3d > picture > img {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+  aspect-ratio: 900 / 183;
+  object-fit: contain;
+  transform: none !important;
+  filter: drop-shadow(0 2px 9px rgba(13, 207, 225, .15));
+}
+
+.kc-brand-3d:hover > picture > img {
+  transform: none !important;
+}
+
+/* The Academy has a wide login panel, a narrow sidebar and a busy topbar. */
+.kc-brand-3d.brand-large > picture { width: min(325px, 100%); }
+.kc-brand-3d.mobile-brand > picture { width: min(220px, 100%); }
+.kc-brand-3d.sidebar-brand > picture { width: min(192px, 100%); }
+.kc-brand-3d.topbar-brand > picture { width: min(180px, 100%); }
+.kc-brand-3d.side-brand > picture { width: min(192px, 100%); }
+
+/* Standalone free resources already have their own back links. */
+header:has(> .kc-resource-logo) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  background-color: #061b25;
+}
+.kc-resource-logo { display: inline-block; flex: 0 0 auto; line-height: 0; }
+.kc-resource-logo img { display: block; width: 190px; max-width: min(55vw, 190px); height: auto; }
+
+@media (max-width: 900px) {
+  .kc-brand-3d > picture { width: 205px; }
+  .kc-brand-3d.topbar-brand > picture { width: 170px; }
+}
+
+@media (max-width: 620px) {
+  .kc-brand-3d > picture { width: min(190px, calc(100vw - 112px)); }
+  .kc-brand-3d > picture > img { aspect-ratio: 720 / 111; }
+  .kc-brand-3d.brand-large > picture,
+  .kc-brand-3d.mobile-brand > picture { width: min(230px, 70vw); }
+  .kc-brand-3d.topbar-brand > picture { width: min(166px, 50vw); }
+  .site-header:has(.kc-brand-3d):not(:has(.menu-button)),
+  .guide-header:has(.kc-brand-3d) { flex-wrap: wrap; }
+  .kc-resource-logo img { width: min(165px, 54vw); }
+}

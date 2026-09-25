@@ -60,7 +60,9 @@ test("la portada referencia assets críticos existentes y versionados", async ()
   assert.ok(baseCss.includes("kc-clinical-site-v1.css?v=20260924-room2"), "falta tema clínico compartido");
   assert.ok(sharedCss.includes("clinical-room-no-people-20260924.png"), "falta fondo clínico sin personas");
   for (const asset of [
-    "./assets/kinecheck-mark.svg",
+    "./assets/brand/kinecheck-3d-header.webp",
+    "./assets/brand/kinecheck-3d-compact.webp",
+    "assets/brand/kinecheck-3d.css?v=1",
     "./kinecheck/site-v5.css?v=20260924-room2",
     "./kinecheck/site-premium-v1.css?v=1",
     "./home-public-v1.css?v=20260925-mobile-title1",
