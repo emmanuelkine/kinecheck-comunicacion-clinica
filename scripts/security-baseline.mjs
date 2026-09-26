@@ -34,6 +34,7 @@ const secretPatterns = [
   { name: "private_key", regex: /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g },
   { name: "github_pat", regex: /\b(?:ghp|github_pat)_[A-Za-z0-9_]{20,}\b/g },
   { name: "stripe_live_key", regex: /\bsk_live_[A-Za-z0-9]{16,}\b/g },
+  { name: "supabase_secret_key", regex: /\bsb_secret_[A-Za-z0-9_-]{16,}\b/g },
   { name: "slack_token", regex: /\bxox[baprs]-[A-Za-z0-9-]{16,}\b/g },
   { name: "database_password_url", regex: /\bpostgres(?:ql)?:\/\/[^\s:@/]+:[^\s@/]+@[^\s"']+/gi },
   { name: "supabase_service_role_assignment", regex: /(?:SUPABASE_SERVICE_ROLE_KEY|service_role_key)\s*[:=]\s*["'][^"']{20,}["']/gi },
@@ -44,7 +45,7 @@ for (const file of files) {
   const content = fs.readFileSync(file, "utf8");
   for (const pattern of secretPatterns) {
     const matches = [...content.matchAll(pattern.regex)];
-    for (const match of matches) report.findings.push({ type: pattern.name, file: relative, excerpt: match[0].slice(0, 20) + "…" });
+    for (const _match of matches) report.findings.push({ type: pattern.name, file: relative });
   }
 }
 
