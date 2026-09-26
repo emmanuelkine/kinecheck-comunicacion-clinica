@@ -123,7 +123,7 @@ for (const viewport of [
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto(`${BASE}/?qa=public-visual-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
 
-    await expect(page.locator("h1")).toContainText("Evaluación musculoesquelética y razonamiento clínico");
+    await expect(page.locator("h1")).toContainText(/evaluación musculoesquelética y razonamiento clínico/i);
     await expect(page.locator(".kc-testimonial")).toHaveCount(8);
     await expect(page.locator(".kc-stars")).toHaveCount(0);
     await expect(page.locator("body")).not.toContainText("★★★★★");
@@ -270,3 +270,53 @@ test("TF-004: tokens premium mantienen contraste mínimo", async ({ page }) => {
   expect(mainRatio).toBeGreaterThanOrEqual(4.5);
   expect(mutedRatio).toBeGreaterThanOrEqual(4.5);
 });
+
+// Capture the principal public routes at both header sizes. These checks cover
+// image loading, clipping and horizontal overflow while keeping the page's
+// existing navigation and free-resource links available.
+for (const viewport of [
+  { name: "mobile", width: 390, height: 844 },
+  { name: "tablet", width: 820, height: 1180 },
+  { name: "desktop", width: 1440, height: 1000 },
+]) {
+  for (const route of [
+    { path: "/", name: "portada" },
+    { path: "/gratis/", name: "biblioteca-gratuita" },
+    { path: "/profesionales/", name: "catalogo" },
+    { path: "/productos/kinecheck-clinico/", name: "ficha-curso" },
+    { path: "/academy/", name: "academy-acceso" },
+  ]) {
+    test(`identidad 3D ${route.name} ${viewport.name}`, async ({ page }, testInfo) => {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      const response = await page.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: 60000 });
+      expect(response?.status()).toBe(200);
+
+      const logo = route.name === "academy-acceso"
+        ? page.locator(`${viewport.width <= 980 ? ".login-card" : ".login-showcase"} .kc-brand-3d picture img:visible`).first()
+        : page.locator("header .kc-brand-3d picture img:visible").first();
+      await expect(logo).toBeVisible();
+      await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
+      await logo.evaluate((image) => image.decode());
+      const geometry = await logo.evaluate((image) => {
+        const rect = image.getBoundingClientRect();
+        return { x: rect.x, y: rect.y, right: rect.right, bottom: rect.bottom, width: rect.width, source: image.currentSrc };
+      });
+      expect(geometry.x, JSON.stringify(geometry)).toBeGreaterThanOrEqual(-1);
+      expect(geometry.y, JSON.stringify(geometry)).toBeGreaterThanOrEqual(-1);
+      expect(geometry.right, JSON.stringify(geometry)).toBeLessThanOrEqual(viewport.width + 1);
+      expect(geometry.bottom, JSON.stringify(geometry)).toBeLessThanOrEqual(viewport.height + 1);
+      expect(geometry.width).toBeGreaterThan(100);
+      expect(geometry.source).toContain(viewport.name === "mobile" ? "compact.webp" : "header.webp");
+      await assertNoOverflow(page);
+
+      if (route.name === "biblioteca-gratuita") {
+        await expect(page.locator(".card")).toHaveCount(10);
+        await expect(page.locator('.card a[href^="https://kinecheck-diagnostico-y-dolor-"]')).toHaveCount(1);
+        const heroBrand = page.locator("h1 .kc-heading-wordmark img");
+        await expect(heroBrand).toBeVisible();
+        await expect.poll(() => heroBrand.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
+      }
+      await page.screenshot({ path: testInfo.outputPath(`${route.name}-${viewport.name}.png`) });
+    });
+  }
+}

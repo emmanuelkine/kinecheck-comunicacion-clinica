@@ -1,0 +1,14 @@
+/* Two short course landing pages use the same dark identity as the catalog. */
+body.kc-fallback-product { background: #05151f; color: #f6fdff; }
+body.kc-fallback-product .hero {
+  background: linear-gradient(145deg, rgba(12, 43, 57, .97), rgba(5, 24, 38, .98));
+  border-color: rgba(110, 219, 225, .32);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .3);
+}
+body.kc-fallback-product .hero p { color: #d0e1e3; }
+body.kc-fallback-product .hero .notice { background: #123840; color: #dcf7f8; }
+body.kc-fallback-product .hero .eyebrow { background: #143b43; color: #99eced; }
+body.kc-fallback-product .hero .secondary {
+  background: #153840; color: #e6fafa; border-color: #5ba9b0;
+}
+body.kc-fallback-product .kc-brand-3d { margin-bottom: 18px; }

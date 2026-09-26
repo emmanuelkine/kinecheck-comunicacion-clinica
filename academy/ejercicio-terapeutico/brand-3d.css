@@ -1,0 +1,35 @@
+/* Identity only: the compiled lesson, quiz and form surfaces remain unchanged. */
+.course-app .topbar .brand::before,
+.access-gate .gate-brand::before {
+  content: "";
+  display: block;
+  flex: 0 0 210px;
+  width: 210px;
+  height: 43px;
+  background: url("../../assets/brand/kinecheck-3d-header.webp") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.course-app .topbar .brand,
+.access-gate .gate-brand { position: relative; }
+.course-app .topbar .brand > *,
+.access-gate .gate-brand > * {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 620px) {
+  .course-app .topbar .brand::before,
+  .access-gate .gate-brand::before {
+    flex-basis: 165px;
+    width: 165px;
+    height: 30px;
+    background-image: url("../../assets/brand/kinecheck-3d-compact.webp");
+  }
+}
