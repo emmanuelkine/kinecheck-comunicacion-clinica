@@ -330,3 +330,19 @@ footer{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+
+/* Global contrast hardening — 2026-09-26 */
+body,main,.section,.section-evidence{color:#f7fbfb}
+body :where(h1,h2,h3,h4,h5,h6,strong,b,summary,label){color:#f7fbfb}
+body :where(p,li,small,.lead,.legal,.digest-summary,.section-head p,.archive p,.archive ul){color:#c9dde0}
+body :where(a:not(.primary):not(.nav-button)){color:#8fe9e5}
+.site-header .brand strong,.site-header nav a:not(.nav-button){color:#f7fbfb}
+.site-header .brand small{color:#b9cdd1}
+.site-header nav{background:rgba(4,24,29,.98)}
+.site-header nav a:not(.nav-button):hover,.site-header nav a:not(.nav-button):focus-visible{color:#fff;background:rgba(255,255,255,.09)}
+@media(max-width:820px){
+  .site-header nav{background:#071d22!important;border-color:rgba(143,233,229,.28)!important}
+  .site-header nav a:not(.nav-button){color:#f7fbfb!important}
+  .site-header nav .nav-button{color:#032119!important}
+}

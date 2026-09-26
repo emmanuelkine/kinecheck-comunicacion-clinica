@@ -1,9 +1,26 @@
 {
-  "version": "2026-09-25.1",
-  "lastReviewed": "2026-09-25",
+  "version": "2026-09-26.1",
+  "lastReviewed": "2026-09-26",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
   "updates": [
+    {
+      "id": "weekly-2026-09-26-evaluacion-razonamiento-pne",
+      "date": "2026-09-26",
+      "title": "Evaluación, razonamiento clínico y educación en dolor: tres lecturas con cautela",
+      "summary": "Tres líneas de evidencia refuerzan una práctica contextual: interpretar pruebas clínicas según probabilidad y función, enseñar razonamiento con estrategias activas sin asumir una técnica pedagógica universalmente superior y usar PNE como componente educativo, no como explicación total del dolor.",
+      "highlights": [
+        "Hombro: un Delphi internacional consensuó 18 descriptores para RCRSP y ningún ítem del dominio de pruebas especiales alcanzó consenso; esto no demuestra que cualquier cluster sea superior.",
+        "Dolor femoropatelar: una combinación de dolor al bajar escaleras y durante sedestación prolongada mostró LR+ 19,47 (IC95% 6,36–59,65) y 95% post-test en la muestra estudiada; la probabilidad post-test depende de la probabilidad pretest.",
+        "Razonamiento clínico: una revisión sistemática incluyó 40 estudios; 22/33 con datos cuantitativos informaron resultados positivos, pero la heterogeneidad y el rigor limitado impiden guías educativas definitivas.",
+        "PNE: un metaanálisis de 12 ECA (n=1.485) comunicó DME −0,27 para intensidad de dolor y 0,42 para tiempo total de sueño; los efectos no deben generalizarse a todos los resultados."
+      ],
+      "practiceMessage": "Integra historia, seguridad, función, probabilidad y reevaluación. En docencia, usa casos, simulación y reflexión con evaluación explícita del razonamiento. En educación en dolor, valida la experiencia y evita explicaciones reduccionistas o promesas causales.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://academic.oup.com/ptj/article/105/3/pzae182/7932001",
+      "evidenceType": "Síntesis crítica de estudios diagnósticos, consenso y revisiones sistemáticas"
+    },
     {
       "id": "weekly-2026-09-25-dose-lbp",
       "date": "2026-09-25",
