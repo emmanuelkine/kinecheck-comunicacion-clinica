@@ -78,3 +78,10 @@ header:has(> .kc-resource-logo) {
     overflow-wrap: anywhere;
   }
 }
+
+/* Keep Academy's bottom navigation reachable after metrics consent is chosen. */
+@media (max-width: 560px) {
+  body:has(#dashboard-view:not([hidden])) #kc-metrics-toggle:not([hidden]) {
+    bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}
