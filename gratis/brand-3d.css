@@ -36,7 +36,7 @@ body.kc-free .hero .actions { justify-content: flex-start; }
 body.kc-free .top { background: rgba(3, 17, 25, .95); }
 .kc-heading-wordmark {
   display: block;
-  width: min(420px, 78vw);
+  width: min(560px, 78vw);
   margin-top: 12px;
   line-height: 0;
 }
@@ -59,7 +59,7 @@ body.kc-free footer .wrap {
 @media (max-width: 620px) {
   body.kc-free .hero { margin: 16px 0 28px; padding: 26px 20px; }
   body.kc-free .hero h1 { font-size: clamp(2.05rem, 9vw, 2.65rem); }
-  .kc-heading-wordmark { width: min(290px, 82vw); margin-top: 10px; }
+  .kc-heading-wordmark { width: min(300px, 82vw); margin-top: 10px; }
   .kc-heading-wordmark-small { width: min(250px, 76vw); }
   body.kc-free footer .wrap { align-items: flex-start; flex-direction: column; }
   .kc-footer-wordmark img { width: 170px; }
