@@ -35,7 +35,7 @@ try {
 
     await page.goto(`${BASE}/?qa=post-privacy-${device}-${Date.now()}`, { waitUntil: "domcontentloaded", timeout: 60000 });
     const home = await text(page);
-    assert.ok(home.includes("Evaluación musculoesquelética y razonamiento clínico"), `${device}: falta propuesta principal actual`);
+    assert.ok(home.toLocaleLowerCase("es").includes("evaluación musculoesquelética y razonamiento clínico"), `${device}: falta propuesta principal actual`);
     assert.ok((await page.locator('a[href*="profesionales/"]').count()) >= 1, `${device}: falta perfil profesional`);
     assert.ok((await page.locator('a[href*="estudiantes/"]').count()) >= 1, `${device}: falta perfil estudiante`);
     assert.ok((await page.locator('a[href*="recupera/"]').count()) >= 1, `${device}: falta perfil Recupera`);

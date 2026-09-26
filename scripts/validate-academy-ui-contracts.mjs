@@ -111,7 +111,8 @@ const assetRefs = [...head.matchAll(/(?:href|src)="([^"?#]+\.(?:css|js))\?v=([^"
 if (!assetRefs.length) {
   fail('No se detectaron assets versionados en <head>.');
 } else {
-  const versions = new Set(assetRefs.map((item) => item.version));
+  // Analytics and privacy assets are versioned independently of Academy's UI bundle.
+  const versions = new Set(assetRefs.filter((item) => !/\/(?:metrics-v1|privacy-consent)\.js$/.test(item.url)).map((item) => item.version));
   if (versions.size !== 1) {
     fail(`Academy mezcla versiones directas de assets: ${[...versions].join(', ')}`);
   }
