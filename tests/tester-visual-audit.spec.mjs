@@ -310,8 +310,11 @@ for (const viewport of [
       await assertNoOverflow(page);
 
       if (route.name === "biblioteca-gratuita") {
-        await expect(page.locator(".card")).toHaveCount(7);
+        await expect(page.locator(".card")).toHaveCount(10);
         await expect(page.locator('.card a[href^="https://kinecheck-diagnostico-y-dolor-"]')).toHaveCount(1);
+        const heroBrand = page.locator("h1 .kc-heading-wordmark img");
+        await expect(heroBrand).toBeVisible();
+        await expect.poll(() => heroBrand.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
       }
       await page.screenshot({ path: testInfo.outputPath(`${route.name}-${viewport.name}.png`) });
     });
