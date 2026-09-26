@@ -48,7 +48,7 @@ async function captureMetrics(page) {
   return events;
 }
 
-async function openAcademy(page, label) {
+async function openAcademy(page, label, { metrics = "no" } = {}) {
   await page.goto(`${BASE}/academy/?qa=${label}-${Date.now()}`, {
     waitUntil: "domcontentloaded",
     timeout: 30000,
@@ -59,12 +59,15 @@ async function openAcademy(page, label) {
     native: typeof window.openCourse,
     bridge: window.__KINECHECK_OWNED_NATIVE_BRIDGE_V1__ === true,
   })), { timeout: 10000 }).toEqual({ opener: "function", native: "function", bridge: true });
+
+  // Every scenario makes an explicit privacy choice before testing navigation.
+  await page.locator(`#kc-metrics-panel button[data-kc-metrics="${metrics}"]`).click();
 }
 
 test("Mis productos registra el toque, usa el opener real y completa una navegación de curso", async ({ page }) => {
   const consoleErrors = collectUnexpectedConsoleErrors(page);
   const metricEvents = await captureMetrics(page);
-  await openAcademy(page, "owned-real-open");
+  await openAcademy(page, "owned-real-open", { metrics: "yes" });
 
   await expect.poll(() => metricEvents.some((event) => event.eventName === "page_view")).toBe(true);
 
