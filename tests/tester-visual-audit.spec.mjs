@@ -312,6 +312,10 @@ for (const viewport of [
       if (route.name === "biblioteca-gratuita") {
         await expect(page.locator(".card")).toHaveCount(10);
         await expect(page.locator('.card a[href^="https://kinecheck-diagnostico-y-dolor-"]')).toHaveCount(1);
+        const metallicHeading = page.locator("h1 .kc-metal-heading");
+        await expect(metallicHeading).toBeVisible();
+        await expect(metallicHeading).toHaveText("Biblioteca gratuita de");
+        expect(await metallicHeading.evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("linear-gradient");
         const heroBrand = page.locator("h1 .kc-heading-wordmark img");
         await expect(heroBrand).toBeVisible();
         await expect.poll(() => heroBrand.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);

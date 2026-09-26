@@ -18,12 +18,25 @@ body.kc-free .hero h1 {
   line-height: 1.07;
   letter-spacing: -.04em;
 }
+.kc-metal-heading {
+  display: block;
+  color: #f5f9fd;
+  background: linear-gradient(180deg, #fff 4%, #edf5fa 34%, #adc5d1 60%, #f8fcff 79%, #cad9e3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: .3px rgba(236, 249, 255, .58);
+  filter: drop-shadow(0 2px 0 #8099a8)
+    drop-shadow(0 4px 0 #345667)
+    drop-shadow(0 8px 6px rgba(0, 8, 18, .85))
+    drop-shadow(0 0 18px rgba(34, 220, 232, .15));
+}
 body.kc-free .hero p { max-width: 760px; }
 body.kc-free .hero .actions { justify-content: flex-start; }
 body.kc-free .top { background: rgba(3, 17, 25, .95); }
 .kc-heading-wordmark {
   display: block;
-  width: min(420px, 78vw);
+  width: min(560px, 78vw);
   margin-top: 12px;
   line-height: 0;
 }
@@ -46,7 +59,7 @@ body.kc-free footer .wrap {
 @media (max-width: 620px) {
   body.kc-free .hero { margin: 16px 0 28px; padding: 26px 20px; }
   body.kc-free .hero h1 { font-size: clamp(2.05rem, 9vw, 2.65rem); }
-  .kc-heading-wordmark { width: min(290px, 82vw); margin-top: 10px; }
+  .kc-heading-wordmark { width: min(300px, 82vw); margin-top: 10px; }
   .kc-heading-wordmark-small { width: min(250px, 76vw); }
   body.kc-free footer .wrap { align-items: flex-start; flex-direction: column; }
   .kc-footer-wordmark img { width: 170px; }
