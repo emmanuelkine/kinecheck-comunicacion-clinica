@@ -28,7 +28,7 @@ export async function onRequestPost({ request, env }) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ error: "Ingresa un correo electrónico válido." }, 400);
   }
-  if (!env.CERT_EMAIL_SERVICE) {
+  if (!env.RESEND_API_KEY && !env.CERT_EMAIL_SERVICE) {
     return json({ error: "El envío de correo no está disponible en este momento. Inténtalo más tarde." }, 503);
   }
 
@@ -40,17 +40,39 @@ export async function onRequestPost({ request, env }) {
   };
 
   try {
-    const result = await env.CERT_EMAIL_SERVICE.fetch("https://certificacion.kinecheck.internal/send", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(details),
-    });
+    // A configured Resend key takes precedence so Pages can send on Workers Free.
+    // The existing Service binding remains available for Cloudflare Email Service.
+    const usingResend = Boolean(env.RESEND_API_KEY);
+    const result = usingResend
+      ? await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "authorization": `Bearer ${env.RESEND_API_KEY}`,
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "KineCheck <certificacion@kinecheck.cl>",
+            to: [email],
+            subject: details.subject,
+            html: details.replyHtml,
+            text: details.replyText,
+          }),
+        })
+      : await env.CERT_EMAIL_SERVICE.fetch("https://certificacion.kinecheck.internal/send", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(details),
+        });
     if (!result.ok) {
       console.error("Certification email service rejected the request", result.status);
       return json({ error: "No pudimos enviar el correo. Inténtalo nuevamente." }, 502);
     }
+    if (usingResend && !(await result.json()).id) {
+      console.error("Certification email service returned no message id");
+      return json({ error: "No pudimos confirmar el envío. Inténtalo nuevamente." }, 502);
+    }
   } catch (error) {
-    console.error("Certification email service unavailable", error);
+    console.error("Certification email service unavailable", error?.name || "unknown");
     return json({ error: "No pudimos enviar el correo. Inténtalo nuevamente." }, 502);
   }
 
