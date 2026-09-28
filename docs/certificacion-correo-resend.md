@@ -1,20 +1,27 @@
 # Envío de certificación con Resend Free y Cloudflare Pages
 
-La función actual `functions/api/certificacion.js` puede usar `RESEND_API_KEY` como secreto de Cloudflare Pages para enviar desde `KineCheck <certificacion@kinecheck.cl>`. Este camino no requiere Workers Paid ni un Worker adicional. Si están configurados tanto `RESEND_API_KEY` como `CERT_EMAIL_SERVICE`, la función usa Resend. La PR debe permanecer sin fusionar hasta que el dominio y el secreto estén listos.
+La función `functions/api/certificacion.js` usa el secreto cifrado `RESEND_API_KEY` de Cloudflare Pages para enviar desde `KineCheck <certificacion@kinecheck.cl>`. Este camino no requiere Workers Paid ni un Worker adicional. Si también existe `CERT_EMAIL_SERVICE`, Resend tiene prioridad.
 
-## Pasos que debe completar el propietario
+## Configuración aplicada el 28/09/2026
 
-1. Crear su propia cuenta en Resend Free, aceptar personalmente los términos y verificar su correo de acceso. Resend Free permite actualmente 100 mensajes diarios y 3.000 mensuales; revisar el plan vigente antes de activarlo. No compartir claves por chat ni agregarlas al repositorio.
-2. En Resend → Domains → Add Domain, registrar `kinecheck.cl` **solo para envío**. No habilitar Receiving. Para mantener la dirección exacta `certificacion@kinecheck.cl`, verificar el dominio raíz como remitente. Elegir Manual setup y leer los valores completos del panel antes de crear registros; la configuración puede variar por región y por cuenta.
-3. En Cloudflare → `kinecheck.cl` → DNS → Records, inventariar los registros existentes y agregar **solo** los que exige el panel de Resend para envío. Para esta cuenta y región São Paulo, la autorización Domain Connect del 28/09/2026 agregó únicamente: TXT/DKIM en `resend._domainkey`, CNAME `rsend` → `rsend.forge.rmta.net` y CNAME `send` → `send.forge.rmta.net`, todos con TTL 1 hora y DNS only. Los tres registros fueron comprobados en DNS público. Mantener el valor DKIM único generado por Resend; no sustituirlo por ejemplos. Los CNAME de correo deben estar en modo DNS only (sin proxy). No crear registros MX o TXT/SPF adicionales por una guía genérica si el panel actual no los pide. Mantener intactos los MX/SPF de la raíz y cualquier otro DKIM.
-4. Revisar `_dmarc.kinecheck.cl`. Si no existe, crear **un único** TXT inicial `v=DMARC1; p=none;`, sujeto a las comprobaciones del panel y de DNS; si existe, conservarlo y verificar su alineación. No publicar dos políticas DMARC ni sustituir una política existente sin revisión.
-5. Pulsar Verify DNS Records en Resend y esperar a que el dominio figure como Verified. Crear una API key con **Sending access**, restringida al dominio `kinecheck.cl` si la interfaz lo permite. Copiarla solo en la interfaz de Cloudflare: Workers & Pages → proyecto Pages `kinecheck-comunicacion-clinica` → Settings → Variables and Secrets → Add → nombre `RESEND_API_KEY` → Encrypt → Save, en **Production**. La clave no debe aparecer en código, captura ni conversación.
-6. Fusionar la PR y permitir que Pages publique el nuevo commit; el secreto debe existir antes del despliegue que lo utiliza. Verificar que no se hayan modificado Academy, autenticación, Hotmart, precios, cursos ni páginas.
+- Resend Free habilitado únicamente para envío; Receiving permanece desactivado.
+- Dominio raíz `kinecheck.cl` verificado en Resend, región São Paulo.
+- Registros creados por Domain Connect, todos en modo DNS only y TTL 1 hora:
+  - CNAME `send` → `send.forge.rmta.net`
+  - CNAME `rsend` → `rsend.forge.rmta.net`
+  - TXT `resend._domainkey` con la clave DKIM única proporcionada por Resend
+- DMARC publicado como un único TXT `_dmarc` con `v=DMARC1; p=none;`.
+- Clave Resend con permiso **Sending access** almacenada en producción como secreto `RESEND_API_KEY`.
+- PR #151 fusionada en `main`.
 
-## Prueba
+No se eliminaron ni modificaron registros DNS preexistentes. No se agregaron MX ni se alteró el correo personal, Academy, autenticación, Hotmart, precios, cursos u otras páginas.
 
-Desde `https://kinecheck.cl/certificacion/`, enviar una solicitud de prueba a una casilla controlada por el propietario. Verificar: el formulario anuncia el envío; `/api/certificacion` devuelve éxito; Resend muestra el ID y estado del mensaje; la casilla lo recibe. Abrir los encabezados del mensaje y revisar SPF, DKIM y DMARC, el `From` exacto y la ausencia de horas, OTEC, costos o condiciones no definidos. Si Resend rechaza el envío, la función devuelve error y no afirma que el mensaje llegó.
+## Verificación
 
-Antes de difusión amplia, añadir protección frente a solicitudes automatizadas directas al endpoint (por ejemplo, una limitación de tasa o Turnstile). El honeypot del formulario no impide por sí solo consumir la cuota diaria.
+`node --test tests/certificacion-mailer.test.mjs`: seis pruebas correctas con proveedor simulado.
+
+La prueba real debe recorrer `https://kinecheck.cl/certificacion/` → `/api/certificacion` → Resend → recepción. Verificar en Resend el identificador y estado del envío; en la casilla receptora revisar el remitente exacto y los resultados SPF, DKIM y DMARC. El contenido no debe publicar horas, nombre de la OTEC, costos ni condiciones aún no definidos.
+
+Antes de difusión amplia, añadir protección frente a solicitudes automatizadas directas al endpoint, por ejemplo limitación de tasa o Turnstile. El honeypot del formulario no impide por sí solo consumir la cuota diaria.
 
 Referencias: [precios Resend](https://resend.com/pricing), [guía Cloudflare DNS de Resend](https://resend.com/docs/knowledge-base/cloudflare), [API de envío](https://resend.com/docs/api-reference/emails/send-email), [secretos de Pages](https://developers.cloudflare.com/pages/functions/bindings/).
