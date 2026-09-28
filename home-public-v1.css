@@ -43,3 +43,18 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}.home-hero,.home-hero>div,
 @media (max-width: 350px) {
   .home-hero h1 { font-size: 1.46rem; }
 }
+
+
+/* KineCheck 3D hero typography — aligned with Biblioteca gratuita */
+.home-hero h1 .hero-title-line:not(em){
+  color:#f7fbfc;
+  text-shadow:0 1px 0 #d7e1e4,0 2px 0 #aab9be,0 4px 8px rgba(0,0,0,.34),0 10px 24px rgba(0,0,0,.28);
+}
+.home-hero h1 em.hero-title-line{
+  font-style:normal;
+  background:linear-gradient(180deg,#8ff7df 0%,#51e7d4 40%,#31cddd 72%,#43b8f0 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(13,105,119,.75)) drop-shadow(0 5px 8px rgba(0,0,0,.34));
+  text-shadow:none;
+}
+@media(max-width:700px){.home-hero h1 .hero-title-line:not(em){text-shadow:0 1px 0 #b9c8cc,0 3px 7px rgba(0,0,0,.32)}.home-hero h1 em.hero-title-line{filter:drop-shadow(0 1px 0 rgba(13,105,119,.7)) drop-shadow(0 3px 6px rgba(0,0,0,.3))}}
