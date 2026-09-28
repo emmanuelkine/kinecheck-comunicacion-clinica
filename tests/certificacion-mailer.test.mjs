@@ -55,3 +55,35 @@ test('no acepta solicitudes sin consentimiento ni anuncia correo sin binding', a
   assert.equal(response.status, 503);
   assert.match((await response.json()).error, /no está disponible/);
 });
+
+test('Pages Function envía mediante Resend con remitente fijo y confirma el id', async () => {
+  const originalFetch = globalThis.fetch;
+  let sent;
+  globalThis.fetch = async (url, options) => {
+    assert.equal(url, 'https://api.resend.com/emails');
+    assert.equal(options.headers.authorization, 'Bearer test-only-key');
+    sent = JSON.parse(options.body);
+    return new Response(JSON.stringify({ id: 'resend-test-id' }), { status: 200 });
+  };
+  try {
+    const response = await onRequestPost({ request: form(), env: { RESEND_API_KEY: 'test-only-key' } });
+    assert.equal(response.status, 200);
+    assert.deepEqual(sent.to, ['prueba@example.org']);
+    assert.equal(sent.from, 'KineCheck <certificacion@kinecheck.cl>');
+    assert.match(sent.html, /Prueba &lt;Nombre&gt;/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('un rechazo de Resend no confirma el envío', async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({ message: 'denied' }), { status: 403 });
+  try {
+    const response = await onRequestPost({ request: form(), env: { RESEND_API_KEY: 'test-only-key' } });
+    assert.equal(response.status, 502);
+    assert.match((await response.json()).error, /No pudimos enviar/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
