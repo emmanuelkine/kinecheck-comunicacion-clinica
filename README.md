@@ -34,6 +34,8 @@ Abre `data.json`, busca `ecosystem` y reemplaza cada `"url": "#"` por la URL rea
 
 La carpeta puede publicarse en Netlify, Vercel, Cloudflare Pages, GitHub Pages o cualquier hosting estático. Para acceso de compradores de Hotmart se recomienda agregar autenticación y validación en servidor; no proteger el contenido solo con JavaScript.
 
+Última activación operativa de Pages Functions: 28 de septiembre de 2026.
+
 ## Revisión antes de vender
 
 - Revisión clínica y editorial de afirmaciones.
