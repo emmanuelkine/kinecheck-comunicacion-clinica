@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Práctica MSK · Juego de rol</title>
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f5f7;color:#1f2937}
+.wrap{max-width:760px;margin:auto;padding:18px}
+.card{background:white;border:1px solid #d9dee6;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);overflow:hidden}
+.head{padding:20px 22px;border-bottom:1px solid #e5e7eb}
+.ey{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#667085;font-weight:700}
+h1{font-size:24px;margin:6px 0 4px}.sub{color:#667085;font-size:14px}
+.body{padding:20px 22px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{width:100%;padding:15px;border:0;border-radius:10px;background:#243447;color:white;font-size:15px;font-weight:700;cursor:pointer}
+button.alt{background:#eef2f6;color:#243447;border:1px solid #cfd7e3}
+.section{margin:0 0 18px}.section h2{font-size:15px;margin:0 0 8px;color:#1f5c78}
+.box{background:#edf5f8;border:1px solid #d3e7ef;border-radius:10px;padding:14px}
+.warn{background:#fff6df;border-color:#ead79a}
+ul{padding-left:20px;margin:8px 0}li{margin:7px 0;line-height:1.45}
+.hidden{display:none}.tag{display:inline-block;padding:5px 9px;border-radius:999px;background:#eef2f6;font-size:12px;font-weight:700;margin-top:8px}
+.foot{margin-top:20px;padding-top:12px;border-top:1px solid #e5e7eb;color:#667085;font-size:12px;line-height:1.4}
+.measure{border-left:4px solid #1f5c78;padding-left:12px;margin:12px 0}
+@media(max-width:560px){.roles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap"><main id="app" class="card"></main></div>
+<script>
+const cases={
+"1":{
+title:"Caso 1 · Rodilla postraumática",
+person:"Carolina, 52 años · administrativa",
+intro:"Hace 7 semanas sufrió una caída directa sobre la rodilla derecha. La radiografía descartó fractura. Desde entonces redujo mucho su actividad. Consulta por dolor al bajar escaleras, levantarse de una silla y caminar trayectos prolongados.",
+goal:"Volver a subir y bajar escaleras en el trabajo y caminar 30 minutos.",
+kine:[
+"Realiza primero un control de signos vitales: presión arterial, frecuencia cardíaca y saturación.",
+"Evalúa rango de movimiento de ambas rodillas con goniómetro.",
+"Realiza al menos una medición con cinta métrica que permita comparar lados.",
+"Evalúa fuerza extensora de rodilla con dinamometría.",
+"Selecciona una tarea funcional breve y vuelve a controlar la respuesta cardiovascular.",
+"Al finalizar, explica cuáles son los 3 hallazgos principales y qué variable reevaluarías en 2–3 semanas."
+],
+patient:{
+say:"Al comenzar di: “Me duele sobre todo al bajar escaleras y siento la pierna derecha más débil desde la caída.”",
+hidden:[
+"Si te preguntan por dolor: 3/10 en reposo y hasta 6/10 al bajar escaleras.",
+"Si te preguntan por banderas: no fiebre, no pérdida de peso, no bloqueo verdadero, no episodios de caída por inestabilidad."
+],
+measures:[
+"Presión arterial correctamente tomada: 138/84 mmHg.",
+"SpO₂ correctamente medida: 97%. FC: 78 lpm.",
+"Goniometría rodilla derecha: flexión activa 112°, pasiva 120°; extensión activa -7°, pasiva -3°.",
+"Goniometría rodilla izquierda: flexión 136°; extensión 0°.",
+"Cinta métrica a 10 cm proximal al borde superior de patela: muslo derecho 45,5 cm; izquierdo 48,0 cm.",
+"Perímetro medio patelar: derecha 39,5 cm; izquierda 38,0 cm.",
+"Dinamometría extensión rodilla, 3 intentos: derecha 17,5 / 18,2 / 18,0 kg; izquierda 24,6 / 25,1 / 24,8 kg.",
+"Después de 5 Sit-to-Stand: FC 96 lpm, SpO₂ 97%, dolor 4/10, RPE 4/10. A los 2 min: FC 82 lpm, SpO₂ 98%, dolor 3/10."
+]
+}
+},
+"2":{
+title:"Caso 2 · Hombro dominante",
+person:"Mauricio, 46 años · técnico eléctrico",
+intro:"Presenta dolor de hombro derecho de 9 semanas, especialmente al trabajar sobre la cabeza. No hubo trauma agudo. Puede mover el brazo, pero al final de la jornada pierde tolerancia y fuerza.",
+goal:"Trabajar media jornada sin tener que suspender las tareas sobre la cabeza.",
+kine:[
+"Controla presión arterial, frecuencia cardíaca y SpO₂ antes de iniciar.",
+"Evalúa movilidad activa y pasiva de hombro con goniómetro.",
+"Usa cinta métrica para una medición comparativa y reproducible del miembro superior.",
+"Evalúa fuerza con dinamometría en una acción relevante para la función.",
+"Realiza una tarea funcional breve sobre la cabeza y controla síntomas y signos vitales al terminar.",
+"Formula una síntesis funcional, no una etiqueta estructural."
+],
+patient:{
+say:"Al comenzar di: “Puedo levantar el brazo, pero cuando llevo rato trabajando arriba empieza a doler y siento que pierdo fuerza.”",
+hidden:[
+"Dolor 2/10 en reposo y hasta 6/10 tras tareas prolongadas sobre la cabeza.",
+"No fiebre, no pérdida de peso, no parestesias persistentes, no luxación previa."
+],
+measures:[
+"PA correctamente tomada: 132/82 mmHg.",
+"SpO₂: 98%. FC: 74 lpm.",
+"Hombro derecho: flexión activa 150°, pasiva 165°; abducción activa 140°, pasiva 160°; rotación externa activa 68°.",
+"Hombro izquierdo: flexión 170°, abducción 170°, rotación externa 82°.",
+"Cinta métrica, perímetro de brazo a 10 cm sobre epicóndilo lateral: derecha 31,0 cm; izquierda 31,8 cm.",
+"Dinamometría de rotación externa en posición estandarizada: derecha 8,4 / 8,8 / 8,6 kg; izquierda 11,2 / 11,0 / 11,4 kg.",
+"Tras 2 min de tarea simulada sobre la cabeza: FC 88 lpm, SpO₂ 98%, dolor 5/10. A los 2 min: FC 77 lpm, dolor 3/10."
+]
+}
+},
+"3":{
+title:"Caso 3 · Tobillo tras esguince",
+person:"Valentina, 29 años · estudiante",
+intro:"Sufrió un esguince de tobillo derecho hace 6 semanas. Ya camina sin ayuda, pero refiere rigidez, sensación de debilidad y dificultad para bajar escaleras y volver a trotar.",
+goal:"Caminar rápido 30 minutos y retomar trote suave.",
+kine:[
+"Controla presión arterial, frecuencia cardíaca y SpO₂ antes de la evaluación física.",
+"Evalúa dorsiflexión y flexión plantar con goniómetro.",
+"Usa cinta métrica para cuantificar edema o diferencia de perímetro entre tobillos.",
+"Evalúa fuerza con dinamometría en una dirección clínicamente relevante.",
+"Incorpora una tarea funcional breve y vuelve a medir respuesta cardiovascular y síntomas.",
+"Explica qué hallazgos son compatibles con menor capacidad de carga y cuáles requieren seguimiento."
+],
+patient:{
+say:"Al comenzar di: “Ya puedo caminar, pero el tobillo se siente rígido y no confío para volver a correr.”",
+hidden:[
+"Dolor 1/10 en reposo y 4/10 al bajar escaleras.",
+"No dolor nocturno intenso, no nuevo trauma, no parestesias."
+],
+measures:[
+"PA: 124/78 mmHg.",
+"SpO₂: 99%. FC: 72 lpm.",
+"Tobillo derecho: dorsiflexión activa 8°, pasiva 12°; flexión plantar activa 40°.",
+"Tobillo izquierdo: dorsiflexión activa 15°, pasiva 18°; flexión plantar 49°.",
+"Figura en ocho con cinta métrica: derecho 52,5 cm; izquierdo 50,8 cm.",
+"Dinamometría eversión: derecha 6,9 / 7,1 / 7,0 kg; izquierda 9,0 / 8,8 / 9,1 kg.",
+"Después de 10 elevaciones de talón: FC 86 lpm, SpO₂ 99%, dolor 3/10, sensación de fatiga 5/10. A los 2 min: FC 75 lpm, dolor 2/10."
+]
+}
+},
+"4":{
+title:"Caso 4 · Dolor lateral de codo",
+person:"Paula, 41 años · manipuladora de alimentos",
+intro:"Desde hace 10 semanas presenta dolor lateral de codo derecho al agarrar objetos, abrir frascos y sostener bandejas. Continúa trabajando, pero refiere menor fuerza de agarre.",
+goal:"Completar una jornada laboral sin soltar objetos por dolor o fatiga.",
+kine:[
+"Controla presión arterial, frecuencia cardíaca y SpO₂.",
+"Evalúa rango de movimiento de codo y muñeca con goniómetro.",
+"Usa cinta métrica para una medición comparativa del antebrazo.",
+"Evalúa fuerza de agarre con dinamometría en ambos lados, estandarizando la posición.",
+"Realiza una tarea funcional de agarre o traslado y controla respuesta clínica.",
+"Relaciona los hallazgos de fuerza y movilidad con la actividad laboral."
+],
+patient:{
+say:"Al comenzar di: “Lo que más me cuesta es agarrar fuerte y sostener cosas por varios minutos; siento que el brazo se cansa.”",
+hidden:[
+"Dolor 2/10 en reposo y 6/10 al sostener bandejas o abrir frascos.",
+"No hubo trauma importante, no pérdida de sensibilidad, no dolor cervical irradiado."
+],
+measures:[
+"PA: 128/80 mmHg.",
+"SpO₂: 98%. FC: 76 lpm.",
+"Codo derecho: flexión 140°, extensión 0°. Muñeca derecha: extensión activa 58°, pasiva 66°.",
+"Lado izquierdo: flexión codo 145°, extensión 0°; extensión muñeca 72°.",
+"Perímetro antebrazo a 10 cm distal al epicóndilo lateral: derecha 25,2 cm; izquierda 25,8 cm.",
+"Dinamometría de agarre, 3 intentos: derecha 18,5 / 19,2 / 18,9 kg; izquierda 27,1 / 27,5 / 27,0 kg.",
+"Tras 60 s de transporte de carga liviana: FC 84 lpm, SpO₂ 98%, dolor 5/10. A los 2 min: FC 78 lpm, dolor 3/10."
+]
+}
+}
+};
+
+const q=new URLSearchParams(location.search);const id=q.get("c");const c=cases[id];const app=document.getElementById("app");
+if(!c){app.innerHTML='<div class="head"><div class="ey">Práctica musculoesquelética</div><h1>Caso no encontrado</h1></div><div class="body"><p>Escanea nuevamente el QR entregado por el docente.</p></div>'}
+else{
+function choose(role){
+ if(role==="k"){
+  app.innerHTML='<div class="head"><div class="ey">Práctica musculoesquelética</div><h1>'+c.title+'</h1><div class="tag">ROL: KINESIÓLOGO/A</div><div class="sub">'+c.person+'</div></div><div class="body"><div class="section"><h2>Información inicial</h2><p>'+c.intro+'</p><div class="box"><strong>Meta de la persona</strong><p>'+c.goal+'</p></div></div><div class="section"><h2>Tu tarea</h2><ul>'+c.kine.map(x=>'<li>'+x+'</li>').join('')+'</ul></div><div class="foot">No mires la tarjeta del paciente. Debes obtener los datos preguntando y ejecutando correctamente cada medición.</div></div>';
+ }else{
+  app.innerHTML='<div class="head"><div class="ey">Práctica musculoesquelética</div><h1>'+c.title+'</h1><div class="tag">ROL: PACIENTE</div><div class="sub">'+c.person+'</div></div><div class="body"><div class="section"><h2>Cómo empiezas</h2><div class="box"><p>'+c.patient.say+'</p></div></div><div class="section"><h2>Información que entregas solo si te la preguntan</h2><ul>'+c.patient.hidden.map(x=>'<li>'+x+'</li>').join('')+'</ul></div><div class="section"><h2>Resultados de mediciones</h2><p><strong>No los digas de inmediato.</strong> Entrega cada resultado solo después de que tu compañero haya realizado correctamente la técnica correspondiente.</p>'+c.patient.measures.map(x=>'<div class="measure">'+x+'</div>').join('')+'</div><div class="section"><button id="reveal">Mostrar todos los resultados nuevamente</button><div id="full" class="hidden box warn"><ul>'+c.patient.measures.map(x=>'<li>'+x+'</li>').join('')+'</ul></div></div><div class="foot">Interpreta el rol con naturalidad. No muestres esta pantalla al kinesiólogo/a.</div></div>';
+  const b=document.getElementById("reveal");b.onclick=()=>document.getElementById("full").classList.toggle("hidden");
+ }
+}
+app.innerHTML='<div class="head"><div class="ey">Práctica musculoesquelética · Juego de rol</div><h1>'+c.title+'</h1><div class="sub">'+c.person+'</div></div><div class="body"><div class="section"><p>Ambos integrantes escanean este mismo QR. Cada uno debe abrir únicamente el rol que le corresponde.</p></div><div class="roles"><button id="k">Soy kinesiólogo/a</button><button class="alt" id="p">Soy paciente</button></div><div class="foot">No intercambien pantallas durante la actividad.</div></div>';
+document.getElementById("k").onclick=()=>choose("k");document.getElementById("p").onclick=()=>choose("p");
+}
+</script>
+</body></html>
