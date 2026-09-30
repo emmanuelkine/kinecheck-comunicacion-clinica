@@ -25,6 +25,17 @@
     "traumatologia-ortopedia-clinica",
   ];
 
+  const CERTIFICATE_SESSION_KEY = "kinecheck_secure_session_v1";
+  const CERTIFICATE_COURSES = Object.freeze({
+    "kinecheck-clinico-curso": "kinecheck-clinico-curso",
+    "comunicacion-clinica": "comunicacion-clinica",
+    "mas-alla-del-dolor": "mas-alla-del-dolor",
+    "evidencia-aplicada": "evidencia-aplicada",
+    "traumatologia-ortopedia-clinica": "traumatologia-ortopedia-clinica",
+    "dolor-lumbar-persistente": "dolor-lumbar-persistente",
+    "dolor-musculoesqueletico": "dolor-musculoesqueletico",
+  });
+
   const VIEW_ALIASES = Object.freeze({
     productos: "biblioteca",
     recursos: "biblioteca",
@@ -44,6 +55,98 @@
     element.hidden = false;
     window.clearTimeout(toast.timer);
     toast.timer = window.setTimeout(() => { element.hidden = true; }, 4500);
+  }
+
+  function certificateSession() {
+    const stores = [sessionStorage, localStorage];
+    for (const store of stores) {
+      try {
+        const value = JSON.parse(store.getItem(CERTIFICATE_SESSION_KEY) || "null");
+        if (value?.access_token) return value;
+      } catch {}
+    }
+    return null;
+  }
+
+  function certificateSlugForCard(card) {
+    const slug = String(card?.getAttribute("data-card-course") || "").trim();
+    return CERTIFICATE_COURSES[slug] || "";
+  }
+
+  function ensureCertificateStyles() {
+    if (document.querySelector("#kc-certificate-button-styles")) return;
+    const style = document.createElement("style");
+    style.id = "kc-certificate-button-styles";
+    style.textContent = `
+      .kc-certificate-button{
+        width:100%;min-height:48px;margin-top:9px;padding:0 14px;border:1px solid rgba(91,220,211,.34);
+        border-radius:13px;background:linear-gradient(135deg,rgba(52,207,198,.16),rgba(76,162,226,.11));
+        color:#eaffff;font:inherit;font-weight:900;cursor:pointer
+      }
+      .kc-certificate-button:hover{border-color:rgba(91,220,211,.7);filter:brightness(1.07)}
+      .kc-certificate-button[aria-busy="true"]{opacity:.7;cursor:progress}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureCertificateButtons() {
+    ensureCertificateStyles();
+    document.querySelectorAll("#course-grid [data-card-course]").forEach((card) => {
+      if (!cardOwned(card)) {
+        card.querySelector(".kc-certificate-button")?.remove();
+        return;
+      }
+      const courseSlug = certificateSlugForCard(card);
+      if (!courseSlug || card.querySelector(".kc-certificate-button")) return;
+      const nativeButton = card.querySelector("button[data-course]");
+      if (!nativeButton) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "kc-certificate-button";
+      button.dataset.kcCertificateCourse = courseSlug;
+      button.textContent = "Quiero mi certificado";
+      nativeButton.insertAdjacentElement("afterend", button);
+    });
+  }
+
+  async function openCertificateRequest(courseSlug, source) {
+    const config = window.KINECHECK_ACADEMY_CONFIG || {};
+    const session = certificateSession();
+    if (!session?.access_token) {
+      toast("Tu sesión expiró. Vuelve a ingresar antes de solicitar el certificado.");
+      return;
+    }
+    if (!config.supabaseUrl || !config.supabaseAnonKey) {
+      toast("La certificación no está disponible en este momento.");
+      return;
+    }
+
+    source?.setAttribute?.("aria-busy", "true");
+    if (source) source.textContent = "Preparando solicitud…";
+    try {
+      const response = await fetch(
+        String(config.supabaseUrl).replace(/\/$/, "") + "/functions/v1/certificate-handoff-create",
+        {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + session.access_token,
+            apikey: config.supabaseAnonKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ courseSlug }),
+          cache: "no-store",
+        },
+      );
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload?.url) {
+        throw new Error(payload?.message || "No fue posible preparar la solicitud.");
+      }
+      location.assign(payload.url);
+    } catch (error) {
+      source?.removeAttribute?.("aria-busy");
+      if (source) source.textContent = "Quiero mi certificado";
+      toast(error instanceof Error ? error.message : "No fue posible solicitar el certificado.");
+    }
   }
 
   function sourceSlug(source) {
@@ -206,6 +309,7 @@
     if (checking) return;
 
     decorateConstructionCards();
+    ensureCertificateButtons();
 
     const baseGroup = grid.querySelector('[data-course-group="not-started"]');
     if (!baseGroup) return;
@@ -327,6 +431,13 @@
   window.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+
+    const certificateControl = target.closest("[data-kc-certificate-course]");
+    if (certificateControl) {
+      stop(event);
+      void openCertificateRequest(certificateControl.dataset.kcCertificateCourse, certificateControl);
+      return;
+    }
 
     const pausedControl = target.closest([
       `[data-kc-open-product="${PAUSED_PRODUCT}"]`,
