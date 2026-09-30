@@ -1,3 +1,17 @@
-KineCheck public audit production deploy trigger.
-Canonical product pages, refund policy, sitemap and cache revalidation are expected from main.
-Commit date: 2026-08-12 America/Santiago.
+KineCheck public production deploy trigger.
+
+Reason: publish academic-load standardization and certificate-readiness updates from main.
+Expected main commit before trigger: 1f93a7e029ef1db9ac4ce376670474205b6389cd
+Trigger date: 2026-09-30 America/Santiago.
+
+After deployment, verify:
+- /productos/kinecheck-clinico/
+- /productos/comunicacion-clinica/
+- /productos/mas-alla-del-dolor/
+- /productos/evidencia-aplicada/
+- /productos/traumatologia-ortopedia-clinica/
+- /productos/dolor-lumbar-persistente/
+- /productos/dolor-musculoesqueletico/
+- /comunicacion-clinica.html
+- /traumatologia/
+- /academy/dolor-lumbar-persistente/
