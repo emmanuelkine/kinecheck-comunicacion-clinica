@@ -319,6 +319,53 @@
     })[character]);
   }
 
+  function academicSession() {
+    const keys = [
+      "kinecheck_course_session_v2:comunicacion-clinica",
+      SESSION_KEY,
+    ];
+    for (const storage of [sessionStorage, localStorage]) {
+      for (const key of keys) {
+        try {
+          const session = JSON.parse(storage.getItem(key) || "null");
+          if (session?.access_token) return session;
+        } catch {}
+      }
+    }
+    return null;
+  }
+
+  async function submitAcademicActivity(text, checks) {
+    const config = window.KINECHECK_CONFIG || {};
+    const session = academicSession();
+    if (!session?.access_token) throw new Error("Tu sesión expiró. Vuelve a ingresar desde KineCheck.");
+    if (!config.supabaseUrl || !config.supabaseAnonKey) throw new Error("La verificación académica no está disponible.");
+
+    const response = await fetch(
+      String(config.supabaseUrl).replace(/\/$/, "") + "/functions/v1/course-completion-submit",
+      {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          Authorization: "Bearer " + session.access_token,
+          apikey: config.supabaseAnonKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseSlug: "comunicacion-clinica",
+          activityKey: "final",
+          responseText: text,
+          criteriaConfirmed: checks.map((item) => Boolean(item.checked)),
+        }),
+      },
+    );
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload?.activityComplete) {
+      throw new Error(payload?.message || "No fue posible registrar la actividad en KineCheck.");
+    }
+    return payload;
+  }
+
 
   function ensureAcademicLoadActivity() {
     const root = document.querySelector("#root");
@@ -346,15 +393,16 @@
           "Finaliza con una decisión compartida y verificación de comprensión."
         ].map((label, index) => `<label style="display:block;margin:9px 0;color:#d9e9ea"><input type="checkbox" data-kc-academic-check="${index}" ${saved?.completed ? "checked" : ""}> ${escapeHtml(label)}</label>`).join("")}
         <button id="kc-communication-academic-save" type="button" style="min-height:44px;padding:0 16px;border:0;border-radius:11px;background:#69dfd6;color:#06262d;font-weight:900">${saved?.completed ? "Actividad completada ✓" : "Guardar actividad"}</button>
-        <p id="kc-communication-academic-status" style="margin:10px 0 0;color:#9fc6c9;font-size:.82rem">${saved?.completed ? "Actividad registrada en este dispositivo." : "Para completar: mínimo 450 caracteres y todos los criterios marcados."}</p>
+        <p id="kc-communication-academic-status" style="margin:10px 0 0;color:#9fc6c9;font-size:.82rem">${saved?.serverCompleted ? "Actividad registrada en KineCheck. Verificación final del recorrido pendiente." : saved?.completed ? "Actividad guardada localmente. Guarda nuevamente para registrarla en KineCheck." : "Para completar: mínimo 450 caracteres y todos los criterios marcados."}</p>
       </div>
     `;
     root.insertAdjacentElement("afterend", section);
 
-    section.querySelector("#kc-communication-academic-save")?.addEventListener("click", () => {
+    section.querySelector("#kc-communication-academic-save")?.addEventListener("click", async () => {
       const text = String(section.querySelector("#kc-communication-academic-response")?.value || "").trim();
       const checks = [...section.querySelectorAll("[data-kc-academic-check]")];
       const status = section.querySelector("#kc-communication-academic-status");
+      const button = section.querySelector("#kc-communication-academic-save");
       if (text.length < 450) {
         if (status) status.textContent = "Desarrolla al menos 450 caracteres antes de guardar.";
         return;
@@ -363,17 +411,33 @@
         if (status) status.textContent = "Marca todos los criterios antes de completar.";
         return;
       }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Registrando…";
+      }
+      if (status) status.textContent = "Guardando actividad en KineCheck…";
+
       try {
-        localStorage.setItem(storageKey, JSON.stringify({
-          text,
-          completed: true,
-          completedAt: new Date().toISOString(),
-          durationMinutes: 30
-        }));
-      } catch {}
-      const button = section.querySelector("#kc-communication-academic-save");
-      if (button) button.textContent = "Actividad completada ✓";
-      if (status) status.textContent = "Actividad registrada en este dispositivo.";
+        const payload = await submitAcademicActivity(text, checks);
+        const completedAt = payload.completedAt || new Date().toISOString();
+        try {
+          localStorage.setItem(storageKey, JSON.stringify({
+            text,
+            completed: true,
+            serverCompleted: true,
+            completedAt,
+            durationMinutes: 30
+          }));
+        } catch {}
+        if (button) button.textContent = "Actividad completada ✓";
+        if (status) status.textContent = "Actividad registrada en KineCheck. La verificación final del recorrido permanece pendiente.";
+      } catch (error) {
+        if (button) button.textContent = "Guardar actividad";
+        if (status) status.textContent = error instanceof Error ? error.message : "No fue posible registrar la actividad.";
+      } finally {
+        if (button) button.disabled = false;
+      }
     });
   }
 
