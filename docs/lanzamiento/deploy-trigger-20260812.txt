@@ -9,3 +9,4 @@ After deployment, verify:
 - academy-owned-native-bridge-v1.js?v=20260930-cert1
 - owned certifiable courses display "Quiero mi certificado"
 - the handoff redirects to the KineCheck Certificados portal
+2026-09-30 certificate-completion-sync deploy
