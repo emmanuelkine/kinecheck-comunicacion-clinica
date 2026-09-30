@@ -15,6 +15,32 @@
   <script src="../watermark.js?v=20260801-access4"></script>
   <script type="module" src="../auth-gate.js?v=20260806-final4"></script>
   <link rel="stylesheet" href="../assets/brand/kinecheck-3d.css?v=1">
+  <script>
+    (() => {
+      function auditDuration() {
+        const root = document.querySelector("#root");
+        if (!root || root.hidden) return;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach((node) => {
+          const text = String(node.nodeValue || "");
+          if (/12\s*[–-]\s*14\s*horas?/i.test(text)) {
+            node.nodeValue = text.replace(/12\s*[–-]\s*14\s*horas?/gi, "10 h 40 min auditados");
+          }
+        });
+        if (document.querySelector("#kc-trauma-academic-load")) return;
+        const panel = document.createElement("section");
+        panel.id = "kc-trauma-academic-load";
+        panel.style.cssText = "width:min(1060px,calc(100% - 28px));margin:24px auto 70px;padding:18px 22px;border:1px solid rgba(82,220,210,.28);border-radius:20px;background:#08232c;color:#eaf8f8;font-family:system-ui,sans-serif";
+        panel.innerHTML = '<h2 style="color:#fff">Carga académica auditada</h2><p>Duración verificable por módulos: <strong>10 h 40 min</strong>. Si el emisor requiere horas enteras, utilizar 10 horas.</p>';
+        root.insertAdjacentElement("afterend", panel);
+      }
+      new MutationObserver(auditDuration).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["hidden"]});
+      window.addEventListener("kinecheck:course-authorized",()=>setTimeout(auditDuration,250));
+      setTimeout(auditDuration,800);
+    })();
+  </script>
 </head>
 <body>
   <main id="access-shell" class="access-shell">

@@ -319,6 +319,64 @@
     })[character]);
   }
 
+
+  function ensureAcademicLoadActivity() {
+    const root = document.querySelector("#root");
+    if (!root || root.hidden || document.getElementById("kc-communication-academic-load")) return;
+
+    const storageKey = "kinecheck_communication_academic_load_v1";
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(storageKey) || "null"); } catch {}
+
+    const section = document.createElement("section");
+    section.id = "kc-communication-academic-load";
+    section.style.cssText = "width:min(1060px,calc(100% - 28px));margin:24px auto 70px;padding:22px;border:1px solid rgba(82,220,210,.28);border-radius:22px;background:#082832;color:#eefafa;font-family:system-ui,sans-serif";
+    section.innerHTML = `
+      <span style="display:inline-flex;padding:6px 9px;border:1px solid rgba(91,226,214,.25);border-radius:999px;color:#79e5d7;font-size:.72rem;font-weight:900">CARGA ACADÉMICA AUDITADA</span>
+      <h2 style="margin:8px 0;color:#fff">Comunicación Clínica · 8 horas</h2>
+      <p style="color:#c7d9dd">La carga incorpora una actividad integradora obligatoria de 30 minutos además del recorrido de 12 módulos.</p>
+      <div style="margin-top:16px;padding:17px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(255,255,255,.04)">
+        <h3 style="margin:0 0 8px;color:#fff">Actividad integradora obligatoria · 30 min</h3>
+        <p style="color:#d5e5e7">Caso: una persona con dolor musculoesquelético persistente expresa temor porque le dijeron que tiene desgaste y que podría empeorar si se mueve. Redacta una intervención clínica completa que incluya validación, exploración de preocupaciones, explicación comprensible, manejo de incertidumbre y una decisión compartida de cierre.</p>
+        <textarea id="kc-communication-academic-response" style="width:100%;min-height:190px;margin:10px 0;padding:12px;border-radius:10px;border:1px solid #bfd7d9;font:inherit">${escapeHtml(saved?.text || "")}</textarea>
+        ${[
+          "Valida la experiencia sin confirmar automáticamente una interpretación de daño.",
+          "Incluye al menos una pregunta abierta y una reformulación.",
+          "Explica incertidumbre con lenguaje comprensible y no alarmista.",
+          "Finaliza con una decisión compartida y verificación de comprensión."
+        ].map((label, index) => `<label style="display:block;margin:9px 0;color:#d9e9ea"><input type="checkbox" data-kc-academic-check="${index}" ${saved?.completed ? "checked" : ""}> ${escapeHtml(label)}</label>`).join("")}
+        <button id="kc-communication-academic-save" type="button" style="min-height:44px;padding:0 16px;border:0;border-radius:11px;background:#69dfd6;color:#06262d;font-weight:900">${saved?.completed ? "Actividad completada ✓" : "Guardar actividad"}</button>
+        <p id="kc-communication-academic-status" style="margin:10px 0 0;color:#9fc6c9;font-size:.82rem">${saved?.completed ? "Actividad registrada en este dispositivo." : "Para completar: mínimo 450 caracteres y todos los criterios marcados."}</p>
+      </div>
+    `;
+    root.insertAdjacentElement("afterend", section);
+
+    section.querySelector("#kc-communication-academic-save")?.addEventListener("click", () => {
+      const text = String(section.querySelector("#kc-communication-academic-response")?.value || "").trim();
+      const checks = [...section.querySelectorAll("[data-kc-academic-check]")];
+      const status = section.querySelector("#kc-communication-academic-status");
+      if (text.length < 450) {
+        if (status) status.textContent = "Desarrolla al menos 450 caracteres antes de guardar.";
+        return;
+      }
+      if (!checks.every((item) => item.checked)) {
+        if (status) status.textContent = "Marca todos los criterios antes de completar.";
+        return;
+      }
+      try {
+        localStorage.setItem(storageKey, JSON.stringify({
+          text,
+          completed: true,
+          completedAt: new Date().toISOString(),
+          durationMinutes: 30
+        }));
+      } catch {}
+      const button = section.querySelector("#kc-communication-academic-save");
+      if (button) button.textContent = "Actividad completada ✓";
+      if (status) status.textContent = "Actividad registrada en este dispositivo.";
+    });
+  }
+
   function repair() {
     ensureRc1Styles();
     hideMisleadingEcosystemButton();
@@ -328,6 +386,7 @@
     repairSlideJumpControls();
     normalizeSourceLinks();
     ensureNotesAccess();
+    ensureAcademicLoadActivity();
   }
 
   function start() {
