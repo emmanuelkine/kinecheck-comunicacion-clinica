@@ -139,6 +139,13 @@
       );
       const payload = await response.json().catch(() => ({}));
       if (!response.ok || !payload?.url) {
+        const progress = payload?.progress;
+        if (payload?.code === "COURSE_NOT_COMPLETED" && progress) {
+          const parts = [];
+          if (Number(progress.journeysTotal) > 0) parts.push(String(progress.journeysCompleted || 0) + "/" + String(progress.journeysTotal) + " recorridos");
+          if (Number(progress.academicTotal) > 0) parts.push(String(progress.academicCompleted || 0) + "/" + String(progress.academicTotal) + " actividades académicas");
+          throw new Error((payload?.message || "El curso aún no está completado.") + (parts.length ? " Avance: " + parts.join(" · ") + "." : ""));
+        }
         throw new Error(payload?.message || "No fue posible preparar la solicitud.");
       }
       location.assign(payload.url);
