@@ -5,6 +5,11 @@
   window.__KINECHECK_COMMUNICATION_UI_CLEANUP_V1__ = true;
 
   const SESSION_KEY = "kinecheck_secure_session_v1";
+  const COURSE_SLUG = "comunicacion-clinica";
+  const COURSE_SESSION_KEY = "kinecheck_course_session_v2:comunicacion-clinica";
+  const QUIZ_SCORES_KEY = "kinecheck_communication_quiz_scores_v1";
+  let progressSyncTimer = 0;
+  let lastProgressPayload = "";
   const NOTES_PREFIX = "kinecheck_communication_notes_v1";
   const nativePrompt = window.prompt.bind(window);
 
@@ -26,6 +31,137 @@
 
   function notesKey() {
     return `${NOTES_PREFIX}:${sessionScope()}`;
+  }
+
+  function readJson(storage, key, fallback = null) {
+    try { return JSON.parse(storage.getItem(key) || "null") ?? fallback; } catch { return fallback; }
+  }
+
+  function currentSession() {
+    return readJson(sessionStorage, COURSE_SESSION_KEY)
+      || readJson(sessionStorage, SESSION_KEY)
+      || readJson(localStorage, SESSION_KEY);
+  }
+
+  function normalizeIntegerList(value, min, max) {
+    if (!Array.isArray(value)) return [];
+    return [...new Set(value.map(Number).filter((item) => Number.isInteger(item) && item >= min && item <= max))].sort((a,b) => a-b);
+  }
+
+  function captureQuizResult() {
+    const root = document.querySelector("#root");
+    if (!root) return;
+    const resultText = String(root.querySelector("#quizQuestion")?.textContent || "");
+    const badgeText = String(root.querySelector("#quizBadge")?.textContent || "");
+    const result = resultText.match(/Resultado:\s*(\d+)\s*de\s*(\d+)\s*\((\d+)%\)/i);
+    const moduleMatch = badgeText.match(/Módulo\s*(\d+)/i);
+    if (!result || !moduleMatch) return;
+    const moduleId = Number(moduleMatch[1]);
+    const score = Math.max(0, Math.min(100, Number(result[3]) || 0));
+    if (!Number.isInteger(moduleId) || moduleId < 1 || moduleId > 12) return;
+    const scores = readJson(localStorage, QUIZ_SCORES_KEY, {});
+    const current = Number(scores?.[moduleId] ?? -1);
+    if (score <= current) return;
+    scores[moduleId] = score;
+    try { localStorage.setItem(QUIZ_SCORES_KEY, JSON.stringify(scores)); } catch {}
+  }
+
+  async function syncCommunicationProgressNow() {
+    const config = window.KINECHECK_CONFIG || {};
+    const session = currentSession();
+    const accessToken = String(session?.access_token || "");
+    if (!config.supabaseUrl || !config.supabaseAnonKey || !accessToken) return;
+
+    let userId = String(session?.user?.id || "");
+    if (!userId) {
+      try {
+        const response = await fetch(`${config.supabaseUrl}/auth/v1/user`, {
+          method: "GET",
+          cache: "no-store",
+          headers: { apikey: config.supabaseAnonKey, Authorization: `Bearer ${accessToken}` },
+        });
+        const user = await response.json().catch(() => ({}));
+        if (!response.ok) return;
+        userId = String(user?.id || "");
+      } catch { return; }
+    }
+    if (!userId) return;
+
+    const slides = normalizeIntegerList(readJson(localStorage, "kcCommSlides", []), 1, 154);
+    const modules = normalizeIntegerList(readJson(localStorage, "kcCommModules", []), 1, 12);
+    const quizScoresRaw = readJson(localStorage, QUIZ_SCORES_KEY, {});
+    const quizScores = {};
+    for (let moduleId = 1; moduleId <= 12; moduleId += 1) {
+      const value = Number(quizScoresRaw?.[moduleId]);
+      if (Number.isFinite(value)) quizScores[moduleId] = Math.max(0, Math.min(100, Math.round(value)));
+    }
+    const practicesCompleted = [];
+    for (let moduleId = 1; moduleId <= 12; moduleId += 1) {
+      if (String(localStorage.getItem(`kcPractice${moduleId}`) || "").trim().length > 0) practicesCompleted.push(moduleId);
+    }
+    const finalActivity = readJson(localStorage, "kinecheck_communication_academic_load_v1", {});
+    const state = {
+      schemaVersion: 1,
+      source: "communication-clinical",
+      slidesCompleted: slides,
+      slidesCompletedCount: slides.length,
+      totalSlides: 154,
+      modulesCompleted: modules,
+      modulesCompletedCount: modules.length,
+      totalModules: 12,
+      practicesCompleted,
+      practicesCompletedCount: practicesCompleted.length,
+      totalPractices: 12,
+      quizScores,
+      quizzesAttempted: Object.keys(quizScores).length,
+      totalQuizzes: 12,
+      finalActivityServerCompleted: finalActivity?.serverCompleted === true,
+      finalActivityCompletedAt: finalActivity?.serverCompleted ? String(finalActivity.completedAt || "") : null,
+      routeComplete: slides.length === 154
+        && modules.length === 12
+        && practicesCompleted.length === 12
+        && Object.keys(quizScores).length === 12
+        && finalActivity?.serverCompleted === true,
+      updatedAt: new Date().toISOString(),
+    };
+    const payloadKey = JSON.stringify({
+      slides: slides.length,
+      modules,
+      practicesCompleted,
+      quizScores,
+      final: state.finalActivityServerCompleted,
+    });
+    if (payloadKey === lastProgressPayload) return;
+
+    try {
+      const response = await fetch(
+        `${config.supabaseUrl}/rest/v1/learning_progress?on_conflict=user_id,course_slug`,
+        {
+          method: "POST",
+          headers: {
+            apikey: config.supabaseAnonKey,
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            Prefer: "resolution=merge-duplicates,return=minimal",
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            course_slug: COURSE_SLUG,
+            profile: "course",
+            state,
+            updated_at: state.updatedAt,
+          }),
+        }
+      );
+      if (response.ok) lastProgressPayload = payloadKey;
+    } catch {
+      // La experiencia del curso no depende de la sincronización.
+    }
+  }
+
+  function scheduleCommunicationProgressSync() {
+    window.clearTimeout(progressSyncTimer);
+    progressSyncTimer = window.setTimeout(syncCommunicationProgressNow, 350);
   }
 
   function readNotes() {
@@ -484,6 +620,8 @@
   }
 
   function repair() {
+    captureQuizResult();
+    scheduleCommunicationProgressSync();
     ensureRc1Styles();
     hideMisleadingEcosystemButton();
     repairLightCardContrast();
@@ -515,6 +653,8 @@
       const slideJump = event.target instanceof Element ? event.target.closest("[data-kc-rc1-slide-jump]") : null;
       if (slideJump) primeSlideJump(slideJump);
     }, true);
+
+    window.addEventListener("focus", scheduleCommunicationProgressSync);
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && !document.getElementById("kc-rc1-notes-dialog")?.hidden) closeNotesDialog();
