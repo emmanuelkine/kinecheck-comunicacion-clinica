@@ -343,7 +343,7 @@ Automática en servidor para los recorridos y actividades configurados.
 
 # Estado de cierre previo a convenio
 
-Los siete programas anteriores están suficientemente documentados para **ser enviados a revisión de una OTEC**, pero ello no equivale a aprobación. Antes de activar certificación deben quedar resueltos, para cada curso, los siguientes puntos:
+Los siete programas anteriores están suficientemente documentados para **ser enviados ahora a revisión de una OTEC**, pero ello no equivale a aprobación ni activa certificación. Antes de activar certificación deben quedar resueltos, para cada curso, los siguientes puntos:
 
 1. aprobación escrita de la versión del programa;
 2. horas que figurarán en el certificado;
