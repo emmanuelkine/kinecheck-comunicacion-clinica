@@ -53,9 +53,12 @@ serve(async (req) => {
       return json({ message: "No fue posible verificar el acceso al curso." }, 500);
     }
 
+    // Match the existing ecosystem owner policy after validating the session server-side.
+    const configuredOwnerEmails = Deno.env.get("KINECHECK_OWNER_EMAILS") || "emmanuelkine@gmail.com,emmanuelkine+owner@gmail.com,emmanuel_fox@hotmail.com";
+    const accountOwner = configuredOwnerEmails.split(",").map(value => value.trim().toLowerCase()).includes(email);
     const owner = String(access?.access_source || "").toLowerCase() === "owner" || String(access?.last_event || "").toUpperCase() === "OWNER_ACCESS";
     const expiresAt = access?.access_expires_at ? new Date(access.access_expires_at).getTime() : null;
-    const usable = Boolean(access?.active) && (owner || expiresAt === null || (Number.isFinite(expiresAt) && expiresAt > Date.now()));
+    const usable = accountOwner || (Boolean(access?.active) && (owner || expiresAt === null || (Number.isFinite(expiresAt) && expiresAt > Date.now())));
     if (!usable) {
       const expired = expiresAt !== null && Number.isFinite(expiresAt) && expiresAt <= Date.now();
       return json({ code: expired ? "ACCESS_TERM_EXPIRED" : "ACCESS_NOT_ACTIVE", message: expired ? "El período de acceso de este producto finalizó." : "No encontramos una licencia activa para este curso." }, 403);
@@ -73,6 +76,7 @@ serve(async (req) => {
       sources.push(source);
     }
     return js(sources.join("\n;\n"));
+
   } catch (error) {
     console.error("dolor-lumbar-course-key", error);
     return json({ message: "Error inesperado." }, 500);
