@@ -4,6 +4,8 @@
 **Objetivo:** separar la preparación académica interna de KineCheck de una futura aprobación/certificación privada por una OTEC.  
 **Regla:** ningún estado de esta matriz equivale a curso SENCE, código SENCE, franquicia tributaria ni aprobación actual de una OTEC.
 
+**Paquete formal de programas:** [programas-kinecheck-v1-2026-10-01.md](./programas-otec/programas-kinecheck-v1-2026-10-01.md). Este paquete consolida propósito, resultados de aprendizaje, estructura, evaluación, carga, trazabilidad y estado de aprobación de los siete cursos propuestos para revisión inicial.
+
 ## Criterio de salida para activar certificación OTEC
 
 Un curso solo debería pasar de **“OTEC en preparación”** a **“certificación OTEC activa”** cuando exista, por escrito:

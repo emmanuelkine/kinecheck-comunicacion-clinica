@@ -295,6 +295,10 @@ Cada curso debería disponer de un archivo único y versionado con:
 Las actualizaciones científicas deben incorporarse sin alterar continuamente el programa troncal. La estructura recomendada es:
 **programa estable + biblioteca viva de evidencia + registro de cambios**.
 
+## E. Paquete formal para revisión OTEC
+
+A partir de esta auditoría se generó el paquete versionado [`programas-kinecheck-v1-2026-10-01.md`](./programas-otec/programas-kinecheck-v1-2026-10-01.md), que consolida los siete cursos de la primera propuesta de convenio con propósito, resultados de aprendizaje, estructura, metodología, evaluación, carga horaria, criterio actual y brechas de trazabilidad. El documento es un **borrador institucional para revisión**, no una aprobación OTEC.
+
 ## E. Estado de cierre de auditoría
 La auditoría documental/académica de los cursos principales ya cubre las fuentes de contenido disponibles: Supabase, activos protegidos, bundles respaldados, Library y repositorios históricos. **Comunicación Clínica, Más allá del dolor y Traumatología y Ortopedia Clínica ya fueron incorporados a la validación estructural detallada.**
 
