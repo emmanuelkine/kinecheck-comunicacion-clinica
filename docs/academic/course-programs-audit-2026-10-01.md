@@ -161,7 +161,7 @@ La lógica académica exige **80 % en cada cuestionario de módulo** para desblo
 
 La fuente histórica todavía contiene el rótulo `12–14 horas`, pero la suma verificable de módulos es 640 minutos. La interfaz vigente ya sustituye ese rótulo por **10 h 40 min** y muestra bibliografía esencial y límites profesionales. También se corrigió el lenguaje de fractura expuesta para no atribuir al estudiante/profesional no habilitado la administración de antibióticos.
 
-**Brechas pendientes:** el progreso y las puntuaciones se guardan en el navegador y todavía no se sincronizan con servidor. El certificado interno histórico de KineCheck no debe utilizarse como certificado institucional: permanece deshabilitado mientras la certificación OTEC no esté formalizada.
+**Trazabilidad actualizada:** la aplicación sincroniza con `learning_progress` un snapshot autenticado de lecciones completadas, puntajes modulares, casos y examen final, además de conservar la copia local. El certificado interno histórico de KineCheck permanece deshabilitado. **Brecha pendiente:** la calificación se origina en el cliente; antes de automatizar una certificación OTEC debe validarse o recalcularse server-side.
 
 ---
 
