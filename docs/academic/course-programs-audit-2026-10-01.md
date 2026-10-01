@@ -77,7 +77,7 @@ Se contrastó la fuente histórica inmediatamente anterior a la protección del 
 
 La actividad integradora final de 30 minutos añadida en la versión académica vigente exige al menos 450 caracteres y cuatro criterios: validación sin confirmar daño, pregunta abierta/reformulación, explicación de incertidumbre no alarmista y cierre con decisión compartida/verificación de comprensión. La entrega se registra en servidor.
 
-**Brecha pendiente:** los cuestionarios son formativos y no existe aún un umbral global de aprobación aprobado por OTEC. La ruta completa tampoco está trazada íntegramente en servidor, por lo que la verificación final debe permanecer manual hasta cerrar ambos puntos.
+**Trazabilidad actualizada:** la interfaz sincroniza a `learning_progress` las diapositivas estudiadas, módulos marcados, prácticas con respuesta, resultados formativos detectados y el estado de la actividad final. **Brecha pendiente:** no existe aún un umbral global de aprobación aprobado por OTEC y los puntajes formativos se originan en cliente, por lo que la verificación final permanece manual.
 
 ---
 
@@ -106,7 +106,7 @@ Se auditó el bundle protegido identificado por la aplicación como `index-nmhIR
 
 La aplicación incluye además **8 casos integradores**: hombro, rodilla, cervical, cadera, tobillo, codo, dolor lumbar persistente y un caso sistémico. El contenido usa formulaciones prudentes sobre imagen, causalidad, banderas clínicas, probabilidad, fiabilidad y pruebas especiales.
 
-**Brecha pendiente:** no se identificó un criterio global de aprobación ni una evaluación final calificable independiente del recorrido. Tampoco existe trazabilidad de finalización en servidor. Por ello, el curso puede presentarse a revisión de la OTEC, pero la emisión automática no debe activarse todavía.
+**Trazabilidad actualizada:** las lecciones completadas del recorrido (hasta 32) se sincronizan a `learning_progress` cuando existe sesión activa. **Brecha pendiente:** no se identificó un criterio global de aprobación ni una evaluación final calificable independiente del recorrido. Por ello, el curso puede presentarse a revisión de la OTEC, pero la emisión automática no debe activarse todavía.
 
 ---
 
