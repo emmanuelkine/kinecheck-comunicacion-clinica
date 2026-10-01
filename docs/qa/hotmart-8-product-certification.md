@@ -2,7 +2,7 @@
 
 Actualizado: 2026-08-17
 
-> Nota de compatibilidad: el nombre histórico de este archivo conserva `hotmart-8-product-certification.md`, pero el contrato vigente incluye nueve productos comerciales.
+> Documento histórico de QA comercial actualizado por última vez el 17 de agosto de 2026. No debe utilizarse como inventario maestro actual. Para el inventario y los grants vigentes, consultar `docs/access/product-access-matrix.md`, cuya verificación es posterior. Los productos incorporados después de esta fecha requieren su propia certificación manual antes de considerarse comercialmente validados.
 
 ## Regla de cierre
 

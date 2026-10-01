@@ -5,7 +5,6 @@
   window.__KINECHECK_COURSE_CERTIFICATION_STATUS_V1__ = true;
 
   const COURSE_LABELS = Object.freeze({
-    "banderas-clinicas": "KineCheck Banderas Clínicas",
     "comunicacion-clinica": "Comunicación Clínica",
     "dolor-lumbar-persistente": "Dolor Lumbar Persistente",
     "dolor-musculoesqueletico": "Dolor Musculoesquelético",
