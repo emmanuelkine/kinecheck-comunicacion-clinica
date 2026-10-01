@@ -24,6 +24,22 @@ function validSource(source: string) {
   return Boolean(source.trim()) && !value.startsWith("<!doctype") && !value.startsWith("<html");
 }
 
+function repairLumbarRenderer(source: string) {
+  return source
+    .replace("function valid(v,min,max){return !isNaN(v)&&v>=min&&v<=max;}", "function valid(v,min,max){return Number.isFinite(v)&&Number.isInteger(v)&&v>=min&&v<=max;}")
+    .replace("var v=Number(inp.value);if(!valid(v,0,24))", "if(inp.value.trim()===''){result.innerHTML='Ingresa el número de ítems marcados.';return;}var v=Number(inp.value);if(!valid(v,0,24))")
+    .replace("var a=Number(cur.value),b=Number(best.value),c=Number(worst.value);", "if([cur,best,worst].some(function(x){return x.value.trim()==='';})){result.innerHTML='Completa los tres valores entre 0 y 10.';return;}var a=Number(cur.value),b=Number(best.value),c=Number(worst.value);")
+    .replace("result.innerHTML='<strong>Actual '+a+'/10</strong>", "if(b>c){result.innerHTML='El mejor dolor no puede superar al peor dolor del mismo período.';return;}result.innerHTML='<strong>Actual '+a+'/10</strong>")
+    .replace("x.placeholder=placeholder;return x;", "x.placeholder=placeholder;x.setAttribute('aria-label',placeholder);return x;")
+    .replace(/Casos ramificados/g, "Casos de decisión clínica")
+    .replace("Modelos interactivos originales.", "Esquemas visuales originales.")
+    .replace(/casos ramificados/g, "casos de decisión clínica")
+    .replace(/Casos clínicos ramificados/g, "Casos de decisión clínica")
+    .replace(/atlas interactivos/g, "esquemas visuales")
+    .replace(/Atlas visual interactivo/g, "Atlas visual")
+    .replace("Cada decisión modifica el recorrido y entrega feedback basado en seguridad, función y evidencia.", "Cada decisión entrega retroalimentación basada en seguridad, función y evidencia.");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ message: "Método no permitido." }, 405);
@@ -73,7 +89,7 @@ serve(async (req) => {
       }
       const source = await file.text();
       if (!validSource(source)) return json({ message: "El contenido protegido del curso no es válido." }, 500);
-      sources.push(source);
+      sources.push(path.endsWith("/app-v6.js") ? repairLumbarRenderer(source) : source);
     }
     return js(sources.join("\n;\n"));
 
