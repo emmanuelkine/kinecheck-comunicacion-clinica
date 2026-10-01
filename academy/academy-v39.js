@@ -531,7 +531,7 @@ function courseCardMarkup(course) {
       <h3>${course.title}</h3>
       <p>${course.subtitle}</p>
       <div class="course-meta">${productLabel}</div>
-      ${course.kind === "course" ? '<div class="course-meta" data-kc-certification-status="preparing">Certificación OTEC en preparación · formación privada · no SENCE</div>' : ""}
+      ${course.kind === "course" ? '<div class="course-meta" data-kc-certification-status="preparing">Certificación privada futura · convenio OTEC pendiente · no SENCE</div>' : ""}
       ${progressMarkup(course, state)}
       <button class="course-button" type="button" data-course="${course.slug}" ${owned ? "" : "disabled"}>
         ${courseActionLabel(course, access)}

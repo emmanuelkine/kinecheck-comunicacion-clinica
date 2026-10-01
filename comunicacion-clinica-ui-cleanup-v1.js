@@ -251,6 +251,16 @@
     });
   }
 
+  function replaceInternalBibliographyNotice() {
+    const root = document.querySelector("#root");
+    if (!root) return;
+    const diagnostic = "No se detectaron referencias con DOI en este tramo. Revisa las diapositivas originales para citas presentadas como imagen o texto sin identificador.";
+    root.querySelectorAll("section.panel-card > p").forEach((paragraph) => {
+      if (normalizeText(paragraph.textContent) !== normalizeText(diagnostic)) return;
+      paragraph.textContent = "Consulta las diapositivas del módulo para revisar las fuentes y ampliar los conceptos trabajados.";
+    });
+  }
+
   function notesButton() {
     return document.querySelector("#root .kc-rc1-notes-button");
   }
@@ -449,6 +459,7 @@
     repairEcosystemRoutes();
     repairSlideJumpControls();
     normalizeSourceLinks();
+    replaceInternalBibliographyNotice();
     ensureNotesAccess();
     ensureAcademicLoadActivity();
   }

@@ -1,3 +1,5 @@
+import { repairCommunicationQuizSource } from "./communication-quiz-source-repair-v1.js";
+
 const COURSE_SESSION_PREFIX = "kinecheck_course_session_v2:";
 const LEGACY_COURSE_SESSION_PREFIX = "kinecheck_course_session_v1:";
 const SHARED_SESSION_KEY = "kinecheck_secure_session_v1";
@@ -324,7 +326,9 @@ async function fetchWithRetry(url, init = {}, attempts = NETWORK_ATTEMPTS) {
   async function launchCourse(source, session, courseSlug) {
     if (!root || !shell) throw new Error("La pantalla del curso no está disponible.");
     root.hidden = false;
-    const moduleUrl = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
+    const moduleUrl = URL.createObjectURL(new Blob([
+      repairCommunicationQuizSource(source, courseSlug),
+    ], { type: "text/javascript" }));
 
     try {
       await import(moduleUrl);
