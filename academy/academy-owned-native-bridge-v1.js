@@ -104,7 +104,7 @@
       button.type = "button";
       button.className = "kc-certificate-button";
       button.dataset.kcCertificateCourse = courseSlug;
-      button.textContent = "Quiero mi certificado";
+      button.textContent = "Información sobre certificación";
       nativeButton.insertAdjacentElement("afterend", button);
     });
   }
@@ -151,7 +151,7 @@
       location.assign(payload.url);
     } catch (error) {
       source?.removeAttribute?.("aria-busy");
-      if (source) source.textContent = "Quiero mi certificado";
+      if (source) source.textContent = "Información sobre certificación";
       toast(error instanceof Error ? error.message : "No fue posible solicitar el certificado.");
     }
   }

@@ -155,12 +155,10 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
       subtitle: "Screening, riesgo y toma de decisiones musculoesqueléticas.",
       productId: "PROPIETARIO",
       icon: "BC",
-      kind: "course",
+      kind: "tool",
       audience: "Profesionales y estudiantes",
       audienceKey: "professionals",
       audiences: ["professionals", "students"],
-      modules: 9,
-      lessons: 13,
       status: "active",
       url: "../banderas-clinicas/?course=banderas-clinicas&v=20260820-owner1"
     },
