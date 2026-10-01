@@ -2,6 +2,8 @@
   const replacements = [
     [/12\s*[–-]\s*14\s*horas?/gi, '10 h 40 min'],
     [/Administrar antibióticos según protocolo y cubrir la herida/g, 'Activar atención urgente para antibióticos por el equipo habilitado y cubrir la herida'],
+    [/Aprobaste el curso\. Tu certificado está habilitado\./g, 'Aprobaste el curso. Tu resultado académico quedó registrado en este dispositivo; la certificación OTEC aún no está activa.'],
+    [/Certificado bloqueado/g, 'Certificación OTEC aún no activa'],
   ];
   function updateAcademicDisplay() {
     const root = document.getElementById('root');
@@ -14,6 +16,16 @@
       const after = replacements.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), before);
       if (after !== before) node.nodeValue = after;
     });
+    root.querySelectorAll('[data-page="certificate"]').forEach(button => button.remove());
+    root.querySelectorAll('.certificate').forEach(section => {
+      section.hidden = true;
+      section.setAttribute('aria-hidden', 'true');
+    });
+    root.querySelectorAll('#student-name,#update-cert,#print-cert').forEach(element => {
+      element.hidden = true;
+      if ('disabled' in element) element.disabled = true;
+    });
+
     if (document.getElementById('kc-trauma-academic-load')) return;
     const panel = document.createElement('section');
     panel.id = 'kc-trauma-academic-load';

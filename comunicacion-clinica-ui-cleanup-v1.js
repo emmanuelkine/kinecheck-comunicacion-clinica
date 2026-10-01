@@ -377,6 +377,38 @@
   }
 
 
+  function disableLegacySelfCertificate() {
+    const root = document.querySelector("#root");
+    if (!root) return;
+
+    const legacyCertificate = root.querySelector("#kcCertificate, .kc-certificate");
+    if (legacyCertificate) {
+      legacyCertificate.hidden = true;
+      legacyCertificate.setAttribute("aria-hidden", "true");
+    }
+
+    const legacyPrint = root.querySelector("#kcPrintCertificate");
+    if (legacyPrint) {
+      legacyPrint.disabled = true;
+      legacyPrint.hidden = true;
+    }
+
+    const legacyName = root.querySelector("#kcStudentName");
+    if (legacyName) legacyName.hidden = true;
+
+    root.querySelectorAll(".kc-tool").forEach((card) => {
+      const heading = card.querySelector("h3");
+      if (!heading || !/certificado/i.test(heading.textContent || "")) return;
+      heading.textContent = "Certificación";
+      card.querySelector("#kcPrintCertificate")?.remove();
+      card.querySelector("#kcStudentName")?.remove();
+      const status = card.querySelector("#kcCertificateStatus") || card.querySelector("p");
+      if (status) {
+        status.textContent = "La certificación OTEC está en preparación y todavía no se encuentra activa. La finalización académica se valida por separado.";
+      }
+    });
+  }
+
   function ensureAcademicLoadActivity() {
     const root = document.querySelector("#root");
     if (!root || root.hidden || document.getElementById("kc-communication-academic-load")) return;
@@ -461,6 +493,7 @@
     normalizeSourceLinks();
     replaceInternalBibliographyNotice();
     ensureNotesAccess();
+    disableLegacySelfCertificate();
     ensureAcademicLoadActivity();
   }
 

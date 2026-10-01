@@ -50,41 +50,63 @@ Cada una de las 30 lecciones incorpora un objeto de comprobación tipo quiz con 
 
 ## 2. Comunicación Clínica
 
-**Estado:** curso formal, contenido interno protegido.  
+**Estado:** curso formal, contenido protegido.  
 **Público:** profesionales de la salud, estudiantes y docentes clínicos.  
-**Carga declarada:** 8 h.
+**Carga auditada:** 8 h 13 min; carga certificable conservadora: 8 h.  
+**Estructura validada:** 154 diapositivas, 12 módulos, 12 prácticas modulares y 60 preguntas formativas.
 
 ### Propósito
 Desarrollar competencias de comunicación clínica centrada en la persona para entrevistar, escuchar, explicar incertidumbre, validar y tomar decisiones compartidas.
 
-### Programa normalizado
-1. Alianza terapéutica, confianza y participación.
-2. Entrevista clínica: preguntas abiertas, focalización, reformulación, resumen y cierre.
-3. Empatía, validación y reconocimiento de emociones y expectativas.
-4. Educación en salud, explicación de hallazgos, riesgo e incertidumbre con lenguaje comprensible.
-5. Decisiones compartidas, desacuerdos, expectativas complejas y continuidad.
+### Programa real validado
+1. Razonamiento clínico, dolor y validación inicial.
+2. Fundamentos de la comunicación efectiva.
+3. Escucha activa y entrevista clínica.
+4. Empatía en la práctica clínica.
+5. Validación emocional: conceptos y diferencias.
+6. Aplicación de la validación y manejo de resistencia.
+7. Noticias difíciles, conflictos y límites.
+8. Comunicación en dolor musculoesquelético y modelo biopsicosocial.
+9. OARS, expectativas y factores contextuales.
+10. Satisfacción, profesionalismo y entorno terapéutico.
+11. Educación del paciente y alianza terapéutica.
+12. Atención basada en valor y cierre integrador.
 
-**Hallazgo pendiente:** revisar lecciones y actividades internas para confirmar que cada resultado de aprendizaje tenga evidencia de logro y que la evaluación final no se limite a exposición pasiva de contenidos.
+### Validación académica · 1 de octubre de 2026
+Se contrastó la fuente histórica inmediatamente anterior a la protección del curso con el wrapper protegido actual y la instrumentación académica vigente. La fuente conserva **154 diapositivas**, tres objetivos por módulo, **una práctica por módulo** y **cinco preguntas con retroalimentación por módulo**, totalizando **60 preguntas**. También contiene 37 referencias registradas.
+
+La actividad integradora final de 30 minutos añadida en la versión académica vigente exige al menos 450 caracteres y cuatro criterios: validación sin confirmar daño, pregunta abierta/reformulación, explicación de incertidumbre no alarmista y cierre con decisión compartida/verificación de comprensión. La entrega se registra en servidor.
+
+**Brecha pendiente:** los cuestionarios son formativos y no existe aún un umbral global de aprobación aprobado por OTEC. La ruta completa tampoco está trazada íntegramente en servidor, por lo que la verificación final debe permanecer manual hasta cerrar ambos puntos.
 
 ---
 
 ## 3. Más allá del dolor
 
-**Estado:** curso formal, contenido interno protegido.  
+**Estado:** curso formal, contenido protegido.  
 **Público:** profesionales y estudiantes.  
-**Carga auditada declarada:** 12 h 25 min; carga certificable declarada: 12 h.
+**Carga auditada:** 12 h 25 min; carga certificable conservadora: 12 h.  
+**Estructura validada:** 8 módulos, 32 lecciones, 32 checkpoints y 8 casos clínicos integradores.
 
 ### Propósito
 Integrar factores biológicos, psicológicos y sociales en la evaluación musculoesquelética sin reducir la experiencia de dolor a una sola dimensión.
 
-### Programa normalizado
-1. Dolor, daño, discapacidad, irritabilidad y riesgo.
-2. Entrevista musculoesquelética y análisis de función.
-3. Sueño, carga, estrés, emociones, creencias, expectativas y entorno.
-4. Selección e interpretación del examen físico.
-5. Educación, objetivos, reevaluación y ajuste del plan.
+### Programa real validado
+1. **Dolor, función y contribuyentes** — 70 min.
+2. **Seguridad, triage y red de seguridad** — 85 min.
+3. **Comunicación, contexto y alianza** — 100 min.
+4. **Medición de resultados** — 85 min.
+5. **Razonamiento y probabilidad** — 110 min.
+6. **Examen físico como prueba de hipótesis** — 115 min.
+7. **Capacidad, palpación y pruebas** — 75 min.
+8. **Integración, intervención y reevaluación** — 105 min.
 
-**Hallazgo pendiente:** auditar el activo protegido para confirmar referencias, actividades, evaluación y coherencia exacta entre carga académica y tiempo real de estudio.
+### Validación académica · 1 de octubre de 2026
+Se auditó el bundle protegido identificado por la aplicación como `index-nmhIRPii.js` mediante el respaldo conservado del mismo bundle. La suma explícita de módulos es **745 minutos**. Cada módulo contiene cuatro lecciones; cada lección posee objetivo, conceptos, lente clínica, reflexión y checkpoint con pregunta, alternativas, respuesta y fundamento. Se verificaron **32 checkpoints** en total.
+
+La aplicación incluye además **8 casos integradores**: hombro, rodilla, cervical, cadera, tobillo, codo, dolor lumbar persistente y un caso sistémico. El contenido usa formulaciones prudentes sobre imagen, causalidad, banderas clínicas, probabilidad, fiabilidad y pruebas especiales.
+
+**Brecha pendiente:** no se identificó un criterio global de aprobación ni una evaluación final calificable independiente del recorrido. Tampoco existe trazabilidad de finalización en servidor. Por ello, el curso puede presentarse a revisión de la OTEC, pero la emisión automática no debe activarse todavía.
 
 ---
 
@@ -116,21 +138,30 @@ Los módulos 8–10 funcionan como actualizaciones cronológicas. Para una certi
 
 ## 5. Traumatología y Ortopedia Clínica
 
-**Estado:** curso formal, contenido interno protegido.  
+**Estado:** curso formal, contenido protegido.  
 **Público:** kinesiólogos y estudiantes.  
-**Carga auditada:** 10 h 40 min; si la entidad certificadora exige horas enteras, declarar 10 h.
+**Carga auditada:** **10 h 40 min = 640 min**; si la entidad certificadora exige horas enteras, propuesta conservadora de 10 h.  
+**Criterio interno existente:** 80 %.
 
 ### Propósito
 Relacionar mecanismo lesional, tejido, fase de recuperación, seguridad, examen y progresión funcional para orientar decisiones clínicas prudentes.
 
-### Programa normalizado
-1. Respuesta tisular, lesión, reparación y adaptación.
-2. Fracturas, luxaciones, esguinces y lesiones musculotendinosas.
-3. Banderas clínicas, complicaciones, precauciones y derivación.
-4. Problemas de extremidad superior e inferior: mecanismo, examen e imagen cuando corresponda.
-5. Protección, movilidad, carga, ejercicio, función y retorno a actividad, trabajo o deporte.
+### Programa real validado
+1. **Fundamentos clínicos y semiología** — 90 min.
+2. **Tejidos, consolidación y fractura expuesta** — 110 min.
+3. **Infecciones y tumores musculoesqueléticos** — 110 min.
+4. **Columna, dolor radicular y escoliosis** — 105 min.
+5. **Extremidad superior** — 105 min.
+6. **Extremidad inferior** — 120 min.
 
-**Hallazgo:** la corrección de duración ya está implementada en producción para reemplazar antiguas referencias a 12–14 h.
+### Validación académica · 1 de octubre de 2026
+Se auditó el archivo fuente del Curso 07 conservado en la Library de KineCheck y se contrastó con el wrapper actualmente publicado. Se confirmaron **6 módulos, 24 lecciones, 30 preguntas de evaluación modular, 6 casos clínicos** y un **examen final de 12 preguntas**.
+
+La lógica académica exige **80 % en cada cuestionario de módulo** para desbloquear el siguiente módulo y **80 % en el examen final**. En un examen de 12 preguntas, el 80 % exige al menos **10 respuestas correctas**. Este es el curso que actualmente posee el criterio de aprobación cuantitativo más explícito del conjunto.
+
+La fuente histórica todavía contiene el rótulo `12–14 horas`, pero la suma verificable de módulos es 640 minutos. La interfaz vigente ya sustituye ese rótulo por **10 h 40 min** y muestra bibliografía esencial y límites profesionales. También se corrigió el lenguaje de fractura expuesta para no atribuir al estudiante/profesional no habilitado la administración de antibióticos.
+
+**Brechas pendientes:** el progreso y las puntuaciones se guardan en el navegador y todavía no se sincronizan con servidor. El certificado interno histórico de KineCheck no debe utilizarse como certificado institucional: permanece deshabilitado mientras la certificación OTEC no esté formalizada.
 
 ---
 
@@ -264,7 +295,7 @@ Cada curso debería disponer de un archivo único y versionado con:
 Las actualizaciones científicas deben incorporarse sin alterar continuamente el programa troncal. La estructura recomendada es:
 **programa estable + biblioteca viva de evidencia + registro de cambios**.
 
-## E. Pendiente para auditoría total
-La auditoría ya accedió a los activos protegidos de **KineCheck Clínico** y **Dolor Lumbar Persistente** mediante la infraestructura autorizada de Supabase y actualizó sus hallazgos en este documento. Permanecen pendientes de inspección completa, lección por lección, los activos protegidos de **Comunicación Clínica**, **Más allá del dolor** y **Traumatología y Ortopedia Clínica**, que se sirven desde Storage y requieren sesión/licencia durante la ejecución.
+## E. Estado de cierre de auditoría
+La auditoría documental/académica de los cursos principales ya cubre las fuentes de contenido disponibles: Supabase, activos protegidos, bundles respaldados, Library y repositorios históricos. **Comunicación Clínica, Más allá del dolor y Traumatología y Ortopedia Clínica ya fueron incorporados a la validación estructural detallada.**
 
-Antes de activar cualquier convenio OTEC deben cerrarse además tres brechas transversales: (1) criterio de aprobación explícito por curso; (2) trazabilidad de finalización que no dependa solo de acceso o compra; y (3) versión oficial del programa aprobada por la OTEC.
+La principal brecha ya no es identificar el contenido, sino cerrar el sistema de aprobación y trazabilidad. Antes de activar cualquier convenio OTEC deben completarse: (1) criterio de aprobación explícito y aprobado por la OTEC para cada curso; (2) trazabilidad de finalización y resultados en servidor cuando hoy dependen del navegador o de revisión manual; (3) versión oficial del programa aprobada por la OTEC; y (4) desactivación de cualquier certificado interno legado que pueda confundirse con el futuro certificado OTEC.

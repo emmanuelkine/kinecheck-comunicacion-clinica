@@ -26,6 +26,7 @@
   ];
 
   const CERTIFICATE_SESSION_KEY = "kinecheck_secure_session_v1";
+  const OTEC_CERTIFICATION_ACTIVE = false;
   const CERTIFICATE_COURSES = Object.freeze({
     "kinecheck-clinico-curso": "kinecheck-clinico-curso",
     "comunicacion-clinica": "comunicacion-clinica",
@@ -110,6 +111,10 @@
   }
 
   async function openCertificateRequest(courseSlug, source) {
+    if (!OTEC_CERTIFICATION_ACTIVE) {
+      location.assign("/certificacion/");
+      return;
+    }
     const config = window.KINECHECK_ACADEMY_CONFIG || {};
     const session = certificateSession();
     if (!session?.access_token) {

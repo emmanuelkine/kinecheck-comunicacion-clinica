@@ -21,10 +21,10 @@ Un curso solo debería pasar de **“OTEC en preparación”** a **“certificac
 | Producto | Carga validada | Evidencia de aprendizaje actual | Criterio global de aprobación | Trazabilidad actual | Estado para OTEC |
 |---|---:|---|---|---|---|
 | KineCheck Clínico | 18 h | 30 lecciones/casos con quiz por lección | **Pendiente** | Progreso global pendiente de instrumentación | Puede enviarse a revisión; no activar emisión |
-| Comunicación Clínica | 8 h | Actividades modulares + actividad integradora final | **A definir/aprobar por OTEC** | Entrega final en servidor; ruta completa aún no trazada | Puede enviarse a revisión; verificación final manual |
-| Más allá del dolor | 12 h 25 min auditadas; 12 h conservadoras | Actividades del curso | **Pendiente de verificación completa** | Instrumentación de progreso pendiente | Revisión académica adicional antes de activar |
+| Comunicación Clínica | 8 h 13 min auditadas; 8 h conservadoras | 12 prácticas + 60 preguntas + actividad integradora final | **A definir/aprobar por OTEC** | Entrega final en servidor; ruta completa aún no trazada | Puede enviarse a revisión; verificación final manual |
+| Más allá del dolor | 12 h 25 min auditadas; 12 h conservadoras | 32 checkpoints + 8 casos integradores | **Pendiente** | Instrumentación de progreso pendiente | Puede enviarse a revisión; no activar emisión |
 | Evidencia Aplicada | 10 h 21 min auditadas; 10 h conservadoras | 35 recorridos con laboratorio, caso, reflexión y revisión | Cumplimiento total del recorrido; **OTEC debe decidir si exige nota/umbral adicional** | Automática en servidor | Estructura fuerte; criterio de aprobación por cerrar con OTEC |
-| Traumatología y Ortopedia Clínica | 10 h 40 min | Evaluación final de 12 preguntas | **80 %** | Puntuación aún no instrumentada completamente en servidor | Académicamente cercano; falta trazabilidad del score |
+| Traumatología y Ortopedia Clínica | 10 h 40 min | 30 preguntas modulares + 6 casos + examen final de 12 preguntas | **80 % en módulos y examen final** | Puntuación/progreso aún guardados en navegador | Académicamente cercano; falta sincronización server-side |
 | Dolor Lumbar Persistente | 8 h 10 min auditadas; 8 h conservadoras | 54 microlecciones con comprobación + caso integrador final | Cuatro criterios del caso; **umbral final a aprobar por OTEC** | Entrega final en servidor; ruta completa aún no trazada | Puede enviarse a revisión; verificación final manual |
 | Dolor Musculoesquelético | 8 h 08 min auditadas; 8 h conservadoras | 12 recorridos + 6 aplicaciones obligatorias + integración final | Cumplimiento de actividades; **OTEC debe definir si exige calificación** | Automática en servidor | Estructura fuerte; criterio de aprobación por cerrar con OTEC |
 | Ejercicio Terapéutico | **6 h** | 5 casos aplicados + 10 preguntas de comprobación + 15 referencias | **Pendiente** | Sin ruta formal de certificación | No certificable todavía |
@@ -34,6 +34,15 @@ Un curso solo debería pasar de **“OTEC en preparación”** a **“certificac
 
 ### KineCheck Clínico
 Se inspeccionó el activo protegido real. Se confirmaron 10 módulos y 30 lecciones/casos. Cada lección incorpora pregunta, alternativas, respuesta y fundamento. La brecha principal ya no es el contenido: es la ausencia de un **criterio global de aprobación** y de trazabilidad de finalización suficiente para emitir un certificado bajo convenio.
+
+### Comunicación Clínica
+Se validó la fuente histórica inmediatamente anterior a la protección junto con el wrapper y la actividad académica actuales. Se confirmaron **154 diapositivas, 12 módulos, 12 prácticas, 60 preguntas formativas y 37 referencias**, además de la actividad integradora final de 30 minutos. La principal brecha es definir el umbral global de aprobación con la OTEC y completar la trazabilidad server-side del recorrido.
+
+### Más allá del dolor
+Se auditó el bundle identificado como `index-nmhIRPii.js` mediante el respaldo conservado del mismo paquete. Se confirmaron **8 módulos, 32 lecciones, 32 checkpoints y 8 casos integradores**, con carga total de **745 min**. El contenido está estructuralmente apto para revisión; falta un criterio global de aprobación y trazabilidad en servidor.
+
+### Traumatología y Ortopedia Clínica
+Se auditó el archivo fuente del Curso 07 conservado en Library. Se confirmaron **6 módulos, 24 lecciones, 30 preguntas modulares, 6 casos y 12 preguntas finales**. El criterio vigente es **80 %** en los cuestionarios modulares y en el examen final. La carga real es **640 min**. El certificado interno legado debe permanecer deshabilitado y los resultados deben migrarse a servidor antes de activar certificación OTEC.
 
 ### Dolor Lumbar Persistente
 Se inspeccionó el activo protegido real. Se confirmaron exactamente 9 módulos y 54 microlecciones. Las 54 incorporan comprobación de aprendizaje. Existe además un caso integrador obligatorio de 40 minutos con cuatro criterios. La entrega ya se registra en servidor; falta completar el seguimiento de toda la ruta para automatizar la verificación final.
