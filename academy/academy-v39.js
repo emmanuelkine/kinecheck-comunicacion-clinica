@@ -10,6 +10,15 @@ const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "").replace(/\/$/, "")}
 const SSO_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";
 const SSO_PRODUCTS = new Set(["kinecheck-estudiante"]);
 const PAUSED_PRODUCT = "kinecheck-recupera";
+const OTEC_PREPARATION_COURSES = new Set([
+  "kinecheck-clinico-curso",
+  "comunicacion-clinica",
+  "mas-alla-del-dolor",
+  "evidencia-aplicada",
+  "traumatologia-ortopedia-clinica",
+  "dolor-lumbar-persistente",
+  "dolor-musculoesqueletico",
+]);
 
 const $ = (selector) => document.querySelector(selector);
 const loginView = $("#login-view");
