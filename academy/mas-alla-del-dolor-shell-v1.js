@@ -4,6 +4,15 @@ const SUPABASE_URL = "https://eqhcdclyeoapmqtlduwf.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_";
 const COURSE_KEY_FUNCTION = "course-key";
 
+// Este curso utiliza la sesión del mismo origen y la valida en servidor.
+// Retira únicamente el handoff sobrante para que no quede en la URL visible.
+const fragmentParams = new URLSearchParams(location.hash.replace(/^#/, ""));
+if (fragmentParams.has("kc_handoff")) {
+  fragmentParams.delete("kc_handoff");
+  const remainingFragment = fragmentParams.toString();
+  history.replaceState(history.state, "", `${location.pathname}${location.search}${remainingFragment ? "#" + remainingFragment : ""}`);
+}
+
 const accessShell = document.querySelector("#kc-access");
 const status = document.querySelector("#kc-status");
 const statusCopy = document.querySelector("#kc-status-copy");
