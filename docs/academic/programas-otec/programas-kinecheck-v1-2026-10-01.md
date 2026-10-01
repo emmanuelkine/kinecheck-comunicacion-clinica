@@ -108,7 +108,7 @@ Al finalizar, el participante debería ser capaz de:
 La actividad integradora debe cumplir sus cuatro criterios. **El umbral global definitivo debe ser aprobado por la OTEC.** Los cuestionarios modulares son actualmente formativos.
 
 ## Trazabilidad
-La actividad final se registra en servidor. La ruta completa del curso todavía no está trazada íntegramente, por lo que la validación final permanece manual.
+La actividad final se registra en servidor. Además, la interfaz sincroniza a `learning_progress` diapositivas estudiadas, módulos, prácticas con respuesta, intentos/puntajes formativos detectados y el estado de la actividad final. La validación permanece manual porque el umbral global todavía debe ser aprobado y los puntajes formativos se originan en cliente.
 
 ---
 
@@ -153,7 +153,7 @@ Al finalizar, el participante debería ser capaz de:
 **Pendiente de aprobación institucional.** No existe actualmente una evaluación final calificable independiente del recorrido ni un umbral global.
 
 ## Trazabilidad
-La finalización todavía no está instrumentada en servidor. No habilitar emisión automática hasta resolver este punto.
+Las lecciones completadas se sincronizan a `learning_progress` como snapshot autenticado del recorrido. No habilitar emisión automática hasta definir y aprobar una evaluación o criterio global de aprobación.
 
 ---
 
