@@ -71,7 +71,7 @@
       if (status) status.textContent = "Desarrolla al menos 550 caracteres.";
       return;
     }
-    if (!checks.every((item) => item.checked)) {
+    if (checks.length !== 4 || !checks.every((item) => item.checked)) {
       if (status) status.textContent = "Marca todos los criterios antes de completar.";
       return;
     }
@@ -93,7 +93,7 @@
         }));
       } catch {}
       target.textContent = "Actividad completada ✓";
-      if (status) status.textContent = "Actividad registrada en KineCheck. La verificación final del recorrido permanece pendiente.";
+      if (status) status.textContent = "Actividad registrada en KineCheck.";
     } catch (error) {
       target.textContent = "Guardar actividad";
       if (status) status.textContent = error instanceof Error ? error.message : "No fue posible registrar la actividad.";
@@ -109,9 +109,10 @@
     try { saved = JSON.parse(localStorage.getItem(LOCAL_KEY) || "null"); } catch {}
     const status = section.querySelector("#kc-af-status");
     if (saved?.serverCompleted) {
-      if (status) status.textContent = "Actividad registrada en KineCheck. La verificación final del recorrido permanece pendiente.";
+      if (status && status.textContent !== "Actividad registrada en KineCheck.") status.textContent = "Actividad registrada en KineCheck.";
     } else if (saved?.completed) {
-      if (status) status.textContent = "Actividad guardada localmente. Guarda nuevamente para registrarla en KineCheck.";
+      const message = "Actividad guardada localmente. Guarda nuevamente para registrarla en KineCheck.";
+      if (status && status.textContent !== message) status.textContent = message;
     }
   }
 
