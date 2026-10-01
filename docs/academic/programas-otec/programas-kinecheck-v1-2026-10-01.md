@@ -244,7 +244,7 @@ Al finalizar, el participante debería ser capaz de:
 - En 12 preguntas finales, se requieren al menos 10 respuestas correctas para alcanzar o superar el 80 %.
 
 ## Trazabilidad
-El progreso y los puntajes todavía se almacenan principalmente en el navegador. Deben sincronizarse con servidor antes de activar certificación OTEC automática.
+La aplicación sincroniza un snapshot autenticado de lecciones completadas, puntajes modulares, casos y examen final a `learning_progress`, manteniendo además la copia local. Antes de una certificación automática, la puntuación debe validarse o recalcularse server-side; por ahora la revisión final permanece manual.
 
 ## Observación de seguridad
 La interfaz vigente corrige formulaciones que podrían atribuir acciones médicas o farmacológicas al participante y mantiene las decisiones sujetas al rol profesional, protocolos locales y derivación correspondiente.

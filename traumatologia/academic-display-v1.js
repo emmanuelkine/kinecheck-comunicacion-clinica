@@ -1,4 +1,120 @@
 (() => {
+  const COURSE_SLUG = "traumatologia-ortopedia-clinica";
+  const LOCAL_STATE_KEY = "kinecheck_course07_trauma_v1";
+  const COURSE_SESSION_KEY = "kinecheck_course_session_v2:traumatologia-ortopedia-clinica";
+  let lastSyncedState = "";
+  let syncTimer = 0;
+
+  function readJson(storage, key) {
+    try { return JSON.parse(storage.getItem(key) || "null"); } catch { return null; }
+  }
+
+  function readSession() {
+    return readJson(sessionStorage, COURSE_SESSION_KEY)
+      || readJson(sessionStorage, "kinecheck_secure_session_v1")
+      || readJson(localStorage, "kinecheck_secure_session_v1");
+  }
+
+  function normalizeAcademicState(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const completedLessons = Array.isArray(raw.completedLessons)
+      ? [...new Set(raw.completedLessons.map(String))].slice(0, 24)
+      : [];
+    const moduleScores = raw.moduleScores && typeof raw.moduleScores === "object" ? raw.moduleScores : {};
+    const caseScores = raw.caseScores && typeof raw.caseScores === "object" ? raw.caseScores : {};
+    const clampScore = (value) => {
+      const number = Number(value);
+      return Number.isFinite(number) ? Math.max(0, Math.min(100, Math.round(number))) : null;
+    };
+    const normalizedModules = Object.fromEntries(
+      Object.entries(moduleScores)
+        .filter(([key]) => /^m[1-6]$/.test(key))
+        .map(([key, value]) => [key, clampScore(value)])
+        .filter(([, value]) => value !== null)
+    );
+    const normalizedCases = Object.fromEntries(
+      Object.entries(caseScores)
+        .filter(([key]) => /^m[1-6]$/.test(key))
+        .map(([key, value]) => [key, clampScore(value)])
+        .filter(([, value]) => value !== null)
+    );
+    const finalScore = raw.finalScore === null || raw.finalScore === undefined
+      ? null
+      : clampScore(raw.finalScore);
+    const passedModules = ["m1","m2","m3","m4","m5","m6"].filter(
+      (key) => Number(normalizedModules[key] || 0) >= 80
+    ).length;
+    return {
+      schemaVersion: 1,
+      source: "trauma-course07",
+      completedLessons,
+      completedLessonCount: completedLessons.length,
+      moduleScores: normalizedModules,
+      modulesPassed: passedModules,
+      caseScores: normalizedCases,
+      finalScore,
+      passingScore: 80,
+      routeComplete: completedLessons.length === 24 && passedModules === 6,
+      academicallyPassed: completedLessons.length === 24 && passedModules === 6 && Number(finalScore || 0) >= 80,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  async function syncAcademicProgressNow() {
+    const config = window.KINECHECK_CONFIG || {};
+    const session = readSession();
+    const accessToken = String(session?.access_token || "");
+    if (!config.supabaseUrl || !config.supabaseAnonKey || !accessToken) return;
+
+    let userId = String(session?.user?.id || "");
+    if (!userId) {
+      try {
+        const response = await fetch(`${config.supabaseUrl}/auth/v1/user`, {
+          headers: { apikey: config.supabaseAnonKey, Authorization: `Bearer ${accessToken}` },
+          cache: "no-store",
+        });
+        const user = await response.json().catch(() => ({}));
+        if (!response.ok) return;
+        userId = String(user?.id || "");
+      } catch { return; }
+    }
+    if (!userId) return;
+
+    const state = normalizeAcademicState(readJson(localStorage, LOCAL_STATE_KEY));
+    if (!state) return;
+    const serialized = JSON.stringify(state);
+    if (serialized === lastSyncedState) return;
+
+    try {
+      const response = await fetch(
+        `${config.supabaseUrl}/rest/v1/learning_progress?on_conflict=user_id,course_slug`,
+        {
+          method: "POST",
+          headers: {
+            apikey: config.supabaseAnonKey,
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            Prefer: "resolution=merge-duplicates,return=minimal",
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            course_slug: COURSE_SLUG,
+            profile: "course",
+            state,
+            updated_at: state.updatedAt,
+          }),
+        }
+      );
+      if (response.ok) lastSyncedState = serialized;
+    } catch {
+      // El curso sigue funcionando aunque la sincronización temporal falle.
+    }
+  }
+
+  function scheduleAcademicProgressSync() {
+    window.clearTimeout(syncTimer);
+    syncTimer = window.setTimeout(syncAcademicProgressNow, 350);
+  }
   const replacements = [
     [/12\s*[–-]\s*14\s*horas?/gi, '10 h 40 min'],
     [/Administrar antibióticos según protocolo y cubrir la herida/g, 'Activar atención urgente para antibióticos por el equipo habilitado y cubrir la herida'],
@@ -26,15 +142,18 @@
       if ('disabled' in element) element.disabled = true;
     });
 
+    scheduleAcademicProgressSync();
+
     if (document.getElementById('kc-trauma-academic-load')) return;
     const panel = document.createElement('section');
     panel.id = 'kc-trauma-academic-load';
     panel.style.cssText = 'width:min(1060px,calc(100% - 28px));margin:24px auto 70px;padding:18px 22px;border:1px solid rgba(82,220,210,.28);border-radius:20px;background:#08232c;color:#eaf8f8;font-family:system-ui,sans-serif';
-    panel.innerHTML = '<h2>Programa y bibliografía esencial</h2><p>Duración del programa: <strong>10 h 40 min</strong> (640 minutos distribuidos en seis módulos). Aprobación: 80% en cada evaluación de módulo y en el examen final; en un examen de 12 preguntas se requieren al menos 10 respuestas correctas. El progreso de esta aplicación se guarda en el navegador.</p><p>Las acciones médicas, quirúrgicas y farmacológicas descritas corresponden al equipo habilitado y al protocolo local. El estudiante debe reconocer la urgencia, activar la derivación y actuar dentro de su formación y supervisión.</p><p>La certificación privada mediante OTEC es una posibilidad futura sujeta a convenio formal; este curso no se presenta como curso SENCE.</p><ul><li><a href="https://www.nice.org.uk/guidance/ng37" target="_blank" rel="noopener noreferrer">NICE NG37. Fractures (complex): assessment and management (2016; actualización 2022).</a></li><li><a href="https://www.nice.org.uk/guidance/ng39" target="_blank" rel="noopener noreferrer">NICE NG39. Major trauma: assessment and initial management (2016).</a></li><li><a href="https://www.boa.ac.uk/resource/boast-4-pdf.html" target="_blank" rel="noopener noreferrer">British Orthopaedic Association. BOAST: Open Fractures (2017).</a></li><li><a href="https://doi.org/10.5194/jbji-8-29-2023" target="_blank" rel="noopener noreferrer">Ravn C et al. Guideline for management of septic arthritis in native joints (SANJO). J Bone Jt Infect. 2023;8:29–37.</a></li><li><a href="https://www.nice.org.uk/guidance/ng59" target="_blank" rel="noopener noreferrer">NICE NG59. Low back pain and sciatica in over 16s: assessment and management (2016; actualización 2020).</a></li></ul><p>Versión académica: 2026-10-01. Fecha de revisión: 1 de octubre de 2026.</p>';
+    panel.innerHTML = '<h2>Programa y bibliografía esencial</h2><p>Duración del programa: <strong>10 h 40 min</strong> (640 minutos distribuidos en seis módulos). Aprobación: 80% en cada evaluación de módulo y en el examen final; en un examen de 12 preguntas se requieren al menos 10 respuestas correctas. El progreso de esta aplicación se guarda localmente y se sincroniza con la cuenta KineCheck cuando la sesión está activa.</p><p>Las acciones médicas, quirúrgicas y farmacológicas descritas corresponden al equipo habilitado y al protocolo local. El estudiante debe reconocer la urgencia, activar la derivación y actuar dentro de su formación y supervisión.</p><p>La certificación privada mediante OTEC es una posibilidad futura sujeta a convenio formal; este curso no se presenta como curso SENCE.</p><ul><li><a href="https://www.nice.org.uk/guidance/ng37" target="_blank" rel="noopener noreferrer">NICE NG37. Fractures (complex): assessment and management (2016; actualización 2022).</a></li><li><a href="https://www.nice.org.uk/guidance/ng39" target="_blank" rel="noopener noreferrer">NICE NG39. Major trauma: assessment and initial management (2016).</a></li><li><a href="https://www.boa.ac.uk/resource/boast-4-pdf.html" target="_blank" rel="noopener noreferrer">British Orthopaedic Association. BOAST: Open Fractures (2017).</a></li><li><a href="https://doi.org/10.5194/jbji-8-29-2023" target="_blank" rel="noopener noreferrer">Ravn C et al. Guideline for management of septic arthritis in native joints (SANJO). J Bone Jt Infect. 2023;8:29–37.</a></li><li><a href="https://www.nice.org.uk/guidance/ng59" target="_blank" rel="noopener noreferrer">NICE NG59. Low back pain and sciatica in over 16s: assessment and management (2016; actualización 2020).</a></li></ul><p>Versión académica: 2026-10-01. Fecha de revisión: 1 de octubre de 2026.</p>';
     panel.querySelectorAll('a').forEach(a => { a.style.color = '#7de9de'; });
     root.insertAdjacentElement('afterend', panel);
   }
   new MutationObserver(updateAcademicDisplay).observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden'] });
   window.addEventListener('kinecheck:course-authorized', updateAcademicDisplay);
+  window.addEventListener('focus', scheduleAcademicProgressSync);
   document.addEventListener('DOMContentLoaded', updateAcademicDisplay);
 })();
