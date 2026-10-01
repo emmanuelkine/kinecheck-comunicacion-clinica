@@ -1,4 +1,120 @@
 (() => {
+  const COURSE_SLUG = "traumatologia-ortopedia-clinica";
+  const LOCAL_STATE_KEY = "kinecheck_course07_trauma_v1";
+  const COURSE_SESSION_KEY = "kinecheck_course_session_v2:traumatologia-ortopedia-clinica";
+  let lastSyncedState = "";
+  let syncTimer = 0;
+
+  function readJson(storage, key) {
+    try { return JSON.parse(storage.getItem(key) || "null"); } catch { return null; }
+  }
+
+  function readSession() {
+    return readJson(sessionStorage, COURSE_SESSION_KEY)
+      || readJson(sessionStorage, "kinecheck_secure_session_v1")
+      || readJson(localStorage, "kinecheck_secure_session_v1");
+  }
+
+  function normalizeAcademicState(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const completedLessons = Array.isArray(raw.completedLessons)
+      ? [...new Set(raw.completedLessons.map(String))].slice(0, 24)
+      : [];
+    const moduleScores = raw.moduleScores && typeof raw.moduleScores === "object" ? raw.moduleScores : {};
+    const caseScores = raw.caseScores && typeof raw.caseScores === "object" ? raw.caseScores : {};
+    const clampScore = (value) => {
+      const number = Number(value);
+      return Number.isFinite(number) ? Math.max(0, Math.min(100, Math.round(number))) : null;
+    };
+    const normalizedModules = Object.fromEntries(
+      Object.entries(moduleScores)
+        .filter(([key]) => /^m[1-6]$/.test(key))
+        .map(([key, value]) => [key, clampScore(value)])
+        .filter(([, value]) => value !== null)
+    );
+    const normalizedCases = Object.fromEntries(
+      Object.entries(caseScores)
+        .filter(([key]) => /^m[1-6]$/.test(key))
+        .map(([key, value]) => [key, clampScore(value)])
+        .filter(([, value]) => value !== null)
+    );
+    const finalScore = raw.finalScore === null || raw.finalScore === undefined
+      ? null
+      : clampScore(raw.finalScore);
+    const passedModules = ["m1","m2","m3","m4","m5","m6"].filter(
+      (key) => Number(normalizedModules[key] || 0) >= 80
+    ).length;
+    return {
+      schemaVersion: 1,
+      source: "trauma-course07",
+      completedLessons,
+      completedLessonCount: completedLessons.length,
+      moduleScores: normalizedModules,
+      modulesPassed: passedModules,
+      caseScores: normalizedCases,
+      finalScore,
+      passingScore: 80,
+      routeComplete: completedLessons.length === 24 && passedModules === 6,
+      academicallyPassed: completedLessons.length === 24 && passedModules === 6 && Number(finalScore || 0) >= 80,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  async function syncAcademicProgressNow() {
+    const config = window.KINECHECK_CONFIG || {};
+    const session = readSession();
+    const accessToken = String(session?.access_token || "");
+    if (!config.supabaseUrl || !config.supabaseAnonKey || !accessToken) return;
+
+    let userId = String(session?.user?.id || "");
+    if (!userId) {
+      try {
+        const response = await fetch(`${config.supabaseUrl}/auth/v1/user`, {
+          headers: { apikey: config.supabaseAnonKey, Authorization: `Bearer ${accessToken}` },
+          cache: "no-store",
+        });
+        const user = await response.json().catch(() => ({}));
+        if (!response.ok) return;
+        userId = String(user?.id || "");
+      } catch { return; }
+    }
+    if (!userId) return;
+
+    const state = normalizeAcademicState(readJson(localStorage, LOCAL_STATE_KEY));
+    if (!state) return;
+    const serialized = JSON.stringify(state, Object.keys(state).sort());
+    if (serialized === lastSyncedState) return;
+
+    try {
+      const response = await fetch(
+        `${config.supabaseUrl}/rest/v1/learning_progress?on_conflict=user_id,course_slug`,
+        {
+          method: "POST",
+          headers: {
+            apikey: config.supabaseAnonKey,
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            Prefer: "resolution=merge-duplicates,return=minimal",
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            course_slug: COURSE_SLUG,
+            profile: "course",
+            state,
+            updated_at: state.updatedAt,
+          }),
+        }
+      );
+      if (response.ok) lastSyncedState = serialized;
+    } catch {
+      // El curso sigue funcionando aunque la sincronización temporal falle.
+    }
+  }
+
+  function scheduleAcademicProgressSync() {
+    window.clearTimeout(syncTimer);
+    syncTimer = window.setTimeout(syncAcademicProgressNow, 350);
+  }
   const replacements = [
     [/12\s*[–-]\s*14\s*horas?/gi, '10 h 40 min'],
     [/Administrar antibióticos según protocolo y cubrir la herida/g, 'Activar atención urgente para antibióticos por el equipo habilitado y cubrir la herida'],
@@ -26,6 +142,8 @@
       if ('disabled' in element) element.disabled = true;
     });
 
+    scheduleAcademicProgressSync();
+
     if (document.getElementById('kc-trauma-academic-load')) return;
     const panel = document.createElement('section');
     panel.id = 'kc-trauma-academic-load';
@@ -36,5 +154,6 @@
   }
   new MutationObserver(updateAcademicDisplay).observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden'] });
   window.addEventListener('kinecheck:course-authorized', updateAcademicDisplay);
+  window.addEventListener('focus', scheduleAcademicProgressSync);
   document.addEventListener('DOMContentLoaded', updateAcademicDisplay);
 })();
