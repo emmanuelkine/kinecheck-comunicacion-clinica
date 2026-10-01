@@ -41,7 +41,10 @@ Desarrollar una evaluación musculoesquelética segura, medible y razonada, inte
 9. CIF, PROMs, función, pronóstico y objetivos.
 10. Integración de hipótesis, toma de decisiones y reevaluación.
 
-**Hallazgo pendiente:** verificar dentro del activo protegido que los diez módulos reales coincidan con esta estructura pública y que exista evaluación final con criterio de aprobación explícito.
+### Validación del activo protegido · 1 de octubre de 2026
+Se inspeccionó directamente el activo protegido publicado en Supabase. El payload declara **18 h**, **10 módulos** y **30 casos/lecciones**. La secuencia real coincide con la estructura académica descrita arriba: seguridad y triage; historia e irritabilidad; factores psicosociales; examen físico; medición; examen neurológico/neurodinámica; pruebas especiales y razonamiento probabilístico; integración CIF; y seguimiento.
+
+Cada una de las 30 lecciones incorpora un objeto de comprobación tipo quiz con pregunta, alternativas, respuesta y fundamento. **No se identificó un criterio global de aprobación ni una evaluación final integradora trazable.** Por ello, el programa puede pasar a revisión de la OTEC, pero la certificación no debe activarse todavía hasta que la OTEC apruebe o defina el criterio de aprobación y se implemente su registro de finalización.
 
 ---
 
@@ -152,7 +155,10 @@ Integrar seguridad, razonamiento clínico, factores biopsicosociales, PROMs, exa
 8. Casos clínicos integrados y toma de decisiones.
 9. Integración final y evaluación basada en casos.
 
-**Hallazgo pendiente:** los nombres anteriores son una normalización basada en la ficha pública; la secuencia exacta de las 54 microlecciones debe validarse dentro del activo protegido antes de emitir un programa oficial OTEC.
+### Validación del activo protegido · 1 de octubre de 2026
+Se inspeccionó directamente el activo protegido publicado en Supabase. Se confirmaron **9 módulos y 54 microlecciones**, seis por módulo. Los títulos reales son: Reencuadrar el dolor lumbar; Historia, pronóstico y riesgo; Evaluación estructurada; Razonamiento y clasificación; Dolor persistente y conducta; Comunicación y educación; Intervención activa; Terapias y dosificación; e Integración clínica.
+
+Las 54 microlecciones contienen comprobación de aprendizaje mediante pregunta con alternativas y respuesta esperada. Además, la plataforma incorpora un **caso integrador obligatorio de 40 minutos**, con mínimo de 550 caracteres y cuatro criterios académicos explícitos. La entrega se registra en servidor; sin embargo, la ruta completa del curso todavía no posee trazabilidad automática suficiente para acreditar por sí sola que todo el recorrido fue completado. Por ello, la verificación final permanece manual hasta completar esa instrumentación.
 
 ---
 
@@ -193,10 +199,15 @@ Prescribir ejercicio mediante FITT-VP, seguridad, elección de modalidad, progre
 4. Prescripción orientada por outcome.
 5. Mantener el beneficio más allá del alta.
 
+### Validación académica · 1 de octubre de 2026
+Se verificó el payload publicado en Supabase. Los cinco módulos declaran respectivamente **70, 75, 95, 65 y 55 minutos**, para una carga total de **360 minutos (6 h)**. Cada módulo contiene tres objetivos explícitos, un caso aplicado y dos preguntas de comprobación; el curso posee además 15 lecturas/referencias registradas.
+
+La carga académica fue incorporada al registro interno `course_academic_load` con **6 h** y `certificate_ready = false`. Esta decisión es deliberada: todavía falta una evaluación final integradora, un criterio global de aprobación y trazabilidad de finalización antes de proponerlo como curso certificable ante la OTEC.
+
 ### Observaciones académicas
 - La dosificación se presenta como hipótesis terapéutica verificable y no como receta universal.
-- Debe definirse una carga académica oficial y un criterio de aprobación antes de incorporarlo a certificación OTEC.
-- Revisar periódicamente referencias 2025–2026 para evitar que recomendaciones recientes queden sin trazabilidad bibliográfica.
+- Mantener las cifras de dosificación ligadas a condición clínica, fuente, seguridad y nivel de certeza; evitar presentarlas como recetas universales.
+- Revisar periódicamente las referencias 2025–2026 para evitar que recomendaciones recientes queden sin trazabilidad bibliográfica.
 
 ---
 
@@ -254,4 +265,6 @@ Las actualizaciones científicas deben incorporarse sin alterar continuamente el
 **programa estable + biblioteca viva de evidencia + registro de cambios**.
 
 ## E. Pendiente para auditoría total
-Los activos protegidos de KineCheck Clínico, Comunicación Clínica, Más allá del dolor, Traumatología y Dolor Lumbar Persistente no están expuestos como archivos legibles desde el repositorio público. Se requiere inspección autenticada de Academy para validar texto por texto, referencias, cuestionarios, respuestas correctas, evaluación y tiempo real de navegación.
+La auditoría ya accedió a los activos protegidos de **KineCheck Clínico** y **Dolor Lumbar Persistente** mediante la infraestructura autorizada de Supabase y actualizó sus hallazgos en este documento. Permanecen pendientes de inspección completa, lección por lección, los activos protegidos de **Comunicación Clínica**, **Más allá del dolor** y **Traumatología y Ortopedia Clínica**, que se sirven desde Storage y requieren sesión/licencia durante la ejecución.
+
+Antes de activar cualquier convenio OTEC deben cerrarse además tres brechas transversales: (1) criterio de aprobación explícito por curso; (2) trazabilidad de finalización que no dependa solo de acceso o compra; y (3) versión oficial del programa aprobada por la OTEC.
