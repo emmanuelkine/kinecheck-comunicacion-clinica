@@ -389,7 +389,7 @@
     section.id = "kc-communication-academic-load";
     section.style.cssText = "width:min(1060px,calc(100% - 28px));margin:24px auto 70px;padding:22px;border:1px solid rgba(82,220,210,.28);border-radius:22px;background:#082832;color:#eefafa;font-family:system-ui,sans-serif";
     section.innerHTML = `
-      <span style="display:inline-flex;padding:6px 9px;border:1px solid rgba(91,226,214,.25);border-radius:999px;color:#79e5d7;font-size:.72rem;font-weight:900">CARGA ACADÉMICA AUDITADA</span>
+      <span style="display:inline-flex;padding:6px 9px;border:1px solid rgba(91,226,214,.25);border-radius:999px;color:#79e5d7;font-size:.72rem;font-weight:900">CARGA ACADÉMICA PLANIFICADA</span>
       <h2 style="margin:8px 0;color:#fff">Comunicación Clínica · 8 horas</h2>
       <p style="color:#c7d9dd">La carga incorpora una actividad integradora obligatoria de 30 minutos además del recorrido de 12 módulos.</p>
       <div style="margin-top:16px;padding:17px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(255,255,255,.04)">
@@ -403,7 +403,7 @@
           "Finaliza con una decisión compartida y verificación de comprensión."
         ].map((label, index) => `<label style="display:block;margin:9px 0;color:#d9e9ea"><input type="checkbox" data-kc-academic-check="${index}" ${saved?.completed ? "checked" : ""}> ${escapeHtml(label)}</label>`).join("")}
         <button id="kc-communication-academic-save" type="button" style="min-height:44px;padding:0 16px;border:0;border-radius:11px;background:#69dfd6;color:#06262d;font-weight:900">${saved?.completed ? "Actividad completada ✓" : "Guardar actividad"}</button>
-        <p id="kc-communication-academic-status" style="margin:10px 0 0;color:#9fc6c9;font-size:.82rem">${saved?.serverCompleted ? "Actividad registrada en KineCheck. Verificación final del recorrido pendiente." : saved?.completed ? "Actividad guardada localmente. Guarda nuevamente para registrarla en KineCheck." : "Para completar: mínimo 450 caracteres y todos los criterios marcados."}</p>
+        <p id="kc-communication-academic-status" style="margin:10px 0 0;color:#9fc6c9;font-size:.82rem">${saved?.serverCompleted ? "Actividad registrada en KineCheck. Revisa tu avance en la ruta del curso." : saved?.completed ? "Actividad guardada localmente. Guarda nuevamente para registrarla en KineCheck." : "Para completar: mínimo 450 caracteres y todos los criterios marcados."}</p>
       </div>
     `;
     root.insertAdjacentElement("afterend", section);

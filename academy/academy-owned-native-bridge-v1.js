@@ -298,10 +298,8 @@
     if (!card || card.dataset.kcConstruction === "true") return;
     const badge = card.querySelector(".status-badge");
     if (!badge || /verificando/i.test(String(badge.textContent || ""))) return;
-    badge.textContent = "EN CONSTRUCCIÓN";
-    badge.classList.add("preparing");
     const meta = card.querySelector(".course-meta");
-    if (meta) meta.textContent = "Próximo lanzamiento · contenido en desarrollo";
+    if (meta) meta.textContent = "Herramienta formativa · fichas, filtros y casos clínicos";
     card.dataset.kcConstruction = "true";
   }
 

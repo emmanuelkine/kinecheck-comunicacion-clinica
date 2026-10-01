@@ -162,7 +162,8 @@ function courseProgress(course) {
 
   return {
     ...record,
-    percent: started && percent === 0 ? 1 : percent,
+    percent,
+    measured: record.measurementRecorded === true || percent > 1 || completedModules > 0,
     started,
     totalModules,
     completedModules,
@@ -416,7 +417,7 @@ function accessBadge(access) {
 
 function courseTypeLabel(course) {
   if (course.kind === "course") return "CURSO CLÍNICO";
-  if (course.kind === "tool") return "SIMULADOR CLÍNICO";
+  if (course.kind === "tool") return course.slug === "banderas-clinicas" ? "HERRAMIENTA FORMATIVA" : "SIMULADOR CLÍNICO";
   return "APLICACIÓN KINECHECK";
 }
 
@@ -427,7 +428,7 @@ function courseActionLabel(course, access) {
   if (course.kind === "course") {
     return courseProgress(course).started ? "Continuar curso" : "Comenzar curso";
   }
-  if (course.kind === "tool") return "Abrir simulador";
+  if (course.kind === "tool") return course.slug === "banderas-clinicas" ? "Abrir herramienta" : "Abrir simulador";
   return "Abrir aplicación";
 }
 
@@ -492,6 +493,15 @@ function progressMarkup(course, state) {
           <strong>${state.started ? "En uso" : "Sin iniciar"}</strong>
         </div>
         <span class="course-progress-detail">${progressDetail(course, state)}</span>
+      </div>
+    `;
+  }
+
+  if (!state.measured) {
+    return `
+      <div class="course-progress course-activity" aria-label="Registro de acceso al curso">
+        <div class="course-progress-copy"><span>Tu recorrido</span><strong>${state.started ? "Inicio registrado" : "Sin iniciar"}</strong></div>
+        <span class="course-progress-detail">Consulta el avance de estudio dentro del curso.</span>
       </div>
     `;
   }
@@ -713,7 +723,7 @@ function saveLastProduct(course) {
   }));
   const current = courseProgress(course);
   writeProgress(course.slug, {
-    percent: current.started ? current.percent : 1,
+    percent: current.percent,
     startedAt: current.startedAt || openedAt,
     lastOpenedAt: openedAt,
   });
@@ -747,7 +757,7 @@ function updateContinuePanel() {
   continueHeading.textContent = course.title;
   const state = courseProgress(course);
   continueCopy.textContent = course.kind === "course"
-    ? `Retoma el curso desde tu último acceso${state.percent ? ` · ${state.percent}% registrado` : ""}.`
+    ? `Retoma el curso desde tu último acceso${state.measured ? ` · ${state.percent}% registrado` : ""}.`
     : "Vuelve directamente a la herramienta que utilizaste más recientemente.";
   continueButton.textContent = course.kind === "course" ? "Continuar curso" : "Abrir nuevamente";
   continueButton.dataset.course = course.slug;
@@ -930,6 +940,7 @@ function applyProgressUpdate(slug, update = {}) {
 
   const current = courseProgress(course);
   const next = {
+    measurementRecorded: true,
     percent: clampPercent(update.percent ?? current.percent),
     completedModules: Math.max(0, Number(update.completedModules ?? current.completedModules) || 0),
     totalModules: Math.max(0, Number(update.totalModules ?? current.totalModules) || 0),

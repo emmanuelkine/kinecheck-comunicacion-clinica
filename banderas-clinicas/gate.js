@@ -48,7 +48,7 @@
     status.textContent = "Validando acceso…";
     try {
       const session = await validSession();
-      if (!session) throw Object.assign(new Error("Inicia sesión en KineCheck y abre este curso desde tu biblioteca."), { status: 401 });
+      if (!session) throw Object.assign(new Error("Inicia sesión en KineCheck y abre esta herramienta desde tu biblioteca."), { status: 401 });
       await validateLicense(session);
       status.textContent = "Acceso verificado.";
       if (window.KineCheckWatermark) {
