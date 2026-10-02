@@ -1,0 +1,681 @@
+{
+  "reviewDate": "2026-10-01",
+  "courses": [
+    {
+      "slug": "evidencia-aplicada",
+      "modules": [
+        {
+          "title": "1. Pensar con evidencia, no obedecer artículos",
+          "lessons": [
+            {
+              "id": "m1-j1",
+              "title": "La evidencia no reemplaza el razonamiento"
+            },
+            {
+              "id": "m1-j2",
+              "title": "Asociación, contribución y causalidad"
+            },
+            {
+              "id": "m1-j3",
+              "title": "Diagnóstico diferencial como proceso"
+            }
+          ]
+        },
+        {
+          "title": "2. Interpretar pruebas sin convertirlas en verdades",
+          "lessons": [
+            {
+              "id": "m2-j1",
+              "title": "Sensibilidad, especificidad y razones de verosimilitud"
+            },
+            {
+              "id": "m2-j2",
+              "title": "Detección, pronóstico y riesgo"
+            },
+            {
+              "id": "m2-j3",
+              "title": "Imágenes y sobrediagnóstico"
+            },
+            {
+              "id": "m2-j4-reliability-validity",
+              "title": "Fiabilidad no es validez: cuando dos clínicos coinciden"
+            }
+          ]
+        },
+        {
+          "title": "3. Dolor: biología, contexto y complejidad",
+          "lessons": [
+            {
+              "id": "m3-j1",
+              "title": "Nocicepción no es dolor"
+            },
+            {
+              "id": "m3-j2",
+              "title": "Mecanismos mixtos y evolución"
+            },
+            {
+              "id": "m3-j3",
+              "title": "Complejidad y no linealidad"
+            }
+          ]
+        },
+        {
+          "title": "4. La entrevista como herramienta clínica",
+          "lessons": [
+            {
+              "id": "m4-j1",
+              "title": "Recibir la historia"
+            },
+            {
+              "id": "m4-j2",
+              "title": "Validación sin sobreconfirmación"
+            },
+            {
+              "id": "m4-j3",
+              "title": "Entrevista motivacional y decisiones compartidas"
+            }
+          ]
+        },
+        {
+          "title": "5. Contexto, expectativas y lenguaje",
+          "lessons": [
+            {
+              "id": "m5-j1",
+              "title": "El contexto también interviene"
+            },
+            {
+              "id": "m5-j2",
+              "title": "Nocebo y lenguaje clínico"
+            },
+            {
+              "id": "m5-j3",
+              "title": "Expectativas y actualización"
+            }
+          ]
+        },
+        {
+          "title": "6. Terapia manual contemporánea",
+          "lessons": [
+            {
+              "id": "m6-j1",
+              "title": "Mecanismos y límites de la terapia manual"
+            },
+            {
+              "id": "m6-j2",
+              "title": "Tacto, preferencia y significado"
+            },
+            {
+              "id": "m6-j3",
+              "title": "Una práctica moderna"
+            }
+          ]
+        },
+        {
+          "title": "7. Ejercicio, adherencia y aplicación clínica",
+          "lessons": [
+            {
+              "id": "m7-j1",
+              "title": "Ejercicio con dolor"
+            },
+            {
+              "id": "m7-j2",
+              "title": "Placer, motivación y adherencia"
+            },
+            {
+              "id": "m7-j3",
+              "title": "Prevención y caminata"
+            },
+            {
+              "id": "m7-j4",
+              "title": "Integración clínica"
+            }
+          ]
+        },
+        {
+          "title": "8. Actualización 2025–2026: evaluación, razonamiento y educación en dolor",
+          "lessons": [
+            {
+              "id": "m8-j1",
+              "title": "PCH + CIF: formular hipótesis centradas en la persona"
+            },
+            {
+              "id": "m8-j2",
+              "title": "Capacidad física: ampliar la mirada sin extrapolar el contexto"
+            },
+            {
+              "id": "m8-j3",
+              "title": "Factores contextuales: efecto total no equivale a efecto específico"
+            },
+            {
+              "id": "m8-j4",
+              "title": "Seguridad y metacognición: IFOMPT, SCRIPT y simulación"
+            },
+            {
+              "id": "m8-j5",
+              "title": "PNE+: educación integrada con movimiento y rehabilitación"
+            },
+            {
+              "id": "m8-j6",
+              "title": "PNE en dolor agudo: promesa plausible, evidencia todavía limitada"
+            }
+          ]
+        },
+        {
+          "title": "9. Actualización septiembre 2026: comunicación, PNE, precisión diagnóstica e IA",
+          "lessons": [
+            {
+              "id": "m9-j1",
+              "title": "Diagnóstico MSK: la etiqueta y el contexto importan"
+            },
+            {
+              "id": "m9-j2",
+              "title": "Dolor persistente: función, automanejo y decisiones compartidas"
+            },
+            {
+              "id": "m9-j3",
+              "title": "PNE: efecto pequeño, utilidad selectiva"
+            },
+            {
+              "id": "m9-j4",
+              "title": "Radiculopatía cervical: pruebas como actualización probabilística"
+            },
+            {
+              "id": "m9-j5",
+              "title": "IA en fisioterapia MSK: entrenador sí, juez todavía no"
+            }
+          ]
+        },
+        {
+          "title": "10. Actualización 21 septiembre 2026: dosificación de ejercicio sin recetas rígidas",
+          "lessons": [
+            {
+              "id": "m11-j1",
+              "title": "Dosis, modalidad y adherencia: cuatro señales nuevas"
+            }
+          ]
+        }
+      ],
+      "load": {
+        "version": "2026-09-30",
+        "methodology": "Carga académica auditada a partir de lectura guiada, laboratorios, casos, preguntas decisionales y síntesis por módulo.",
+        "moduleMinutes": [
+          52,
+          71,
+          51,
+          52,
+          52,
+          52,
+          67,
+          113,
+          91,
+          20
+        ],
+        "auditedMinutes": 621,
+        "certifiableHours": 10,
+        "certificateReady": true
+      }
+    },
+    {
+      "slug": "dolor-musculoesqueletico",
+      "modules": [
+        {
+          "title": "Módulo 1 · Fundamentos del dolor",
+          "lessons": [
+            {
+              "id": "pain-01",
+              "title": "Dolor, nocicepción y experiencia"
+            },
+            {
+              "id": "pain-02",
+              "title": "Agudo, subagudo y persistente"
+            }
+          ]
+        },
+        {
+          "title": "Módulo 2 · Fenotipos y mecanismos",
+          "lessons": [
+            {
+              "id": "pain-03",
+              "title": "Predominio nociceptivo"
+            },
+            {
+              "id": "pain-04",
+              "title": "Dolor neuropático y radicular"
+            }
+          ]
+        },
+        {
+          "title": "Módulo 3 · Nociplasticidad y dolor persistente",
+          "lessons": [
+            {
+              "id": "pain-05",
+              "title": "Nociplasticidad: criterios y cautelas"
+            },
+            {
+              "id": "pain-06",
+              "title": "Fenotipos mixtos"
+            }
+          ]
+        },
+        {
+          "title": "Módulo 4 · Evaluación y cuestionarios",
+          "lessons": [
+            {
+              "id": "pain-07",
+              "title": "Dolor, función e interferencia"
+            },
+            {
+              "id": "pain-08",
+              "title": "Screening neuropático y psicosocial"
+            }
+          ]
+        },
+        {
+          "title": "Módulo 5 · Razonamiento clínico y fiabilidad",
+          "lessons": [
+            {
+              "id": "pain-09",
+              "title": "Fiabilidad interexaminador"
+            },
+            {
+              "id": "pain-10",
+              "title": "Hipótesis revisables y probabilidad"
+            }
+          ]
+        },
+        {
+          "title": "Módulo 6 · Intervención y comunicación",
+          "lessons": [
+            {
+              "id": "pain-11",
+              "title": "Educación y reconceptualización"
+            },
+            {
+              "id": "pain-12",
+              "title": "Ejercicio, exposición y dosificación"
+            }
+          ]
+        }
+      ],
+      "assignments": [
+        {
+          "title": "Aplicación 1 · Dolor, nocicepción y comunicación segura",
+          "prompt": "Analiza un caso de dolor musculoesquelético intenso con hallazgos de imagen frecuentes. Diferencia dolor, nocicepción, daño y riesgo; formula una explicación clínica que valide la experiencia sin equiparar intensidad con daño.",
+          "criteria": [
+            "Distingue dolor de nocicepción",
+            "Integra seguridad y contexto",
+            "Usa lenguaje no alarmista y revisable"
+          ],
+          "moduleNumber": 1,
+          "durationMinutes": 45,
+          "minimumCharacters": 450
+        },
+        {
+          "title": "Aplicación 2 · Fenotipos y mecanismos como hipótesis",
+          "prompt": "Construye una hipótesis de mecanismo predominante para un caso con rasgos nociceptivos y neurales. Explicita qué datos apoyan cada hipótesis, qué alternativa mantienes abierta y qué hallazgo cambiaría tu decisión.",
+          "criteria": [
+            "Evita etiquetas absolutas",
+            "Explicita datos a favor y en contra",
+            "Define una reevaluación"
+          ],
+          "moduleNumber": 2,
+          "durationMinutes": 45,
+          "minimumCharacters": 450
+        },
+        {
+          "title": "Aplicación 3 · Nociplasticidad con criterios y cautelas",
+          "prompt": "Resuelve un caso de dolor persistente generalizado. Justifica si la nociplasticidad es una hipótesis plausible, qué condiciones deben seguir siendo consideradas y cómo comunicarías incertidumbre sin invalidar a la persona.",
+          "criteria": [
+            "No usa nociplasticidad como diagnóstico por descarte",
+            "Mantiene diagnóstico diferencial",
+            "Comunica incertidumbre de forma clínica"
+          ],
+          "moduleNumber": 3,
+          "durationMinutes": 45,
+          "minimumCharacters": 450
+        },
+        {
+          "title": "Aplicación 4 · Medición con propósito",
+          "prompt": "Selecciona un conjunto breve de medidas para un caso de dolor persistente. Para cada medida, indica constructo, decisión que informa, momento de reevaluación y una limitación de interpretación.",
+          "criteria": [
+            "Relaciona medida con una pregunta clínica",
+            "Evita acumular cuestionarios sin propósito",
+            "Define criterio de seguimiento"
+          ],
+          "moduleNumber": 4,
+          "durationMinutes": 45,
+          "minimumCharacters": 450
+        },
+        {
+          "title": "Aplicación 5 · Fiabilidad, probabilidad y decisiones revisables",
+          "prompt": "Analiza un escenario en el que dos examinadores discrepan y una prueba especial resulta positiva. Separa fiabilidad, validez y utilidad clínica; formula una decisión probabilística y qué dato adicional buscarías.",
+          "criteria": [
+            "Distingue fiabilidad de validez",
+            "No convierte una prueba en diagnóstico",
+            "Explicita cómo actualizaría la hipótesis"
+          ],
+          "moduleNumber": 5,
+          "durationMinutes": 45,
+          "minimumCharacters": 450
+        },
+        {
+          "title": "Aplicación 6 · Intervención y comunicación compartida",
+          "prompt": "Diseña un plan inicial para una persona con dolor musculoesquelético persistente, baja confianza y evitación. Incluye explicación, objetivo funcional, exposición o ejercicio, dosis inicial, criterio de progresión y forma de reevaluar.",
+          "criteria": [
+            "Integra educación y acción",
+            "Individualiza la dosis",
+            "Define progresión y reevaluación"
+          ],
+          "moduleNumber": 6,
+          "durationMinutes": 45,
+          "minimumCharacters": 450
+        }
+      ],
+      "final": {
+        "title": "Integración final · Del mecanismo a la decisión clínica",
+        "prompt": "Caso integrador: persona de 44 años con dolor cervical y de hombro persistente, sueño irregular, preocupación por una resonancia con cambios degenerativos, temor al movimiento y baja actividad. Formula una representación del problema, prioriza seguridad, plantea mecanismos como hipótesis, selecciona dos medidas de resultado y propone una intervención inicial con lenguaje clínico prudente.",
+        "criteria": [
+          "Integra dimensiones biológicas, psicológicas y sociales",
+          "Mantiene hipótesis y límites explícitos",
+          "Propone una decisión concreta y reevaluable",
+          "Comunica sin alarmismo ni falsa certeza"
+        ],
+        "durationMinutes": 30,
+        "minimumCharacters": 600
+      },
+      "load": {
+        "version": "2026-09-30",
+        "baseMinutes": 188,
+        "methodology": "Carga académica formalizada mediante seis actividades aplicadas obligatorias de 45 minutos y una integración final de 30 minutos, además del recorrido clínico base.",
+        "auditedMinutes": 488,
+        "certifiableHours": 8,
+        "certificateReady": true,
+        "supplementMinutes": 300
+      }
+    }
+  ],
+  "exercise": [
+    {
+      "title": "De la recomendación a una dosis clínica segura",
+      "duration": "70 min",
+      "objectives": [
+        "Distinguir recomendación poblacional de prescripción clínica individual.",
+        "Explicitar frecuencia, intensidad, tiempo, tipo, volumen y progresión.",
+        "Detener la prescripción cuando el riesgo o la inestabilidad requieren evaluación."
+      ],
+      "case": "Caso 01 · Rehabilitación cardiaca",
+      "lessons": [
+        "Clase aplicada",
+        "Caso clínico",
+        "Decisiones guiadas",
+        "Evidencia"
+      ]
+    },
+    {
+      "title": "Prescribir ante artrosis y dolor persistente",
+      "duration": "75 min",
+      "objectives": [
+        "Diferenciar efecto promedio de una modalidad ganadora.",
+        "Prescribir desde el objetivo funcional, preferencias y respuesta.",
+        "Reconocer cuándo la literatura no permite afirmar una dosis óptima."
+      ],
+      "case": "Caso 02 · Artrosis de rodilla",
+      "lessons": [
+        "Clase aplicada",
+        "Caso clínico",
+        "Decisiones guiadas",
+        "Evidencia"
+      ]
+    },
+    {
+      "title": "Caídas, fragilidad y sarcopenia",
+      "duration": "95 min",
+      "objectives": [
+        "Combinar fuerza, balance, marcha y tarea funcional según riesgo.",
+        "Interpretar NMA y dosis–respuesta sin obedecer rankings de forma automática.",
+        "Distinguir evidencia convergente de evidencia causal directa."
+      ],
+      "case": "Caso 03 · Caídas y probable sarcopenia",
+      "lessons": [
+        "Clase aplicada",
+        "Caso clínico",
+        "Decisiones guiadas",
+        "Evidencia"
+      ]
+    },
+    {
+      "title": "Prescripción orientada por outcome",
+      "duration": "65 min",
+      "objectives": [
+        "Relacionar modalidad y dosis con el outcome prioritario.",
+        "Separar evidencia suficiente, insuficiente y no evaluada.",
+        "Adaptar por tratamiento, síntomas, comorbilidad y preferencias."
+      ],
+      "case": "Caso 04 · Fatiga relacionada con cáncer",
+      "lessons": [
+        "Clase aplicada",
+        "Caso clínico",
+        "Decisiones guiadas",
+        "Evidencia"
+      ]
+    },
+    {
+      "title": "Mantener el beneficio más allá del alta",
+      "duration": "55 min",
+      "objectives": [
+        "Incorporar la mantención como fase explícita de FITT‑VP.",
+        "Elegir estrategias digitales, presenciales o mixtas según barreras.",
+        "Medir actividad, función, calidad de vida y eventos adversos tras el alta."
+      ],
+      "case": "Caso 05 · Transición post‑rehabilitación",
+      "lessons": [
+        "Clase aplicada",
+        "Caso clínico",
+        "Decisiones guiadas",
+        "Evidencia"
+      ]
+    }
+  ],
+  "exerciseBibliography": [
+    {
+      "id": "esc",
+      "doi": "10.1093/eurheartj/ehae177",
+      "url": "https://doi.org/10.1093/eurheartj/ehae177",
+      "use": "FITT cardiovascular, intensidad relativa, fuerza y condiciones de inestabilidad.",
+      "type": "Guía clínica",
+      "year": 2024,
+      "short": "ESC CCS",
+      "title": "2024 ESC Guidelines for the management of chronic coronary syndromes",
+      "number": 1,
+      "message": "En enfermedad coronaria crónica, la dosis se individualiza con variables fisiológicas y el riesgo clínico antecede a la progresión.",
+      "citation": "Vrints C, Andreotti F, Koskinas KC, et al. Eur Heart J. 2024;45:3415–3537."
+    },
+    {
+      "id": "who",
+      "doi": "10.1136/bjsports-2020-102955",
+      "url": "https://doi.org/10.1136/bjsports-2020-102955",
+      "use": "Marco de dosis–respuesta y fuerza, balance y función en personas mayores.",
+      "type": "Guía global",
+      "year": 2020,
+      "short": "WHO",
+      "title": "World Health Organization 2020 guidelines on physical activity and sedentary behaviour",
+      "number": 2,
+      "message": "El marco poblacional se traduce clínicamente según capacidad, riesgo, función y barreras; en mayores se prioriza trabajo multicomponente.",
+      "citation": "Bull FC, Al‑Ansari SS, Biddle S, et al. Br J Sports Med. 2020;54:1451–1462."
+    },
+    {
+      "id": "cancer",
+      "doi": "10.1249/MSS.0000000000002116",
+      "url": "https://doi.org/10.1249/MSS.0000000000002116",
+      "use": "Prescripción por fatiga, ansiedad, función y calidad de vida.",
+      "type": "Consenso internacional",
+      "year": 2019,
+      "short": "Cancer roundtable",
+      "title": "Exercise Guidelines for Cancer Survivors: Consensus Statement from International Multidisciplinary Roundtable",
+      "number": 3,
+      "message": "La modalidad y la dosis se eligen por outcome; no todos los resultados tienen el mismo umbral de evidencia.",
+      "citation": "Campbell KL, Winters‑Stone KM, Wiskemann J, et al. Med Sci Sports Exerc. 2019;51:2375–2390."
+    },
+    {
+      "id": "eular",
+      "doi": "10.1136/ard-2023-225041",
+      "url": "https://doi.org/10.1136/ard-2023-225041",
+      "use": "Artrosis de cadera/rodilla, educación, dosificación, progresión y adherencia.",
+      "type": "Recomendación",
+      "year": 2024,
+      "short": "EULAR OA",
+      "title": "EULAR recommendations for the non‑pharmacological core management of hip and knee osteoarthritis: 2023 update",
+      "number": 4,
+      "message": "El ejercicio es tratamiento central en artrosis; la mejor modalidad es la que puede individualizarse, progresarse y sostenerse.",
+      "citation": "Moseng T, Vliet Vlieland TPM, Battista S, et al. Ann Rheum Dis. 2024;83:730–740."
+    },
+    {
+      "id": "uspstf",
+      "doi": "10.1001/jama.2024.4166",
+      "url": "https://doi.org/10.1001/jama.2024.4166",
+      "use": "Balance, marcha, función, fuerza, supervisión y seguridad.",
+      "type": "Revisión de evidencia",
+      "year": 2024,
+      "short": "USPSTF falls",
+      "title": "Interventions to Prevent Falls in Older Adults: Updated Evidence Report and Systematic Review for the US Preventive Services Task Force",
+      "number": 5,
+      "message": "El ejercicio ofrece el beneficio más consistente sobre desenlaces de caídas en mayores que viven en la comunidad.",
+      "citation": "Guirguis‑Blake JM, Perdue LA, Coppola EL, et al. JAMA. 2024;332:58–69."
+    },
+    {
+      "id": "jnha",
+      "doi": "10.1016/j.jnha.2026.100862",
+      "url": "https://doi.org/10.1016/j.jnha.2026.100862",
+      "use": "Integración sarcopenia–caídas y lectura crítica de evidencia convergente.",
+      "type": "Umbrella review",
+      "year": 2026,
+      "short": "JNHA umbrella",
+      "title": "Exercise and nutritional interventions for sarcopenia-related fall prevention in older adults: An umbrella review",
+      "number": 6,
+      "message": "Resistencia, balance y abordaje nutricional convergen, pero aún falta evidencia directa de que revertir sarcopenia reduzca caídas.",
+      "citation": "Dharmansyah D, Rahayuwati L, Pramukti I, Mutyara K. J Nutr Health Aging. 2026;30:100862."
+    },
+    {
+      "id": "jcsm",
+      "doi": "10.1002/jcsm.13225",
+      "url": "https://doi.org/10.1002/jcsm.13225",
+      "use": "Comparar modalidades, magnitud, ranking y certeza sin confundir ranking con verdad clínica.",
+      "type": "Network meta‑analysis",
+      "year": 2023,
+      "short": "JCSM NMA",
+      "title": "Exercise for sarcopenia in older people: A systematic review and network meta‑analysis",
+      "number": 7,
+      "message": "La resistencia sola o combinada con aeróbico y balance aparece entre las opciones más efectivas para outcomes relevantes.",
+      "citation": "Shen Y, Shi Q, Nong K, et al. J Cachexia Sarcopenia Muscle. 2023;14:1199–1211."
+    },
+    {
+      "id": "frailty",
+      "doi": "10.1016/j.archger.2024.105717",
+      "url": "https://doi.org/10.1016/j.archger.2024.105717",
+      "use": "MET‑min/semana, límites del ‘más es mejor’ y progresión en fragilidad.",
+      "type": "Meta‑análisis dosis–respuesta",
+      "year": 2025,
+      "short": "Frailty dose–response",
+      "title": "Exercise prescription prescriptions for frailty improvement in older adults: An evidence-based approach based on the 2024 older adult compendium",
+      "number": 8,
+      "message": "La relación dosis–respuesta es no lineal: baja a moderada intensidad mejora fragilidad y más intensidad no garantiza más beneficio.",
+      "citation": "Zang W, Fang M, Meng L, et al. Arch Gerontol Geriatr. 2025;130:105717."
+    },
+    {
+      "id": "msk-umbrella",
+      "doi": "10.1007/s40279-023-01966-2",
+      "url": "https://doi.org/10.1007/s40279-023-01966-2",
+      "use": "Reporting FITT‑VP/CERT, incertidumbre de dosis y lectura crítica.",
+      "type": "Umbrella review",
+      "year": 2024,
+      "short": "MSK umbrella",
+      "title": "The Impact of Exercise Prescription Variables on Intervention Outcomes in Musculoskeletal Pain: An Umbrella Review of Systematic Reviews",
+      "number": 9,
+      "message": "La evidencia MSK respalda ejercicio, pero suele informar mal las variables que permitirían replicar una dosis precisa.",
+      "citation": "Arora NK, Donath L, Owen PJ, et al. Sports Med. 2024;54:711–725."
+    },
+    {
+      "id": "maintenance",
+      "doi": "10.1136/bjsports-2025-110444",
+      "url": "https://doi.org/10.1136/bjsports-2025-110444",
+      "use": "Seguimiento, refuerzos, transición comunitaria/domiciliaria y outcomes de sostenimiento.",
+      "type": "Umbrella review",
+      "year": 2026,
+      "short": "Maintenance umbrella",
+      "title": "Effectiveness of maintenance interventions promoting physical activity following exercise therapy for chronic conditions: an umbrella review",
+      "number": 10,
+      "message": "La mantención debe diseñarse antes del alta; estrategias digitales y mixtas pueden apoyar actividad, función y calidad de vida.",
+      "citation": "Luijk A, Bricca A, Mortensen SR, et al. Br J Sports Med. 2026;60:884–899."
+    },
+    {
+      "id": "ers-ests-lung",
+      "doi": "10.1183/13993003.00156-2025",
+      "url": "https://doi.org/10.1183/13993003.00156-2025",
+      "use": "Cribado funcional, selección de pruebas y diferenciación entre evaluar aptitud y prescribir ejercicio.",
+      "tier": "Complementaria",
+      "type": "Guía clínica",
+      "year": 2025,
+      "short": "ERS/ESTS lung",
+      "title": "European Respiratory Society and European Society of Thoracic Surgeons clinical practice guideline on fitness for curative intent treatment of lung cancer",
+      "number": 11,
+      "message": "Aporta un algoritmo contemporáneo para valorar aptitud funcional y riesgo antes de tratamientos curativos de cáncer pulmonar; la prueba de ejercicio cardiopulmonar informa riesgo, pero no constituye por sí sola una prescripción FITT.",
+      "citation": "Brunelli A, Hardavella G, Huber RM, et al. Eur Respir J. 2025;66(5):2500156."
+    },
+    {
+      "id": "institutional-falls",
+      "doi": "10.1111/wvn.12571",
+      "url": "https://doi.org/10.1111/wvn.12571",
+      "use": "Transferir la prevención de caídas al contexto institucional y ajustar supervisión según fragilidad.",
+      "tier": "Complementaria",
+      "type": "Guía clínica GRADE",
+      "year": 2022,
+      "short": "Falls institutional",
+      "title": "Fall prevention in hospitals and nursing homes: Clinical practice guideline",
+      "number": 12,
+      "message": "En hospitales y cuidados de larga estadía respalda intervenciones multifactoriales, ejercicio con apoyo profesional y educación; no autoriza ejercicio indiscriminado en residentes frágiles.",
+      "citation": "Schoberer D, Breimaier HE, Zuschnegg J, et al. Worldviews Evid Based Nurs. 2022;19(2):86–93."
+    },
+    {
+      "id": "ortho-umbrella",
+      "doi": "10.1136/bmj.n1511",
+      "url": "https://doi.org/10.1136/bmj.n1511",
+      "use": "Razonamiento MSK, comunicación de incertidumbre y comparación prudente entre vías quirúrgicas y no operatorias.",
+      "tier": "Complementaria",
+      "type": "Umbrella review",
+      "year": 2021,
+      "short": "BMJ orthopaedics",
+      "title": "Common elective orthopaedic procedures and their clinical effectiveness: umbrella review of level 1 evidence",
+      "number": 13,
+      "message": "Para varios procedimientos ortopédicos comunes falta evidencia sólida de superioridad frente a alternativas no operatorias. Esto favorece decisiones compartidas, pero no demuestra que una dosis específica de ejercicio sea superior.",
+      "citation": "Blom AW, Donovan RL, Beswick AD, et al. BMJ. 2021;374:n1511."
+    },
+    {
+      "id": "respiratory-training-osa",
+      "doi": "10.1111/jsr.13941",
+      "url": "https://doi.org/10.1111/jsr.13941",
+      "use": "Enseñar una modalidad respiratoria adyuvante y por qué una señal estadística no equivale a reemplazar el tratamiento estándar.",
+      "tier": "Complementaria",
+      "type": "Revisión sistemática y MA",
+      "year": 2024,
+      "short": "RMT & OSA",
+      "title": "Respiratory muscle training for obstructive sleep apnea: Systematic review and meta-analysis",
+      "number": 14,
+      "message": "Incluyó 13 ECA, todos con riesgo de sesgo global alto. El entrenamiento inspiratorio mostró señales en presión sistólica y somnolencia, pero no beneficios consistentes en AHI, calidad de vida o capacidad física.",
+      "citation": "Silva de Sousa A, Rocha AP, Tavares DRB, et al. J Sleep Res. 2024;33(3):e13941."
+    },
+    {
+      "id": "postconcussion",
+      "doi": "10.1001/jamanetworkopen.2021.32221",
+      "url": "https://doi.org/10.1001/jamanetworkopen.2021.32221",
+      "use": "Ejemplificar progresión subsintomática, rehabilitación interdisciplinaria y comunicación explícita de certeza.",
+      "tier": "Complementaria",
+      "type": "RS/MA + recomendación",
+      "year": 2021,
+      "short": "PPCS rehabilitation",
+      "title": "Nonpharmacological Treatment of Persistent Postconcussion Symptoms in Adults: A Systematic Review and Meta-analysis and Guideline Recommendation",
+      "number": 15,
+      "message": "El ejercicio físico graduado y otras intervenciones individualizadas recibieron recomendaciones débiles, sustentadas en evidencia de certeza baja o muy baja; los parámetros óptimos siguen inciertos.",
+      "citation": "Rytter HM, Graff HJ, Henriksen HK, et al. JAMA Netw Open. 2021;4(11):e2132221."
+    }
+  ]
+}
