@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-02.2",
+  "version": "2026-10-02.3",
   "lastReviewed": "2026-10-02",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
@@ -23,7 +23,12 @@
       "evidenceType": "Guía de práctica clínica basada en evidencia",
       "certainty": "Fuerza de recomendación variable según la pregunta clínica",
       "doi": "10.2519/jospt.2025.13182",
-      "pmid": "40165544"
+      "pmid": "40165544",
+      "topics": [
+        "Hombro",
+        "Evaluación y razonamiento",
+        "Ejercicio"
+      ]
     },
     {
       "id": "library-2026-10-02-neck-exercise-overview",
@@ -44,7 +49,11 @@
       "evidenceType": "Umbrella review / revisión de revisiones sistemáticas",
       "certainty": "Variable según modalidad y desenlace; heterogeneidad relevante",
       "doi": "10.1080/10669817.2026.2687807",
-      "pmid": "42319264"
+      "pmid": "42319264",
+      "topics": [
+        "Columna",
+        "Ejercicio"
+      ]
     },
     {
       "id": "library-2026-10-02-knee-oa-resistance-dose",
@@ -65,7 +74,11 @@
       "evidenceType": "Revisión sistemática con metaanálisis dosis–respuesta de ensayos aleatorizados",
       "certainty": "Baja a muy baja",
       "doi": "10.2519/jospt.2026.13477",
-      "pmid": "42676087"
+      "pmid": "42676087",
+      "topics": [
+        "Rodilla",
+        "Ejercicio"
+      ]
     },
     {
       "id": "library-2026-10-02-patellar-tendon-loading",
@@ -86,7 +99,12 @@
       "evidenceType": "Revisión sistemática con metaanálisis de comparaciones activas de ejercicio/carga",
       "certainty": "Baja",
       "doi": "10.3390/jfmk11030348",
-      "pmid": "42783641"
+      "pmid": "42783641",
+      "topics": [
+        "Tendón",
+        "Rodilla",
+        "Ejercicio"
+      ]
     },
     {
       "id": "library-2026-10-02-msk-pain-multidomain",
@@ -107,7 +125,11 @@
       "evidenceType": "Revisión sistemática con metaanálisis multivariados",
       "certainty": "Moderada en dominios psicológico y sensorial; baja a muy baja en otros dominios",
       "doi": "10.1016/j.jpain.2026.106395",
-      "pmid": "42543134"
+      "pmid": "42543134",
+      "topics": [
+        "Dolor",
+        "Evaluación y razonamiento"
+      ]
     },
     {
       "id": "weekly-2026-10-02-electrolisis-percutanea",
@@ -128,7 +150,12 @@
       "evidenceType": "Revisión sistemática con metaanálisis de ensayos clínicos aleatorizados",
       "certainty": "Baja a muy baja",
       "doi": "10.1002/pri.70352",
-      "pmid": "42806498"
+      "pmid": "42806498",
+      "topics": [
+        "Tendón",
+        "Dolor",
+        "Ejercicio"
+      ]
     },
     {
       "id": "weekly-2026-09-26-evaluacion-razonamiento-pne",
@@ -145,7 +172,11 @@
       "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
       "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
       "sourceUrl": "https://academic.oup.com/ptj/article/105/3/pzae182/7932001",
-      "evidenceType": "Síntesis crítica de estudios diagnósticos, consenso y revisiones sistemáticas"
+      "evidenceType": "Síntesis crítica de estudios diagnósticos, consenso y revisiones sistemáticas",
+      "topics": [
+        "Evaluación y razonamiento",
+        "Dolor"
+      ]
     },
     {
       "id": "weekly-2026-09-25-dose-lbp",
@@ -166,7 +197,12 @@
       "evidenceType": "Revisión sistemática con metaanálisis en red dosis–respuesta",
       "certainty": "Baja a muy baja",
       "doi": "10.1136/bjsports-2026-111988",
-      "pmid": "42785965"
+      "pmid": "42785965",
+      "topics": [
+        "Columna",
+        "Dolor",
+        "Ejercicio"
+      ]
     },
     {
       "id": "weekly-2026-09-21",
@@ -181,7 +217,10 @@
       ],
       "practiceMessage": "Prescribe una dosis que la persona pueda sostener y progresar. Usa los promedios de la literatura como punto de partida, no como umbrales rígidos, y reevalúa función, tolerancia y adherencia.",
       "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
-      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/"
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "topics": [
+        "Ejercicio"
+      ]
     },
     {
       "id": "manual-therapy-mechanisms-2026",
@@ -198,7 +237,11 @@
       "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
       "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
       "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42250858/",
-      "doi": "10.1016/j.ctim.2026.103393"
+      "doi": "10.1016/j.ctim.2026.103393",
+      "topics": [
+        "Terapia manual",
+        "Evaluación y razonamiento"
+      ]
     },
     {
       "id": "weekly-2026-09-15",
@@ -213,7 +256,11 @@
       ],
       "practiceMessage": "La dirección general es reforzar un razonamiento clínico contextual, probabilístico y centrado en resultados significativos para la persona.",
       "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
-      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/"
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "topics": [
+        "Evaluación y razonamiento",
+        "Dolor"
+      ]
     }
   ]
 }
