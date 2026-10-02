@@ -12,20 +12,20 @@ Los bancos de ítems, claves y casos equivalentes deben almacenarse en servidor 
 
 ### Implementación técnica actual
 
-La plataforma ya contiene la especificación protegida de los ocho instrumentos con estado `prepared_not_active`. Academy muestra su estado a usuarios autenticados con licencia; el propietario puede revisar el caso y la rúbrica mediante una API server-side. No se almacenaron claves de respuesta porque los bancos definitivos todavía deben revisarse ítem por ítem. Tampoco se habilitaron intentos, calificación, finalización automática ni certificados. La activación exige que ambos controles —pilotaje académico y certificación OTEC— estén autorizados de forma explícita.
+La plataforma contiene un banco protegido de **120 ítems**: 15 por cada uno de los ocho cursos. Las claves y fundamentos permanecen solo en servidor. Academy permite iniciar la evaluación a usuarios autenticados con licencia; Supabase registra curso, versión, intento, respuestas, puntaje, puerta crítica y fecha. El criterio académico interno vigente es **80 %**, con máximo de **dos intentos** y requisito de responder correctamente los ítems críticos de seguridad. Este cierre es de KineCheck: la certificación OTEC sigue desactivada y requiere aprobación escrita independiente.
 
 ## 2. Modelo evaluativo propuesto
 
-Para los cursos que actualmente solo tienen autoevaluación se propone un instrumento de 100 puntos:
+Para los ocho cursos se implementó una evaluación final objetiva corregida en servidor:
 
-- **30 puntos:** 15 ítems de decisión clínica o interpretación, dos puntos cada uno.
-- **70 puntos:** un caso integrador calificado con cinco dimensiones de rúbrica, 14 puntos cada una.
-- **Aprobación propuesta:** 80/100 o más y cumplimiento de la condición crítica de seguridad del curso.
-- **No aprobación:** menos de 80 puntos, omisión crítica de seguridad, respuesta que exceda el alcance profesional o uso de datos clínicos identificables.
-- **Intentos propuestos:** un intento ordinario y una recuperación con forma equivalente. La OTEC debe aprobar esta regla antes de activarla.
-- **Retroalimentación:** por resultado de aprendizaje y criterio de rúbrica; las claves completas no se muestran antes de cerrar el intento.
+- **15 ítems objetivos** por curso, con decisión clínica, interpretación y seguridad.
+- **Aprobación interna KineCheck:** 80 % o más y todas las preguntas críticas de seguridad correctas.
+- **No aprobación:** menos de 80 % o fallo de la puerta crítica de seguridad.
+- **Intentos:** máximo de dos por versión del curso.
+- **Retroalimentación:** posterior al envío, con fundamento por ítem; la clave no se expone antes de cerrar el intento.
+- **Registro:** resultado y finalización académica se guardan en servidor.
 
-Este umbral es una **propuesta académica para revisión**, no un requisito ya vigente. Traumatología conserva mientras tanto su regla comprobada de 80% modular y final; su nueva forma independiente se describe más abajo.
+Este umbral es un **requisito académico interno vigente de KineCheck**. No se presenta como criterio aprobado por una OTEC. Traumatología mantiene además su regla histórica de 80 % modular y final; para certificación externa prevalecerá lo que la OTEC apruebe por escrito.
 
 ### Rúbrica transversal del caso integrador
 

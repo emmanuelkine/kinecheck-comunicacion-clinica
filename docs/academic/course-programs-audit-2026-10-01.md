@@ -1,26 +1,26 @@
 # Validación académica exhaustiva de KineCheck
 
-Fecha de revisión: 2026-10-01. Versión del dossier: 2026.10.01-validacion-academica-1.
+Fecha de revisión inicial: 2026-10-01. **Actualización de cierre técnico-académico: 2026-10-02.** Versión del dossier: 2026.10.02-cierre-academico-interno.
 
 ## Resultado ejecutivo
 
 La revisión se ejecutó con la sesión autorizada del propietario en la aplicación publicada, usando pantallas y acciones reales de estudiante. Se verificaron todos los módulos y lecciones enumerados abajo; también casos, cuestionarios, actividades, bibliotecas y las rutas estudiante/profesional cuando existen. Se corrigieron defectos inequívocos y afirmaciones clínicas únicamente al comprobar fuentes originales.
 
-No se otorga acreditación OTEC, no se presume convenio vigente y no se declara ningún curso SENCE. El dictamen se refiere a preparación para certificación: siete cursos requieren evaluación sumativa y/o validación temporal; Traumatología conserva una aprobación académica verificable, con correcciones. El campo técnico `certificate_ready` y la elegibilidad automática no equivalen a aprobación científica ni convenio.
+No se otorga acreditación OTEC, no se presume convenio vigente y no se declara ningún curso SENCE. El 2 de octubre de 2026 se cerró la brecha interna de evaluación sumativa: los ocho cursos auditados disponen de evaluación final KineCheck protegida, 15 ítems por curso, 80 % de aprobación, máximo dos intentos, puerta crítica de seguridad, corrección server-side y registro de resultado. La certificación OTEC continúa bloqueada hasta convenio, aprobación escrita de programas/horas y plantilla oficial.
 
 ## Matriz general
 
-| Producto | Dictamen para futura certificación | Estructura comprobada | Carga exacta planificada | Registro de horas existente | Evaluación académica actual |
+| Producto | Estado académico interno | Estructura comprobada | Carga exacta planificada | Evaluación final KineCheck | Estado OTEC |
 |---|---|---|---|---|---|
-| KineCheck Clínico | Revisión mayor | 10 módulos / 30 experiencias | 18 h 00 min | 18.00 h | Formativa / autoevaluada, sin aprobación sumativa verificada |
-| Comunicación Clínica | Revisión mayor | 12 módulos / 154 diapositivas / 60 preguntas | 8 h 13 min | 8.00 h | Formativa / autoevaluada, sin aprobación sumativa verificada |
-| Más allá del dolor | Revisión mayor | 8 módulos / 32 lecciones | 12 h 25 min | 12.00 h | Formativa / autoevaluada, sin aprobación sumativa verificada |
-| KineCheck Evidencia Aplicada | Revisión mayor | 10 módulos / 35 experiencias | 10 h 21 min | 10.00 h | Formativa / autoevaluada, sin aprobación sumativa verificada |
-| Traumatología y Ortopedia Clínica | Aprobado con correcciones | 6 módulos / 24 lecciones | 10 h 40 min | 10.67 h | 80% modular y final |
-| Dolor Lumbar Persistente | Revisión mayor | 9 módulos / 54 microlecciones | 8 h 10 min | 8.00 h | Formativa / autoevaluada, sin aprobación sumativa verificada |
-| Dolor Musculoesquelético | Revisión mayor | 6 módulos / 12 experiencias / 7 entregas | 8 h 08 min | 8.00 h | Formativa / autoevaluada, sin aprobación sumativa verificada |
-| Ejercicio Terapéutico | Revisión mayor | 5 módulos / 5 casos / 10 decisiones / 15 lecturas | 6 h 00 min | 6.00 h (`certificate_ready = false`) | Formativa / autoevaluada, sin aprobación sumativa verificada |
-| Banderas Clínicas | Herramienta formativa, no curso | 13 fichas / 4 casos | No asignada | No asignado | Práctica sin certificado de curso |
+| KineCheck Clínico | Operativo con cierre sumativo | 10 módulos / 30 experiencias | 18 h 00 min | 15 ítems · 80 % · 2 intentos · server-side | En preparación |
+| Comunicación Clínica | Operativo con cierre sumativo | 12 módulos / 154 diapositivas / 60 preguntas | 8 h 13 min | 15 ítems · 80 % · 2 intentos · server-side | En preparación |
+| Más allá del dolor | Operativo con cierre sumativo | 8 módulos / 32 lecciones | 12 h 25 min | 15 ítems · 80 % · 2 intentos · server-side | En preparación |
+| KineCheck Evidencia Aplicada | Operativo con cierre sumativo | 10 módulos / 35 experiencias | 10 h 21 min | 15 ítems · 80 % · 2 intentos · server-side | En preparación |
+| Traumatología y Ortopedia Clínica | Operativo con cierre sumativo | 6 módulos / 24 lecciones | 10 h 40 min | Examen legado 80 % + final KineCheck 15 ítems server-side | En preparación |
+| Dolor Lumbar Persistente | Operativo con cierre sumativo | 9 módulos / 54 microlecciones | 8 h 10 min | 15 ítems · 80 % · 2 intentos · server-side | En preparación |
+| Dolor Musculoesquelético | Operativo con cierre sumativo | 6 módulos / 12 experiencias / 7 entregas | 8 h 08 min | 15 ítems · 80 % · 2 intentos · server-side | En preparación |
+| Ejercicio Terapéutico | Operativo con cierre sumativo | 5 módulos / 5 casos / 10 decisiones / 15 lecturas | 6 h 00 min | 15 ítems · 80 % · 2 intentos · server-side | No habilitado para certificado |
+| Banderas Clínicas | Recurso, no curso | 13 fichas / 4 casos | No asignada | No aplica | No certificable |
 
 ## Alcance y evidencia de ejecución
 
@@ -46,7 +46,7 @@ Asociación ≠ causalidad; screening ≠ diagnóstico; fiabilidad ≠ validez; 
 
 ### 1. Dictamen
 
-Revisión mayor. Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.
+Curso académicamente operativo en KineCheck con evaluación final interna server-side. Esto no es acreditación OTEC ni convierte el curso en SENCE.
 
 ### 2. Programa académico final
 
@@ -141,13 +141,13 @@ Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, con
 
 - Diagnóstica: No se verificó una evaluación diagnóstica diferenciada.
 - Formativa: 30 preguntas de elección con respuesta y justificación; 30 tareas/casos de aplicación.
-- Sumativa: No se verificó examen final calificado ni rúbrica de corrección de las tareas.
-- Puntaje: Sin puntaje global de aprobación publicado.
-- Intentos: Autoevaluaciones repetibles; no se verificó un límite explícito.
+- Sumativa: evaluación final KineCheck protegida de 15 ítems.
+- Puntaje: aprobación interna con 80 % y cumplimiento de la puerta crítica de seguridad.
+- Intentos: máximo de dos por versión; corrección y registro server-side.
 
 ### 7. Criterio de aprobación
 
-Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.
+El criterio académico interno vigente exige 80 % en la evaluación final KineCheck y respuesta correcta de los ítems críticos de seguridad. Este resultado acredita finalización académica interna, no competencia profesional ni certificación OTEC.
 
 Requisitos de finalización técnica: El porcentaje representa el recorrido registrado. Las tareas son propuestas de trabajo y no tienen corrección docente registrada en esta versión.
 
@@ -201,7 +201,7 @@ No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba d
 
 ### 1. Dictamen
 
-Revisión mayor. Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.
+Curso académicamente operativo en KineCheck con evaluación final interna server-side. Esto no es acreditación OTEC ni convierte el curso en SENCE.
 
 ### 2. Programa académico final
 
@@ -378,7 +378,7 @@ No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba d
 
 ### 1. Dictamen
 
-Revisión mayor. Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.
+Curso académicamente operativo en KineCheck con evaluación final interna server-side. Esto no es acreditación OTEC ni convierte el curso en SENCE.
 
 ### 2. Programa académico final
 
@@ -532,7 +532,7 @@ No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba d
 
 ### 1. Dictamen
 
-Revisión mayor. Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.
+Curso académicamente operativo en KineCheck con evaluación final interna server-side. Esto no es acreditación OTEC ni convierte el curso en SENCE.
 
 ### 2. Programa académico final
 
@@ -841,7 +841,7 @@ No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba d
 
 ### 1. Dictamen
 
-Revisión mayor. Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.
+Curso académicamente operativo en KineCheck con evaluación final interna server-side. Esto no es acreditación OTEC ni convierte el curso en SENCE.
 
 ### 2. Programa académico final
 
@@ -1025,7 +1025,7 @@ No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba d
 
 ### 1. Dictamen
 
-Revisión mayor. Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.
+Curso académicamente operativo en KineCheck con evaluación final interna server-side. Esto no es acreditación OTEC ni convierte el curso en SENCE.
 
 ### 2. Programa académico final
 
@@ -1163,7 +1163,7 @@ No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba d
 
 ### 1. Dictamen
 
-Revisión mayor. Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.
+Curso académicamente operativo en KineCheck con evaluación final interna server-side. Esto no es acreditación OTEC ni convierte el curso en SENCE.
 
 ### 2. Programa académico final
 

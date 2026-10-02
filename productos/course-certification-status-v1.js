@@ -31,7 +31,7 @@
       .kc-certification-status__badge{display:inline-flex;align-items:center;min-height:30px;padding:6px 10px;border:1px solid rgba(121,228,218,.3);border-radius:999px;background:rgba(72,203,194,.09);color:#9aeee6;font-size:.7rem;font-weight:900}
       .kc-certification-status h2{margin:10px 0 8px;color:#fff;font-size:clamp(1.35rem,3vw,1.9rem);line-height:1.12}
       .kc-certification-status p{margin:0;color:#c8dcdf;font-size:.92rem;line-height:1.6}
-      .kc-certification-status__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:17px}
+      .kc-certification-status__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:17px}
       .kc-certification-status__item{padding:13px;border:1px solid rgba(255,255,255,.07);border-radius:14px;background:rgba(255,255,255,.035)}
       .kc-certification-status__item strong{display:block;margin-bottom:5px;color:#f4ffff;font-size:.78rem}
       .kc-certification-status__item span{display:block;color:#adc7cb;font-size:.73rem;line-height:1.45}
@@ -52,8 +52,9 @@
         <p><strong>${name}</strong> es un curso privado de KineCheck. KineCheck está preparando un convenio con una OTEC para que, una vez formalizado y aprobado el programa bajo los criterios acordados, los participantes que cumplan los requisitos puedan obtener un certificado emitido por la OTEC.</p>
         <div class="kc-certification-status__grid">
           <div class="kc-certification-status__item"><strong>Uso laboral</strong><span>El certificado podrá presentarse como antecedente de capacitación o formación complementaria en procesos públicos o privados, sujeto a las bases o criterios de cada institución.</span></div>
-          <div class="kc-certification-status__item"><strong>Trazabilidad</strong><span>La certificación prevista incorporará identificación del participante, curso, horas, aprobación, folio y verificación mediante QR.</span></div>
-          <div class="kc-certification-status__item"><strong>Alcance</strong><span>No corresponde a un curso SENCE, no posee código SENCE y no utiliza franquicia tributaria.</span></div>
+          <div class="kc-certification-status__item"><strong>Evaluación final KineCheck</strong><span>El cierre académico interno utiliza 15 preguntas, aprobación desde 80 %, máximo dos intentos y preguntas críticas de seguridad. El resultado se corrige y registra en servidor.</span></div>
+          <div class="kc-certification-status__item"><strong>Trazabilidad</strong><span>KineCheck registra curso, versión, intento, resultado y finalización académica. El futuro certificado OTEC incorporará además folio y verificación mediante QR.</span></div>
+          <div class="kc-certification-status__item"><strong>Alcance</strong><span>La aprobación interna KineCheck no equivale a certificación OTEC. El curso no es SENCE, no posee código SENCE y no utiliza franquicia tributaria.</span></div>
         </div>
         <p class="kc-certification-status__note">La certificación OTEC aún no se encuentra activa. Su disponibilidad quedará sujeta a la formalización del convenio y a la aprobación previa del programa por parte de la OTEC.</p>
       </section>
