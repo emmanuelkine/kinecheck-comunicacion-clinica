@@ -1,0 +1,1983 @@
+{
+  "version": "2026.10.01-validacion-academica-1",
+  "reviewDate": "2026-10-01",
+  "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+  "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+  "courses": [
+    {
+      "slug": "kinecheck-clinico-curso",
+      "name": "KineCheck Clínico",
+      "description": "Evaluación musculoesquelética avanzada; la guía es un recurso complementario incluido, no otro curso.",
+      "purpose": "Evaluar de forma segura, seleccionar medidas y justificar decisiones revisables.",
+      "target": "Kinesiólogos y profesionales de rehabilitación musculoesquelética; nivel avanzado.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Priorizar señales de riesgo y justificar derivación o adaptación de la evaluación.",
+        "Construir hipótesis a partir de historia, contexto y examen dirigido.",
+        "Interpretar pruebas, imagen y mediciones distinguiendo fiabilidad, validez y probabilidad.",
+        "Integrar función, metas y seguimiento en una síntesis clínica anonimizada."
+      ],
+      "methodology": [
+        "Lectura guiada de 30 experiencias en diez módulos.",
+        "Casos simulados, tareas de aplicación, lectura crítica y 30 autoevaluaciones con explicación.",
+        "Uso de la guía complementaria como apoyo al razonamiento, no almacenamiento de ficha clínica."
+      ],
+      "assessment": {
+        "diagnostic": "No se verificó una evaluación diagnóstica diferenciada.",
+        "formative": "30 preguntas de elección con respuesta y justificación; 30 tareas/casos de aplicación.",
+        "summative": "No se verificó examen final calificado ni rúbrica de corrección de las tareas.",
+        "points": "Sin puntaje global de aprobación publicado.",
+        "attempts": "Autoevaluaciones repetibles; no se verificó un límite explícito."
+      },
+      "approval": "Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.",
+      "completion": "El porcentaje representa el recorrido registrado. Las tareas son propuestas de trabajo y no tienen corrección docente registrada en esta versión.",
+      "publicHours": "18 h",
+      "load": {
+        "minutes": 1080,
+        "hours": "18.00",
+        "method": "Duración académica declarada en el payload del curso; distribución modular administrativa provisional sobre 10 módulos equivalentes.",
+        "note": "La duración total está declarada explícitamente como 18 horas. La distribución por módulo se usa para trazabilidad administrativa."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "LIN",
+        "IFOMPT",
+        "CERVICAL",
+        "FINNERUP",
+        "KOSEK",
+        "NOLET",
+        "BRINJIKJI"
+      ],
+      "fixes": [
+        "Programa reconstruido desde los diez módulos y las 30 experiencias reales, no desde un temario supuesto.",
+        "Se aclara que la guía complementaria no es un curso independiente.",
+        "Bibliografía esencial y límites de medición y seguridad enlazados en el programa."
+      ],
+      "limits": [
+        "La distribución administrativa de 108 minutos por módulo no demuestra dedicación real ni tiempo equivalente entre módulos.",
+        "La certificación necesita una evaluación sumativa alineada y un criterio formal de aprobación; no se alteraron requisitos por inferencia."
+      ],
+      "findings": [
+        [
+          "P1",
+          "CL-01",
+          "Abierto",
+          "No existe evaluación sumativa calificada ni aprobación académica explícita."
+        ],
+        [
+          "P2",
+          "CL-02",
+          "Abierto",
+          "18 horas declaradas con reparto modular administrativo igual; no validación temporal de estudiantes."
+        ],
+        [
+          "P2",
+          "CL-03",
+          "Abierto",
+          "Distractores frecuentemente muy evidentes; limitada discriminación de razonamiento avanzado."
+        ],
+        [
+          "P2",
+          "CL-04",
+          "Corregido",
+          "El programa preliminar no coincidía con la secuencia real de diez módulos."
+        ]
+      ],
+      "verdict": "Revisión mayor",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "La guía complementaria y el estándar profesional",
+          "lessons": [
+            "El curso es el centro; la guía es el adjunto",
+            "Datos mínimos, anonimización y trazabilidad",
+            "De la casilla a la decisión clínica"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Seguridad, triage y detección de patología relevante",
+          "lessons": [
+            "Banderas rojas: señales, combinaciones y contexto",
+            "Cribado neurológico y deterioro progresivo",
+            "Región cervical y posible patología vascular"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Historia clínica, comportamiento de síntomas e irritabilidad",
+          "lessons": [
+            "ALICIA y cronología con propósito",
+            "SINS e irritabilidad como marco, no puntaje",
+            "Patrones de dolor y mecanismos como hipótesis"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Persona, contexto y factores psicosociales",
+          "lessons": [
+            "Banderas amarillas y naranjas sin etiquetar",
+            "Sueño, carga, trabajo y vida cotidiana",
+            "Metas y decisiones compartidas"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Examen físico orientado por hipótesis",
+          "lessons": [
+            "Observación y movimiento funcional",
+            "Movimiento activo, pasivo y resistido",
+            "Palpación y movimientos accesorios"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Medición: movilidad, fuerza y desempeño",
+          "lessons": [
+            "Goniometría y rango de movimiento",
+            "Fuerza: MMT, Oxford y dinamometría",
+            "Pruebas de desempeño y capacidad funcional"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Examen neurológico y neurodinámica",
+          "lessons": [
+            "Miotomas, dermatomas y reflejos",
+            "Neurodinámica y diferenciación estructural",
+            "Patrones centrales y periféricos"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Pruebas especiales, clusters y razonamiento probabilístico",
+          "lessons": [
+            "Probabilidad pretest y utilidad de una prueba",
+            "Sensibilidad, especificidad y razones de verosimilitud",
+            "Clusters, imagen y cierre prematuro"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Integración CIF, hipótesis, diagnóstico y pronóstico",
+          "lessons": [
+            "CIF como mapa, no inventario",
+            "Representación del problema e hipótesis jerarquizadas",
+            "Pronóstico y plan revisable"
+          ],
+          "minutes": 108
+        },
+        {
+          "title": "Seguimiento, resultados y cierre del razonamiento",
+          "lessons": [
+            "Dolor, función y resultados informados",
+            "Cambio detectable, relevancia y respuesta 24 horas",
+            "Síntesis final, derivación y aprendizaje continuo"
+          ],
+          "minutes": 108
+        }
+      ]
+    },
+    {
+      "slug": "comunicacion-clinica",
+      "name": "Comunicación Clínica",
+      "description": "Entrevista, empatía, validación, educación y decisiones compartidas en doce módulos y 154 diapositivas.",
+      "purpose": "Usar comunicación comprensible, respetuosa y clínicamente prudente.",
+      "target": "Profesionales de salud, estudiantes y docentes clínicos.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Realizar una entrevista con preguntas abiertas, reformulación y verificación de comprensión.",
+        "Validar la experiencia sin confirmar una explicación de daño ni un diagnóstico psicológico.",
+        "Comunicar hallazgos, incertidumbre y opciones sin prometer recuperación.",
+        "Distinguir satisfacción, asociación y resultados clínicos al interpretar investigación.",
+        "Construir un cierre compartido con metas y seguimiento."
+      ],
+      "methodology": [
+        "154 diapositivas con texto accesible, doce guías y laboratorio de prácticas.",
+        "60 preguntas formativas con explicación.",
+        "Actividad integradora escrita obligatoria de 30 minutos, mínimo 450 caracteres y cuatro criterios de autoevaluación."
+      ],
+      "assessment": {
+        "diagnostic": "No se verificó prueba diagnóstica independiente.",
+        "formative": "12 cuestionarios de cinco preguntas cada uno, más prácticas y autoevaluación.",
+        "summative": "Actividad integradora escrita registrada; sus casillas y longitud validan presentación, no calidad de desempeño.",
+        "points": "Sin nota global ni porcentaje mínimo de aprobación académica publicado.",
+        "attempts": "Cuestionarios repetibles; no límite explícito verificado."
+      },
+      "approval": "Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.",
+      "completion": "La actividad final exige 450 caracteres y cuatro criterios confirmados. Marcar diapositivas estudiadas y guardar la actividad no equivale a aprobar competencia comunicacional.",
+      "publicHours": "8 h",
+      "load": {
+        "minutes": 493,
+        "hours": "8.00",
+        "method": "Carga base auditada más actividad integradora obligatoria de 30 minutos.",
+        "note": "La actividad final debe completarse y quedar registrada en el progreso para considerar la carga de 8 horas."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "IASP",
+        "BRINJIKJI",
+        "OKEEFFE",
+        "OLIVEIRA",
+        "HUSH",
+        "HOWICK",
+        "NIJS",
+        "PNE",
+        "SPIKES"
+      ],
+      "fixes": [
+        "Reparación de los 60 cuestionarios que no cargaban por un token vacío de clase CSS.",
+        "Retiro del aviso editorial sobre ausencia de DOI; fuentes originales ofrecidas donde fueron verificadas.",
+        "27 diapositivas revisadas con texto legible y fuentes originales: 11,13,14,63,64,76,77,80,81,82,83,85,90,118,120,125,127,135,136,137,139,141,142,144,149,150,154.",
+        "Validación de cuatro criterios booleanos y longitud de la actividad en servidor; estado de registro sin mensaje interno de pendiente."
+      ],
+      "limits": [
+        "La actividad final es autoevaluada: requiere rúbrica y calificación de desempeño para futura certificación.",
+        "La presentación original conserva diapositivas muy densas y heterogeneidad de respaldo bibliográfico fuera de los pasajes corregidos.",
+        "8 h declaradas frente a 8 h 13 min planificados; no se incrementó el registro de horas."
+      ],
+      "findings": [
+        [
+          "P1",
+          "CO-01",
+          "Corregido",
+          "Cuestionarios críticos inaccesibles por error JavaScript."
+        ],
+        [
+          "P1",
+          "CO-02",
+          "Corregido",
+          "Se confundían satisfacción y eficacia y se prometían beneficios de educación/movimiento."
+        ],
+        [
+          "P1",
+          "CO-03",
+          "Abierto",
+          "No se verifica calificación sumativa ni umbral académico de aprobación."
+        ],
+        [
+          "P2",
+          "CO-04",
+          "Corregido",
+          "Diapositivas corregidas con fuentes originales y texto accesible."
+        ],
+        [
+          "P2",
+          "CO-05",
+          "Abierto",
+          "Lectura de imágenes densas y tiempo de estudio sin validación empírica."
+        ]
+      ],
+      "verdict": "Revisión mayor",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "Razonamiento clínico, dolor y validación inicial",
+          "minutes": 41,
+          "lessons": [
+            "Diapositivas 1–15: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Fundamentos de la comunicación efectiva",
+          "minutes": 44,
+          "lessons": [
+            "Diapositivas 16–32: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Escucha activa y entrevista clínica",
+          "minutes": 45,
+          "lessons": [
+            "Diapositivas 33–50: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Empatía en la práctica clínica",
+          "minutes": 51,
+          "lessons": [
+            "Diapositivas 51–73: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Validación emocional: conceptos y diferencias",
+          "minutes": 38,
+          "lessons": [
+            "Diapositivas 74–85: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Aplicación de la validación y manejo de resistencia",
+          "minutes": 34,
+          "lessons": [
+            "Diapositivas 86–94: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Noticias difíciles, conflictos y límites",
+          "minutes": 36,
+          "lessons": [
+            "Diapositivas 95–105: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Comunicación en dolor musculoesquelético y modelo BPS",
+          "minutes": 41,
+          "lessons": [
+            "Diapositivas 106–120: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "OARS, expectativas y factores contextuales",
+          "minutes": 38,
+          "lessons": [
+            "Diapositivas 121–132: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Satisfacción, profesionalismo y entorno terapéutico",
+          "minutes": 31,
+          "lessons": [
+            "Diapositivas 133–139: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Educación del paciente y alianza terapéutica",
+          "minutes": 38,
+          "lessons": [
+            "Diapositivas 140–151: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        },
+        {
+          "title": "Atención basada en valor y cierre integrador",
+          "minutes": 26,
+          "lessons": [
+            "Diapositivas 152–154: contenido de estudio",
+            "Guía pedagógica del módulo",
+            "Práctica y cinco preguntas formativas"
+          ]
+        }
+      ],
+      "finalActivity": {
+        "title": "Actividad integradora de comunicación clínica",
+        "minutes": 30,
+        "minimumCharacters": 450,
+        "criteria": 4
+      }
+    },
+    {
+      "slug": "mas-alla-del-dolor",
+      "name": "Más allá del dolor",
+      "description": "Curso de ocho módulos, 32 lecciones y recursos regionales de integración clínica.",
+      "purpose": "Integrar dolor, función, seguridad, comunicación, medición y reevaluación sin reducir el problema a una etiqueta.",
+      "target": "Kinesiólogos y profesionales de rehabilitación; estudiantes de salud como formación complementaria sin habilitación profesional adicional.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Construir un mapa de contribuyentes biológicos, psicológicos y sociales.",
+        "Decidir cuándo derivar y comunicar una red de seguridad.",
+        "Seleccionar e interpretar PROMs y pruebas según propiedades de medición.",
+        "Revisar probabilidad y límites de palpación y pruebas especiales.",
+        "Formular un plan compartido con metas y reevaluación."
+      ],
+      "methodology": [
+        "Lectura de 32 lecciones con referencias al material original.",
+        "32 preguntas formativas, manual transversal de doce fases, nueve guías regionales y ocho casos regionales.",
+        "Tres escenarios del caso Camila, herramientas de medición y razonamiento probabilístico."
+      ],
+      "assessment": {
+        "diagnostic": "Sin evaluación diagnóstica independiente verificada.",
+        "formative": "32 preguntas opcionales, casos y feedback de aplicación.",
+        "summative": "No se verificó examen final calificado ni rúbrica obligatoria.",
+        "points": "Sin nota total o porcentaje mínimo académico publicado.",
+        "attempts": "Práctica repetible sin límite explícito verificado."
+      },
+      "approval": "Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.",
+      "completion": "Marcar las 32 lecciones estudiadas registra el recorrido; resolver preguntas no demuestra aprobación sumativa.",
+      "publicHours": "12 h 25 min planificados; registro académico 12 h",
+      "load": {
+        "minutes": 745,
+        "hours": "12.00",
+        "method": "Suma de minutos declarados en los ocho módulos del curso.",
+        "note": "745 minutos auditados. Para certificación conservadora se registran 12 horas."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "WHO",
+        "LIN",
+        "IFOMPT",
+        "PETERSEN",
+        "NOLET",
+        "OKEEFFE",
+        "WALKBACK"
+      ],
+      "fixes": [
+        "Retiro temprano del fragmento temporal de sesión de la URL, sin cambiar los permisos ni la duración de las licencias.",
+        "Programa exacto de ocho módulos y 32 lecciones reconstruido desde la aplicación.",
+        "Se diferencian 745 minutos planificados de las 12 horas previstas en el registro académico."
+      ],
+      "limits": [
+        "Falta evaluación final calificada y criterio académico de aprobación.",
+        "Los tiempos declarados y el material suplementario necesitan un registro de dedicación real antes de una acreditación externa."
+      ],
+      "findings": [
+        [
+          "P0",
+          "MA-01",
+          "Corregido",
+          "Un fragmento temporal de sesión permanecía visible en la URL."
+        ],
+        [
+          "P1",
+          "MA-02",
+          "Abierto",
+          "Finalización por marcas de lectura sin evaluación sumativa calificada."
+        ],
+        [
+          "P2",
+          "MA-03",
+          "Corregido",
+          "El temario preliminar de cinco unidades no representaba ocho módulos reales."
+        ],
+        [
+          "P2",
+          "MA-04",
+          "Abierto",
+          "Carga temporal declarada, sin medición de dedicación real."
+        ]
+      ],
+      "verdict": "Revisión mayor",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "Dolor, función y contribuyentes",
+          "minutes": 70,
+          "lessons": [
+            "De la técnica al razonamiento",
+            "Biopsicosocial sin abandonar la biología",
+            "Dolor y daño: una relación no proporcional",
+            "Del árbol causal al mapa de contribuyentes"
+          ]
+        },
+        {
+          "title": "Seguridad, triage y red de seguridad",
+          "minutes": 85,
+          "lessons": [
+            "Qué significa detectar riesgo",
+            "Limitaciones de las listas",
+            "Screening de sistemas y comorbilidades",
+            "Safety-netting y niveles de acción"
+          ]
+        },
+        {
+          "title": "Comunicación, contexto y alianza",
+          "minutes": 100,
+          "lessons": [
+            "Cuatro preguntas que organizan la consulta",
+            "Validación sin acuerdo automático",
+            "Expectativas y factores contextuales",
+            "OARS y entrevista motivacional"
+          ]
+        },
+        {
+          "title": "Medición de resultados",
+          "minutes": 85,
+          "lessons": [
+            "Qué medir y para qué",
+            "PSFS, GROC y SANE",
+            "Instrumentos regionales y constructos",
+            "Cambio, error y significado"
+          ]
+        },
+        {
+          "title": "Razonamiento y probabilidad",
+          "minutes": 110,
+          "lessons": [
+            "Atención centrada y valor",
+            "Pirámide invertida y sesgos",
+            "Sensibilidad, especificidad y validez",
+            "Likelihood ratios y probabilidad postest"
+          ]
+        },
+        {
+          "title": "Examen físico como prueba de hipótesis",
+          "minutes": 115,
+          "lessons": [
+            "Los ocho pasos como sistema",
+            "Observación y signo concordante",
+            "Activo, pasivo, resistido y accesorio",
+            "Pruebas especiales con propósito"
+          ]
+        },
+        {
+          "title": "Capacidad, palpación y pruebas",
+          "minutes": 75,
+          "lessons": [
+            "Adaptabilidad al dolor: hipótesis, no etiqueta",
+            "Palpación y provocación",
+            "Fuerza y capacidad",
+            "Pruebas de desempeño"
+          ]
+        },
+        {
+          "title": "Integración, intervención y reevaluación",
+          "minutes": 105,
+          "lessons": [
+            "Síntesis del problema",
+            "Del hallazgo al plan compartido",
+            "Explicar sin sobreprometer",
+            "Reevaluar es volver a razonar"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "evidencia-aplicada",
+      "name": "KineCheck Evidencia Aplicada",
+      "description": "Lectura y aplicación crítica en diez módulos y 35 experiencias, con rutas estudiante y profesional.",
+      "purpose": "Convertir evidencia en decisiones clínicas contextualizadas, trazables y revisables.",
+      "target": "Kinesiólogos y profesionales de rehabilitación; estudiantes de salud como formación complementaria sin habilitación profesional adicional.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Distinguir asociación, causalidad, fiabilidad y validez al leer investigación.",
+        "Interpretar pruebas mediante población, probabilidad previa y utilidad decisional.",
+        "Integrar biología, contexto y mecanismos de dolor sin sobrediagnóstico.",
+        "Seleccionar intervenciones según efectos, certeza, preferencias y seguridad.",
+        "Justificar una decisión y explicitar qué dato cambiaría la hipótesis."
+      ],
+      "methodology": [
+        "35 experiencias: lectura, laboratorio, caso, metarreflexión y revisión.",
+        "Cuaderno personal sincronizado y biblioteca de 113 fichas temáticas/bibliográficas.",
+        "16 alertas de actualización, filtros, rutas diferenciadas y laboratorio integrador de seis respuestas."
+      ],
+      "assessment": {
+        "diagnostic": "No se verificó prueba diagnóstica diferenciada.",
+        "formative": "Casos, laboratorios, preguntas decisionales y feedback de autoevaluación en 35 experiencias.",
+        "summative": "El laboratorio integrador tiene seis respuestas guardables, sin puntaje ni rúbrica de aprobación publicada.",
+        "points": "175 eventos de recorrido (35×5) no constituyen 175 puntos académicos.",
+        "attempts": "Respuestas editables y práctica repetible; no límite de intentos declarado."
+      },
+      "approval": "Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.",
+      "completion": "El registro técnico exige los cinco eventos por experiencia y texto no vacío en laboratorio, caso y reflexión. No equivale a calificación académica.",
+      "publicHours": "10 h 21 min planificados; registro académico 10 h",
+      "load": {
+        "minutes": 621,
+        "hours": "10.00",
+        "method": "Estimación conservadora basada en lectura guiada, laboratorios, casos, preguntas decisionales y síntesis modular.",
+        "note": "Versión certificable congelada al 30-09-2026. Se corrigió la numeración del último módulo."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "LIN",
+        "IASP",
+        "PETERSEN",
+        "FINNERUP",
+        "KOSEK",
+        "WHO",
+        "WALKBACK",
+        "PNE"
+      ],
+      "fixes": [
+        "Definición de nocicepción corregida conforme a IASP.",
+        "Se añadieron resultados observables y orientación de ambas rutas al último contenido que carecía de ellos.",
+        "Respuestas vacías ya no generan eventos válidos, tanto en pantalla como en la comprobación de servidor.",
+        "Referencias originales Lin y WalkBack completadas y enlazadas.",
+        "113 registros identificados honestamente como fichas, sin afirmar que todos sean artículos o referencias verificadas.",
+        "Privacidad de cuaderno y actividades; error de campo vacío persistente al lado del campo.",
+        "Finalización registrada sin anunciar certificado habilitado."
+      ],
+      "limits": [
+        "La calidad de las respuestas no tiene calificación sumativa: se necesita una evaluación alineada para certificación.",
+        "Parte de las fichas son temáticas y no referencias a publicaciones originales identificadas.",
+        "Las unidades de actualización cronológica se conservaron para no eliminar material; una futura versión certificada debe congelar su alcance."
+      ],
+      "findings": [
+        [
+          "P1",
+          "EA-01",
+          "Corregido",
+          "Definición de nocicepción confundida con amenaza."
+        ],
+        [
+          "P1",
+          "EA-02",
+          "Corregido",
+          "Guardar respuestas vacías podía aumentar avance y elegibilidad técnica."
+        ],
+        [
+          "P1",
+          "EA-03",
+          "Abierto",
+          "Los eventos guardados no evalúan calidad ni competencia."
+        ],
+        [
+          "P2",
+          "EA-04",
+          "Corregido",
+          "Fichas genéricas se presentaban como biblioteca de referencias científicas."
+        ],
+        [
+          "P2",
+          "EA-05",
+          "Abierto",
+          "Resultados y feedback demasiado genéricos en parte del tronco original."
+        ]
+      ],
+      "verdict": "Revisión mayor",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "Pensar con evidencia, no obedecer artículos",
+          "minutes": 52,
+          "lessons": [
+            "La evidencia no reemplaza el razonamiento",
+            "Asociación, contribución y causalidad",
+            "Diagnóstico diferencial como proceso"
+          ]
+        },
+        {
+          "title": "Interpretar pruebas sin convertirlas en verdades",
+          "minutes": 71,
+          "lessons": [
+            "Sensibilidad, especificidad y razones de verosimilitud",
+            "Detección, pronóstico y riesgo",
+            "Imágenes y sobrediagnóstico",
+            "Fiabilidad no es validez: cuando dos clínicos coinciden"
+          ]
+        },
+        {
+          "title": "Dolor: biología, contexto y complejidad",
+          "minutes": 51,
+          "lessons": [
+            "Nocicepción no es dolor",
+            "Mecanismos mixtos y evolución",
+            "Complejidad y no linealidad"
+          ]
+        },
+        {
+          "title": "La entrevista como herramienta clínica",
+          "minutes": 52,
+          "lessons": [
+            "Recibir la historia",
+            "Validación sin sobreconfirmación",
+            "Entrevista motivacional y decisiones compartidas"
+          ]
+        },
+        {
+          "title": "Contexto, expectativas y lenguaje",
+          "minutes": 52,
+          "lessons": [
+            "El contexto también interviene",
+            "Nocebo y lenguaje clínico",
+            "Expectativas y actualización"
+          ]
+        },
+        {
+          "title": "Terapia manual contemporánea",
+          "minutes": 52,
+          "lessons": [
+            "Mecanismos y límites de la terapia manual",
+            "Tacto, preferencia y significado",
+            "Una práctica moderna"
+          ]
+        },
+        {
+          "title": "Ejercicio, adherencia y aplicación clínica",
+          "minutes": 67,
+          "lessons": [
+            "Ejercicio con dolor",
+            "Placer, motivación y adherencia",
+            "Prevención y caminata",
+            "Integración clínica"
+          ]
+        },
+        {
+          "title": "Actualización 2025–2026: evaluación, razonamiento y educación en dolor",
+          "minutes": 113,
+          "lessons": [
+            "PCH + CIF: formular hipótesis centradas en la persona",
+            "Capacidad física: ampliar la mirada sin extrapolar el contexto",
+            "Factores contextuales: efecto total no equivale a efecto específico",
+            "Seguridad y metacognición: IFOMPT, SCRIPT y simulación",
+            "PNE+: educación integrada con movimiento y rehabilitación",
+            "PNE en dolor agudo: promesa plausible, evidencia todavía limitada"
+          ]
+        },
+        {
+          "title": "Actualización septiembre 2026: comunicación, PNE, precisión diagnóstica e IA",
+          "minutes": 91,
+          "lessons": [
+            "Diagnóstico MSK: la etiqueta y el contexto importan",
+            "Dolor persistente: función, automanejo y decisiones compartidas",
+            "PNE: efecto pequeño, utilidad selectiva",
+            "Radiculopatía cervical: pruebas como actualización probabilística",
+            "IA en fisioterapia MSK: entrenador sí, juez todavía no"
+          ]
+        },
+        {
+          "title": "Actualización 21 septiembre 2026: dosificación de ejercicio sin recetas rígidas",
+          "minutes": 20,
+          "lessons": [
+            "Dosis, modalidad y adherencia: cuatro señales nuevas"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "traumatologia-ortopedia-clinica",
+      "name": "Traumatología y Ortopedia Clínica",
+      "description": "Seis módulos, 24 lecciones, seis casos y evaluación modular y final.",
+      "purpose": "Orientar evaluación y decisiones seguras ante lesiones y enfermedades ortopédicas, dentro del alcance profesional.",
+      "target": "Kinesiólogos y profesionales de rehabilitación; estudiantes de salud como formación complementaria sin habilitación profesional adicional.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Relacionar mecanismo, tejido, reparación y prioridades de evaluación.",
+        "Identificar cuadros urgentes y coordinar atención por equipos habilitados.",
+        "Interpretar la utilidad de imagen y hallazgos en su contexto.",
+        "Diferenciar problemas de columna y extremidades con hipótesis revisables.",
+        "Resolver casos y justificar seguimiento y retorno funcional prudente."
+      ],
+      "methodology": [
+        "24 lecciones y seis casos con tres preguntas por caso.",
+        "Seis cuestionarios de cinco preguntas y examen final de doce.",
+        "Repetición con feedback y registro de finalización; el certificado interno legado permanece deshabilitado."
+      ],
+      "assessment": {
+        "diagnostic": "No se verificó instrumento diagnóstico independiente.",
+        "formative": "Seis casos con 18 preguntas y seis controles modulares.",
+        "summative": "Examen final de doce preguntas; los seis controles modulares también requieren umbral.",
+        "points": "Cada cuestionario modular: cinco preguntas. Examen final: doce preguntas; conversión a porcentaje.",
+        "approval": "Obtener al menos 80% en cada módulo (4/5) y en el examen final (10/12, 83,33%). 9/12 equivale a 75% y no aprueba. Se conserva el criterio ya existente.",
+        "attempts": "Intentos repetibles sin límite técnico observado; esta política no fue modificada."
+      },
+      "approval": "Obtener al menos 80% en cada módulo (4/5) y en el examen final (10/12, 83,33%). 9/12 equivale a 75% y no aprueba. Se conserva el criterio ya existente.",
+      "completion": "Cumplir los seis umbrales modulares y el final. Los resultados se sincronizan al servidor, pero se originan en el navegador; el certificado interno legado permanece deshabilitado y no se verificó folio del futuro emisor OTEC.",
+      "publicHours": "10 h 40 min",
+      "load": {
+        "minutes": 640,
+        "hours": "10.67",
+        "method": "Suma de las duraciones declaradas módulo por módulo en el curso.",
+        "note": "Total verificable 10 h 40 min. Si el emisor exige horas enteras, usar 10 horas y no la antigua cifra global de 12–14 h."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "NICE37",
+        "BOAST",
+        "NICE39",
+        "SANJO",
+        "NICE59",
+        "BRINJIKJI"
+      ],
+      "fixes": [
+        "Duración general corregida a la suma real existente de 640 minutos: 10 h 40 min.",
+        "Pregunta de fractura expuesta aclara que los antibióticos los administra el equipo habilitado; no prescribe el kinesiólogo por inferencia.",
+        "Criterio 80%, mínimo entero de diez respuestas finales, fuentes, alcance y versión visibles.",
+        "Se verificó rechazo de 9/12 y aprobación de 10/12, más permanencia del progreso al recargar."
+      ],
+      "limits": [
+        "El examen final reutiliza preguntas de los módulos y limita evaluación independiente de transferencia.",
+        "La futura emisión certificada requiere identidad, folio, validación del resultado y convenio formal; no se activó por inferencia."
+      ],
+      "findings": [
+        [
+          "P1",
+          "TO-01",
+          "Corregido",
+          "La duración global 12–14 h no correspondía a 640 minutos modulares."
+        ],
+        [
+          "P1",
+          "TO-02",
+          "Corregido",
+          "Una alternativa podía interpretarse como indicación farmacológica fuera de alcance."
+        ],
+        [
+          "P2",
+          "TO-03",
+          "Abierto",
+          "Examen final reutiliza preguntas de controles modulares."
+        ],
+        [
+          "P2",
+          "TO-04",
+          "Corregido",
+          "El progreso se sincroniza al servidor y el certificado interno legado quedó deshabilitado; la emisión OTEC futura continúa sujeta a convenio y trazabilidad formal."
+        ]
+      ],
+      "verdict": "Aprobado con correcciones",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "Fundamentos clínicos y semiología",
+          "minutes": 90,
+          "lessons": [
+            "Lenguaje espacial y deformidades",
+            "Mecanismo y energía del trauma",
+            "Del examen a la hipótesis",
+            "Selección razonada de imágenes"
+          ]
+        },
+        {
+          "title": "Tejidos, consolidación y fractura expuesta",
+          "minutes": 110,
+          "lessons": [
+            "Tejidos y capacidad de reparación",
+            "Consolidación primaria y secundaria",
+            "Retardo y no unión",
+            "Fractura expuesta: prioridades"
+          ]
+        },
+        {
+          "title": "Infecciones y tumores musculoesqueléticos",
+          "minutes": 110,
+          "lessons": [
+            "Osteomielitis: biología de la infección",
+            "Artritis séptica: tiempo articular",
+            "Imágenes en infección",
+            "Tumor óseo: lectura de agresividad"
+          ]
+        },
+        {
+          "title": "Columna, dolor radicular y escoliosis",
+          "minutes": 105,
+          "lessons": [
+            "Cervicobraquialgia y dolor referido",
+            "Dolor lumbar: clasificación clínica",
+            "Imágenes y banderas clínicas",
+            "Escoliosis estructural y funcional"
+          ]
+        },
+        {
+          "title": "Extremidad superior",
+          "minutes": 105,
+          "lessons": [
+            "Hombro y espacio subacromial",
+            "Capsulitis versus manguito",
+            "Epicondilalgia y epitroclealgia",
+            "Túnel carpiano y mano"
+          ]
+        },
+        {
+          "title": "Extremidad inferior",
+          "minutes": 120,
+          "lessons": [
+            "Cuello femoral y riesgo vascular",
+            "LCA y hemartrosis",
+            "Meniscos y síntomas mecánicos",
+            "Tobillo, Ottawa y Aquiles"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "dolor-lumbar-persistente",
+      "name": "Dolor Lumbar Persistente",
+      "description": "Nueve módulos y 54 microlecciones, con PROMs, casos de decisiones, atlas visuales y autoevaluación.",
+      "purpose": "Integrar seguridad, medición, mecanismos como hipótesis, manejo activo y reevaluación del dolor lumbar persistente.",
+      "target": "Kinesiólogos y profesionales de rehabilitación; estudiantes de salud como formación complementaria sin habilitación profesional adicional.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Priorizar seguridad y contextualizar pronóstico y riesgo.",
+        "Elegir medidas de dolor, discapacidad, función y factores modificadores con límites explícitos.",
+        "Construir una formulación sin convertir imagen, screening o mecanismo en diagnóstico aislado.",
+        "Individualizar educación, ejercicio y dosificación según metas y respuesta.",
+        "Resolver un caso integrador con seguimiento y red de seguridad."
+      ],
+      "methodology": [
+        "54 microlecciones con una pregunta formativa cada una.",
+        "Nueve calculadoras de puntuación, cuatro atlas SVG estáticos y tres casos lineales con ocho decisiones.",
+        "Autoevaluación final de diez preguntas y actividad escrita obligatoria de 40 minutos."
+      ],
+      "assessment": {
+        "diagnostic": "Sin prueba diagnóstica independiente verificada.",
+        "formative": "54 preguntas, ocho decisiones de casos y autoevaluación final de diez preguntas.",
+        "summative": "Caso integrador de mínimo 550 caracteres y cuatro criterios; registro autoevaluado sin calificación de la calidad.",
+        "points": "Diez preguntas finales con porcentaje; 80% aparece como umbral formativo sugerido, no requisito certificador.",
+        "attempts": "Autoevaluaciones repetibles; no límite explícito verificado."
+      },
+      "approval": "Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.",
+      "completion": "Para registrar el caso integrador: 550 caracteres y los cuatro criterios confirmados. El 80% sugerido de autoevaluación no se convirtió en requisito de certificación por inferencia.",
+      "publicHours": "8 h 10 min planificados; registro académico 8 h",
+      "load": {
+        "minutes": 490,
+        "hours": "8.00",
+        "method": "Carga base auditada más caso integrador obligatorio de 40 minutos.",
+        "note": "La actividad final debe completarse y quedar registrada en el progreso para considerar la carga de 8 horas."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "WHO",
+        "LIN",
+        "NICE59",
+        "IFOMPT",
+        "KOSEK",
+        "BRINJIKJI",
+        "WALKBACK"
+      ],
+      "fixes": [
+        "Contenido crítico recuperado: reparación de JavaScript y compatibilidad CSP del caso integrador.",
+        "Acceso del propietario armonizado con la política existente de Academy, sin otorgar accesos nuevos.",
+        "Validación de RMDQ: entero entre 0 y 24; vacío y fracción rechazados.",
+        "NPRS rechaza campos vacíos y mejor dolor mayor que peor dolor.",
+        "Se corrigieron descripciones: atlas visuales estáticos y casos de decisiones, no simulador interactivo ni ramificación real.",
+        "Criterios completos del integrador comprobados en servidor."
+      ],
+      "limits": [
+        "No hay calificación sumativa ni criterio académico de certificación explícito.",
+        "Microlecciones muy breves y distractores evidentes no sostienen por sí solos 50 minutos de cada módulo.",
+        "Las calculadoras reciben puntuaciones: no equivalen a aplicación validada de todas las versiones completas de PROMs."
+      ],
+      "findings": [
+        [
+          "P1",
+          "DL-01",
+          "Corregido",
+          "Contenido crítico e integrador inaccesibles por JavaScript/CSP."
+        ],
+        [
+          "P1",
+          "DL-02",
+          "Corregido",
+          "Entradas vacías o fuera de dominio podían producir puntuaciones engañosas."
+        ],
+        [
+          "P1",
+          "DL-03",
+          "Abierto",
+          "Aprobación formativa sugerida no constituye criterio académico certificador."
+        ],
+        [
+          "P2",
+          "DL-04",
+          "Corregido",
+          "Atlas y casos se anunciaban con interacción/ramificación que no existe."
+        ],
+        [
+          "P2",
+          "DL-05",
+          "Abierto",
+          "Carga planificada no validada frente a profundidad real de las microlecciones."
+        ]
+      ],
+      "verdict": "Revisión mayor",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "Reencuadrar el dolor lumbar",
+          "minutes": 50,
+          "lessons": [
+            "Por qué importa el dolor lumbar",
+            "Dolor lumbar inespecífico",
+            "Modelo biopsicosocial aplicado",
+            "Curso, recurrencia y trayectorias",
+            "Imagenología sin alarmismo",
+            "Objetivos centrados en la persona"
+          ]
+        },
+        {
+          "title": "Historia, pronóstico y riesgo",
+          "minutes": 50,
+          "lessons": [
+            "Entrevista que genera hipótesis",
+            "Triage y patología seria",
+            "Fractura vertebral: razonamiento probabilístico",
+            "Síntomas neurológicos y urgencia",
+            "Pronóstico: riesgo no es destino",
+            "STarT Back con cautela"
+          ]
+        },
+        {
+          "title": "Evaluación estructurada",
+          "minutes": 50,
+          "lessons": [
+            "Arquitectura de evaluación",
+            "RMDQ: función lumbar",
+            "ODI: discapacidad relacionada con columna",
+            "PSFS: función individualizada",
+            "NPRS y dolor",
+            "Examen físico con propósito"
+          ]
+        },
+        {
+          "title": "Razonamiento y clasificación",
+          "minutes": 50,
+          "lessons": [
+            "Local, regional y global",
+            "Dolor y nocicepción no son sinónimos",
+            "Sensibilidad y modulación",
+            "Diferencial y exclusión razonada",
+            "Síntesis operativa",
+            "Reevaluación como parte del razonamiento"
+          ]
+        },
+        {
+          "title": "Dolor persistente y conducta",
+          "minutes": 50,
+          "lessons": [
+            "Miedo relacionado con movimiento",
+            "TSK-11",
+            "Catastrofización",
+            "Autoeficacia",
+            "Sueño, estrés y carga total",
+            "Lenguaje que no fragiliza"
+          ]
+        },
+        {
+          "title": "Comunicación y educación",
+          "minutes": 50,
+          "lessons": [
+            "Alianza terapéutica",
+            "Expectativas y pronóstico comunicado",
+            "Educación que cambia conducta",
+            "Comunicar imagenología",
+            "Metas SMART con sentido clínico",
+            "Plan compartido y autonomía"
+          ]
+        },
+        {
+          "title": "Intervención activa",
+          "minutes": 50,
+          "lessons": [
+            "Ejercicio: qué dice la evidencia",
+            "Dosificar para una tarea real",
+            "Fuerza y capacidad",
+            "Exposición progresiva",
+            "Actividad aeróbica y condición global",
+            "Adherencia y entorno"
+          ]
+        },
+        {
+          "title": "Terapias y dosificación",
+          "minutes": 50,
+          "lessons": [
+            "Terapia manual como adjunto",
+            "Intervenciones psicológicas",
+            "Cognitive Functional Therapy",
+            "Flare-up: plan anticipado",
+            "Medicamentos y alcance profesional",
+            "Reevaluar dosis y respuesta"
+          ]
+        },
+        {
+          "title": "Integración clínica",
+          "minutes": 50,
+          "lessons": [
+            "Ruta de 11 pasos",
+            "Caso A: miedo a flexión e imagen",
+            "Caso B: riesgo y derivación",
+            "Documentación clínica útil",
+            "Caso C: retorno al trabajo",
+            "Evaluación final"
+          ]
+        }
+      ],
+      "finalActivity": {
+        "title": "Caso integrador",
+        "minutes": 40,
+        "minimumCharacters": 550,
+        "criteria": 4
+      }
+    },
+    {
+      "slug": "dolor-musculoesqueletico",
+      "name": "Dolor Musculoesquelético",
+      "description": "Seis módulos y doce experiencias: del mecanismo a la decisión clínica, con siete actividades escritas obligatorias.",
+      "purpose": "Formular mecanismos como hipótesis, mantener el diferencial y convertir medición y evidencia en decisiones seguras.",
+      "target": "Kinesiólogos y profesionales de rehabilitación; estudiantes de salud como formación complementaria sin habilitación profesional adicional.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Distinguir dolor, nocicepción, daño y riesgo clínico.",
+        "Aplicar criterios y grados de mecanismos nociceptivos, neuropáticos y nociplásticos con cautelas.",
+        "Seleccionar cuestionarios y pruebas sin confundir screening, fiabilidad y diagnóstico.",
+        "Justificar una decisión revisable mediante laboratorio, caso y metarreflexión.",
+        "Formular una integración clínica con medidas, intervención y comunicación prudente."
+      ],
+      "methodology": [
+        "Doce experiencias con lectura, laboratorio, caso, reflexión y revisión en dos rutas.",
+        "Seis aplicaciones de 45 minutos: mínimo 450 caracteres y tres criterios cada una.",
+        "Integración final de 30 minutos: mínimo 600 caracteres y cuatro criterios."
+      ],
+      "assessment": {
+        "diagnostic": "No se verificó evaluación diagnóstica independiente.",
+        "formative": "Doce experiencias, feedback por criterios y siete actividades de autoevaluación.",
+        "summative": "Integración final registrada, pero sin calificación del contenido ni rúbrica evaluada por un tercero.",
+        "points": "60 eventos de recorrido y siete entregas no equivalen a una nota académica.",
+        "attempts": "Respuestas editables; no límite técnico de intentos observado."
+      },
+      "approval": "Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.",
+      "completion": "Finalización técnica: cinco eventos en cada experiencia, respuestas no vacías, seis entregas de 450 caracteres/tres criterios y final de 600 caracteres/cuatro criterios. No acredita por sí sola logro académico.",
+      "publicHours": "8 h 8 min planificados; registro académico 8 h",
+      "load": {
+        "minutes": 488,
+        "hours": "8.00",
+        "method": "Carga base más seis aplicaciones obligatorias de 45 minutos y una integración final de 30 minutos.",
+        "note": "Las actividades obligatorias fueron incorporadas al payload protegido y al seguimiento del curso."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "IASP",
+        "KOSEK",
+        "FINNERUP",
+        "PETERSEN",
+        "LIN",
+        "WHO"
+      ],
+      "fixes": [
+        "Criterios nociplásticos corregidos con la tabla original de Kosek 2021: posible/probable y cautelas, sin diagnóstico automático de sensibilización central.",
+        "Cinco referencias esenciales con identificación y enlaces originales, incluyendo Finnerup y Petersen.",
+        "Feedback de doce experiencias incorpora criterios de seguridad, diferencial y reevaluación cuando faltaban.",
+        "Guardado vacío y elegibilidad técnica robustecidos en cliente y servidor; longitud y número exacto de criterios validados.",
+        "Avisos de privacidad y finalización sin afirmar certificado habilitado."
+      ],
+      "limits": [
+        "Se verifica presentación de siete respuestas, no su calidad ni competencia: falta evaluación sumativa y criterio formal.",
+        "Doce lecturas breves más 300 minutos de trabajos declarados no permiten confirmar dedicación real sin observar ejecución de las actividades."
+      ],
+      "findings": [
+        [
+          "P1",
+          "DM-01",
+          "Corregido",
+          "Criterios nociplásticos incompletos favorecían sobrediagnóstico."
+        ],
+        [
+          "P1",
+          "DM-02",
+          "Corregido",
+          "Comprobación de finalización aceptaba evidencia insuficiente o casillas incompletas."
+        ],
+        [
+          "P1",
+          "DM-03",
+          "Abierto",
+          "Autoevaluación no constituye calificación sumativa."
+        ],
+        [
+          "P2",
+          "DM-04",
+          "Corregido",
+          "Bibliografía esencial y feedback de seguridad incompletos."
+        ],
+        [
+          "P2",
+          "DM-05",
+          "Abierto",
+          "Tiempo declarado de actividades no validado empíricamente."
+        ]
+      ],
+      "verdict": "Revisión mayor",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "Módulo 1 · Fundamentos del dolor",
+          "minutes": 77,
+          "lessons": [
+            "Dolor, nocicepción y experiencia",
+            "Agudo, subagudo y persistente"
+          ]
+        },
+        {
+          "title": "Módulo 2 · Fenotipos y mecanismos",
+          "minutes": 76,
+          "lessons": [
+            "Predominio nociceptivo",
+            "Dolor neuropático y radicular"
+          ]
+        },
+        {
+          "title": "Módulo 3 · Nociplasticidad y dolor persistente",
+          "minutes": 76,
+          "lessons": [
+            "Nociplasticidad: criterios y cautelas",
+            "Fenotipos mixtos"
+          ]
+        },
+        {
+          "title": "Módulo 4 · Evaluación y cuestionarios",
+          "minutes": 76,
+          "lessons": [
+            "Dolor, función e interferencia",
+            "Screening neuropático y psicosocial"
+          ]
+        },
+        {
+          "title": "Módulo 5 · Razonamiento clínico y fiabilidad",
+          "minutes": 76,
+          "lessons": [
+            "Fiabilidad interexaminador",
+            "Hipótesis revisables y probabilidad"
+          ]
+        },
+        {
+          "title": "Módulo 6 · Intervención y comunicación",
+          "minutes": 77,
+          "lessons": [
+            "Educación y reconceptualización",
+            "Ejercicio, exposición y dosificación"
+          ]
+        }
+      ],
+      "requiredActivities": [
+        {
+          "title": "Aplicación 1 · Dolor, nocicepción y comunicación segura",
+          "minutes": 45,
+          "minimumCharacters": 450,
+          "criteria": [
+            "Distingue dolor de nocicepción",
+            "Integra seguridad y contexto",
+            "Usa lenguaje no alarmista y revisable"
+          ]
+        },
+        {
+          "title": "Aplicación 2 · Fenotipos y mecanismos como hipótesis",
+          "minutes": 45,
+          "minimumCharacters": 450,
+          "criteria": [
+            "Evita etiquetas absolutas",
+            "Explicita datos a favor y en contra",
+            "Define una reevaluación"
+          ]
+        },
+        {
+          "title": "Aplicación 3 · Nociplasticidad con criterios y cautelas",
+          "minutes": 45,
+          "minimumCharacters": 450,
+          "criteria": [
+            "No usa nociplasticidad como diagnóstico por descarte",
+            "Mantiene diagnóstico diferencial",
+            "Comunica incertidumbre de forma clínica"
+          ]
+        },
+        {
+          "title": "Aplicación 4 · Medición con propósito",
+          "minutes": 45,
+          "minimumCharacters": 450,
+          "criteria": [
+            "Relaciona medida con una pregunta clínica",
+            "Evita acumular cuestionarios sin propósito",
+            "Define criterio de seguimiento"
+          ]
+        },
+        {
+          "title": "Aplicación 5 · Fiabilidad, probabilidad y decisiones revisables",
+          "minutes": 45,
+          "minimumCharacters": 450,
+          "criteria": [
+            "Distingue fiabilidad de validez",
+            "No convierte una prueba en diagnóstico",
+            "Explicita cómo actualizaría la hipótesis"
+          ]
+        },
+        {
+          "title": "Aplicación 6 · Intervención y comunicación compartida",
+          "minutes": 45,
+          "minimumCharacters": 450,
+          "criteria": [
+            "Integra educación y acción",
+            "Individualiza la dosis",
+            "Define progresión y reevaluación"
+          ]
+        },
+        {
+          "title": "Integración final · Del mecanismo a la decisión clínica",
+          "minutes": 30,
+          "minimumCharacters": 600,
+          "criteria": [
+            "Integra dimensiones biológicas, psicológicas y sociales",
+            "Mantiene hipótesis y límites explícitos",
+            "Propone una decisión concreta y reevaluable",
+            "Comunica sin alarmismo ni falsa certeza"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ejercicio-terapeutico",
+      "name": "Ejercicio Terapéutico",
+      "description": "Cinco módulos aplicados a seguridad, dolor/artrosis, geriatría, oncología y mantenimiento del beneficio.",
+      "purpose": "Construir y revisar una prescripción individualizada de ejercicio con FITT-VP, objetivos y monitorización.",
+      "target": "Kinesiólogos y profesionales que prescriben ejercicio dentro de sus competencias; nivel avanzado.",
+      "prerequisites": "No se verificó un requisito formal de ingreso evaluado. Se recomiendan conocimientos de anatomía, evaluación clínica y lectura de investigación; la práctica profesional exige habilitación y competencias propias.",
+      "results": [
+        "Distinguir recomendación poblacional de prescripción clínica individual.",
+        "Explicitar frecuencia, intensidad, tiempo, tipo, volumen y progresión según riesgo y respuesta.",
+        "Interpretar efectos, certeza y límites de evidencia sin convertir rankings o dosis promedio en recetas universales.",
+        "Adaptar ejercicio a metas funcionales en distintos contextos clínicos.",
+        "Planificar mantenimiento y reevaluar función, actividad y eventos adversos."
+      ],
+      "methodology": [
+        "Cinco clases aplicadas, cinco casos y diez decisiones guiadas.",
+        "15 lecturas esenciales/complementarias y biblioteca por contexto.",
+        "Cinco plantillas FITT-VP con edición de outcome y progresión; integración modular de avance personal."
+      ],
+      "assessment": {
+        "diagnostic": "No se verificó prueba diagnóstica.",
+        "formative": "Diez decisiones con feedback y cinco casos con tres alternativas cada uno; revisión de las 40 alternativas de decisiones y 15 alternativas de casos.",
+        "summative": "No se ofrece examen final calificado.",
+        "points": "La aplicación declara explícitamente “Sin puntaje · retroalimentación inmediata”.",
+        "attempts": "Práctica repetible, sin límite explícito observado."
+      },
+      "approval": "Esta versión no ofrece un criterio de aprobación académica con calificación mínima para certificación. La finalización de pantallas, registros y autoevaluaciones no equivale a acreditación de competencia.",
+      "completion": "Integrar los cinco módulos registra 100% de recorrido local; no equivale a aprobación de prescripción ni activa certificado académico.",
+      "publicHours": "6 h",
+      "load": {
+        "minutes": 360,
+        "hours": 6.0,
+        "method": "Suma de las duraciones de los cinco módulos: 70+75+95+65+55 minutos.",
+        "note": "360 minutos equivalen a 6.00 horas registradas, con certificate_ready = false; no son horas certificables activas."
+      },
+      "certification": "Formación privada de KineCheck. La futura certificación privada mediante OTEC no está activa y depende de un convenio formalizado y de requisitos acordados con el emisor. No se presenta como curso SENCE.",
+      "privacy": "Usa exclusivamente casos simulados o anonimizados. No ingreses nombres, RUT, contactos ni otros datos identificables de pacientes; estas herramientas no reemplazan una ficha clínica.",
+      "bibliography": [
+        "EX-esc",
+        "EX-who",
+        "EX-cancer",
+        "EX-eular",
+        "EX-uspstf",
+        "EX-jnha",
+        "EX-jcsm",
+        "EX-frailty",
+        "EX-msk-umbrella",
+        "EX-maintenance",
+        "EX-ers-ests-lung",
+        "EX-institutional-falls",
+        "EX-ortho-umbrella",
+        "EX-respiratory-training-osa",
+        "EX-postconcussion"
+      ],
+      "fixes": [
+        "Se corrigió el texto que afirmaba que abrir pantallas registraba práctica/adherencia.",
+        "El laboratorio se identifica como plantillas FITT-VP, acorde con sus dos campos editables, no como constructor completo de dosis.",
+        "Privacidad de ejemplos y programa con fuentes reales, seguridad, dosificación y límites de inferencia."
+      ],
+      "limits": [
+        "Sin evaluación sumativa ni criterio de aprobación para certificación.",
+        "Producto aún marcado Próximamente en Academy para el público general; la auditoría del propietario no autoriza el lanzamiento comercial.",
+        "Progreso personal local: no demuestra práctica, adherencia ni competencia."
+      ],
+      "findings": [
+        [
+          "P1",
+          "ET-01",
+          "Abierto",
+          "No existe examen final ni aprobación académica para certificar."
+        ],
+        [
+          "P2",
+          "ET-02",
+          "Corregido",
+          "Abrir una pantalla se describía como registro de práctica."
+        ],
+        [
+          "P2",
+          "ET-03",
+          "Corregido",
+          "Constructor sugería controles de dosificación que no existen."
+        ],
+        [
+          "P2",
+          "ET-04",
+          "Abierto",
+          "Disponibilidad pública futura y progreso local; no lanzamiento autorizado por inferencia."
+        ]
+      ],
+      "verdict": "Revisión mayor",
+      "verdictScope": "Preparación académica para una futura certificación privada; no es acreditación OTEC ni una aprobación de estudiantes.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01",
+      "modules": [
+        {
+          "title": "De la recomendación a una dosis clínica segura",
+          "minutes": 70,
+          "lessons": [
+            "Clase aplicada",
+            "Caso clínico",
+            "Decisiones guiadas",
+            "Evidencia"
+          ],
+          "case": "Caso 01 · Rehabilitación cardiaca",
+          "results": [
+            "Distinguir recomendación poblacional de prescripción clínica individual.",
+            "Explicitar frecuencia, intensidad, tiempo, tipo, volumen y progresión.",
+            "Detener la prescripción cuando el riesgo o la inestabilidad requieren evaluación."
+          ]
+        },
+        {
+          "title": "Prescribir ante artrosis y dolor persistente",
+          "minutes": 75,
+          "lessons": [
+            "Clase aplicada",
+            "Caso clínico",
+            "Decisiones guiadas",
+            "Evidencia"
+          ],
+          "case": "Caso 02 · Artrosis de rodilla",
+          "results": [
+            "Diferenciar efecto promedio de una modalidad ganadora.",
+            "Prescribir desde el objetivo funcional, preferencias y respuesta.",
+            "Reconocer cuándo la literatura no permite afirmar una dosis óptima."
+          ]
+        },
+        {
+          "title": "Caídas, fragilidad y sarcopenia",
+          "minutes": 95,
+          "lessons": [
+            "Clase aplicada",
+            "Caso clínico",
+            "Decisiones guiadas",
+            "Evidencia"
+          ],
+          "case": "Caso 03 · Caídas y probable sarcopenia",
+          "results": [
+            "Combinar fuerza, balance, marcha y tarea funcional según riesgo.",
+            "Interpretar NMA y dosis–respuesta sin obedecer rankings de forma automática.",
+            "Distinguir evidencia convergente de evidencia causal directa."
+          ]
+        },
+        {
+          "title": "Prescripción orientada por outcome",
+          "minutes": 65,
+          "lessons": [
+            "Clase aplicada",
+            "Caso clínico",
+            "Decisiones guiadas",
+            "Evidencia"
+          ],
+          "case": "Caso 04 · Fatiga relacionada con cáncer",
+          "results": [
+            "Relacionar modalidad y dosis con el outcome prioritario.",
+            "Separar evidencia suficiente, insuficiente y no evaluada.",
+            "Adaptar por tratamiento, síntomas, comorbilidad y preferencias."
+          ]
+        },
+        {
+          "title": "Mantener el beneficio más allá del alta",
+          "minutes": 55,
+          "lessons": [
+            "Clase aplicada",
+            "Caso clínico",
+            "Decisiones guiadas",
+            "Evidencia"
+          ],
+          "case": "Caso 05 · Transición post‑rehabilitación",
+          "results": [
+            "Incorporar la mantención como fase explícita de FITT‑VP.",
+            "Elegir estrategias digitales, presenciales o mixtas según barreras.",
+            "Medir actividad, función, calidad de vida y eventos adversos tras el alta."
+          ]
+        }
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "slug": "banderas-clinicas",
+      "name": "KineCheck Banderas Clínicas",
+      "kind": "Herramienta formativa",
+      "description": "13 fichas, filtros, favoritos y cuatro casos de decisiones. No es un curso certificable en su estado actual.",
+      "bibliography": [
+        "IFOMPT",
+        "CERVICAL",
+        "YELLOW",
+        "SCREEN"
+      ],
+      "fixes": [
+        "Clasificación como herramienta formativa en Academy y Recursos.",
+        "Se corrige la pantalla de acceso que seguía visible encima de la herramienta ya autorizada.",
+        "Mensajes de licencia de herramienta, no de curso."
+      ],
+      "findings": [
+        [
+          "P1",
+          "BC-01",
+          "Corregido",
+          "Clasificación de herramienta como curso sin currículo ni evaluación final."
+        ],
+        [
+          "P2",
+          "BC-02",
+          "Corregido",
+          "El atributo hidden del panel de acceso era anulado por CSS."
+        ],
+        [
+          "P2",
+          "BC-03",
+          "Abierto",
+          "Las fichas orientan screening y decisiones, no certifican diagnóstico; conservar cautelas y fuente original por ficha."
+        ]
+      ],
+      "hours": null,
+      "certification": "No tiene horas, aprobación ni certificado de curso asignados.",
+      "version": "2026.10.01-validacion-academica-1",
+      "reviewDate": "2026-10-01"
+    }
+  ],
+  "references": [
+    {
+      "id": "IASP",
+      "authors": "International Association for the Study of Pain",
+      "year": 2020,
+      "title": "IASP Terminology: Pain; Nociception; Nociplastic pain",
+      "publication": "Definiciones institucionales",
+      "url": "https://www.iasp-pain.org/resources/terminology/",
+      "scope": "Dolor y nocicepción son constructos distintos; la intensidad no es una medida directa de daño."
+    },
+    {
+      "id": "LIN",
+      "authors": "Lin I, Wiles L, Waller R, et al.",
+      "year": 2020,
+      "title": "What does best practice care for musculoskeletal pain look like? Eleven consistent recommendations from high-quality clinical practice guidelines: systematic review",
+      "publication": "Br J Sports Med. 54:79–86",
+      "doi": "10.1136/bjsports-2018-099878",
+      "pmid": 30826805,
+      "url": "https://doi.org/10.1136/bjsports-2018-099878",
+      "scope": "Recomendaciones concordantes de atención centrada en la persona, seguridad y manejo activo; no una receta universal."
+    },
+    {
+      "id": "IFOMPT",
+      "authors": "Finucane LM, Downie A, Mercer C, et al.",
+      "year": 2020,
+      "title": "International Framework for Red Flags for Potential Serious Spinal Pathologies",
+      "publication": "J Orthop Sports Phys Ther. 50:350–372",
+      "doi": "10.2519/jospt.2020.9971",
+      "pmid": 32438853,
+      "url": "https://doi.org/10.2519/jospt.2020.9971",
+      "scope": "Razonamiento contextual ante patología grave; una bandera aislada no confirma un diagnóstico."
+    },
+    {
+      "id": "CERVICAL",
+      "authors": "Rushton A, Carlesso LC, Flynn T, et al.",
+      "year": 2023,
+      "title": "International Framework for Examination of the Cervical Region for Potential of Vascular Pathologies of the Neck Prior to Musculoskeletal Intervention: International IFOMPT Cervical Framework",
+      "publication": "J Orthop Sports Phys Ther. 53:7–22",
+      "doi": "10.2519/jospt.2022.11147",
+      "pmid": 36099171,
+      "url": "https://doi.org/10.2519/jospt.2022.11147",
+      "scope": "Publicación anticipada en 2022; volumen de 2023. Historia y examen dirigido, no descarte vascular mediante una prueba aislada."
+    },
+    {
+      "id": "KOSEK",
+      "authors": "Kosek E, Clauw D, Nijs J, et al.",
+      "year": 2021,
+      "title": "Chronic nociplastic pain affecting the musculoskeletal system: clinical criteria and grading system",
+      "publication": "Pain. 162:2629–2634",
+      "doi": "10.1097/j.pain.0000000000002324",
+      "pmid": 33974577,
+      "url": "https://doi.org/10.1097/j.pain.0000000000002324",
+      "scope": "Criterios de consenso para posible/probable; no diagnóstico definitivo validado, ni equivalencia automática con sensibilización central."
+    },
+    {
+      "id": "FINNERUP",
+      "authors": "Finnerup NB, Haroutounian S, Kamerman P, et al.",
+      "year": 2016,
+      "title": "Neuropathic pain: an updated grading system for research and clinical practice",
+      "publication": "Pain. 157:1599–1606",
+      "doi": "10.1097/j.pain.0000000000000492",
+      "pmid": 27115670,
+      "url": "https://doi.org/10.1097/j.pain.0000000000000492",
+      "scope": "Gradación posible/probable/definitiva basada en distribución, historia, signos y confirmación; screening no equivale a diagnóstico."
+    },
+    {
+      "id": "BRINJIKJI",
+      "authors": "Brinjikji W, Luetmer PH, Comstock B, et al.",
+      "year": 2015,
+      "title": "Systematic literature review of imaging features of spinal degeneration in asymptomatic populations",
+      "publication": "AJNR. 36:811–816",
+      "doi": "10.3174/ajnr.A4173",
+      "pmid": 25430861,
+      "url": "https://doi.org/10.3174/ajnr.A4173",
+      "scope": "Hallazgos degenerativos en personas asintomáticas; no invalida toda imagen ni permite excluir enfermedad seria."
+    },
+    {
+      "id": "WHO",
+      "authors": "World Health Organization",
+      "year": 2023,
+      "title": "WHO guideline for non-surgical management of chronic primary low back pain in adults in primary and community care settings",
+      "publication": "Guía clínica. ISBN 978-92-4-008178-9",
+      "url": "https://www.who.int/publications/i/item/9789240081789",
+      "scope": "Dolor lumbar crónico primario en adultos; intervenciones contextualizadas y multimodales, no sustitución del triage."
+    },
+    {
+      "id": "OKEEFFE",
+      "authors": "O’Keeffe M, Cullinane P, Hurley J, et al.",
+      "year": 2016,
+      "title": "What influences patient-therapist interactions in musculoskeletal physical therapy? Qualitative systematic review and meta-synthesis",
+      "publication": "Phys Ther. 96:609–622",
+      "doi": "10.2522/ptj.20150240",
+      "pmid": 26427530,
+      "url": "https://doi.org/10.2522/ptj.20150240",
+      "scope": "Síntesis cualitativa de percepciones y experiencia de interacción; no prueba causal de eficacia de una técnica."
+    },
+    {
+      "id": "OLIVEIRA",
+      "authors": "Oliveira VC, Refshauge KM, Ferreira ML, et al.",
+      "year": 2012,
+      "title": "Communication that values patient autonomy is associated with satisfaction with care: a systematic review",
+      "publication": "J Physiother. 58:215–229",
+      "doi": "10.1016/S1836-9553(12)70123-6",
+      "pmid": 23177224,
+      "url": "https://doi.org/10.1016/S1836-9553(12)70123-6",
+      "scope": "Asociación con satisfacción, no equivalencia con recuperación ni duración óptima de sesión."
+    },
+    {
+      "id": "HUSH",
+      "authors": "Hush JM, Cameron K, Mackey M",
+      "year": 2011,
+      "title": "Patient satisfaction with musculoskeletal physical therapy care: a systematic review",
+      "publication": "Phys Ther. 91:25–36",
+      "doi": "10.2522/ptj.20100061",
+      "pmid": 21071504,
+      "url": "https://doi.org/10.2522/ptj.20100061",
+      "scope": "Satisfacción con la atención; los resultados clínicos se relacionaron de forma infrecuente e inconsistente."
+    },
+    {
+      "id": "HOWICK",
+      "authors": "Howick J, Moscrop A, Mebius A, et al.",
+      "year": 2018,
+      "title": "Effects of empathic and positive communication in healthcare consultations: a systematic review and meta-analysis",
+      "publication": "J R Soc Med. 111:240–252",
+      "doi": "10.1177/0141076818769477",
+      "pmid": 29672201,
+      "url": "https://doi.org/10.1177/0141076818769477",
+      "scope": "Beneficios promedio pequeños y heterogéneos; no resultados garantizados ni prueba de prevención de complicaciones."
+    },
+    {
+      "id": "NIJS",
+      "authors": "Nijs J, Wijma AJ, Willaert W, et al.",
+      "year": 2020,
+      "title": "Integrating Motivational Interviewing in Pain Neuroscience Education for People With Chronic Pain: A Practical Guide for Clinicians",
+      "publication": "Phys Ther. 100:846–859",
+      "doi": "10.1093/ptj/pzaa021",
+      "pmid": 31995191,
+      "url": "https://doi.org/10.1093/ptj/pzaa021",
+      "scope": "Guía práctica: su agenda de investigación señala que la superioridad de combinar PNE y MI requiere ensayos."
+    },
+    {
+      "id": "PNE",
+      "authors": "Cuenca-Martínez F, Suso-Martí L, Calatayud J, et al.",
+      "year": 2023,
+      "title": "Pain neuroscience education in patients with chronic musculoskeletal pain: an umbrella review",
+      "publication": "Front Neurosci. 17:1272068",
+      "doi": "10.3389/fnins.2023.1272068",
+      "pmid": 38075271,
+      "url": "https://doi.org/10.3389/fnins.2023.1272068",
+      "scope": "Distinguir educación aislada de intervención combinada; heterogeneidad y calidad limitan certeza."
+    },
+    {
+      "id": "SPIKES",
+      "authors": "Baile WF, Buckman R, Lenzi R, et al.",
+      "year": 2000,
+      "title": "SPIKES—A Six-Step Protocol for Delivering Bad News: Application to the Patient with Cancer",
+      "publication": "Oncologist. 5:302–311",
+      "doi": "10.1634/theoncologist.5-4-302",
+      "pmid": 10964998,
+      "url": "https://doi.org/10.1634/theoncologist.5-4-302",
+      "scope": "Protocolo originalmente oncológico; adaptación de comunicación, no garantía de resultados del paciente."
+    },
+    {
+      "id": "PETERSEN",
+      "authors": "Petersen T, Olsen S, Laslett M, et al.",
+      "year": 2004,
+      "title": "Inter-tester reliability of a new diagnostic classification system for patients with non-specific low back pain",
+      "publication": "Aust J Physiother. 50:85–94",
+      "doi": "10.1016/S0004-9514(14)60100-8",
+      "pmid": 15151492,
+      "url": "https://doi.org/10.1016/S0004-9514(14)60100-8",
+      "scope": "Fiabilidad entre evaluadores de una clasificación en una muestra concreta; no demuestra validez diagnóstica universal."
+    },
+    {
+      "id": "WALKBACK",
+      "authors": "Pocovi NC, Lin C-WC, French SD, et al.",
+      "year": 2024,
+      "title": "Effectiveness and cost-effectiveness of an individualised, progressive walking and education intervention for the prevention of low back pain recurrence in Australia (WalkBack): a randomised controlled trial",
+      "publication": "Lancet. 404:134–144",
+      "doi": "10.1016/S0140-6736(24)00755-4",
+      "pmid": 38908392,
+      "url": "https://doi.org/10.1016/S0140-6736(24)00755-4",
+      "scope": "Prevención de recurrencia en adultos recuperados mediante caminata y educación combinadas; no separar causalmente sus componentes."
+    },
+    {
+      "id": "NOLET",
+      "authors": "Nolet PS, Yu H, Côté P, et al.",
+      "year": 2021,
+      "title": "Reliability and validity of manual palpation for the assessment of patients with low back pain: a systematic and critical review",
+      "publication": "Chiropr Man Therap. 29:33",
+      "doi": "10.1186/s12998-021-00384-3",
+      "url": "https://doi.org/10.1186/s12998-021-00384-3",
+      "scope": "La utilidad depende de qué se palpa y de propiedades de medición; fiabilidad no equivale a validez."
+    },
+    {
+      "id": "SANJO",
+      "authors": "Ravn C, Neyt J, Benito N, et al.",
+      "year": 2023,
+      "title": "Guideline for management of septic arthritis in native joints (SANJO)",
+      "publication": "J Bone Jt Infect. 8:29–37",
+      "doi": "10.5194/jbji-8-29-2023",
+      "pmid": 36756304,
+      "url": "https://doi.org/10.5194/jbji-8-29-2023",
+      "scope": "Sospecha de artritis séptica, investigación y manejo por equipo habilitado; distinguir prioridad de derivación de prescripción farmacológica."
+    },
+    {
+      "id": "NICE37",
+      "authors": "National Institute for Health and Care Excellence",
+      "year": 2022,
+      "title": "Fractures (complex): assessment and management (NG37)",
+      "publication": "Guía publicada en 2016, actualización 2022",
+      "url": "https://www.nice.org.uk/guidance/ng37",
+      "scope": "Fracturas complejas y expuestas; prioridades urgentes y alcance de equipos competentes."
+    },
+    {
+      "id": "BOAST",
+      "authors": "British Orthopaedic Association",
+      "year": 2017,
+      "title": "BOAST: Open Fractures",
+      "publication": "Estándar clínico",
+      "url": "https://www.boa.ac.uk/resource/boast-4-pdf.html",
+      "scope": "Manejo de fracturas expuestas, antibióticos por equipo competente y cobertura apropiada; no tratamiento ambulatorio electivo."
+    },
+    {
+      "id": "NICE39",
+      "authors": "National Institute for Health and Care Excellence",
+      "year": 2016,
+      "title": "Major trauma: assessment and initial management (NG39)",
+      "publication": "Guía clínica",
+      "url": "https://www.nice.org.uk/guidance/ng39",
+      "scope": "Trauma mayor y prioridades de evaluación y coordinación."
+    },
+    {
+      "id": "NICE59",
+      "authors": "National Institute for Health and Care Excellence",
+      "year": 2020,
+      "title": "Low back pain and sciatica in over 16s: assessment and management (NG59)",
+      "publication": "Guía publicada en 2016, actualización 2020",
+      "url": "https://www.nice.org.uk/guidance/ng59",
+      "scope": "No usar imagen rutinaria fuera de contexto; decisiones según utilidad y sospecha de patología específica."
+    },
+    {
+      "id": "YELLOW",
+      "authors": "Nicholas MK, Linton SJ, Watson PJ, Main CJ",
+      "year": 2011,
+      "title": "Early identification and management of psychological risk factors (yellow flags) in patients with low back pain: a reappraisal",
+      "publication": "Phys Ther. 91:737–753",
+      "doi": "10.2522/ptj.20100224",
+      "url": "https://doi.org/10.2522/ptj.20100224",
+      "scope": "Riesgo y pronóstico contextualizados; no diagnóstico psiquiátrico a partir de una bandera."
+    },
+    {
+      "id": "SCREEN",
+      "authors": "Stearns ZR, Carvalho ML, Beneciuk JM, Lentz TA",
+      "year": 2021,
+      "title": "Screening for Yellow Flags in Orthopaedic Physical Therapy: A Clinical Framework",
+      "publication": "J Orthop Sports Phys Ther. 51:459–469",
+      "doi": "10.2519/jospt.2021.10570",
+      "pmid": 34465140,
+      "url": "https://doi.org/10.2519/jospt.2021.10570",
+      "scope": "Screening, decisiones compartidas y monitorización; screening no equivale a diagnóstico."
+    },
+    {
+      "id": "EX-esc",
+      "authors": "Vrints C, Andreotti F, Koskinas KC, et al",
+      "year": 2024,
+      "title": "2024 ESC Guidelines for the management of chronic coronary syndromes",
+      "publication": "Vrints C, Andreotti F, Koskinas KC, et al. Eur Heart J. 2024;45:3415–3537.",
+      "doi": "10.1093/eurheartj/ehae177",
+      "url": "https://doi.org/10.1093/eurheartj/ehae177",
+      "scope": "En enfermedad coronaria crónica, la dosis se individualiza con variables fisiológicas y el riesgo clínico antecede a la progresión.",
+      "pmid": 39210710
+    },
+    {
+      "id": "EX-who",
+      "authors": "Bull FC, Al‑Ansari SS, Biddle S, et al",
+      "year": 2020,
+      "title": "World Health Organization 2020 guidelines on physical activity and sedentary behaviour",
+      "publication": "Bull FC, Al‑Ansari SS, Biddle S, et al. Br J Sports Med. 2020;54:1451–1462.",
+      "doi": "10.1136/bjsports-2020-102955",
+      "url": "https://doi.org/10.1136/bjsports-2020-102955",
+      "scope": "El marco poblacional se traduce clínicamente según capacidad, riesgo, función y barreras; en mayores se prioriza trabajo multicomponente.",
+      "pmid": 33239350
+    },
+    {
+      "id": "EX-cancer",
+      "authors": "Campbell KL, Winters‑Stone KM, Wiskemann J, et al",
+      "year": 2019,
+      "title": "Exercise Guidelines for Cancer Survivors: Consensus Statement from International Multidisciplinary Roundtable",
+      "publication": "Campbell KL, Winters‑Stone KM, Wiskemann J, et al. Med Sci Sports Exerc. 2019;51:2375–2390.",
+      "doi": "10.1249/MSS.0000000000002116",
+      "url": "https://doi.org/10.1249/MSS.0000000000002116",
+      "scope": "La modalidad y la dosis se eligen por outcome; no todos los resultados tienen el mismo umbral de evidencia.",
+      "pmid": 31626055
+    },
+    {
+      "id": "EX-eular",
+      "authors": "Moseng T, Vliet Vlieland TPM, Battista S, et al",
+      "year": 2024,
+      "title": "EULAR recommendations for the non‑pharmacological core management of hip and knee osteoarthritis: 2023 update",
+      "publication": "Moseng T, Vliet Vlieland TPM, Battista S, et al. Ann Rheum Dis. 2024;83:730–740.",
+      "doi": "10.1136/ard-2023-225041",
+      "url": "https://doi.org/10.1136/ard-2023-225041",
+      "scope": "El ejercicio es tratamiento central en artrosis; la mejor modalidad es la que puede individualizarse, progresarse y sostenerse.",
+      "pmid": 38212040
+    },
+    {
+      "id": "EX-uspstf",
+      "authors": "Guirguis‑Blake JM, Perdue LA, Coppola EL, et al",
+      "year": 2024,
+      "title": "Interventions to Prevent Falls in Older Adults: Updated Evidence Report and Systematic Review for the US Preventive Services Task Force",
+      "publication": "Guirguis‑Blake JM, Perdue LA, Coppola EL, et al. JAMA. 2024;332:58–69.",
+      "doi": "10.1001/jama.2024.4166",
+      "url": "https://doi.org/10.1001/jama.2024.4166",
+      "scope": "El ejercicio ofrece el beneficio más consistente sobre desenlaces de caídas en mayores que viven en la comunidad."
+    },
+    {
+      "id": "EX-jnha",
+      "authors": "Dharmansyah D, Rahayuwati L, Pramukti I, Mutyara K",
+      "year": 2026,
+      "title": "Exercise and nutritional interventions for sarcopenia-related fall prevention in older adults: An umbrella review",
+      "publication": "Dharmansyah D, Rahayuwati L, Pramukti I, Mutyara K. J Nutr Health Aging. 2026;30:100862.",
+      "doi": "10.1016/j.jnha.2026.100862",
+      "url": "https://doi.org/10.1016/j.jnha.2026.100862",
+      "scope": "Resistencia, balance y abordaje nutricional convergen, pero aún falta evidencia directa de que revertir sarcopenia reduzca caídas.",
+      "pmid": 42208412
+    },
+    {
+      "id": "EX-jcsm",
+      "authors": "Shen Y, Shi Q, Nong K, et al",
+      "year": 2023,
+      "title": "Exercise for sarcopenia in older people: A systematic review and network meta‑analysis",
+      "publication": "Shen Y, Shi Q, Nong K, et al. J Cachexia Sarcopenia Muscle. 2023;14:1199–1211.",
+      "doi": "10.1002/jcsm.13225",
+      "url": "https://doi.org/10.1002/jcsm.13225",
+      "scope": "La resistencia sola o combinada con aeróbico y balance aparece entre las opciones más efectivas para outcomes relevantes.",
+      "pmid": 37057640
+    },
+    {
+      "id": "EX-frailty",
+      "authors": "Zang W, Fang M, Meng L, et al",
+      "year": 2025,
+      "title": "Exercise prescription prescriptions for frailty improvement in older adults: An evidence-based approach based on the 2024 older adult compendium",
+      "publication": "Zang W, Fang M, Meng L, et al. Arch Gerontol Geriatr. 2025;130:105717.",
+      "doi": "10.1016/j.archger.2024.105717",
+      "url": "https://doi.org/10.1016/j.archger.2024.105717",
+      "scope": "La relación dosis–respuesta es no lineal: baja a moderada intensidad mejora fragilidad y más intensidad no garantiza más beneficio.",
+      "pmid": 39671884
+    },
+    {
+      "id": "EX-msk-umbrella",
+      "authors": "Arora NK, Donath L, Owen PJ, et al",
+      "year": 2024,
+      "title": "The Impact of Exercise Prescription Variables on Intervention Outcomes in Musculoskeletal Pain: An Umbrella Review of Systematic Reviews",
+      "publication": "Arora NK, Donath L, Owen PJ, et al. Sports Med. 2024;54:711–725.",
+      "doi": "10.1007/s40279-023-01966-2",
+      "url": "https://doi.org/10.1007/s40279-023-01966-2",
+      "scope": "La evidencia MSK respalda ejercicio, pero suele informar mal las variables que permitirían replicar una dosis precisa."
+    },
+    {
+      "id": "EX-maintenance",
+      "authors": "Luijk A, Bricca A, Mortensen SR, et al",
+      "year": 2026,
+      "title": "Effectiveness of maintenance interventions promoting physical activity following exercise therapy for chronic conditions: an umbrella review",
+      "publication": "Luijk A, Bricca A, Mortensen SR, et al. Br J Sports Med. 2026;60:884–899.",
+      "doi": "10.1136/bjsports-2025-110444",
+      "url": "https://doi.org/10.1136/bjsports-2025-110444",
+      "scope": "La mantención debe diseñarse antes del alta; estrategias digitales y mixtas pueden apoyar actividad, función y calidad de vida.",
+      "pmid": 42135017
+    },
+    {
+      "id": "EX-ers-ests-lung",
+      "authors": "Brunelli A, Hardavella G, Huber RM, et al",
+      "year": 2025,
+      "title": "European Respiratory Society and European Society of Thoracic Surgeons clinical practice guideline on fitness for curative intent treatment of lung cancer",
+      "publication": "Brunelli A, Hardavella G, Huber RM, et al. Eur Respir J. 2025;66(5):2500156.",
+      "doi": "10.1183/13993003.00156-2025",
+      "url": "https://doi.org/10.1183/13993003.00156-2025",
+      "scope": "Aporta un algoritmo contemporáneo para valorar aptitud funcional y riesgo antes de tratamientos curativos de cáncer pulmonar; la prueba de ejercicio cardiopulmonar informa riesgo, pero no constituye por sí sola una prescripción FITT.",
+      "pmid": 41232938
+    },
+    {
+      "id": "EX-institutional-falls",
+      "authors": "Schoberer D, Breimaier HE, Zuschnegg J, et al",
+      "year": 2022,
+      "title": "Fall prevention in hospitals and nursing homes: Clinical practice guideline",
+      "publication": "Schoberer D, Breimaier HE, Zuschnegg J, et al. Worldviews Evid Based Nurs. 2022;19(2):86–93.",
+      "doi": "10.1111/wvn.12571",
+      "url": "https://doi.org/10.1111/wvn.12571",
+      "scope": "En hospitales y cuidados de larga estadía respalda intervenciones multifactoriales, ejercicio con apoyo profesional y educación; no autoriza ejercicio indiscriminado en residentes frágiles.",
+      "pmid": 35262271
+    },
+    {
+      "id": "EX-ortho-umbrella",
+      "authors": "Blom AW, Donovan RL, Beswick AD, et al",
+      "year": 2021,
+      "title": "Common elective orthopaedic procedures and their clinical effectiveness: umbrella review of level 1 evidence",
+      "publication": "Blom AW, Donovan RL, Beswick AD, et al. BMJ. 2021;374:n1511.",
+      "doi": "10.1136/bmj.n1511",
+      "url": "https://doi.org/10.1136/bmj.n1511",
+      "scope": "Para varios procedimientos ortopédicos comunes falta evidencia sólida de superioridad frente a alternativas no operatorias. Esto favorece decisiones compartidas, pero no demuestra que una dosis específica de ejercicio sea superior.",
+      "pmid": 34233885
+    },
+    {
+      "id": "EX-respiratory-training-osa",
+      "authors": "Silva de Sousa A, Rocha AP, Tavares DRB, et al",
+      "year": 2024,
+      "title": "Respiratory muscle training for obstructive sleep apnea: Systematic review and meta-analysis",
+      "publication": "Silva de Sousa A, Rocha AP, Tavares DRB, et al. J Sleep Res. 2024;33(3):e13941.",
+      "doi": "10.1111/jsr.13941",
+      "url": "https://doi.org/10.1111/jsr.13941",
+      "scope": "Incluyó 13 ECA, todos con riesgo de sesgo global alto. El entrenamiento inspiratorio mostró señales en presión sistólica y somnolencia, pero no beneficios consistentes en AHI, calidad de vida o capacidad física.",
+      "pmid": 37258418
+    },
+    {
+      "id": "EX-postconcussion",
+      "authors": "Rytter HM, Graff HJ, Henriksen HK, et al",
+      "year": 2021,
+      "title": "Nonpharmacological Treatment of Persistent Postconcussion Symptoms in Adults: A Systematic Review and Meta-analysis and Guideline Recommendation",
+      "publication": "Rytter HM, Graff HJ, Henriksen HK, et al. JAMA Netw Open. 2021;4(11):e2132221.",
+      "doi": "10.1001/jamanetworkopen.2021.32221",
+      "url": "https://doi.org/10.1001/jamanetworkopen.2021.32221",
+      "scope": "El ejercicio físico graduado y otras intervenciones individualizadas recibieron recomendaciones débiles, sustentadas en evidencia de certeza baja o muy baja; los parámetros óptimos siguen inciertos.",
+      "pmid": 34751759
+    }
+  ]
+}
