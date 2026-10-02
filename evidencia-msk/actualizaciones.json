@@ -1,9 +1,114 @@
 {
-  "version": "2026-10-02.1",
+  "version": "2026-10-02.2",
   "lastReviewed": "2026-10-02",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
   "updates": [
+    {
+      "id": "library-2026-10-02-rotator-cuff-cpg",
+      "date": "2026-10-02",
+      "title": "Hombro y manguito rotador: evaluar bien antes de pedir imágenes",
+      "summary": "Una guía de práctica clínica de JOSPT para adultos con sospecha de tendinopatía del manguito rotador integra evaluación, manejo no quirúrgico, rehabilitación y retorno a función/deporte. Recomienda que la evaluación inicial se apoye en historia clínica, examen físico, medidas objetivas y resultados reportados por el paciente; la imagen no se recomienda de rutina para confirmar una tendinopatía en el manejo inicial.",
+      "highlights": [
+        "Evaluación: la guía recomienda medir el rango de movimiento con inclinómetro, goniómetro o aplicaciones validadas en lugar de estimarlo visualmente, y utilizar dinamometría manual para objetivar la fuerza isométrica del complejo del hombro. Desmeules et al. (2025). DOI: 10.2519/jospt.2025.13182 · PMID: 40165544.",
+        "Imágenes: no se recomienda solicitar una prueba de imagen para confirmar tendinopatía del manguito rotador durante el manejo inicial. Puede considerarse si los síntomas no se resuelven o mejoran tras un máximo de 12 semanas de manejo no quirúrgico apropiado. Desmeules et al. (2025). DOI: 10.2519/jospt.2025.13182 · PMID: 40165544.",
+        "Tratamiento inicial: la guía recomienda educación individualizada y rehabilitación activa, que puede incluir control motor y/o ejercicio de resistencia con distintas cargas. Desmeules et al. (2025). DOI: 10.2519/jospt.2025.13182 · PMID: 40165544.",
+        "Límite de interpretación: una guía clínica integra evidencia y recomendaciones de distinta fuerza; no convierte una prueba aislada, un plazo de 12 semanas ni una modalidad de ejercicio en una regla aplicable a todas las personas."
+      ],
+      "practiceMessage": "En un hombro compatible con tendinopatía del manguito rotador, prioriza historia, seguridad, ROM, fuerza, función y seguimiento. Usa la imagen cuando exista una indicación clínica pertinente o una evolución que lo justifique, no como requisito rutinario para iniciar rehabilitación.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/40165544/",
+      "authors": "Desmeules F, Roy JS, Lafrance S, Charron M, Dubé MO, Dupuis F, Beneciuk JM, Grimes J, Kim HM, Lamontagne M, McCreesh K, Shanley E, Vukobrat T, Michener LA.",
+      "evidenceType": "Guía de práctica clínica basada en evidencia",
+      "certainty": "Fuerza de recomendación variable según la pregunta clínica",
+      "doi": "10.2519/jospt.2025.13182",
+      "pmid": "40165544"
+    },
+    {
+      "id": "library-2026-10-02-neck-exercise-overview",
+      "date": "2026-10-02",
+      "title": "Cervicalgia: el ejercicio ayuda, pero no emerge un método universalmente superior",
+      "summary": "Una revisión de 52 revisiones sistemáticas examinó ejercicio para dolor cervical. El conjunto de la evidencia respalda el ejercicio, pero la heterogeneidad de modalidades, dosis y resultados no permite sostener que exista una estrategia única superior para todas las personas.",
+      "highlights": [
+        "Qué aporta: se sintetizaron 52 revisiones sistemáticas sobre entrenamiento de flexores cervicales profundos, fortalecimiento del cuadrante superior, intervenciones de fitness y otras modalidades. Amin et al. (2026). DOI: 10.1080/10669817.2026.2687807 · PMID: 42319264.",
+        "Flexores cervicales profundos: la revisión informó evidencia moderada de mejorías a corto-intermedio plazo en dolor, discapacidad y rango de movimiento, especialmente en programas que incorporaron biofeedback o estrategias cognitivas. Amin et al. (2026). DOI: 10.1080/10669817.2026.2687807 · PMID: 42319264.",
+        "No hay un ganador único: fortalecimiento del cuadrante superior y programas como yoga, Pilates o tai chi mostraron beneficios en distintos desenlaces, pero sin una superioridad clara y consistente de una modalidad. Amin et al. (2026). DOI: 10.1080/10669817.2026.2687807 · PMID: 42319264.",
+        "Límite: es una revisión de revisiones y hereda la heterogeneidad y las limitaciones metodológicas de las revisiones incluidas; no permite prescribir una dosis óptima universal."
+      ],
+      "practiceMessage": "Selecciona el ejercicio cervical según objetivos funcionales, capacidad, preferencias y adherencia. Una modalidad específica puede ser útil, pero su nombre no debería reemplazar la progresión, la reevaluación ni la adaptación individual.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42319264/",
+      "authors": "Amin S, Unverzagt C, Cuka C, Shepherd M, Siegel V, Carlson R, Clewley D.",
+      "evidenceType": "Umbrella review / revisión de revisiones sistemáticas",
+      "certainty": "Variable según modalidad y desenlace; heterogeneidad relevante",
+      "doi": "10.1080/10669817.2026.2687807",
+      "pmid": "42319264"
+    },
+    {
+      "id": "library-2026-10-02-knee-oa-resistance-dose",
+      "date": "2026-10-02",
+      "title": "Artrosis de rodilla: la dosis de fuerza orienta, pero los números no son una receta",
+      "summary": "Una revisión sistemática con metaanálisis dosis–respuesta de 20 ensayos (n=791) evaluó entrenamiento isotónico de resistencia en artrosis de rodilla. Se observaron asociaciones favorables para dolor, función y fuerza, pero la certeza fue baja a muy baja y las estimaciones de volumen no deben interpretarse como objetivos obligatorios.",
+      "highlights": [
+        "Qué aporta: el entrenamiento isotónico de resistencia puede reducir dolor y mejorar función y fuerza en personas con artrosis de rodilla. Núñez-Cortés et al. (2026). DOI: 10.2519/jospt.2026.13477 · PMID: 42676087.",
+        "Intensidad: las mayores estimaciones para dolor aparecieron entre intensidades muy ligeras y moderadas; para función, alrededor de intensidad moderada; y para fuerza, intensidades moderadas a vigorosas mostraron ganancias similares. Núñez-Cortés et al. (2026). DOI: 10.2519/jospt.2026.13477 · PMID: 42676087.",
+        "Volumen: los modelos estimaron máximos en distintos volúmenes acumulados para dolor, función y fuerza. Son relaciones dosis–respuesta poblacionales y no umbrales que cada paciente deba alcanzar. Núñez-Cortés et al. (2026). DOI: 10.2519/jospt.2026.13477 · PMID: 42676087.",
+        "Certeza: los autores calificaron la evidencia como baja a muy baja; por ello no corresponde presentar una intensidad o un número de repeticiones como dosis óptima universal."
+      ],
+      "practiceMessage": "Usa intensidad y volumen como variables ajustables. Progresa según objetivo, respuesta, tolerancia, recuperación y adherencia; las cifras del metaanálisis sirven para generar hipótesis de dosificación, no para imponer una receta.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42676087/",
+      "authors": "Núñez-Cortés R, Suso-Martí L, Tur-Boned A, Ogrezeanu DC, Salazar-Méndez J, Cruz-Montecinos C, López-Bueno R, Andersen LL, Calatayud J.",
+      "evidenceType": "Revisión sistemática con metaanálisis dosis–respuesta de ensayos aleatorizados",
+      "certainty": "Baja a muy baja",
+      "doi": "10.2519/jospt.2026.13477",
+      "pmid": "42676087"
+    },
+    {
+      "id": "library-2026-10-02-patellar-tendon-loading",
+      "date": "2026-10-02",
+      "title": "Tendinopatía patelar: cargar el tendón importa más que buscar un protocolo ganador",
+      "summary": "Una revisión sistemática de 40 reportes evaluó estrategias de ejercicio y carga para tendinopatía patelar. Solo seis comparaciones activas pudieron combinarse en el análisis principal; el efecto promedio fue pequeño y la certeza GRADE fue baja, por lo que no se demostró que una estrategia específica sea universalmente superior.",
+      "highlights": [
+        "Qué aporta: la revisión mapeó prescripciones de carga y comparó estrategias activas utilizando VISA-P/VISA como desenlace principal. Bruna-Mejias et al. (2026). DOI: 10.3390/jfmk11030348 · PMID: 42783641.",
+        "Resultado comparativo: seis comparaciones activas aportaron datos al metaanálisis y mostraron una diferencia media de 5,16 puntos (IC95% 2,39–7,93) a favor de la intervención listada primero; las comparaciones eran clínicamente diferentes entre sí. Bruna-Mejias et al. (2026). DOI: 10.3390/jfmk11030348 · PMID: 42783641.",
+        "Certeza: todos los estudios que contribuyeron al análisis presentaron algunas preocupaciones en RoB 2 y la certeza GRADE fue baja. Bruna-Mejias et al. (2026). DOI: 10.3390/jfmk11030348 · PMID: 42783641.",
+        "Interpretación: el resultado agrupado no demuestra que excéntricos, isométricos, heavy slow resistance u otra estrategia sean el protocolo universalmente superior."
+      ],
+      "practiceMessage": "Mantén la carga progresiva como eje de la rehabilitación, pero selecciona y modifica el tipo de ejercicio según irritabilidad, capacidad, demandas deportivas, respuesta y adherencia. No conviertas el nombre de un protocolo en el objetivo terapéutico.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42783641/",
+      "authors": "Bruna-Mejias A, Cañas-Jamett R, Valenzuela Fuenzalida JJ, Moya-Daza MP, Oyanedel G, Cifuentes-Suazo G, Villaroel L, Orellana Donoso M, Mateluna-Valls E, Cabeza-Salgado JJ, León-Rojas JE, Sanchis-Gimeno J.",
+      "evidenceType": "Revisión sistemática con metaanálisis de comparaciones activas de ejercicio/carga",
+      "certainty": "Baja",
+      "doi": "10.3390/jfmk11030348",
+      "pmid": "42783641"
+    },
+    {
+      "id": "library-2026-10-02-msk-pain-multidomain",
+      "date": "2026-10-02",
+      "title": "Dolor MSK: las diferencias de grupo son multidominio y no identifican la causa individual",
+      "summary": "Una revisión sistemática con metaanálisis multivariados de 118 estudios (n=11.822) comparó personas con fibromialgia, artrosis de rodilla, dolor lumbar o cervical con controles sin dolor. Las diferencias fueron mayores en medidas psicológicas y sensoriales que en dominios motores, cerebrales o tisulares, pero el diseño no permite concluir qué factor causa el dolor de una persona.",
+      "highlights": [
+        "Qué aporta: el estudio integró en un mismo análisis dominios psicológicos, sensoriales, motores, cerebrales y tisulares en cuatro condiciones de dolor MSK. Döding et al. (2026). DOI: 10.1016/j.jpain.2026.106395 · PMID: 42543134.",
+        "Magnitud de las diferencias: las mayores diferencias caso-control aparecieron en medidas psicológicas (g=1,08) y sensoriales (g=0,85), ambas con certeza moderada; fueron menores en dominios motores, cerebrales y tisulares. Döding et al. (2026). DOI: 10.1016/j.jpain.2026.106395 · PMID: 42543134.",
+        "No es causalidad: los datos proceden de comparaciones caso-control y datos basales. Una diferencia entre grupos no demuestra que un dominio sea la causa del dolor, ni permite diagnosticar el mecanismo de dolor de un individuo. Döding et al. (2026). DOI: 10.1016/j.jpain.2026.106395 · PMID: 42543134.",
+        "Certeza desigual: fue moderada para dominios psicológico y sensorial, baja para cerebro y muy baja para motor y tejido; además, los patrones variaron entre diagnósticos."
+      ],
+      "practiceMessage": "Evalúa el dolor persistente de forma multidimensional cuando sea pertinente, pero evita usar un hallazgo psicológico, sensorial, motor, cerebral o tisular como explicación causal automática. Integra hallazgos con historia, función, contexto y evolución.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42543134/",
+      "authors": "Döding R, Donath L, Ehrenbrusthoff K, Frangi J, Schlaffke L, Schmidt H, Junker F, Owen PJ, Saueressig T, Tagliaferri SD, Vickery S, Belavy DL.",
+      "evidenceType": "Revisión sistemática con metaanálisis multivariados",
+      "certainty": "Moderada en dominios psicológico y sensorial; baja a muy baja en otros dominios",
+      "doi": "10.1016/j.jpain.2026.106395",
+      "pmid": "42543134"
+    },
     {
       "id": "weekly-2026-10-02-electrolisis-percutanea",
       "date": "2026-10-02",
