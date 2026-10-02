@@ -8,6 +8,8 @@
 
 **Instrumentos y pilotaje:** [instrumentos-evaluacion-y-pilotaje-otec-v1.md](./programas-otec/instrumentos-evaluacion-y-pilotaje-otec-v1.md). Contiene el diseño sumativo de los ocho cursos, rúbrica, condiciones críticas, Forma B de Traumatología y protocolo para validar tiempos sin aumentar horas por inferencia.
 
+**Implementación en plataforma:** los ocho instrumentos están registrados como `prepared_not_active`. Academy permite consultar su estado con sesión y licencia válidas. No hay intentos activos, claves públicas, finalizaciones automáticas ni emisión de certificados; `academic_assessment_pilot` y `otec_certification_active` permanecen desactivados.
+
 ## Criterio de salida para activar certificación OTEC
 
 Un curso solo debería pasar de **“OTEC en preparación”** a **“certificación OTEC activa”** cuando exista, por escrito:
@@ -24,14 +26,14 @@ Un curso solo debería pasar de **“OTEC en preparación”** a **“certificac
 
 | Producto | Carga validada | Evidencia de aprendizaje actual | Criterio global de aprobación | Trazabilidad actual | Estado para OTEC |
 |---|---:|---|---|---|---|
-| KineCheck Clínico | 18 h | 30 lecciones/casos con quiz por lección | Propuesta: 80/100 + puerta de seguridad | Instrumento y pilotaje diseñados; aún no activos | Puede enviarse a revisión; no activar emisión |
-| Comunicación Clínica | 8 h 13 min auditadas; 8 h conservadoras | 12 prácticas + 60 preguntas + actividad integradora final | Propuesta: 80/100 + puerta de comunicación segura | Snapshot autenticado en `learning_progress`; evaluación propuesta aún no activa | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
-| Más allá del dolor | 12 h 25 min auditadas; 12 h conservadoras | 32 checkpoints + 8 casos integradores | Propuesta: 80/100 + puerta contra sobrediagnóstico | 32 lecciones sincronizadas; instrumento diseñado, aún no activo | Puede enviarse a revisión; no activar emisión |
-| Evidencia Aplicada | 10 h 21 min auditadas; 10 h conservadoras | 35 recorridos con laboratorio, caso, reflexión y revisión | Propuesta: 80/100 + puerta de inferencia válida | Recorrido en servidor; instrumento diseñado, aún no activo | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
-| Traumatología y Ortopedia Clínica | 10 h 40 min | 30 preguntas modulares + 6 casos + examen final de 12 preguntas | Vigente: 80 % modular y final; Forma B propuesta: 12/15 | Snapshot sincronizado; validación final manual | Académicamente cercano; Forma B requiere revisión antes de sustituir examen |
-| Dolor Lumbar Persistente | 8 h 10 min auditadas; 8 h conservadoras | 54 microlecciones con comprobación + caso integrador final | Propuesta: 80/100 + puerta de triage | Entrega final en servidor; instrumento diseñado, aún no activo | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
-| Dolor Musculoesquelético | 8 h 08 min auditadas; 8 h conservadoras | 12 recorridos + 6 aplicaciones obligatorias + integración final | Propuesta: 80/100 + puerta de interpretación clínica | Recorrido en servidor; instrumento diseñado, aún no activo | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
-| Ejercicio Terapéutico | **6 h** | 5 casos aplicados + 10 preguntas de comprobación + 15 referencias | Propuesta: 80/100 + puerta de seguridad/dosis | Instrumento y pilotaje diseñados; `certificate_ready = false` | Puede enviarse a revisión como octavo curso; no activar emisión |
+| KineCheck Clínico | 18 h | 30 lecciones/casos con quiz por lección | Propuesta: 80/100 + puerta de seguridad | Configuración protegida en plataforma; no activa | Puede enviarse a revisión; no activar emisión |
+| Comunicación Clínica | 8 h 13 min auditadas; 8 h conservadoras | 12 prácticas + 60 preguntas + actividad integradora final | Propuesta: 80/100 + puerta de comunicación segura | Snapshot autenticado; configuración evaluativa protegida y no activa | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Más allá del dolor | 12 h 25 min auditadas; 12 h conservadoras | 32 checkpoints + 8 casos integradores | Propuesta: 80/100 + puerta contra sobrediagnóstico | 32 lecciones sincronizadas; configuración evaluativa no activa | Puede enviarse a revisión; no activar emisión |
+| Evidencia Aplicada | 10 h 21 min auditadas; 10 h conservadoras | 35 recorridos con laboratorio, caso, reflexión y revisión | Propuesta: 80/100 + puerta de inferencia válida | Recorrido y configuración evaluativa protegidos; no activa | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Traumatología y Ortopedia Clínica | 10 h 40 min | 30 preguntas modulares + 6 casos + examen final de 12 preguntas | Vigente: 80 % modular y final; Forma B propuesta: 12/15 | Snapshot sincronizado; Forma B configurada, no activa; validación manual | Académicamente cercano; Forma B requiere revisión antes de sustituir examen |
+| Dolor Lumbar Persistente | 8 h 10 min auditadas; 8 h conservadoras | 54 microlecciones con comprobación + caso integrador final | Propuesta: 80/100 + puerta de triage | Entrega final y configuración evaluativa en servidor; no activa | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Dolor Musculoesquelético | 8 h 08 min auditadas; 8 h conservadoras | 12 recorridos + 6 aplicaciones obligatorias + integración final | Propuesta: 80/100 + puerta de interpretación clínica | Recorrido y configuración evaluativa en servidor; no activa | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Ejercicio Terapéutico | **6 h** | 5 casos aplicados + 10 preguntas de comprobación + 15 referencias | Propuesta: 80/100 + puerta de seguridad/dosis | Configuración protegida en plataforma; `certificate_ready = false` | Puede enviarse a revisión como octavo curso; no activar emisión |
 | Banderas Clínicas | No corresponde | Biblioteca/casos/recurso interactivo | No aplica | No aplica | Recurso formativo; no curso certificable |
 
 ## Hallazgos ejecutados en esta validación

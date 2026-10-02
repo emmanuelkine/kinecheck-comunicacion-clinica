@@ -107,6 +107,7 @@ serve(async (req) => {
       { data: access, error: accessError },
       { data: load, error: loadError },
       { data: requirement, error: requirementError },
+      { data: certificationFlag, error: certificationFlagError },
     ] = await Promise.all([
       admin.from("course_access")
         .select("active,access_expires_at,access_source,last_event")
@@ -117,12 +118,25 @@ serve(async (req) => {
       admin.from("course_completion_requirements")
         .select("content_version,verification_mode,auto_certificate,requirements")
         .eq("course_slug", courseSlug).maybeSingle(),
+      admin.from("platform_feature_flags")
+        .select("enabled,config")
+        .eq("key", "otec_certification_active").maybeSingle(),
     ]);
 
     if (accessError) return json({ message: "No fue posible verificar la compra." }, 500);
     const ownerEmails = Deno.env.get("KINECHECK_OWNER_EMAILS") || "emmanuelkine@gmail.com,emmanuelkine+owner@gmail.com,emmanuel_fox@hotmail.com";
     const accountOwner = ownerEmails.split(',').map(normalize).includes(email);
     if (!accountOwner && !usableAccess(access)) return json({ message: "No encontramos una licencia activa para este curso." }, 403);
+    if (certificationFlagError) return json({ message: "No fue posible verificar el estado de certificación." }, 500);
+    if (!certificationFlag?.enabled) {
+      return json({
+        eligible: false,
+        autoCertificate: false,
+        code: "OTEC_CERTIFICATION_NOT_ACTIVE",
+        status: certificationFlag?.config?.status || "preparation",
+        message: "La evaluación y certificación OTEC todavía están en preparación; no se registra aprobación automática.",
+      }, 409);
+    }
     if (loadError || !load?.certificate_ready) return json({ message: "No fue posible verificar la carga académica." }, 409);
     if (requirementError || !requirement) {
       return json({
@@ -141,7 +155,7 @@ serve(async (req) => {
       .eq("content_version", contentVersion)
       .maybeSingle();
 
-    if (existingCompletion?.verification_level === "automatic_full" && !requirement.auto_certificate) {
+    if (existingCompletion?.verification_level === "automatic_full" && requirement.auto_certificate) {
       return json({
         eligible: true,
         autoCertificate: true,

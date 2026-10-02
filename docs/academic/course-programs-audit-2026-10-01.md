@@ -1392,6 +1392,7 @@ Las correcciones se distribuyen entre código web en el repositorio principal, e
 | Repositorio principal | PR #165 (`98083d6`), #166 (`551b474`), #167 (`25a2beb`), #168 (`4e436569`) y paquete exhaustivo en PR #169. |
 | Motor Evidencia Aplicada / Dolor MSK | PR #6 (`90a674…`) y PR #7 (`7070f9bbea0135cbd84fb06f990e3337305961a1`). |
 | Contenido protegido | Payloads y lecturas corregidos en Supabase; Ejercicio Terapéutico quedó en la versión `edge-course-key-v21`, con 15 lecturas y 360 minutos registrados, sin habilitación certificable. |
+| Preparación evaluativa en plataforma | Los ocho cursos cuentan con una configuración protegida `prepared_not_active`, visible desde Academy para usuarios con licencia. La API autenticada expone el estado y la condición de seguridad, pero no almacena ni entrega claves. Los indicadores `academic_assessment_pilot` y `otec_certification_active` permanecen en `false`. |
 | Certificación | No se activó convenio, emisión OTEC ni declaración SENCE. Los certificados internos legados de Comunicación y Traumatología permanecen deshabilitados. |
 
 Se preservaron precios, condiciones Hotmart, duración de licencias, horas numéricas, contenido y funcionalidades no relacionadas, así como las reglas de aprobación ya existentes. No se emitieron certificados en nombre de una OTEC.
@@ -1403,6 +1404,8 @@ La validación académica y los programas se ejecutaron aquí. No puede sustitui
 A partir de esta auditoría se generó el paquete versionado [`programas-kinecheck-v1-2026-10-01.md`](./programas-otec/programas-kinecheck-v1-2026-10-01.md), que consolida los siete cursos de la primera propuesta de convenio con propósito, resultados de aprendizaje, estructura, metodología, evaluación, carga horaria, criterio actual y brechas de trazabilidad. El documento es un **borrador institucional para revisión**, no una aprobación OTEC.
 
 Las brechas evaluativas y temporales quedaron convertidas en una especificación operativa para los ocho cursos: [`instrumentos-evaluacion-y-pilotaje-otec-v1.md`](./programas-otec/instrumentos-evaluacion-y-pilotaje-otec-v1.md). Incluye matriz por resultados de aprendizaje, rúbrica, condiciones críticas de seguridad, Forma B independiente de Traumatología, requisitos técnicos y protocolo de pilotaje. Su diseño está completo; su activación requiere aprobación OTEC y no se presume vigente.
+
+La especificación también quedó incorporada técnicamente en Academy y Supabase. Cada tarjeta de curso con acceso muestra **Evaluación académica** y consulta el estado mediante una función autenticada. Se prepararon los valores propuestos de 15 ítems, 80/100, dos intentos y puerta crítica de seguridad; no existe botón de intento, emisión ni modificación retroactiva de requisitos. El servidor rechaza la sincronización automática de finalización mientras `otec_certification_active` siga desactivado.
 
 ## Estado de cierre de auditoría
 La auditoría documental/académica de los cursos principales ya cubre las fuentes de contenido disponibles: Supabase, activos protegidos, bundles respaldados, Library y repositorios históricos. **Comunicación Clínica, Más allá del dolor y Traumatología y Ortopedia Clínica ya fueron incorporados a la validación estructural detallada.**

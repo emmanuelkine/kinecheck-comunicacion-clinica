@@ -10,6 +10,10 @@ Este documento convierte las brechas detectadas en diseños evaluativos aplicabl
 
 Los bancos de ítems, claves y casos equivalentes deben almacenarse en servidor y no en archivos públicos. Antes de utilizarlos se deben verificar uno a uno contra el contenido y las fuentes originales de la versión del curso.
 
+### Implementación técnica actual
+
+La plataforma ya contiene la especificación protegida de los ocho instrumentos con estado `prepared_not_active`. Academy muestra su estado a usuarios autenticados con licencia; el propietario puede revisar el caso y la rúbrica mediante una API server-side. No se almacenaron claves de respuesta porque los bancos definitivos todavía deben revisarse ítem por ítem. Tampoco se habilitaron intentos, calificación, finalización automática ni certificados. La activación exige que ambos controles —pilotaje académico y certificación OTEC— estén autorizados de forma explícita.
+
 ## 2. Modelo evaluativo propuesto
 
 Para los cursos que actualmente solo tienen autoevaluación se propone un instrumento de 100 puntos:
