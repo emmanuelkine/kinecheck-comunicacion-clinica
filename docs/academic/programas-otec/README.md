@@ -11,6 +11,7 @@ Este directorio contiene el material listo para ser enviado a una OTEC para revi
 3. [Ficha de aprobación de programa](./ficha-aprobacion-programa-otec-v1.md)
 4. [Matriz de preparación académica](../otec-readiness-matrix-2026-10-01.md)
 5. [Auditoría académica completa](../course-programs-audit-2026-10-01.md)
+6. [Instrumentos sumativos y protocolo de pilotaje](./instrumentos-evaluacion-y-pilotaje-otec-v1.md)
 
 ## Qué debe devolver la OTEC
 
