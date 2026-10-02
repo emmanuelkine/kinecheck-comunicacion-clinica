@@ -6,6 +6,8 @@
 
 **Paquete formal de programas:** [programas-kinecheck-v1-2026-10-01.md](./programas-otec/programas-kinecheck-v1-2026-10-01.md). Este paquete consolida propósito, resultados de aprendizaje, estructura, evaluación, carga, trazabilidad y estado de aprobación de los siete cursos propuestos para revisión inicial.
 
+**Instrumentos y pilotaje:** [instrumentos-evaluacion-y-pilotaje-otec-v1.md](./programas-otec/instrumentos-evaluacion-y-pilotaje-otec-v1.md). Contiene el diseño sumativo de los ocho cursos, rúbrica, condiciones críticas, Forma B de Traumatología y protocolo para validar tiempos sin aumentar horas por inferencia.
+
 ## Criterio de salida para activar certificación OTEC
 
 Un curso solo debería pasar de **“OTEC en preparación”** a **“certificación OTEC activa”** cuando exista, por escrito:
@@ -22,14 +24,14 @@ Un curso solo debería pasar de **“OTEC en preparación”** a **“certificac
 
 | Producto | Carga validada | Evidencia de aprendizaje actual | Criterio global de aprobación | Trazabilidad actual | Estado para OTEC |
 |---|---:|---|---|---|---|
-| KineCheck Clínico | 18 h | 30 lecciones/casos con quiz por lección | **Pendiente** | Progreso global pendiente de instrumentación | Puede enviarse a revisión; no activar emisión |
-| Comunicación Clínica | 8 h 13 min auditadas; 8 h conservadoras | 12 prácticas + 60 preguntas + actividad integradora final | **A definir/aprobar por OTEC** | Snapshot autenticado de diapositivas, módulos, prácticas, quizzes y actividad final en `learning_progress`; verificación final manual | Puede enviarse a revisión; falta aprobar umbral global |
-| Más allá del dolor | 12 h 25 min auditadas; 12 h conservadoras | 32 checkpoints + 8 casos integradores | **Pendiente** | Las 32 lecciones se sincronizan a `learning_progress`; falta evaluación/criterio final | Puede enviarse a revisión; no activar emisión |
-| Evidencia Aplicada | 10 h 21 min auditadas; 10 h conservadoras | 35 recorridos con laboratorio, caso, reflexión y revisión | Cumplimiento total del recorrido; **OTEC debe decidir si exige nota/umbral adicional** | Automática en servidor | Estructura fuerte; criterio de aprobación por cerrar con OTEC |
-| Traumatología y Ortopedia Clínica | 10 h 40 min | 30 preguntas modulares + 6 casos + examen final de 12 preguntas | **80 % en módulos y examen final** | Snapshot de lecciones, puntajes y examen sincronizado a `learning_progress`; validación final todavía manual | Académicamente cercano; falta validación server-side de respuestas antes de automatizar |
-| Dolor Lumbar Persistente | 8 h 10 min auditadas; 8 h conservadoras | 54 microlecciones con comprobación + caso integrador final | Cuatro criterios del caso; **umbral final a aprobar por OTEC** | Entrega final en servidor; ruta completa aún no trazada | Puede enviarse a revisión; verificación final manual |
-| Dolor Musculoesquelético | 8 h 08 min auditadas; 8 h conservadoras | 12 recorridos + 6 aplicaciones obligatorias + integración final | Cumplimiento de actividades; **OTEC debe definir si exige calificación** | Automática en servidor | Estructura fuerte; criterio de aprobación por cerrar con OTEC |
-| Ejercicio Terapéutico | **6 h** | 5 casos aplicados + 10 preguntas de comprobación + 15 referencias | **Pendiente** | Sin ruta formal de certificación | No certificable todavía |
+| KineCheck Clínico | 18 h | 30 lecciones/casos con quiz por lección | Propuesta: 80/100 + puerta de seguridad | Instrumento y pilotaje diseñados; aún no activos | Puede enviarse a revisión; no activar emisión |
+| Comunicación Clínica | 8 h 13 min auditadas; 8 h conservadoras | 12 prácticas + 60 preguntas + actividad integradora final | Propuesta: 80/100 + puerta de comunicación segura | Snapshot autenticado en `learning_progress`; evaluación propuesta aún no activa | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Más allá del dolor | 12 h 25 min auditadas; 12 h conservadoras | 32 checkpoints + 8 casos integradores | Propuesta: 80/100 + puerta contra sobrediagnóstico | 32 lecciones sincronizadas; instrumento diseñado, aún no activo | Puede enviarse a revisión; no activar emisión |
+| Evidencia Aplicada | 10 h 21 min auditadas; 10 h conservadoras | 35 recorridos con laboratorio, caso, reflexión y revisión | Propuesta: 80/100 + puerta de inferencia válida | Recorrido en servidor; instrumento diseñado, aún no activo | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Traumatología y Ortopedia Clínica | 10 h 40 min | 30 preguntas modulares + 6 casos + examen final de 12 preguntas | Vigente: 80 % modular y final; Forma B propuesta: 12/15 | Snapshot sincronizado; validación final manual | Académicamente cercano; Forma B requiere revisión antes de sustituir examen |
+| Dolor Lumbar Persistente | 8 h 10 min auditadas; 8 h conservadoras | 54 microlecciones con comprobación + caso integrador final | Propuesta: 80/100 + puerta de triage | Entrega final en servidor; instrumento diseñado, aún no activo | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Dolor Musculoesquelético | 8 h 08 min auditadas; 8 h conservadoras | 12 recorridos + 6 aplicaciones obligatorias + integración final | Propuesta: 80/100 + puerta de interpretación clínica | Recorrido en servidor; instrumento diseñado, aún no activo | Puede enviarse a revisión; OTEC debe aprobar la propuesta |
+| Ejercicio Terapéutico | **6 h** | 5 casos aplicados + 10 preguntas de comprobación + 15 referencias | Propuesta: 80/100 + puerta de seguridad/dosis | Instrumento y pilotaje diseñados; `certificate_ready = false` | Puede enviarse a revisión como octavo curso; no activar emisión |
 | Banderas Clínicas | No corresponde | Biblioteca/casos/recurso interactivo | No aplica | No aplica | Recurso formativo; no curso certificable |
 
 ## Hallazgos ejecutados en esta validación
@@ -70,7 +72,7 @@ Para no imponer criterios antes de que la OTEC los acepte, KineCheck debería pr
 
 La OTEC debe escoger o modificar el modelo antes de activar certificados con su respaldo.
 
-## Bloqueadores antes de activar certificados OTEC
+## Decisiones institucionales antes de activar certificados OTEC
 
 1. Formalizar el convenio.
 2. Recibir aprobación escrita de cada programa.

@@ -190,9 +190,9 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 
 | Código | Prioridad | Estado | Hallazgo |
 |---|---|---|---|
-| CL-01 | P1 | Abierto | No existe evaluación sumativa calificada ni aprobación académica explícita. |
-| CL-02 | P2 | Abierto | 18 horas declaradas con reparto modular administrativo igual; no validación temporal de estudiantes. |
-| CL-03 | P2 | Abierto | Distractores frecuentemente muy evidentes; limitada discriminación de razonamiento avanzado. |
+| CL-01 | P1 | Diseñado; no activado | Instrumento sumativo, rúbrica y condición crítica especificados para revisión OTEC; no se presenta como requisito vigente. |
+| CL-02 | P2 | Protocolado | Se mantiene la carga existente y se definió pilotaje temporal; no se modifican horas sin datos. |
+| CL-03 | P2 | Protocolado | La matriz de banco exige distractores defendibles, revisión de claves y análisis de discriminación antes de activar. |
 | CL-04 | P2 | Corregido | El programa preliminar no coincidía con la secuencia real de diez módulos. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
@@ -368,9 +368,9 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 |---|---|---|---|
 | CO-01 | P1 | Corregido | Cuestionarios críticos inaccesibles por error JavaScript. |
 | CO-02 | P1 | Corregido | Se confundían satisfacción y eficacia y se prometían beneficios de educación/movimiento. |
-| CO-03 | P1 | Abierto | No se verifica calificación sumativa ni umbral académico de aprobación. |
+| CO-03 | P1 | Diseñado; no activado | Instrumento sumativo y rúbrica de comunicación especificados para revisión OTEC. |
 | CO-04 | P2 | Corregido | Diapositivas corregidas con fuentes originales y texto accesible. |
-| CO-05 | P2 | Abierto | Lectura de imágenes densas y tiempo de estudio sin validación empírica. |
+| CO-05 | P2 | Protocolado | Se definió prueba cognitiva y medición temporal por pantalla/dispositivo; no se alteran horas sin pilotaje. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
 
@@ -522,9 +522,9 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 | Código | Prioridad | Estado | Hallazgo |
 |---|---|---|---|
 | MA-01 | P0 | Corregido | Un fragmento temporal de sesión permanecía visible en la URL. |
-| MA-02 | P1 | Abierto | Finalización por marcas de lectura sin evaluación sumativa calificada. |
+| MA-02 | P1 | Diseñado; no activado | Caso sumativo y banco de ítems especificados con puerta crítica contra sobrediagnóstico nociplástico. |
 | MA-03 | P2 | Corregido | El temario preliminar de cinco unidades no representaba ocho módulos reales. |
-| MA-04 | P2 | Abierto | Carga temporal declarada, sin medición de dedicación real. |
+| MA-04 | P2 | Protocolado | Pilotaje temporal definido; se conserva la carga existente hasta obtener datos. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
 
@@ -690,9 +690,9 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 |---|---|---|---|
 | EA-01 | P1 | Corregido | Definición de nocicepción confundida con amenaza. |
 | EA-02 | P1 | Corregido | Guardar respuestas vacías podía aumentar avance y elegibilidad técnica. |
-| EA-03 | P1 | Abierto | Los eventos guardados no evalúan calidad ni competencia. |
+| EA-03 | P1 | Diseñado; no activado | Instrumento sumativo de interpretación y aplicabilidad especificado; los eventos continúan sin presentarse como nota. |
 | EA-04 | P2 | Corregido | Fichas genéricas se presentaban como biblioteca de referencias científicas. |
-| EA-05 | P2 | Abierto | Resultados y feedback demasiado genéricos en parte del tronco original. |
+| EA-05 | P2 | Protocolado | La especificación exige feedback por resultado, clave, distractor y límite de inferencia antes de activar el banco. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
 
@@ -832,7 +832,7 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 |---|---|---|---|
 | TO-01 | P1 | Corregido | La duración global 12–14 h no correspondía a 640 minutos modulares. |
 | TO-02 | P1 | Corregido | Una alternativa podía interpretarse como indicación farmacológica fuera de alcance. |
-| TO-03 | P2 | Abierto | Examen final reutiliza preguntas de controles modulares. |
+| TO-03 | P2 | Diseñado; no activado | Forma B independiente de 15 ítems especificada; el examen vigente no se sustituyó sin revisión de contenido. |
 | TO-04 | P2 | Corregido | El progreso se sincroniza al servidor y el certificado interno legado quedó deshabilitado; la emisión OTEC futura continúa sujeta a convenio y trazabilidad formal. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
@@ -1015,9 +1015,9 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 |---|---|---|---|
 | DL-01 | P1 | Corregido | Contenido crítico e integrador inaccesibles por JavaScript/CSP. |
 | DL-02 | P1 | Corregido | Entradas vacías o fuera de dominio podían producir puntuaciones engañosas. |
-| DL-03 | P1 | Abierto | Aprobación formativa sugerida no constituye criterio académico certificador. |
+| DL-03 | P1 | Diseñado; no activado | Caso sumativo, ponderación y puerta de seguridad especificados para revisión OTEC. |
 | DL-04 | P2 | Corregido | Atlas y casos se anunciaban con interacción/ramificación que no existe. |
-| DL-05 | P2 | Abierto | Carga planificada no validada frente a profundidad real de las microlecciones. |
+| DL-05 | P2 | Protocolado | Medición por microlección, dispositivo y experiencia previa incluida en el protocolo de pilotaje. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
 
@@ -1153,9 +1153,9 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 |---|---|---|---|
 | DM-01 | P1 | Corregido | Criterios nociplásticos incompletos favorecían sobrediagnóstico. |
 | DM-02 | P1 | Corregido | Comprobación de finalización aceptaba evidencia insuficiente o casillas incompletas. |
-| DM-03 | P1 | Abierto | Autoevaluación no constituye calificación sumativa. |
+| DM-03 | P1 | Diseñado; no activado | Instrumento sumativo y rúbrica especificados sin convertir autoevaluación en calificación. |
 | DM-04 | P2 | Corregido | Bibliografía esencial y feedback de seguridad incompletos. |
-| DM-05 | P2 | Abierto | Tiempo declarado de actividades no validado empíricamente. |
+| DM-05 | P2 | Protocolado | Se definió medición temporal y criterio para confirmar horas sin aumentarlas por inferencia. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
 
@@ -1302,10 +1302,10 @@ La suma de minutos y las horas administrativas se conservaron. No son medición 
 
 | Código | Prioridad | Estado | Hallazgo |
 |---|---|---|---|
-| ET-01 | P1 | Abierto | No existe examen final ni aprobación académica para certificar. |
+| ET-01 | P1 | Diseñado; no activado | Instrumento sumativo FITT-VP, rúbrica y puerta de seguridad especificados para revisión OTEC. |
 | ET-02 | P2 | Corregido | Abrir una pantalla se describía como registro de práctica. |
 | ET-03 | P2 | Corregido | Constructor sugería controles de dosificación que no existen. |
-| ET-04 | P2 | Abierto | Disponibilidad pública futura y progreso local; no lanzamiento autorizado por inferencia. |
+| ET-04 | P2 | Corregido | El curso continúa protegido y `certificate_ready = false`; la auditoría no autoriza lanzamiento ni certificado. |
 
 No se detectó otro P0 en el recorrido revisado; esto no equivale a una prueba de penetración completa ni ausencia garantizada de riesgo.
 
@@ -1401,6 +1401,8 @@ La validación académica y los programas se ejecutaron aquí. No puede sustitui
 ## Paquete formal para revisión OTEC
 
 A partir de esta auditoría se generó el paquete versionado [`programas-kinecheck-v1-2026-10-01.md`](./programas-otec/programas-kinecheck-v1-2026-10-01.md), que consolida los siete cursos de la primera propuesta de convenio con propósito, resultados de aprendizaje, estructura, metodología, evaluación, carga horaria, criterio actual y brechas de trazabilidad. El documento es un **borrador institucional para revisión**, no una aprobación OTEC.
+
+Las brechas evaluativas y temporales quedaron convertidas en una especificación operativa para los ocho cursos: [`instrumentos-evaluacion-y-pilotaje-otec-v1.md`](./programas-otec/instrumentos-evaluacion-y-pilotaje-otec-v1.md). Incluye matriz por resultados de aprendizaje, rúbrica, condiciones críticas de seguridad, Forma B independiente de Traumatología, requisitos técnicos y protocolo de pilotaje. Su diseño está completo; su activación requiere aprobación OTEC y no se presume vigente.
 
 ## Estado de cierre de auditoría
 La auditoría documental/académica de los cursos principales ya cubre las fuentes de contenido disponibles: Supabase, activos protegidos, bundles respaldados, Library y repositorios históricos. **Comunicación Clínica, Más allá del dolor y Traumatología y Ortopedia Clínica ya fueron incorporados a la validación estructural detallada.**
