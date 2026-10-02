@@ -16,6 +16,7 @@ Este documento consolida los siete cursos que KineCheck propone presentar inicia
 - El contenido clínico es educativo y no sustituye evaluación, diagnóstico, tratamiento, supervisión ni protocolos institucionales.
 - La versión cursada, las horas, la fecha de finalización y la evidencia de cumplimiento deben quedar registradas antes de emitir un certificado.
 - La certificación OTEC permanecerá desactivada hasta que exista convenio vigente, aprobación escrita del programa y plantilla oficial autorizada.
+- Desde el 2 de octubre de 2026, KineCheck posee una evaluación final académica interna protegida para cada curso: 15 ítems, 80 % de aprobación, máximo de dos intentos y puerta crítica de seguridad, con corrección y registro server-side. Esta evaluación **no equivale a aprobación OTEC**.
 
 ---
 
@@ -56,10 +57,10 @@ Al finalizar, el participante debería ser capaz de:
 - Cada lección contiene comprobación tipo quiz con alternativas, respuesta y fundamento.
 
 ## Criterio de aprobación
-**Pendiente de aprobación institucional.** El curso todavía no posee un criterio global de aprobación ni una evaluación final integradora trazable. KineCheck propone que la OTEC defina si la aprobación se basará en desempeño final, cumplimiento validado o una combinación de ambos.
+**Criterio interno KineCheck vigente:** evaluación final server-side de 15 ítems, mínimo 80 %, máximo dos intentos y cumplimiento de las preguntas críticas de seguridad. La OTEC debe aprobar o modificar este criterio antes de utilizarlo como base de certificación.
 
 ## Trazabilidad
-La instrumentación global de finalización todavía debe completarse antes de activar emisión automática.
+El resultado final KineCheck queda registrado en servidor. La emisión OTEC permanece bloqueada por el estado institucional del convenio y no se activa por aprobar el examen interno.
 
 ---
 
@@ -105,7 +106,7 @@ Al finalizar, el participante debería ser capaz de:
 - Actividad final: mínimo 450 caracteres y cuatro criterios académicos obligatorios.
 
 ## Criterio de aprobación
-La actividad integradora debe cumplir sus cuatro criterios. **El umbral global definitivo debe ser aprobado por la OTEC.** Los cuestionarios modulares son actualmente formativos.
+La actividad integradora mantiene sus cuatro criterios formativos. Además, la evaluación final interna KineCheck exige 80 %, máximo dos intentos y puerta crítica de seguridad. **La OTEC debe aprobar o modificar ese criterio antes de certificar.**
 
 ## Trazabilidad
 La actividad final se registra en servidor. Además, la interfaz sincroniza a `learning_progress` diapositivas estudiadas, módulos, prácticas con respuesta, intentos/puntajes formativos detectados y el estado de la actividad final. La validación permanece manual porque el umbral global todavía debe ser aprobado y los puntajes formativos se originan en cliente.
@@ -150,10 +151,10 @@ Al finalizar, el participante debería ser capaz de:
 - 8 casos integradores: hombro, rodilla, cervical, cadera, tobillo, codo, dolor lumbar persistente y caso sistémico.
 
 ## Criterio de aprobación
-**Pendiente de aprobación institucional.** No existe actualmente una evaluación final calificable independiente del recorrido ni un umbral global.
+Existe una evaluación final interna independiente, corregida server-side: 15 ítems, 80 % de aprobación, máximo dos intentos y puerta crítica de seguridad. Su uso para certificación externa requiere aprobación OTEC.
 
 ## Trazabilidad
-Las lecciones completadas se sincronizan a `learning_progress` como snapshot autenticado del recorrido. No habilitar emisión automática hasta definir y aprobar una evaluación o criterio global de aprobación.
+Las lecciones completadas se sincronizan a `learning_progress` y el examen final KineCheck registra puntaje/finalización server-side. No habilitar emisión OTEC hasta contar con aprobación formal.
 
 ---
 
@@ -196,7 +197,7 @@ Al finalizar, el participante debería ser capaz de:
 - El progreso exige, según el recorrido, apertura, laboratorio, caso, reflexión y revisión.
 
 ## Criterio de aprobación
-Actualmente el sistema puede verificar automáticamente el cumplimiento completo del recorrido. **La OTEC debe decidir si ese cumplimiento es suficiente o si exige además nota o evaluación final con umbral.**
+El sistema verifica el recorrido y, además, dispone de evaluación final KineCheck server-side con mínimo 80 %, dos intentos y puerta crítica. **La OTEC debe decidir si adopta, modifica o complementa este criterio.**
 
 ## Trazabilidad
 Automática en servidor para los componentes obligatorios configurados.
@@ -291,7 +292,7 @@ Al finalizar, el participante debería ser capaz de:
 - Respuesta final mínima de 550 caracteres con cuatro criterios académicos.
 
 ## Criterio de aprobación
-El caso final debe cumplir sus cuatro criterios. **El umbral global definitivo debe aprobarse con la OTEC.**
+El caso final mantiene sus cuatro criterios y se complementa con una evaluación final KineCheck server-side de 15 ítems, mínimo 80 %, dos intentos y puerta crítica. **La OTEC debe aprobar el criterio definitivo para certificación.**
 
 ## Trazabilidad
 La entrega final se registra en servidor. El seguimiento integral de toda la ruta aún debe completarse; por ahora la verificación final permanece manual.
@@ -334,7 +335,7 @@ Al finalizar, el participante debería ser capaz de:
 - El sistema verifica automáticamente el progreso completo y las actividades académicas obligatorias.
 
 ## Criterio de aprobación
-Actualmente puede acreditarse el cumplimiento íntegro del recorrido y de las actividades. **La OTEC debe definir si requiere además una calificación mínima o evaluación final específica.**
+El recorrido y actividades permanecen trazados y se complementan con una evaluación final KineCheck server-side de 15 ítems, mínimo 80 %, dos intentos y puerta crítica. **La OTEC debe aprobar el criterio definitivo de certificación.**
 
 ## Trazabilidad
 Automática en servidor para los recorridos y actividades configurados.
