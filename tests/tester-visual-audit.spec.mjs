@@ -310,7 +310,7 @@ for (const viewport of [
       await assertNoOverflow(page);
 
       if (route.name === "biblioteca-gratuita") {
-        await expect(page.locator(".card")).toHaveCount(10);
+        await expect(page.locator(".card")).toHaveCount(13);
         await expect(page.locator('.card a[href^="https://kinecheck-diagnostico-y-dolor-"]')).toHaveCount(1);
         const metallicHeading = page.locator("h1 .kc-metal-heading");
         await expect(metallicHeading).toBeVisible();
