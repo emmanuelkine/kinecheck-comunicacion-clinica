@@ -1389,7 +1389,7 @@ Las correcciones se distribuyen entre código web en el repositorio principal, e
 
 | Superficie | Publicación comprobada |
 |---|---|
-| Repositorio principal | PR #165 (`98083d6`), #166 (`551b474`), #167 (`25a2beb`), #168 (`4e436569`) y paquete exhaustivo en PR #169. |
+| Repositorio principal | PR #165 (`98083d6`), #166 (`551b474`), #167 (`25a2beb`), #168 (`4e436569`), paquete exhaustivo en PR #169 e implementación de plataforma en PR #178. |
 | Motor Evidencia Aplicada / Dolor MSK | PR #6 (`90a674…`) y PR #7 (`7070f9bbea0135cbd84fb06f990e3337305961a1`). |
 | Contenido protegido | Payloads y lecturas corregidos en Supabase; Ejercicio Terapéutico quedó en la versión `edge-course-key-v21`, con 15 lecturas y 360 minutos registrados, sin habilitación certificable. |
 | Preparación evaluativa en plataforma | Los ocho cursos cuentan con una configuración protegida `prepared_not_active`, visible desde Academy para usuarios con licencia. La API autenticada expone el estado y la condición de seguridad, pero no almacena ni entrega claves. Los indicadores `academic_assessment_pilot` y `otec_certification_active` permanecen en `false`. |
