@@ -161,6 +161,7 @@ const publicPaths = [
   "/",
   "/demo/",
   "/evidencia-msk/",
+  "/evidencia-msk/actualizaciones.json",
   "/metodologia/",
   "/productos/",
   "/profesionales/",
@@ -188,6 +189,17 @@ for (const path of publicPaths) {
     checkSpelling(text, `despliegue ${path}`);
   }
 
+  if (path === "/evidencia-msk/actualizaciones.json") {
+    try {
+      const sourceEvidence = JSON.parse(await read("evidencia-msk/actualizaciones.json"));
+      const deployedEvidence = JSON.parse(text);
+      record(deployedEvidence.version === sourceEvidence.version, "Deployed Evidencia MSK version matches source", String(deployedEvidence.version || "missing"));
+      record(deployedEvidence.lastReviewed === sourceEvidence.lastReviewed, "Deployed Evidencia MSK review date matches source", String(deployedEvidence.lastReviewed || "missing"));
+      record(deployedEvidence.updates?.[0]?.id === sourceEvidence.updates?.[0]?.id, "Deployed Evidencia MSK latest entry matches source", String(deployedEvidence.updates?.[0]?.id || "missing"));
+    } catch (error) {
+      record(false, "Deployed Evidencia MSK JSON is valid", error?.message || "invalid JSON");
+    }
+  }
   if (path === "/legal/privacidad.html") {
     record(text.includes("25 de septiembre de 2026") && text.includes("3 bis. Cookies, almacenamiento del navegador y medición") && text.includes("KineCheck Recupera está actualmente marcado como Próximamente"), "Deployed privacy is latest, discloses analytics and does not imply active Recupera");
   }
