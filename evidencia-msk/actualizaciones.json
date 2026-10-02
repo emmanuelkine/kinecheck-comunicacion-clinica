@@ -1,9 +1,30 @@
 {
-  "version": "2026-09-26.1",
-  "lastReviewed": "2026-09-26",
+  "version": "2026-10-02.1",
+  "lastReviewed": "2026-10-02",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
   "updates": [
+    {
+      "id": "weekly-2026-10-02-electrolisis-percutanea",
+      "date": "2026-10-02",
+      "title": "Electrólisis percutánea en dolor MSK: no demuestra un beneficio adicional consistente sobre el ejercicio",
+      "summary": "Una revisión sistemática con metaanálisis de 13 ensayos evaluó la electrólisis percutánea (PNE), sola o añadida al ejercicio terapéutico, en tendinopatías y síndrome de dolor miofascial. La evidencia disponible no demuestra superioridad de PNE + ejercicio frente a sham + ejercicio o ejercicio solo para dolor o función en tendinopatías; frente a punción seca + ejercicio puede existir una reducción adicional del dolor a corto y medio plazo, sin superioridad funcional. La certeza es baja o muy baja.",
+      "highlights": [
+        "Qué aporta: Novaková et al. incluyeron 13 ensayos (12 en metaanálisis) y evaluaron dolor y función con GRADE. En tendinopatías, añadir PNE al ejercicio no fue superior a sham + ejercicio o ejercicio solo en seguimiento corto, medio o largo. DOI: 10.1002/pri.70352 · PMID: 42806498.",
+        "Por qué importa: una intervención invasiva no debería asumirse como necesaria por producir una respuesta inmediata o por una explicación mecanística plausible. Para los desenlaces clínicos evaluados, el beneficio adicional sobre ejercicio no quedó demostrado. Novaková et al. (2026). DOI: 10.1002/pri.70352 · PMID: 42806498.",
+        "Comparación con punción seca: PNE + ejercicio mostró mayor reducción del dolor a corto y medio plazo que punción seca + ejercicio en tendinopatías, pero sin superioridad funcional; la certeza fue baja. Novaková et al. (2026). DOI: 10.1002/pri.70352 · PMID: 42806498.",
+        "Límites: en síndrome de dolor miofascial no se observaron diferencias claras entre PNE y punción seca para dolor o función. La certeza global fue baja a muy baja, por lo que no corresponde interpretar estos resultados como prueba de equivalencia definitiva ni como recomendación universal. Novaková et al. (2026). DOI: 10.1002/pri.70352 · PMID: 42806498."
+      ],
+      "practiceMessage": "Si utilizas electrólisis percutánea, preséntala como una opción complementaria cuya ventaja adicional sigue siendo incierta, no como sustituto del ejercicio terapéutico ni como requisito para la recuperación. Prioriza objetivos funcionales, carga progresiva, preferencias, tolerancia y reevaluación; evita prometer beneficios superiores que la evidencia actual no ha demostrado.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42806498/",
+      "authors": "Novaková T, Robles-Pérez R, Martinek M, Carrasco-Uribarren A, Vomáčková H, Ceballos-Laita L.",
+      "evidenceType": "Revisión sistemática con metaanálisis de ensayos clínicos aleatorizados",
+      "certainty": "Baja a muy baja",
+      "doi": "10.1002/pri.70352",
+      "pmid": "42806498"
+    },
     {
       "id": "weekly-2026-09-26-evaluacion-razonamiento-pne",
       "date": "2026-09-26",
