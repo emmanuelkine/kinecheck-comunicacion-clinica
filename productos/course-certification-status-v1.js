@@ -9,6 +9,7 @@
     "dolor-lumbar-persistente": "Dolor Lumbar Persistente",
     "dolor-musculoesqueletico": "Dolor Musculoesquelético",
     "evidencia-aplicada": "Evidencia Aplicada",
+    "ejercicio-terapeutico": "Ejercicio Terapéutico",
     "kinecheck-clinico": "KineCheck Clínico",
     "mas-alla-del-dolor": "Más allá del dolor",
     "traumatologia-ortopedia-clinica": "Traumatología y Ortopedia Clínica",

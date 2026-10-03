@@ -4,7 +4,7 @@
 **Estado:** borrador institucional para revisión y aprobación de una OTEC.  
 **Alcance:** formación privada. Estos programas no corresponden a cursos SENCE, no poseen código SENCE y no utilizan franquicia tributaria.
 
-Este documento consolida los siete cursos que KineCheck propone presentar inicialmente a una OTEC. Las cargas horarias se basan en la auditoría académica interna vigente. La OTEC puede aprobar, modificar o rechazar horas, criterios de aprobación, instrumentos de evaluación y condiciones de certificación antes de que se active cualquier emisión de certificados con su respaldo.
+Este documento consolida los ocho cursos que KineCheck propone presentar inicialmente a una OTEC. Las cargas horarias se basan en la auditoría académica interna vigente. La OTEC puede aprobar, modificar o rechazar horas, criterios de aprobación, instrumentos de evaluación y condiciones de certificación antes de que se active cualquier emisión de certificados con su respaldo.
 
 ---
 
@@ -342,9 +342,53 @@ Automática en servidor para los recorridos y actividades configurados.
 
 ---
 
+# 8. Ejercicio Terapéutico
+
+**Slug:** `ejercicio-terapeutico`  
+**Versión auditada:** `edge-course-key-v21`  
+**Carga auditada:** 6 h (360 min)  
+**Carga propuesta para certificación:** 6 h  
+**Público objetivo:** profesionales y estudiantes de salud.
+
+## Propósito
+Prescribir ejercicio mediante FITT-VP, seguridad, elección de modalidad, progresión y seguimiento, comunicando la incertidumbre de la evidencia y evitando recetas universales.
+
+## Resultados de aprendizaje
+Al finalizar, el participante debería ser capaz de:
+1. traducir una recomendación general a una dosis individualizada y revisable;
+2. seleccionar frecuencia, intensidad, tiempo, tipo, volumen y progresión según objetivo y tolerancia;
+3. reconocer situaciones que requieren ajustar, detener o derivar antes de progresar;
+4. prescribir ejercicio en artrosis, dolor persistente, fragilidad y sarcopenia dentro del alcance profesional;
+5. utilizar medidas de resultado para decidir progresión, regresión o mantenimiento;
+6. comunicar incertidumbre y límites de la evidencia sin prometer una dosis universal.
+
+## Estructura y carga
+1. De la recomendación a una dosis clínica segura — 70 min.
+2. Prescribir ante artrosis y dolor persistente — 75 min.
+3. Caídas, fragilidad y sarcopenia — 95 min.
+4. Prescripción orientada por outcome — 65 min.
+5. Mantener el beneficio más allá del alta — 55 min.
+
+## Metodología y evaluación actual
+- 5 módulos.
+- Tres objetivos explícitos por módulo.
+- 5 casos aplicados.
+- 10 preguntas de comprobación.
+- 15 lecturas/referencias registradas.
+- Evaluación final KineCheck protegida de 15 ítems.
+
+## Criterio de aprobación
+**Criterio interno KineCheck vigente:** mínimo 80 %, máximo dos intentos y aprobación de las preguntas críticas de seguridad. La OTEC debe aprobar o modificar este criterio antes de utilizarlo como base de certificación.
+
+## Trazabilidad
+La evaluación final se corrige y registra server-side. La certificación OTEC permanece desactivada y `certificate_ready` se mantiene en `false` hasta que exista convenio y aprobación escrita del programa.
+
+
+---
+
 # Estado de cierre previo a convenio
 
-Los siete programas anteriores están suficientemente documentados para **ser enviados ahora a revisión de una OTEC**, pero ello no equivale a aprobación ni activa certificación. Antes de activar certificación deben quedar resueltos, para cada curso, los siguientes puntos:
+Los ocho programas anteriores están suficientemente documentados para **ser enviados ahora a revisión de una OTEC**, pero ello no equivale a aprobación ni activa certificación. Antes de activar certificación deben quedar resueltos, para cada curso, los siguientes puntos:
 
 1. aprobación escrita de la versión del programa;
 2. horas que figurarán en el certificado;

@@ -537,7 +537,7 @@ function courseCardMarkup(course) {
     ? "En progreso"
     : accessBadge(access);
   const productLabel = course.productId === "PROPIETARIO"
-    ? "Versión en desarrollo"
+    ? (course.status === "preparing" ? "Versión en desarrollo" : "Acceso KineCheck")
     : (owned ? "Acceso verificado" : "Licencia asociada a la compra");
 
   return `
