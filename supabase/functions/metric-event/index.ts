@@ -24,6 +24,8 @@ const allowedEvents = new Set([
   "academy_opened",
   "product_opened",
   "first_activity",
+  "free_resource_open",
+  "ebook_download",
 ]);
 
 const authenticatedFunnelEvents = new Set([
@@ -33,27 +35,28 @@ const authenticatedFunnelEvents = new Set([
 ]);
 
 const allowedProducts = new Set([
-    "banderas-clinicas",
-    "comunicacion-clinica",
-    "dolor-lumbar-persistente",
-    "dolor-musculoesqueletico",
-    "evidencia-aplicada",
-    "kinecheck-clinico",
-    "kinecheck-estudiante",
-    "kinecheck-recupera",
-    "mas-alla-del-dolor",
-    "pack-estudiante",
-    "pack-kinecheck-estudiante",
-    "traumatologia-ortopedia-clinica",
-  ]);
+  "banderas-clinicas",
+  "comunicacion-clinica",
+  "dolor-lumbar-persistente",
+  "dolor-musculoesqueletico",
+  "evidencia-aplicada",
+  "kinecheck-clinico",
+  "kinecheck-estudiante",
+  "kinecheck-recupera",
+  "mas-alla-del-dolor",
+  "pack-estudiante",
+  "pack-kinecheck-estudiante",
+  "traumatologia-ortopedia-clinica",
+]);
 
 function cors(origin: string | null) {
-  const selected = origin && allowedOrigins.has(origin) ? origin : "https://kinecheck.cl";
+  const selected =
+    origin && allowedOrigins.has(origin) ? origin : "https://kinecheck.cl";
   return {
     "Access-Control-Allow-Origin": selected,
     "Access-Control-Allow-Headers": "authorization, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Vary": "Origin",
+    Vary: "Origin",
     "Cache-Control": "no-store",
   };
 }
@@ -61,16 +64,24 @@ function cors(origin: string | null) {
 function json(origin: string | null, payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
     status,
-    headers: { ...cors(origin), "Content-Type": "application/json; charset=utf-8" },
+    headers: {
+      ...cors(origin),
+      "Content-Type": "application/json; charset=utf-8",
+    },
   });
 }
 
 function clean(value: unknown, max: number) {
-  return String(value ?? "").trim().replace(/\s+/g, " ").slice(0, max);
+  return String(value ?? "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .slice(0, max);
 }
 
 function isUuid(value: string) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    value,
+  );
 }
 
 function cleanMetadata(value: unknown) {
@@ -80,7 +91,8 @@ function cleanMetadata(value: unknown) {
   for (const [key, raw] of Object.entries(source).slice(0, 8)) {
     const safeKey = clean(key, 40).replace(/[^a-zA-Z0-9_-]/g, "");
     if (!safeKey) continue;
-    if (typeof raw === "boolean" || typeof raw === "number") output[safeKey] = raw;
+    if (typeof raw === "boolean" || typeof raw === "number")
+      output[safeKey] = raw;
     else output[safeKey] = clean(raw, 120);
   }
   return output;
@@ -124,20 +136,29 @@ function chileDateKey(value: string | Date) {
 Deno.serve(async (req: Request) => {
   const origin = req.headers.get("Origin");
 
-  if (req.method === "OPTIONS") return new Response("ok", { headers: cors(origin) });
-  if (req.method !== "POST") return json(origin, { message: "Método no permitido." }, 405);
-  if (!origin || !allowedOrigins.has(origin)) return json(origin, { message: "Origen no autorizado." }, 403);
+  if (req.method === "OPTIONS")
+    return new Response("ok", { headers: cors(origin) });
+  if (req.method !== "POST")
+    return json(origin, { message: "Método no permitido." }, 405);
+  if (!origin || !allowedOrigins.has(origin))
+    return json(origin, { message: "Origen no autorizado." }, 403);
 
   const contentLength = Number(req.headers.get("content-length") || 0);
-  if (contentLength > 8_000) return json(origin, { message: "Solicitud demasiado extensa." }, 413);
+  if (contentLength > 8_000)
+    return json(origin, { message: "Solicitud demasiado extensa." }, 413);
 
   const body = await req.json().catch(() => null);
-  if (!body || typeof body !== "object") return json(origin, { message: "Solicitud inválida." }, 400);
+  if (!body || typeof body !== "object")
+    return json(origin, { message: "Solicitud inválida." }, 400);
 
   // Privacy safeguard: legacy cached clients cannot persist optional analytics.
   // This marker is a compatibility check, not independent proof of consent.
   if ((body as any).consentVersion !== "20260925-v1") {
-    return json(origin, { ok: true, recorded: false, reason: "consent_required" }, 202);
+    return json(
+      origin,
+      { ok: true, recorded: false, reason: "consent_required" },
+      202,
+    );
   }
 
   const eventId = clean((body as any).eventId, 36).toLowerCase();
@@ -149,20 +170,29 @@ Deno.serve(async (req: Request) => {
   const referrerHost = clean((body as any).referrerHost, 160) || null;
   const deviceClass = clean((body as any).deviceClass, 20) || null;
   const clientIsQa = (body as any).isQa === true;
-  const metadata = authenticatedFunnelEvents.has(eventName) ? {} : cleanMetadata((body as any).metadata);
+  const metadata = authenticatedFunnelEvents.has(eventName)
+    ? {}
+    : cleanMetadata((body as any).metadata);
 
-  if (!isUuid(eventId) || !allowedEvents.has(eventName) || !path.startsWith("/")) {
+  if (
+    !isUuid(eventId) ||
+    !allowedEvents.has(eventName) ||
+    !path.startsWith("/")
+  ) {
     return json(origin, { message: "Evento inválido." }, 400);
   }
-  if (productSlug && !allowedProducts.has(productSlug)) return json(origin, { message: "Producto inválido." }, 400);
-  if (sessionId && !isUuid(sessionId)) return json(origin, { message: "Sesión inválida." }, 400);
+  if (productSlug && !allowedProducts.has(productSlug))
+    return json(origin, { message: "Producto inválido." }, 400);
+  if (sessionId && !isUuid(sessionId))
+    return json(origin, { message: "Sesión inválida." }, 400);
   if (deviceClass && !["mobile", "tablet", "desktop"].includes(deviceClass)) {
     return json(origin, { message: "Dispositivo inválido." }, 400);
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  if (!supabaseUrl || !serviceRoleKey) return json(origin, { message: "Métricas no disponibles." }, 503);
+  if (!supabaseUrl || !serviceRoleKey)
+    return json(origin, { message: "Métricas no disponibles." }, 503);
 
   const admin = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -188,7 +218,11 @@ Deno.serve(async (req: Request) => {
       .gte("occurred_at", since);
     if (countError) {
       console.error("metric-event count", countError.code);
-      return json(origin, { message: "No fue posible registrar la métrica." }, 500);
+      return json(
+        origin,
+        { message: "No fue posible registrar la métrica." },
+        500,
+      );
     }
     if ((count || 0) >= 200) return json(origin, { ok: true, limited: true });
   }
@@ -209,7 +243,11 @@ Deno.serve(async (req: Request) => {
 
   if (error && error.code !== "23505") {
     console.error("metric-event insert", error.code);
-    return json(origin, { message: "No fue posible registrar la métrica." }, 500);
+    return json(
+      origin,
+      { message: "No fue posible registrar la métrica." },
+      500,
+    );
   }
 
   let returnRecorded = false;
@@ -224,7 +262,10 @@ Deno.serve(async (req: Request) => {
       .limit(1)
       .maybeSingle();
 
-    if (firstActivity?.occurred_at && chileDateKey(firstActivity.occurred_at) < chileDateKey(new Date())) {
+    if (
+      firstActivity?.occurred_at &&
+      chileDateKey(firstActivity.occurred_at) < chileDateKey(new Date())
+    ) {
       const todayStart = new Date();
       todayStart.setUTCHours(0, 0, 0, 0);
       const { count } = await admin
@@ -236,23 +277,30 @@ Deno.serve(async (req: Request) => {
         .gte("occurred_at", todayStart.toISOString());
 
       if ((count || 0) === 0) {
-        const { error: returnError } = await admin.from("kinecheck_public_events").insert({
-          event_id: crypto.randomUUID(),
-          event_name: "return_session",
-          path,
-          product_slug: productSlug,
-          session_id: sessionId,
-          referrer_host: null,
-          device_class: deviceClass,
-          metadata: {},
-          user_id: userId,
-          is_qa: false,
-        });
+        const { error: returnError } = await admin
+          .from("kinecheck_public_events")
+          .insert({
+            event_id: crypto.randomUUID(),
+            event_name: "return_session",
+            path,
+            product_slug: productSlug,
+            session_id: sessionId,
+            referrer_host: null,
+            device_class: deviceClass,
+            metadata: {},
+            user_id: userId,
+            is_qa: false,
+          });
         returnRecorded = !returnError;
-        if (returnError) console.error("metric-event return_session", returnError.code);
+        if (returnError)
+          console.error("metric-event return_session", returnError.code);
       }
     }
   }
 
-  return json(origin, { ok: true, authenticated: Boolean(userId), returnRecorded });
+  return json(origin, {
+    ok: true,
+    authenticated: Boolean(userId),
+    returnRecorded,
+  });
 });
