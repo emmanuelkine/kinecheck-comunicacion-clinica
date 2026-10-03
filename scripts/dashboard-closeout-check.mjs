@@ -20,6 +20,17 @@ assert.match(lab, /En preparación/i);
 assert.doesNotMatch(lab, /<script\s+src="\.\/app\.js"/i);
 assert.match(lab, /noindex,nofollow/i);
 
+const exerciseRoute = read("academy/ejercicio-terapeutico/index.html");
+assert.match(exerciseRoute, /academic-progress-sync-v1\.js\?v=20261003-route1/);
+const exerciseSync = read("academy/ejercicio-terapeutico/academic-progress-sync-v1.js");
+assert.match(exerciseSync, /kinecheck-exercise-progress/);
+assert.match(exerciseSync, /routeComplete/);
+assert.match(exerciseSync, /learning_progress/);
+
+const assessmentUi = read("academy/academic-assessment-status-v1.js");
+assert.match(assessmentUi, /Completa primero el recorrido/);
+assert.match(assessmentUi, /Finalización académica consolidada/);
+
 const exercise = read("productos/ejercicio-terapeutico/index.html");
 assert.match(exercise, /Carga académica auditada: 6 h/);
 assert.match(exercise, /15 ítems/);
@@ -36,7 +47,7 @@ const academy = read("academy/academy-v39.js");
 assert.match(academy, /course\.status === "preparing" \? "Versión en desarrollo" : "Acceso KineCheck"/);
 
 const academyHtml = read("academy/index.html");
-const versionMatches = [...academyHtml.matchAll(/20261003-dashboard-closeout1/g)];
+const versionMatches = [...academyHtml.matchAll(/20261003-route-hardening1/g)];
 assert.ok(versionMatches.length >= 15, "Academy direct assets must share the new cache version");
 assert.doesNotMatch(academyHtml, /20261002-final-assessment1/);
 
