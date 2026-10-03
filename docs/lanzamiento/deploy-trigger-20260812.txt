@@ -11,3 +11,7 @@ After deployment, verify:
 - the handoff redirects to the KineCheck Certificados portal
 2026-09-30 certificate-completion-sync deploy
 2026-09-30 certificate-completion-final deploy
+2026-10-03 dashboard-closeout deploy
+Reason: publish Lab lock, Exercise course page, Academy label/cache fixes, sitemap and OTEC program pack.
+Expected main commit before trigger: 654031bd35a619a94bc3e69aa6eccf8676851d66
+Verify: /academy/ · /lab/ · /productos/ejercicio-terapeutico/ · /productos/dolor-musculoesqueletico/
