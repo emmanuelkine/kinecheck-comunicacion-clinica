@@ -310,7 +310,8 @@ for (const viewport of [
       await assertNoOverflow(page);
 
       if (route.name === "biblioteca-gratuita") {
-        await expect(page.locator(".card")).toHaveCount(13);
+        await expect(page.locator(".card")).toHaveCount(14);
+        await expect(page.locator(`.card a[href="/recursos/ejercicio-salud-cerebral/"]`)).toHaveCount(1);
         await expect(page.locator('.card a[href="/recursos/biblioteca-diagnostico-dolor/"]')).toHaveCount(1);
         const metallicHeading = page.locator("h1 .kc-metal-heading");
         await expect(metallicHeading).toBeVisible();
@@ -323,4 +324,32 @@ for (const viewport of [
       await page.screenshot({ path: testInfo.outputPath(`${route.name}-${viewport.name}.png`) });
     });
   }
+}
+
+for (const viewport of [
+  { name: "mobile", width: 390, height: 844 },
+  { name: "tablet", width: 820, height: 1180 },
+  { name: "desktop", width: 1440, height: 1000 },
+]) {
+  test(`ejercicio-salud-cerebral ${viewport.name}: contenido, fuentes y diseño adaptativo`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    const response = await page.goto(`${BASE}/recursos/ejercicio-salud-cerebral/`, { waitUntil: "networkidle", timeout: 60000 });
+    expect(response?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveText("Ejercicio, lactato y salud cerebral");
+    await expect(page.getByText("No existe una dosis exacta universal.")).toBeVisible();
+    await expect(page.locator(".refs li")).toHaveCount(7);
+    await expect(page.locator(".slide")).toHaveCount(6);
+    await assertNoOverflow(page);
+    await assertNoClippedHeadings(page);
+    await assertImagesLoaded(page);
+    const table = await page.locator(".scroll").evaluate((element) => ({
+      overflowX: getComputedStyle(element).overflowX,
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+    }));
+    expect(table.overflowX).toBe("auto");
+    expect(table.clientWidth).toBeGreaterThan(0);
+    expect(table.scrollWidth).toBeGreaterThanOrEqual(table.clientWidth);
+    await page.screenshot({ path: testInfo.outputPath(`ejercicio-salud-cerebral-${viewport.name}.png`) });
+  });
 }
