@@ -20,3 +20,8 @@ Verify: /academy/ · /lab/ · /productos/ejercicio-terapeutico/ · /productos/do
 Reason: publish explicit OTEC-preparation wording on homepage and certification information page after academic assessment hardening.
 Expected main commit before trigger: 554c09f0d4c001b7267863a19a14d422612846e3
 Verify: / · /certificacion/ · /gratis/ · /academy/
+
+2026-10-03 route-completion-hardening deploy
+Reason: publish Exercise route sync and route-aware internal final-assessment gating.
+Expected main commit before trigger: 2520d93518f088c0d914bcfdc5f1f1ee697c042e
+Verify: /academy/ · /academy/ejercicio-terapeutico/ · internal assessment status/start/submit flow
