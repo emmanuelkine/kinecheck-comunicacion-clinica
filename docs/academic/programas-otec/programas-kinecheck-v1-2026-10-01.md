@@ -16,7 +16,7 @@ Este documento consolida los ocho cursos que KineCheck propone presentar inicial
 - El contenido clínico es educativo y no sustituye evaluación, diagnóstico, tratamiento, supervisión ni protocolos institucionales.
 - La versión cursada, las horas, la fecha de finalización y la evidencia de cumplimiento deben quedar registradas antes de emitir un certificado.
 - La certificación OTEC permanecerá desactivada hasta que exista convenio vigente, aprobación escrita del programa y plantilla oficial autorizada.
-- Desde el 2 de octubre de 2026, KineCheck posee una evaluación final académica interna protegida para cada curso: 15 ítems, 80 % de aprobación, máximo de dos intentos y puerta crítica de seguridad, con corrección y registro server-side. Esta evaluación **no equivale a aprobación OTEC**.
+- Desde el 2 de octubre de 2026, KineCheck posee una evaluación final académica interna protegida para cada curso: 15 ítems, 80 % de aprobación, máximo de dos intentos y puerta crítica de seguridad, con corrección server-side. Desde el 3 de octubre, cuando el recorrido del curso es trazable en servidor, la evaluación final solo se habilita después de completar ese recorrido y la finalización académica se consolida únicamente al cumplir **recorrido + evaluación final**. Esta evaluación **no equivale a aprobación OTEC**.
 
 ---
 
@@ -60,7 +60,7 @@ Al finalizar, el participante debería ser capaz de:
 **Criterio interno KineCheck vigente:** evaluación final server-side de 15 ítems, mínimo 80 %, máximo dos intentos y cumplimiento de las preguntas críticas de seguridad. La OTEC debe aprobar o modificar este criterio antes de utilizarlo como base de certificación.
 
 ## Trazabilidad
-El resultado final KineCheck queda registrado en servidor. La emisión OTEC permanece bloqueada por el estado institucional del convenio y no se activa por aprobar el examen interno.
+El resultado del examen final KineCheck queda registrado en servidor. La trazabilidad completa del recorrido de este curso aún no está instrumentada; por ello, aprobar el examen no consolida por sí solo la finalización académica del curso y requiere verificación adicional. La emisión OTEC permanece bloqueada.
 
 ---
 
@@ -109,7 +109,7 @@ Al finalizar, el participante debería ser capaz de:
 La actividad integradora mantiene sus cuatro criterios formativos. Además, la evaluación final interna KineCheck exige 80 %, máximo dos intentos y puerta crítica de seguridad. **La OTEC debe aprobar o modificar ese criterio antes de certificar.**
 
 ## Trazabilidad
-La actividad final se registra en servidor. Además, la interfaz sincroniza a `learning_progress` diapositivas estudiadas, módulos, prácticas con respuesta, intentos/puntajes formativos detectados y el estado de la actividad final. La validación permanece manual porque el umbral global todavía debe ser aprobado y los puntajes formativos se originan en cliente.
+La actividad final y el recorrido se sincronizan en servidor. La evaluación final independiente se corrige server-side y solo puede iniciarse cuando `routeComplete=true`. La finalización académica interna se consolida únicamente al coexistir recorrido completo y evaluación final aprobada. La emisión OTEC permanece bloqueada hasta aprobación formal.
 
 ---
 
@@ -154,7 +154,7 @@ Al finalizar, el participante debería ser capaz de:
 Existe una evaluación final interna independiente, corregida server-side: 15 ítems, 80 % de aprobación, máximo dos intentos y puerta crítica de seguridad. Su uso para certificación externa requiere aprobación OTEC.
 
 ## Trazabilidad
-Las lecciones completadas se sincronizan a `learning_progress` y el examen final KineCheck registra puntaje/finalización server-side. No habilitar emisión OTEC hasta contar con aprobación formal.
+Las 32 lecciones completadas se sincronizan a `learning_progress`. La evaluación final KineCheck solo se habilita cuando el recorrido está completo y se corrige server-side; la finalización interna se consolida con recorrido + examen aprobado. No habilitar emisión OTEC hasta contar con aprobación formal.
 
 ---
 
@@ -200,7 +200,7 @@ Al finalizar, el participante debería ser capaz de:
 El sistema verifica el recorrido y, además, dispone de evaluación final KineCheck server-side con mínimo 80 %, dos intentos y puerta crítica. **La OTEC debe decidir si adopta, modifica o complementa este criterio.**
 
 ## Trazabilidad
-Automática en servidor para los componentes obligatorios configurados.
+Automática en servidor para los componentes obligatorios configurados. La evaluación final se habilita al completar el recorrido y la finalización interna se consolida con recorrido + examen aprobado.
 
 ---
 
@@ -245,7 +245,7 @@ Al finalizar, el participante debería ser capaz de:
 - En 12 preguntas finales, se requieren al menos 10 respuestas correctas para alcanzar o superar el 80 %.
 
 ## Trazabilidad
-La aplicación sincroniza un snapshot autenticado de lecciones completadas, puntajes modulares, casos y examen final a `learning_progress`, manteniendo además la copia local. Antes de una certificación automática, la puntuación debe validarse o recalcularse server-side; por ahora la revisión final permanece manual.
+La aplicación sincroniza un snapshot autenticado del recorrido a `learning_progress`. La evaluación final independiente KineCheck es corregida server-side y solo se habilita cuando `routeComplete=true`; su resultado no depende del examen legado calculado en cliente. La finalización interna se consolida con recorrido + evaluación final aprobada.
 
 ## Observación de seguridad
 La interfaz vigente corrige formulaciones que podrían atribuir acciones médicas o farmacológicas al participante y mantiene las decisiones sujetas al rol profesional, protocolos locales y derivación correspondiente.
@@ -295,7 +295,7 @@ Al finalizar, el participante debería ser capaz de:
 El caso final mantiene sus cuatro criterios y se complementa con una evaluación final KineCheck server-side de 15 ítems, mínimo 80 %, dos intentos y puerta crítica. **La OTEC debe aprobar el criterio definitivo para certificación.**
 
 ## Trazabilidad
-La entrega final se registra en servidor. El seguimiento integral de toda la ruta aún debe completarse; por ahora la verificación final permanece manual.
+La entrega final y el examen final independiente se registran en servidor. El seguimiento integral de las 54 microlecciones aún no está instrumentado; por ello, aprobar el examen no consolida por sí solo la finalización académica del curso y la ruta requiere verificación adicional.
 
 ---
 
@@ -381,7 +381,7 @@ Al finalizar, el participante debería ser capaz de:
 **Criterio interno KineCheck vigente:** mínimo 80 %, máximo dos intentos y aprobación de las preguntas críticas de seguridad. La OTEC debe aprobar o modificar este criterio antes de utilizarlo como base de certificación.
 
 ## Trazabilidad
-La evaluación final se corrige y registra server-side. La certificación OTEC permanece desactivada y `certificate_ready` se mantiene en `false` hasta que exista convenio y aprobación escrita del programa.
+Los cinco módulos completados se sincronizan a `learning_progress` y generan `routeComplete=true`. La evaluación final solo se habilita al completar el recorrido, se corrige server-side y la finalización interna se consolida con recorrido + examen aprobado. La certificación OTEC permanece desactivada y `certificate_ready` se mantiene en `false` hasta que exista convenio y aprobación escrita del programa.
 
 
 ---
