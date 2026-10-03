@@ -3,6 +3,18 @@ import assert from "node:assert/strict";
 
 const read = (path) => fs.readFileSync(path, "utf8");
 
+
+const home = read("index.html");
+assert.match(home, /CERTIFICACIÓN OTEC EN PREPARACIÓN/);
+assert.match(home, /certificación OTEC todavía no activa/i);
+assert.match(home, /no son cursos SENCE/i);
+assert.doesNotMatch(home, /Tu aprendizaje también puede certificarse/);
+
+const certificationInfo = read("certificacion/index.html");
+assert.match(certificationInfo, /evaluación académica interna KineCheck está activa/i);
+assert.match(certificationInfo, /KineCheck Clínico/);
+assert.match(certificationInfo, /Ejercicio Terapéutico/);
+
 const lab = read("lab/index.html");
 assert.match(lab, /En preparación/i);
 assert.doesNotMatch(lab, /<script\s+src="\.\/app\.js"/i);
