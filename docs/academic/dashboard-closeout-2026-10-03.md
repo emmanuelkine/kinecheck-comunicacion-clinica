@@ -34,6 +34,8 @@
 6. Se incorporaron **Dolor Musculoesquelético** y **Ejercicio Terapéutico** al sitemap público.
 7. Se actualizó el cache-bust de Academy de forma uniforme para que las correcciones no queden ocultas por caché.
 8. Se agregó una prueba de regresión de cierre para impedir que Lab vuelva a quedar público o que se pierdan las aclaraciones de certificación.
+9. Se endureció la evaluación final server-side: entre el primer y segundo intento no se expone la clave correcta ni la justificación que pudiera revelar la respuesta. La retroalimentación detallada se entrega al aprobar o al agotar los intentos.
+10. Se corrigió la portada pública para mostrar de forma explícita **“Certificación OTEC en preparación”** y se reemplazó cualquier formulación que pudiera sugerir que la certificación OTEC ya está disponible.
 
 ## Criterios del dashboard
 
