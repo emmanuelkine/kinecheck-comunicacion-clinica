@@ -15,3 +15,8 @@ After deployment, verify:
 Reason: publish Lab lock, Exercise course page, Academy label/cache fixes, sitemap and OTEC program pack.
 Expected main commit before trigger: 654031bd35a619a94bc3e69aa6eccf8676851d66
 Verify: /academy/ · /lab/ · /productos/ejercicio-terapeutico/ · /productos/dolor-musculoesqueletico/
+
+2026-10-03 certification-truthfulness deploy
+Reason: publish explicit OTEC-preparation wording on homepage and certification information page after academic assessment hardening.
+Expected main commit before trigger: 554c09f0d4c001b7267863a19a14d422612846e3
+Verify: / · /certificacion/ · /gratis/ · /academy/
