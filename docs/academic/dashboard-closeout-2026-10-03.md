@@ -36,6 +36,8 @@
 8. Se agregó una prueba de regresión de cierre para impedir que Lab vuelva a quedar público o que se pierdan las aclaraciones de certificación.
 9. Se endureció la evaluación final server-side: entre el primer y segundo intento no se expone la clave correcta ni la justificación que pudiera revelar la respuesta. La retroalimentación detallada se entrega al aprobar o al agotar los intentos.
 10. Se corrigió la portada pública para mostrar de forma explícita **“Certificación OTEC en preparación”** y se reemplazó cualquier formulación que pudiera sugerir que la certificación OTEC ya está disponible.
+11. Se sincroniza ahora el recorrido de **Ejercicio Terapéutico** a `learning_progress`; cinco módulos completados generan `routeComplete=true`.
+12. La evaluación final quedó condicionada al recorrido en los cursos con trazabilidad server-side disponible. Aprobar el examen por sí solo ya no consolida `course_completions`: se exige recorrido completo + evaluación final. En KineCheck Clínico y Dolor Lumbar Persistente, donde la trazabilidad completa de ruta aún no está instrumentada, la evaluación puede registrarse pero la finalización del curso requiere verificación adicional.
 
 ## Criterios del dashboard
 
