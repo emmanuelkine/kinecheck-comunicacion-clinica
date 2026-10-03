@@ -69,6 +69,7 @@
         <div><dt>Seguridad</dt><dd>${result?.safetyGatePassed ? "Cumplida" : "No cumplida"}</dd></div>
       </dl>
       <section class="academic-safety"><strong>Condición de seguridad</strong><p>${result?.safetyGatePassed ? "Las preguntas críticas de seguridad fueron respondidas correctamente." : "Al menos una pregunta crítica de seguridad fue incorrecta; este intento no puede aprobarse aunque el puntaje sea suficiente."}</p></section>
+      ${pass ? `<section class="academic-result ${result?.courseCompletionConsolidated ? "academic-result-pass" : ""}"><h3>${result?.courseCompletionConsolidated ? "Finalización académica consolidada" : "Evaluación final aprobada"}</h3><p>${escapeHtml(result?.courseCompletionMessage || "")}</p></section>` : ""}
       <section>
         <h3>Retroalimentación</h3>
         <ol class="academic-feedback-list">
@@ -155,6 +156,11 @@
     const passed = passedAttempt || (assessment.completed ? completion : null);
     const submitted = attempts.filter((item) => item?.submitted_at).length;
     const remaining = Math.max(0, Number(assessment.maxAttempts || 2) - submitted);
+    const route = assessment.route || {};
+    const routeLabel = route.trackingAvailable
+      ? (route.complete ? "Completo" : "Pendiente")
+      : "Verificación adicional";
+    const canStart = assessment.canStart !== false;
     const content = dialog.querySelector("[data-academic-dialog-content]");
 
     content.innerHTML = `
@@ -166,11 +172,13 @@
         <div><dt>Preguntas</dt><dd>${Number(assessment.objectiveItemCount || 15)}</dd></div>
         <div><dt>Aprobación</dt><dd>${Number(assessment.passingScore || 80)}%</dd></div>
         <div><dt>Intentos</dt><dd>${submitted}/${Number(assessment.maxAttempts || 2)} usados</dd></div>
+        <div><dt>Recorrido</dt><dd>${escapeHtml(routeLabel)}</dd></div>
         <div><dt>Certificación</dt><dd>${data.certification?.active ? "OTEC activa" : "OTEC en preparación · no SENCE"}</dd></div>
       </dl>
       <section class="academic-safety"><strong>Condición crítica de seguridad</strong><p>${escapeHtml(assessment.safetyGate || "Las preguntas críticas de seguridad deben responderse correctamente.")}</p></section>
       ${passed ? `<section class="academic-result academic-result-pass"><h3>Evaluación aprobada</h3><p>Resultado registrado en servidor: <strong>${escapeHtml(passed.score ?? "—")}%</strong>.</p><p>Esta aprobación es académica de KineCheck y no equivale todavía a certificación OTEC.</p></section>` : ""}
-      ${!passed && assessment.internalActive && remaining > 0 ? `<button type="button" class="academic-primary-action" data-academic-start="${escapeHtml(slug)}">${submitted ? "Iniciar segundo intento" : "Comenzar evaluación final"}</button>` : ""}
+      ${!passed && assessment.internalActive && remaining > 0 && canStart ? `<button type="button" class="academic-primary-action" data-academic-start="${escapeHtml(slug)}">${submitted ? "Iniciar segundo intento" : "Comenzar evaluación final"}</button>` : ""}
+      ${!passed && assessment.internalActive && remaining > 0 && !canStart ? '<section class="academic-result"><h3>Completa primero el recorrido</h3><p>La evaluación final quedará disponible cuando KineCheck verifique el recorrido obligatorio de este curso.</p></section>' : ""}
       ${!passed && remaining === 0 ? '<section class="academic-result"><h3>Intentos utilizados</h3><p>La evaluación quedó registrada sin aprobación en esta versión. Contacta soporte si necesitas una revisión académica.</p></section>' : ""}
       <p class="academic-status-note">La evaluación final es un requisito académico interno de KineCheck. La certificación privada OTEC seguirá bloqueada hasta que exista convenio, aprobación escrita del programa y plantilla autorizada.</p>
     `;
