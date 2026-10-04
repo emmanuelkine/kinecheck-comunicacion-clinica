@@ -1,18 +1,25 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4?target=deno";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "https://kinecheck.cl",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Cache-Control": "private, no-store, max-age=0",
+  "Vary": "Origin",
+};
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
+      ...corsHeaders,
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "private, no-store, max-age=0",
-      "Access-Control-Allow-Origin": "https://kinecheck.cl",
-      "Vary": "Origin",
     },
   });
 }
 
 Deno.serve(async (req: Request) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ message: "Método no permitido." }, 405);
 
   try {
