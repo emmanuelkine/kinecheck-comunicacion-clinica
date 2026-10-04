@@ -276,6 +276,31 @@
     );
     const href = target instanceof HTMLAnchorElement ? target.href : "";
 
+    if (href && /^mailto:/i.test(href)) {
+      send("email_click", { metadata: { destination: "email" } });
+      return;
+    }
+
+    if (href) {
+      try {
+        const destination = new URL(href, location.href);
+        const isKineCheck = destination.hostname === "kinecheck.cl"
+          || destination.hostname.endsWith(".kinecheck.cl")
+          || (/\.appdeploy\.ai$/i.test(destination.hostname) && /kinecheck/i.test(destination.hostname));
+        const sameDocumentAnchor = destination.hostname === location.hostname
+          && destination.pathname === location.pathname && Boolean(destination.hash);
+        if (isKineCheck && !sameDocumentAnchor) {
+          const path = destination.pathname.replace(/\/{2,}/g, "/").slice(0, 180) || "/";
+          const category = path.startsWith("/certificacion") ? "certification"
+            : path.startsWith("/academy") ? "academy"
+            : path.startsWith("/productos") || path.startsWith("/cursos") ? "course"
+            : path.startsWith("/gratis") || path.startsWith("/recursos") || path.startsWith("/evidencia") ? "free_resource"
+            : "ecosystem";
+          send("ecosystem_click", { metadata: { category, destination: destination.hostname + path } });
+        }
+      } catch { /* Invalid anchors do not interrupt navigation. */ }
+    }
+
     if (href && /pay\.hotmart\.com/i.test(href)) {
       if (markOnce("buy_click", slug || "unknown")) send("buy_click", { productSlug: slug });
       if (markOnce("checkout_start", slug || "unknown")) send("checkout_start", { productSlug: slug });

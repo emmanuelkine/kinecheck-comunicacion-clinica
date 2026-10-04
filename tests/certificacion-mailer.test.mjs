@@ -6,12 +6,14 @@ import mailer from '../workers/certificacion-mailer/src/index.js';
 const form = (overrides = {}) => new Request('https://kinecheck.cl/api/certificacion', {
   method: 'POST',
   headers: { 'content-type': 'application/json' },
-  body: JSON.stringify({ nombre: 'Prueba <Nombre>', email: 'prueba@example.org', curso: 'Ruta profesional KineCheck', consentimiento: 'on', ...overrides }),
+  body: JSON.stringify({ nombre: 'Prueba <Nombre>', email: 'prueba@example.org', curso: 'Ruta profesional KineCheck', consentimiento: 'on', tema: 'costos', consulta: '¿Cuánto cuesta?', ...overrides }),
 });
 
 test('formulario → Pages Function → Worker → Email Service confirma el envío', async () => {
   const messages = [];
+  const stored = [];
   const env = {
+    CERT_REQUESTS: { put: async (key, value, options) => stored.push({ key, value: JSON.parse(value), options }) },
     CERT_EMAIL_SERVICE: {
       fetch: (url, options) => mailer.fetch(new Request(url, options), {
         EMAIL: { send: async (message) => { messages.push(message); return { messageId: 'test-message-1' }; } },
@@ -27,6 +29,10 @@ test('formulario → Pages Function → Worker → Email Service confirma el env
   assert.match(messages[0].html, /Prueba &lt;Nombre&gt;/);
   assert.match(messages[0].text, /Los recursos gratuitos de KineCheck no incluyen certificación/);
   assert.doesNotMatch(messages[0].text, /\b[0-9]+ horas\b/);
+  assert.equal(stored.length, 1);
+  assert.equal(stored[0].value.tema, 'costos');
+  assert.equal(stored[0].value.consulta, '¿Cuánto cuesta?');
+  assert.equal(stored[0].options.expirationTtl, 7776000);
 });
 
 test('no anuncia un envío si el Worker rechaza el mensaje', async () => {

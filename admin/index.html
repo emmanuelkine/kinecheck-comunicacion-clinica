@@ -48,6 +48,22 @@
       <div id="action-message" class="action-message" hidden></div>
       <section id="metric-grid" class="metric-grid"></section>
 
+      <section id="engagement-section" class="panel" aria-labelledby="engagement-title">
+        <div class="panel-heading"><div><span class="eyebrow">RECORRIDO PÚBLICO</span><h2 id="engagement-title">Interés y clics</h2><p id="engagement-period">Últimos 30 días</p></div></div>
+        <div id="engagement-metrics" class="metric-grid"></div>
+        <div class="two-panels">
+          <article><h3>Interés en certificación por curso</h3><ul id="certification-interest-courses" class="engagement-list"></ul></article>
+          <article><h3>Solicitudes enviadas por curso</h3><ul id="certification-request-courses" class="engagement-list"></ul></article>
+        </div>
+        <h3>Clics hacia páginas del ecosistema</h3><ul id="ecosystem-destinations" class="engagement-list"></ul>
+        <p class="muted">La analítica de navegación solo registra actividad después de aceptar las métricas opcionales.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="certification-requests-title">
+        <div class="panel-heading"><div><span class="eyebrow">CONTACTOS</span><h2 id="certification-requests-title">Solicitudes de certificación</h2><p id="certification-requests-count">Cargando solicitudes…</p></div></div>
+        <div id="certification-requests" class="item-list"></div>
+      </section>
+
       <section class="panel release-panel" aria-labelledby="release-title">
         <div class="panel-heading release-heading">
           <div>

@@ -21,10 +21,14 @@ export async function onRequestPost({ request, env }) {
   const nombre = String(body.nombre || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
   const curso = String(body.curso || "").trim();
+  const tema = String(body.tema || "general").trim();
+  const temas = new Set(["estado", "horas", "requisitos", "costos", "entidad", "validez", "contenidos", "general"]);
+  const consulta = String(body.consulta || "").trim().slice(0, 1000);
   if (body.website) return json({ message: "Solicitud recibida." });
   if (!nombre || nombre.length > 100 || !email || email.length > 160 || !curso || curso.length > 120 || !body.consentimiento) {
     return json({ error: "Completa todos los campos obligatorios." }, 400);
   }
+  if (!temas.has(tema)) return json({ error: "Selecciona un tema de consulta válido." }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ error: "Ingresa un correo electrónico válido." }, 400);
   }
@@ -33,7 +37,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const details = {
-    nombre, email, curso, fecha: new Date().toISOString(),
+    nombre, email, curso, tema, consulta, fecha: new Date().toISOString(),
     subject: "Información sobre certificación — KineCheck",
     replyHtml: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#102c33"><h1>Información sobre certificación</h1><p>Hola ${escapeHtml(nombre)},</p><p>Recibimos tu solicitud de información sobre certificación para <strong>${escapeHtml(curso)}</strong>.</p><p>Los recursos gratuitos de KineCheck no incluyen certificación. En cursos seleccionados, quienes adquieren la formación podrán acceder a certificación de sus horas de estudio a través de una OTEC, según las condiciones específicas del curso.</p><p>Las horas certificables, requisitos, entidad emisora y eventuales costos se informarán para cada curso antes de solicitar la certificación.</p><p>Este mensaje informativo no constituye por sí mismo la emisión de un certificado ni una inscripción.</p><p><strong>KineCheck</strong><br>Educación, evidencia científica y razonamiento clínico musculoesquelético.</p></div>`,
     replyText: `Información sobre certificación\n\nHola ${nombre},\n\nRecibimos tu solicitud de información sobre certificación para ${curso}.\n\nLos recursos gratuitos de KineCheck no incluyen certificación. En cursos seleccionados, quienes adquieren la formación podrán acceder a certificación de sus horas de estudio a través de una OTEC, según las condiciones específicas del curso.\n\nLas horas certificables, requisitos, entidad emisora y eventuales costos se informarán para cada curso antes de solicitar la certificación.\n\nEste mensaje informativo no constituye por sí mismo la emisión de un certificado ni una inscripción.\n\nKineCheck — Educación, evidencia científica y razonamiento clínico musculoesquelético.`,
