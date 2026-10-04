@@ -115,6 +115,54 @@
     $("#metric-grid").innerHTML = cards.map(([label, value]) => `<article class="metric"><small>${escapeHtml(label)}</small><strong>${escapeHtml(value)}</strong></article>`).join("");
   }
 
+  function renderEngagement(data) {
+    const safe = data || {};
+    const cards = [
+      ["Visitas certificación", safe.certificationViews ?? 0],
+      ["Interés en curso", safe.certificationInterests ?? 0],
+      ["Solicitudes enviadas", safe.certificationRequestsSent ?? 0],
+      ["Solicitudes con error", safe.certificationRequestFailures ?? 0],
+      ["Clics en correo", safe.emailClicks ?? 0],
+      ["Clics del ecosistema", safe.ecosystemClicks ?? 0],
+      ["Sesiones aproximadas", safe.approximateUniqueSessions ?? 0],
+    ];
+    $("#engagement-metrics").innerHTML = cards.map(([label, value]) =>
+      `<article class="metric"><small>${escapeHtml(label)}</small><strong>${escapeHtml(value)}</strong></article>`
+    ).join("");
+    const renderList = (selector, rows, empty) => {
+      const items = Array.isArray(rows) ? rows : [];
+      $(selector).innerHTML = items.length
+        ? items.map((row) => `<li><span>${escapeHtml(row.label)}</span><strong>${escapeHtml(row.total)}</strong></li>`).join("")
+        : `<li class="muted">${escapeHtml(empty)}</li>`;
+    };
+    renderList("#certification-interest-courses", safe.interestsByCourse, "Sin intereses por curso registrados.");
+    renderList("#certification-request-courses", safe.requestsByCourse, "Sin solicitudes enviadas registradas.");
+    renderList("#ecosystem-destinations", safe.clicksByDestination, "Sin clics registrados.");
+  }
+
+  async function loadCertificationRequests() {
+    const list = $("#certification-requests");
+    if (!list) return;
+    try {
+      const response = await fetch("/api/certificacion-solicitudes", {
+        method: "GET", cache: "no-store",
+        headers: { Authorization: `Bearer ${state.session?.access_token || ""}` },
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || "No fue posible cargar las solicitudes.");
+      const requests = Array.isArray(result.requests) ? result.requests : [];
+      $("#certification-requests-count").textContent = `${result.total || requests.length} registros · hasta 90 días`;
+      list.innerHTML = requests.length ? requests.map((item) => `
+        <article class="item-card">
+          <div class="item-heading"><strong>${escapeHtml(item.nombre)}</strong><small>${escapeHtml(formatDate(item.fecha))}</small></div>
+          <p><a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a></p>
+          <p>Curso: <strong>${escapeHtml(item.curso)}</strong></p>
+        </article>`).join("") : '<p class="muted">No hay solicitudes guardadas durante el periodo de retención.</p>';
+    } catch (error) {
+      list.innerHTML = `<p class="error">${escapeHtml(error.message || "No fue posible cargar las solicitudes.")}</p>`;
+    }
+  }
+
   function renderRuns(data) {
     const rows = data.automationRuns || [];
     $("#runs-body").innerHTML = rows.length ? rows.map((run) => `
@@ -191,11 +239,13 @@
     $("#admin-account").textContent = data.email;
     $("#generated-at").textContent = `Actualizado: ${formatDate(data.generatedAt)}`;
     renderMetrics(data);
+    renderEngagement(data.engagement);
     renderRuns(data);
     renderSupport(data);
     renderBeta(data);
     renderIssues(data);
     renderRestore(data);
+    await loadCertificationRequests();
     bindRowControls();
   }
 
