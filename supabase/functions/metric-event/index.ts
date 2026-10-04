@@ -26,6 +26,11 @@ const allowedEvents = new Set([
   "first_activity",
   "free_resource_open",
   "ebook_download",
+  "certification_interest",
+  "certification_request_sent",
+  "certification_request_failed",
+  "ecosystem_click",
+  "email_click",
 ]);
 
 const authenticatedFunnelEvents = new Set([
