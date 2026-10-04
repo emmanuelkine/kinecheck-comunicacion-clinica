@@ -53,7 +53,7 @@ Deno.serve(async (req: Request) => {
     );
     if (!isOwner) return json({ message: "Acceso administrativo no autorizado." }, 403);
 
-    await admin.rpc("kinecheck_rollup_daily_metrics").catch(() => null);
+    try { await admin.rpc("kinecheck_rollup_daily_metrics"); } catch { /* Keep dashboard reads available if the optional rollup fails. */ }
 
     const [
       metrics,
