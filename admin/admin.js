@@ -235,7 +235,7 @@
     }));
   }
 
-  function render(data) {
+  async function render(data) {
     $("#admin-account").textContent = data.email;
     $("#generated-at").textContent = `Actualizado: ${formatDate(data.generatedAt)}`;
     renderMetrics(data);
@@ -253,7 +253,7 @@
     const data = await fetchStatus();
     $("#login-view").hidden = true;
     $("#dashboard-view").hidden = false;
-    render(data);
+    await render(data);
   }
 
   $("#admin-login")?.addEventListener("submit", async (event) => {
