@@ -68,6 +68,42 @@ Deno.serve(async (req: Request) => {
       admin.from("kinecheck_legal_acceptances").select("id", { count: "exact", head: true }),
     ]);
 
+    const engagementSince = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const { data: engagementRows, error: engagementError } = await admin
+      .from("kinecheck_public_events")
+      .select("event_name,occurred_at,path,session_id,metadata")
+      .eq("is_qa", false).gte("occurred_at", engagementSince)
+      .in("event_name", ["page_view","certification_interest","certification_request_sent","certification_request_failed","ecosystem_click","email_click"])
+      .order("occurred_at", { ascending: false }).limit(5000);
+    if (engagementError) console.error("automation-status engagement", engagementError.code);
+    const rows = engagementRows || [];
+    const count = (name: string) => rows.filter((row) => row.event_name === name).length;
+    const certificationViews = rows.filter((row) =>
+      row.event_name === "page_view" && String(row.path || "").replace(/\\/$/, "") === "/certificacion"
+    ).length;
+    const distinctSessions = new Set(rows.map((row) => row.session_id).filter(Boolean)).size;
+    const aggregate = (eventName: string, key: string) => {
+      const totals = new Map<string, number>();
+      for (const row of rows) {
+        if (row.event_name !== eventName) continue;
+        const value = String((row.metadata || {})[key] || "").trim().slice(0, 180);
+        if (value) totals.set(value, (totals.get(value) || 0) + 1);
+      }
+      return [...totals.entries()].map(([label, total]) => ({ label, total }))
+        .sort((a, b) => b.total - a.total || a.label.localeCompare(b.label)).slice(0, 10);
+    };
+    const engagement = {
+      since: engagementSince, certificationViews,
+      certificationInterests: count("certification_interest"),
+      certificationRequestsSent: count("certification_request_sent"),
+      certificationRequestFailures: count("certification_request_failed"),
+      emailClicks: count("email_click"), ecosystemClicks: count("ecosystem_click"),
+      approximateUniqueSessions: distinctSessions,
+      interestsByCourse: aggregate("certification_interest", "course"),
+      requestsByCourse: aggregate("certification_request_sent", "course"),
+      clicksByDestination: aggregate("ecosystem_click", "destination"),
+    };
+
     const payload = (metrics.data?.payload || {}) as Record<string, unknown>;
     const numberMetric = (key: string) => Number(payload[key] || 0);
 
@@ -75,6 +111,7 @@ Deno.serve(async (req: Request) => {
       generatedAt: new Date().toISOString(),
       email,
       metrics: metrics.data || null,
+      engagement,
       automationRuns: runs.data || [],
       supportRequests: support.data || [],
       betaApplications: beta.data || [],
