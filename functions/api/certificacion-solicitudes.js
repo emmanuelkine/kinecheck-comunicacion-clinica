@@ -6,7 +6,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_";
 
 export async function onRequestGet({ request, env }) {
   const authorization = request.headers.get("authorization") || "";
-  if (!/^Bearer\\s+\\S+$/i.test(authorization)) return json({ message: "Sesión requerida." }, 401);
+  if (!/^Bearer\s+\S+$/i.test(authorization)) return json({ message: "Sesión requerida." }, 401);
   if (!env.CERT_REQUESTS?.list || !env.CERT_REQUESTS?.get) return json({ message: "Historial de solicitudes no disponible." }, 503);
   try {
     const check = await fetch(`${SUPABASE_URL}/functions/v1/platform-context`, {
@@ -34,7 +34,7 @@ export async function onRequestGet({ request, env }) {
         const email = String(value.email || "").trim().toLowerCase().slice(0, 160);
         const curso = String(value.curso || "").slice(0, 120);
         const fecha = String(value.fecha || "");
-        if (nombre && /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) && curso) requests.push({ nombre, email, curso, fecha });
+        if (nombre && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && curso) requests.push({ nombre, email, curso, fecha });
       } catch { /* Never return stored email HTML or message text. */ }
     }
     requests.sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
