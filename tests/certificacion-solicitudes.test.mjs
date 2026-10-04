@@ -8,7 +8,7 @@ test('requiere sesión y rechaza cuentas que no son owner', async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response(JSON.stringify({ owner: false }), { status: 200 });
   try {
-    assert.equal((await onRequestGet({ request: makeRequest(), env: { CERT_REQUESTS: {} } })).status, 403);
+    assert.equal((await onRequestGet({ request: makeRequest(), env: { CERT_REQUESTS: { list: async () => ({ keys: [], list_complete: true }), get: async () => null } } })).status, 403);
   } finally { globalThis.fetch = originalFetch; }
 });
 
