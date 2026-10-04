@@ -15,14 +15,14 @@ test('requiere sesión y rechaza cuentas que no son owner', async () => {
 test('owner ve los campos necesarios y no el HTML guardado del correo', async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response(JSON.stringify({ owner: true }), { status: 200 });
-  const store = new Map([["cert:1", JSON.stringify({ nombre: "Emilia", email: "emilia@example.org", curso: "KineCheck Clínico", fecha: "2026-10-04T12:00:00.000Z", replyHtml: "<script>secreto</script>", replyText: "contenido no necesario" })]]);
+  const store = new Map([["cert:1", JSON.stringify({ nombre: "Emilia", email: "emilia@example.org", curso: "KineCheck Clínico", tema: "costos", consulta: "¿Cuál es el valor?", fecha: "2026-10-04T12:00:00.000Z", replyHtml: "<script>secreto</script>", replyText: "contenido no necesario" })]]);
   const env = { CERT_REQUESTS: { list: async () => ({ keys: [{ name: "cert:1" }], list_complete: true }), get: async (key) => store.get(key) } };
   try {
     const response = await onRequestGet({ request: makeRequest(), env });
     assert.equal(response.status, 200);
     const result = await response.json();
     assert.equal(result.total, 1);
-    assert.deepEqual(result.requests[0], { nombre: "Emilia", email: "emilia@example.org", curso: "KineCheck Clínico", fecha: "2026-10-04T12:00:00.000Z" });
+    assert.deepEqual(result.requests[0], { nombre: "Emilia", email: "emilia@example.org", curso: "KineCheck Clínico", tema: "Costos", consulta: "¿Cuál es el valor?", fecha: "2026-10-04T12:00:00.000Z" });
     assert.doesNotMatch(JSON.stringify(result), /secreto|contenido no necesario/);
   } finally { globalThis.fetch = originalFetch; }
 });
