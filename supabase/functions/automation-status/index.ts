@@ -79,7 +79,7 @@ Deno.serve(async (req: Request) => {
     const rows = engagementRows || [];
     const count = (name: string) => rows.filter((row) => row.event_name === name).length;
     const certificationViews = rows.filter((row) =>
-      row.event_name === "page_view" && String(row.path || "").replace(/\\/$/, "") === "/certificacion"
+      row.event_name === "page_view" && String(row.path || "").replace(/\/$/, "") === "/certificacion"
     ).length;
     const distinctSessions = new Set(rows.map((row) => row.session_id).filter(Boolean)).size;
     const aggregate = (eventName: string, key: string) => {
