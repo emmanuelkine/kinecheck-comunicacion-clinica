@@ -157,6 +157,8 @@
           <div class="item-heading"><strong>${escapeHtml(item.nombre)}</strong><small>${escapeHtml(formatDate(item.fecha))}</small></div>
           <p><a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a></p>
           <p>Curso: <strong>${escapeHtml(item.curso)}</strong></p>
+          <p>Tema: <strong>${escapeHtml(item.tema || "Otra consulta")}</strong></p>
+          ${item.consulta ? `<p>Consulta: ${escapeHtml(item.consulta)}</p>` : ""}
         </article>`).join("") : '<p class="muted">No hay solicitudes guardadas durante el periodo de retención.</p>';
     } catch (error) {
       list.innerHTML = `<p class="error">${escapeHtml(error.message || "No fue posible cargar las solicitudes.")}</p>`;
