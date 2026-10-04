@@ -33,8 +33,11 @@ export async function onRequestGet({ request, env }) {
         const nombre = String(value.nombre || "").slice(0, 100);
         const email = String(value.email || "").trim().toLowerCase().slice(0, 160);
         const curso = String(value.curso || "").slice(0, 120);
+        const temas = { estado: "Estado de la certificación", horas: "Horas certificables", requisitos: "Requisitos y evaluación", costos: "Costos", entidad: "Entidad emisora", validez: "Validez o uso del certificado", contenidos: "Contenidos y cursos", general: "Otra consulta" };
+        const tema = temas[String(value.tema || "general")] || "Otra consulta";
+        const consulta = String(value.consulta || "").slice(0, 1000);
         const fecha = String(value.fecha || "");
-        if (nombre && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && curso) requests.push({ nombre, email, curso, fecha });
+        if (nombre && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && curso) requests.push({ nombre, email, curso, tema, consulta, fecha });
       } catch { /* Never return stored email HTML or message text. */ }
     }
     requests.sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
