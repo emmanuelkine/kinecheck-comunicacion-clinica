@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Actividad Neurokinésica | KineCheck</title>
+<style>
+:root{--bg:#06131a;--card:#0d222c;--text:#f4fbfd;--muted:#afc7ce;--a:#22d3c5;--b:#51b9ff;--line:#214753}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#051219,#0b1c24);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+main{max-width:860px;margin:auto;padding:18px}.brand{color:var(--a);font-weight:900;letter-spacing:.08em;font-size:.86rem}
+h1{font-size:clamp(1.8rem,7vw,3rem);margin:.35rem 0}.lead{color:var(--muted);line-height:1.5}
+.card{background:linear-gradient(180deg,#0c2029,#102a35);border:1px solid var(--line);border-radius:18px;padding:20px;margin:14px 0}
+.badge{display:inline-block;background:#153c44;color:var(--a);padding:6px 10px;border-radius:999px;font-size:.8rem;font-weight:900}
+h2{margin:9px 0 12px;font-size:1.35rem}h3{font-size:1rem;color:var(--a);margin:18px 0 8px}
+.role{background:#081a21;border-left:3px solid var(--b);padding:11px 12px;border-radius:8px;margin:8px 0;line-height:1.45}
+.steps p{line-height:1.5}.steps strong{color:#fff}.mission{border:1px solid #347d7a;background:#0c302f;padding:14px;border-radius:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-weight:750;margin:12px 0 6px}
+input,textarea,select{width:100%;border:1px solid #315a65;background:#061820;color:white;border-radius:11px;padding:12px;font-size:16px}textarea{min-height:92px;resize:vertical}
+button{width:100%;margin-top:18px;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:900;background:linear-gradient(90deg,var(--a),var(--b));color:#021317;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}.status{display:none;margin-top:14px;padding:12px;border-radius:10px}.ok{display:block;background:#10372f;border:1px solid #2a7c68}.err{display:block;background:#3a1b20;border:1px solid #9b4854}.small{font-size:.9rem;color:var(--muted)}
+@media(max-width:650px){main{padding:13px}.grid{grid-template-columns:1fr}}
+</style></head>
+<body><main>
+<div class="brand">KINECHECK · ACTIVIDAD DOCENTE</div>
+<h1 id="title">Circuito neurokinésico</h1>
+<p class="lead">Escaneen, lean, dejen el teléfono, realicen el juego de roles y vuelvan al formulario solo para registrar la conclusión del grupo.</p>
+<div class="card steps">
+<h2>Instrucciones generales</h2>
+<p><strong>1.</strong> Formen un grupo de 3 y asignen roles: <strong>kinesiólogo, paciente y observador</strong>.</p>
+<p><strong>2.</strong> Lean juntos el caso y la misión. Después dejen el teléfono.</p>
+<p><strong>3.</strong> Realicen la actividad presencial durante 5–6 minutos.</p>
+<p><strong>4.</strong> El observador debe exigir justificación clínica: no se aceptan respuestas basadas en un solo dato.</p>
+<p><strong>5.</strong> Vuelvan al teléfono, completen una sola respuesta grupal y presionen <strong>Enviar respuesta</strong>.</p>
+</div>
+<div id="station"></div>
+<div class="card">
+<h2>Respuesta del grupo</h2>
+<form id="form">
+<div class="grid"><div><label>Sección</label><select id="section" required><option value="">Seleccionar</option><option>S1</option><option>S2</option></select></div><div><label>N.º de grupo</label><input id="group" inputmode="numeric" required placeholder="Ej. 4"></div></div>
+<label>Integrantes (nombre y apellido)</label><textarea id="members" required placeholder="1.&#10;2.&#10;3."></textarea>
+<div id="questions"></div>
+<label>Conclusión del grupo</label><textarea id="conclusion" required placeholder="Sinteticen su decisión clínica y la evidencia que la sustenta."></textarea>
+<input id="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px">
+<button id="send" type="submit">Enviar respuesta</button>
+<p class="small">La respuesta se envía directamente desde KineCheck al docente. No se abrirá la agenda de contactos ni la aplicación de correo.</p>
+<div id="status" class="status"></div>
+</form></div>
+</main>
+<script>
+const stations={
+1:{title:"Mapa neurokinésico",case:"Mujer de 58 años, 3 meses post-ACV. Presenta debilidad del hemicuerpo derecho, olvida instrucciones de 2 pasos y refiere que «no siente igual» la mano derecha. Le cuesta abotonarse y a veces se le caen objetos.",roles:["KINESIÓLOGO: realiza 3 preguntas dirigidas y decide qué dominios evaluar primero: motor, sensitivo y/o neurocognitivo. Justifica el orden.","PACIENTE: responde usando solo los datos del caso. Si te preguntan por función manual, agrega que cuesta abotonarse y se caen objetos.","OBSERVADOR: verifica si se integran los dominios motor, sensorial y cognitivo. Exige una razón para cada decisión."],mission:"Construyan una secuencia de evaluación de 4 pasos y determinen qué hallazgo podría modificar más la intervención.",qs:["Primera prioridad de evaluación","Secuencia de 4 pasos","Hallazgo que más modificaría la intervención","Justificación clínica"]},
+2:{title:"Cognición en movimiento",case:"Hombre de 67 años, 4 meses post-ACV izquierdo. Camina con supervisión, pero se distrae, olvida consignas recientes y tiene dificultad para planificar tareas.",roles:["KINESIÓLOGO: elige MoCA o MMSE como screening inicial y justifica. Luego entrega una instrucción motora de 3 pasos.","PACIENTE: ejecuta solo el primer paso, olvida el segundo y pregunta nuevamente por el tercero.","OBSERVADOR: identifica qué funciones cognitivas interfieren y propone 2 adaptaciones de la instrucción."],mission:"Rediseñen la instrucción para hacerla más segura y comprensible sin cambiar el objetivo motor.",qs:["Prueba neurocognitiva elegida y por qué","Funciones cognitivas que interfieren","Instrucción motora original","Instrucción adaptada y dos cambios realizados"]},
+3:{title:"¿Raíz o nervio periférico?",case:"Paciente de 42 años con parestesias en mano derecha. Refiere hormigueo en pulgar e índice, dolor cervical ocasional y debilidad al flexionar el codo. El hormigueo aumenta al mover el cuello. No existe antecedente de trauma local de muñeca.",roles:["KINESIÓLOGO: plantea una hipótesis inicial y decide qué explorar entre dermatoma, territorio de nervio periférico, miotoma y reflejos.","PACIENTE: entrega los datos del caso solo cuando te los pregunten.","OBSERVADOR: registra qué datos apoyan o debilitan cada hipótesis y exige una segunda hipótesis."],mission:"Diferencien una posible lesión radicular de una neuropatía periférica utilizando al menos 3 hallazgos concordantes.",qs:["Hipótesis principal","Hipótesis alternativa","Tres hallazgos que buscarían","Hallazgo que haría cambiar la hipótesis"]},
+4:{title:"Laboratorio sensorial",case:"Paciente con sospecha de alteración sensitiva unilateral de extremidad superior. Deben organizar un examen sensorial seguro y reproducible.",roles:["KINESIÓLOGO: explica cómo evaluaría tacto superficial, dolor, temperatura, propiocepción, estereognosia y grafestesia.","PACIENTE: mantiene los ojos cerrados y simula 2 respuestas normales y 2 alteradas.","OBSERVADOR: controla comparación bilateral, instrucciones claras y ausencia de pistas visuales."],mission:"Clasifiquen las pruebas como sensibilidad superficial, profunda o cortical e identifiquen un error técnico capaz de producir un falso hallazgo. No realicen estímulos dolorosos peligrosos.",qs:["Pruebas de sensibilidad superficial","Pruebas de sensibilidad profunda","Pruebas de sensibilidad cortical","Error técnico posible y cómo evitarlo"]},
+5:{title:"Tono muscular",case:"Caso A: mujer de 70 años post-ACV; el brazo derecho presenta mayor resistencia cuando el movimiento pasivo se realiza rápido. Caso B: hombre de 72 años con Parkinson; presenta resistencia relativamente uniforme durante el movimiento pasivo.",roles:["KINESIÓLOGO: diferencia espasticidad, rigidez e hipotonía y selecciona Ashworth Modificada o Tardieu según corresponda.","PACIENTE: representa el Caso A o B sin movimientos bruscos ni forzados.","OBSERVADOR: exige que la explicación considere la velocidad y una limitación del método seleccionado."],mission:"Comparen Ashworth Modificada y Tardieu considerando qué evalúan, una ventaja y una limitación.",qs:["Interpretación del Caso A","Interpretación del Caso B","Escala elegida y justificación","Ashworth vs Tardieu: ventaja y limitación"]},
+6:{title:"Neurodesafío integrador",case:"Paciente de 55 años con dolor lumbar irradiado a pierna derecha, debilidad para dorsiflexión, reflejo patelar disminuido y alteración sensitiva en región medial de pierna. El dolor baja desde la zona lumbar y empeora al estar mucho tiempo sentado.",roles:["KINESIÓLOGO: integra sensibilidad, miotomas y reflejos para proponer el nivel neurológico más probable.","PACIENTE: responde solo con los datos del caso.","OBSERVADOR: no acepta una conclusión basada en un único hallazgo; exige al menos 3 datos concordantes."],mission:"Construyan la cadena SÍNTOMA → SENSIBILIDAD → MIOTOMA → REFLEJO → HIPÓTESIS y planteen un diagnóstico alternativo.",qs:["Síntoma y patrón sensitivo clave","Miotoma relacionado","Reflejo relacionado","Hipótesis principal, alternativa y dato que falta confirmar"]}
+};
+const e=Math.min(6,Math.max(1,Number(new URLSearchParams(location.search).get("e"))||1)),s=stations[e];
+document.title="Estación "+e+" · "+s.title+" | KineCheck";document.getElementById("title").textContent="Estación "+e+" · "+s.title;
+document.getElementById("station").innerHTML='<div class="card"><span class="badge">ESTACIÓN '+e+'</span><h2>'+s.title+'</h2><h3>Caso clínico</h3><p>'+s.case+'</p><h3>Roles</h3>'+s.roles.map(x=>'<div class="role">'+x+'</div>').join("")+'<h3>Misión</h3><div class="mission">'+s.mission+'</div></div>';
+document.getElementById("questions").innerHTML=s.qs.map((q,i)=>'<label>'+q+'</label><textarea class="answer" data-q="'+q.replace(/"/g,"&quot;")+'" required></textarea>').join("");
+document.getElementById("form").addEventListener("submit",async ev=>{
+ ev.preventDefault();const btn=document.getElementById("send"),st=document.getElementById("status");btn.disabled=true;btn.textContent="Enviando…";st.className="status";st.style.display="none";
+ const answers=[...document.querySelectorAll(".answer")].map(x=>({question:x.dataset.q,answer:x.value.trim()}));
+ const body={station:e,title:s.title,section:document.getElementById("section").value,group:document.getElementById("group").value.trim(),members:document.getElementById("members").value.trim(),answers,conclusion:document.getElementById("conclusion").value.trim(),website:document.getElementById("website").value};
+ try{const r=await fetch("/api/actividad-neuro",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body)});const j=await r.json();if(!r.ok)throw new Error(j.error||"No se pudo enviar.");st.textContent="✓ "+j.message+" Código: "+j.id;st.className="status ok";document.getElementById("form").reset();}
+ catch(err){st.textContent="No se pudo enviar: "+err.message+" Conserva tus respuestas e inténtalo nuevamente.";st.className="status err";}
+ finally{btn.disabled=false;btn.textContent="Enviar respuesta";st.style.display="block";}
+});
+</script></body></html>
