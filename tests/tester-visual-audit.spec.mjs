@@ -310,9 +310,10 @@ for (const viewport of [
       await assertNoOverflow(page);
 
       if (route.name === "biblioteca-gratuita") {
-        await expect(page.locator(".card")).toHaveCount(14);
+        await expect(page.locator(".card")).toHaveCount(21);
         await expect(page.locator(`.card a[href="/recursos/ejercicio-salud-cerebral/"]`)).toHaveCount(1);
         await expect(page.locator('.card a[href="/recursos/biblioteca-diagnostico-dolor/"]')).toHaveCount(1);
+        await expect(page.locator('.card a[href="/recursos/comunicacion-clinica-intervencion/"]')).toHaveCount(1);
         const metallicHeading = page.locator("h1 .kc-metal-heading");
         await expect(metallicHeading).toBeVisible();
         await expect(metallicHeading).toHaveText("Biblioteca gratuita de");
