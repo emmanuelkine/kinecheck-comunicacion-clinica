@@ -80,7 +80,7 @@ Deno.serve(async (req: Request) => {
       .from("kinecheck_public_events")
       .select("event_name,occurred_at,path,session_id,metadata")
       .eq("is_qa", false).gte("occurred_at", engagementSince)
-      .in("event_name", ["page_view","certification_interest","certification_request_sent","certification_request_failed","ecosystem_click","email_click"])
+      .in("event_name", ["page_view","product_view","checkout_start","buy_click","hotmart_outbound","academy_open","academy_opened","course_open","free_resource_open","ebook_download","certification_interest","certification_request_sent","certification_request_failed","ecosystem_click","email_click"])
       .order("occurred_at", { ascending: false }).limit(5000);
     if (engagementError) console.error("automation-status engagement", engagementError.code);
     const rows = engagementRows || [];
@@ -99,8 +99,34 @@ Deno.serve(async (req: Request) => {
       return [...totals.entries()].map(([label, total]) => ({ label, total }))
         .sort((a, b) => b.total - a.total || a.label.localeCompare(b.label)).slice(0, 10);
     };
+    const freeLibraryRows = rows.filter((row) => String(row.path || "").replace(/\/$/, "") === "/gratis");
+    const freeLibraryPageViews = freeLibraryRows.filter((row) => row.event_name === "page_view").length;
+    const freeLibrarySessions = new Set(freeLibraryRows.filter((row) => row.event_name === "page_view").map((row) => row.session_id).filter(Boolean)).size;
+    const ebookDownloads = freeLibraryRows.filter((row) => row.event_name === "ebook_download").length;
+    const freeResourceOpens = freeLibraryRows.filter((row) => row.event_name === "free_resource_open").length;
+    const ecosystemFromLibrary = freeLibraryRows.filter((row) => row.event_name === "ecosystem_click").length;
+    const academySessions = new Set(rows.filter((row) => ["academy_open","academy_opened"].includes(row.event_name)).map((row) => row.session_id).filter(Boolean)).size;
+    const courseOpens = rows.filter((row) => row.event_name === "course_open").length;
+    const checkoutStarts = rows.filter((row) => row.event_name === "checkout_start").length;
+    const buyClicks = rows.filter((row) => row.event_name === "buy_click").length;
+    const hotmartOutbounds = rows.filter((row) => row.event_name === "hotmart_outbound").length;
+    const resourcesByName = aggregate("free_resource_open", "resource");
+
+    const { data: progressRows } = await admin.from("learning_progress").select("course_slug,user_id,updated_at");
+    const courseLearners = new Map<string, Set<string>>();
+    for (const row of progressRows || []) {
+      const slug = String(row.course_slug || "unknown");
+      if (!courseLearners.has(slug)) courseLearners.set(slug, new Set());
+      if (row.user_id) courseLearners.get(slug)!.add(String(row.user_id));
+    }
+    const learnersByCourse = [...courseLearners.entries()].map(([label, users]) => ({ label, total: users.size }))
+      .sort((a,b) => b.total - a.total || a.label.localeCompare(b.label));
+
     const engagement = {
       since: engagementSince, certificationViews,
+      freeLibraryPageViews, freeLibrarySessions, ebookDownloads, freeResourceOpens,
+      ecosystemFromLibrary, academySessions, courseOpens, checkoutStarts, buyClicks, hotmartOutbounds,
+      resourcesByName, learnersByCourse,
       certificationInterests: count("certification_interest"),
       certificationRequestsSent: count("certification_request_sent"),
       certificationRequestFailures: count("certification_request_failed"),
