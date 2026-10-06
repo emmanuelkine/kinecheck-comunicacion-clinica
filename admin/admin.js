@@ -140,6 +140,35 @@
     renderList("#ecosystem-destinations", safe.clicksByDestination, "Sin clics registrados.");
   }
 
+  function renderAnalytics(data, metricsPayload = {}) {
+    const safe = data || {};
+    const cards = [
+      ["Biblioteca · vistas", safe.freeLibraryPageViews ?? 0],
+      ["Biblioteca · sesiones", safe.freeLibrarySessions ?? 0],
+      ["Recursos abiertos", safe.freeResourceOpens ?? 0],
+      ["Descargas eBook", safe.ebookDownloads ?? 0],
+      ["Biblioteca → ecosistema", safe.ecosystemFromLibrary ?? 0],
+      ["Sesiones Academy", safe.academySessions ?? 0],
+      ["Aperturas de cursos", safe.courseOpens ?? 0],
+      ["Clics comprar", safe.buyClicks ?? 0],
+      ["Inicios checkout", safe.checkoutStarts ?? 0],
+      ["Salidas a Hotmart", safe.hotmartOutbounds ?? 0],
+      ["Compras comerciales activas", metricsPayload.commercial_active_purchases ?? 0],
+      ["Compras comerciales aprobadas hoy", metricsPayload.commercial_purchase_approvals_today ?? 0],
+    ];
+    $("#analytics-metrics").innerHTML = cards.map(([label, value]) =>
+      `<article class="metric"><small>${escapeHtml(label)}</small><strong>${escapeHtml(value)}</strong></article>`
+    ).join("");
+    const list = (selector, rows, empty) => {
+      const items = Array.isArray(rows) ? rows : [];
+      $(selector).innerHTML = items.length
+        ? items.map((row) => `<li><span>${escapeHtml(row.label)}</span><strong>${escapeHtml(row.total)}</strong></li>`).join("")
+        : `<li class="muted">${escapeHtml(empty)}</li>`;
+    };
+    list("#analytics-resources", safe.resourcesByName, "Sin aperturas registradas.");
+    list("#analytics-learners", safe.learnersByCourse, "Sin actividad de aprendizaje registrada.");
+  }
+
   async function loadCertificationRequests() {
     const list = $("#certification-requests");
     if (!list) return;
@@ -242,6 +271,7 @@
     $("#generated-at").textContent = `Actualizado: ${formatDate(data.generatedAt)}`;
     renderMetrics(data);
     renderEngagement(data.engagement);
+    renderAnalytics(data.engagement, data.metrics?.payload || {});
     renderRuns(data);
     renderSupport(data);
     renderBeta(data);
