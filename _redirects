@@ -11,3 +11,7 @@
 /kinecheck-comunicacion-clinica/traumatologia/* /traumatologia/:splat 301
 /kinecheck-comunicacion-clinica/lab/* /lab/:splat 301
 /kinecheck-comunicacion-clinica/* /:splat 301
+/kin2002 /actividades/kin2002/ 302
+/kin2002/ /actividades/kin2002/ 302
+/kin2002/admin /actividades/kin2002/admin/ 302
+/kin2002/admin/ /actividades/kin2002/admin/ 302
