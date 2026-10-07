@@ -61,7 +61,14 @@ function importObjectiveReview(){
   const names=JSON.parse(decodeURIComponent(location.hash.slice(10)));
   if(!Array.isArray(names)||names.length<1||names.length>50||names.some(n=>typeof n!=="string"||n.length>150))return false;
   $("criteria").replaceChildren();
-  names.forEach(name=>addCriterion(name,"10"));
+  let transfer=null;
+  try{const raw=sessionStorage.getItem('kinecheck-evalua-transfer');sessionStorage.removeItem('kinecheck-evalua-transfer');if(raw){const parsed=JSON.parse(raw);if(Date.now()-parsed.timestamp<15*60*1000&&Array.isArray(parsed.findings))transfer=parsed;}}catch{}
+  if(transfer&&typeof transfer.student==="string")$("student").value=transfer.student;
+  names.forEach(name=>{
+   const item=transfer?.findings.find(f=>f.name===name);
+   const feedback=item?(item.found?"Coincidencia textual detectada en página(s) "+item.pages.join(", ")+". Revisar presencia real, desarrollo y calidad antes de puntuar.":"No se detectó el encabezado o expresión en el texto extraído. Verificar manualmente posibles variantes o páginas escaneadas."):"";
+   addCriterion(name,"10","",feedback);
+  });
   history.replaceState(null,"",location.pathname+location.search);
   return true;
  }catch{return false}
