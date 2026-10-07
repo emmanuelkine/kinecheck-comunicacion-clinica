@@ -55,5 +55,16 @@ $("export").onclick=()=>{
  const blob=new Blob(["\uFEFF"+data.map(r=>r.map(esc).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"});
  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="kinecheck-evalua-resultados.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
-addCriterion("Introducción","10");addCriterion("Desarrollo","30");addCriterion("Fundamentación","20");addCriterion("Conclusiones","10");addCriterion("Presentación","10");
+function importObjectiveReview(){
+ try{
+  if(!location.hash.startsWith("#criterios="))return false;
+  const names=JSON.parse(decodeURIComponent(location.hash.slice(10)));
+  if(!Array.isArray(names)||names.length<1||names.length>50||names.some(n=>typeof n!=="string"||n.length>150))return false;
+  $("criteria").replaceChildren();
+  names.forEach(name=>addCriterion(name,"10"));
+  history.replaceState(null,"",location.pathname+location.search);
+  return true;
+ }catch{return false}
+}
+if(!importObjectiveReview()){addCriterion("Introducción","10");addCriterion("Desarrollo","30");addCriterion("Fundamentación","20");addCriterion("Conclusiones","10");addCriterion("Presentación","10");}
 </script></body></html>
