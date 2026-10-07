@@ -88,3 +88,7 @@ header nav a{display:inline-flex;align-items:center;min-height:42px}
   mix-blend-mode:multiply;
   filter:contrast(1.14) saturate(1.08) drop-shadow(0 18px 24px rgba(0,0,0,.62)) drop-shadow(0 0 16px rgba(99,226,220,.13));
 }
+
+
+/* Allow the multiply blend to reach the dark anatomy panel behind the image. */
+.anatomy-stage{isolation:auto;filter:none}
