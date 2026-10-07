@@ -20,7 +20,7 @@ $('run').onclick=async()=>{
  if(f.size===0||f.size>15*1024*1024){setStatus('El archivo debe tener entre 1 byte y 15 MB.');return}
  const required=lines($('sections').value),terms=lines($('terms').value);
  if(!required.length&&!terms.length){setStatus('Indica al menos una sección o expresión requerida.');return}
- $('run').disabled=true;setStatus('Leyendo PDF localmente…');
+ $('run').disabled=true;window.__kinecheckFindings=null;$('rubric').hidden=true;setStatus('Leyendo PDF localmente…');
  let doc=null;
  try{
   const bytes=new Uint8Array(await f.arrayBuffer());
@@ -40,18 +40,20 @@ $('run').onclick=async()=>{
   const search=q=>{const n=norm(q);return pages.filter(p=>p.text.includes(n)).map(p=>p.number)};
   setStatus('Archivo: '+f.name+' · '+doc.numPages+' páginas · '+required.length+' secciones · '+terms.length+' expresiones revisadas.');
   if(scanned)addLine('Texto no extraíble',false,scanned+' página(s) con poco texto; pueden contener imágenes o escaneos. No implica que falte contenido.');
-  let found=0;
-  for(const section of required){const matches=search(section);if(matches.length)found++;addLine('Sección: '+section,matches.length>0,matches.length?'Coincidencia de texto en página(s): '+matches.join(', ')+'. Confirmar que sea encabezado y que esté desarrollada.':'No se encontró la expresión. Puede aparecer con otra redacción.');}
+  let found=0;const findings=[];
+  for(const section of required){const matches=search(section);findings.push({name:section,found:matches.length>0,pages:matches});if(matches.length)found++;addLine('Sección: '+section,matches.length>0,matches.length?'Coincidencia de texto en página(s): '+matches.join(', ')+'. Confirmar que sea encabezado y que esté desarrollada.':'No se encontró la expresión. Puede aparecer con otra redacción.');}
   for(const term of terms){const matches=search(term);if(matches.length)found++;addLine('Expresión: '+term,matches.length>0,matches.length?'Coincidencia en página(s): '+matches.join(', ')+'.':'No se detectó coincidencia textual.');}
   const summary=document.createElement('p');summary.textContent='Coincidencias detectadas: '+found+' de '+(required.length+terms.length)+'. Este número no representa puntaje ni cumplimiento académico.';$('detail').prepend(summary);
-  $('print').hidden=false;$('rubric').hidden=false;
+  $('print').hidden=false;$('rubric').hidden=false;window.__kinecheckFindings=findings;
  }catch(e){setStatus('No fue posible revisar el PDF: '+e.message+'. Verifica el archivo y la conexión necesaria para cargar el lector PDF.');}
  finally{if(doc)await doc.destroy();$('run').disabled=false;}
 };
 $('print').onclick=()=>window.print();
 $('rubric').onclick=()=>{
  const criteria=lines($('sections').value);
+ if(!window.__kinecheckFindings){setStatus('Primero ejecuta la revisión del PDF.');return}
  if(!criteria.length){setStatus('Define al menos una sección para convertirla en criterio de la rúbrica.');return}
+ try{sessionStorage.setItem('kinecheck-evalua-transfer',JSON.stringify({findings:window.__kinecheckFindings,student:$('student').value.trim().slice(0,120),timestamp:Date.now()}));}catch(e){setStatus('No fue posible transferir el resultado: el navegador bloquea el almacenamiento temporal.');return}
  location.href='/evalua/calculadora.html#criterios='+encodeURIComponent(JSON.stringify(criteria));
 };
 </script></body></html>
