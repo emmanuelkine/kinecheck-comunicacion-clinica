@@ -81,3 +81,10 @@ header nav a{display:inline-flex;align-items:center;min-height:42px}
 @media(max-width:390px){
  .anatomy-model{inset:4px 68px 8px}
 }
+
+
+/* Integrate the Wikimedia anatomical plate into the dark KineCheck panel. */
+.anatomy-model{
+  mix-blend-mode:multiply;
+  filter:contrast(1.14) saturate(1.08) drop-shadow(0 18px 24px rgba(0,0,0,.62)) drop-shadow(0 0 16px rgba(99,226,220,.13));
+}
