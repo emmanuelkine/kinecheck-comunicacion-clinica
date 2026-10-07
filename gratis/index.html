@@ -152,7 +152,7 @@
       .card .action {
         align-self: flex-start;
       }
-      .teacher-tool {grid-column:1/-1;background:linear-gradient(120deg,#0d4650,#0f3037);border:2px solid #6de1dd;box-shadow:0 0 0 1px rgba(109,225,221,.15),0 20px 50px rgba(0,0,0,.25)} .teacher-tool h3{font-size:clamp(1.5rem,3vw,2.1rem)} .teacher-pill{display:inline-block;width:max-content;padding:5px 9px;border-radius:999px;background:#6de1dd;color:#06252a;font-size:.75rem;font-weight:900;letter-spacing:.06em}      .featured-ebook {
+      .teacher-tool{grid-column:1/-1;background:linear-gradient(125deg,#fff9ed 0%,#ffebc5 100%);border:2px solid #f9b333;box-shadow:0 18px 45px rgba(0,0,0,.25);color:#152332;padding:clamp(22px,3vw,36px)}.teacher-tool h3{font-size:clamp(1.8rem,3.5vw,2.6rem);color:#142132;margin:12px 0}.teacher-tool p{color:#263949;max-width:760px;font-size:1.06rem;line-height:1.65}.teacher-tool .eyebrow{color:#a94d08;background:transparent;border:0;padding:0;font-weight:800}.teacher-pill{display:inline-flex;align-items:center;width:max-content;padding:9px 17px;border-radius:999px;background:#ffb72c;color:#18212b;font-size:.93rem;font-weight:900;letter-spacing:.04em}.teacher-tool .action.primary{background:linear-gradient(110deg,#ffb52d,#f57b20);border:1px solid #e37a1d;color:#142132;font-weight:900;padding:15px 22px}.teacher-benefits{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px}.teacher-benefits span{border:1px solid #e8c58b;border-radius:12px;background:#fff9eb;padding:10px 13px;color:#203243;font-size:.9rem;font-weight:750}.teacher-upgrade{display:block;color:#9b4b13;font-weight:750;margin-top:12px;font-size:.9rem}      .featured-ebook {
         grid-column: 1/-1;
         display: grid;
         grid-template-columns: auto minmax(0, 1fr) auto;
@@ -308,12 +308,15 @@
         <span class="eyebrow">Recursos disponibles</span>
         <h2 id="biblioteca-title">Elige qué quieres aprender</h2>
         <div class="grid">
-          <article class="card teacher-tool">
-            <span class="teacher-pill">NUEVO · HERRAMIENTA GRATUITA</span>
-            <span class="eyebrow">¿Eres docente?</span>
-            <h3>Prueba KineCheck Evalúa</h3>
-            <p>Sube tu propia rúbrica y hasta 5 trabajos PDF por evaluación. KineCheck organiza una propuesta de corrección criterio por criterio; tú mantienes la decisión final.</p>
-            <a class="action primary" href="/evalua/" data-kc-resource="kinecheck-evalua" data-kc-format="web">Probar KineCheck Evalúa gratis →</a>
+          <article class="card teacher-tool" aria-labelledby="docente-title">
+            <span class="teacher-pill">SOY DOCENTE</span>
+            <h3 id="docente-title">Evalúa los trabajos de tus estudiantes</h3>
+            <p>Revisa hasta 5 informes PDF en una sola evaluación. Define los requisitos, comprueba coincidencias textuales y organiza tus resultados. Tú validas los puntajes y la retroalimentación.</p>
+            <div class="teacher-benefits" aria-label="Funciones disponibles">
+              <span>Hasta 5 PDF gratis</span><span>Tus propios requisitos</span><span>Notas de 1,0 a 7,0</span><span>Exportación a Excel (CSV)</span>
+            </div>
+            <a class="action primary" href="/evalua/lote.html" data-kc-resource="kinecheck-evalua" data-kc-format="web">Probar KineCheck Evalúa gratis →</a>
+            <span class="teacher-upgrade">Versión Completa: hasta 40 PDF por evaluación · Próximamente</span>
           </article>
           <article class="card featured-ebook">
             <div class="ebook-badge" aria-hidden="true">PDF</div>
