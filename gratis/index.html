@@ -152,7 +152,7 @@
       .card .action {
         align-self: flex-start;
       }
-      .featured-ebook {
+      .teacher-tool {grid-column:1/-1;background:linear-gradient(120deg,#0d4650,#0f3037);border:2px solid #6de1dd;box-shadow:0 0 0 1px rgba(109,225,221,.15),0 20px 50px rgba(0,0,0,.25)} .teacher-tool h3{font-size:clamp(1.5rem,3vw,2.1rem)} .teacher-pill{display:inline-block;width:max-content;padding:5px 9px;border-radius:999px;background:#6de1dd;color:#06252a;font-size:.75rem;font-weight:900;letter-spacing:.06em}      .featured-ebook {
         grid-column: 1/-1;
         display: grid;
         grid-template-columns: auto minmax(0, 1fr) auto;
@@ -308,6 +308,13 @@
         <span class="eyebrow">Recursos disponibles</span>
         <h2 id="biblioteca-title">Elige qué quieres aprender</h2>
         <div class="grid">
+          <article class="card teacher-tool">
+            <span class="teacher-pill">NUEVO · HERRAMIENTA GRATUITA</span>
+            <span class="eyebrow">¿Eres docente?</span>
+            <h3>Prueba KineCheck Evalúa</h3>
+            <p>Sube tu propia rúbrica y hasta 5 trabajos PDF por evaluación. KineCheck organiza una propuesta de corrección criterio por criterio; tú mantienes la decisión final.</p>
+            <a class="action primary" href="/evalua/" data-kc-resource="kinecheck-evalua" data-kc-format="web">Probar KineCheck Evalúa gratis →</a>
+          </article>
           <article class="card featured-ebook">
             <div class="ebook-badge" aria-hidden="true">PDF</div>
             <div>
