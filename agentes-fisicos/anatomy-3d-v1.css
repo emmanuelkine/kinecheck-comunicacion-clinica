@@ -61,3 +61,23 @@ header nav a{display:inline-flex;align-items:center;min-height:42px}
  .anatomy-label{font-size:.63rem;padding:5px 7px}
  .anatomy-label.free-region:after{display:block;line-height:1.1;margin-top:2px}
 }
+
+/* v2: professional anatomical plate */
+.anatomy-model{
+  inset:8px 60px 12px;
+  background:
+    radial-gradient(ellipse at center,rgba(99,226,220,.12),transparent 66%),
+    url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Muscles%20anterior.png?width=964") center/contain no-repeat;
+  filter:drop-shadow(0 18px 24px rgba(0,0,0,.62)) drop-shadow(0 0 16px rgba(99,226,220,.13));
+  transform:none;
+}
+.anatomy-model .part,.anatomy-model .core,.anatomy-model .muscle-line,.anatomy-model .clinical-glow{display:none!important}
+.anatomy-model:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,27,32,.12),transparent 22% 78%,rgba(6,27,32,.12));pointer-events:none}
+.anatomy-model .caption{bottom:-20px}
+@media(max-width:780px){
+ .anatomy-model{inset:4px 76px 8px;background-size:contain}
+ .anatomy-model .caption{bottom:-14px;font-size:.52rem}
+}
+@media(max-width:390px){
+ .anatomy-model{inset:4px 68px 8px}
+}
