@@ -1,0 +1,47 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Calculadora de rúbricas · KineCheck Evalúa</title><style>
+:root{font-family:system-ui,Arial,sans-serif;color-scheme:dark}body{margin:0;background:radial-gradient(circle at 90% 0%,#0a4650,#07151e 50%);color:#e7f8fa}main{max-width:950px;margin:auto;padding:26px 18px 65px}a{color:#71f1ea}.hero,.panel{background:#0b2530;border:1px solid #32737c;border-radius:18px;padding:24px;margin:18px 0}h1{font-size:clamp(1.8rem,5vw,2.7rem);margin:10px 0}h2{margin-top:0}p,small{color:#b7d5db}label{display:block;font-weight:650;margin:12px 0 6px}input,textarea,select{box-sizing:border-box;width:100%;border:1px solid #52717b;background:#061923;color:#fff;border-radius:9px;padding:11px;font:inherit}textarea{min-height:70px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.criterion{border:1px solid #365c65;border-radius:12px;padding:15px;margin:12px 0}.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}button{border:0;border-radius:9px;padding:11px 15px;font-weight:750;cursor:pointer;background:#59e7de;color:#042329}button.secondary{background:#234752;color:#fff}button.danger{background:#5c3036;color:#fff}.total{font-size:2rem;font-weight:800;color:#79f6e9}.error{color:#ffc3c3} .muted{color:#aec5cc}.criterion-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.criterion-head button{flex-shrink:0}.resultline{padding:12px 0;border-bottom:1px solid #31535b}@media print{body{background:white;color:black;color-scheme:light}main{max-width:none;padding:0}.hero,.panel{background:white;border:0;color:black;padding:10px 0}input,textarea,select{color:black;background:white;border:0;padding:2px}button,.no-print,nav{display:none!important}.criterion{break-inside:avoid;border:1px solid #888}.total{color:black}p,small{color:#333}}
+</style></head><body><main><nav><a href="/evalua/">← KineCheck Evalúa</a></nav><section class="hero"><img src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck" style="max-width:185px"><h1>Calculadora gratuita de rúbricas</h1><p>El docente selecciona los puntajes. KineCheck los suma y calcula la nota automáticamente. Sin IA, sin API y sin subir datos a un servidor.</p></section>
+<section class="panel"><h2>Datos de la evaluación</h2><div class="grid"><div><label for="evaluation">Evaluación</label><input id="evaluation" placeholder="Informe clínico"></div><div><label for="student">Estudiante o código</label><input id="student" placeholder="Identificador"></div><div><label for="requirement">Exigencia (%)</label><input id="requirement" type="number" min="1" max="99" value="60"></div></div><p class="muted">Configura cada criterio con su puntaje máximo. Puedes asignar cualquier puntaje entre 0 y ese máximo, incluidos decimales. Si tu rúbrica exige niveles fijos, ingresa exclusivamente el puntaje del nivel correspondiente.</p></section>
+<section class="panel"><h2>Criterios de la rúbrica</h2><div id="criteria"></div><div class="buttons no-print"><button id="add" type="button">+ Añadir criterio</button><button id="reset" type="button" class="secondary">Nueva evaluación</button></div></section>
+<section class="panel" aria-live="polite"><h2>Resultado</h2><div id="summary"></div><p id="error" class="error" role="alert"></p><div class="buttons no-print"><button id="print" type="button">Imprimir / guardar PDF</button><button id="export" type="button" class="secondary">Descargar resultados CSV</button></div><p class="muted">El resultado se calcula con escala lineal por tramos: 1,0 en 0 %, 4,0 al alcanzar la exigencia y 7,0 en 100 %. No sustituye la revisión docente.</p></section><small>Documento generado localmente · KineCheck Evalúa · kinecheck.cl. No se guardan ni envían datos desde esta calculadora.</small></main>
+<script type="module">
+function calcularNota(p,m,e=60){if(![p,m,e].every(Number.isFinite)||m<=0||p<0||p>m||e<=0||e>=100)throw Error('Puntaje inválido');let q=p/m,u=e/100;return Math.round((q<=u?1+3*q/u:4+3*(q-u)/(1-u))*10)/10;}
+const $=id=>document.getElementById(id);
+let counter=0;
+function number(v){return v.trim()===""?NaN:Number(v.replace(",","."))}
+function addCriterion(title="",max="10",score="",feedback=""){
+ const id=++counter,div=document.createElement("div");div.className="criterion";div.dataset.id=id;
+ div.innerHTML='<div class="criterion-head"><strong>Criterio '+id+'</strong><button type="button" class="danger remove no-print">Eliminar</button></div><div class="grid"><div><label>Nombre del criterio</label><input class="title" placeholder="Ej. Fundamentación"></div><div><label>Máximo de puntos</label><input class="max" inputmode="decimal" placeholder="10"></div><div><label>Puntos obtenidos</label><input class="score" inputmode="decimal" placeholder="Pendiente"></div></div><label>Retroalimentación docente</label><textarea class="feedback" placeholder="Fortalezas y aspectos por mejorar"></textarea>';
+ div.querySelector(".title").value=title;div.querySelector(".max").value=max;div.querySelector(".score").value=score;div.querySelector(".feedback").value=feedback;
+ div.querySelector(".remove").onclick=()=>{div.remove();calculate()};
+ div.addEventListener("input",calculate);$("criteria").append(div);calculate();
+}
+function getRows(){return [...document.querySelectorAll(".criterion")].map((div,i)=>({name:div.querySelector(".title").value.trim()||"Criterio "+(i+1),max:number(div.querySelector(".max").value),score:number(div.querySelector(".score").value),feedback:div.querySelector(".feedback").value.trim()}))}
+function calculate(){
+ const rows=getRows(),req=number($("requirement").value),error=$("error");error.textContent="";
+ if(!rows.length){$("summary").textContent="Agrega un criterio.";return}
+ if(!Number.isFinite(req)||req<=0||req>=100){error.textContent="La exigencia debe estar entre 1 y 99 %."; $("summary").textContent="";return}
+ let total=0,maxTotal=0,complete=true;
+ for(let i=0;i<rows.length;i++){const r=rows[i];if(!Number.isFinite(r.max)||r.max<=0){error.textContent="Revisa el puntaje máximo del criterio "+(i+1);$("summary").textContent="";return}maxTotal+=r.max;if(!Number.isFinite(r.score)){complete=false;continue}if(r.score<0||r.score>r.max){error.textContent="El puntaje del criterio "+(i+1)+" debe estar entre 0 y "+r.max; $("summary").textContent="";return}total+=r.score}
+ const percent=100*total/maxTotal,grade=complete?calcularNota(total,maxTotal,req):null;
+ $("summary").replaceChildren();
+ const headline=document.createElement("div");headline.className="total";headline.textContent=complete?"Nota final: "+grade.toFixed(1).replace(".",","):"Nota pendiente: faltan puntajes";$("summary").append(headline);
+ const p=document.createElement("p");p.textContent="Puntaje registrado: "+total.toLocaleString("es-CL")+" / "+maxTotal.toLocaleString("es-CL")+" · Exigencia "+req+" %"+(complete?" · Logro "+percent.toFixed(1).replace(".",",")+" %":"");$("summary").append(p);
+ for(const r of rows){const line=document.createElement("div");line.className="resultline";line.textContent=r.name+": "+(Number.isFinite(r.score)?r.score:"Pendiente")+" / "+r.max+(r.feedback?" — "+r.feedback:"");$("summary").append(line)}
+}
+$("add").onclick=()=>addCriterion();
+$("reset").onclick=()=>{if(confirm("¿Borrar los criterios y comenzar otra evaluación?")){$("criteria").replaceChildren();$("evaluation").value="";$("student").value="";$("requirement").value="60";addCriterion()}};
+$("requirement").addEventListener("input",calculate);
+$("print").onclick=()=>{calculate();if(!$("error").textContent)window.print()};
+$("export").onclick=()=>{
+ calculate();if($("error").textContent)return;
+ const rows=getRows(),req=number($("requirement").value);
+ if(rows.some(r=>!Number.isFinite(r.score))){$("error").textContent="Completa todos los puntajes antes de exportar.";return}
+ const total=rows.reduce((s,r)=>s+r.score,0),max=rows.reduce((s,r)=>s+r.max,0);
+ const esc=x=>'"'+String(x??"").replaceAll('"','""')+'"';
+ const data=[["Evaluación",$("evaluation").value],["Estudiante",$("student").value],["Exigencia",req],[],["Criterio","Máximo","Obtenido","Retroalimentación"],...rows.map(r=>[r.name,r.max,r.score,r.feedback]),[],["TOTAL",max,total],["NOTA","",calcularNota(total,max,req).toFixed(1)]];
+ const blob=new Blob(["\uFEFF"+data.map(r=>r.map(esc).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="kinecheck-evalua-resultados.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+addCriterion("Introducción","10");addCriterion("Desarrollo","30");addCriterion("Fundamentación","20");addCriterion("Conclusiones","10");addCriterion("Presentación","10");
+</script></body></html>
