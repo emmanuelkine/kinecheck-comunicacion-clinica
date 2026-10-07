@@ -1,0 +1,52 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Revisión objetiva de informes · KineCheck Evalúa</title><style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif}body{margin:0;background:linear-gradient(135deg,#06141f,#0c343b);color:#eafafa}main{max-width:930px;margin:auto;padding:26px 18px 65px}a{color:#69eee5}.panel{background:#0c2831;border:1px solid #34747c;border-radius:18px;padding:22px;margin:18px 0}h1{font-size:clamp(1.7rem,4vw,2.6rem)}p{color:#bad6da;line-height:1.55}label{display:block;margin:14px 0 6px;font-weight:650}input[type=file],input[type=text],textarea{width:100%;box-sizing:border-box;border:1px solid #4a7880;background:#081b23;color:white;border-radius:10px;padding:11px;font:inherit}button{border:0;border-radius:10px;background:#6ae9df;color:#05282c;padding:12px 18px;font-weight:750;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.status{padding:12px;border-radius:10px;background:#133d47;margin:10px 0}.warn{color:#ffd9a5}.ok{color:#7ff5c6}.bad{color:#ffb7b7}.item{border-bottom:1px solid #325961;padding:13px 0}.item strong{display:block}.item small{color:#a6c5cc}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.hide-print{}@media print{body{background:white;color:black;color-scheme:light}.panel{border:0;padding:8px 0}button,input,.hide-print,nav{display:none!important}p,.item small{color:#333}.status{background:white;color:black}.item{break-inside:avoid}}
+</style></head><body><main><nav><a href="/evalua/">← KineCheck Evalúa</a></nav><section class="panel"><img src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck" style="max-width:190px"><h1>Revisión objetiva de informes PDF</h1><p>Comprueba automáticamente la presencia de secciones y términos exigidos. El archivo se analiza en tu navegador y no se sube a KineCheck. Sin IA de pago.</p><p class="warn">Esta herramienta detecta texto, no evalúa calidad científica, originalidad ni razonamiento. Un encabezado presente no garantiza que la sección esté bien desarrollada.</p></section>
+<section class="panel hide-print"><h2>Configurar revisión</h2><label for="file">Informe del estudiante (PDF, máximo 15 MB)</label><input id="file" type="file" accept=".pdf,application/pdf"><label for="student">Estudiante o código (opcional)</label><input id="student" type="text" placeholder="Código del estudiante"><label for="sections">Secciones requeridas (una por línea)</label><textarea id="sections" rows="8">Portada
+Índice
+Introducción
+Desarrollo
+Conclusiones
+Referencias</textarea><label for="terms">Términos o expresiones obligatorias (uno por línea; opcional)</label><textarea id="terms" rows="4" placeholder="Ej. Objetivos de intervención"></textarea><p>Las coincidencias ignoran mayúsculas, tildes y espacios repetidos. Para evitar falsos positivos, cada resultado necesita revisión docente.</p><button id="run" type="button">Revisar informe</button></section>
+<section class="panel" id="results" aria-live="polite"><h2>Resultado de la revisión</h2><div id="status" class="status">Selecciona un PDF y pulsa «Revisar informe».</div><div id="detail"></div><button class="hide-print" id="print" type="button" hidden>Imprimir resultado / guardar PDF</button></section><p>Herramienta de apoyo · KineCheck Evalúa · No asigna puntajes ni calificaciones por coincidencias de palabras.</p></main>
+<script type="module">
+const $=id=>document.getElementById(id);
+const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+const lines=s=>[...new Set(s.split(/\r?\n/).map(x=>x.trim()).filter(Boolean))].slice(0,50);
+function setStatus(t){$('status').textContent=t}
+function addLine(label,result,info){const div=document.createElement('div');div.className='item';const title=document.createElement('strong');title.textContent=(result?'✓ Encontrado: ':'○ No detectado: ')+label;title.className=result?'ok':'warn';const desc=document.createElement('small');desc.textContent=info;div.append(title,desc);$('detail').append(div)}
+$('run').onclick=async()=>{
+ const f=$('file').files[0];$('detail').replaceChildren();$('print').hidden=true;
+ if(!f){setStatus('Selecciona un archivo PDF.');return}
+ if(f.size===0||f.size>15*1024*1024){setStatus('El archivo debe tener entre 1 byte y 15 MB.');return}
+ const required=lines($('sections').value),terms=lines($('terms').value);
+ if(!required.length&&!terms.length){setStatus('Indica al menos una sección o expresión requerida.');return}
+ $('run').disabled=true;setStatus('Leyendo PDF localmente…');
+ let doc=null;
+ try{
+  const bytes=new Uint8Array(await f.arrayBuffer());
+  if(new TextDecoder().decode(bytes.slice(0,5))!=='%PDF-')throw Error('El archivo no tiene una firma PDF válida.');
+  const pdfjs=await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.mjs');
+  pdfjs.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.mjs';
+  doc=await pdfjs.getDocument({data:bytes}).promise;
+  if(doc.numPages>100)throw Error('El PDF supera el límite de 100 páginas.');
+  const pages=[];let length=0;
+  for(let i=1;i<=doc.numPages;i++){
+   const page=await doc.getPage(i);const content=await page.getTextContent();
+   const text=content.items.map(x=>x.str||'').join(' ');
+   length+=text.length;if(length>300000)throw Error('El texto supera el límite de 300.000 caracteres.');
+   pages.push({number:i,text:norm(text)});page.cleanup();
+  }
+  const scanned=pages.filter(p=>p.text.length<15).length;
+  const search=q=>{const n=norm(q);return pages.filter(p=>p.text.includes(n)).map(p=>p.number)};
+  setStatus('Archivo: '+f.name+' · '+doc.numPages+' páginas · '+required.length+' secciones · '+terms.length+' expresiones revisadas.');
+  if(scanned)addLine('Texto no extraíble',false,scanned+' página(s) con poco texto; pueden contener imágenes o escaneos. No implica que falte contenido.');
+  let found=0;
+  for(const section of required){const matches=search(section);if(matches.length)found++;addLine('Sección: '+section,matches.length>0,matches.length?'Coincidencia de texto en página(s): '+matches.join(', ')+'. Confirmar que sea encabezado y que esté desarrollada.':'No se encontró la expresión. Puede aparecer con otra redacción.');}
+  for(const term of terms){const matches=search(term);if(matches.length)found++;addLine('Expresión: '+term,matches.length>0,matches.length?'Coincidencia en página(s): '+matches.join(', ')+'.':'No se detectó coincidencia textual.');}
+  const summary=document.createElement('p');summary.textContent='Coincidencias detectadas: '+found+' de '+(required.length+terms.length)+'. Este número no representa puntaje ni cumplimiento académico.';$('detail').prepend(summary);
+  $('print').hidden=false;
+ }catch(e){setStatus('No fue posible revisar el PDF: '+e.message+'. Verifica el archivo y la conexión necesaria para cargar el lector PDF.');}
+ finally{if(doc)await doc.destroy();$('run').disabled=false;}
+};
+$('print').onclick=()=>window.print();
+</script></body></html>
