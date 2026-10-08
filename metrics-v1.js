@@ -302,9 +302,20 @@
     }
 
     if (href && /pay\.hotmart\.com/i.test(href)) {
-      if (markOnce("buy_click", slug || "unknown")) send("buy_click", { productSlug: slug });
-      if (markOnce("checkout_start", slug || "unknown")) send("checkout_start", { productSlug: slug });
-      if (markOnce("hotmart_outbound", slug || "unknown")) send("hotmart_outbound", { productSlug: slug });
+      // Track only consented, non-sensitive purchase context. Never store checkout URL/query.
+      const purchaseProduct = cleanProduct(slug)
+        || cleanProduct(anchor?.getAttribute("data-product-slug"))
+        || cleanProduct(anchor?.getAttribute("data-course"))
+        || currentProduct();
+      const purchaseMetadata = {
+        source_path: String(location.pathname || "/").slice(0, 180),
+        destination_host: "pay.hotmart.com",
+        product_identified: Boolean(purchaseProduct),
+      };
+      const funnelKey = purchaseProduct || "unknown";
+      if (markOnce("buy_click", funnelKey)) send("buy_click", { productSlug: purchaseProduct, metadata: purchaseMetadata });
+      if (markOnce("checkout_start", funnelKey)) send("checkout_start", { productSlug: purchaseProduct, metadata: purchaseMetadata });
+      if (markOnce("hotmart_outbound", funnelKey)) send("hotmart_outbound", { productSlug: purchaseProduct, metadata: purchaseMetadata });
       return;
     }
 
