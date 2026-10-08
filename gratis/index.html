@@ -189,8 +189,9 @@
       .featured-tendinopathy figure img {
         display: block;
         width: 100%;
-        aspect-ratio: 4 / 3;
-        object-fit: cover;
+        aspect-ratio: 520 / 420;
+        object-fit: contain;
+        background: #122a3e;
       }
       .featured-tendinopathy figcaption {
         padding: 8px 5px;
@@ -206,6 +207,10 @@
           grid-template-areas: "copy" "visuals" "action";
         }
         .featured-tendinopathy .action { width: 100%; box-sizing: border-box; text-align: center; }
+      }
+      @media (max-width: 500px) {
+        .featured-tendinopathy .tendino-visuals { grid-template-columns: 1fr; }
+        .featured-tendinopathy figure img { max-height: 260px; }
       }
       .featured-ebook {
         grid-column: 1/-1;
