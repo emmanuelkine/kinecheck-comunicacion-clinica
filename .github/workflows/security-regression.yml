@@ -1,0 +1,21 @@
+name: Security source regression
+on:
+  push:
+    branches: [security/harden-beta-apply-20261008]
+  pull_request:
+    paths:
+      - 'supabase/functions/beta-apply/**'
+      - 'supabase/functions/metric-event/**'
+      - 'security/security-source-regression.test.mjs'
+      - '.github/workflows/security-regression.yml'
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test security/security-source-regression.test.mjs

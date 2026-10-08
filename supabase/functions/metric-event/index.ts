@@ -89,16 +89,17 @@ function isUuid(value: string) {
   );
 }
 
+// Client-provided metadata must never store arbitrary identifiers or free text.
+const metadataKeys = new Set(["source", "channel", "placement", "resource", "section", "action", "variant"]);
+const safeMetadataValue = /^[a-zA-Z0-9_-]{1,48}$/;
 function cleanMetadata(value: unknown) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};
   const source = value as Record<string, unknown>;
-  const output: Record<string, string | number | boolean> = {};
-  for (const [key, raw] of Object.entries(source).slice(0, 8)) {
-    const safeKey = clean(key, 40).replace(/[^a-zA-Z0-9_-]/g, "");
-    if (!safeKey) continue;
-    if (typeof raw === "boolean" || typeof raw === "number")
-      output[safeKey] = raw;
-    else output[safeKey] = clean(raw, 120);
+  const output: Record<string, string> = {};
+  for (const [key, raw] of Object.entries(source)) {
+    if (!metadataKeys.has(key) || typeof raw !== "string") continue;
+    const candidate = raw.trim();
+    if (safeMetadataValue.test(candidate)) output[key] = candidate;
   }
   return output;
 }
@@ -148,11 +149,37 @@ Deno.serve(async (req: Request) => {
   if (!origin || !allowedOrigins.has(origin))
     return json(origin, { message: "Origen no autorizado." }, 403);
 
-  const contentLength = Number(req.headers.get("content-length") || 0);
-  if (contentLength > 8_000)
+  const maxBytes = 8_000;
+  const declaredLength = Number(req.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes)
     return json(origin, { message: "Solicitud demasiado extensa." }, 413);
 
-  const body = await req.json().catch(() => null);
+  let body: any = null;
+  try {
+    const reader = req.body?.getReader();
+    if (!reader) return json(origin, { message: "Solicitud inválida." }, 400);
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > maxBytes) {
+        await reader.cancel().catch(() => {});
+        return json(origin, { message: "Solicitud demasiado extensa." }, 413);
+      }
+      chunks.push(value);
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    body = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
+  } catch {
+    return json(origin, { message: "Solicitud inválida." }, 400);
+  }
   if (!body || typeof body !== "object")
     return json(origin, { message: "Solicitud inválida." }, 400);
 

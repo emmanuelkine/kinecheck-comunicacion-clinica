@@ -57,12 +57,39 @@ Deno.serve(async (req: Request) => {
     return json(origin, { message: "Origen no autorizado." }, 403);
   }
 
-  const contentLength = Number(req.headers.get("content-length") || 0);
-  if (contentLength > 20_000) {
+  // Enforce an actual byte limit; Content-Length is controlled by the caller
+  // and may be missing for streamed requests.
+  const maxBytes = 20_000;
+  const declaredLength = Number(req.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
     return json(origin, { message: "Solicitud demasiado extensa." }, 413);
   }
-
-  const body = await req.json().catch(() => null);
+  let body: any = null;
+  try {
+    const reader = req.body?.getReader();
+    if (!reader) return json(origin, { message: "Solicitud inválida." }, 400);
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > maxBytes) {
+        await reader.cancel().catch(() => {});
+        return json(origin, { message: "Solicitud demasiado extensa." }, 413);
+      }
+      chunks.push(value);
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    body = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
+  } catch {
+    return json(origin, { message: "Solicitud inválida." }, 400);
+  }
   if (!body || typeof body !== "object") {
     return json(origin, { message: "Solicitud inválida." }, 400);
   }
@@ -138,14 +165,17 @@ Deno.serve(async (req: Request) => {
     return json(origin, { message: "No fue posible registrar la postulación." }, 500);
   }
 
-  // Throttle repeated submissions for the same email without exposing applicant status.
-  const lastSubmittedAt = existing?.last_submitted_at
-    ? new Date(existing.last_submitted_at).getTime()
-    : 0;
-  if (Number.isFinite(lastSubmittedAt) && lastSubmittedAt > 0 && Date.now() - lastSubmittedAt < 15 * 60 * 1000) {
-    return json(origin, { message: "Ya recibimos una postulación reciente. Espera 15 minutos antes de volver a enviarla." }, 429);
+  // Existing records are immutable through this unauthenticated endpoint.
+  // Origin and possession of an email address do not establish identity.
+  // Respond identically for new/known addresses to avoid account enumeration.
+  if (existing) {
+    return json(origin, {
+      ok: true,
+      message: "Postulación recibida. Revisaremos el perfil antes de enviar una invitación.",
+    });
   }
 
+  const now = new Date().toISOString();
   const payload = {
     email,
     full_name: fullName,
@@ -157,18 +187,15 @@ Deno.serve(async (req: Request) => {
     consent_privacy: consentPrivacy,
     consent_contact: consentContact,
     source: "website_beta",
-    last_submitted_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    submission_count: Number(existing?.submission_count || 0) + 1,
-    status: existing?.status || "new",
+    last_submitted_at: now,
+    updated_at: now,
+    submission_count: 1,
+    status: "new",
   };
 
-  const query = existing?.id
-    ? admin.from("beta_applications").update(payload).eq("id", existing.id)
-    : admin.from("beta_applications").insert(payload);
-
-  const { error } = await query;
-  if (error) {
+  // Insert only. Concurrent duplicate submissions must never become updates.
+  const { error } = await admin.from("beta_applications").insert(payload);
+  if (error && error.code !== "23505") {
     console.error("beta-apply write", error.code);
     return json(origin, { message: "No fue posible registrar la postulación." }, 500);
   }
