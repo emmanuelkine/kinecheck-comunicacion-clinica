@@ -377,6 +377,15 @@
         .resource-art { min-height: 96px; padding-inline: 16px; }
       }
 
+      /* Mobile Android: avoid clipping and fixed consent control covering CTAs. */
+      .featured-neuromodulation, .featured-neuromodulation .tendino-visuals, .featured-neuromodulation figure { min-width:0; max-width:100%; }
+      .featured-neuromodulation figure img { width:100%; height:auto; max-height:none; object-fit:contain; }
+      @media(max-width:700px){
+        .featured-neuromodulation { grid-template-columns:minmax(0,1fr); }
+        .featured-neuromodulation .tendino-visuals { grid-template-columns:minmax(0,1fr)!important; }
+        #kc-metrics-toggle { left:auto; right:max(8px,env(safe-area-inset-right)); bottom:max(8px,env(safe-area-inset-bottom)); max-width:145px; padding:6px 9px; font-size:11px; line-height:1.25; white-space:normal; }
+        #kc-metrics-panel { left:8px; bottom:max(8px,env(safe-area-inset-bottom)); width:calc(100vw - 16px); }
+      }
     </style>
     <link rel="stylesheet" href="../assets/brand/kinecheck-3d.css?v=1" />
     <link rel="stylesheet" href="./brand-3d.css?v=3" />
@@ -496,7 +505,7 @@
               <p>TENS, microcorrientes NESA, estimulación percutánea y cerebral. Explora mecanismos, evidencia, seguridad y un caso clínico interactivo. Acceso abierto, sin pago ni registro.</p>
             </div>
             <div class="tendino-visuals" aria-label="Ilustración clínica de neuromodulación" style="grid-template-columns:1fr">
-              <figure><img src="/gratis/neuromodulacion/neuromodulacion.svg" alt="Ilustración educativa de médula espinal, nervios periféricos y electrodos de neuromodulación" loading="lazy" width="960" height="500" style="aspect-ratio:960/500;object-fit:cover"><figcaption>Vías nerviosas · Estimulación eléctrica</figcaption></figure>
+              <figure><img src="/gratis/neuromodulacion/neuromodulacion.svg" alt="Ilustración educativa de médula espinal, nervios periféricos y electrodos de neuromodulación" loading="lazy" width="960" height="500" style="aspect-ratio:960/500;object-fit:contain"><figcaption>Vías nerviosas · Estimulación eléctrica</figcaption></figure>
             </div>
             <a class="action primary" href="/gratis/neuromodulacion/" data-kc-resource="neuromodulacion-dolor" data-kc-format="web">Explorar recurso gratuito</a>
           </article>
