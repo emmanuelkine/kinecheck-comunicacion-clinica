@@ -152,7 +152,62 @@
       .card .action {
         align-self: flex-start;
       }
-      .teacher-tool{grid-column:1/-1;background:linear-gradient(125deg,#fff9ed 0%,#ffebc5 100%);border:2px solid #f9b333;box-shadow:0 18px 45px rgba(0,0,0,.25);color:#152332;padding:clamp(22px,3vw,36px)}.teacher-tool h3{font-size:clamp(1.8rem,3.5vw,2.6rem);color:#142132;margin:12px 0}.teacher-tool p{color:#263949;max-width:760px;font-size:1.06rem;line-height:1.65}.teacher-tool .eyebrow{color:#a94d08;background:transparent;border:0;padding:0;font-weight:800}.teacher-pill{display:inline-flex;align-items:center;width:max-content;padding:9px 17px;border-radius:999px;background:#ffb72c;color:#18212b;font-size:.93rem;font-weight:900;letter-spacing:.04em}.teacher-tool .action.primary{background:linear-gradient(110deg,#ffb52d,#f57b20);border:1px solid #e37a1d;color:#142132;font-weight:900;padding:15px 22px}.teacher-benefits{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px}.teacher-benefits span{border:1px solid #e8c58b;border-radius:12px;background:#fff9eb;padding:10px 13px;color:#203243;font-size:.9rem;font-weight:750}.teacher-upgrade{display:block;color:#9b4b13;font-weight:750;margin-top:12px;font-size:.9rem}      .featured-ebook {
+      .teacher-tool{grid-column:1/-1;background:linear-gradient(125deg,#fff9ed 0%,#ffebc5 100%);border:2px solid #f9b333;box-shadow:0 18px 45px rgba(0,0,0,.25);color:#152332;padding:clamp(22px,3vw,36px)}.teacher-tool h3{font-size:clamp(1.8rem,3.5vw,2.6rem);color:#142132;margin:12px 0}.teacher-tool p{color:#263949;max-width:760px;font-size:1.06rem;line-height:1.65}.teacher-tool .eyebrow{color:#a94d08;background:transparent;border:0;padding:0;font-weight:800}.teacher-pill{display:inline-flex;align-items:center;width:max-content;padding:9px 17px;border-radius:999px;background:#ffb72c;color:#18212b;font-size:.93rem;font-weight:900;letter-spacing:.04em}.teacher-tool .action.primary{background:linear-gradient(110deg,#ffb52d,#f57b20);border:1px solid #e37a1d;color:#142132;font-weight:900;padding:15px 22px}.teacher-benefits{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px}.teacher-benefits span{border:1px solid #e8c58b;border-radius:12px;background:#fff9eb;padding:10px 13px;color:#203243;font-size:.9rem;font-weight:750}.teacher-upgrade{display:block;color:#9b4b13;font-weight:750;margin-top:12px;font-size:.9rem}      .featured-tendinopathy {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+        grid-template-areas: "copy visuals" "action visuals";
+        align-items: center;
+        gap: 18px 26px;
+        padding: clamp(22px, 3.5vw, 34px);
+        background: linear-gradient(125deg, #103e46 0%, #163b56 58%, #282e54 100%);
+        border: 2px solid #62ded8;
+        box-shadow: 0 18px 46px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255,255,255,.08);
+      }
+      .featured-tendinopathy .tendino-copy { grid-area: copy; }
+      .featured-tendinopathy h3 {
+        margin: 9px 0;
+        max-width: 650px;
+        font-size: clamp(1.5rem, 3.1vw, 2.15rem);
+        line-height: 1.2;
+      }
+      .featured-tendinopathy p { margin: 0; }
+      .featured-tendinopathy .tendino-visuals {
+        grid-area: visuals;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 9px;
+      }
+      .featured-tendinopathy figure {
+        min-width: 0;
+        margin: 0;
+        overflow: hidden;
+        border: 1px solid rgba(139, 228, 228, .42);
+        border-radius: 14px;
+        background: linear-gradient(150deg, #183e50, #102a3a);
+      }
+      .featured-tendinopathy figure img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+      }
+      .featured-tendinopathy figcaption {
+        padding: 8px 5px;
+        color: #dcf7f5;
+        text-align: center;
+        font-size: .875rem;
+        font-weight: 750;
+      }
+      .featured-tendinopathy .action { grid-area: action; justify-self: start; }
+      @media (max-width: 700px) {
+        .featured-tendinopathy {
+          grid-template-columns: 1fr;
+          grid-template-areas: "copy" "visuals" "action";
+        }
+        .featured-tendinopathy .action { width: 100%; box-sizing: border-box; text-align: center; }
+      }
+      .featured-ebook {
         grid-column: 1/-1;
         display: grid;
         grid-template-columns: auto minmax(0, 1fr) auto;
@@ -325,7 +380,20 @@
 <div class="teacher-benefits"><span>Muñeca + tobillo gratis</span><span>18 modalidades</span><span>Evidencia por indicación</span><span>Acceso a PubMed</span></div>
 <a class="action primary" href="/agentes-fisicos/" data-kc-resource="agentes-fisicos-evidencia" data-kc-format="web">Explorar agentes físicos gratis →</a>
 <span class="teacher-upgrade" style="color:#9fe9e5">Cervical, hombro, codo, lumbar, cadera y rodilla: versión completa próximamente.</span>
-</article><article class="card featured-ebook">
+</article>
+          <article class="card featured-tendinopathy" aria-labelledby="tendinopatias-title">
+            <div class="tendino-copy">
+              <span class="eyebrow">Nuevo · Recurso gratuito</span>
+              <h3 id="tendinopatias-title">Tendinopatías: evaluación clínica, manejo de cargas y ejercicio terapéutico</h3>
+              <p>Revisa criterios de evaluación, decisiones de carga y ejercicio terapéutico, con esquemas anatómicos de Aquiles, tendón rotuliano y tendones glúteos. Acceso abierto, sin pago ni registro.</p>
+            </div>
+            <div class="tendino-visuals" aria-label="Ilustraciones anatómicas incluidas en el recurso">
+              <figure><img src="/gratis/tendinopatias/aquiles.svg" alt="Esquema anatómico del tendón de Aquiles" loading="lazy" width="480" height="360"><figcaption>Aquiles</figcaption></figure>
+              <figure><img src="/gratis/tendinopatias/rotuliano.svg" alt="Esquema anatómico del tendón rotuliano" loading="lazy" width="480" height="360"><figcaption>Rotuliano</figcaption></figure>
+              <figure><img src="/gratis/tendinopatias/gluteo.svg" alt="Esquema anatómico de los tendones glúteos" loading="lazy" width="480" height="360"><figcaption>Glúteo</figcaption></figure>
+            </div>
+            <a class="action primary" href="/gratis/tendinopatias/" data-kc-resource="tendinopatias-evaluacion-carga-ejercicio" data-kc-format="web">Explorar recurso gratuito</a>
+          </article><article class="card featured-ebook">
             <div class="ebook-badge" aria-hidden="true">PDF</div>
             <div>
               <span class="eyebrow">eBook KineCheck · Descarga gratuita</span>
@@ -684,7 +752,7 @@
           >
         </div>
       </section>
-    <section aria-label="Nuevo recurso de tendinopatías" style="max-width:1100px;margin:24px auto;padding:24px;border:1px solid #37a7a5;border-radius:18px;background:#10343b;color:#e8f8f7"><p style="color:#7be7dc;font-weight:700">NUEVO · RECURSO GRATUITO</p><h2>Tendinopatías: dolor, carga y decisiones clínicas</h2><p>Evaluación, ejercicio terapéutico y esquemas anatómicos por segmento. Lectura gratuita y versión imprimible.</p><a style="color:#7be7dc;font-weight:700" href="/gratis/tendinopatias/">Explorar recurso →</a></section></main>
+</main>
     <footer>
       <div class="wrap">
         <a
