@@ -304,8 +304,8 @@
     if (href && /pay\.hotmart\.com/i.test(href)) {
       // Track only consented, non-sensitive purchase context. Never store checkout URL/query.
       const purchaseProduct = cleanProduct(slug)
-        || cleanProduct(anchor?.getAttribute("data-product-slug"))
-        || cleanProduct(anchor?.getAttribute("data-course"))
+        || cleanProduct(target?.getAttribute("data-product-slug"))
+        || cleanProduct(target?.getAttribute("data-course"))
         || currentProduct();
       const purchaseMetadata = {
         source_path: String(location.pathname || "/").slice(0, 180),
