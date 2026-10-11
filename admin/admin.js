@@ -169,6 +169,38 @@
     list("#analytics-learners", safe.learnersByCourse, "Sin actividad de aprendizaje registrada.");
   }
 
+  function renderLibraryIntelligence(engagement = {}, metrics = {}) {
+    const known = (value) => value === undefined || value === null ? "Sin dato" : value;
+    const cards = [
+      ["Visitas biblioteca gratuita", known(engagement.freeLibraryPageViews)],
+      ["Sesiones biblioteca", known(engagement.freeLibrarySessions)],
+      ["Aperturas de recursos", known(engagement.freeResourceOpens)],
+      ["Descargas eBook registradas", known(engagement.ebookDownloads)],
+      ["Biblioteca → ecosistema", known(engagement.ecosystemFromLibrary)],
+      ["Clics de compra", known(engagement.buyClicks)],
+      ["Inicios checkout", known(engagement.checkoutStarts)],
+      ["Salidas Hotmart", known(engagement.hotmartOutbounds)],
+      ["Compras comerciales activas", known(metrics.commercial_active_purchases)],
+      ["Compras aprobadas hoy", known(metrics.commercial_purchase_approvals_today)],
+      ["Aperturas de infografías", known(engagement.infographicOpens)],
+      ["Intenciones guardar PDF", known(engagement.infographicPdfExportIntents)],
+      ["Cambios entre bibliotecas", known(engagement.librarySwitches)],
+    ];
+    $("#library-intelligence-cards").innerHTML = cards.map(([label, value]) =>
+      `<article class="metric"><small>${escapeHtml(label)}</small><strong>${escapeHtml(value)}</strong></article>`
+    ).join("");
+    const list = (selector, rows, fallback) => {
+      const items = Array.isArray(rows) ? rows : [];
+      $(selector).innerHTML = items.length
+        ? items.map(row => `<li><span>${escapeHtml(row.label)}</span><strong>${escapeHtml(row.total)}</strong></li>`).join("")
+        : `<li class="muted">${escapeHtml(fallback)}</li>`;
+    };
+    list("#library-intelligence-resources", engagement.resourcesByName, "El servicio aún no entrega un desglose por recurso.");
+    list("#library-intelligence-paths", engagement.clicksByDestination, "Sin destinos desglosados.");
+    $("#library-intelligence-note").textContent =
+      "Las cifras corresponden a los datos agregados entregados por automation-status. 'Sin dato' significa que el backend todavía no expone ese indicador, no que el valor sea cero. Los clics hacia Hotmart no son compras confirmadas; las descargas por impresión tampoco prueban que el PDF se haya guardado. Periodo habitual del embudo: últimos 30 días.";
+  }
+
   async function loadCertificationRequests() {
     const list = $("#certification-requests");
     if (!list) return;
@@ -272,6 +304,7 @@
     renderMetrics(data);
     renderEngagement(data.engagement);
     renderAnalytics(data.engagement, data.metrics?.payload || {});
+    renderLibraryIntelligence(data.engagement, data.metrics?.payload || {});
     renderRuns(data);
     renderSupport(data);
     renderBeta(data);
