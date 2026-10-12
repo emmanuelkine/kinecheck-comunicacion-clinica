@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../supabase/functions/dolor-lumbar-course-key/index.ts', import.meta.url), 'utf8')
-  .replace(/^import .*;\n/gm, '')
+  .replace(/^import .*;\r?\n/gm, '')
   .replace(/payload: unknown/g, 'payload')
   .replace(/source: string/g, 'source')
   .replace(/const sources: string\[\]/g, 'const sources');

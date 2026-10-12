@@ -45,11 +45,14 @@ Deno.serve(async (req: Request) => {
 
     const { data: ownerRows } = await admin
       .from("course_access")
-      .select("access_source,last_event")
-      .eq("email", email);
+      .select("active,access_source,last_event")
+      .eq("email", email)
+      .eq("active", true);
     const isOwner = (ownerRows || []).some((row) =>
-      String(row.access_source || "").toLowerCase() === "owner" ||
-      String(row.last_event || "").toUpperCase() === "OWNER_ACCESS"
+      row.active === true && (
+        String(row.access_source || "").toLowerCase() === "owner" ||
+        String(row.last_event || "").toUpperCase() === "OWNER_ACCESS"
+      )
     );
     if (!isOwner) return json({ message: "Acceso administrativo no autorizado." }, 403);
 
