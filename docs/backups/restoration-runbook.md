@@ -85,7 +85,7 @@ Usar exclusivamente datos ficticios.
 
 - todas las tablas, restricciones e índices coinciden con el respaldo;
 - 14 grants para 12 Product IDs cargados sin duplicados;
-- las únicas vigencias `NULL` son `8289351` y `8289677`, documentadas como pendientes de evidencia comercial;
+- los 14 grants tienen una vigencia explícita; `8289351` y `8289677` deben restaurarse con 12 meses;
 - webhooks aceptan eventos válidos y rechazan tokens inválidos;
 - aprobación concede acceso;
 - reembolso bloquea acceso;

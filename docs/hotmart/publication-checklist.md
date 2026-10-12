@@ -23,8 +23,8 @@ Usar en cada producto y en el Pack KineCheck Estudiante.
 | 8195982 | Pack KineCheck Estudiante | Adjuntar las guías de Estudiante y Más allá del dolor | Activo públicamente; grants múltiples preparados |
 | 8205453 | Traumatología y Ortopedia Clínica | `Bienvenida_Acceso_Traumatologia_Ortopedia_Clinica.pdf` | Técnico preparado; verificar panel |
 | 8208817 | KineCheck Evidencia Aplicada | `Bienvenida_Acceso_KineCheck_Evidencia_Aplicada.pdf` | Técnico preparado; verificar panel |
-| 8289351 | KineCheck Escalas Clínicas | Confirmar material en Hotmart | Vigencia pendiente; verificar panel |
-| 8289677 | KineCheck Pruebas Especiales | Confirmar material en Hotmart | Vigencia pendiente; verificar panel |
+| 8289351 | KineCheck Escalas Clínicas | Confirmar material en Hotmart | Vigencia técnica 12 meses; E2E real pendiente |
+| 8289677 | KineCheck Pruebas Especiales | Confirmar material en Hotmart | Vigencia técnica 12 meses; E2E real pendiente |
 | 8330940 | Dolor Lumbar Persistente | Confirmar material en Hotmart | Técnico preparado; verificar panel |
 | 8340185 | Dolor Musculoesquelético | Confirmar material en Hotmart | Técnico preparado; verificar panel |
 

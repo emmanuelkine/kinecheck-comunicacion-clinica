@@ -33,6 +33,6 @@ Este inventario técnico es más amplio que la lista histórica de ocho IDs del 
 
 ## Pendiente exclusivamente de administración Hotmart
 
-Antes de cerrar #11 se requiere evidencia directa del panel Hotmart para confirmar, producto por producto, webhook configurado y páginas pospago. También debe resolverse con evidencia la vigencia de `8289351` y `8289677`; ambas permanecen `NULL` para evitar inventarla. La ausencia de esa evidencia no bloquea los productos que ya pasaron las pruebas públicas, pero impide declarar la reconciliación administrativa completa. La matriz vigente está en `docs/hotmart/issue-11-reconciliation.md`.
+Antes de cerrar #11 se requiere evidencia directa del panel Hotmart para confirmar, producto por producto, webhook configurado y páginas pospago. Las vigencias técnicas de `8289351` y `8289677` se verificaron en 12 meses el 12 de octubre de 2026; queda pendiente el E2E real controlado de compra y revocación para ambos productos. La ausencia de esa evidencia no bloquea los productos que ya pasaron las pruebas públicas, pero impide declarar la reconciliación administrativa completa. La matriz vigente está en `docs/hotmart/issue-11-reconciliation.md`.
 
 No registrar en este documento HOTTOK, tokens, correos de compradores ni códigos de transacción reales.

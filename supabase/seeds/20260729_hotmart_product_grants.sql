@@ -1,5 +1,5 @@
 -- KineCheck
--- Snapshot técnico de producción actualizado: 2026-08-30
+-- Snapshot técnico de producción actualizado: 2026-10-12
 -- Tabla: public.hotmart_product_grants
 --
 -- Este archivo contiene únicamente identificadores públicos de productos,
@@ -28,9 +28,8 @@ values
   (8195982, 'mas-alla-del-dolor', 'Pack KineCheck Estudiante', 12),
   (8205453, 'traumatologia-ortopedia-clinica', null, 12),
   (8208817, 'evidencia-aplicada', 'KineCheck Evidencia Aplicada', 12),
-  -- Vigencia pendiente de evidencia directa del panel Hotmart. No inventar.
-  (8289351, 'kinecheck-escalas', 'KineCheck Escalas Clínicas', null),
-  (8289677, 'kinecheck-pruebas-especiales', 'KineCheck Pruebas Especiales', null),
+  (8289351, 'kinecheck-escalas', 'KineCheck Escalas Clínicas', 12),
+  (8289677, 'kinecheck-pruebas-especiales', 'KineCheck Pruebas Especiales', 12),
   (8330940, 'dolor-lumbar-persistente', 'KineCheck · Dolor Lumbar Persistente', 12),
   (8340185, 'dolor-musculoesqueletico', 'Dolor Musculoesquelético: del mecanismo a la decisión clínica', 12)
 on conflict (product_id, course_slug) do update
