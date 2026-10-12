@@ -1,9 +1,35 @@
 {
-  "version": "2026-10-02.3",
-  "lastReviewed": "2026-10-02",
+  "version": "2026-10-12.1",
+  "lastReviewed": "2026-10-12",
   "publicUrl": "https://kinecheck.cl/evidencia-msk/",
   "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
   "updates": [
+    {
+      "id": "weekly-2026-10-12-sonafe-hamstring-guideline",
+      "date": "2026-10-12",
+      "title": "Lesión de isquiotibiales: rehabilitación progresiva y retorno deportivo según guía SONAFE",
+      "summary": "La guía clínica SONAFE-Brazil (2026) sintetizó 11 ensayos aleatorizados con 551 deportistas con lesiones de isquiotibiales. Sugiere programas por fases y criterios de progresión, inclusión de ejercicio excéntrico ajustado a síntomas y capacidad, y estrategias de agilidad y estabilización. Algunas recomendaciones se apoyan en muestras pequeñas y resultados heterogéneos: no deben interpretarse como protocolos universales.",
+      "highlights": [
+        "Qué aporta: Baroni y colaboradores desarrollaron una guía clínica mediante GRADE sobre intervenciones de rehabilitación en deportistas con lesión de isquiotibiales. Incluyó 11 ensayos aleatorizados (551 atletas). DOI: 10.2519/jospt.2026.14372 · PMID: 42823642.",
+        "Progresión: la organización en fases con criterios clínicos puede ayudar a estructurar carga y función; no mostró necesariamente un retorno deportivo más rápido y los posibles beneficios sobre recurrencia requieren interpretación prudente. Baroni et al. (2026).",
+        "Ejercicio: se sugiere incorporar trabajo excéntrico de forma progresiva y, cuando corresponda, agilidad y estabilización del tronco. La introducción temprana depende de síntomas, capacidad y evolución; no constituye una fecha obligatoria para todos los deportistas. Baroni et al. (2026).",
+        "Dolor durante el ejercicio: puede tolerarse dolor leve a moderado bajo monitorización y aceptación del deportista, pero el umbral estudiado no sustituye la evaluación individual ni autoriza ignorar empeoramiento o señales de alarma. Baroni et al. (2026).",
+        "Límites: el panel consideró insuficiente la evidencia para recomendar sistemáticamente estiramiento estático o fotobiomodulación. Las recomendaciones proceden de ensayos con tamaños muestrales y comparaciones variables. Baroni et al. (2026)."
+      ],
+      "practiceMessage": "En rehabilitación de isquiotibiales, define criterios funcionales de progresión, ajusta exposición a carga excéntrica y tareas específicas del deporte, monitoriza síntomas y capacidad, y decide el retorno deportivo integrando evaluación clínica y desempeño; evita basarlo solo en días transcurridos.",
+      "premiumLabel": "Ver análisis completo en Evidencia Aplicada",
+      "premiumUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/42823642/",
+      "authors": "Baroni BM, de Oliveira RR, Pereira ALA, Meira FC, dos Reis FA, Bryk FF, et al.",
+      "evidenceType": "Guía de práctica clínica basada en ensayos aleatorizados y GRADE",
+      "certainty": "Variable por recomendación; evidencia limitada para algunas intervenciones",
+      "doi": "10.2519/jospt.2026.14372",
+      "pmid": "42823642",
+      "topics": [
+        "Ejercicio",
+        "Evaluación y razonamiento"
+      ]
+    },
     {
       "id": "library-2026-10-02-rotator-cuff-cpg",
       "date": "2026-10-02",
