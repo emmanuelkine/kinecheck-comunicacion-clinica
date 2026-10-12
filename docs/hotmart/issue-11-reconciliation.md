@@ -1,6 +1,6 @@
 # Reconciliación técnica Hotmart — issue #11
 
-Última revisión técnica: 30 de agosto de 2026
+Última revisión técnica: 12 de octubre de 2026
 
 Este documento separa evidencia técnica, estado público y evidencia pendiente del panel Hotmart. No contiene HOTTOK, tokens, compradores, correos ni transacciones reales. El issue #11 no debe cerrarse hasta completar la columna de evidencia administrativa con capturas o registros verificables del panel.
 
@@ -16,8 +16,8 @@ Este documento separa evidencia técnica, estado público y evidencia pendiente 
 | 8195982 | Pack KineCheck Estudiante | `kinecheck-estudiante`, `mas-alla-del-dolor` | 12 meses | Activo · $49.900 CLP | Pendiente |
 | 8205453 | Traumatología y Ortopedia Clínica | `traumatologia-ortopedia-clinica` | 12 meses | Activo | Pendiente |
 | 8208817 | KineCheck Evidencia Aplicada | `evidencia-aplicada` | 12 meses | Activo | Pendiente |
-| 8289351 | KineCheck Escalas Clínicas | `kinecheck-escalas` | Pendiente de evidencia | Checkout técnico en Academy | Pendiente |
-| 8289677 | KineCheck Pruebas Especiales | `kinecheck-pruebas-especiales` | Pendiente de evidencia | Checkout técnico en Academy | Pendiente |
+| 8289351 | KineCheck Escalas Clínicas | `kinecheck-escalas` | 12 meses | Checkout técnico en Academy | Pendiente E2E real controlado |
+| 8289677 | KineCheck Pruebas Especiales | `kinecheck-pruebas-especiales` | 12 meses | Checkout técnico en Academy | Pendiente E2E real controlado |
 | 8330940 | Dolor Lumbar Persistente | `dolor-lumbar-persistente` | 12 meses | Activo | Pendiente |
 | 8340185 | Dolor Musculoesquelético | `dolor-musculoesqueletico` | 12 meses | Activo en Academy | Pendiente |
 
@@ -36,9 +36,11 @@ El contrato comercial versionado mantiene Estudiante y Pack activos. Cualquier c
 - La expiración automática desactiva accesos comerciales con fecha vencida y excluye accesos de propietario.
 - La prueba técnica no sustituye una compra, reembolso o contracargo real controlado en Hotmart.
 
-## Dos vigencias sin resolver
+## Vigencias técnicas verificadas
 
-`8289351` y `8289677` conservan `access_term_months = NULL`. No se asignará un plazo hasta obtener evidencia directa de la duración comercial configurada en Hotmart. La excepción está permitida temporalmente por el test de regresión y debe desaparecer al incorporar esa evidencia.
+`8289351` y `8289677` tienen `access_term_months = 12` en producción y en la fuente versionada. La actualización del grant solo rige el cálculo de accesos nuevos. Los seis accesos históricos observados conservan su valor individual `NULL` y su `access_expires_at`; no se reescriben licencias existentes.
+
+La prueba sintética cubre concesión, vencimiento exacto a 12 meses, idempotencia, revocación y rechazo de eventos tardíos. La compra y revocación reales controladas continúan pendientes y no deben ejecutarse contra producción sin un escenario autorizado sin cobro.
 
 ## Evidencia administrativa requerida por producto
 
@@ -53,4 +55,4 @@ El contrato comercial versionado mantiene Estudiante y Pack activos. Cualquier c
 
 ## Criterio de cierre
 
-El cierre técnico queda preparado cuando pruebas y fuente coinciden con esta matriz. El cierre administrativo requiere completar las 12 filas con evidencia del panel Hotmart y resolver las dos vigencias pendientes. Hasta entonces, #11 permanece abierto.
+El cierre técnico queda preparado cuando pruebas y fuente coinciden con esta matriz. El cierre administrativo requiere completar las 12 filas con evidencia del panel Hotmart y el E2E real controlado de `8289351` y `8289677`. Hasta entonces, #11 permanece abierto.

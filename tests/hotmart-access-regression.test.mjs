@@ -301,7 +301,7 @@ test("cancel, expiry, refund and chargeback revoke the final active purchase", a
   }
 });
 
-test("production grant snapshot contains 12 products and only two documented NULL terms", async (t) => {
+test("production grant snapshot contains 12 products with explicit access terms", async (t) => {
   const db = new PGlite();
   t.after(async () => db.close());
   await db.exec(`
@@ -328,10 +328,104 @@ test("production grant snapshot contains 12 products and only two documented NUL
     where access_term_months is null
     order by product_id
   `);
-  assert.deepEqual(indefinite.rows, [
-    { product_id: "8289351", course_slug: "kinecheck-escalas" },
-    { product_id: "8289677", course_slug: "kinecheck-pruebas-especiales" },
+  assert.deepEqual(indefinite.rows, []);
+
+  const auditedTerms = await db.query(`
+    select product_id::text as product_id, course_slug, access_term_months
+    from public.hotmart_product_grants
+    where product_id in (8289351, 8289677)
+    order by product_id
+  `);
+  assert.deepEqual(auditedTerms.rows, [
+    {
+      product_id: "8289351",
+      course_slug: "kinecheck-escalas",
+      access_term_months: 12,
+    },
+    {
+      product_id: "8289677",
+      course_slug: "kinecheck-pruebas-especiales",
+      access_term_months: 12,
+    },
   ]);
+});
+
+test("Escalas and Pruebas Especiales grant 12 months and resist replay after revocation", async (t) => {
+  const db = await makeDatabase(t);
+  await db.exec(await readFile(productGrantsSeedUrl, "utf8"));
+  await db.exec(`
+    update public.kinecheck_access_policy
+    set effective_at='2025-01-01T00:00:00Z', enabled=true;
+  `);
+
+  const products = [
+    { id: 8289351, slug: "kinecheck-escalas", revocation: "PURCHASE_REFUNDED" },
+    { id: 8289677, slug: "kinecheck-pruebas-especiales", revocation: "PURCHASE_CHARGEBACK" },
+  ];
+
+  for (const product of products) {
+    const suffix = String(product.id);
+    const email = `issue-214-${suffix}@example.com`;
+    const transaction = `issue-214-${suffix}`;
+    const purchasedAt = "2026-10-12T12:00:00Z";
+
+    assert.equal(await event(db, {
+      id: `approve-${suffix}`,
+      name: "PURCHASE_APPROVED",
+      transaction,
+      product: product.id,
+      email,
+      status: "active",
+      at: purchasedAt,
+    }), "active");
+
+    const granted = await db.query(
+      `select active, access_source, access_term_months,
+              access_expires_at::text as access_expires_at
+       from public.course_access
+       where email=$1 and course_slug=$2`,
+      [email, product.slug],
+    );
+    assert.deepEqual(granted.rows, [{
+      active: true,
+      access_source: "hotmart_test",
+      access_term_months: 12,
+      access_expires_at: "2027-10-12 12:00:00+00",
+    }]);
+
+    assert.equal(await event(db, {
+      id: `approve-${suffix}`,
+      name: product.revocation,
+      transaction,
+      product: product.id,
+      email,
+      status: "revoked",
+      at: "2026-10-13T12:00:00Z",
+    }), "duplicate");
+    assert.equal((await access(db, email, product.slug)).active, true);
+
+    assert.equal(await event(db, {
+      id: `revoke-${suffix}`,
+      name: product.revocation,
+      transaction,
+      product: product.id,
+      email,
+      status: "revoked",
+      at: "2026-10-14T12:00:00Z",
+    }), "revoked");
+    assert.equal((await access(db, email, product.slug)).active, false);
+
+    assert.equal(await event(db, {
+      id: `stale-${suffix}`,
+      name: "PURCHASE_APPROVED",
+      transaction,
+      product: product.id,
+      email,
+      status: "active",
+      at: "2026-10-13T12:00:00Z",
+    }), "stale_event");
+    assert.equal((await access(db, email, product.slug)).active, false);
+  }
 });
 
 test("webhook handles unmapped products without logging PII or secrets", async () => {
