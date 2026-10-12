@@ -1,5 +1,5 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import "jsr:@supabase/functions-js@2.117.2/edge-runtime.d.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.117.3?target=deno";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

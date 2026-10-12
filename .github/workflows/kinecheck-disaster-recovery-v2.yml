@@ -32,7 +32,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Validate workflow and recovery documentation
         run: node scripts/validate-disaster-recovery.mjs
@@ -45,7 +45,7 @@ jobs:
     timeout-minutes: 30
     services:
       postgres:
-        image: postgres:17
+        image: postgres:17@sha256:2d2b8998d31037bf721cfdf764d76ba74171b4fab3431b7f72c27c56ddbdf9e3
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: restore_validation_only
@@ -65,7 +65,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Validate required secrets
         shell: bash
@@ -493,7 +493,7 @@ jobs:
           test ! -e "${RUNNER_TEMP}/kinecheck-public.verify.dump"
 
       - name: Upload encrypted recovery package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: kinecheck-disaster-recovery-${{ github.run_id }}
           path: |

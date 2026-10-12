@@ -1,2 +1,8 @@
 node_modules/
 qa-*-report.json
+
+# Premium course payloads belong in private Supabase Storage/Edge Functions.
+/kinecheck-clinico-curso/course-data.js
+/kinecheck-clinico-curso/renderer.js
+/academy/dolor-lumbar-persistente/data-v6.js
+/academy/dolor-lumbar-persistente/app-v6.js
