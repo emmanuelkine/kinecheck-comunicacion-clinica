@@ -64,6 +64,8 @@ test("premium course payloads stay outside the public tree", () => {
     "kinecheck-clinico-curso/renderer.js",
     "academy/dolor-lumbar-persistente/data-v6.js",
     "academy/dolor-lumbar-persistente/app-v6.js",
+    "academy/preview-dolor-lumbar/data-v6.js",
+    "academy/preview-dolor-lumbar/app-v6.js",
   ];
 
   for (const path of forbidden) {
