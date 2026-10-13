@@ -2,6 +2,12 @@ name: KineCheck Security Baseline
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - ".gitignore"
+      - "tests/security-remediation.test.mjs"
+      - "scripts/security-baseline.mjs"
+      - ".github/workflows/security-baseline.yml"
   schedule:
     - cron: "15 11 * * *"
   push:
@@ -11,6 +17,8 @@ on:
       - "platform/**"
       - "legal/**"
       - "scripts/security-baseline.mjs"
+      - "tests/security-remediation.test.mjs"
+      - ".gitignore"
       - ".github/workflows/security-baseline.yml"
 
 permissions:
@@ -35,6 +43,9 @@ jobs:
 
       - name: Run security baseline
         run: node scripts/security-baseline.mjs
+
+      - name: Run security remediation regressions
+        run: node --test tests/security-remediation.test.mjs
 
       - name: Upload security evidence
         if: always()
