@@ -9,15 +9,16 @@ const cors = {
 };
 const COURSE_SLUG = "dolor-lumbar-persistente";
 const ASSETS = [
-  "dolor-lumbar-persistente/data-v6.js",
-  "dolor-lumbar-persistente/app-v6.js",
+  "issue213-r5-20261014/dolor-lumbar-persistente/data.r5.js",
+  "issue213-r5-20261014/dolor-lumbar-persistente/app.r5.js",
 ];
 
 function json(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), { status, headers: { ...cors, "Content-Type": "application/json; charset=utf-8" } });
 }
-function js(source: string) {
-  return new Response(source, { status: 200, headers: { ...cors, "Content-Type": "text/javascript; charset=utf-8", "X-Content-Type-Options": "nosniff" } });
+async function js(source: string) {
+  const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source))), b => b.toString(16).padStart(2,"0")).join("");
+  return new Response(source, { status: 200, headers: { ...cors, "Content-Type": "text/javascript; charset=utf-8", "X-Content-Type-Options": "nosniff", "X-KineCheck-Material-Edition": "2026-10-14-r5", "X-KineCheck-Material-Sha256": digest } });
 }
 function validSource(source: string) {
   const value = source.trimStart().toLowerCase();
@@ -50,7 +51,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    if (!supabaseUrl || !anonKey || !serviceRoleKey) return json({ message: "La autorización del curso no está configurada." }, 503);
+    if (supabaseUrl !== "https://eqhcdclyeoapmqtlduwf.supabase.co" || !anonKey || !serviceRoleKey) return json({ message: "La autorización del curso no está configurada." }, 503);
 
     const body = await req.json().catch(() => ({}));
     if (String(body.courseSlug || "").trim() !== COURSE_SLUG) return json({ message: "Curso no reconocido." }, 400);
@@ -91,7 +92,7 @@ serve(async (req) => {
       if (!validSource(source)) return json({ message: "El contenido protegido del curso no es válido." }, 500);
       sources.push(path.endsWith("/app-v6.js") ? repairLumbarRenderer(source) : source);
     }
-    return js(sources.join("\n;\n"));
+    return js("window.KC_CANDIDATE_SUBJECT = " + JSON.stringify(user.id) + ";\n" + sources.join("\n;\n"));
 
   } catch (error) {
     console.error("dolor-lumbar-course-key", error);

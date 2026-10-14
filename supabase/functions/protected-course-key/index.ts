@@ -10,12 +10,12 @@ const corsHeaders = {
 
 const protectedAssets: Record<string, string[]> = {
   "kinecheck-clinico-curso": [
-    "kinecheck-clinico-curso/course-data.js",
-    "kinecheck-clinico-curso/renderer.js",
+    "issue213-r5-20261014/kinecheck-clinico-curso/course-data.js",
+    "issue213-r5-20261014/kinecheck-clinico-curso/renderer.js",
   ],
   "dolor-lumbar-persistente": [
-    "dolor-lumbar-persistente/data-v6.js",
-    "dolor-lumbar-persistente/app-v6.js",
+    "issue213-r5-20261014/dolor-lumbar-persistente/data.r5.js",
+    "issue213-r5-20261014/dolor-lumbar-persistente/app.r5.js",
   ],
 };
 
@@ -26,13 +26,16 @@ function json(payload: unknown, status = 200) {
   });
 }
 
-function moduleSource(source: string) {
+async function moduleSource(source: string) {
+  const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source))), b => b.toString(16).padStart(2,"0")).join("");
   return new Response(source, {
     status: 200,
     headers: {
       ...corsHeaders,
       "Content-Type": "text/javascript; charset=utf-8",
       "X-Content-Type-Options": "nosniff",
+      "X-KineCheck-Material-Edition": "2026-10-14-r5",
+      "X-KineCheck-Material-Sha256": digest,
     },
   });
 }
@@ -80,7 +83,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    if (!supabaseUrl || !anonKey || !serviceRoleKey) {
+    if (supabaseUrl !== "https://eqhcdclyeoapmqtlduwf.supabase.co" || !anonKey || !serviceRoleKey) {
       return json({ message: "La autorización del curso no está configurada." }, 503);
     }
 
@@ -102,6 +105,7 @@ serve(async (req) => {
     const admin = createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
+
     const { data: access, error: accessError } = await admin
       .from("course_access")
       .select("active,access_expires_at,access_source,last_event")
@@ -143,7 +147,7 @@ serve(async (req) => {
       sources.push(source);
     }
 
-    return moduleSource(sources.join("\n;\n"));
+    return moduleSource("window.KC_CANDIDATE_SUBJECT = " + JSON.stringify(user.id) + ";\n" + sources.join("\n;\n"));
   } catch (error) {
     console.error("protected-course-key error", error);
     return json({ message: "Error inesperado durante la validación." }, 500);

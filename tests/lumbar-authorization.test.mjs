@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { webcrypto } from 'node:crypto';
 
 const source = fs.readFileSync(new URL('../supabase/functions/dolor-lumbar-course-key/index.ts', import.meta.url), 'utf8')
   .replace(/^import .*;\r?\n/gm, '')
@@ -9,15 +10,15 @@ const source = fs.readFileSync(new URL('../supabase/functions/dolor-lumbar-cours
   .replace(/source: string/g, 'source')
   .replace(/const sources: string\[\]/g, 'const sources');
 
-async function call({email='learner@example.test', access=null, validUser=true, authorization='Bearer audit-fixture', slug='dolor-lumbar-persistente', asset='window.fixture = true;'} = {}) {
+async function call({email='learner@example.test', access=null, validUser=true, authorization='Bearer audit-fixture', slug='dolor-lumbar-persistente', asset='window.fixture = true;', projectUrl='https://eqhcdclyeoapmqtlduwf.supabase.co'} = {}) {
   let handler, downloads = 0;
   const query = {select(){return this},eq(){return this},async maybeSingle(){return {data:access,error:null}}};
   const context = vm.createContext({
-    Response, Date, Number, String, Boolean, console,
+    Response, Date, Number, String, Boolean, TextEncoder, crypto:webcrypto, console,
     serve(fn){handler=fn},
-    Deno:{env:{get(name){return name==='KINECHECK_OWNER_EMAILS' ? 'owner@example.test' : 'test-configuration'}}},
+    Deno:{env:{get(name){return name==='SUPABASE_URL' ? projectUrl : name==='KINECHECK_OWNER_EMAILS' ? 'owner@example.test' : 'test-configuration'}}},
     createClient(){return {
-      auth:{async getUser(){return {data:{user:validUser?{email}:null},error:validUser?null:new Error('invalid')}}},
+      auth:{async getUser(){return {data:{user:validUser?{id:'00000000-0000-4000-8000-000000000213',email}:null},error:validUser?null:new Error('invalid')}}},
       from(){return query},
       storage:{from(){return {async download(){downloads++;return {data:{async text(){return asset}},error:null}}}}},
     }},
@@ -45,4 +46,8 @@ test('invalid authentication and a different course never download protected ass
 });
 test('HTML returned as a protected script is rejected', async()=>{
   const {response}=await call({email:'owner@example.test',asset:'<!doctype html><title>Error</title>'});assert.equal(response.status,500);
+});
+test('deployment in a different project fails before accessing protected assets', async()=>{
+  const {response,downloads}=await call({email:'owner@example.test',projectUrl:'https://other-project.example.invalid'});
+  assert.equal(response.status,503);assert.equal(downloads,0);
 });
