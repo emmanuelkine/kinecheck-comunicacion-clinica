@@ -28,7 +28,7 @@ const server = createServer(async (req, res) => {
     const origin = `http://${req.headers.host}`;
     const url = new URL(req.url, origin);
     if (url.pathname === '/__local-test__/owner-session') {
-      res.setHeader('content-type', 'text/html');
+      res.setHeader('content-type', 'text/html; charset=utf-8');
       res.end('<script>sessionStorage.setItem("kinecheck_admin_session_v1",JSON.stringify({access_token:"local-synthetic-owner"}))</script><a href="/admin/feedback/">Moderación local</a>');
       return;
     }
