@@ -1,10 +1,8 @@
 (() => {
   "use strict";
   const $ = (selector) => document.querySelector(selector);
-  const escapeText = (value) => String(value ?? "");
   const status = $("#status");
   let session;
-  try { session = JSON.parse(sessionStorage.getItem("kinecheck_admin_session_v1") || "null"); } catch {}
 
   const areaNames = { contenido: "Más contenido", navegacion: "Navegación", diseno: "Diseño e imágenes", descargas: "Descargas y PDF", nada: "Sin mejoras sugeridas", otro: "Otra sugerencia" };
   function makeReview(row, pending) {
@@ -15,11 +13,19 @@
     head.append(meta, date); article.append(head);
     const comment = document.createElement("p"); comment.className = "comment"; comment.textContent = row.comment || "Sin comentario escrito."; article.append(comment);
     if (pending) {
+      const editLabel = document.createElement("label"); editLabel.textContent = "Texto que se publicará: elimina nombres y cualquier dato personal o sensible.";
+      const edit = document.createElement("textarea"); edit.value = row.comment || ""; edit.maxLength = 500; edit.rows = 3; editLabel.append(edit); article.append(editLabel);
+      const privacyLabel = document.createElement("label"); privacyLabel.className = "privacy-check";
+      const privacy = document.createElement("input"); privacy.type = "checkbox";
+      privacyLabel.append(privacy, document.createTextNode("He revisado la privacidad: el texto no identifica a nadie ni contiene información sensible.")); article.append(privacyLabel);
       const controls = document.createElement("div"); controls.className = "actions";
       const approve = document.createElement("button"); approve.type = "button"; approve.textContent = "Aprobar y publicar";
+      approve.disabled = true;
+      privacy.addEventListener("change", () => { approve.disabled = !privacy.checked; });
+      edit.addEventListener("input", () => { privacy.checked = false; approve.disabled = true; });
       const reject = document.createElement("button"); reject.type = "button"; reject.className = "reject"; reject.textContent = "Rechazar";
-      approve.addEventListener("click", () => moderate(row.key, "approved", approve, reject));
-      reject.addEventListener("click", () => moderate(row.key, "rejected", approve, reject));
+      approve.addEventListener("click", () => moderate(row.key, "approved", approve, reject, edit, privacy));
+      reject.addEventListener("click", () => moderate(row.key, "rejected", approve, reject, edit, privacy));
       controls.append(approve, reject); article.append(controls);
     } else {
       const decision = document.createElement("p"); decision.className = "muted"; decision.textContent = row.status === "approved" ? "Aprobado y visible en la biblioteca" : "Rechazado; no se muestra al público"; article.append(decision);
@@ -27,20 +33,23 @@
     return article;
   }
 
-  async function moderate(key, decision, approve, reject) {
+  async function moderate(key, decision, approve, reject, edit, privacy) {
+    if (decision === "approved" && !privacy.checked) return;
     approve.disabled = reject.disabled = true;
     try {
-      const response = await fetch("/api/library-feedback", { method: "PUT", headers: { "content-type": "application/json", Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ key, decision }) });
+      const response = await fetch("/api/library-feedback", { method: "PUT", headers: { "content-type": "application/json", Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ key, decision, comment: edit.value, privacyReviewed: privacy.checked }) });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "No se pudo guardar la decisión.");
       await load();
     } catch (error) {
       status.textContent = error.message;
-      approve.disabled = reject.disabled = false;
+      approve.disabled = !privacy.checked; reject.disabled = false;
     }
   }
 
   async function load() {
+    $("#results").hidden = true;
+    try { session = JSON.parse(sessionStorage.getItem("kinecheck_admin_session_v1") || "null"); } catch { session = null; }
     if (!session?.access_token) { status.textContent = "Inicia sesión primero en /admin/ desde esta misma pestaña."; return; }
     status.textContent = "Cargando valoraciones…";
     try {
@@ -49,7 +58,7 @@
       if (!response.ok) throw new Error(data.message || "No se pudieron consultar las valoraciones.");
       $("#count").textContent = String(data.count);
       $("#average").textContent = data.average === null ? "Sin datos" : `${data.average}/5`;
-      $("#pending-count").textContent = String(data.pending.length);
+      $("#pending-count").textContent = String(data.pendingCount ?? data.pending.length);
       const distribution = $("#distribution"); distribution.replaceChildren();
       [1, 2, 3, 4, 5].forEach((n) => { const item = document.createElement("div"); item.className = "dist"; item.textContent = `${n} ★ · ${data.distribution[n-1]}`; distribution.append(item); });
       const pending = $("#pending"); pending.replaceChildren();

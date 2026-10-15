@@ -35,8 +35,6 @@
     }
   };
   document.getElementById("kc-feedback-reload")?.addEventListener("click", load);
-  document.addEventListener("click", (event) => {
-    if (event.target?.closest?.("#admin-login button")) setTimeout(load, 1400);
-  });
+  document.addEventListener("kinecheck:admin-session", load);
   load();
 })();

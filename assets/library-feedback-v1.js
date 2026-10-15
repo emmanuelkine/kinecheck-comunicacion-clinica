@@ -2,7 +2,7 @@
   "use strict";
   if (document.getElementById("kc-feedback")) return;
 
-  const path = location.pathname.startsWith("/gratis/pacientes/")
+  const page = location.pathname.startsWith("/gratis/pacientes/")
     ? "/gratis/pacientes/"
     : location.pathname.startsWith("/gratis/profesionales/")
       ? "/gratis/profesionales/"
@@ -18,7 +18,7 @@
       #kc-feedback .kc-fb-box{background:linear-gradient(145deg,#102d35,#0b252c);border:1px solid #3b8388;border-radius:18px;padding:clamp(19px,3vw,32px)}
       #kc-feedback h2{font-size:clamp(1.3rem,2.4vw,1.8rem);margin:0 0 9px}
       #kc-feedback h3{font-size:1.05rem;margin:22px 0 9px}
-      #kc-feedback p{margin:6px 0 16px;color:#c9e5e5}
+      #kc-feedback p{margin:6px 0 16px;color:#c9e5e5;overflow-wrap:anywhere}
       #kc-feedback .kc-fb-summary{display:grid;grid-template-columns:minmax(170px,.8fr) 1.2fr;gap:20px;align-items:center;margin:19px 0 23px;padding:18px;background:#0a222a;border:1px solid #28565f;border-radius:14px}
       #kc-feedback .kc-fb-average{font-size:2rem;font-weight:850;color:#fff0ad}#kc-feedback .kc-fb-average span{color:#ffce58;letter-spacing:.08em}
       #kc-feedback .kc-fb-row{display:grid;grid-template-columns:42px 1fr 34px;gap:9px;align-items:center;font-size:.9rem;color:#d3e9e8}
@@ -39,7 +39,7 @@
     </style>
     <div class="kc-fb-box">
       <h2 id="kc-fb-title">¿Qué te pareció la biblioteca gratuita?</h2>
-      <p>Tu opinión ayuda a mejorar. La encuesta es anónima y toma menos de 30 segundos.</p>
+      <p>Tu opinión ayuda a mejorar. No pedimos tu nombre ni correo. Resultados de los últimos 30 días.</p>
       <div class="kc-fb-summary" aria-live="polite"><div id="kc-fb-average">Cargando valoraciones…</div><div id="kc-fb-distribution"></div></div>
       <div id="kc-fb-comments-block" hidden><h3>Comentarios anónimos moderados</h3><div class="kc-fb-comments" id="kc-fb-comments"></div></div>
       <form>

@@ -10,10 +10,61 @@ const PAGES = new Set(["/gratis/", "/gratis/pacientes/", "/gratis/profesionales/
 const PREFIX = "feedback:v2:";
 const LEGACY_PREFIX = "feedback:";
 const RETENTION_SECONDS = 90 * 24 * 60 * 60;
+const MAX_BYTES = 4096;
+const RATE_LIMIT = 5;
 
 const json = (data, status = 200, headers = {}) =>
   new Response(JSON.stringify(data), { status, headers: { ...JSON_HEADERS, ...headers } });
 const trim = (value, max) => String(value ?? "").trim().slice(0, max);
+
+// Dedicated binding: feedback must never fall back to certification/customer KV.
+const feedbackStore = (env) => env.LIBRARY_FEEDBACK;
+const sameOrigin = (request) => request.headers.get("origin") === new URL(request.url).origin
+  && !["cross-site", "same-site"].includes(request.headers.get("sec-fetch-site"));
+
+class InputError extends Error {
+  constructor(message, status = 400) { super(message); this.status = status; }
+}
+
+async function readInput(request) {
+  if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get("content-type") || "")) throw new InputError("Formato no permitido.", 415);
+  if (Number(request.headers.get("content-length") || 0) > MAX_BYTES) throw new InputError("Solicitud demasiado extensa.", 413);
+  const reader = request.body?.getReader();
+  if (!reader) throw new InputError("Datos incorrectos.");
+  const chunks = [];
+  let bytes = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > MAX_BYTES) { await reader.cancel(); throw new InputError("Solicitud demasiado extensa.", 413); }
+    chunks.push(value);
+  }
+  const buffer = new Uint8Array(bytes);
+  let offset = 0;
+  for (const chunk of chunks) { buffer.set(chunk, offset); offset += chunk.byteLength; }
+  let input;
+  try { input = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(buffer)); } catch { throw new InputError("Datos incorrectos."); }
+  if (!input || typeof input !== "object" || Array.isArray(input)) throw new InputError("Datos incorrectos.");
+  return input;
+}
+
+async function applyRateLimit(request, env, store) {
+  // CF-Connecting-IP is set by Cloudflare. Never persist the address or link the
+  // short-lived, keyed network digest to an opinion. KV throttling is best effort
+  // across locations; it complements the browser cookie and moderation.
+  const ip = request.headers.get("cf-connecting-ip");
+  const secret = env.FEEDBACK_RATE_LIMIT_SECRET;
+  if (!ip || typeof secret !== "string" || secret.length < 32) throw new InputError("Encuesta temporalmente no disponible.", 503);
+  const hour = Math.floor(Date.now() / 3600000);
+  const encoder = new TextEncoder();
+  const hmac = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const digest = new Uint8Array(await crypto.subtle.sign("HMAC", hmac, encoder.encode(`${hour}:${ip}`)));
+  const key = `rate:${hour}:${Array.from(digest, (n) => n.toString(16).padStart(2, "0")).join("")}`;
+  const used = Number(await store.get(key)) || 0;
+  if (used >= RATE_LIMIT) throw new InputError("Demasiados envíos. Inténtalo más tarde.", 429);
+  await store.put(key, String(used + 1), { expirationTtl: 3700 });
+}
 
 async function isOwner(request) {
   const authorization = request.headers.get("authorization") || "";
@@ -24,6 +75,7 @@ async function isOwner(request) {
       headers: { apikey: SUPABASE_KEY, authorization, "content-type": "application/json" },
       body: "{}",
       cache: "no-store",
+      signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) return false;
     return (await response.json()).owner === true;
@@ -33,66 +85,76 @@ async function isOwner(request) {
 }
 
 function scrubComment(value) {
-  return trim(value, 500)
+  return trim(value, 500).normalize("NFKC")
     .replace(/<[^>]*>/g, " ")
     .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[dato omitido]")
     .replace(/\bhttps?:\/\/\S+|\bwww\.\S+/gi, "[enlace omitido]")
-    .replace(/\b(?:\+?56\s*)?9\s*\d{4}\s*\d{4}\b/g, "[teléfono omitido]")
-    .replace(/\b\d{1,2}\.??\d{3}\.??\d{3}-?[\dkK]\b/g, "[identificador omitido]")
-    .replace(/[\u0000-\u001f\u007f]/g, " ")
+    .replace(/(?:\+?56[\s.-]*)?\b(?:9|2)[\s.-]*(?:\d[\s.-]*){7}\d\b/g, "[teléfono omitido]")
+    .replace(/\b\d{1,2}\.?\d{3}\.?\d{3}-[\dkK]\b/g, "[identificador omitido]")
+    .replace(/[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, " ")
     .replace(/\s{2,}/g, " ")
     .trim();
 }
 
 function containsSensitiveHealthDetails(value) {
-  return /\b(mi diagnóstico es|me diagnosticaron|tengo (?:cáncer|diabetes|fibromialgia|depresión|ansiedad|una hernia)|mi ficha clínica|mi tratamiento médico|mi número de ficha)\b/i.test(value);
+  const text = String(value).normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+  return /\b(mi diagnostico|me diagnosticaron|tengo (?:cancer|diabetes|fibromialgia|depresion|ansiedad|asma|vih|una hernia)|mi ficha clinica|mi tratamiento medico|mi numero de ficha|mi paciente|mi (?:hij[oa]|pareja|madre|padre) (?:tiene|padece)|mi direccion|vivo en|me llamo|mi nombre es)\b/.test(text);
+}
+
+function validRecord(value) {
+  return value && typeof value === "object" && Number.isInteger(value.rating)
+    && value.rating >= 1 && value.rating <= 5 && PAGES.has(value.page)
+    && Number.isFinite(Date.parse(value.createdAt)) && Date.parse(value.createdAt) <= Date.now();
 }
 
 async function readRecords(store) {
   let cursor;
   const rows = [];
-  for (let page = 0; page < 10; page += 1) {
+  do {
     const result = await store.list({ prefix: LEGACY_PREFIX, limit: 1000, ...(cursor ? { cursor } : {}) });
-    const values = await Promise.all((result.keys || []).map(async ({ name }) => ({ key: name, value: await store.get(name, "json") })));
-    for (const { key, value } of values) {
-      if (!value || typeof value !== "object" || !Number.isInteger(Number(value.rating)) || Number(value.rating) < 1 || Number(value.rating) > 5 || !PAGES.has(value.page)) continue;
-      rows.push({ ...value, rating: Number(value.rating), area: AREAS.has(value.area) ? value.area : "otro", comment: scrubComment(value.comment), status: value.status === "approved" || value.status === "rejected" ? value.status : "pending", key });
+    for (let start = 0; start < (result.keys || []).length; start += 16) {
+      const values = await Promise.all(result.keys.slice(start, start + 16).map(async ({ name }) => ({ key: name, value: await store.get(name, "json") })));
+      for (const { key, value } of values) {
+        if (!validRecord(value)) continue;
+        // Do not spread legacy objects: never expose historical identifying fields.
+        rows.push({ rating: value.rating, page: value.page, createdAt: value.createdAt, area: AREAS.has(value.area) ? value.area : "otro", comment: scrubComment(value.comment), status: value.status === "approved" || value.status === "rejected" ? value.status : "pending", key });
+      }
     }
     if (result.list_complete || !result.cursor) break;
     cursor = result.cursor;
-  }
-  const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  } while (cursor);
+  const cutoff = Date.now() - RETENTION_SECONDS * 1000;
   return rows.filter((row) => Date.parse(row.createdAt) >= cutoff);
 }
 
 function summarize(records) {
-  const approved = records.filter((record) => record.status === "approved");
+  const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const approved = records.filter((record) => record.status === "approved" && Date.parse(record.createdAt) >= cutoff);
   const distribution = [1, 2, 3, 4, 5].map((score) => approved.filter((record) => record.rating === score).length);
   const count = approved.length;
   return {
     count,
     average: count ? Math.round(approved.reduce((sum, record) => sum + record.rating, 0) / count * 100) / 100 : null,
     distribution,
-    comments: approved.filter((record) => record.comment).sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 12).map(({ rating, comment, createdAt }) => ({ rating, comment, createdAt })),
+    comments: approved.filter((record) => record.comment && !containsSensitiveHealthDetails(record.comment)).sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 12).map(({ rating, comment, createdAt }) => ({ rating, comment, createdAt })),
     periodDays: 30,
   };
 }
 
 export async function onRequestPost({ request, env }) {
-  if (!env.CERT_REQUESTS?.put) return json({ message: "Encuesta temporalmente no disponible." }, 503);
-  if (Number(request.headers.get("content-length") || 0) > 4096) return json({ message: "Solicitud demasiado extensa." }, 413);
+  if (!sameOrigin(request)) return json({ message: "Origen no permitido." }, 403);
+  const store = feedbackStore(env);
+  if (!store?.put || !store?.get) return json({ message: "Encuesta temporalmente no disponible." }, 503);
   let input;
-  try { input = await request.json(); } catch { return json({ message: "Datos incorrectos." }, 400); }
-  if (JSON.stringify(input).length > 4096) return json({ message: "Solicitud demasiado extensa." }, 413);
-  if (!input || typeof input !== "object" || Array.isArray(input)) return json({ message: "Datos incorrectos." }, 400);
+  try { input = await readInput(request); } catch (error) { return json({ message: error.message }, error.status || 400); }
   if (input.website) return json({ ok: true }, 201);
   if (request.method !== "POST") return json({ message: "Método no permitido." }, 405, { allow: "GET, POST, PUT, OPTIONS" });
 
-  const rating = Number(input.rating);
+  const rating = ["number", "string"].includes(typeof input.rating) ? Number(input.rating) : NaN;
   const area = trim(input.area, 30);
   const page = trim(input.page, 120);
-  const rawComment = String(input.comment || "");
-  if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !AREAS.has(area) || !PAGES.has(page) || rawComment.length > 500) {
+  const rawComment = input.comment ?? "";
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !AREAS.has(input.area) || !PAGES.has(input.page) || typeof rawComment !== "string" || rawComment.length > 500) {
     return json({ message: "Revisa la valoración y vuelve a intentarlo." }, 400);
   }
   const cookies = request.headers.get("cookie") || "";
@@ -114,46 +176,55 @@ export async function onRequestPost({ request, env }) {
     createdAt,
   };
   try {
-    await env.CERT_REQUESTS.put(`${PREFIX}${createdAt}:${crypto.randomUUID()}`, JSON.stringify(record), { expirationTtl: RETENTION_SECONDS });
+    await applyRateLimit(request, env, store);
+    await store.put(`${PREFIX}${createdAt}:${crypto.randomUUID()}`, JSON.stringify(record), { expirationTtl: RETENTION_SECONDS });
     return json({ ok: true, moderated: true }, 201, {
-      "set-cookie": "kc_feedback_submitted=1; Path=/gratis/; Max-Age=2592000; Secure; SameSite=Lax; HttpOnly",
+      "set-cookie": "kc_feedback_submitted=1; Path=/api/library-feedback; Max-Age=2592000; Secure; SameSite=Strict; HttpOnly",
     });
-  } catch {
-    return json({ message: "No se pudo guardar. Inténtalo más tarde." }, 503);
+  } catch (error) {
+    return json({ message: error instanceof InputError ? error.message : "No se pudo guardar. Inténtalo más tarde." }, error.status || 503, error.status === 429 ? { "retry-after": "3600" } : {});
   }
 }
 
 export async function onRequestGet({ request, env }) {
-  if (!env.CERT_REQUESTS?.list || !env.CERT_REQUESTS?.get) return json({ message: "Valoraciones no disponibles." }, 503);
+  const admin = new URL(request.url).searchParams.get("admin") === "1";
+  if (admin && !(await isOwner(request))) return json({ message: "Acceso restringido." }, 403);
+  const store = feedbackStore(env);
+  if (!store?.list || !store?.get) return json({ message: "Valoraciones no disponibles." }, 503);
   try {
-    const records = await readRecords(env.CERT_REQUESTS);
-    const url = new URL(request.url);
-    if (url.searchParams.get("admin") === "1") {
-      if (!(await isOwner(request))) return json({ message: "Acceso restringido." }, 403);
+    const records = await readRecords(store);
+    if (admin) {
       const visible = records.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-      return json({ ...summarize(records), pending: visible.filter((row) => row.status === "pending").slice(0, 400), recent: visible.filter((row) => row.status !== "pending").slice(0, 100) });
+      const pending = visible.filter((row) => row.status === "pending");
+      return json({ ...summarize(records), pendingCount: pending.length, pending: pending.slice(0, 400), recent: visible.filter((row) => row.status !== "pending").slice(0, 100) });
     }
-    return json(summarize(records), 200, { "cache-control": "public, max-age=60, stale-while-revalidate=300" });
+    return json(summarize(records));
   } catch {
     return json({ message: "No se pudieron consultar las valoraciones." }, 500);
   }
 }
 
 export async function onRequestPut({ request, env }) {
+  if (!sameOrigin(request)) return json({ message: "Origen no permitido." }, 403);
   if (!(await isOwner(request))) return json({ message: "Acceso restringido." }, 403);
-  if (!env.CERT_REQUESTS?.get || !env.CERT_REQUESTS?.put) return json({ message: "Moderación no disponible." }, 503);
+  const store = feedbackStore(env);
+  if (!store?.get || !store?.put) return json({ message: "Moderación no disponible." }, 503);
   let input;
-  try { input = await request.json(); } catch { return json({ message: "Datos incorrectos." }, 400); }
+  try { input = await readInput(request); } catch (error) { return json({ message: error.message }, error.status || 400); }
   const key = String(input.key || "");
   const decision = String(input.decision || "");
-  if (!key.startsWith(LEGACY_PREFIX) || !["approved", "rejected"].includes(decision)) return json({ message: "Acción inválida." }, 400);
+  if (!key.startsWith(LEGACY_PREFIX) || key.length > 200 || /[\u0000-\u001f]/.test(key) || !["approved", "rejected"].includes(decision)) return json({ message: "Acción inválida." }, 400);
+  if (decision === "approved" && input.privacyReviewed !== true) return json({ message: "Confirma la revisión de privacidad antes de publicar." }, 400);
   try {
-    const raw = await env.CERT_REQUESTS.get(key, "json");
-    if (!raw || raw.status !== "pending") return json({ message: "La opinión ya fue moderada o no existe." }, 404);
-    if (decision === "approved" && containsSensitiveHealthDetails(raw.comment)) return json({ message: "El comentario contiene información de salud; recházalo para no publicarlo." }, 400);
-    const updated = { rating: Number(raw.rating), area: AREAS.has(raw.area) ? raw.area : "otro", page: raw.page, comment: scrubComment(raw.comment), status: decision, createdAt: raw.createdAt, moderatedAt: new Date().toISOString() };
-    const remainingTtl = Math.max(1, Math.ceil((Date.parse(raw.createdAt) + RETENTION_SECONDS * 1000 - Date.now()) / 1000));
-    await env.CERT_REQUESTS.put(key, JSON.stringify(updated), { expirationTtl: remainingTtl });
+    const raw = await store.get(key, "json");
+    if (!validRecord(raw) || ["approved", "rejected"].includes(raw.status)) return json({ message: "La opinión ya fue moderada o no existe." }, 404);
+    const comment = input.comment === undefined ? raw.comment || "" : input.comment;
+    if (typeof comment !== "string" || comment.length > 500) return json({ message: "Comentario inválido." }, 400);
+    if (decision === "approved" && containsSensitiveHealthDetails(comment)) return json({ message: "El comentario contiene información personal o de salud; elimínala o rechaza la opinión." }, 400);
+    const updated = { rating: raw.rating, area: AREAS.has(raw.area) ? raw.area : "otro", page: raw.page, comment: decision === "rejected" ? "" : scrubComment(comment), status: decision, createdAt: raw.createdAt, moderatedAt: new Date().toISOString() };
+    const expiration = Math.floor(Date.parse(raw.createdAt) / 1000) + RETENTION_SECONDS;
+    if (expiration <= Math.floor(Date.now() / 1000) + 60) return json({ message: "La opinión ha expirado." }, 410);
+    await store.put(key, JSON.stringify(updated), { expiration });
     return json({ ok: true, status: decision });
   } catch {
     return json({ message: "No se pudo actualizar la moderación." }, 500);

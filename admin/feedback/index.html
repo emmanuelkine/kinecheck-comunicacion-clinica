@@ -7,15 +7,14 @@
   <meta name="theme-color" content="#073c4a">
   <title>Moderación de opiniones | KineCheck</title>
   <link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png">
-  <style>
-    :root{color-scheme:dark}*{box-sizing:border-box}body{background:#071d22;color:#e5f7f6;font:16px/1.55 system-ui,sans-serif;margin:0}.wrap{max-width:1120px;margin:auto;padding:24px 18px 56px}a{color:#8cece6}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{width:155px;height:auto}.muted{color:#bacfd0}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0}button{background:#8af0e7;color:#062d32;border:0;border-radius:9px;padding:11px 17px;font-weight:800;cursor:pointer}button.secondary{background:#163c43;color:#d9f8f5;border:1px solid #4b9292}button.reject{background:#492b30;color:#ffe5e5;border:1px solid #a66b72}button:disabled{opacity:.6;cursor:wait}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}.card,.panel,.review{background:#10343c;border:1px solid #427b82;border-radius:13px;padding:17px}.number{font-size:2rem;font-weight:800;color:#8af0e7}.panel{margin-top:18px}.distribution{display:grid;grid-template-columns:repeat(5,minmax(40px,1fr));gap:9px;margin-top:12px}.dist{background:#0b272e;border:1px solid #2e646a;border-radius:10px;padding:10px;text-align:center}.reviews{display:grid;gap:12px}.review-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#a9e2df;font-size:.9rem}.comment{white-space:pre-wrap;overflow-wrap:anywhere}.actions{display:flex;gap:8px;flex-wrap:wrap}.notice{padding:12px;border-radius:10px;background:#0b292f;color:#bfe5e3;min-height:2.8em}.review[hidden]{display:none}@media(max-width:520px){.wrap{padding:17px 13px 40px}.distribution{gap:5px}.dist{padding:8px 3px;font-size:.87rem}}
-  </style>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="/admin/library-feedback.css?v=20261015-r3">
 </head>
 <body>
   <main class="wrap">
     <nav class="top"><a href="/admin/">← Volver al panel</a><img class="brand" src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck"></nav>
     <h1>Opiniones de la biblioteca gratuita</h1>
-    <p class="muted">Valora solo comentarios auténticos. Las valoraciones y comentarios se publican únicamente después de aprobarlos. Las respuestas son anónimas y se eliminan a los 90 días.</p>
+    <p class="muted">Valora solo comentarios auténticos. Las valoraciones y comentarios se publican únicamente después de aprobarlos. Resultados de los últimos 30 días. Las respuestas se eliminan a los 90 días; al rechazar, se descarta el texto.</p>
     <div class="toolbar"><button id="load" type="button">Actualizar resultados</button><span id="status" class="notice" role="status" aria-live="polite">Inicia sesión primero en /admin/ desde esta misma pestaña.</span></div>
     <section id="results" hidden>
       <div class="cards">
@@ -28,6 +27,6 @@
       <section class="panel"><h2>Últimas decisiones</h2><div id="recent" class="reviews"></div></section>
     </section>
   </main>
-  <script src="/admin/library-feedback-moderation.js" defer></script>
+  <script src="/admin/library-feedback-moderation.js?v=20261015-r3" defer></script>
 </body>
 </html>
