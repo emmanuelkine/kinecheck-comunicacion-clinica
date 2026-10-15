@@ -2,7 +2,7 @@
 // confined to this process. No requests to production are allowed.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile, mkdir } from 'node:fs/promises';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -58,6 +58,7 @@ const server = createServer(async (req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const origin = `http://127.0.0.1:${server.address().port}`;
 let browser;
+let activePage;
 const results = [];
 try {
   browser = await chromium.launch({ headless: true });
@@ -69,12 +70,13 @@ try {
   for (let rating = 1; rating <= 5; rating++) {
     const context = await newContext(rating === 1 ? 320 : 390);
     const page = await context.newPage();
+    activePage = page;
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     const path = ['/gratis/', '/gratis/pacientes/', '/gratis/profesionales/'][(rating - 1) % 3];
     await page.goto(origin + path);
     const widget = page.locator('#kc-feedback');
-    await widget.getByText('Aún sin valoraciones', { exact: true }).waitFor();
+    await widget.locator('#kc-fb-average').filter({ hasText: 'Aún sin valoraciones' }).waitFor();
     await widget.locator('.kc-fb-ratings label').nth(rating - 1).click();
     assert.equal(await widget.locator(`input[value="${rating}"]`).isChecked(), true);
     await widget.locator('textarea').fill(`PRUEBA SINTÉTICA UI ${rating}: <img src=x onerror=alert(1)> texto de verificación.`);
@@ -91,11 +93,13 @@ try {
       await widget.getByText('Ya registramos una opinión desde este navegador.').waitFor();
     }
     await context.close();
+    console.log(`Synthetic ${rating}-star submission passed for ${path}.`);
   }
   results.push('All five star choices submit successfully, correct page on all three libraries, cookie blocks duplicate, no page ReferenceError.');
 
   const context = await newContext();
   const page = await context.newPage();
+  activePage = page;
   await page.goto(origin + '/admin/feedback/');
   assert.equal(await page.locator('#results').isVisible(), false);
   assert.match(await page.locator('#status').textContent(), /Inicia sesión/);
@@ -135,6 +139,17 @@ try {
   results.push('No horizontal overflow at 320, 390, 768, 1365px; long comments wrap, original logo assets remain, comment markup never executes.');
   await context.close();
   console.log(JSON.stringify({ environment: 'local; synthetic KV and mocked owner verification; no Cloudflare E2E claim', passed: true, results }, null, 2));
+} catch (error) {
+  if (activePage && !activePage.isClosed()) {
+    const detail = await activePage.locator('#kc-feedback, #status').allTextContents();
+    console.error('Synthetic browser state:', detail.join('\n').slice(0, 3000));
+    if (process.env.FEEDBACK_QA_DIR) {
+      await mkdir(process.env.FEEDBACK_QA_DIR, { recursive: true });
+      await activePage.screenshot({ path: resolve(process.env.FEEDBACK_QA_DIR, 'failure.png'), fullPage: true });
+      await writeFile(resolve(process.env.FEEDBACK_QA_DIR, 'failure.txt'), String(error) + '\n' + detail.join('\n'));
+    }
+  }
+  throw error;
 } finally {
   if (browser) await browser.close();
   records.clear();
