@@ -13,6 +13,9 @@ on:
       - '.github/workflows/library-feedback.yml'
 permissions:
   contents: read
+concurrency:
+  group: library-feedback-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   synthetic-feedback:
     runs-on: ubuntu-latest

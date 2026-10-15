@@ -64,6 +64,7 @@ try {
   browser = await chromium.launch({ headless: true });
   const newContext = async (width = 390) => {
     const context = await browser.newContext({ viewport: { width, height: 844 } });
+    context.setDefaultTimeout(15000);
     await context.route('**/*', route => route.request().url().startsWith(origin + '/') ? route.continue() : route.abort());
     return context;
   };
@@ -75,6 +76,8 @@ try {
     page.on('pageerror', error => errors.push(error.message));
     const path = ['/gratis/', '/gratis/pacientes/', '/gratis/profesionales/'][(rating - 1) % 3];
     await page.goto(origin + path);
+    const metricsConsent = page.getByRole('button', { name: 'Rechazar métricas', exact: true });
+    if (await metricsConsent.isVisible()) await metricsConsent.click();
     const widget = page.locator('#kc-feedback');
     await widget.locator('#kc-fb-average').filter({ hasText: 'Aún sin valoraciones' }).waitFor();
     await widget.locator('.kc-fb-ratings label').nth(rating - 1).click();
@@ -127,6 +130,8 @@ try {
   for (const width of [320, 390, 768, 1365]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(origin + '/gratis/');
+    const metricsConsent = page.getByRole('button', { name: 'Rechazar métricas', exact: true });
+    if (await metricsConsent.isVisible()) await metricsConsent.click();
     const widget = page.locator('#kc-feedback');
     await widget.getByText('4 evaluaciones aprobadas', { exact: true }).waitFor();
     assert.equal(await widget.locator('#kc-fb-comments article').count(), 4);
