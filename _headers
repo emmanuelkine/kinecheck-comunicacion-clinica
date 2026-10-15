@@ -144,3 +144,6 @@
 
 /traumatologia/*.js
   Cache-Control: no-cache, must-revalidate
+
+/assets/library-feedback-v1.js
+  Cache-Control: no-cache, must-revalidate
