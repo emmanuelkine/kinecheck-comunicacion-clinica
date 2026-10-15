@@ -21,6 +21,8 @@
       #kc-feedback p{margin:6px 0 16px;color:#c9e5e5;overflow-wrap:anywhere}
       #kc-feedback .kc-fb-summary{display:grid;grid-template-columns:minmax(170px,.8fr) 1.2fr;gap:20px;align-items:center;margin:19px 0 23px;padding:18px;background:#0a222a;border:1px solid #28565f;border-radius:14px}
       #kc-feedback .kc-fb-average{font-size:2rem;font-weight:850;color:#fff0ad}#kc-feedback .kc-fb-average span{color:#ffce58;letter-spacing:.08em}
+      #kc-feedback .kc-fb-average p{font-size:.92rem;font-weight:400;line-height:1.5;margin:8px 0 0}
+      #kc-feedback .kc-fb-average .kc-fb-summary-stars{display:inline-block;color:transparent;background:linear-gradient(90deg,#ffce58 var(--kc-fb-fill),#819b9b var(--kc-fb-fill));background-clip:text;-webkit-background-clip:text}
       #kc-feedback .kc-fb-row{display:grid;grid-template-columns:42px 1fr 34px;gap:9px;align-items:center;font-size:.9rem;color:#d3e9e8}
       #kc-feedback .kc-fb-track{height:9px;border-radius:99px;background:#24444a;overflow:hidden}#kc-feedback .kc-fb-fill{height:100%;background:linear-gradient(90deg,#50bdb7,#a4f3e8);border-radius:99px}
       #kc-feedback .kc-fb-ratings{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0 19px}
@@ -34,7 +36,7 @@
       #kc-feedback .kc-fb-note{font-size:.84rem;color:#c5dddd}#kc-feedback [role=status]{font-weight:700;min-height:1.5em}
       #kc-feedback .kc-fb-comments{display:grid;gap:10px}#kc-feedback .kc-fb-comment{border-left:3px solid #4eaaa6;padding:8px 13px;background:#0d292f;border-radius:0 9px 9px 0}
       #kc-feedback .kc-fb-comment p{margin:4px 0;color:#e4f3f2}#kc-feedback .kc-fb-comment small{color:#9fcecd}
-      @media(max-width:600px){#kc-feedback{padding:0 14px;margin:30px auto}#kc-feedback .kc-fb-summary{grid-template-columns:1fr;gap:12px}#kc-feedback .kc-fb-row{grid-template-columns:35px 1fr 28px}#kc-feedback .kc-fb-ratings{gap:5px}#kc-feedback .kc-fb-ratings label{min-width:48px;padding:9px 4px}}
+      @media(max-width:600px){#kc-feedback{padding:0 14px;margin:30px auto}#kc-feedback .kc-fb-summary{grid-template-columns:1fr;gap:12px}#kc-feedback .kc-fb-row{grid-template-columns:35px 1fr 28px}#kc-feedback .kc-fb-ratings{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}#kc-feedback .kc-fb-ratings label{min-width:0;min-height:54px;flex-direction:column;gap:4px;padding:8px 2px}}
       @media(prefers-reduced-motion:reduce){#kc-feedback *{scroll-behavior:auto;transition:none}}
     </style>
     <div class="kc-fb-box">
@@ -77,7 +79,9 @@
       avg.textContent = data.count ? `${data.average} / 5` : "Aún sin valoraciones";
       if (data.count) {
         const stars = document.createElement("span");
-        stars.textContent = ` ${"★".repeat(Math.round(data.average))}${"☆".repeat(5 - Math.round(data.average))}`;
+        stars.textContent = "★★★★★";
+        stars.className = "kc-fb-summary-stars";
+        stars.style.setProperty("--kc-fb-fill", `${Math.max(0, Math.min(100, Number(data.average) * 20))}%`);
         stars.setAttribute("aria-label", `${data.average} de 5 estrellas`);
         avg.append(stars);
       }
