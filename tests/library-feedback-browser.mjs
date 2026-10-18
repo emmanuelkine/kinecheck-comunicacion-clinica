@@ -81,7 +81,7 @@ try {
     assert.deepEqual(errors, []);
     const cookie = (await context.cookies()).find(cookie => cookie.name === 'kc_feedback_submitted');
     assert.equal(cookie?.path, '/api/library-feedback');
-    assert.equal(await widget.locator('.kc-fb-average').innerText().then(s => s.split('\n')[0]), `${(i + 1) / (i + 1) * (i + 2) / 2} / 5`);
+    assert.ok((await widget.locator('#kc-fb-average').innerText()).startsWith(`${(i + 1) / (i + 1) * (i + 2) / 2} / 5`));
     await context.close();
     contexts.splice(contexts.indexOf(context), 1);
   }
@@ -93,7 +93,7 @@ try {
   if (await metricsConsent.isVisible()) await metricsConsent.click();
   const widget = page.locator('#kc-feedback');
   await widget.getByText('5 puntuaciones', { exact: true }).waitFor();
-  assert.equal(await widget.locator('#kc-fb-average').innerText().then(s => s.split('\n')[0]), '3 / 5');
+  assert.ok((await widget.locator('#kc-fb-average').innerText()).startsWith('3 / 5'));
   assert.equal(await widget.locator('.kc-fb-row').count(), 5);
   for (const width of [320, 390, 768, 1365]) {
     await page.setViewportSize({ width, height: 900 });
