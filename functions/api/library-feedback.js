@@ -136,7 +136,6 @@ function summarize(records) {
     count,
     average: count ? Math.round(approved.reduce((sum, record) => sum + record.rating, 0) / count * 100) / 100 : null,
     distribution,
-    comments: approved.filter((record) => record.comment && !containsSensitiveHealthDetails(record.comment)).sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 12).map(({ rating, comment, createdAt }) => ({ rating, comment, createdAt })),
     periodDays: 30,
   };
 }
@@ -151,34 +150,20 @@ export async function onRequestPost({ request, env }) {
   if (request.method !== "POST") return json({ message: "Método no permitido." }, 405, { allow: "GET, POST, PUT, OPTIONS" });
 
   const rating = ["number", "string"].includes(typeof input.rating) ? Number(input.rating) : NaN;
-  const area = trim(input.area, 30);
   const page = trim(input.page, 120);
-  const rawComment = input.comment ?? "";
-  if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !AREAS.has(input.area) || !PAGES.has(input.page) || typeof rawComment !== "string" || rawComment.length > 500) {
-    return json({ message: "Revisa la valoración y vuelve a intentarlo." }, 400);
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !PAGES.has(page)) {
+    return json({ message: "Selecciona una puntuación de 1 a 5 estrellas." }, 400);
   }
   const cookies = request.headers.get("cookie") || "";
   if (/(?:^|;\s*)kc_feedback_submitted=1(?:;|$)/.test(cookies)) {
     return json({ message: "Ya registramos una opinión desde este navegador." }, 429);
   }
-  const comment = scrubComment(rawComment);
-  if (containsSensitiveHealthDetails(rawComment)) {
-    return json({ message: "Por privacidad, elimina los datos clínicos y envía nuevamente tu opinión." }, 400);
-  }
-
   const createdAt = new Date().toISOString();
-  const record = {
-    rating,
-    area,
-    page,
-    comment,
-    status: "pending",
-    createdAt,
-  };
+  const record = { rating, page, status: "approved", createdAt };
   try {
     await applyRateLimit(request, env, store);
     await store.put(`${PREFIX}${createdAt}:${crypto.randomUUID()}`, JSON.stringify(record), { expirationTtl: RETENTION_SECONDS });
-    return json({ ok: true, moderated: true }, 201, {
+    return json({ ok: true }, 201, {
       "set-cookie": "kc_feedback_submitted=1; Path=/api/library-feedback; Max-Age=2592000; Secure; SameSite=Strict; HttpOnly",
     });
   } catch (error) {
