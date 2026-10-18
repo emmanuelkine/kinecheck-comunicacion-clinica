@@ -17,13 +17,11 @@
   function saveSession(value) {
     state.session = value;
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(value));
-    document.dispatchEvent(new Event("kinecheck:admin-session"));
   }
 
   function clearSession() {
     sessionStorage.removeItem(SESSION_KEY);
     state.session = null;
-    document.dispatchEvent(new Event("kinecheck:admin-session"));
   }
 
   function headers() {
