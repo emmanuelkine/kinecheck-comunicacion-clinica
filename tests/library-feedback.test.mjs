@@ -37,6 +37,9 @@ test('accepts real 1–5 star scores and publishes their average and distributio
     assert.equal(response.status, 201);
     assert.match(response.headers.get('set-cookie'), /HttpOnly/);
     assert.match(response.headers.get('set-cookie'), /Path=\/api\/library-feedback;/);
+    const publicSummary = await (await onRequestGet(context(request('/api/library-feedback'), store))).json();
+    assert.equal(publicSummary.count, rating);
+    assert.equal(publicSummary.average, (rating + 1) / 2);
   }
   const summary = await (await onRequestGet(context(request('/api/library-feedback'), store))).json();
   assert.equal(summary.count, 5);
