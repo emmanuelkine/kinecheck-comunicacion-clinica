@@ -104,7 +104,7 @@ try {
     assert.ok(await page.locator('header img[src*="kinecheck-3d-"]').count() > 0);
   }
   assert.equal([...records.keys()].filter(key => key.startsWith('feedback:')).length, 5);
-  assert.deepEqual([...records.values()].map(JSON.parse).map(row => row.rating), [1, 2, 3, 4, 5]);
+  assert.deepEqual([...records].filter(([key]) => key.startsWith('feedback:')).map(([, value]) => JSON.parse(value).rating), [1, 2, 3, 4, 5]);
   console.log(JSON.stringify({
     environment: 'local synthetic KV; loopback browser; no Cloudflare E2E claim',
     passed: true,
