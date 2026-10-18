@@ -68,7 +68,9 @@ try {
     const metricsConsent = page.getByRole('button', { name: 'Rechazar métricas', exact: true });
     if (await metricsConsent.isVisible()) await metricsConsent.click();
     const widget = page.locator('#kc-feedback');
-    await widget.locator('#kc-fb-average').filter({ hasText: 'Aún sin puntuaciones' }).waitFor();
+    await widget.locator('#kc-fb-average').waitFor();
+    if (i === 0) await widget.getByText('Aún sin puntuaciones').waitFor();
+    else await widget.getByText(`${i} ${i === 1 ? 'puntuación' : 'puntuaciones'}`, { exact: true }).waitFor();
     await widget.locator('.ratings label').nth(i).click();
     assert.equal(await widget.locator(`input[value="${i + 1}"]`).isChecked(), true);
     await widget.getByRole('button', { name: 'Enviar puntuación' }).click();
