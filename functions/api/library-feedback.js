@@ -22,7 +22,7 @@ class InputError extends Error {
 }
 
 async function readInput(request) {
-  if (!/^application\\/json(?:\\s*;|$)/i.test(request.headers.get("content-type") || "")) throw new InputError("Formato no permitido.", 415);
+  if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get("content-type") || "")) throw new InputError("Formato no permitido.", 415);
   if (Number(request.headers.get("content-length") || 0) > MAX_BYTES) throw new InputError("Solicitud demasiado extensa.", 413);
   const reader = request.body?.getReader();
   if (!reader) throw new InputError("Datos incorrectos.");
@@ -115,7 +115,7 @@ export async function onRequestPost({ request, env }) {
   if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !PAGES.has(page)) {
     return json({ message: "Selecciona una puntuación de 1 a 5 estrellas." }, 400);
   }
-  if (/(?:^|;\\s*)kc_feedback_submitted=1(?:;|$)/.test(request.headers.get("cookie") || "")) {
+  if (/(?:^|;\s*)kc_feedback_submitted=1(?:;|$)/.test(request.headers.get("cookie") || "")) {
     return json({ message: "Ya registramos una puntuación desde este navegador." }, 429);
   }
   const createdAt = new Date().toISOString();
