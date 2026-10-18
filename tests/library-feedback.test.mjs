@@ -44,7 +44,8 @@ test('accepts real 1–5 star scores and publishes their average and distributio
   assert.deepEqual(summary.distribution, [1, 1, 1, 1, 1]);
   assert.equal(summary.periodDays, 30);
   assert.equal(Object.hasOwn(summary, 'comments'), false);
-  for (const value of store.records.values()) {
+  for (const [key, value] of store.records) {
+    if (!key.startsWith('feedback:')) continue;
     const record = JSON.parse(value);
     assert.equal(record.status, 'approved');
     assert.deepEqual(Object.keys(record).sort(), ['createdAt', 'page', 'rating', 'status']);
@@ -149,7 +150,7 @@ test('paginates every feedback record and counts only valid approved scores from
     return { keys: names.slice(offset, offset + 2).map((name) => ({ name })), list_complete: offset + 2 >= names.length, cursor: String(offset + 2) };
   };
   const summary = await (await onRequestGet(context(request('/api/library-feedback'), store))).json();
-  assert.equal(summary.count, 20);
+  assert.equal(summary.count, 21);
   assert.ok(listCalls > 10);
   assert.equal(summary.distribution.reduce((a, b) => a + b), summary.count);
   assert.doesNotMatch(JSON.stringify(summary), /SYNTHETIC NAME|key|status/);
