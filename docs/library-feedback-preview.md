@@ -1,35 +1,39 @@
-# Valoración simple: pruebas y publicación
+# Valoraciones: verificación y publicación
 
-Este documento continúa el PR #231. La función pública se limita a:
-- permitir elegir de 1 a 5 estrellas;
-- registrar cada puntuación sin nombre, correo ni texto libre;
-- mostrar el promedio y la distribución de puntuaciones reales aprobadas de los últimos 30 días.
+Este documento continúa el PR #231. No habilitar producción antes de superar
+las pruebas reales de Preview. Las pruebas locales usan exclusivamente una KV
+en memoria y autorización de propietario simulada; no equivalen a un E2E real
+de Cloudflare/Supabase.
 
-Las puntuaciones nuevas se publican inmediatamente en el promedio. No se muestran
-comentarios, no se solicitan sugerencias y no se inventan datos para rellenar el
-promedio. Una cookie y el límite temporal por red reducen envíos duplicados o
-automatizados. La puntuación se guarda sin identificadores.
+## Configuración aislada en Cloudflare
 
-## Costo y almacenamiento
+Proyecto existente: `kinecheck-comunicacion-clinica`.
 
-Se usa Cloudflare Pages/Workers KV en el plan gratuito. No se requiere proveedor
-de pago ni plan de pago. Las cuotas gratuitas de Cloudflare aplican.
+1. Crear una KV exclusiva de Preview (para esta ejecución se usó
+   `kinecheck-preview-library-feedback-pr231-20261015`). Confirmar que su ID es
+   distinto de cualquier namespace de producción, certificación, compradores o
+   licencias.
+2. En Pages → Settings → Bindings, seleccionar **Preview** y vincular
+   `CERT_REQUESTS` a esa KV aislada. El entorno **Production** debe permanecer
+   sin cambios durante estas pruebas y nunca debe apuntar a la KV de Preview.
+3. En las variables/secretos de **Preview**, guardar `FEEDBACK_RATE_LIMIT_SECRET`
+   como secreto aleatorio de al menos 32 caracteres. No subir su valor al repo ni
+   incluirlo en capturas o logs. Este secreto solo calcula una huella temporal
+   para limitar envíos; no concede acceso a Cloudflare ni a Supabase.
+4. Volver a desplegar la rama del PR. Una KV vinculada después del despliegue no
+   se incorpora a las funciones hasta el siguiente despliegue.
+5. Tras superar el gate de Preview, tratar cualquier configuración de Production
+   como un cambio separado: usar almacenamiento propio, un secreto distinto y
+   conservar todos los bindings y secretos preexistentes. Nunca copiar fixtures.
 
-Proyecto Pages existente: `kinecheck-comunicacion-clinica`.
+La API usa exclusivamente `CERT_REQUESTS`, que en Preview debe resolver al
+namespace nuevo y aislado descrito arriba.
+Si falta la KV o el secreto antispam, el envío falla con 503. La consulta pública
+puede leer una KV vacía y devolver `average: null`, `count: 0`. No crear semillas.
 
-1. Crear dos KV distintas: `kinecheck-library-feedback-preview` y
-   `kinecheck-library-feedback-production`. Sus IDs deben ser distintos entre
-   sí y de los namespaces de certificación, compradores o licencias.
-2. En el entorno Preview, vincular la primera como `LIBRARY_FEEDBACK` y crear
-   `FEEDBACK_RATE_LIMIT_SECRET` aleatorio de al menos 32 caracteres.
-3. Desplegar de nuevo la rama después de configurar los bindings.
-4. Tras aprobar las pruebas, vincular la segunda KV vacía y un secreto distinto
-   en Production. Conservar todos los demás bindings y secretos.
+Documentación oficial: <https://developers.cloudflare.com/pages/functions/bindings/>.
 
-La API falla de forma cerrada para envíos si falta la KV o el secreto. No
-reutilizar la KV de certificación o compradores.
-
-## Pruebas locales y de navegador
+## Pruebas reproducibles locales
 
 ```sh
 npm ci --ignore-scripts
@@ -38,40 +42,65 @@ npx --no-install playwright install --with-deps chromium
 FEEDBACK_QA_DIR=/tmp/feedback-qa npm run test:feedback:browser
 ```
 
-Estas pruebas usan una KV en memoria y solo el servidor local. No son una prueba
-real de Cloudflare. Cubren las cinco puntuaciones, escritura y lectura,
-promedio/distribución, limitación de envíos, ausencia de texto libre, y
-visualización adaptable a 320, 390, 768 y 1365 px.
+La prueba de navegador solo escucha en loopback, bloquea peticiones externas,
+simula la verificación de propietario y destruye todos los datos ficticios al
+finalizar. Recorre las tres bibliotecas, selecciona 1–5 estrellas, envía, comprueba
+la cookie en una segunda solicitud, revisa el estado pendiente, edita para
+anonimizar, aprueba, rechaza y verifica promedio/distribución/comentarios. Revisa
+anchos de 320, 390, 768 y 1365 píxeles y genera capturas de 320 y 1365 píxeles.
 
-## Gate obligatorio en Preview
+El workflow `Library feedback isolation and browser tests` repite esas pruebas
+sin credenciales de producción. Las imágenes son pruebas sintéticas, no opiniones
+reales ni material publicitario.
 
-- Confirmar y registrar SHA, URL del despliegue e IDs de las dos KV; verificar
-  que el Preview usa solo la KV aislada.
-- Sin enviar datos a producción, publicar cinco puntuaciones sintéticas con
-  identificador de ejecución y contextos de navegador separados.
-- Comprobar que quedan guardadas y que el promedio/distribución coinciden.
-  Esperar la propagación eventual de KV antes de comparar lecturas.
-- Probar puntuaciones fuera de rango, honeypot, duplicado y límite de envíos.
-- Revisar visualmente la selección de estrellas y el promedio en un iPhone y un
-  computador. El Playwright de escritorio emulando anchuras no sustituye la
-  comprobación en dispositivo.
-- Limpiar exclusivamente las claves de prueba registradas y las claves de
-  limitación creadas por la ejecución; no vaciar el namespace completo.
-- Revisar las valoraciones auténticas históricas y compararlas con la fuente
-  antes/después. No borrar, reescribir ni copiar registros auténticos a Preview.
-  Si hay que incorporarlas al nuevo namespace productivo, documentar el conteo y
-  verificar que cada puntuación mantiene su valor y fecha; no migrar pendientes.
-- Solo después de superar todas las pruebas, fusionar el SHA probado y verificar
-  el despliegue productivo con consultas de lectura. No sembrar datos en producción.
+## Gate real de Preview
 
-La KV tiene consistencia eventual; el límite por red es de mejor esfuerzo, no un
-bloqueo atómico contra envíos concurrentes.
+- Registrar SHA y URL del despliegue probado. Confirmar nuevamente los IDs KV
+  distintos antes de realizar el primer envío.
+- Comprobar GET público 200 con totales reales; GET admin sin token 403.
+- Enviar cinco respuestas ficticias identificadas con un UUID de esta ejecución,
+  usando cinco contextos de navegador limpios. Esperar al menos 1 segundo entre
+  escrituras de la misma clave de rate limit, por el límite de Workers KV.
+- Todas quedan pendientes y fuera de los agregados públicos. Nunca enviar pruebas
+  a `kinecheck.cl` ni a la KV de producción.
+- Iniciar sesión como propietario en el `/admin/` del mismo Preview y pestaña;
+  comprobar carga en `/admin/feedback/`, redacción, confirmación de privacidad,
+  aprobación y rechazo. Verificar también token inválido/no propietario.
+- Consultar el resumen y las tres bibliotecas de nuevo; comprobar promedio,
+  distribución y comentarios contra los registros aprobados de esta ejecución.
+- Probar honeypot, duplicado, límite de red, formatos inválidos, más de 4096 bytes,
+  inyección HTML, correo/teléfono/RUT y revelaciones personales/de salud.
+- Moderación obligatoria: los filtros no identifican todas las formas de nombres,
+  direcciones o información sensible. Revisar el texto completo antes de aprobar.
+  Los rechazos descartan el texto. No alterar la puntuación al redactar.
+- KV tiene consistencia eventual: esperar propagación entre consultas. No usar
+  caches HTTP adicionales. La limitación de red es complementaria y de mejor
+  esfuerzo, no un bloqueo distribuido atómico contra bots concurrentes.
+- Limpiar únicamente las claves `feedback:*` cuyos UUID/textos correspondan a la
+  ejecución y las claves `rate:*` creadas por ella. La KV Preview debe estar vacía
+  y reservada para esta prueba para que la atribución sea inequívoca. Registrar
+  las claves antes de borrar, no usar vaciado global. Cerrar contextos elimina
+  cookies locales de prueba. Comprobar nuevamente que no queda ningún fixture.
+- Solo con todos los puntos anteriores aprobados, fusionar el SHA probado,
+  verificar despliegue de producción y hacer comprobaciones de lectura sin
+  sembrar valoraciones ni testimonios ficticios.
 
-## Cambios del PR
+## Correcciones añadidas al PR
 
-- La variable `page` se define antes del envío del formulario.
-- El formulario solo contiene estrellas; el servidor guarda puntuación, ruta y
-  fecha, sin datos de identidad ni comentarios.
-- Las puntuaciones válidas nuevas se suman al promedio público inmediatamente.
-- Se conservan las valoraciones históricas aprobadas y sus registros originales;
-  las pendientes y las de más de 30 días no se suman al promedio.
+- La variable usada en el JSON del formulario es ahora `page`, definida en el
+  mismo ámbito. La prueba pulsa y envía realmente cada puntuación.
+- La cookie ahora llega a `/api/library-feedback`, con `Secure`, `HttpOnly` y
+  `SameSite=Strict`; la ruta anterior `/gratis/` no protegía la API.
+- El CSP del panel permite consultar su API de mismo origen. La moderación usa
+  CSS externo y un CSP que restringe scripts/conexiones al propio sitio.
+- Se exige propietario antes de consultar pendientes o escribir decisiones.
+  Una clave pública de Supabase o un JWT no propietario no autorizan moderación.
+- Lectura de JSON acotada por bytes incluso sin `Content-Length`, tipos/rangos
+  estrictos, origen exacto y honeypot. No se persisten campos de identidad.
+- Límite de 5 envíos por hora/red con HMAC y TTL; no se guarda la IP ni se vincula
+  su huella con la opinión. Cookie adicional: una respuesta por navegador/30 días.
+- Aprobación con revisión de privacidad y edición para quitar datos; el texto se
+  renderiza mediante `textContent`. No se asignan comentarios con `innerHTML`.
+- Se eliminó el truncado silencioso a diez páginas KV. Agregados aprobados: últimos
+  30 días; pendientes moderables: hasta 90 días. Moderar no reinicia la retención.
+- Logo y paleta originales conservados. No se cambian compras, cursos ni licencias.

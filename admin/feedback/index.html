@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#073c4a">
+  <title>Moderación de opiniones | KineCheck</title>
+  <link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="/admin/library-feedback.css?v=20261015-r3">
+</head>
+<body>
+  <main class="wrap">
+    <nav class="top"><a href="/admin/">← Volver al panel</a><img class="brand" src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck"></nav>
+    <h1>Opiniones de la biblioteca gratuita</h1>
+    <p class="muted">Valora solo comentarios auténticos. Las valoraciones y comentarios se publican únicamente después de aprobarlos. Resultados de los últimos 30 días. Las respuestas se eliminan a los 90 días; al rechazar, se descarta el texto.</p>
+    <div class="toolbar"><button id="load" type="button">Actualizar resultados</button><span id="status" class="notice" role="status" aria-live="polite">Inicia sesión primero en /admin/ desde esta misma pestaña.</span></div>
+    <section id="results" hidden>
+      <div class="cards">
+        <article class="card">Evaluaciones aprobadas<div id="count" class="number">—</div></article>
+        <article class="card">Promedio aprobado<div id="average" class="number">—</div></article>
+        <article class="card">Pendientes de moderar<div id="pending-count" class="number">—</div></article>
+      </div>
+      <section class="panel"><h2>Distribución aprobada</h2><div id="distribution" class="distribution"></div></section>
+      <section class="panel"><h2>En espera de moderación</h2><p class="muted">Revisa que el comentario no identifique a una persona ni exponga datos de contacto, salud o información sensible. El sistema elimina formatos de contacto evidentes antes de guardar; rechaza cualquier texto dudoso.</p><div id="pending" class="reviews"></div></section>
+      <section class="panel"><h2>Últimas decisiones</h2><div id="recent" class="reviews"></div></section>
+    </section>
+  </main>
+  <script src="/admin/library-feedback-moderation.js?v=20261015-r3" defer></script>
+</body>
+</html>
