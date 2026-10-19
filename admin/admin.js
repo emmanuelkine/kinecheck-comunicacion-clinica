@@ -54,40 +54,25 @@
     return hostname.endsWith(`.${PAGES_PROJECT_HOST}`) && hostname !== PAGES_PROJECT_HOST;
   }
 
-  async function requireOwner(session) {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/platform-context`, {
-      method: "POST",
-      cache: "no-store",
-      headers: {
-        apikey: ANON_KEY,
-        Authorization: `Bearer ${session?.access_token || ""}`,
-        "Content-Type": "application/json",
-      },
-      body: "{}",
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok || data.owner !== true) {
-      throw new Error(data?.message || "Esta cuenta no tiene acceso de propietario.");
-    }
-  }
-
   async function login(email, password) {
-    // platform-login deliberately permits only the production origin. Preview
-    // uses Supabase Auth's own rate-limited endpoint, then independently proves
-    // owner authorization before saving any session. Production is unchanged.
+    // Preview uses a same-origin Pages Function because mobile WebKit can reject
+    // the otherwise valid cross-origin Auth hop. The function authenticates with
+    // Supabase and proves owner authorization before returning a session.
+    // Production keeps its existing platform-login path unchanged.
     const preview = isCloudflarePreview();
-    const path = preview
-      ? "/auth/v1/token?grant_type=password"
-      : "/functions/v1/platform-login";
-    const response = await fetch(`${SUPABASE_URL}${path}`, {
+    const endpoint = preview
+      ? "/api/admin-preview-login"
+      : `${SUPABASE_URL}/functions/v1/platform-login`;
+    const response = await fetch(endpoint, {
       method: "POST",
       cache: "no-store",
-      headers: { apikey: ANON_KEY, "Content-Type": "application/json" },
+      headers: preview
+        ? { "Content-Type": "application/json" }
+        : { apikey: ANON_KEY, "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data?.error_description || data?.message || "No fue posible ingresar.");
-    if (preview) await requireOwner(data);
     saveSession(data);
   }
 

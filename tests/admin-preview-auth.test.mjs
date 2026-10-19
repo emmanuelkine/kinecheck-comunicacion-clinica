@@ -7,12 +7,12 @@ const source = await readFile(new URL("../admin/admin.js", import.meta.url), "ut
 test("admin Preview authenticates without changing the production login path", () => {
   assert.match(source, /hostname\.endsWith\(`\.\$\{PAGES_PROJECT_HOST\}`\)/);
   assert.match(source, /hostname !== PAGES_PROJECT_HOST/);
-  assert.match(source, /preview\s*\?\s*"\/auth\/v1\/token\?grant_type=password"\s*:\s*"\/functions\/v1\/platform-login"/);
+  assert.match(source, /preview\s*\?\s*"\/api\/admin-preview-login"\s*:\s*`\$\{SUPABASE_URL\}\/functions\/v1\/platform-login`/);
 });
 
-test("admin Preview requires verified owner authorization before saving a session", () => {
-  assert.match(source, /functions\/v1\/platform-context/);
-  assert.match(source, /data\.owner !== true/);
-  assert.match(source, /if \(preview\) await requireOwner\(data\);\s*saveSession\(data\);/);
+test("admin Preview sends credentials only to its same-origin login endpoint", () => {
+  assert.match(source, /headers:\s*preview\s*\?\s*\{ "Content-Type": "application\/json" \}/);
+  assert.doesNotMatch(source, /auth\/v1\/token\?grant_type=password/);
+  assert.match(source, /saveSession\(data\);/);
   assert.match(source, /\$\("#admin-password"\)\.value = ""/);
 });
