@@ -14,3 +14,7 @@
 #kc-metrics-panel button:focus-visible,#kc-metrics-toggle:focus-visible,#kc-metrics-panel a:focus-visible{outline:3px solid #ffde7c;outline-offset:3px}
 #kc-metrics-toggle{position:fixed;z-index:2147482999;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));padding:8px 13px;border:1px solid #6cbdc3;background:#082c37;color:#f5ffff;box-shadow:0 7px 26px rgba(0,0,0,.35)}
 @media(max-width:560px){#kc-metrics-panel{max-height:65vh;padding:16px}#kc-metrics-panel .kc-metrics-actions button{flex:1 1 auto}}
+
+/* Biblioteca: solicitud persistente centrada hasta que el visitante acepte. */
+body.kc-library-metrics #kc-metrics-panel:not([hidden]){position:fixed;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(540px,calc(100vw - 24px));max-height:min(82dvh,650px);margin:0;overflow-y:auto;overscroll-behavior:contain;z-index:2147483000}
+@media(max-width:560px){body.kc-library-metrics #kc-metrics-panel:not([hidden]){width:calc(100vw - 24px);max-height:76dvh;padding:16px}}
