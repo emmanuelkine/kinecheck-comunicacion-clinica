@@ -119,7 +119,8 @@ async function readRecords(store) {
       for (const { key, value } of values) {
         if (!validRecord(value)) continue;
         // Do not spread legacy objects: never expose historical identifying fields.
-        rows.push({ rating: value.rating, page: value.page, createdAt: value.createdAt, area: AREAS.has(value.area) ? value.area : "otro", comment: scrubComment(value.comment), status: value.status === "approved" || value.status === "rejected" ? value.status : "pending", key });
+        const historical = value.status === undefined || value.status === null;
+        rows.push({ rating: value.rating, page: value.page, createdAt: value.createdAt, area: AREAS.has(value.area) ? value.area : "otro", comment: historical ? "" : scrubComment(value.comment), status: historical ? "approved" : value.status === "approved" || value.status === "rejected" ? value.status : "pending", key });
       }
     }
     if (result.list_complete || !result.cursor) break;
