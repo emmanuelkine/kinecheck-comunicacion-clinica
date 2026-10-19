@@ -179,7 +179,7 @@ test('pagination, historical scores, retention and projection do not leak identi
     const admin = await (await onRequestGet(context(request('/api/library-feedback?admin=1', { headers: ownerHeaders }), store))).json();
     assert.equal(admin.pendingCount, 0);
     assert.doesNotMatch(JSON.stringify(admin), /SYNTHETIC NAME|synthetic@example/);
-    assert.equal((await onRequestPut(context(request('/api/library-feedback', { method: 'PUT', headers: ownerHeaders, body: { key: 'feedback:legacy-22', decision: 'approved', privacyReviewed: true } }), store))).status, 404);
+    assert.equal(admin.recent.find((row) => row.key === 'feedback:legacy-22')?.comment, '');
   });
 });
 
