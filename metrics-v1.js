@@ -371,7 +371,7 @@
   function mountMetricsPreferences() {
     const css = document.createElement("link");
     css.rel = "stylesheet";
-    css.href = "/assets/metrics-privacy-v1.css?v=20260925-1";
+    css.href = "/assets/metrics-privacy-v1.css?v=20261019-center";
     document.head.appendChild(css);
 
     const panel = document.createElement("section");
@@ -415,6 +415,7 @@
     });
     document.body.append(panel, toggle);
     const inLibrary = location.pathname === "/gratis" || location.pathname.startsWith("/gratis/");
+    if (inLibrary) document.body.classList.add("kc-library-metrics");
     if (inLibrary) {
       // El rechazo no elimina ni oculta el aviso en las bibliotecas.
       panel.hidden = metricsChoice === "yes";
