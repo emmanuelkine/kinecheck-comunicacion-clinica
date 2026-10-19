@@ -360,8 +360,11 @@
     if (choice === "no") removeOptionalSession();
     const panel = document.querySelector("#kc-metrics-panel");
     const toggle = document.querySelector("#kc-metrics-toggle");
-    if (panel) panel.hidden = true;
-    if (toggle) toggle.hidden = false;
+    // En las bibliotecas el aviso de aceptación permanece visible mientras
+    // no exista consentimiento afirmativo, sin impedir navegar ni medir sin permiso.
+    const inLibrary = location.pathname === "/gratis" || location.pathname.startsWith("/gratis/");
+    if (panel) panel.hidden = inLibrary ? choice === "yes" : true;
+    if (toggle) toggle.hidden = inLibrary ? choice !== "yes" : false;
     if (choice === "yes") startMetrics();
   }
 
@@ -411,7 +414,12 @@
       toggle.focus();
     });
     document.body.append(panel, toggle);
-    if (metricsChoice === "yes" || metricsChoice === "no") {
+    const inLibrary = location.pathname === "/gratis" || location.pathname.startsWith("/gratis/");
+    if (inLibrary) {
+      // El rechazo no elimina ni oculta el aviso en las bibliotecas.
+      panel.hidden = metricsChoice === "yes";
+      toggle.hidden = metricsChoice !== "yes";
+    } else if (metricsChoice === "yes" || metricsChoice === "no") {
       panel.hidden = true;
       toggle.hidden = false;
     }
