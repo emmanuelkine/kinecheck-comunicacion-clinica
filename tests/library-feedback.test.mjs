@@ -162,23 +162,24 @@ test('sensitive disclosures are rejected before storage, including accents and t
   assert.equal(store.records.size, 0);
 });
 
-test('pagination, legacy pending records, retention and projection do not leak identity or distort totals', async () => {
+test('pagination, historical scores, retention and projection do not leak identity or distort totals', async () => {
   const store = makeStore();
   const now = Date.now();
-  for (let n = 0; n < 23; n++) store.records.set(`feedback:legacy-${n}`, JSON.stringify({ ...input({ rating: n % 5 + 1 }), status: n === 22 ? undefined : 'approved', name: 'SYNTHETIC NAME', email: 'synthetic@example.test', createdAt: new Date(now - (n === 22 ? 45 : n === 21 ? 35 : 1) * 86400000).toISOString() }));
+  for (let n = 0; n < 23; n++) store.records.set(`feedback:legacy-${n}`, JSON.stringify({ ...input({ rating: n % 5 + 1, comment: n === 22 ? 'Comentario histórico no revisado' : 'Comentario aprobado' }), status: n === 22 ? undefined : 'approved', name: 'SYNTHETIC NAME', email: 'synthetic@example.test', createdAt: new Date(now - (n === 21 ? 35 : 1) * 86400000).toISOString() }));
   store.records.set('feedback:invalid', JSON.stringify({ ...input(), rating: 500, createdAt: new Date().toISOString(), status: 'approved' }));
   const names = [...store.records.keys()];
   let listCalls = 0;
   store.list = async ({ cursor }) => { listCalls++; const offset = Number(cursor || 0); return { keys: names.slice(offset, offset + 2).map(name => ({ name })), list_complete: offset + 2 >= names.length, cursor: String(offset + 2) }; };
   const summary = await (await onRequestGet(context(request('/api/library-feedback'), store))).json();
-  assert.equal(summary.count, 21);
+  assert.equal(summary.count, 22);
   assert.ok(listCalls > 10);
   assert.equal(summary.distribution.reduce((a, b) => a + b), summary.count);
+  assert.equal(summary.comments.some((item) => item.comment.includes('Comentario histórico no revisado')), false);
   await withOwner(async () => {
     const admin = await (await onRequestGet(context(request('/api/library-feedback?admin=1', { headers: ownerHeaders }), store))).json();
-    assert.equal(admin.pendingCount, 1);
+    assert.equal(admin.pendingCount, 0);
     assert.doesNotMatch(JSON.stringify(admin), /SYNTHETIC NAME|synthetic@example/);
-    assert.equal((await onRequestPut(context(request('/api/library-feedback', { method: 'PUT', headers: ownerHeaders, body: { key: 'feedback:legacy-22', decision: 'approved', privacyReviewed: true } }), store))).status, 200);
+    assert.equal(admin.recent.find((row) => row.key === 'feedback:legacy-22')?.comment, '');
   });
 });
 

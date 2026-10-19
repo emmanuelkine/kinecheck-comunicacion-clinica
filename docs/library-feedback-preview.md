@@ -103,4 +103,5 @@ reales ni material publicitario.
   renderiza mediante `textContent`. No se asignan comentarios con `innerHTML`.
 - Se eliminó el truncado silencioso a diez páginas KV. Agregados aprobados: últimos
   30 días; pendientes moderables: hasta 90 días. Moderar no reinicia la retención.
+- Los registros históricos del formulario anterior sin `status` siguen contando como valoraciones reales; sus comentarios no se publican automáticamente.
 - Logo y paleta originales conservados. No se cambian compras, cursos ni licencias.
