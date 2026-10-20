@@ -428,6 +428,14 @@
   }
 
   function init() {
+    // Cargar audioguía solamente en páginas de la biblioteca gratuita.
+    if (/^\\/gratis(?:\\/|$)/.test(location.pathname) && !document.querySelector('script[data-kc-audio-guide]')) {
+      const audioScript = document.createElement("script");
+      audioScript.src = "/assets/library-audio-guide-v1.js?v=20261020";
+      audioScript.defer = true;
+      audioScript.dataset.kcAudioGuide = "true";
+      document.head.appendChild(audioScript);
+    }
     cleanAcademyTrackingParams();
     mountMetricsPreferences();
     startMetrics();
