@@ -40,11 +40,12 @@
       @media(prefers-reduced-motion:reduce){#kc-feedback *{scroll-behavior:auto;transition:none}}
     </style>
     <div class="kc-fb-box">
-      <h2 id="kc-fb-title">¿Qué te pareció la biblioteca gratuita?</h2>
-      <p>Tu opinión ayuda a mejorar. No pedimos tu nombre ni correo. Resultados de los últimos 30 días.</p>
+      <h2 id="kc-fb-title">Opiniones de nuestra comunidad</h2>
+      <p>Promedio, estrellas y comentarios auténticos aprobados durante los últimos 30 días. No pedimos tu nombre ni correo.</p>
       <div class="kc-fb-summary" aria-live="polite"><div id="kc-fb-average">Cargando valoraciones…</div><div id="kc-fb-distribution"></div></div>
       <div id="kc-fb-comments-block" hidden><h3>Comentarios anónimos moderados</h3><div class="kc-fb-comments" id="kc-fb-comments"></div></div>
       <form>
+        <h3>Comparte tu experiencia</h3>
         <fieldset style="border:0;padding:0;margin:0"><legend>Califica tu experiencia de 1 a 5 estrellas</legend><div class="kc-fb-ratings"></div></fieldset>
         <label for="kc-fb-area">¿Qué mejorarías?</label>
         <select id="kc-fb-area" name="area" required><option value="nada">Nada, me gustó</option><option value="contenido">Más contenido</option><option value="navegacion">Encontrar recursos</option><option value="diseno">Diseño e imágenes</option><option value="descargas">Descargas y PDF</option><option value="otro">Otra sugerencia</option></select>
@@ -105,6 +106,9 @@
       (data.comments || []).forEach((item) => {
         const article = document.createElement("article"); article.className = "kc-fb-comment";
         const stars = document.createElement("small"); stars.textContent = `${"★".repeat(item.rating)} · Anónimo`;
+        const date = document.createElement("time"); date.dateTime = item.createdAt;
+        date.textContent = new Intl.DateTimeFormat("es-CL", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(item.createdAt));
+        stars.append(document.createTextNode(" · "), date);
         const quote = document.createElement("p"); quote.textContent = item.comment;
         article.append(stars, quote); comments.append(article);
       });

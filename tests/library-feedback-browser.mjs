@@ -133,8 +133,11 @@ try {
     const metricsConsent = page.getByRole('button', { name: 'Rechazar métricas', exact: true });
     if (await metricsConsent.isVisible()) await metricsConsent.click();
     const widget = page.locator('#kc-feedback');
+    await widget.getByRole('heading', { name: 'Opiniones de nuestra comunidad', exact: true }).waitFor();
     await widget.getByText('4 evaluaciones aprobadas', { exact: true }).waitFor();
     assert.equal(await widget.locator('#kc-fb-comments article').count(), 4);
+    assert.equal(await widget.locator('#kc-fb-comments time').count(), 4);
+    assert.ok((await widget.locator('#kc-fb-comments time').first().getAttribute('datetime'))?.includes('T'));
     assert.equal(await widget.locator('#kc-fb-comments img, #kc-fb-comments script').count(), 0);
     const geometry = await widget.evaluate(node => ({ left: node.getBoundingClientRect().left, right: node.getBoundingClientRect().right, viewport: innerWidth, scroll: node.scrollWidth, width: node.clientWidth }));
     assert.ok(geometry.left >= 0 && geometry.right <= geometry.viewport + 1 && geometry.scroll <= geometry.width + 1, JSON.stringify(geometry));
