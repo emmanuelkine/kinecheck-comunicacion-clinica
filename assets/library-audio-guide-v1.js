@@ -16,12 +16,12 @@ css.textContent=`
 #kc-audio-guide .kc-audio-status{font-size:12px;color:#d1e8e8;margin-top:5px}
 #kc-audio-guide .kc-audio-collapse{float:right;padding:3px 8px;background:transparent;color:white}
 #kc-audio-guide button:focus-visible{outline:3px solid #ffc87a;outline-offset:2px}
-@media print{#kc-audio-guide{display:none!important}}
+@media(max-width:700px){#kc-audio-guide{position:relative;inset:auto;right:auto;bottom:auto;z-index:1;width:100%;max-width:100%;margin:16px 0 22px;box-shadow:0 5px 18px #0004}#kc-audio-guide .kc-audio-buttons button{min-height:44px}}\n@media print{#kc-audio-guide{display:none!important}}
 `;
 document.head.appendChild(css);
 const root=document.createElement("section");root.id="kc-audio-guide";root.setAttribute("aria-label","Escuchar explicación de KineCheck");
 root.innerHTML='<button type="button" class="kc-audio-collapse secondary" aria-label="Minimizar controles de audio" aria-expanded="true">−</button><div class="kc-audio-title">♫ Escuchar explicación</div><div class="kc-audio-content"><div class="kc-audio-status" role="status" aria-live="polite">Escucha el contenido educativo de esta página.</div><div class="kc-audio-buttons"><button type="button" data-audio="play">Escuchar</button><button type="button" class="secondary" data-audio="pause" disabled>Pausar</button><button type="button" class="secondary" data-audio="stop" disabled>Detener</button></div><div style="font-size:11px;margin-top:8px;color:#badbdc">Voz disponible según tu navegador. El audio no se guarda ni se envía a KineCheck.</div></div>';
-document.body.appendChild(root);
+const contentMain=document.querySelector("main");\nif(contentMain)contentMain.insertBefore(root,contentMain.firstChild);else document.body.insertBefore(root,document.body.firstChild);
 const $=s=>root.querySelector(s),status=$(".kc-audio-status"),play=$('[data-audio="play"]'),pause=$('[data-audio="pause"]'),stop=$('[data-audio="stop"]');
 function update(message){status.textContent=message;play.textContent=active?"Reiniciar":"Escuchar";pause.disabled=!active;pause.textContent=paused?"Continuar":"Pausar";stop.disabled=!active;}
 function cancel(){session++;active=false;paused=false;chunks=[];index=0;synth.cancel();update("Reproducción detenida.");}
