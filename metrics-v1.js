@@ -360,11 +360,9 @@
     if (choice === "no") removeOptionalSession();
     const panel = document.querySelector("#kc-metrics-panel");
     const toggle = document.querySelector("#kc-metrics-toggle");
-    // En las bibliotecas el aviso de aceptación permanece visible mientras
-    // no exista consentimiento afirmativo, sin impedir navegar ni medir sin permiso.
-    const inLibrary = location.pathname === "/gratis" || location.pathname.startsWith("/gratis/");
-    if (panel) panel.hidden = inLibrary ? choice === "yes" : true;
-    if (toggle) toggle.hidden = inLibrary ? choice !== "yes" : false;
+    // Aceptar o rechazar cierra el aviso; el rechazo nunca activa métricas.
+    if (panel) panel.hidden = true;
+    if (toggle) toggle.hidden = false;
     if (choice === "yes") startMetrics();
   }
 
@@ -417,9 +415,10 @@
     const inLibrary = location.pathname === "/gratis" || location.pathname.startsWith("/gratis/");
     if (inLibrary) document.body.classList.add("kc-library-metrics");
     if (inLibrary) {
-      // El rechazo no elimina ni oculta el aviso en las bibliotecas.
-      panel.hidden = metricsChoice === "yes";
-      toggle.hidden = metricsChoice !== "yes";
+      // Mantener centrado hasta elegir; ambas opciones registran una decisión.
+      const decided = metricsChoice === "yes" || metricsChoice === "no";
+      panel.hidden = decided;
+      toggle.hidden = !decided;
     } else if (metricsChoice === "yes" || metricsChoice === "no") {
       panel.hidden = true;
       toggle.hidden = false;
