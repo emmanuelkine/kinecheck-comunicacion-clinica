@@ -21,7 +21,8 @@ css.textContent=`
 document.head.appendChild(css);
 const root=document.createElement("section");root.id="kc-audio-guide";root.setAttribute("aria-label","Escuchar explicación de KineCheck");
 root.innerHTML='<button type="button" class="kc-audio-collapse secondary" aria-label="Minimizar controles de audio" aria-expanded="true">−</button><div class="kc-audio-title">♫ Escuchar explicación</div><div class="kc-audio-content"><div class="kc-audio-status" role="status" aria-live="polite">Escucha el contenido educativo de esta página.</div><div class="kc-audio-buttons"><button type="button" data-audio="play">Escuchar</button><button type="button" class="secondary" data-audio="pause" disabled>Pausar</button><button type="button" class="secondary" data-audio="stop" disabled>Detener</button></div><div style="font-size:11px;margin-top:8px;color:#badbdc">Voz disponible según tu navegador. El audio no se guarda ni se envía a KineCheck.</div></div>';
-const contentMain=document.querySelector("main");\nif(contentMain)contentMain.insertBefore(root,contentMain.firstChild);else document.body.insertBefore(root,document.body.firstChild);
+const contentMain=document.querySelector("main");
+if(contentMain)contentMain.insertBefore(root,contentMain.firstChild);else document.body.insertBefore(root,document.body.firstChild);
 const $=s=>root.querySelector(s),status=$(".kc-audio-status"),play=$('[data-audio="play"]'),pause=$('[data-audio="pause"]'),stop=$('[data-audio="stop"]');
 function update(message){status.textContent=message;play.textContent=active?"Reiniciar":"Escuchar";pause.disabled=!active;pause.textContent=paused?"Continuar":"Pausar";stop.disabled=!active;}
 function cancel(){session++;active=false;paused=false;chunks=[];index=0;synth.cancel();update("Reproducción detenida.");}
