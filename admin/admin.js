@@ -77,11 +77,14 @@
   }
 
   async function fetchStatus() {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/automation-status`, {
+    const preview = isCloudflarePreview();
+    const response = await fetch(preview ? "/api/admin-preview-automation" : `${SUPABASE_URL}/functions/v1/automation-status`, {
       method: "POST",
       cache: "no-store",
-      headers: headers(),
-      body: "{}",
+      headers: preview
+        ? { Authorization: `Bearer ${state.session?.access_token || ""}`, "Content-Type": "application/json" }
+        : headers(),
+      body: preview ? JSON.stringify({ operation: "status" }) : "{}",
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data?.message || "No fue posible cargar el panel.");
@@ -90,11 +93,15 @@
   }
 
   async function runAction(action, extra = {}) {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/automation-control`, {
+    const preview = isCloudflarePreview();
+    const payload = { action, ...extra };
+    const response = await fetch(preview ? "/api/admin-preview-automation" : `${SUPABASE_URL}/functions/v1/automation-control`, {
       method: "POST",
       cache: "no-store",
-      headers: headers(),
-      body: JSON.stringify({ action, ...extra }),
+      headers: preview
+        ? { Authorization: `Bearer ${state.session?.access_token || ""}`, "Content-Type": "application/json" }
+        : headers(),
+      body: JSON.stringify(preview ? { operation: "control", payload } : payload),
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data?.message || "No fue posible ejecutar la acción.");

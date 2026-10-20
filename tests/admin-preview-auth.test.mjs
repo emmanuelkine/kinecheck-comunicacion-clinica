@@ -16,3 +16,10 @@ test("admin Preview sends credentials only to its same-origin login endpoint", (
   assert.match(source, /saveSession\(data\);/);
   assert.match(source, /\$\("#admin-password"\)\.value = ""/);
 });
+
+test("admin Preview loads and controls the dashboard through its owner-checked same-origin proxy", () => {
+  assert.match(source, /preview \? "\/api\/admin-preview-automation" : `\$\{SUPABASE_URL\}\/functions\/v1\/automation-status`/);
+  assert.match(source, /preview \? "\/api\/admin-preview-automation" : `\$\{SUPABASE_URL\}\/functions\/v1\/automation-control`/);
+  assert.match(source, /JSON\.stringify\(\{ operation: "status" \}\)/);
+  assert.match(source, /JSON\.stringify\(preview \? \{ operation: "control", payload \} : payload\)/);
+});
