@@ -26,7 +26,7 @@ const $=s=>root.querySelector(s),status=$(".kc-audio-status"),play=$('[data-audi
 function update(message){status.textContent=message;play.textContent=active?"Reiniciar":"Escuchar";pause.disabled=!active;pause.textContent=paused?"Continuar":"Pausar";stop.disabled=!active;}
 function cancel(){session++;active=false;paused=false;chunks=[];index=0;synth.cancel();update("Reproducción detenida.");}
 function getText(){
-const target=document.querySelector("main article:not([hidden])")||document.querySelector("main")||document.querySelector("article")||document.querySelector('[role="main"]');
+const target=document.querySelector("main")||document.querySelector("article:not([hidden])")||document.querySelector("article")||document.querySelector('[role="main"]');
 if(!target)return "";
 const copy=target.cloneNode(true);
 copy.querySelectorAll('script,style,svg,nav,aside,footer,form,button,input,select,textarea,video,audio,iframe,[hidden],[aria-hidden="true"],[inert],.lock,.lockcard,.locked,.paywall,[data-locked],[data-premium],#kc-audio-guide').forEach(n=>n.remove());
