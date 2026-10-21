@@ -369,7 +369,7 @@
   function mountMetricsPreferences() {
     const css = document.createElement("link");
     css.rel = "stylesheet";
-    css.href = "/assets/metrics-privacy-v1.css?v=20261019-center";
+    css.href = "/assets/metrics-privacy-v1.css?v=20261021-global-center";
     document.head.appendChild(css);
 
     const panel = document.createElement("section");
