@@ -9,7 +9,8 @@ test("las métricas opcionales requieren aceptación", async () => {
   assert.doesNotThrow(() => new Function(source));
   assert.match(source, /if \(metricsChoice !== "yes"\) return Promise\.resolve\(null\)/);
   assert.match(source, /function startMetrics\(\) \{\s*if \(metricsStarted \|\| metricsChoice !== "yes"\) return;/);
-  assert.match(source, /function init\(\) \{\s*cleanAcademyTrackingParams\(\);\s*mountMetricsPreferences\(\);\s*startMetrics\(\);/);
+  assert.match(source, /function init\(\) \{[\s\S]*?cleanAcademyTrackingParams\(\);\s*mountMetricsPreferences\(\);\s*startMetrics\(\);/);
+  assert.match(source, /const decided = metricsChoice === "yes" \|\| metricsChoice === "no";\s*panel\.hidden = decided;\s*toggle\.hidden = !decided;/);
   assert.match(source, /data-kc-metrics="no"/);
   assert.match(source, /data-kc-metrics="yes"/);
   assert.match(source, /kc_optional_metrics_choice_v1/);
@@ -27,6 +28,7 @@ test("el visitante puede informarse y cambiar su elección", async () => {
   assert.match(policy, /25 de septiembre de 2026/);
   assert.match(styles, /#kc-metrics-panel/);
   assert.match(styles, /:focus-visible/);
+  assert.match(styles, /body\.kc-library-metrics #kc-metrics-panel:not\(\[hidden\]\)[^{]*\{[^}]*left:50%;[^}]*top:50%;[^}]*transform:translate\(-50%,-50%\)/);
   assert.match(home, /metrics-v1\.js\?v=20260925-consent1/);
 });
 
