@@ -4,6 +4,7 @@
   const SUPABASE_URL = "https://eqhcdclyeoapmqtlduwf.supabase.co";
   const ANON_KEY = "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_";
   const SESSION_KEY = "kinecheck_admin_session_v1";
+  const PAGES_PROJECT_HOST = "kinecheck-comunicacion-clinica.pages.dev";
 
   const state = { session: null, data: null };
   const $ = (selector) => document.querySelector(selector);
@@ -17,11 +18,13 @@
   function saveSession(value) {
     state.session = value;
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(value));
+    document.dispatchEvent(new Event("kinecheck:admin-session"));
   }
 
   function clearSession() {
     sessionStorage.removeItem(SESSION_KEY);
     state.session = null;
+    document.dispatchEvent(new Event("kinecheck:admin-session"));
   }
 
   function headers() {
@@ -46,11 +49,26 @@
     node.hidden = !message;
   }
 
+  function isCloudflarePreview() {
+    const hostname = location.hostname.toLowerCase();
+    return hostname.endsWith(`.${PAGES_PROJECT_HOST}`) && hostname !== PAGES_PROJECT_HOST;
+  }
+
   async function login(email, password) {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/platform-login`, {
+    // Preview uses a same-origin Pages Function because mobile WebKit can reject
+    // the otherwise valid cross-origin Auth hop. The function authenticates with
+    // Supabase and proves owner authorization before returning a session.
+    // Production keeps its existing platform-login path unchanged.
+    const preview = isCloudflarePreview();
+    const endpoint = preview
+      ? "/api/admin-preview-login"
+      : `${SUPABASE_URL}/functions/v1/platform-login`;
+    const response = await fetch(endpoint, {
       method: "POST",
       cache: "no-store",
-      headers: { apikey: ANON_KEY, "Content-Type": "application/json" },
+      headers: preview
+        ? { "Content-Type": "application/json" }
+        : { apikey: ANON_KEY, "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json().catch(() => ({}));
@@ -59,11 +77,14 @@
   }
 
   async function fetchStatus() {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/automation-status`, {
+    const preview = isCloudflarePreview();
+    const response = await fetch(preview ? "/api/admin-preview-automation" : `${SUPABASE_URL}/functions/v1/automation-status`, {
       method: "POST",
       cache: "no-store",
-      headers: headers(),
-      body: "{}",
+      headers: preview
+        ? { Authorization: `Bearer ${state.session?.access_token || ""}`, "Content-Type": "application/json" }
+        : headers(),
+      body: preview ? JSON.stringify({ operation: "status" }) : "{}",
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data?.message || "No fue posible cargar el panel.");
@@ -72,11 +93,15 @@
   }
 
   async function runAction(action, extra = {}) {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/automation-control`, {
+    const preview = isCloudflarePreview();
+    const payload = { action, ...extra };
+    const response = await fetch(preview ? "/api/admin-preview-automation" : `${SUPABASE_URL}/functions/v1/automation-control`, {
       method: "POST",
       cache: "no-store",
-      headers: headers(),
-      body: JSON.stringify({ action, ...extra }),
+      headers: preview
+        ? { Authorization: `Bearer ${state.session?.access_token || ""}`, "Content-Type": "application/json" }
+        : headers(),
+      body: JSON.stringify(preview ? { operation: "control", payload } : payload),
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data?.message || "No fue posible ejecutar la acción.");
@@ -336,6 +361,7 @@
       message.textContent = error.message;
       message.hidden = false;
     } finally {
+      $("#admin-password").value = "";
       button.disabled = false;
       button.textContent = "Ingresar";
     }
