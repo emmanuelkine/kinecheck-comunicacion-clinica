@@ -41,9 +41,9 @@
     </style>
     <div class="kc-fb-box">
       <h2 id="kc-fb-title">Opiniones de nuestra comunidad</h2>
-      <p>Puntuación de 0 a 5 y comentarios auténticos aprobados. No pedimos tu nombre ni correo.</p>
-      <div class="kc-fb-summary" style="display:block" aria-live="polite"><div id="kc-fb-average">Cargando puntuación…</div></div>
-      <div id="kc-fb-comments-block" hidden><h3>Comentarios destacados</h3><div class="kc-fb-comments" id="kc-fb-comments"></div></div>
+      <p>Promedio, estrellas y comentarios auténticos aprobados durante los últimos 30 días. No pedimos tu nombre ni correo.</p>
+      <div class="kc-fb-summary" aria-live="polite"><div id="kc-fb-average">Cargando valoraciones…</div><div id="kc-fb-distribution"></div></div>
+      <div id="kc-fb-comments-block" hidden><h3>Comentarios anónimos moderados</h3><div class="kc-fb-comments" id="kc-fb-comments"></div></div>
       <form>
         <h3>Comparte tu experiencia</h3>
         <fieldset style="border:0;padding:0;margin:0"><legend>Califica tu experiencia de 1 a 5 estrellas</legend><div class="kc-fb-ratings"></div></fieldset>
@@ -69,6 +69,7 @@
 
   async function loadSummary() {
     const averageNode = root.querySelector("#kc-fb-average");
+    const distributionNode = root.querySelector("#kc-fb-distribution");
     try {
       const response = await fetch("/api/library-feedback", { cache: "no-store", headers: { Accept: "application/json" } });
       if (!response.ok) throw new Error("No fue posible cargar las valoraciones.");
@@ -86,6 +87,16 @@
         avg.append(stars);
       }
       averageNode.append(avg);
+      distributionNode.replaceChildren();
+      [5, 4, 3, 2, 1].forEach((rating) => {
+        const countForRating = Number(data.distribution?.[rating - 1] || 0);
+        const row = document.createElement("div");
+        row.className = "kc-fb-row";
+        const label = document.createElement("span"); label.textContent = `${rating} ★`;
+        const track = document.createElement("div"); track.className = "kc-fb-track"; track.setAttribute("aria-hidden", "true");
+        const fill = document.createElement("div"); fill.className = "kc-fb-fill"; fill.style.width = `${data.count ? Math.round(countForRating * 100 / data.count) : 0}%`; track.append(fill);
+        row.append(label, track); distributionNode.append(row);
+      });
       const comments = root.querySelector("#kc-fb-comments");
       comments.replaceChildren();
       (data.comments || []).forEach((item) => {
