@@ -15,7 +15,7 @@
             >/ HORAS</span
           >
         </div>
-        <span class="pill">PROTOTIPO INTERACTIVO</span>
+        <span class="pill">SERVICIO EN PREPARACIÓN</span>
       </header>
       <main>
         <div class="eyebrow">CONECTAMOS DISPONIBILIDAD CON ATENCIÓN</div>
@@ -63,13 +63,12 @@
           <div id="results" class="cards"></div>
         </section>
         <section id="publishPanel" class="panel hidden">
-          <div class="tag">DEMOSTRACIÓN · SIN VERIFICACIÓN REAL</div>
+          <div class="tag">REGISTRO DE PROFESIONALES · VERIFICACIÓN PENDIENTE</div>
           <h2>Publica una hora liberada</h2>
           <p>
-            En la versión definitiva, solo profesionales verificados podrán
-            publicar. Aquí puedes probar el formulario sin crear una cuenta.
+            Regístrate con tu correo y solicita verificación. Solo los profesionales aprobados pueden publicar horas reales.
           </p>
-          <form id="publishForm">
+          <div id="authPanel"><label>Correo profesional</label><input id="authEmail" type="email" autocomplete="email" placeholder="correo@ejemplo.cl"><button id="authBtn" type="button" style="margin-top:12px">Enviar enlace de acceso</button><p id="authMessage" role="status"></p></div><div id="profilePanel" class="hidden"><h3>Solicitar verificación profesional</h3><label>Nombre completo</label><input id="profileName" maxlength="120"><label>Profesión</label><input id="profileProfession" maxlength="100"><label>Número de registro profesional (si corresponde)</label><input id="profileRegistry" maxlength="100"><button id="profileBtn" type="button" style="margin-top:12px">Enviar solicitud de verificación</button><p id="profileMessage" role="status"></p></div><div id="verificationMessage" role="status"></div><form id="publishForm" class="hidden">
             <div class="grid">
               <div>
                 <label>Nombre profesional</label
@@ -118,8 +117,7 @@
         </section>
       </main>
       <footer>
-        KineCheck · Vista previa de servicio · Sin reservas, pagos ni datos
-        compartidos entre dispositivos.
+        KineCheck · Contacto directo · Sin reservas ni pagos intermediados.
       </footer>
     </div>
     <script type="module" src="./app.js"></script>
