@@ -30,7 +30,14 @@
           ><button class="secondary" id="publishBtn">
             Soy profesional · Publicar hora
           </button>
+          <button class="secondary" id="institutionBtn" type="button" aria-controls="institutionPanel" aria-expanded="false">Soy institución · Publicar disponibilidad</button>
         </div>
+        <section class="panel hidden" id="institutionPanel" aria-labelledby="institutionTitle">
+          <div class="tag">CLÍNICAS · HOSPITALES · CENTROS DE SALUD · CENTROS VETERINARIOS</div>
+          <h2 id="institutionTitle">Publicación institucional</h2>
+          <p>Próximamente, los establecimientos podrán administrar disponibilidades reales de sus profesionales mediante cuentas institucionales verificadas.</p>
+          <p class="muted">La identidad y representación de cada institución, así como las credenciales de los profesionales asociados, deberán comprobarse antes de habilitar publicaciones. No se reciben solicitudes ni se publican horas institucionales mientras el mecanismo de verificación no esté disponible.</p>
+        </section>
         <section class="panel" id="searchPanel">
           <h2>Encuentra atención</h2>
           <div class="grid">
@@ -140,6 +147,18 @@
         KineCheck · Contacto directo · Sin reservas ni pagos intermediados.
       </footer>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const button = document.getElementById('institutionBtn');
+        const panel = document.getElementById('institutionPanel');
+        button.addEventListener('click', function () {
+          const willOpen = panel.classList.contains('hidden');
+          panel.classList.toggle('hidden', !willOpen);
+          button.setAttribute('aria-expanded', String(willOpen));
+          if (willOpen) panel.scrollIntoView({behavior:'smooth',block:'start'});
+        });
+      });
+    </script>
     <script src="./app.js?v=20261022-4" defer></script>
   </body>
 </html>
