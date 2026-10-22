@@ -1,6 +1,7 @@
 const API='https://eqhcdclyeoapmqtlduwf.supabase.co';
 const KEY='sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_';
 const $=id=>document.getElementById(id);
+const norm=s=>String(s??'').trim().toLocaleLowerCase('es');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let token=sessionStorage.getItem('kc_health_token')||'', user=null, profile=null;
 async function request(path,{method='GET',body,auth=false}={}){
@@ -10,8 +11,8 @@ async function request(path,{method='GET',body,auth=false}={}){
 async function loadSlots(){
  try{
  const data=await request('/rest/v1/kc_health_slots?select=id,specialty,region,comuna,starts_at,location_text,public_contact&status=eq.active&starts_at=gt.'+encodeURIComponent(new Date().toISOString())+'&order=starts_at.asc&limit=100');
- const specialty=$('specialty').value, city=$('city').value.toLocaleLowerCase('es');
- const rows=data.filter(x=>(!specialty||x.specialty===specialty)&&(!city||x.comuna.toLocaleLowerCase('es').includes(city)));
+ const specialty=norm($('specialty').value), city=norm($('city').value);
+ const rows=data.filter(x=>(!specialty||norm(x.specialty).includes(specialty))&&(!city||norm(x.comuna).includes(city)));
  $('results').innerHTML=rows.length?rows.map(x=>'<article class="card"><div class="tag">HORA DISPONIBLE</div><h3>'+esc(x.specialty)+'</h3><p>'+esc(x.comuna)+' · '+esc(x.region)+'</p><p>'+esc(new Date(x.starts_at).toLocaleString('es-CL',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Santiago'}))+'</p><p>'+esc(x.location_text)+'</p><p>Contacto directo: '+esc(x.public_contact)+'</p></article>').join(''):'<p>No hay horas verificadas disponibles con estos filtros.</p>';
  }catch(e){$('results').textContent='No se pudo consultar la disponibilidad. Intenta nuevamente.';}
 }
@@ -19,13 +20,48 @@ async function refreshUser(){
  if(!token)return;
  try{user=await request('/auth/v1/user',{auth:true});const data=await request('/rest/v1/kc_health_professionals?select=full_name,profession,verification_status&user_id=eq.'+user.id,{auth:true});profile=data[0]||null;
  $('authPanel').classList.add('hidden');$('profilePanel').classList.toggle('hidden',!!profile);
- $('verificationMessage').textContent=profile?(profile.verification_status==='verified'?'Identidad profesional verificada. Ya puedes publicar horas.': 'Solicitud recibida. Estado: '+(profile.verification_status==='pending'?'pendiente de revisión':'rechazada')+'. No puedes publicar hasta ser verificado.'):'Completa tu solicitud de verificación.';
+ $('verificationMessage').textContent=profile?(profile.verification_status==='verified'?'Credencial profesional verificada. Ya puedes publicar y administrar tus horas.':profile.verification_status==='pending'?'Credencial pendiente de verificación oficial. No podrás publicar hasta que una fuente autorizada confirme tu habilitación. KineCheck no aprueba registros manualmente ni acepta documentos por canales inseguros.':'La verificación no pudo confirmarse. No puedes publicar horas.'):'Completa tus datos profesionales. La publicación requiere verificación oficial.';
  $('publishForm').classList.toggle('hidden',profile?.verification_status!=='verified');
+ $('mySlotsPanel').classList.toggle('hidden',profile?.verification_status!=='verified');
+ if(profile?.verification_status==='verified')loadMySlots();
  }catch(e){token='';sessionStorage.removeItem('kc_health_token');$('authMessage').textContent='La sesión expiró. Solicita un nuevo enlace.';}
 }
 $('authBtn').onclick=async()=>{const email=$('authEmail').value.trim();if(!email)return;$('authBtn').disabled=true;try{const redirectTo=new URL('/horas-disponibles/',location.origin).toString();await request('/auth/v1/otp?redirect_to='+encodeURIComponent(redirectTo),{method:'POST',body:{email,create_user:true}});$('authMessage').textContent='Revisa tu correo y abre el enlace de acceso.';}catch(e){$('authMessage').textContent='No se pudo enviar el enlace: '+e.message;}finally{$('authBtn').disabled=false;}};
-$('profileBtn').onclick=async()=>{if(!user)return;const name=$('profileName').value.trim(),profession=$('profileProfession').value.trim();if(name.length<3||profession.length<3){$('profileMessage').textContent='Completa nombre y profesión.';return;}try{await request('/rest/v1/kc_health_professionals',{method:'POST',auth:true,body:{user_id:user.id,full_name:name,profession,registration_number:$('profileRegistry').value.trim()||null}});$('profileMessage').textContent='Solicitud enviada. Pendiente de revisión.';await refreshUser();}catch(e){$('profileMessage').textContent='No se pudo registrar: '+e.message;}};
-$('publishForm').onsubmit=async e=>{e.preventDefault();if(profile?.verification_status!=='verified')return;const f=Object.fromEntries(new FormData(e.target).entries());const starts=new Date(f.date+'T'+f.time+':00-03:00');if(!Number.isFinite(starts.getTime())||starts<=new Date()){$('message').textContent='Selecciona una fecha y hora futuras.';return;}try{await request('/rest/v1/kc_health_slots',{method:'POST',auth:true,body:{professional_id:user.id,specialty:f.specialty,region:'Región de O’Higgins',comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,public_contact:f.contact}});$('message').textContent='Hora publicada para todos los visitantes.';e.target.reset();loadSlots();}catch(err){$('message').textContent='No se pudo publicar: '+err.message;}};
+$('profileBtn').onclick=async()=>{if(!user)return;const name=$('profileName').value.trim(),profession=$('profileProfession').value.trim();if(name.length<3||profession.length<3){$('profileMessage').textContent='Completa nombre y profesión.';return;}try{await request('/rest/v1/kc_health_professionals',{method:'POST',auth:true,body:{user_id:user.id,full_name:name,profession,registration_number:$('profileRegistry').value.trim()||null}});$('profileMessage').textContent='Registro enviado. Tu estado permanecerá pendiente hasta una verificación oficial; no se aprobará automáticamente ni por revisión manual rutinaria.';await refreshUser();}catch(e){$('profileMessage').textContent='No se pudo registrar: '+e.message;}};
+$('publishForm').onsubmit=async e=>{e.preventDefault();if(profile?.verification_status!=='verified')return;const f=Object.fromEntries(new FormData(e.target).entries());const starts=chileDateTime(f.date,f.time);if(!Number.isFinite(starts.getTime())||starts<=new Date()){$('message').textContent='Selecciona una fecha y hora futuras.';return;}try{await request('/rest/v1/kc_health_slots',{method:'POST',auth:true,body:{professional_id:user.id,specialty:f.specialty,region:'Región de O’Higgins',comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,public_contact:f.contact}});$('message').textContent='Hora publicada para todos los visitantes.';e.target.reset();loadSlots();}catch(err){$('message').textContent='No se pudo publicar: '+err.message;}};
+
+function chileDateTime(date,time){
+ const [y,m,d]=date.split('-').map(Number),[h,mi]=time.split(':').map(Number);
+ if(!y||!m||!d||!Number.isFinite(h)||!Number.isFinite(mi))return new Date(NaN);
+ const target=Date.UTC(y,m-1,d,h,mi),fmt=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Santiago',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+ let guess=target;
+ for(let i=0;i<3;i++){const p=Object.fromEntries(fmt.formatToParts(new Date(guess)).map(x=>[x.type,x.value]));const represented=Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute);guess+=target-represented;}
+ return new Date(guess);
+}
+async function loadMySlots(){
+ try{
+  const rows=await request('/rest/v1/kc_health_slots?select=id,specialty,comuna,starts_at,location_text,public_contact,status&professional_id=eq.'+encodeURIComponent(user.id)+'&order=starts_at.asc&limit=100',{auth:true});
+  $('mySlots').innerHTML=rows.length?rows.map(x=>{
+   const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Santiago',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(x.starts_at));
+   const p=Object.fromEntries(parts.map(a=>[a.type,a.value])),date=p.year+'-'+p.month+'-'+p.day,time=p.hour+':'+p.minute;
+   return '<form class="card slotEditor" data-slot-id="'+esc(x.id)+'" data-slot-status="'+esc(x.status)+'"><div class="tag">'+(x.status==='active'?'PUBLICADA':'DESACTIVADA')+'</div><div class="grid"><div><label>Profesión o especialidad</label><input name="specialty" maxlength="120" required value="'+esc(x.specialty)+'"></div><div><label>Comuna</label><input name="city" maxlength="100" required value="'+esc(x.comuna)+'"></div><div><label>Fecha</label><input name="date" type="date" required value="'+date+'"></div><div><label>Hora (Chile)</label><input name="time" type="time" required value="'+time+'"></div><div><label>Dirección</label><input name="address" maxlength="200" required value="'+esc(x.location_text)+'"></div><div><label>Contacto público</label><input name="contact" maxlength="180" required value="'+esc(x.public_contact)+'"></div></div><div class="actions"><button type="submit">Guardar cambios</button>'+(x.status==='active'?'<button class="secondary" type="button" data-deactivate>Desactivar hora</button>':'')+'</div><p class="slotMessage" role="status"></p></form>';
+  }).join(''):'<p>Aún no tienes horas publicadas.</p>';
+ }catch(e){$('mySlots').textContent='No se pudo cargar tu disponibilidad.';}
+}
+$('mySlots').addEventListener('submit',async e=>{
+ const form=e.target.closest('.slotEditor');if(!form)return;e.preventDefault();
+ if(profile?.verification_status!=='verified')return;
+ const f=Object.fromEntries(new FormData(form).entries()),starts=chileDateTime(f.date,f.time),out=form.querySelector('.slotMessage');
+ if(!Number.isFinite(starts.getTime())||starts<=new Date()){out.textContent='Selecciona una fecha y hora futuras.';return;}
+ try{await request('/rest/v1/kc_health_slots?id=eq.'+encodeURIComponent(form.dataset.slotId)+'&professional_id=eq.'+encodeURIComponent(user.id),{method:'PATCH',auth:true,body:{specialty:f.specialty,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,public_contact:f.contact,status:form.dataset.slotStatus}});out.textContent='Cambios guardados.';loadSlots();}
+ catch(err){out.textContent='No se pudo guardar: '+err.message;}
+});
+$('mySlots').addEventListener('click',async e=>{
+ const button=e.target.closest('[data-deactivate]');if(!button)return;
+ const form=button.closest('.slotEditor');if(profile?.verification_status!=='verified'||!form)return;
+ try{await request('/rest/v1/kc_health_slots?id=eq.'+encodeURIComponent(form.dataset.slotId)+'&professional_id=eq.'+encodeURIComponent(user.id),{method:'PATCH',auth:true,body:{status:'inactive'}});await loadMySlots();loadSlots();}
+ catch(err){form.querySelector('.slotMessage').textContent='No se pudo desactivar: '+err.message;}
+});
 $('searchBtn').onclick=()=>$('searchPanel').scrollIntoView({behavior:'smooth'});
 $('publishBtn').onclick=()=>{$('publishPanel').classList.remove('hidden');$('publishPanel').scrollIntoView({behavior:'smooth'});};
 $('filterBtn').onclick=loadSlots;
