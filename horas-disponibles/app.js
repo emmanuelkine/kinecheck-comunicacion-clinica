@@ -6,6 +6,7 @@ const norm=s=>String(s??'').trim().toLocaleLowerCase('es');
 const types=["Consulta particular","Centro médico o centro de salud","Clínica","Hospital","Centro odontológico","Clínica veterinaria","Otro establecimiento"];
 const parseLocation=s=>{const m=String(s||'').match(/^\[KCLOC:([^|\]]+)\|([^\]]+)\] (.*)$/s);return m?{facility:m[1],modality:m[2],address:m[3]}:{facility:'No especificado',modality:'No especificada',address:String(s||'')};};
 const slotLocation=x=>{const legacy=parseLocation(x.location_text);return {facility:x.facility_type||legacy.facility,modality:x.modality||legacy.modality,address:legacy.address};};
+const safeBookingUrl=s=>{try{const u=new URL(String(s||''));return u.protocol==='https:'&&!u.username&&!u.password&&u.hostname.includes('.')?u.href:null;}catch{return null;}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let token=sessionStorage.getItem('kc_health_token')||'', user=null, profile=null;
 async function request(path,{method='GET',body,auth=false}={}){
@@ -14,9 +15,9 @@ async function request(path,{method='GET',body,auth=false}={}){
 }
 async function loadSlots(){
  try{
- const data=await request('/rest/v1/kc_health_slots?select=id,specialty,region,comuna,starts_at,location_text,facility_type,modality,public_contact&status=eq.active&starts_at=gt.'+encodeURIComponent(new Date().toISOString())+'&order=starts_at.asc&limit=100');
+ const data=await request('/rest/v1/kc_health_slots?select=id,specialty,region,comuna,starts_at,location_text,facility_type,modality,public_contact,booking_url,expires_at&status=eq.active&starts_at=gt.'+encodeURIComponent(new Date().toISOString())+'&order=starts_at.asc&limit=100');
  const specialty=norm($('specialty').value), city=norm($('city').value), region=norm($('regionFilter').value), facility=$('facilityFilter').value, modality=$('modalityFilter').value;
- const rows=data.filter(x=>(!specialty||norm(x.specialty).includes(specialty))&&(!city||norm(x.comuna).includes(city))&&(!region||norm(x.region).includes(region))&&(!facility||slotLocation(x).facility===facility)&&(!modality||slotLocation(x).modality===modality));
+ const rows=data.filter(x=>(!x.expires_at||new Date(x.expires_at)>new Date())&&(!specialty||norm(x.specialty).includes(specialty))&&(!city||norm(x.comuna).includes(city))&&(!region||norm(x.region).includes(region))&&(!facility||slotLocation(x).facility===facility)&&(!modality||slotLocation(x).modality===modality));
  $('results').innerHTML=rows.length?rows.map(x=>'<article class="card"><div class="tag">HORA DISPONIBLE</div><h3>'+esc(x.specialty)+'</h3><p>'+esc(x.comuna)+' · '+esc(x.region)+'</p><p>'+esc(new Date(x.starts_at).toLocaleString('es-CL',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Santiago'}))+'</p><p>'+esc(slotLocation(x).address)+'</p><p>Contacto directo: '+esc(x.public_contact)+'</p></article>').join(''):'<p>No hay horas verificadas disponibles con estos filtros.</p>';
  }catch(e){$('results').textContent='No se pudo consultar la disponibilidad. Intenta nuevamente.';}
 }
@@ -57,7 +58,7 @@ $('institutionForm').onsubmit=async e=>{
 };
 $('authBtn').onclick=async()=>{const email=$('authEmail').value.trim();if(!email)return;$('authBtn').disabled=true;try{const redirectTo=new URL('/horas-disponibles/',location.origin).toString();await request('/auth/v1/otp?redirect_to='+encodeURIComponent(redirectTo),{method:'POST',body:{email,create_user:true}});$('authMessage').textContent='Revisa tu correo y abre el enlace de acceso.';}catch(e){$('authMessage').textContent='No se pudo enviar el enlace: '+e.message;}finally{$('authBtn').disabled=false;}};
 $('profileBtn').onclick=async()=>{if(!user)return;const name=$('profileName').value.trim(),profession=$('profileProfession').value.trim();if(name.length<3||profession.length<3){$('profileMessage').textContent='Completa nombre y profesión.';return;}try{await request('/rest/v1/kc_health_professionals',{method:'POST',auth:true,body:{user_id:user.id,full_name:name,profession,registration_number:$('profileRegistry').value.trim()||null}});$('profileMessage').textContent='Registro enviado. Tu estado permanecerá pendiente hasta una verificación oficial; no se aprobará automáticamente ni por revisión manual rutinaria.';await refreshUser();}catch(e){$('profileMessage').textContent='No se pudo registrar: '+e.message;}};
-$('publishForm').onsubmit=async e=>{e.preventDefault();if(profile?.verification_status!=='verified')return;const f=Object.fromEntries(new FormData(e.target).entries());const starts=chileDateTime(f.date,f.time);if(!types.includes(f.facility_type)){$('message').textContent='Selecciona un tipo de establecimiento válido.';return;}if(!Number.isFinite(starts.getTime())||starts<=new Date()){$('message').textContent='Selecciona una fecha y hora futuras.';return;}try{await request('/rest/v1/kc_health_slots',{method:'POST',auth:true,body:{professional_id:user.id,specialty:f.specialty,region:f.region,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,facility_type:f.facility_type,modality:f.modality,public_contact:f.contact}});$('message').textContent='Hora publicada para todos los visitantes.';e.target.reset();loadSlots();}catch(err){$('message').textContent='No se pudo publicar: '+err.message;}};
+$('publishForm').onsubmit=async e=>{e.preventDefault();if(profile?.verification_status!=='verified')return;const f=Object.fromEntries(new FormData(e.target).entries());const starts=chileDateTime(f.date,f.time);if(!safeBookingUrl(f.booking_url)){$('message').textContent='Ingresa un enlace HTTPS válido al sistema oficial de agendamiento.';return;}if(!types.includes(f.facility_type)){$('message').textContent='Selecciona un tipo de establecimiento válido.';return;}if(!Number.isFinite(starts.getTime())||starts<=new Date()){$('message').textContent='Selecciona una fecha y hora futuras.';return;}try{await request('/rest/v1/kc_health_slots',{method:'POST',auth:true,body:{professional_id:user.id,specialty:f.specialty,region:f.region,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,facility_type:f.facility_type,modality:f.modality,public_contact:f.contact,booking_url:safeBookingUrl(f.booking_url),expires_at:starts.toISOString()}});$('message').textContent='Hora publicada para todos los visitantes.';e.target.reset();loadSlots();}catch(err){$('message').textContent='No se pudo publicar: '+err.message;}};
 
 function chileDateTime(date,time){
  const [y,m,d]=date.split('-').map(Number),[h,mi]=time.split(':').map(Number);
@@ -69,7 +70,7 @@ function chileDateTime(date,time){
 }
 async function loadMySlots(){
  try{
-  const rows=await request('/rest/v1/kc_health_slots?select=id,specialty,comuna,starts_at,location_text,facility_type,modality,public_contact,status&professional_id=eq.'+encodeURIComponent(user.id)+'&order=starts_at.asc&limit=100',{auth:true});
+  const rows=await request('/rest/v1/kc_health_slots?select=id,specialty,comuna,starts_at,location_text,facility_type,modality,public_contact,booking_url,status&professional_id=eq.'+encodeURIComponent(user.id)+'&order=starts_at.asc&limit=100',{auth:true});
   $('mySlots').innerHTML=rows.length?rows.map(x=>{
    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Santiago',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(x.starts_at));
    const p=Object.fromEntries(parts.map(a=>[a.type,a.value])),date=p.year+'-'+p.month+'-'+p.day,time=p.hour+':'+p.minute,loc=slotLocation(x);
@@ -81,8 +82,8 @@ $('mySlots').addEventListener('submit',async e=>{
  const form=e.target.closest('.slotEditor');if(!form)return;e.preventDefault();
  if(profile?.verification_status!=='verified')return;
  const f=Object.fromEntries(new FormData(form).entries()),starts=chileDateTime(f.date,f.time),out=form.querySelector('.slotMessage');
- if(!types.includes(f.facility_type)||!['Presencial','Teleconsulta'].includes(f.modality)){out.textContent='Debes seleccionar explícitamente el establecimiento y la modalidad para esta hora.';return;}if(!Number.isFinite(starts.getTime())||starts<=new Date()){out.textContent='Selecciona una fecha y hora futuras.';return;}
- try{await request('/rest/v1/kc_health_slots?id=eq.'+encodeURIComponent(form.dataset.slotId)+'&professional_id=eq.'+encodeURIComponent(user.id),{method:'PATCH',auth:true,body:{specialty:f.specialty,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,facility_type:f.facility_type,modality:f.modality,public_contact:f.contact,status:form.dataset.slotStatus}});out.textContent='Cambios guardados.';loadSlots();}
+ if(!safeBookingUrl(f.booking_url)){out.textContent='Ingresa un enlace HTTPS válido al sistema de agendamiento.';return;}if(!types.includes(f.facility_type)||!['Presencial','Teleconsulta'].includes(f.modality)){out.textContent='Debes seleccionar explícitamente el establecimiento y la modalidad para esta hora.';return;}if(!Number.isFinite(starts.getTime())||starts<=new Date()){out.textContent='Selecciona una fecha y hora futuras.';return;}
+ try{await request('/rest/v1/kc_health_slots?id=eq.'+encodeURIComponent(form.dataset.slotId)+'&professional_id=eq.'+encodeURIComponent(user.id),{method:'PATCH',auth:true,body:{specialty:f.specialty,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,facility_type:f.facility_type,modality:f.modality,public_contact:f.contact,booking_url:safeBookingUrl(f.booking_url),expires_at:starts.toISOString(),status:form.dataset.slotStatus}});out.textContent='Cambios guardados.';loadSlots();}
  catch(err){out.textContent='No se pudo guardar: '+err.message;}
 });
 $('mySlots').addEventListener('click',async e=>{
