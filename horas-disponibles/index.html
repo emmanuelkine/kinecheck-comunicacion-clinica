@@ -86,7 +86,7 @@
               <label for="city">Comuna</label
               ><input id="city" placeholder="Ej. Rancagua" />
             </div>
-            <div><label for="facilityFilter">Tipo de establecimiento</label><select id="facilityFilter" ><option value="">Todos los establecimientos</option><option value="Consulta particular">Consulta particular</option><option value="Centro médico o centro de salud">Centro médico o centro de salud</option><option value="Clínica">Clínica</option><option value="Hospital">Hospital</option><option value="Centro odontológico">Centro odontológico</option><option value="Clínica veterinaria">Clínica veterinaria</option><option value="Otro establecimiento">Otro establecimiento</option></select></div>
+            <div><label for="regionFilter">Región</label><select id="regionFilter"><option value="">Todas las regiones</option><option value="Arica y Parinacota">Arica y Parinacota</option><option value="Tarapacá">Tarapacá</option><option value="Antofagasta">Antofagasta</option><option value="Atacama">Atacama</option><option value="Coquimbo">Coquimbo</option><option value="Valparaíso">Valparaíso</option><option value="Metropolitana de Santiago">Metropolitana de Santiago</option><option value="Libertador General Bernardo O’Higgins">Libertador General Bernardo O’Higgins</option><option value="Maule">Maule</option><option value="Ñuble">Ñuble</option><option value="Biobío">Biobío</option><option value="La Araucanía">La Araucanía</option><option value="Los Ríos">Los Ríos</option><option value="Los Lagos">Los Lagos</option><option value="Aysén del General Carlos Ibáñez del Campo">Aysén del General Carlos Ibáñez del Campo</option><option value="Magallanes y de la Antártica Chilena">Magallanes y de la Antártica Chilena</option></select></div><div><label for="facilityFilter">Tipo de establecimiento</label><select id="facilityFilter" ><option value="">Todos los establecimientos</option><option value="Consulta particular">Consulta particular</option><option value="Centro médico o centro de salud">Centro médico o centro de salud</option><option value="Clínica">Clínica</option><option value="Hospital">Hospital</option><option value="Centro odontológico">Centro odontológico</option><option value="Clínica veterinaria">Clínica veterinaria</option><option value="Otro establecimiento">Otro establecimiento</option></select></div>
             <div><label for="modalityFilter">Modalidad</label><select id="modalityFilter"><option value="">Todas</option><option value="Presencial">Presencial</option><option value="Teleconsulta">Teleconsulta</option></select></div>
             <div style="align-self: end">
               <button id="filterBtn" style="width: 100%">
@@ -115,7 +115,7 @@
                 <label>Profesión o especialidad</label
                 ><input name="specialty" required maxlength="120" placeholder="Profesión o especialidad de la atención" />
               </div>
-              <div>
+              <div><label>Región de atención</label><select name="region" required><option value="">Selecciona la región</option><option value="Región de Arica y Parinacota">Arica y Parinacota</option><option value="Región de Tarapacá">Tarapacá</option><option value="Región de Antofagasta">Antofagasta</option><option value="Región de Atacama">Atacama</option><option value="Región de Coquimbo">Coquimbo</option><option value="Región de Valparaíso">Valparaíso</option><option value="Región de Metropolitana de Santiago">Metropolitana de Santiago</option><option value="Región de Libertador General Bernardo O’Higgins">Libertador General Bernardo O’Higgins</option><option value="Región de Maule">Maule</option><option value="Región de Ñuble">Ñuble</option><option value="Región de Biobío">Biobío</option><option value="Región de La Araucanía">La Araucanía</option><option value="Región de Los Ríos">Los Ríos</option><option value="Región de Los Lagos">Los Lagos</option><option value="Región de Aysén del General Carlos Ibáñez del Campo">Aysén del General Carlos Ibáñez del Campo</option><option value="Región de Magallanes y de la Antártica Chilena">Magallanes y de la Antártica Chilena</option></select></div><div>
                 <label>Comuna</label
                 ><input name="city" required placeholder="Rancagua" />
               </div>
@@ -172,6 +172,6 @@
         }
       })();
     </script>
-    <script src="./app.js?v=20261022-5" defer></script>
+    <script src="./app.js?v=20261022-6" defer></script>
   </body>
 </html>
