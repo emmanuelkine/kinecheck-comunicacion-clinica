@@ -85,6 +85,8 @@
               <label for="city">Comuna</label
               ><input id="city" placeholder="Ej. Rancagua" />
             </div>
+            <div><label for="facilityFilter">Tipo de establecimiento</label><select id="facilityFilter" ><option value="">Todos los establecimientos</option><option value="Consulta particular">Consulta particular</option><option value="Centro médico o centro de salud">Centro médico o centro de salud</option><option value="Clínica">Clínica</option><option value="Hospital">Hospital</option><option value="Centro odontológico">Centro odontológico</option><option value="Clínica veterinaria">Clínica veterinaria</option><option value="Otro establecimiento">Otro establecimiento</option></select></div>
+            <div><label for="modalityFilter">Modalidad</label><select id="modalityFilter"><option value="">Todas</option><option value="Presencial">Presencial</option><option value="Teleconsulta">Teleconsulta</option></select></div>
             <div style="align-self: end">
               <button id="filterBtn" style="width: 100%">
                 Buscar disponibilidad
@@ -122,6 +124,7 @@
               <div>
                 <label>Hora</label><input type="time" name="time" required />
               </div>
+              <div><label>Tipo de establecimiento</label><select name="facility_type" required><option value="">Selecciona el tipo</option><option value="Consulta particular">Consulta particular</option><option value="Centro médico o centro de salud">Centro médico o centro de salud</option><option value="Clínica">Clínica</option><option value="Hospital">Hospital</option><option value="Centro odontológico">Centro odontológico</option><option value="Clínica veterinaria">Clínica veterinaria</option><option value="Otro establecimiento">Otro establecimiento</option></select></div><div><label>Modalidad</label><select name="modality" required><option value="Presencial">Presencial</option><option value="Teleconsulta">Teleconsulta</option></select></div>
               <div>
                 <label>Dirección de atención</label
                 ><input name="address" required placeholder="Calle y número" />
@@ -159,6 +162,6 @@
         });
       });
     </script>
-    <script src="./app.js?v=20261022-4" defer></script>
+    <script src="./app.js?v=20261022-5" defer></script>
   </body>
 </html>
