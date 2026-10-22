@@ -57,7 +57,7 @@ $('mySlots').addEventListener('submit',async e=>{
  if(profile?.verification_status!=='verified')return;
  const f=Object.fromEntries(new FormData(form).entries()),starts=chileDateTime(f.date,f.time),out=form.querySelector('.slotMessage');
  if(!types.includes(f.facility_type)){out.textContent='Selecciona un tipo de establecimiento válido.';return;}if(!Number.isFinite(starts.getTime())||starts<=new Date()){out.textContent='Selecciona una fecha y hora futuras.';return;}
- try{await request('/rest/v1/kc_health_slots?id=eq.'+encodeURIComponent(form.dataset.slotId)+'&professional_id=eq.'+encodeURIComponent(user.id),{method:'PATCH',auth:true,body:{specialty:f.specialty,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,public_contact:f.contact,status:form.dataset.slotStatus}});out.textContent='Cambios guardados.';loadSlots();}
+ try{await request('/rest/v1/kc_health_slots?id=eq.'+encodeURIComponent(form.dataset.slotId)+'&professional_id=eq.'+encodeURIComponent(user.id),{method:'PATCH',auth:true,body:{specialty:f.specialty,comuna:f.city,starts_at:starts.toISOString(),location_text:packLocation(f.facility_type,f.modality,f.address),public_contact:f.contact,status:form.dataset.slotStatus}});out.textContent='Cambios guardados.';loadSlots();}
  catch(err){out.textContent='No se pudo guardar: '+err.message;}
 });
 $('mySlots').addEventListener('click',async e=>{
