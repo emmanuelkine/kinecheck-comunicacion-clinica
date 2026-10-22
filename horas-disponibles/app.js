@@ -42,7 +42,7 @@ async function refreshInstitution(){
  }catch(e){$('institutionFormMessage').textContent='No fue posible consultar el registro institucional.';}
 }
 $('institutionAccessBtn').onclick=async()=>{
- const email=$('institutionEmail').value.trim();if(!email)return;
+ const email=$('institutionEmail').value.trim();if(!email)return;sessionStorage.setItem('kc_health_auth_intent','institution');
  $('institutionAccessBtn').disabled=true;
  try{await request('/auth/v1/otp?redirect_to='+encodeURIComponent(new URL('/horas-disponibles/#institutionPanel',location.origin).toString()),{method:'POST',body:{email,create_user:true}});$('institutionAuthMessage').textContent='Revisa tu correo y abre el enlace de acceso.';}
  catch(e){$('institutionAuthMessage').textContent='No se pudo enviar el enlace: '+e.message;}
@@ -97,5 +97,5 @@ $('filterBtn').onclick=loadSlots;
 if(location.hash==='#publishPanel'){$('publishPanel').classList.remove('hidden');setTimeout(()=>$('publishPanel').scrollIntoView(),100);}
 if(location.hash==='#institutionPanel'){$('institutionPanel').classList.remove('hidden');setTimeout(()=>$('institutionPanel').scrollIntoView(),100);}
 if(location.hash==='#searchPanel')setTimeout(()=>$('searchPanel').scrollIntoView(),100);
-const hash=new URLSearchParams(location.hash.slice(1));if(hash.has('access_token')){token=hash.get('access_token');sessionStorage.setItem('kc_health_token',token);history.replaceState(null,'',location.pathname+(hash.get('type')==='institution'?'#institutionPanel':'#publishPanel'));if(location.hash==='#institutionPanel')$('institutionPanel').classList.remove('hidden');else $('publishPanel').classList.remove('hidden');}
+const hash=new URLSearchParams(location.hash.slice(1));if(hash.has('access_token')){token=hash.get('access_token');sessionStorage.setItem('kc_health_token',token);const destination=sessionStorage.getItem('kc_health_auth_intent')==='institution'?'#institutionPanel':'#publishPanel';sessionStorage.removeItem('kc_health_auth_intent');history.replaceState(null,'',location.pathname+destination);if(destination==='#institutionPanel')$('institutionPanel').classList.remove('hidden');else $('publishPanel').classList.remove('hidden');}
 loadSlots();refreshUser();
