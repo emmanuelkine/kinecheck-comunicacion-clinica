@@ -28,8 +28,33 @@ async function refreshUser(){
  $('publishForm').classList.toggle('hidden',profile?.verification_status!=='verified');
  $('mySlotsPanel').classList.toggle('hidden',profile?.verification_status!=='verified');
  if(profile?.verification_status==='verified')loadMySlots();
+ await refreshInstitution();
  }catch(e){token='';sessionStorage.removeItem('kc_health_token');$('authMessage').textContent='La sesión expiró. Solicita un nuevo enlace.';}
 }
+async function refreshInstitution(){
+ if(!user)return;
+ try{
+  const rows=await request('/rest/v1/kc_health_institutions?select=id,public_name,verification_status&owner_user_id=eq.'+encodeURIComponent(user.id)+'&order=created_at.desc&limit=10',{auth:true});
+  $('institutionAuth').classList.add('hidden');
+  $('institutionForm').classList.toggle('hidden',rows.length>0);
+  $('institutionRegistered').classList.toggle('hidden',rows.length===0);
+  $('institutionRegistered').textContent=rows.length?'Institución registrada: '+rows.map(x=>x.public_name+' ('+(x.verification_status==='pending'?'verificación pendiente':x.verification_status)+')').join(', ')+'. La publicación institucional permanece deshabilitada.':'';
+ }catch(e){$('institutionFormMessage').textContent='No fue posible consultar el registro institucional.';}
+}
+$('institutionAccessBtn').onclick=async()=>{
+ const email=$('institutionEmail').value.trim();if(!email)return;
+ $('institutionAccessBtn').disabled=true;
+ try{await request('/auth/v1/otp?redirect_to='+encodeURIComponent(new URL('/horas-disponibles/#institutionPanel',location.origin).toString()),{method:'POST',body:{email,create_user:true}});$('institutionAuthMessage').textContent='Revisa tu correo y abre el enlace de acceso.';}
+ catch(e){$('institutionAuthMessage').textContent='No se pudo enviar el enlace: '+e.message;}
+ finally{$('institutionAccessBtn').disabled=false;}
+};
+$('institutionForm').onsubmit=async e=>{
+ e.preventDefault();if(!user)return;
+ const f=Object.fromEntries(new FormData(e.target).entries());
+ try{await request('/rest/v1/kc_health_institutions',{method:'POST',auth:true,body:{...f,owner_user_id:user.id}});
+ $('institutionFormMessage').textContent='Registro recibido. Permanecerá pendiente de verificación institucional.';await refreshInstitution();}
+ catch(err){$('institutionFormMessage').textContent='No se pudo registrar la institución: '+err.message;}
+};
 $('authBtn').onclick=async()=>{const email=$('authEmail').value.trim();if(!email)return;$('authBtn').disabled=true;try{const redirectTo=new URL('/horas-disponibles/',location.origin).toString();await request('/auth/v1/otp?redirect_to='+encodeURIComponent(redirectTo),{method:'POST',body:{email,create_user:true}});$('authMessage').textContent='Revisa tu correo y abre el enlace de acceso.';}catch(e){$('authMessage').textContent='No se pudo enviar el enlace: '+e.message;}finally{$('authBtn').disabled=false;}};
 $('profileBtn').onclick=async()=>{if(!user)return;const name=$('profileName').value.trim(),profession=$('profileProfession').value.trim();if(name.length<3||profession.length<3){$('profileMessage').textContent='Completa nombre y profesión.';return;}try{await request('/rest/v1/kc_health_professionals',{method:'POST',auth:true,body:{user_id:user.id,full_name:name,profession,registration_number:$('profileRegistry').value.trim()||null}});$('profileMessage').textContent='Registro enviado. Tu estado permanecerá pendiente hasta una verificación oficial; no se aprobará automáticamente ni por revisión manual rutinaria.';await refreshUser();}catch(e){$('profileMessage').textContent='No se pudo registrar: '+e.message;}};
 $('publishForm').onsubmit=async e=>{e.preventDefault();if(profile?.verification_status!=='verified')return;const f=Object.fromEntries(new FormData(e.target).entries());const starts=chileDateTime(f.date,f.time);if(!types.includes(f.facility_type)){$('message').textContent='Selecciona un tipo de establecimiento válido.';return;}if(!Number.isFinite(starts.getTime())||starts<=new Date()){$('message').textContent='Selecciona una fecha y hora futuras.';return;}try{await request('/rest/v1/kc_health_slots',{method:'POST',auth:true,body:{professional_id:user.id,specialty:f.specialty,region:f.region,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,facility_type:f.facility_type,modality:f.modality,public_contact:f.contact}});$('message').textContent='Hora publicada para todos los visitantes.';e.target.reset();loadSlots();}catch(err){$('message').textContent='No se pudo publicar: '+err.message;}};
@@ -70,6 +95,7 @@ $('searchBtn').onclick=()=>$('searchPanel').scrollIntoView({behavior:'smooth'});
 $('publishBtn').onclick=()=>{$('publishPanel').classList.remove('hidden');$('publishPanel').scrollIntoView({behavior:'smooth'});};
 $('filterBtn').onclick=loadSlots;
 if(location.hash==='#publishPanel'){$('publishPanel').classList.remove('hidden');setTimeout(()=>$('publishPanel').scrollIntoView(),100);}
+if(location.hash==='#institutionPanel'){$('institutionPanel').classList.remove('hidden');setTimeout(()=>$('institutionPanel').scrollIntoView(),100);}
 if(location.hash==='#searchPanel')setTimeout(()=>$('searchPanel').scrollIntoView(),100);
-const hash=new URLSearchParams(location.hash.slice(1));if(hash.has('access_token')){token=hash.get('access_token');sessionStorage.setItem('kc_health_token',token);history.replaceState(null,'',location.pathname+'#publishPanel');$('publishPanel').classList.remove('hidden');}
+const hash=new URLSearchParams(location.hash.slice(1));if(hash.has('access_token')){token=hash.get('access_token');sessionStorage.setItem('kc_health_token',token);history.replaceState(null,'',location.pathname+(hash.get('type')==='institution'?'#institutionPanel':'#publishPanel'));if(location.hash==='#institutionPanel')$('institutionPanel').classList.remove('hidden');else $('publishPanel').classList.remove('hidden');}
 loadSlots();refreshUser();
