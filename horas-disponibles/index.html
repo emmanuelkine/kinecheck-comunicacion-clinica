@@ -35,16 +35,7 @@
           <div class="grid">
             <div>
               <label for="specialty">Profesión o especialidad</label
-              ><select id="specialty">
-                <option value="">Todas</option>
-                <option>Traumatología</option>
-                <option>Medicina general</option>
-                <option>Kinesiología</option>
-                <option>Nutrición</option>
-                <option>Enfermería</option>
-                <option>Terapia ocupacional</option>
-                <option>Psicología</option>
-              </select>
+              ><input id="specialty" placeholder="Ej. Kinesiología, medicina, nutrición" />
             </div>
             <div>
               <label for="city">Comuna</label
@@ -57,8 +48,7 @@
             </div>
           </div>
           <p class="muted">
-            Las fichas marcadas como ejemplo son ficticias y no permiten
-            reservar.
+            Solo se muestran horas futuras publicadas por profesionales verificados.
           </p>
           <div id="results" class="cards"></div>
         </section>
@@ -66,9 +56,9 @@
           <div class="tag">REGISTRO DE PROFESIONALES · VERIFICACIÓN PENDIENTE</div>
           <h2>Publica una hora liberada</h2>
           <p>
-            Regístrate con tu correo y solicita verificación. Solo los profesionales aprobados pueden publicar horas reales.
+            Regístrate con tu correo y profesión. La publicación requiere verificación por fuentes oficiales autorizadas. Si no existe una conexión verificable, tu registro queda pendiente.
           </p>
-          <div id="authPanel"><label>Correo profesional</label><input id="authEmail" type="email" autocomplete="email" placeholder="correo@ejemplo.cl"><button id="authBtn" type="button" style="margin-top:12px">Enviar enlace de acceso</button><p id="authMessage" role="status" aria-live="polite">Ingresa tu correo y solicita un enlace de acceso.</p></div><div id="profilePanel" class="hidden"><h3>Solicitar verificación profesional</h3><label>Nombre completo</label><input id="profileName" maxlength="120"><label>Profesión</label><input id="profileProfession" maxlength="100"><label>Número de registro profesional (si corresponde)</label><input id="profileRegistry" maxlength="100"><button id="profileBtn" type="button" style="margin-top:12px">Enviar solicitud de verificación</button><p id="profileMessage" role="status"></p></div><div id="verificationMessage" role="status"></div><form id="publishForm" class="hidden">
+          <div id="authPanel"><label>Correo profesional</label><input id="authEmail" type="email" autocomplete="email" placeholder="correo@ejemplo.cl"><button id="authBtn" type="button" style="margin-top:12px">Enviar enlace de acceso</button><p id="authMessage" role="status" aria-live="polite">Ingresa tu correo y solicita un enlace de acceso.</p></div><div id="profilePanel" class="hidden"><h3>Solicitar verificación profesional</h3><label>Nombre completo</label><input id="profileName" maxlength="120"><label>Profesión o disciplina de salud</label><input id="profileProfession" maxlength="100" placeholder="Ej. Kinesiología, Medicina, Nutrición"><p class="muted">No se limita a una lista cerrada de profesiones.</p><label>Número de registro profesional (si corresponde)</label><input id="profileRegistry" maxlength="100"><button id="profileBtn" type="button" style="margin-top:12px">Enviar solicitud de verificación</button><p id="profileMessage" role="status"></p><p class="muted">No envíes contraseñas, ClaveÚnica, RUN ni documentos por este formulario. Si no hay validación automática oficial disponible, el estado permanece pendiente hasta habilitar un mecanismo seguro con la entidad emisora.</p></div><div id="verificationMessage" role="status"></div><form id="publishForm" class="hidden">
             <div class="grid">
               <div>
                 <label>Nombre profesional</label
@@ -76,15 +66,7 @@
               </div>
               <div>
                 <label>Profesión o especialidad</label
-                ><select name="specialty" required>
-                  <option>Traumatología</option>
-                  <option>Medicina general</option>
-                  <option>Kinesiología</option>
-                  <option>Nutrición</option>
-                  <option>Enfermería</option>
-                  <option>Terapia ocupacional</option>
-                  <option>Psicología</option>
-                </select>
+                ><input name="specialty" required maxlength="120" placeholder="Profesión o especialidad de la atención" />
               </div>
               <div>
                 <label>Comuna</label
@@ -114,12 +96,13 @@
             </div>
             <div id="message" role="status"></div>
           </form>
+          <div id="mySlotsPanel" class="hidden"><h3>Mis horas</h3><div id="mySlots" class="cards"></div></div>
         </section>
       </main>
       <footer>
         KineCheck · Contacto directo · Sin reservas ni pagos intermediados.
       </footer>
     </div>
-    <script src="./app.js?v=20261022-3" defer></script>
+    <script src="./app.js?v=20261022-4" defer></script>
   </body>
 </html>
