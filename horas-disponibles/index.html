@@ -24,7 +24,7 @@
         <h1>Una hora liberada.<br /><span>Una nueva oportunidad.</span></h1>
         <p class="lead">
           Encuentra atenciones de salud disponibles por cancelaciones, cerca de
-          ti. Sin esperas innecesarias ni intermediarios.
+          ti. KineCheck muestra horas liberadas y te dirige al sistema oficial de agendamiento del centro o profesional. La reserva se confirma allí.
         </p>
         <div class="actions">
           <button id="searchBtn">Buscar una hora disponible →</button
@@ -95,7 +95,7 @@
             </div>
           </div>
           <p class="muted">
-            Solo se muestran horas futuras publicadas por profesionales verificados.
+            Solo se muestran horas futuras de profesionales verificados. Las horas pueden agotarse por otros canales; confirma siempre la disponibilidad en el sistema oficial.
           </p>
           <div id="results" class="cards"></div>
         </section>
@@ -138,6 +138,7 @@
                   placeholder="Teléfono o correo"
                 />
               </div>
+              <div><label>Enlace HTTPS al sistema oficial de agendamiento</label><input name="booking_url" type="url" required maxlength="1500" placeholder="https://agenda.clinica.cl/..." /><p class="muted">El paciente completará su reserva fuera de KineCheck. No ingreses enlaces de pago ni páginas no autorizadas.</p></div>
             </div>
             <div class="actions" style="margin: 20px 0 0">
               <button type="submit">Publicar disponibilidad</button>
@@ -148,7 +149,7 @@
         </section>
       </main>
       <footer>
-        KineCheck · Contacto directo · Sin reservas ni pagos intermediados.
+        KineCheck · Difusión de horas liberadas · Reserva en el sistema oficial del prestador.
       </footer>
     </div>
     <script>
@@ -172,6 +173,6 @@
         }
       })();
     </script>
-    <script src="./app.js?v=20261022-7" defer></script>
+    <script src="./app.js?v=20261022-8" defer></script>
   </body>
 </html>
