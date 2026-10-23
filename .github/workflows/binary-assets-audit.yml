@@ -18,3 +18,5 @@ jobs:
           node-version: '22'
       - name: Inspect tracked PDF, vector and raster assets
         run: node scripts/audit-public-assets.mjs
+      - name: Verify public routes and branding
+        run: node scripts/audit-public-routes.mjs
