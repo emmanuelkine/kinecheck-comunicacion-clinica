@@ -3,6 +3,8 @@ import { cleanText, demoIdentifier, makeContactUrl, normalizeProfile, toLocalISO
 const SUPABASE_URL = 'https://mhnqtyvwxytppekktvxb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_JLWKq6m0g4yB30iIQLE4bg_AkspSDYD';
 const SESSION_KEY = 'kc_hours_demo_auth_v1';
+const WRITES_ENABLED = false;
+const PILOT_MESSAGE = 'KineCheck Horas Disponibles está preparando un piloto controlado con instituciones. Por ahora, el registro y la publicación o modificación de perfiles y horarios están temporalmente deshabilitados. Pronto se habilitarán. Gracias por tu paciencia.';
 const $ = (selector, root = document) => root.querySelector(selector);
 const state = { session: readSession(), profile: null, slots: [], profiles: [], publicSlots: [] };
 
@@ -13,6 +15,7 @@ function node(tag, className, text) { const el = document.createElement(tag); if
 function fmtDate(value) { return new Intl.DateTimeFormat('es-CL', { timeZone: 'America/Santiago', dateStyle: 'full', timeStyle: 'short' }).format(new Date(value)); }
 function apiHeaders(extra = {}) { return { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', ...extra }; }
 async function rest(path, { method = 'GET', body, prefer } = {}) {
+  if (method !== 'GET' && !WRITES_ENABLED) throw new Error(PILOT_MESSAGE);
   const headers = apiHeaders(state.session?.access_token ? { Authorization: `Bearer ${state.session.access_token}` } : {});
   if (prefer) headers.Prefer = prefer;
   const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), cache: 'no-store' });
@@ -22,6 +25,7 @@ async function rest(path, { method = 'GET', body, prefer } = {}) {
   return data;
 }
 async function authRequest(path, body) {
+  if (!WRITES_ENABLED) throw new Error(PILOT_MESSAGE);
   const response = await fetch(`${SUPABASE_URL}/auth/v1/${path}`, { method: 'POST', headers: apiHeaders(), body: JSON.stringify(body), cache: 'no-store' });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.msg || data.message || data.error_description || 'No se pudo iniciar sesión.');
@@ -51,6 +55,14 @@ async function ensureFreshSession() {
   await hydrateSessionUser();
 }
 async function handleMagicLink() {
+  if (!WRITES_ENABLED) {
+    const url = new URL(location.href);
+    const hadAuthData = url.searchParams.has('token_hash') || url.hash.includes('access_token=');
+    url.searchParams.delete('token_hash'); url.searchParams.delete('type');
+    if (url.hash.includes('access_token=')) url.hash = '';
+    if (hadAuthData) history.replaceState({}, '', url.pathname + url.search + url.hash);
+    return;
+  }
   const url = new URL(location.href);
   const tokenHash = url.searchParams.get('token_hash');
   const type = url.searchParams.get('type');
@@ -97,6 +109,7 @@ function setContactFields() {
 
 async function sendMagicLink(event) {
   event.preventDefault();
+  if (!WRITES_ENABLED) return message('#authMessage', PILOT_MESSAGE);
   const email = cleanText($('#authEmail').value, 254).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return message('#authMessage', 'Ingresa un correo válido.', true);
   const button = $('#magicLinkForm button'); button.disabled = true;
@@ -206,10 +219,10 @@ async function deactivateProfile() {
 }
 
 function renderWorkspace() {
-  const loggedIn = Boolean(state.session?.access_token);
-  $('#authPanel').classList.toggle('hidden', loggedIn); $('#workspace').classList.toggle('hidden', !loggedIn);
-  $('#sessionStatus').textContent = loggedIn ? 'Sesión profesional DEMO · datos guardados en staging' : 'Modo paciente · sin iniciar sesión';
-  if (loggedIn) { loadProfessional().then(() => { fillProfileForm(); renderMySlots(); }).catch(error => message('#profileState', error.message, true)); }
+  $('#authPanel').classList.add('hidden');
+  $('#workspace').classList.add('hidden');
+  $('#pilotLock').classList.remove('hidden');
+  $('#sessionStatus').textContent = 'Registro y publicación en pausa · piloto en preparación';
 }
 
 function safeFilter(profile) {
