@@ -3,11 +3,12 @@ import { cleanText, demoIdentifier, makeContactUrl, normalizeProfile, toLocalISO
 const SUPABASE_URL = 'https://mhnqtyvwxytppekktvxb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_JLWKq6m0g4yB30iIQLE4bg_AkspSDYD';
 const SESSION_KEY = 'kc_hours_demo_auth_v1';
-const WRITES_ENABLED = false;
+const PILOT_TESTER_USER_ID = '9a5052da-48f4-4224-8d1f-c57288ceb150';
 const PILOT_MESSAGE = 'KineCheck Horas Disponibles está preparando un piloto controlado con instituciones. Por ahora, el registro y la publicación o modificación de perfiles y horarios están temporalmente deshabilitados. Pronto se habilitarán. Gracias por tu paciencia.';
 const $ = (selector, root = document) => root.querySelector(selector);
 const state = { session: readSession(), profile: null, slots: [], profiles: [], publicSlots: [] };
 
+function isPilotTester() { return state.session?.user?.id === PILOT_TESTER_USER_ID; }
 function readSession() { try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch { localStorage.removeItem(SESSION_KEY); return null; } }
 function saveSession(session) { state.session = session; if (session) localStorage.setItem(SESSION_KEY, JSON.stringify(session)); else localStorage.removeItem(SESSION_KEY); }
 function message(target, text, bad = false) { const el = typeof target === 'string' ? $(target) : target; el.textContent = text; el.classList.toggle('error', bad); }
@@ -15,7 +16,7 @@ function node(tag, className, text) { const el = document.createElement(tag); if
 function fmtDate(value) { return new Intl.DateTimeFormat('es-CL', { timeZone: 'America/Santiago', dateStyle: 'full', timeStyle: 'short' }).format(new Date(value)); }
 function apiHeaders(extra = {}) { return { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', ...extra }; }
 async function rest(path, { method = 'GET', body, prefer } = {}) {
-  if (method !== 'GET' && !WRITES_ENABLED) throw new Error(PILOT_MESSAGE);
+  if (method !== 'GET' && !isPilotTester()) throw new Error(PILOT_MESSAGE);
   const headers = apiHeaders(state.session?.access_token ? { Authorization: `Bearer ${state.session.access_token}` } : {});
   if (prefer) headers.Prefer = prefer;
   const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), cache: 'no-store' });
@@ -25,7 +26,6 @@ async function rest(path, { method = 'GET', body, prefer } = {}) {
   return data;
 }
 async function authRequest(path, body) {
-  if (!WRITES_ENABLED) throw new Error(PILOT_MESSAGE);
   const response = await fetch(`${SUPABASE_URL}/auth/v1/${path}`, { method: 'POST', headers: apiHeaders(), body: JSON.stringify(body), cache: 'no-store' });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.msg || data.message || data.error_description || 'No se pudo iniciar sesión.');
@@ -55,14 +55,6 @@ async function ensureFreshSession() {
   await hydrateSessionUser();
 }
 async function handleMagicLink() {
-  if (!WRITES_ENABLED) {
-    const url = new URL(location.href);
-    const hadAuthData = url.searchParams.has('token_hash') || url.hash.includes('access_token=');
-    url.searchParams.delete('token_hash'); url.searchParams.delete('type');
-    if (url.hash.includes('access_token=')) url.hash = '';
-    if (hadAuthData) history.replaceState({}, '', url.pathname + url.search + url.hash);
-    return;
-  }
   const url = new URL(location.href);
   const tokenHash = url.searchParams.get('token_hash');
   const type = url.searchParams.get('type');
@@ -109,13 +101,12 @@ function setContactFields() {
 
 async function sendMagicLink(event) {
   event.preventDefault();
-  if (!WRITES_ENABLED) return message('#authMessage', PILOT_MESSAGE);
   const email = cleanText($('#authEmail').value, 254).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return message('#authMessage', 'Ingresa un correo válido.', true);
   const button = $('#magicLinkForm button'); button.disabled = true;
   try {
     const redirect = `${location.origin}${location.pathname}`;
-    await authRequest(`otp?redirect_to=${encodeURIComponent(redirect)}`, { email, create_user: true, gotrue_meta_security: { captcha_token: '' } });
+    await authRequest(`otp?redirect_to=${encodeURIComponent(redirect)}`, { email, create_user: false, gotrue_meta_security: { captcha_token: '' } });
     message('#authMessage', 'Si el correo puede recibir mensajes, llegará un enlace de acceso. Revisa también spam.');
   } catch (error) { message('#authMessage', error.message, true); }
   finally { button.disabled = false; }
@@ -123,6 +114,7 @@ async function sendMagicLink(event) {
 
 async function loadProfessional() {
   await ensureFreshSession();
+  if (!isPilotTester()) { state.profile = null; state.slots = []; return; }
   if (!state.session?.access_token) { state.profile = null; state.slots = []; return; }
   const userId = state.session.user?.id;
   if (!userId) { state.profile = null; return; }
@@ -219,10 +211,17 @@ async function deactivateProfile() {
 }
 
 function renderWorkspace() {
-  $('#authPanel').classList.add('hidden');
-  $('#workspace').classList.add('hidden');
-  $('#pilotLock').classList.remove('hidden');
-  $('#sessionStatus').textContent = 'Registro y publicación en pausa · piloto en preparación';
+  const tester = isPilotTester();
+  const signedIn = Boolean(state.session?.user?.id);
+  $('#pilotLock').classList.toggle('hidden', tester);
+  $('#authPanel').classList.toggle('hidden', tester || signedIn);
+  $('#workspace').classList.toggle('hidden', !tester);
+  $('#sessionStatus').textContent = tester
+    ? 'Acceso de prueba autorizado · entorno DEMO aislado'
+    : 'Piloto controlado en preparación · acceso de edición restringido';
+  if (!tester && signedIn) {
+    message('#pilotLock', 'Esta sesión no tiene acceso de edición a la DEMO. El piloto está reservado a la cuenta de prueba autorizada; la búsqueda pública sigue disponible.');
+  }
 }
 
 function safeFilter(profile) {
@@ -274,6 +273,8 @@ async function init() {
   $('#signOut').addEventListener('click', signOut); $('#unpublishProfile').addEventListener('click', deactivateProfile); $('#refreshSearch').addEventListener('click', loadPublicResults);
   for (const control of document.querySelectorAll('#patientView input,#patientView select')) control.addEventListener('input', drawResults);
   for (const control of document.querySelectorAll('#patientView select')) control.addEventListener('change', drawResults);
-  await handleMagicLink(); await ensureFreshSession(); renderWorkspace(); await loadPublicResults();
+  await handleMagicLink(); await ensureFreshSession(); renderWorkspace();
+  if (isPilotTester()) { await loadProfessional(); fillProfileForm(); renderMySlots(); }
+  await loadPublicResults();
 }
 init();
