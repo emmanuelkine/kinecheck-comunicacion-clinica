@@ -17,7 +17,8 @@ async function loadSlots(){
  try{
  const data=await request('/rest/v1/kc_health_slots?select=id,specialty,region,comuna,starts_at,location_text,facility_type,modality,public_contact,booking_url,expires_at&status=eq.active&starts_at=gt.'+encodeURIComponent(new Date().toISOString())+'&order=starts_at.asc&limit=100');
  const specialty=norm($('specialty').value), city=norm($('city').value), region=norm($('regionFilter').value), facility=$('facilityFilter').value, modality=$('modalityFilter').value;
- const rows=data.filter(x=>(!x.expires_at||new Date(x.expires_at)>new Date())&&(!specialty||norm(x.specialty).includes(specialty))&&(!city||norm(x.comuna).includes(city))&&(!region||norm(x.region).includes(region))&&(!facility||slotLocation(x).facility===facility)&&(!modality||slotLocation(x).modality===modality));
+ const windowHours=Number($('timeWindow').value)||0; const now=Date.now();
+ const rows=data.filter(x=>(!windowHours||new Date(x.starts_at).getTime()<=now+windowHours*3600000)&&(!x.expires_at||new Date(x.expires_at)>new Date())&&(!specialty||norm(x.specialty).includes(specialty))&&(!city||norm(x.comuna).includes(city))&&(!region||norm(x.region).includes(region))&&(!facility||slotLocation(x).facility===facility)&&(!modality||slotLocation(x).modality===modality));
  $('results').innerHTML=rows.length?rows.map(x=>'<article class="card"><div class="tag">HORA DISPONIBLE</div><h3>'+esc(x.specialty)+'</h3><p>'+esc(x.comuna)+' · '+esc(x.region)+'</p><p>'+esc(new Date(x.starts_at).toLocaleString('es-CL',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Santiago'}))+'</p><p>'+esc(slotLocation(x).address)+'</p><p>Reserva y confirma en el sistema oficial.</p>'+(safeBookingUrl(x.booking_url)?'<p><a href="'+esc(safeBookingUrl(x.booking_url))+'" target="_blank" rel="noopener noreferrer nofollow">Agendar en el centro ↗</a></p>':'<p>Enlace de reserva pendiente.</p>')+'</article>').join(''):'<p>No hay horas verificadas disponibles con estos filtros.</p>';
  }catch(e){$('results').textContent='No se pudo consultar la disponibilidad. Intenta nuevamente.';}
 }
@@ -95,6 +96,17 @@ $('mySlots').addEventListener('click',async e=>{
 $('searchBtn').onclick=()=>$('searchPanel').scrollIntoView({behavior:'smooth'});
 $('publishBtn').onclick=()=>{$('publishPanel').classList.remove('hidden');$('publishPanel').scrollIntoView({behavior:'smooth'});};
 $('filterBtn').onclick=loadSlots;
+const searchFields=['specialty','city','regionFilter','facilityFilter','modalityFilter','timeWindow'];
+$('saveSearchBtn').onclick=()=>{
+ try{localStorage.setItem('kc_health_saved_search_v1',JSON.stringify(Object.fromEntries(searchFields.map(id=>[id,$(id).value]))));$('savedSearchMessage').textContent='Búsqueda guardada en este dispositivo. No se enviarán alertas ni notificaciones automáticas.';}
+ catch{$('savedSearchMessage').textContent='Este navegador no permite guardar la búsqueda.';}
+};
+$('restoreSearchBtn').onclick=()=>{
+ try{const saved=JSON.parse(localStorage.getItem('kc_health_saved_search_v1')||'null');if(!saved){$('savedSearchMessage').textContent='No hay una búsqueda guardada.';return;}searchFields.forEach(id=>{if(typeof saved[id]!=='string')return;const el=$(id);if(!el.options||Array.from(el.options).some(o=>o.value===saved[id]))el.value=saved[id];});$('savedSearchMessage').textContent='Búsqueda recuperada. Mostrando resultados actuales.';loadSlots();}
+ catch{$('savedSearchMessage').textContent='No se pudo recuperar la búsqueda.';}
+};
+$('clearSearchBtn').onclick=()=>{try{localStorage.removeItem('kc_health_saved_search_v1');$('savedSearchMessage').textContent='Búsqueda guardada eliminada de este dispositivo.';}catch{$('savedSearchMessage').textContent='No se pudo eliminar la búsqueda.';}};
+
 if(location.hash==='#publishPanel'){$('publishPanel').classList.remove('hidden');setTimeout(()=>$('publishPanel').scrollIntoView(),100);}
 if(location.hash==='#institutionPanel'){$('institutionPanel').classList.remove('hidden');setTimeout(()=>$('institutionPanel').scrollIntoView(),100);}
 if(location.hash==='#searchPanel')setTimeout(()=>$('searchPanel').scrollIntoView(),100);
