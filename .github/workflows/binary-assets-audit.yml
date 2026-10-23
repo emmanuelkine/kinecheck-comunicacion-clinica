@@ -12,7 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install PDF and metadata tools
-        run: sudo apt-get update -qq && sudo apt-get install -y poppler-utils libimage-exiftool-perl tesseract-ocr tesseract-ocr-spa imagemagick
+        run: sudo timeout 180 apt-get update -qq && sudo timeout 180 apt-get install -y poppler-utils libimage-exiftool-perl tesseract-ocr tesseract-ocr-spa
+      - name: Install image converter
+        run: python3 -m pip install --user --break-system-packages pillow
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
