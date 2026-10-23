@@ -1,0 +1,1175 @@
+{
+  "checkedAt": "2026-10-23T19:10:17.086757+00:00",
+  "base": "https://kinecheck.cl",
+  "scope": "All tracked HTML except docs/tests/scripts/workflows, plus QR redirect",
+  "count": 129,
+  "results": [
+    {
+      "route": "/404.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/404",
+      "bytes": 2610,
+      "sha256": "b77bd837353fd0b97b90faa1a00db1c6016ce757b34b333f8a83e66384424fbc",
+      "title": "Página no encontrada | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/academy/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/",
+      "bytes": 26062,
+      "sha256": "814cca6b4d9e6e803ebfcbaed8e92ad238f776e9f854912538fb0dfb00777298",
+      "title": "KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/actualizado.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/actualizado",
+      "bytes": 655,
+      "sha256": "2cf96986702791d0c4becc805fd250aa08614000b516102dd3d68c381297c97b",
+      "title": "KineCheck Academy",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/app-sso-relay.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/app-sso-relay",
+      "bytes": 2516,
+      "sha256": "421e627fcb4c59749071967b01a1a5db4137562d3e4710b4a3ff2b7ca4643ce4",
+      "title": "Abriendo KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/compra-aprobada.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/compra-aprobada",
+      "bytes": 4814,
+      "sha256": "a916a927a6f043ef9e6dc0b16e787723b5d32d21b24a7795476e4ee3496c75ba",
+      "title": "Compra aprobada · KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/dolor-lumbar-persistente/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/dolor-lumbar-persistente/",
+      "bytes": 4134,
+      "sha256": "1890065a60f9e7eebceabb8c2786e64f30f68573664c738e52d8fdbdc71ff657",
+      "title": "KineCheck | Dolor Lumbar Persistente",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/dolor-musculoesqueletico-relay.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/dolor-musculoesqueletico-relay",
+      "bytes": 2420,
+      "sha256": "61c284c8570536fc4db19203f222be616bb2a04b41a26f76971585223d328851",
+      "title": "Abriendo Dolor Musculoesquelético | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/ejercicio-terapeutico/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/ejercicio-terapeutico/",
+      "bytes": 1287,
+      "sha256": "cd4e7d1cd8c4dfeedaea7ace9ffe0f8ee26a68892242975f57198ee0b0374f37",
+      "title": "KineCheck Ejercicio Terapéutico",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/evidencia-aplicada-relay.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/evidencia-aplicada-relay",
+      "bytes": 2064,
+      "sha256": "81a674dee242924ba39761d5b4852b103d6fc4643ac782d77e9c223106f7285f",
+      "title": "Abriendo Evidencia Aplicada | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/",
+      "bytes": 26062,
+      "sha256": "814cca6b4d9e6e803ebfcbaed8e92ad238f776e9f854912538fb0dfb00777298",
+      "title": "KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/mas-alla-del-dolor.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/mas-alla-del-dolor",
+      "bytes": 5520,
+      "sha256": "33a350ffe610e74dac4feeec962ebf9d800110a37cbfe0d2323cc2de740b7275",
+      "title": "Más allá del dolor | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/pago-en-analisis.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/pago-en-analisis",
+      "bytes": 3753,
+      "sha256": "4de5e30efbd98376c2680fde1a85232ab667aa75c32bd9a1ac794a938dc2af21",
+      "title": "Compra en análisis · KineCheck Academy",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/pago-pendiente.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/pago-pendiente",
+      "bytes": 3693,
+      "sha256": "2d8776631053027fe91dac029eff800a19bcc4ee5c6be4db01595cf82dcb0bea",
+      "title": "Pago pendiente · KineCheck Academy",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/programas/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/programas/",
+      "bytes": 1824,
+      "sha256": "ab3cb605585742dbe8da16b90c0b52c7accf7ce321d814ed8a81328784bf636c",
+      "title": "Programas académicos | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/salir.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/salir",
+      "bytes": 2100,
+      "sha256": "a110a20af2c4f3615ee91ce27ece3b4a49d5b2e9b0c28ab5a8bec216316e730c",
+      "title": "Sesión cerrada · KineCheck Academy",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/watermark-visual-frame.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/watermark-visual-frame",
+      "bytes": 6150,
+      "sha256": "138d5ed376b65baab7d61f7b2ff83c7f46149904b83a9c40bde3648f14c9072a",
+      "title": "Contenido protegido de prueba",
+      "brandMatches": []
+    },
+    {
+      "route": "/academy/watermark-visual-preview.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/academy/watermark-visual-preview",
+      "bytes": 2269,
+      "sha256": "8b9a5e494209de683001e1a94e17e87cf8ae30f2c6f7c99390aef32209e4b47a",
+      "title": "Vista previa de marca de agua | KineCheck Academy",
+      "brandMatches": []
+    },
+    {
+      "route": "/actividades/kin2002/admin/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/actividades/kin2002/admin/",
+      "bytes": 3869,
+      "sha256": "818a98088281d7e008d73c5c205d22578c7b7e4b45849992b2f8994f55d8d4c6",
+      "title": "KIN2002 · Panel docente",
+      "brandMatches": []
+    },
+    {
+      "route": "/actividades/kin2002/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/actividades/kin2002/",
+      "bytes": 14516,
+      "sha256": "a5afbc21ff1179e30d8ce499a60abdd6b002cbdbe291946f22b0632a4d858037",
+      "title": "KIN2002 · Laboratorio S1",
+      "brandMatches": []
+    },
+    {
+      "route": "/actividades/kin2002/preparacion/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/actividades/kin2002/preparacion/",
+      "bytes": 2331,
+      "sha256": "84b8cd83cabc4472927195ad00b567ca23f6c1407076118bfa47b2cd7ff56c50",
+      "title": "Consulta, decide y vuelve a intentarlo | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/actividades/neurokinesica/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/actividades/neurokinesica/",
+      "bytes": 11705,
+      "sha256": "37b240d7144d0c74662ae7d4763c357d978c9fc0d26868b6e0fcf53333d44782",
+      "title": "Actividad Neurokinésica | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/admin/c2-informes.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/admin/c2-informes",
+      "bytes": 3745,
+      "sha256": "ef1b888057b1ab978438b383951a23043f7238234c1341294b54313c35e425f5",
+      "title": "Corrector C2 | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/admin/feedback/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/admin/feedback/",
+      "bytes": 2822,
+      "sha256": "49aa15c5dbc26338d6d0cf6f092524d0574709a7dd7deb5bb4ede2d2bd03bc5c",
+      "title": "Moderación de opiniones | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/admin/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/admin/",
+      "bytes": 13290,
+      "sha256": "2d1dc1a0e3c3b8aa3369f96089fa27d720bc9f8615ad1dad21c3b7a7a7d80f1e",
+      "title": "Centro de automatización | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/admin/status.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/admin/status",
+      "bytes": 3155,
+      "sha256": "23898069060e458ee0bce7e8240c99bff1b1e1bfcbcdbd49de8b7d8b724e04dd",
+      "title": "KineCheck Status Center",
+      "brandMatches": []
+    },
+    {
+      "route": "/agentes-fisicos/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/agentes-fisicos/",
+      "bytes": 41730,
+      "sha256": "02aa9027e5be9e695fea584e625c2b154ff99154e5b544b877c2973acd69adf6",
+      "title": "Agentes físicos basados en evidencia | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/ayuda/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/ayuda/",
+      "bytes": 13616,
+      "sha256": "d74372096251b7ba6ab4455e408a2d452225dfe6429f6e1c32ec20d6c0b18115",
+      "title": "Centro de Ayuda | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/banderas-clinicas/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/banderas-clinicas/",
+      "bytes": 7198,
+      "sha256": "95261e5af8ad5bf1553c008b543caf9e9cb3fd149fe7c6780938b398f195c497",
+      "title": "KineCheck | Banderas Clínicas",
+      "brandMatches": []
+    },
+    {
+      "route": "/beta/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/beta/",
+      "bytes": 10097,
+      "sha256": "0ff900baeacc5dfcde66206a4984e7a584f526991c12b18869cd9b8d330ba296",
+      "title": "Programa beta externo | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/bienvenida/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/bienvenida/",
+      "bytes": 8459,
+      "sha256": "ca21e37da749d8323e1ec2373caa6e4139f23e1160b5d6056dc167ba87f4280f",
+      "title": "Bienvenido a KineCheck | Primeros pasos",
+      "brandMatches": []
+    },
+    {
+      "route": "/certificacion/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/certificacion/",
+      "bytes": 6713,
+      "sha256": "7c7707d7701b86ad203828282b30b824ad7e783c5df1fcfe674ee9bcce055f01",
+      "title": "Certificación de horas de formación | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/comunicacion-clinica.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/comunicacion-clinica",
+      "bytes": 3600,
+      "sha256": "69dd220a908390e4ef0b20c1d65da259edbd2b2c76d20cc8162fe814465bea3c",
+      "title": "Comunicación Clínica | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/demo/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/demo/",
+      "bytes": 29754,
+      "sha256": "d8e1b97b84fb555f7d6858995f44e47b171fb2e84c2977b62278d96b0d0d1f1e",
+      "title": "Demo interactiva | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/estudiantes/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/estudiantes/",
+      "bytes": 9417,
+      "sha256": "c10bdbd16ab8d5566fd180c8587745fc9cd63fbdd163c99fbaaacab30af7a81f",
+      "title": "KineCheck para estudiantes | Evaluación clínica guiada",
+      "brandMatches": []
+    },
+    {
+      "route": "/evalua/calculadora.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/evalua/calculadora",
+      "bytes": 11461,
+      "sha256": "68c301423e760ed575f6b4eb6ad507c1d647ab4c0702c58b8c875dd0cefc0d34",
+      "title": "Calculadora de rúbricas · KineCheck Evalúa",
+      "brandMatches": []
+    },
+    {
+      "route": "/evalua/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/evalua/",
+      "bytes": 17079,
+      "sha256": "d9084b9399973598d8515c3f9430e1ed3a3fd976a8a617ccde03ab9c99f0923d",
+      "title": "KineCheck Evalúa | Tu rúbrica. Tus criterios. Tu decisión.",
+      "brandMatches": []
+    },
+    {
+      "route": "/evalua/lote.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/evalua/lote",
+      "bytes": 12156,
+      "sha256": "716e44e6209cfb0a585c86ca831e6f9d20efa962b3e1d9a7a761832b35fb1052",
+      "title": "Revisión masiva · KineCheck Evalúa",
+      "brandMatches": []
+    },
+    {
+      "route": "/evalua/revision-objetiva.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/evalua/revision-objetiva",
+      "bytes": 8468,
+      "sha256": "87e224d6988a8362292d3d19a5b273ea6651f136f60ac7ac708cafd17c38fc42",
+      "title": "Revisión objetiva de informes · KineCheck Evalúa",
+      "brandMatches": []
+    },
+    {
+      "route": "/evidencia-msk/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/evidencia-msk/",
+      "bytes": 14745,
+      "sha256": "3a980386d305c1a89fe575336a0f1de9b97feaed0f74af01127147a3d66a8db2",
+      "title": "Resumen semanal de evidencia MSK | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/ejercicio-dolor-lumbar/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/ejercicio-dolor-lumbar/",
+      "bytes": 13024,
+      "sha256": "23cd971cc246edb9d9c960aa35cb7a0e358fa9e74e92dde2e0aec9c9d31f486c",
+      "title": "Ejercicio terapéutico y dolor lumbar | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/",
+      "bytes": 9964,
+      "sha256": "31775313a84db795b65a2afb118cfdba40981bcd53c1f7e03c38752837cfbe1e",
+      "title": "Biblioteca gratuita | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/intensidad-ejercicio/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/intensidad-ejercicio/",
+      "bytes": 19973,
+      "sha256": "76fa84a683498160b995c787a7491dc68b28b974fc61a9eacaad53dec98589ff",
+      "title": "Intensidad del ejercicio: cómo describirla y prescribirla | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/neurociencia-del-dolor/contexto-y-experiencia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/neurociencia-del-dolor/contexto-y-experiencia/",
+      "bytes": 5617,
+      "sha256": "be0cc8354e560065d6ec76326113eeb25a071125eb0bbe04fcbf50fb2beb393c",
+      "title": "El dolor y su contexto | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/neurociencia-del-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/neurociencia-del-dolor/",
+      "bytes": 16680,
+      "sha256": "ff7a901dd292fdcc603e708acdab96810277763f343e30fa76ad94a89d6686dd",
+      "title": "Comprender el dolor · Curso gratuito | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/neuromodulacion/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/neuromodulacion/",
+      "bytes": 8973,
+      "sha256": "99f51789e84f9a59ddf256765d0354578ac963f25a6eedeabc59f1fdd2fb8f88",
+      "title": "Neuromodulación y dolor | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/pacientes/dolor-lumbar/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/pacientes/dolor-lumbar/",
+      "bytes": 13749,
+      "sha256": "8a2cc3769f4fd9c5c4922242f3e8701a78ebcda5aa78524089db84c919aa749d",
+      "title": "Dolor lumbar: comprender y actuar | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/pacientes/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/pacientes/",
+      "bytes": 76436,
+      "sha256": "45a862aedd3f494280098f2999ecf69544f7c9bec3ef3e6bd90c187f96ee3892",
+      "title": "Para pacientes | Biblioteca gratuita KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/pacientes/infografias/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/pacientes/infografias/",
+      "bytes": 13488,
+      "sha256": "5dd4bb0b0bfd0f14288b8cc0cfd075120fa8ca3e259c89db77e09d2478c62cbe",
+      "title": "Infografías para pacientes | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/11-principios-atencion-msk/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/11-principios-atencion-msk/",
+      "bytes": 15025,
+      "sha256": "d93c1563ad0282b8885b0718b21ba598f0c8eb618b895890283c8e879a66f9ad",
+      "title": "11 principios de atención musculoesquelética | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/aprendizaje-practica-clinica/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/aprendizaje-practica-clinica/",
+      "bytes": 17955,
+      "sha256": "348d3568da01ca29c291d77f65ad8493f4553ffc1519b970a75bd819fed71ed0",
+      "title": "Aprendizaje y desempeño clínico | Biblioteca KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/comunicacion-actividad-fisica/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/comunicacion-actividad-fisica/",
+      "bytes": 16266,
+      "sha256": "cd0de537423908ce6d1667cc93f7d66bf64229aaa087e5c02f7979319cec2779",
+      "title": "Comunicación clínica y actividad física | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/decisiones-clinicas-evidencia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/decisiones-clinicas-evidencia/",
+      "bytes": 24540,
+      "sha256": "8540df42c7ce9ea0ab71be6478e90edc5cf277bd9cb81007bdb41f896c46f3e0",
+      "title": "Decisiones clínicas basadas en evidencia | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/evolucion-ciencia-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/evolucion-ciencia-dolor/",
+      "bytes": 28489,
+      "sha256": "93100b95f325bb510340e06f3f747e15caf4011d4fc24a16e851b34b3ab535f8",
+      "title": "Evolución de la ciencia del dolor | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/examen-kinesico-msk/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/examen-kinesico-msk/",
+      "bytes": 18102,
+      "sha256": "b8aca9859d7bab2d53196a00e581ec62e8b874fba061c13e5c5adaea901522a4",
+      "title": "Examen kinésico MSK: guía visual | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/",
+      "bytes": 62602,
+      "sha256": "69a57c8b651f2e9614fb27a1bf5b0cd0af3d5bff021b0a5195e15c069087000a",
+      "title": "Biblioteca gratuita de recursos MSK | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/kit-clinico-msk/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/kit-clinico-msk/",
+      "bytes": 9446,
+      "sha256": "027555d42ea4968614f03bd2975307ce65c9c1f0b89ec9ab3ccb84c0ddb4279c",
+      "title": "Kit Clínico MSK | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/rastreo-patelar/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/rastreo-patelar/",
+      "bytes": 18148,
+      "sha256": "c2652e86e0cf47e6447c2c19e3e889611cd57a74142235ce648edf4f65b70b2e",
+      "title": "Rastreo patelar | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/profesionales/referentes/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/profesionales/referentes/",
+      "bytes": 18604,
+      "sha256": "ef6a5d5f5e51773ce8185d3486deec35f31ca0cbca12ea3fb0ac04dce187c65d",
+      "title": "Referentes científicos | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/rehabilitacion-personalizada/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/rehabilitacion-personalizada/",
+      "bytes": 13638,
+      "sha256": "bad985d34c16d7e004afa3cdb63bd45eacb6545a37ea8495681144465dc1b289",
+      "title": "Rehabilitación musculoesquelética personalizada | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/tendinopatias/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/tendinopatias/",
+      "bytes": 7483,
+      "sha256": "d00ddea0f5de654afd14cf78b350d706416e45c0a4048d313af8463de8a06ba4",
+      "title": "Tendinopatías | Biblioteca KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/terapia-manual-mecanismos/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/terapia-manual-mecanismos/",
+      "bytes": 12359,
+      "sha256": "6fd18eb6340f120947ec368291757460f0ef74cdbb686408ac038073e2805908",
+      "title": "Terapia manual: qué cambia realmente | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/terapia-manual-mecanismos/infografia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/terapia-manual-mecanismos/infografia/",
+      "bytes": 4646,
+      "sha256": "39fdc5eb613a3c7f2422116363e0893dde8b68539ccc3f0854d581f16cec40ae",
+      "title": "Infografía terapia manual | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/gratis/terapia-manual-mecanismos/pacientes/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/terapia-manual-mecanismos/pacientes/",
+      "bytes": 6612,
+      "sha256": "03efe1fea95002b18472ee6dbe0902978b3670d2c813b70fac0729b736786b20",
+      "title": "Qué ocurre durante la terapia manual | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/horas-disponibles/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/horas-disponibles/",
+      "bytes": 17757,
+      "sha256": "e3857873f60b8fe8f41fc45408ce4c4f94cba3421017e1734db0ff35d807b43c",
+      "title": "KineCheck · Horas Disponibles",
+      "brandMatches": []
+    },
+    {
+      "route": "/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/",
+      "bytes": 18691,
+      "sha256": "4e0ea7ade8244a733426677d137f6cce5e0a7d2a3b643e2befe4b145fb7332f4",
+      "title": "KineCheck | Evaluación musculoesquelética y razonamiento clínico",
+      "brandMatches": []
+    },
+    {
+      "route": "/kin2002-roles/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/kin2002-roles/",
+      "bytes": 10062,
+      "sha256": "11ce9082ecd96c2a552f92d7bfcc2669db2fdec77616c4402c0fde1edd8b6a01",
+      "title": "KIN2002 · Tarjeta de rol",
+      "brandMatches": []
+    },
+    {
+      "route": "/kinecheck-clinico-curso/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/kinecheck-clinico-curso/",
+      "bytes": 4039,
+      "sha256": "3ec998805494430bbed861783ab66e3c64c235ab4363bc72776d0d66bfba7df9",
+      "title": "KineCheck Clínico | Curso profesional",
+      "brandMatches": []
+    },
+    {
+      "route": "/kinecheck-clinico-guia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/kinecheck-clinico-guia/",
+      "bytes": 6512,
+      "sha256": "386972d6842654d320918ec7da6ebef995490c7eacb495884c810a2d76cd0faf",
+      "title": "Guía complementaria KineCheck Clínico",
+      "brandMatches": []
+    },
+    {
+      "route": "/kinecheck/estudiantes/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/kinecheck/estudiantes/",
+      "bytes": 965,
+      "sha256": "fc7d59f73206d42b2f8a4cee98d1edb04941e5c450c1a09aee1894f38a866bb4",
+      "title": "Abriendo KineCheck para estudiantes",
+      "brandMatches": []
+    },
+    {
+      "route": "/kinecheck/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/kinecheck/",
+      "bytes": 947,
+      "sha256": "93fa52ec05b976783472d1674e697313fd634b3f49264e4aafffab14e4163d1d",
+      "title": "Abriendo KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/kinecheck/profesionales/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/kinecheck/profesionales/",
+      "bytes": 977,
+      "sha256": "0685c70de987e8cdecbbc9e2f63390daebbe43185c3dc77fa32b9287cf502617",
+      "title": "Abriendo KineCheck para profesionales",
+      "brandMatches": []
+    },
+    {
+      "route": "/kinecheck/recupera/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/kinecheck/recupera/",
+      "bytes": 937,
+      "sha256": "192a8046a2348c363eb6372a76b461392deda334c31ebeb56d2144e2f9665e31",
+      "title": "Abriendo KineCheck Recupera",
+      "brandMatches": []
+    },
+    {
+      "route": "/lab/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/lab/",
+      "bytes": 2894,
+      "sha256": "de319c552a9bd3cd969743846d6e31e9478ff998929ad024b50689610c44d53d",
+      "title": "KineCheck Lab Clínico | En preparación",
+      "brandMatches": []
+    },
+    {
+      "route": "/legal/privacidad.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/legal/privacidad",
+      "bytes": 16696,
+      "sha256": "990af35e18c2792d6636b9b1d76a61a216c821f04afef95754d4ae83b5b3c120",
+      "title": "Política de privacidad | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/legal/reembolsos.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/legal/reembolsos",
+      "bytes": 9046,
+      "sha256": "d19e920a5ee0a49a59dbe730f88c491cbdf9e3119b9ef488d4337f6ce3aef0fb",
+      "title": "Retracto y reembolsos | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/legal/terminos.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/legal/terminos",
+      "bytes": 8306,
+      "sha256": "868443340d532a2020a118df87ac90b6ec4e5b3d82eb8b98dee0f81ce7d49b3e",
+      "title": "Términos y condiciones | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/metodologia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/metodologia/",
+      "bytes": 7177,
+      "sha256": "18f190373c456fdd7880f86c8771c5a3bac5998ccbd7c67abaf8423ba40f091f",
+      "title": "Metodología y evidencia | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/platform/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/platform/",
+      "bytes": 2174,
+      "sha256": "f7b9b7cf3f518fe75737b468eaf08a7478f1e7883d3b09867108f9fa08157f3c",
+      "title": "Abriendo Mi KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/portal-estudiantes/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/portal-estudiantes/",
+      "bytes": 14612,
+      "sha256": "2ee1eab926daa0cefd3e3b0302a2381b5ea56cfa57fb745b4c774493853f3127",
+      "title": "Portal del estudiante · Inicio de semestre",
+      "brandMatches": []
+    },
+    {
+      "route": "/practica-anamnesis-banderas/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/practica-anamnesis-banderas/",
+      "bytes": 14359,
+      "sha256": "eb2543119eeef65f24b70c3c196b1933f7ea3ba5311d492da17fb566c5610fa2",
+      "title": "Anamnesis y banderas clínicas",
+      "brandMatches": []
+    },
+    {
+      "route": "/practica-mediciones-msk/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/practica-mediciones-msk/",
+      "bytes": 12163,
+      "sha256": "65e233a00e5fe9db6788f002a97269126a879ce057fd882ab3b23d91956d6331",
+      "title": "Práctica MSK · Juego de rol",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/banderas-clinicas/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/banderas-clinicas/",
+      "bytes": 3609,
+      "sha256": "08f6d72d8424d1bfaebe3cfacf1b74282abd65b3eeec761cd4ba49d65e3e873d",
+      "title": "KineCheck Banderas Clínicas",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/comunicacion-clinica/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/comunicacion-clinica/",
+      "bytes": 7441,
+      "sha256": "ffc775440450f3f2c7cfc716628ed5ce88af1e88493d51405edbc51f78530da8",
+      "title": "Comunicación Clínica | Curso KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/dolor-lumbar-persistente/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/dolor-lumbar-persistente/",
+      "bytes": 7689,
+      "sha256": "2aebda3e27c5afaf2ac164cbbf09251c33ea6c20f6212f18cb509a8e669a7504",
+      "title": "Dolor Lumbar Persistente | Curso KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/dolor-musculoesqueletico/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/dolor-musculoesqueletico/",
+      "bytes": 3713,
+      "sha256": "f3b03db18ffcc36fd3466d4a545c79da18411d74dd568ae2e9d01547befe6933",
+      "title": "Dolor Musculoesquelético · KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/ejercicio-terapeutico/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/ejercicio-terapeutico/",
+      "bytes": 6693,
+      "sha256": "df0b6f514cd3799d9c3fcb181442701a4202397ccef84b097879aaca0005fa8c",
+      "title": "Ejercicio Terapéutico | Curso KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/evidencia-aplicada/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/evidencia-aplicada/",
+      "bytes": 7053,
+      "sha256": "5711361643bf3ec181001cdeee83cc361ff40f3a2de33d0783b0cf610554034f",
+      "title": "Evidencia Aplicada | Curso KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/",
+      "bytes": 2572,
+      "sha256": "8ce2a220845ed89b81151ca2a9a72534e9ada052c1ca66d8b182ffe67bf7dd98",
+      "title": "Productos KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/kinecheck-clinico/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/kinecheck-clinico/",
+      "bytes": 9288,
+      "sha256": "a89b65eee02f5963511d1ac29cdb8a814132edec25b7bb882f098c2d1b26f7d5",
+      "title": "KineCheck Clínico | Curso profesional",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/kinecheck-estudiante/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/kinecheck-estudiante/",
+      "bytes": 6879,
+      "sha256": "d24d8de94d47c5f784862172835bcc1a8dd8da9fef20fa84440e65f0758313c6",
+      "title": "KineCheck Estudiante | Evaluación clínica guiada",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/kinecheck-recupera/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/kinecheck-recupera/",
+      "bytes": 4246,
+      "sha256": "a28f8b33c10aa2da6e2dad3a2f807013485f47f88cf20893cac370d2cc70d0f0",
+      "title": "KineCheck Recupera | Próximamente",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/mas-alla-del-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/mas-alla-del-dolor/",
+      "bytes": 7116,
+      "sha256": "e65e72dbf0e9c551c3c38d97a7d65dd7a141fc2fcaf3eac5d5450c8199caa720",
+      "title": "Más allá del dolor | Curso KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/pack-estudiante/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/pack-estudiante/",
+      "bytes": 6745,
+      "sha256": "da3f7b6222b6b88779d2c2020bd333786dda5ed66331e357b236fabf5055ded2",
+      "title": "Pack KineCheck Estudiante",
+      "brandMatches": []
+    },
+    {
+      "route": "/productos/traumatologia-ortopedia-clinica/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/productos/traumatologia-ortopedia-clinica/",
+      "bytes": 7284,
+      "sha256": "e924944a48dd6138a449f17ca02ed382b25657efd655f7f74a9cbfaab18898a4",
+      "title": "Traumatología y Ortopedia Clínica | Curso KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/profesionales/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/profesionales/",
+      "bytes": 10813,
+      "sha256": "77dd4e7deb287134cfb56665298157e3402e886e659fefe6007728576e0de5dd",
+      "title": "KineCheck para profesionales | Evaluación y razonamiento clínico",
+      "brandMatches": []
+    },
+    {
+      "route": "/recupera/consentimiento.html",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recupera/consentimiento",
+      "bytes": 2528,
+      "sha256": "b25666e00bd99ff4455e391369eb539d13e19bffe38aa2b91829960a4d4b0258",
+      "title": "KineCheck Recupera | Próximamente",
+      "brandMatches": []
+    },
+    {
+      "route": "/recupera/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recupera/",
+      "bytes": 3725,
+      "sha256": "3366a410979d3597578042c4bcbeaa1d59379968159c92c246eb2bbc238b2258",
+      "title": "KineCheck Recupera | Próximamente",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/actividad-fisica-estilo-vida-dolor-persistente/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/actividad-fisica-estilo-vida-dolor-persistente/",
+      "bytes": 8303,
+      "sha256": "9ebd1f38460fe9424fdc2ab20d9aea423e65cf5efff982c0c1644069b92232d7",
+      "title": "Actividad física, estilo de vida y dolor musculoesquelético persistente | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/anatomia-medular-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/anatomia-medular-dolor/",
+      "bytes": 9601,
+      "sha256": "f84d0b83ca008002c68f148ef068f556b83bea472e8ffc1261a9a8d61506f7ad",
+      "title": "Anatomía medular y dolor | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/banderas-clinicas/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/banderas-clinicas/",
+      "bytes": 8656,
+      "sha256": "14d0edbfc07737c0eb2bb45052e67c7028a58b13838efb51f8eacbd1363aefef",
+      "title": "Banderas clínicas: continuar, adaptar o derivar | Recursos gratuitos",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/biblioteca-diagnostico-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/biblioteca-diagnostico-dolor/",
+      "bytes": 2883,
+      "sha256": "1e0f5063121767bf1d81d3c89d564967a5b93e918249cfcfec755fff703be735",
+      "title": "Biblioteca de diagnóstico y dolor | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/comunicacion-clinica-intervencion/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/comunicacion-clinica-intervencion/",
+      "bytes": 13336,
+      "sha256": "6455d9d975f979689f90041ef5810980ebbe217bbe8f6351a1dba1a8f47cbdde",
+      "title": "La comunicación también es parte del tratamiento | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/dolor-extremidades-origen-espinal/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/dolor-extremidades-origen-espinal/",
+      "bytes": 10446,
+      "sha256": "6e6a74d8b3a856b4d75f6799468e6e7e2043e496312120f8d48c5c319570c9b4",
+      "title": "Dolor de extremidades y columna | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/dolor-lumbar-biomecanica-metamodelo/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/dolor-lumbar-biomecanica-metamodelo/",
+      "bytes": 12147,
+      "sha256": "e5d1686ac7a4ba1f5de68a9955ff1c7c1139ff2d853854c5ec13d68313398816",
+      "title": "Dolor lumbar y biomecánica | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/dosis-ejercicio-dolor-lumbar/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/dosis-ejercicio-dolor-lumbar/",
+      "bytes": 11953,
+      "sha256": "a12bd62ee13a5c7aaa91426fafb0d86c55ace8907ea98c6445d7e8a780b1c925",
+      "title": "Dosis de ejercicio y dolor lumbar | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/educacion-neurociencia-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/educacion-neurociencia-dolor/",
+      "bytes": 4456,
+      "sha256": "3c4eb468e229b79308fb8a9ed85cfd971db8ffafdb0ab8f0723361f127683594",
+      "title": "Educación en neurociencia del dolor: alcance y límites | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/ejercicio-dolor-hombro-rcrsp/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/ejercicio-dolor-hombro-rcrsp/",
+      "bytes": 5728,
+      "sha256": "c6fd3489318d186a9c57493d593484c79c163d33724a99b451ccfc7c950e6a5d",
+      "title": "¿Existe un ejercicio superior para el dolor de hombro? | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/ejercicio-salud-cerebral/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/ejercicio-salud-cerebral/",
+      "bytes": 12886,
+      "sha256": "208f09f4bc660576e657a8609a7debafb5f39416e5038ee1599c37a0f2f47f0c",
+      "title": "Ejercicio, lactato y salud cerebral | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/estiramientos-mito-evidencia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/estiramientos-mito-evidencia/",
+      "bytes": 12697,
+      "sha256": "de171f6ab3c5565c5eec154ffa1ba05524e062a45799c556c3cf22bdc1c3db8d",
+      "title": "Estiramientos: entre el mito y la evidencia | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/etiquetas-diagnosticas-comunicacion/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/etiquetas-diagnosticas-comunicacion/",
+      "bytes": 10457,
+      "sha256": "2a7c24448183403bdcf70f1ac94f238fa119e97df9104ec194dec338eb08259e",
+      "title": "¿Qué significa mi diagnóstico? | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/etiquetas-diagnosticas-y-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/etiquetas-diagnosticas-y-dolor/",
+      "bytes": 10687,
+      "sha256": "320c87dda2c9fb1f0feaa6ac9a9c50169ba11068ca83889eb0943c92bc6d41d9",
+      "title": "Etiquetas diagnósticas y dolor musculoesquelético | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/evaluacion-pruebas-clinicas/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/evaluacion-pruebas-clinicas/",
+      "bytes": 4367,
+      "sha256": "ff2718cb8300607226a84e89e1e22890b03e4e07e3a3e9446b137a072699231e",
+      "title": "Evaluación clínica: del test aislado a la decisión | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/factores-contextuales-placebo-nocebo/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/factores-contextuales-placebo-nocebo/",
+      "bytes": 12545,
+      "sha256": "c2c6634b9fd4c0433a73340010ad47cee776c93a6a20bcf6858154d07227a4c2",
+      "title": "Factores contextuales, placebo y nocebo | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/flexion-lumbar-carga-adaptacion/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/flexion-lumbar-carga-adaptacion/",
+      "bytes": 10530,
+      "sha256": "0e1e44f0a064069f67ea314699eb35b4ee9f569e70096339f75cc80b51a7ea9c",
+      "title": "¿La flexión lumbar desgasta tu espalda? | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/mecanismos-tratamiento-musculoesqueletico/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/mecanismos-tratamiento-musculoesqueletico/",
+      "bytes": 8683,
+      "sha256": "8f192d008fff269971251c88c4cb7e386b169787a07a7682a4a703623d95f35f",
+      "title": "¿Sabemos realmente por qué funciona un tratamiento? | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/neuroimagen-fibromialgia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/neuroimagen-fibromialgia/",
+      "bytes": 13035,
+      "sha256": "623257883e81166ad864d1c50afe5f04617f5fbfcff69f32d63330b18a7ad13e",
+      "title": "Neuroimagen en fibromialgia: qué sabemos y qué falta | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/niveles-explicacion-dolor/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/niveles-explicacion-dolor/",
+      "bytes": 9310,
+      "sha256": "e326c926bc1c8d8913b1d72187d7e11fa75381b35536768d92e5ce1fa9bf34dd",
+      "title": "¿“El cerebro genera dolor” explica realmente el dolor? | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/pch-razonamiento-centrado-persona/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/pch-razonamiento-centrado-persona/",
+      "bytes": 6314,
+      "sha256": "50ad1b62da0cfd1d1b105c7ea2d0c45499176c88b3ce65c3d56563fe39a9de36",
+      "title": "PCH: hipótesis centradas en la persona | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/pne-comunicacion-experiencia-paciente/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/pne-comunicacion-experiencia-paciente/",
+      "bytes": 5628,
+      "sha256": "16f31c4750676c00b84dcc6b2bdf037a88dea194f17ff7eb88a88948e82a2ccb",
+      "title": "PNE: qué decir, qué no decir y por qué | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/prescripcion-ejercicio-razonamiento/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/prescripcion-ejercicio-razonamiento/",
+      "bytes": 9877,
+      "sha256": "956dc2fbacbd05178e5cf7aea8b0448576be2aafdda74f1c5484c751b6dde152",
+      "title": "Prescripción de ejercicio: hacer visible el razonamiento | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/psps-t2-neuromodulacion/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/psps-t2-neuromodulacion/",
+      "bytes": 12307,
+      "sha256": "2e4a32f6e4920c5fb64913f5b94f9fe6310be0ac71557e51a2ba38a7c67be420",
+      "title": "Dolor persistente tras cirugía de columna | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/que-mide-una-escala-clinica/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/que-mide-una-escala-clinica/",
+      "bytes": 16200,
+      "sha256": "b659d36b6bafb6d7ac83966b3d5ef3a7fa7fb2e1b3bb23a458c72fb21187b819",
+      "title": "¿Qué mide realmente una escala clínica? | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/razonamiento-clinico-ensenanza/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/razonamiento-clinico-ensenanza/",
+      "bytes": 4253,
+      "sha256": "91950c3947e9230723422404749c4ae5e480b83fec99551dc9e9de8b9b8bff0d",
+      "title": "Razonamiento clínico: aprender a decidir | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/reglas-prediccion-clinica-prescriptivas/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/reglas-prediccion-clinica-prescriptivas/",
+      "bytes": 8289,
+      "sha256": "9f04f17d0a596fbd6806eb9d2812a4815ec487fa6ca3d04f0a29e79cb1d78f07",
+      "title": "R.I.P. reglas de predicción clínica prescriptivas | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/recursos/vmo-dolor-patelofemoral/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/recursos/vmo-dolor-patelofemoral/",
+      "bytes": 12490,
+      "sha256": "7dc11300af2436137d58de2b5a1e10bb2250d76bd8fd46af7f08db9e008b18e6",
+      "title": "¿Podemos aislar el VMO? Dolor patelofemoral | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/secure-index.html",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden",
+      "errorBodyExcerpt": "error code: 1010\n"
+    },
+    {
+      "route": "/soporte/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/soporte/",
+      "bytes": 8282,
+      "sha256": "53c15097e1f0bd85a7084a53cc0d05aa3963c7f0fbecfb7f7f749200215951de",
+      "title": "Soporte inteligente | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/traumatologia/",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/traumatologia/",
+      "bytes": 3495,
+      "sha256": "cd817b244ae3434623c31723fd30c9eac0bff291bbeeae04b53fd6996ee9c879",
+      "title": "Traumatología y Ortopedia Clínica | KineCheck",
+      "brandMatches": []
+    },
+    {
+      "route": "/qr",
+      "status": 200,
+      "finalUrl": "https://kinecheck.cl/gratis/",
+      "bytes": 9964,
+      "sha256": "31775313a84db795b65a2afb118cfdba40981bcd53c1f7e03c38752837cfbe1e",
+      "title": "Biblioteca gratuita | KineCheck",
+      "brandMatches": []
+    }
+  ],
+  "failures": [
+    {
+      "route": "/secure-index.html",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden",
+      "errorBodyExcerpt": "error code: 1010\n"
+    }
+  ],
+  "collectorCorrection": "secure-index.html is a filename; the initial invalid /secure- mapping was replaced with a real request to /secure-index.html."
+}

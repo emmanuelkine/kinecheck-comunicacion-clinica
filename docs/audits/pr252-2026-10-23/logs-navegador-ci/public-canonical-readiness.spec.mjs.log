@@ -1,0 +1,15 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: mobile/inicio: falta propuesta principal actual
+    at file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/public-canonical-readiness.spec.mjs:82:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

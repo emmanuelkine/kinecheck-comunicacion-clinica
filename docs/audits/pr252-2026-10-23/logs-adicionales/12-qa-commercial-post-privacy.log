@@ -1,0 +1,23 @@
+✓ Source KineCheck Clínico: producto activo conserva precio, checkout canónico y acceso a Academy
+✓ Source KineCheck Estudiante: producto activo conserva precio, checkout canónico y acceso a Academy
+✓ Source Pack KineCheck Estudiante: producto activo conserva precio, checkout canónico y acceso a Academy
+✓ Source Comunicación Clínica: producto activo conserva precio, checkout canónico y acceso a Academy
+✓ Source Más allá del dolor: producto activo conserva precio, checkout canónico y acceso a Academy
+✓ Source Evidencia Aplicada: producto activo conserva precio, checkout canónico y acceso a Academy
+✓ Source Traumatología y Ortopedia Clínica: producto activo conserva precio, checkout canónico y acceso a Academy
+✓ Catálogo Estudiante activo: KineCheck Estudiante visible con checkout canónico
+✓ Catálogo Pack activo: Pack Estudiante visible con checkout canónico
+✓ Recupera pausado en fuente: Recupera se presenta como Próximamente
+✓ Recupera sin checkout activo: no existe enlace Hotmart operativo de Recupera
+✓ Recupera sin precio público activo: no se publica precio operativo de Recupera
+✓ Academy shell: Academy conserva login, toast y navegación móvil
+✓ Live KineCheck Clínico: 200 producto activo
+✓ Live KineCheck Estudiante: 200 producto activo
+✓ Live Pack KineCheck Estudiante: 200 producto activo
+✓ Live Comunicación Clínica: 200 producto activo
+✓ Live Más allá del dolor: 200 producto activo
+✓ Live Evidencia Aplicada: 200 producto activo
+✓ Live Traumatología y Ortopedia Clínica: 200 producto activo
+✓ Live Recupera Próximamente: 200 Recupera pausado
+✓ Live Recupera sin comercio: sin checkout ni precio operativo
+Commercial QA post-privacy passed.

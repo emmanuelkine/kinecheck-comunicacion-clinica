@@ -1,0 +1,14 @@
+{
+  "sourceUrl": "https://static.metricool.com/planner/202609/7071148-file-15924474641952879846.png",
+  "sourceReferencedByCommit": "7ec0f8919210c8ff8cbc075c22586ddffea748e1",
+  "sourceSha256": "f8ba1f6be70523d54006c595e7204bcf201d21a36a61405fd1a85195b92d7b8b",
+  "restoredSha256": "01eea820fe6448b7a1619074ceae2435bcd31a28f1b7e50dbaa50dbdaafdb089",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "sourceMode": "RGB",
+  "restoredBytes": 1469852,
+  "rgbaPixelsEqual": true,
+  "limitation": "Cannot compare pixels with the undecodable historical WebP; restored from the original URL cited by its introducing commit."
+}

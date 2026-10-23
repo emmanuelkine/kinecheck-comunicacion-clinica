@@ -1,0 +1,754 @@
+{
+  "count": 187,
+  "failures": [],
+  "results": [
+    {
+      "path": "academic-program-link-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academic-assessment-status-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-access-recovery-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-bootstrap-v28.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-brand-identity.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-clinical-card-details-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-clinical-checkouts-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-clinical-commerce-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-clinical-interior-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-clinical-library-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-clinico-course-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-commerce-v4.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-enhancements.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-evidence-alerts.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-home-native-courses-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-integration-guard-v4.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-kinecheck-v4.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-launch-router-v4.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-learning-path-v4.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-open-v6.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-owned-native-bridge-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-personalization-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-recommended-buttons-fix.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-reviews.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-v16.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-v39.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy-view-contract-fix-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/academy.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/app-sso-relay.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/defer-styles-v27.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/dolor-lumbar-persistente/academic-completion-sync-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/dolor-lumbar-persistente/academic-final-activity-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/dolor-lumbar-persistente/app.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/dolor-lumbar-persistente/config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/dolor-lumbar-persistente/evidence.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/dolor-lumbar-persistente/loader-v6.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/dolor-lumbar-persistente/rc1-interaction-fix-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/ejercicio-terapeutico/academic-progress-sync-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/ejercicio-terapeutico/assets/index-BeACaNS4.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/mas-alla-del-dolor-shell-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/mi-kinecheck-card-copy-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/mi-kinecheck-simplify-v2.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/mi-kinecheck-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/network-guard-v17.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/programas/programas.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/salir-v34.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/security-hardening-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "academy/verify-kinecheck-access.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "actividades/kin2002/preparacion/cases.js",
+      "exitCode": 0
+    },
+    {
+      "path": "actividades/kin2002/preparacion/checkpoints.js",
+      "exitCode": 0
+    },
+    {
+      "path": "actividades/kin2002/preparacion/roles.js",
+      "exitCode": 0
+    },
+    {
+      "path": "admin/admin.js",
+      "exitCode": 0
+    },
+    {
+      "path": "admin/c2-informes.js",
+      "exitCode": 0
+    },
+    {
+      "path": "admin/library-feedback-moderation.js",
+      "exitCode": 0
+    },
+    {
+      "path": "admin/library-feedback-report.js",
+      "exitCode": 0
+    },
+    {
+      "path": "admin/status-center.js",
+      "exitCode": 0
+    },
+    {
+      "path": "admin/status-page.js",
+      "exitCode": 0
+    },
+    {
+      "path": "assets/library-audio-guide-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "assets/library-feedback-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "assets/library-funnel-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "assets/observability.js",
+      "exitCode": 0
+    },
+    {
+      "path": "assets/runtime-config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "auth-gate.js",
+      "exitCode": 0
+    },
+    {
+      "path": "ayuda/ayuda.js",
+      "exitCode": 0
+    },
+    {
+      "path": "banderas-clinicas/app.js",
+      "exitCode": 0
+    },
+    {
+      "path": "banderas-clinicas/config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "banderas-clinicas/data.js",
+      "exitCode": 0
+    },
+    {
+      "path": "banderas-clinicas/gate.js",
+      "exitCode": 0
+    },
+    {
+      "path": "beta/beta.js",
+      "exitCode": 0
+    },
+    {
+      "path": "bienvenida/bienvenida.js",
+      "exitCode": 0
+    },
+    {
+      "path": "communication-academic-revision-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "communication-quiz-source-repair-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "comunicacion-clinica-ui-cleanup-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "evidencia-msk/public-evidence.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/actividad-neuro.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/admin-preview-automation.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/admin-preview-login.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/c2-report-review.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/certificacion-solicitudes.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/certificacion.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/health.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/kin2002-roleplay.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/kin2002-submissions.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/kin2002-submit.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/library-feedback.js",
+      "exitCode": 0
+    },
+    {
+      "path": "functions/api/ready.js",
+      "exitCode": 0
+    },
+    {
+      "path": "home-commercial-proof-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "home-core-20260806.js",
+      "exitCode": 0
+    },
+    {
+      "path": "home-experience-unification-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "home.js",
+      "exitCode": 0
+    },
+    {
+      "path": "horas-disponibles/app.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-curso/access-ui-fix.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-curso/config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-curso/hegedus-attribution-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-guia/config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-guia/gate.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-guia/guide-ui-fix.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-guia/guide.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck-clinico-guia/privacy-guard-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck/course-reviews-public.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck/site-v3.js",
+      "exitCode": 0
+    },
+    {
+      "path": "kinecheck/site-v5.js",
+      "exitCode": 0
+    },
+    {
+      "path": "lab/app.js",
+      "exitCode": 0
+    },
+    {
+      "path": "metrics-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "platform/onboarding.js",
+      "exitCode": 0
+    },
+    {
+      "path": "platform/platform-metrics-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "platform/platform.js",
+      "exitCode": 0
+    },
+    {
+      "path": "platform/redirect-to-mi-kinecheck-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "platform/security-bootstrap.js",
+      "exitCode": 0
+    },
+    {
+      "path": "productos/course-certification-status-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "productos/product-clinico-reposition-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "productos/product-experience-unification-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "productos/product-legacy-router-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "productos/product-price-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "productos/product.js",
+      "exitCode": 0
+    },
+    {
+      "path": "recupera/consentimiento-recupera.js",
+      "exitCode": 0
+    },
+    {
+      "path": "recursos/etiquetas-diagnosticas-y-dolor/challenge.js",
+      "exitCode": 0
+    },
+    {
+      "path": "recursos/psps-t2-neuromodulacion/quiz.js",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/audit-brand-integrity.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/audit-public-assets.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/audit-public-routes.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/dashboard-closeout-check.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/healthcheck.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/qa-commercial-post-privacy.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/qa-commercial.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/qa-publication-readiness.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/security-baseline.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/validate-academy-integrity.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/validate-academy-ui-contracts.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/validate-commercial-funnel-instrumentation.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/validate-disaster-recovery.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/validate-ecosystem-access-v2.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "scripts/validate-ecosystem-access.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "soporte/support.js",
+      "exitCode": 0
+    },
+    {
+      "path": "sso-handoff.js",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/academic-assessment-platform.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/academic-completion-validation.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/academic-programs.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/academic-progress-display.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/academy-dom-contract.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/academy-initialization.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/admin-preview-auth.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/admin-preview-automation.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/admin-preview-login.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/app-sso-relay.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/beta-onboarding-regression.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/certificacion-mailer.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/certificacion-solicitudes.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/clinico-buttons.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/communication-academic-revision.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/communication-quiz-repair.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/free-library-metrics.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/hotmart-access-regression.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/kin2002-roleplay.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/launch-readiness-post-privacy.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/launch-readiness-public.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/library-feedback-browser.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/library-feedback.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/live-academy-runtime.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/lumbar-authorization.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/metrics-consent.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/mi-kinecheck-roles.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/otec-evaluation-package.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/owned-buttons.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/p0-p1-hardening.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/platform-hardening-post-privacy.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/platform-hardening.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/privacy-hardening-clean-extract.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/privacy-hardening-clean-extract.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/product-overflow-diagnostic.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/public-assets-audit.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/public-canonical-readiness.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/public-home-source-regression.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/public-internal-markers.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/public-source-regression.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/recommended-buttons.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/recupera-commerce-state.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/role-separation-regression.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/security-remediation.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/tester-p0-access-sso.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "tests/tester-visual-audit.spec.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "traumatologia/academic-display-v1.js",
+      "exitCode": 0
+    },
+    {
+      "path": "traumatologia/config.js",
+      "exitCode": 0
+    },
+    {
+      "path": "watermark.js",
+      "exitCode": 0
+    },
+    {
+      "path": "workers/certificacion-mailer/src/index.js",
+      "exitCode": 0
+    }
+  ]
+}
