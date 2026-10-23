@@ -15,10 +15,12 @@ for(const path of assets){
   const bytes=readFileSync(path);
   check(path,bytes.toString('latin1').slice(0,2000000),'binary-strings');
   if(ext==='.pdf'){
-    try{const result=execFileSync('pdftotext',['-layout',path,'-'],{encoding:'utf8',maxBuffer:15*1024*1024});check(path,result,'pdf-text');}
+    try{const result=execFileSync('pdftotext',['-layout',path,'-'],{encoding:'utf8',maxBuffer:15*1024*1024});check(path,result,'pdf-text');
+    try{const result=execFileSync('pdftoppm',['-f','1','-l','100','-r','120','-png',path,'/tmp/kinecheck-pdf-audit'],{maxBuffer:5*1024*1024}); const pageNames=execFileSync('find',['/tmp','-maxdepth','1','-name','kinecheck-pdf-audit-*.png'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);for(const name of pageNames){const ocr=execFileSync('tesseract',[name,'stdout','-l','spa+eng'],{encoding:'utf8',maxBuffer:10*1024*1024,stdio:['ignore','pipe','ignore']});check(path,ocr,'pdf-rendered-page-ocr')} }catch(e){skipped.push(path+' (PDF page visual text scan unavailable)')}}
     catch(e){skipped.push(path+' (PDF extract failed)');}
   }else if(/\.(png|jpe?g|webp|gif)$/.test(ext)){
-    try{const info=execFileSync('exiftool',['-s','-s','-s','-all',path],{encoding:'utf8',maxBuffer:5*1024*1024});check(path,info,'image-metadata');}
+    try{const info=execFileSync('exiftool',['-s','-s','-s','-all',path],{encoding:'utf8',maxBuffer:5*1024*1024});check(path,info,'image-metadata');
+      const ocr=execFileSync('tesseract',[path,'stdout','-l','spa+eng'],{encoding:'utf8',maxBuffer:10*1024*1024,stdio:['ignore','pipe','ignore']});check(path,ocr,'raster-render-ocr');}
     catch(e){skipped.push(path+' (metadata scan unavailable)');}
   }
 }
