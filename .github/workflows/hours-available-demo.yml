@@ -1,0 +1,35 @@
+name: Horas Disponibles demo checks
+
+on:
+  pull_request:
+    paths:
+      - 'horas-disponibles/demo/**'
+      - 'supabase/migrations/*hours_available_demo*'
+      - 'tests/hours-available-demo.test.mjs'
+      - '_headers'
+      - '.github/workflows/hours-available-demo.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'horas-disponibles/demo/**'
+      - 'supabase/migrations/*hours_available_demo*'
+      - 'tests/hours-available-demo.test.mjs'
+      - '_headers'
+      - '.github/workflows/hours-available-demo.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  demo-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Validate demo workflows, contact links and isolation
+        run: node --test tests/hours-available-demo.test.mjs
+      - name: Check browser modules parse
+        run: node --check horas-disponibles/demo/demo.js && node --check horas-disponibles/demo/demo-core.mjs
