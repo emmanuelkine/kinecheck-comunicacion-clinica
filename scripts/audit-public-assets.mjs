@@ -20,7 +20,7 @@ for(const path of assets){
     catch(e){skipped.push(path+' (PDF extract failed)');}
   }else if(/\.(png|jpe?g|webp|gif)$/.test(ext)){
     try{const info=execFileSync('exiftool',['-s','-s','-s','-all',path],{encoding:'utf8',maxBuffer:5*1024*1024});check(path,info,'image-metadata');
-      try{const ocr=execFileSync('tesseract',[path,'stdout','-l','spa+eng'],{encoding:'utf8',maxBuffer:10*1024*1024,stdio:['ignore','pipe','ignore']});check(path,ocr,'raster-render-ocr');}catch(ocrError){try{execFileSync('convert',[path,'-resize','2400x2400>','/tmp/kc-ocr-raster.png'],{stdio:'ignore'});const ocr=execFileSync('tesseract',['/tmp/kc-ocr-raster.png','stdout','-l','spa+eng'],{encoding:'utf8',maxBuffer:10*1024*1024,stdio:['ignore','pipe','ignore']});check(path,ocr,'raster-converted-ocr');}catch(e){skipped.push(path+' (image OCR failed after conversion)')}}}
+      try{const ocr=execFileSync('tesseract',[path,'stdout','-l','spa+eng'],{encoding:'utf8',maxBuffer:10*1024*1024,stdio:['ignore','pipe','ignore']});check(path,ocr,'raster-render-ocr');}catch(ocrError){try{execFileSync('python3',['-c','from PIL import Image; import sys; im=Image.open(sys.argv[1]); im.thumbnail((2400,2400)); im.convert("RGB").save("/tmp/kc-ocr-raster.png")',path],{stdio:'ignore'});const ocr=execFileSync('tesseract',['/tmp/kc-ocr-raster.png','stdout','-l','spa+eng'],{encoding:'utf8',maxBuffer:10*1024*1024,stdio:['ignore','pipe','ignore']});check(path,ocr,'raster-converted-ocr');}catch(e){skipped.push(path+' (image OCR failed after conversion)')}}}
     catch(e){skipped.push(path+' (image metadata scan unavailable)');}
   }
 }
