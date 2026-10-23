@@ -88,7 +88,7 @@
             </div>
             <div><label for="regionFilter">Región</label><select id="regionFilter"><option value="">Todas las regiones</option><option value="Arica y Parinacota">Arica y Parinacota</option><option value="Tarapacá">Tarapacá</option><option value="Antofagasta">Antofagasta</option><option value="Atacama">Atacama</option><option value="Coquimbo">Coquimbo</option><option value="Valparaíso">Valparaíso</option><option value="Metropolitana de Santiago">Metropolitana de Santiago</option><option value="Libertador General Bernardo O’Higgins">Libertador General Bernardo O’Higgins</option><option value="Maule">Maule</option><option value="Ñuble">Ñuble</option><option value="Biobío">Biobío</option><option value="La Araucanía">La Araucanía</option><option value="Los Ríos">Los Ríos</option><option value="Los Lagos">Los Lagos</option><option value="Aysén del General Carlos Ibáñez del Campo">Aysén del General Carlos Ibáñez del Campo</option><option value="Magallanes y de la Antártica Chilena">Magallanes y de la Antártica Chilena</option></select></div><div><label for="facilityFilter">Tipo de establecimiento</label><select id="facilityFilter" ><option value="">Todos los establecimientos</option><option value="Consulta particular">Consulta particular</option><option value="Centro médico o centro de salud">Centro médico o centro de salud</option><option value="Clínica">Clínica</option><option value="Hospital">Hospital</option><option value="Centro odontológico">Centro odontológico</option><option value="Clínica veterinaria">Clínica veterinaria</option><option value="Otro establecimiento">Otro establecimiento</option></select></div>
             <div><label for="modalityFilter">Modalidad</label><select id="modalityFilter"><option value="">Todas</option><option value="Presencial">Presencial</option><option value="Teleconsulta">Teleconsulta</option></select></div>
-            <div style="align-self: end">
+            <div><label for="timeWindow">Cuándo necesitas atención</label><select id="timeWindow"><option value="0">Cualquier fecha futura</option><option value="24">Próximas 24 horas</option><option value="48">Próximas 48 horas</option><option value="168">Próximos 7 días</option></select></div><div style="align-self: end">
               <button id="filterBtn" style="width: 100%">
                 Buscar disponibilidad
               </button>
@@ -97,7 +97,7 @@
           <p class="muted">
             Solo se muestran horas futuras de profesionales verificados. Las horas pueden agotarse por otros canales; confirma siempre la disponibilidad en el sistema oficial.
           </p>
-          <div id="results" class="cards"></div>
+          <div class="actions" style="margin:14px 0"><button class="secondary" id="saveSearchBtn" type="button">Guardar mi búsqueda</button><button class="secondary" id="restoreSearchBtn" type="button">Recuperar búsqueda</button><button class="secondary" id="clearSearchBtn" type="button">Eliminar búsqueda guardada</button></div><p id="savedSearchMessage" class="muted" role="status" aria-live="polite">La búsqueda se guarda únicamente en este navegador. Las alertas automáticas aún no están disponibles.</p><div id="results" class="cards"></div>
         </section>
         <section id="publishPanel" class="panel hidden">
           <div class="tag">REGISTRO DE PROFESIONALES · VERIFICACIÓN PENDIENTE</div>
