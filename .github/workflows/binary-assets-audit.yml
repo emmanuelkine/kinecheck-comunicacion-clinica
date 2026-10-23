@@ -1,0 +1,20 @@
+name: KineCheck Binary Asset Audit
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  binary-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PDF and metadata tools
+        run: sudo apt-get update -qq && sudo apt-get install -y poppler-utils libimage-exiftool-perl
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect tracked PDF, vector and raster assets
+        run: node scripts/audit-public-assets.mjs
