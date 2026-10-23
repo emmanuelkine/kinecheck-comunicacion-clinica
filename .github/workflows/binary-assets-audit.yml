@@ -10,15 +10,47 @@ jobs:
   binary-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Install PDF and metadata tools
         run: sudo timeout 180 apt-get update -qq && sudo timeout 180 apt-get install -y poppler-utils libimage-exiftool-perl tesseract-ocr tesseract-ocr-spa
       - name: Install image converter
-        run: python3 -m pip install --user --break-system-packages pillow
-      - uses: actions/setup-node@v4
+        run: python3 -m pip install --user --break-system-packages Pillow==12.3.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
+      - name: Test complete and truncated WebP handling
+        run: node --test tests/public-assets-audit.test.mjs
       - name: Inspect tracked PDF, vector and raster assets
+        env:
+          ASSET_AUDIT_REPORT: /tmp/kinecheck-assets-audit.json
         run: node scripts/audit-public-assets.mjs
       - name: Verify public routes and branding
+        if: always()
         run: node scripts/audit-public-routes.mjs
+      - name: Preserve audit evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: binary-assets-audit-${{ github.run_id }}
+          path: /tmp/kinecheck-assets-audit.json
+          if-no-files-found: error
+          retention-days: 14
+  regressions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Run the complete Node test suite
+        run: npm test 2>&1 | tee /tmp/kinecheck-regressions.log
+      - name: Preserve full regression results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: regressions-${{ github.run_id }}
+          path: /tmp/kinecheck-regressions.log
+          if-no-files-found: error
+          retention-days: 14
