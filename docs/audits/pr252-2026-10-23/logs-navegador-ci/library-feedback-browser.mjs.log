@@ -1,0 +1,50 @@
+(node:5837) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/functions/api/library-feedback.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Synthetic 1-star submission passed for /gratis/.
+Synthetic 2-star submission passed for /gratis/pacientes/.
+Synthetic 3-star submission passed for /gratis/profesionales/.
+Synthetic 4-star submission passed for /gratis/.
+Synthetic 5-star submission passed for /gratis/pacientes/.
+Synthetic browser state: 
+    
+      #kc-feedback{max-width:1100px;margin:42px auto;padding:0 22px;color:#e6faf8;font-family:system-ui,sans-serif}
+      #kc-feedback *{box-sizing:border-box}
+      #kc-feedback .kc-fb-box{background:linear-gradient(145deg,#102d35,#0b252c);border:1px solid #3b8388;border-radius:18px;padding:clamp(19px,3vw,32px)}
+      #kc-feedback h2{font-size:clamp(1.3rem,2.4vw,1.8rem);margin:0 0 9px}
+      #kc-feedback h3{font-size:1.05rem;margin:22px 0 9px}
+      #kc-feedback p{margin:6px 0 16px;color:#c9e5e5;overflow-wrap:anywhere}
+      #kc-feedback .kc-fb-summary{display:grid;grid-template-columns:minmax(170px,.8fr) 1.2fr;gap:20px;align-items:center;margin:19px 0 23px;padding:18px;background:#0a222a;border:1px solid #28565f;border-radius:14px}
+      #kc-feedback .kc-fb-average{font-size:2rem;font-weight:850;color:#fff0ad}#kc-feedback .kc-fb-average span{color:#ffce58;letter-spacing:.08em}
+      #kc-feedback .kc-fb-average p{font-size:.92rem;font-weight:400;line-height:1.5;margin:8px 0 0}
+      #kc-feedback .kc-fb-average .kc-fb-summary-stars{display:inline-block;color:transparent;background:linear-gradient(90deg,#ffce58 var(--kc-fb-fill),#819b9b var(--kc-fb-fill));background-clip:text;-webkit-background-clip:text}
+      #kc-feedback .kc-fb-row{display:grid;grid-template-columns:42px 1fr 34px;gap:9px;align-items:center;font-size:.9rem;color:#d3e9e8}
+      #kc-feedback .kc-fb-track{height:9px;border-radius:99px;background:#24444a;overflow:hidden}#kc-feedback .kc-fb-fill{height:100%;background:linear-gradient(90deg,#50bdb7,#a4f3e8);border-radius:99px}
+      #kc-feedback .kc-fb-ratings{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0 19px}
+      #kc-feedback .kc-fb-ratings label{display:flex;align-items:center;justify-content:center;gap:5px;flex:1;min-width:52px;padding:10px 7px;border:1px solid #5faaa9;border-radius:10px;cursor:pointer;transition:background .15s,border-color .15s}
+      #kc-feedback .kc-fb-ratings input{position:absolute;opacity:0;width:1px;height:1px}
+      #kc-feedback .kc-fb-star{color:#819b9b;font-size:1.55rem;line-height:1}#kc-feedback .kc-fb-number{font-size:.88rem}
+      #kc-feedback .kc-fb-ratings label:has(input:checked),#kc-feedback .kc-fb-ratings label:has(input:focus-visible){background:#225d62;border-color:#a1fff1;outline:2px solid #a1fff1;outline-offset:2px}
+      #kc-feedback .kc-fb-ratings label:has(input:checked) .kc-fb-star,#kc-feedback .kc-fb-ratings label:has(input:focus-visible) .kc-fb-star{color:#ffce58}
+      #kc-feedback select,#kc-feedback textarea{display:block;width:100%;background:#0a222a;color:white;border:1px solid #5faaa9;border-radius:9px;padding:11px;font:inherit;margin:7px 0 14px}
+      #kc-feedback button{background:#8ef0e6;border:0;color:#082d31;border-radius:9px;padding:12px 22px;font-weight:800;cursor:pointer}#kc-feedback button:disabled{opacity:.65;cursor:wait}
+      #kc-feedback .kc-fb-note{font-size:.84rem;color:#c5dddd}#kc-feedback [role=status]{font-weight:700;min-height:1.5em}
+      #kc-feedb
+Local synthetic records and rate-limit keys removed; no production data touched.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('#kc-feedback').getByText('4 evaluaciones aprobadas', { exact: true }) to be visible
+
+    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/library-feedback-browser.mjs:137:73 {
+  log: [
+    "  - waiting for locator('#kc-feedback').getByText('4 evaluaciones aprobadas', { exact: true }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

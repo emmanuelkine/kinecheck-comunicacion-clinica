@@ -1,0 +1,114 @@
+{
+  "checkedAt": "2026-10-23T19:15:14.509329+00:00",
+  "base": "https://kinecheck.cl",
+  "results": [
+    {
+      "path": "agentes-fisicos/anatomy-clinical-plate.webp",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-compact.webp",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-favicon.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-header.webp",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-horizontal.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-social.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-symbol-192.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-symbol-512.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-symbol-64.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/clinical-room-no-people-20260924.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/evidence/kinecheck-mecanismos-tratamiento.webp",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/kinecheck-mark.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/qr/kinecheck-gratis-qr.png",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/qr/kinecheck-gratis-qr.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/visuals/comunicacion-clinica-intervencion-hero.webp",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/ebook/razonamiento-clinico-musculoesqueletico-kinecheck.pdf",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/ejercicio-dolor-lumbar/carga-progresiva.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/ejercicio-dolor-lumbar/columna-lumbar.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/ejercicio-dolor-lumbar/movimiento-funcional.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/neuromodulacion/neuromodulacion.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/rehabilitacion-personalizada/rehabilitacion.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/tendinopatias/aquiles.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/tendinopatias/gluteo.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "gratis/tendinopatias/rotuliano.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "recursos/banderas-clinicas.svg",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "recursos/neuroimagen-fibromialgia/neuroimagen-redes-fibromialgia.webp",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "recursos/que-mide-una-escala-clinica/resumen-escalas.svg",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+✓ Source mapping KineCheck Clínico: price, checkout, canonical and Academy access match
+✓ Source mapping KineCheck Estudiante: price, checkout, canonical and Academy access match
+✗ Source mapping KineCheck Recupera: missing or inconsistent canonical commercial mapping
+✓ Source mapping Comunicación Clínica: price, checkout, canonical and Academy access match
+✓ Source mapping Más allá del dolor: price, checkout, canonical and Academy access match
+✓ Source mapping Evidencia Aplicada: price, checkout, canonical and Academy access match
+✓ Source mapping Traumatología y Ortopedia Clínica: price, checkout, canonical and Academy access match
+✓ Source mapping Pack KineCheck Estudiante: price, checkout, canonical and Academy access match
+✗ Current public pricing architecture: home=0, profesionales=6, estudiantes=5, recupera=0
+✗ Public home Explora KineCheck: home exploration rail is missing or incomplete
+✗ Public purchase coverage: one or more Hotmart checkout routes are missing
+✓ Retired creator section: the creator profile intentionally removed from the current public home must not return as stale content
+✓ No fabricated social proof: unsupported testimonials and user counts must remain absent
+✓ Verified pack price: Pack price and verified saving data remain consistent with commercial source
+✗ Product page legal links: one or more canonical product legal links are missing
+✓ Legacy product compatibility: legacy product endpoint must remain noindex and route to canonical pages
+✓ Legacy platform route: legacy /platform/ must redirect cleanly to the canonical /academy/ entry point
+✓ Canonical Academy entry: canonical /academy/ must contain login shell, secure product runtime and launch metrics
+✓ Product access route: canonical product pages must route owned access directly to /academy/
+✓ Automated support source: support portal must submit to diagnostic endpoint
+✓ Private automation source: admin portal must use protected status and control endpoints
+✓ Beta privacy consent: beta form must require privacy consent
+✗ Public home: 200 https://kinecheck.cl/?qa=commercial-current — expected content missing
+✗ Professional profile: 200 https://kinecheck.cl/profesionales/?qa=commercial-current — expected content missing
+✗ Student profile: 200 https://kinecheck.cl/estudiantes/?qa=commercial-current — expected content missing
+✗ Recovery profile: 200 https://kinecheck.cl/recupera/?qa=commercial-current — expected content missing
+✓ Canonical Academy: 200 https://kinecheck.cl/academy/?qa=commercial-current
+✓ Legacy platform redirect shell: 200 https://kinecheck.cl/platform/?qa=commercial-current
+✓ Terms: 200 https://kinecheck.cl/legal/terminos.html
+✓ Privacy: 200 https://kinecheck.cl/legal/privacidad.html
+✓ Refunds: 200 https://kinecheck.cl/legal/reembolsos.html
+✓ External beta: 200 https://kinecheck.cl/beta/
+✓ Automated support: 200 https://kinecheck.cl/soporte/
+✓ Private automation portal: 200 https://kinecheck.cl/admin/
+✓ Product detail KineCheck Clínico: 200 https://kinecheck.cl/productos/kinecheck-clinico/?qa=commercial-current
+✓ Checkout KineCheck Clínico: 200 reachable
+✓ Product detail KineCheck Estudiante: 200 https://kinecheck.cl/productos/kinecheck-estudiante/?qa=commercial-current
+✓ Checkout KineCheck Estudiante: 200 reachable
+✗ Product detail KineCheck Recupera: 200 https://kinecheck.cl/productos/kinecheck-recupera/?qa=commercial-current — expected content missing
+✓ Checkout KineCheck Recupera: 307 reachable
+✓ Product detail Comunicación Clínica: 200 https://kinecheck.cl/productos/comunicacion-clinica/?qa=commercial-current
+✓ Checkout Comunicación Clínica: 200 reachable
+✓ Product detail Más allá del dolor: 200 https://kinecheck.cl/productos/mas-alla-del-dolor/?qa=commercial-current
+✓ Checkout Más allá del dolor: 200 reachable
+✓ Product detail Evidencia Aplicada: 200 https://kinecheck.cl/productos/evidencia-aplicada/?qa=commercial-current
+✓ Checkout Evidencia Aplicada: 200 reachable
+✓ Product detail Traumatología y Ortopedia Clínica: 200 https://kinecheck.cl/productos/traumatologia-ortopedia-clinica/?qa=commercial-current
+✓ Checkout Traumatología y Ortopedia Clínica: 200 reachable
+✓ Product detail Pack KineCheck Estudiante: 200 https://kinecheck.cl/productos/pack-estudiante/?qa=commercial-current
+✓ Checkout Pack KineCheck Estudiante: 200 reachable
+Commercial QA failed with 10 blocking issue(s).

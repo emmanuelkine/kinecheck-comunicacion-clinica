@@ -1,0 +1,489 @@
+{
+  "commit": "e7890dd9217125c576ef0cd0fbb4f8851eada133",
+  "stats": {
+    "startTime": "2026-10-23T19:20:41.452Z",
+    "duration": 59274.11,
+    "expected": 47,
+    "skipped": 0,
+    "unexpected": 10,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "academy-initialization.spec.mjs / Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones DOM",
+      "file": "academy-initialization.spec.mjs",
+      "line": 16,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-kc-open-product=\"kinecheck-estudiante\"]')\nExpected: visible\nError: strict mode violation: locator('[data-kc-open-product=\"kinecheck-estudiante\"]') resolved to 2 elements:\n    1) <button type=\"button\" data-kc-open-product=\"kinecheck-estudiante\">Abrir</button> aka getByRole('button', { name: 'Abrir', exact: true })\n    2) <button type=\"button\" data-kc-open-product=\"kinecheck-estudiante\">Abrir</button> aka locator('#apps-grid').getByText('Abrir', { exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-kc-open-product=\"kinecheck-estudiante\"]')\u001b[22m\n\n\n  70 |   await expect(page.locator(\"[data-kc-home-apps-grid]\")).not.toContainText(\"Verificando tus aplicaciones\");\n  71 |   await expect(page.locator(\"[data-kc-home-courses-grid]\")).not.toContainText(\"Verificando tus cursos\");\n> 72 |   await expect(page.locator('[data-kc-open-product=\"kinecheck-estudiante\"]')).toBeVisible();\n     |                                                                               ^\n  73 |   await expect(page.locator(\"[data-kc-home-courses-grid] .kc-summary-card\").first()).toBeVisible();\n  74 |\n  75 |   await page.locator(\"#library-search\").evaluate((input) => {\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/academy-initialization.spec.mjs:72:79"
+      ]
+    },
+    {
+      "title": "app-sso-relay.spec.mjs / Estudiante conserva el POST SSO probado y el handoff protegido",
+      "file": "app-sso-relay.spec.mjs",
+      "line": 37,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "app-sso-relay.spec.mjs / Recupera es rechazado sin POST ni consentimiento operativo",
+      "file": "app-sso-relay.spec.mjs",
+      "line": 74,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "clinico-buttons.spec.mjs / KineCheck Clínico · controles móviles / acceso: no duplica correo y contraseña cuando falta sesión",
+      "file": "clinico-buttons.spec.mjs",
+      "line": 9,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.ecosystem-entry-link')\nExpected: \u001b[32m\"\u001b[7m..\u001b[27m/academy/#biblioteca\"\u001b[39m\nReceived: \u001b[31m\"/academy/#biblioteca\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ecosystem-entry-link')\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/academy/#biblioteca\" class=\"primary-button ecosystem-entry-link\">Ingresar al ecosistema KineCheck</a>\u001b[22m\n\u001b[2m       - unexpected value \"/academy/#biblioteca\"\u001b[22m\n\n\n  17 |     await expect(page.locator(\"#ecosystem-entry\")).toBeVisible();\n  18 |     await expect(page.locator(\"#ecosystem-entry\")).toContainText(\"Un solo acceso\");\n> 19 |     await expect(page.locator(\".ecosystem-entry-link\")).toHaveAttribute(\"href\", \"../academy/#biblioteca\");\n     |                                                         ^\n  20 |   });\n  21 |\n  22 |   test(\"acceso: reutiliza automáticamente la sesión del ecosistema\", async ({ page }) => {\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/clinico-buttons.spec.mjs:19:57"
+      ]
+    },
+    {
+      "title": "clinico-buttons.spec.mjs / KineCheck Clínico · controles móviles / acceso: reutiliza automáticamente la sesión del ecosistema",
+      "file": "clinico-buttons.spec.mjs",
+      "line": 22,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#course-opened')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#course-opened')\u001b[22m\n\n\n  51 |\n  52 |     await page.goto(`${BASE}/kinecheck-clinico-curso/`, { waitUntil: \"networkidle\" });\n> 53 |     await expect(page.locator(\"#course-opened\")).toBeVisible();\n     |                                                  ^\n  54 |     await expect(page.locator(\"#access-shell\")).toBeHidden();\n  55 |     await expect(page.locator(\"#ecosystem-entry\")).toBeHidden();\n  56 |     await expect(page.locator(\".kc-top-actions #sign-out\")).toBeVisible();\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/clinico-buttons.spec.mjs:53:50"
+      ]
+    },
+    {
+      "title": "clinico-buttons.spec.mjs / KineCheck Clínico · controles móviles / curso: temario, módulos, comprobación y progreso",
+      "file": "clinico-buttons.spec.mjs",
+      "line": 60,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: page.addScriptTag: Error: Failed to load script at http://127.0.0.1:4173/kinecheck-clinico-curso/course-data.js\n    at script.onerror (eval at evaluate (:311:30), <anonymous>:8:80)\n    at script.onerror (eval at evaluate (:311:30), <anonymous>:8:80)\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/clinico-buttons.spec.mjs:65:16"
+      ]
+    },
+    {
+      "title": "clinico-buttons.spec.mjs / KineCheck Clínico · controles móviles / guía: anonimización, copiar, imprimir y limpiar",
+      "file": "clinico-buttons.spec.mjs",
+      "line": 120,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "live-academy-runtime.spec.mjs / Mis productos registra el toque, usa el opener real y completa una navegación de curso",
+      "file": "live-academy-runtime.spec.mjs",
+      "line": 67,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "live-academy-runtime.spec.mjs / Mis productos muestra un error visible si la sesión no permite navegar",
+      "file": "live-academy-runtime.spec.mjs",
+      "line": 141,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "live-academy-runtime.spec.mjs / navegación móvil real y botones nativos conservan eventos de puntero",
+      "file": "live-academy-runtime.spec.mjs",
+      "line": 172,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "live-academy-runtime.spec.mjs / Academy no conserva overlays invisibles ni bloquea el scroll o los controles",
+      "file": "live-academy-runtime.spec.mjs",
+      "line": 200,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / tarjetas dinámicas conservan su controlador nativo y el bridge no bloquea el clic",
+      "file": "owned-buttons.spec.mjs",
+      "line": 85,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / los cursos nuevos conservan el controlador nativo de la Biblioteca",
+      "file": "owned-buttons.spec.mjs",
+      "line": 104,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / productos activos permiten verificar acceso y los que están en preparación usan CTA correcto",
+      "file": "owned-buttons.spec.mjs",
+      "line": 118,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / Continuar usa el opener unificado sin alterar los botones nativos del catálogo",
+      "file": "owned-buttons.spec.mjs",
+      "line": 189,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / Continuar actividad usa el opener unificado con el producto recordado",
+      "file": "owned-buttons.spec.mjs",
+      "line": 207,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / Mis productos, Recursos, Cuenta y navegación móvil funcionan desde el controlador directo",
+      "file": "owned-buttons.spec.mjs",
+      "line": 221,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / Soporte responde aunque los listeners secundarios no carguen",
+      "file": "owned-buttons.spec.mjs",
+      "line": 247,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / si el opener todavía no cargó, el bridge espera su disponibilidad",
+      "file": "owned-buttons.spec.mjs",
+      "line": 255,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "owned-buttons.spec.mjs / la personalización no renombra la marca ni reintroduce clicks proxy",
+      "file": "owned-buttons.spec.mjs",
+      "line": 277,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "privacy-hardening-clean-extract.spec.mjs / Clínico muestra guard contextual y marca educativa de impresión",
+      "file": "privacy-hardening-clean-extract.spec.mjs",
+      "line": 11,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "privacy-hardening-clean-extract.spec.mjs / portal Estudiantes mantiene advertencias junto a sus textos libres",
+      "file": "privacy-hardening-clean-extract.spec.mjs",
+      "line": 26,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "privacy-hardening-clean-extract.spec.mjs / consentimiento legacy de Recupera no contiene controles de captura",
+      "file": "privacy-hardening-clean-extract.spec.mjs",
+      "line": 35,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "recommended-buttons.spec.mjs / los botones dinámicos de los cursos activos abren su producto exacto",
+      "file": "recommended-buttons.spec.mjs",
+      "line": 21,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "recommended-buttons.spec.mjs / al regresar al ecosistema se libera cualquier navegación bloqueada",
+      "file": "recommended-buttons.spec.mjs",
+      "line": 61,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-p0-access-sso.spec.mjs / TF-001: handoff reciente en milisegundos no se marca como vencido",
+      "file": "tester-p0-access-sso.spec.mjs",
+      "line": 31,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-p0-access-sso.spec.mjs / TF-001: handoff reciente legado en segundos tampoco se marca como vencido",
+      "file": "tester-p0-access-sso.spec.mjs",
+      "line": 43,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-p0-access-sso.spec.mjs / TF-001: un handoff realmente vencido sí es rechazado y no hace POST",
+      "file": "tester-p0-access-sso.spec.mjs",
+      "line": 56,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-p0-access-sso.spec.mjs / TF-002: botón Estudiante usa opener unificado y Recupera se bloquea al intentar abrir",
+      "file": "tester-p0-access-sso.spec.mjs",
+      "line": 67,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-p0-access-sso.spec.mjs / TF-002: relay Estudiante conserva POST y campos contractuales",
+      "file": "tester-p0-access-sso.spec.mjs",
+      "line": 87,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / public-mobile: portada, imágenes y controles están utilizables",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 122,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('h1')\nExpected pattern: \u001b[32m/evaluación musculoesquelética y razonamiento clínico/i\u001b[39m\nReceived string:  \u001b[31m\"Aprende a evaluar mejor. Razona con evidencia. Decide con criterio clínico.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    14 × locator resolved to <h1>…</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Aprende a evaluar mejor. Razona con evidencia. Decide con criterio clínico.\"\u001b[22m\n\n\n  124 |     await page.goto(`${BASE}/?qa=public-visual-${Date.now()}`, { waitUntil: \"networkidle\", timeout: 60000 });\n  125 |\n> 126 |     await expect(page.locator(\"h1\")).toContainText(/evaluación musculoesquelética y razonamiento clínico/i);\n      |                                      ^\n  127 |     await expect(page.locator(\".kc-testimonial\")).toHaveCount(8);\n  128 |     await expect(page.locator(\".kc-stars\")).toHaveCount(0);\n  129 |     await expect(page.locator(\"body\")).not.toContainText(\"★★★★★\");\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/tester-visual-audit.spec.mjs:126:38"
+      ]
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / public-tablet: portada, imágenes y controles están utilizables",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 122,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('h1')\nExpected pattern: \u001b[32m/evaluación musculoesquelética y razonamiento clínico/i\u001b[39m\nReceived string:  \u001b[31m\"Aprende a evaluar mejor. Razona con evidencia. Decide con criterio clínico.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    14 × locator resolved to <h1>…</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Aprende a evaluar mejor. Razona con evidencia. Decide con criterio clínico.\"\u001b[22m\n\n\n  124 |     await page.goto(`${BASE}/?qa=public-visual-${Date.now()}`, { waitUntil: \"networkidle\", timeout: 60000 });\n  125 |\n> 126 |     await expect(page.locator(\"h1\")).toContainText(/evaluación musculoesquelética y razonamiento clínico/i);\n      |                                      ^\n  127 |     await expect(page.locator(\".kc-testimonial\")).toHaveCount(8);\n  128 |     await expect(page.locator(\".kc-stars\")).toHaveCount(0);\n  129 |     await expect(page.locator(\"body\")).not.toContainText(\"★★★★★\");\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/tester-visual-audit.spec.mjs:126:38"
+      ]
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / public-desktop: portada, imágenes y controles están utilizables",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 122,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('h1')\nExpected pattern: \u001b[32m/evaluación musculoesquelética y razonamiento clínico/i\u001b[39m\nReceived string:  \u001b[31m\"Aprende a evaluar mejor. Razona con evidencia. Decide con criterio clínico.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    14 × locator resolved to <h1>…</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Aprende a evaluar mejor. Razona con evidencia. Decide con criterio clínico.\"\u001b[22m\n\n\n  124 |     await page.goto(`${BASE}/?qa=public-visual-${Date.now()}`, { waitUntil: \"networkidle\", timeout: 60000 });\n  125 |\n> 126 |     await expect(page.locator(\"h1\")).toContainText(/evaluación musculoesquelética y razonamiento clínico/i);\n      |                                      ^\n  127 |     await expect(page.locator(\".kc-testimonial\")).toHaveCount(8);\n  128 |     await expect(page.locator(\".kc-stars\")).toHaveCount(0);\n  129 |     await expect(page.locator(\"body\")).not.toContainText(\"★★★★★\");\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/tester-visual-audit.spec.mjs:126:38"
+      ]
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / resource-mobile: recurso gratuito, referencias y desafío son utilizables",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 163,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / resource-tablet: recurso gratuito, referencias y desafío son utilizables",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 163,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / resource-desktop: recurso gratuito, referencias y desafío son utilizables",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 163,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / TF-003/005 mobile: soporte, navegación y títulos no se solapan ni recortan",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 206,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / TF-003/005 tablet: soporte, navegación y títulos no se solapan ni recortan",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 206,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / TF-004: tokens premium mantienen contraste mínimo",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 254,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D portada mobile",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D biblioteca-gratuita mobile",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('header .kc-brand-3d picture img:visible').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('header .kc-brand-3d picture img:visible').first()\u001b[22m\n\n\n  295 |         ? page.locator(`${viewport.width <= 980 ? \".login-card\" : \".login-showcase\"} .kc-brand-3d picture img:visible`).first()\n  296 |         : page.locator(\"header .kc-brand-3d picture img:visible\").first();\n> 297 |       await expect(logo).toBeVisible();\n      |                          ^\n  298 |       await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);\n  299 |       await logo.evaluate((image) => image.decode());\n  300 |       const geometry = await logo.evaluate((image) => {\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/tester-visual-audit.spec.mjs:297:26"
+      ]
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D catalogo mobile",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D ficha-curso mobile",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D academy-acceso mobile",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D portada tablet",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D biblioteca-gratuita tablet",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('header .kc-brand-3d picture img:visible').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('header .kc-brand-3d picture img:visible').first()\u001b[22m\n\n\n  295 |         ? page.locator(`${viewport.width <= 980 ? \".login-card\" : \".login-showcase\"} .kc-brand-3d picture img:visible`).first()\n  296 |         : page.locator(\"header .kc-brand-3d picture img:visible\").first();\n> 297 |       await expect(logo).toBeVisible();\n      |                          ^\n  298 |       await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);\n  299 |       await logo.evaluate((image) => image.decode());\n  300 |       const geometry = await logo.evaluate((image) => {\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/tester-visual-audit.spec.mjs:297:26"
+      ]
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D catalogo tablet",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D ficha-curso tablet",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D academy-acceso tablet",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D portada desktop",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D biblioteca-gratuita desktop",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "failed",
+      "outcome": "unexpected",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('header .kc-brand-3d picture img:visible').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('header .kc-brand-3d picture img:visible').first()\u001b[22m\n\n\n  295 |         ? page.locator(`${viewport.width <= 980 ? \".login-card\" : \".login-showcase\"} .kc-brand-3d picture img:visible`).first()\n  296 |         : page.locator(\"header .kc-brand-3d picture img:visible\").first();\n> 297 |       await expect(logo).toBeVisible();\n      |                          ^\n  298 |       await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);\n  299 |       await logo.evaluate((image) => image.decode());\n  300 |       const geometry = await logo.evaluate((image) => {\n    at /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/tester-visual-audit.spec.mjs:297:26"
+      ]
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D catalogo desktop",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D ficha-curso desktop",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / identidad 3D academy-acceso desktop",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 289,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / ejercicio-salud-cerebral mobile: contenido, fuentes y diseño adaptativo",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 335,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / ejercicio-salud-cerebral tablet: contenido, fuentes y diseño adaptativo",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 335,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    },
+    {
+      "title": "tester-visual-audit.spec.mjs / ejercicio-salud-cerebral desktop: contenido, fuentes y diseño adaptativo",
+      "file": "tester-visual-audit.spec.mjs",
+      "line": 335,
+      "status": "passed",
+      "outcome": "expected",
+      "errors": []
+    }
+  ]
+}

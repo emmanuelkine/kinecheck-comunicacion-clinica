@@ -1,0 +1,15 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: sin JS: falta familia del producto clínico
+    at file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/launch-readiness-public.spec.mjs:98:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

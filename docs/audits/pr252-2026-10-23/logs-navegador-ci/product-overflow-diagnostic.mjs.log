@@ -1,0 +1,37 @@
+{
+  "mode": "js",
+  "target": "http://127.0.0.1:4173/productos/kinecheck-clinico/?qa=overflow-js-1792783324345",
+  "viewport": 390,
+  "documentScrollWidth": 390,
+  "bodyScrollWidth": 390,
+  "offenders": [
+    {
+      "tag": "section",
+      "id": "",
+      "className": "page-hero",
+      "left": 0,
+      "right": 390,
+      "width": 390,
+      "scrollWidth": 490,
+      "clientWidth": 390,
+      "display": "block",
+      "position": "relative",
+      "whiteSpace": "normal",
+      "text": "KINECHECK CLÍNICOEvaluación, seguridad y razonamiento musculoesquelético.Formación avanzada para kin"
+    },
+    {
+      "tag": "a",
+      "id": "",
+      "className": "skip-link",
+      "left": -9999,
+      "right": -9848.1,
+      "width": 150.9,
+      "scrollWidth": 151,
+      "clientWidth": 151,
+      "display": "block",
+      "position": "absolute",
+      "whiteSpace": "normal",
+      "text": "Saltar al contenido"
+    }
+  ]
+}

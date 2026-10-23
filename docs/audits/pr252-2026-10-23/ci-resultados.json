@@ -1,0 +1,78 @@
+{
+  "commit": "e7890dd9217125c576ef0cd0fbb4f8851eada133",
+  "checks": [
+    {
+      "name": "Cloudflare Pages",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 120609766353,
+      "url": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/runs/120609766353"
+    },
+    {
+      "name": "validate-publication",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 120609646579,
+      "url": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40010591083/job/120609646579"
+    },
+    {
+      "name": "regressions",
+      "status": "completed",
+      "conclusion": "failure",
+      "id": 120609646407,
+      "url": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40010590952/job/120609646407"
+    },
+    {
+      "name": "browser-regressions",
+      "status": "completed",
+      "conclusion": "failure",
+      "id": 120609646327,
+      "url": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40010590952/job/120609646327"
+    },
+    {
+      "name": "binary-audit",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 120609646167,
+      "url": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40010590952/job/120609646167"
+    },
+    {
+      "name": "scan",
+      "status": "completed",
+      "conclusion": "success",
+      "id": 120609645593,
+      "url": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40010590945/job/120609645593"
+    }
+  ],
+  "browserFailures": [
+    "tests/academy-initialization.spec.mjs:16:1 › Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones DOM",
+    "tests/clinico-buttons.spec.mjs:9:3 › KineCheck Clínico · controles móviles › acceso: no duplica correo y contraseña cuando falta sesión",
+    "tests/clinico-buttons.spec.mjs:22:3 › KineCheck Clínico · controles móviles › acceso: reutiliza automáticamente la sesión del ecosistema",
+    "tests/clinico-buttons.spec.mjs:60:3 › KineCheck Clínico · controles móviles › curso: temario, módulos, comprobación y progreso",
+    "tests/tester-visual-audit.spec.mjs:122:3 › public-mobile: portada, imágenes y controles están utilizables",
+    "tests/tester-visual-audit.spec.mjs:122:3 › public-tablet: portada, imágenes y controles están utilizables",
+    "tests/tester-visual-audit.spec.mjs:122:3 › public-desktop: portada, imágenes y controles están utilizables",
+    "tests/tester-visual-audit.spec.mjs:289:5 › identidad 3D biblioteca-gratuita mobile",
+    "tests/tester-visual-audit.spec.mjs:289:5 › identidad 3D biblioteca-gratuita tablet",
+    "tests/tester-visual-audit.spec.mjs:289:5 › identidad 3D biblioteca-gratuita desktop"
+  ],
+  "browserStandalone": [
+    "FAIL tests/launch-readiness-post-privacy.spec.mjs",
+    "FAIL tests/launch-readiness-public.spec.mjs",
+    "PASS tests/mi-kinecheck-roles.spec.mjs",
+    "PASS tests/platform-hardening-post-privacy.spec.mjs",
+    "FAIL tests/platform-hardening.spec.mjs",
+    "FAIL tests/public-canonical-readiness.spec.mjs",
+    "FAIL tests/library-feedback-browser.mjs",
+    "PASS tests/product-overflow-diagnostic.mjs"
+  ],
+  "browserSummary": {
+    "passed": 47,
+    "failed": 10,
+    "total": 57
+  },
+  "artifacts": {
+    "browser": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40010590952/artifacts/12526546147",
+    "assets": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40010590952/artifacts/12526655808"
+  }
+}

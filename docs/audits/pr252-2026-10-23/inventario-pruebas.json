@@ -1,0 +1,186 @@
+[
+  {
+    "path": "tests/academic-assessment-platform.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/academic-completion-validation.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/academic-programs.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/academic-progress-display.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/academy-dom-contract.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/academy-initialization.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/admin-preview-auth.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/admin-preview-automation.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/admin-preview-login.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/app-sso-relay.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/beta-onboarding-regression.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/certificacion-mailer.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/certificacion-solicitudes.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/clinico-buttons.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/communication-academic-revision.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/communication-quiz-repair.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/free-library-metrics.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/hotmart-access-regression.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/kin2002-roleplay.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/launch-readiness-post-privacy.spec.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/launch-readiness-public.spec.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/library-feedback-browser.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/library-feedback.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/live-academy-runtime.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/lumbar-authorization.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/metrics-consent.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/mi-kinecheck-roles.spec.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/otec-evaluation-package.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/owned-buttons.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/p0-p1-hardening.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/platform-hardening-post-privacy.spec.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/platform-hardening.spec.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/privacy-hardening-clean-extract.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/privacy-hardening-clean-extract.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/product-overflow-diagnostic.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/public-assets-audit.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/public-canonical-readiness.spec.mjs",
+    "execution": "Standalone node script"
+  },
+  {
+    "path": "tests/public-home-source-regression.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/public-internal-markers.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/public-source-regression.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/recommended-buttons.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/recupera-commerce-state.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/role-separation-regression.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/security-remediation.test.mjs",
+    "execution": "npm test"
+  },
+  {
+    "path": "tests/tester-p0-access-sso.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  },
+  {
+    "path": "tests/tester-visual-audit.spec.mjs",
+    "execution": "Playwright runner (57 cases total)"
+  }
+]

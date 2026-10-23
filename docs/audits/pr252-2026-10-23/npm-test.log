@@ -1,0 +1,1073 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> test
+> node --test tests/*.test.mjs
+
+✔ all eight course assessment configurations are prepared but inactive (2.335798ms)
+✔ assessment status requires authentication and never returns answer keys (0.535469ms)
+✔ completion sync is blocked while OTEC certification is inactive (0.139487ms)
+✖ Academy exposes truthful assessment status without an attempt action (3.626445ms)
+✔ saved timestamps do not complete empty or absent written activities (6.301945ms)
+✔ mandatory academic work must satisfy its published length and every configured criterion (3.784287ms)
+✔ all eight programs retain the verified structure and existing planned minutes (5.552946ms)
+✔ every essential reference resolves to an identified source and tools are not certified courses (2.493643ms)
+✔ opening a course records access without manufacturing study percentage (5.364771ms)
+✔ legacy access-only one percent is not shown as measured learning (1.303618ms)
+✔ explicit one percent, module completion and existing measured progress are preserved (4.841883ms)
+✔ Academy conserva el contrato DOM de inicialización y sus listeners directos (128.622577ms)
+✔ admin Preview authenticates without changing the production login path (2.223901ms)
+✔ admin Preview sends credentials only to its same-origin login endpoint (0.649352ms)
+✔ admin Preview loads and controls the dashboard through its owner-checked same-origin proxy (0.165478ms)
+(node:46) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/functions/api/admin-preview-automation.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Preview automation proxy is unavailable in production and rejects cross-origin requests (21.441163ms)
+✔ Preview automation proxy requires a bearer token and a permitted operation (3.574153ms)
+✔ Preview status proves owner authorization before forwarding the bearer token server-side (5.250577ms)
+✔ Preview automation proxy never forwards a non-owner request (1.651641ms)
+✔ Preview control forwards only allowlisted administrative actions (2.687954ms)
+✔ Preview automation proxy converts upstream network failures into explicit JSON errors (1.236407ms)
+(node:87) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/functions/api/admin-preview-login.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ preview login is unavailable outside Preview and rejects cross-origin posts (10.708451ms)
+✔ preview login rejects malformed or oversized credentials (2.465856ms)
+✔ preview login returns a session only after owner verification (461.834312ms)
+✔ preview login does not return a session to a non-owner (78.536494ms)
+✔ preview login hides upstream auth details and handles outages (4.708072ms)
+✔ beta declara acceso temporal sin compra (1.857797ms)
+✔ Recupera y perfil paciente quedan fuera de la convocatoria activa (0.567765ms)
+✔ el submit rechaza valores legacy pausados antes de enviar (2.217092ms)
+(node:94) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/functions/api/certificacion.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Certification email service rejected the request 503
+Certification email send returned no messageId
+Certification email service rejected the request 502
+Certification email service rejected the request 403
+✔ formulario → Pages Function → Worker → Email Service confirma el envío (17.79017ms)
+✔ no anuncia un envío si el Worker rechaza el mensaje (1.930496ms)
+✔ no anuncia un envío si Email Service no confirma la aceptación (3.069724ms)
+✔ no acepta solicitudes sin consentimiento ni anuncia correo sin binding (2.440269ms)
+✔ Pages Function envía mediante Resend con remitente fijo y confirma el id (3.317574ms)
+✔ un rechazo de Resend no confirma el envío (3.615239ms)
+(node:95) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/functions/api/certificacion-solicitudes.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ requiere sesión y rechaza cuentas que no son owner (10.106709ms)
+✔ owner ve los campos necesarios y no el HTML guardado del correo (9.487275ms)
+(node:111) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/communication-academic-revision-v1.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ academic revisions resolve actual viewer counters and thumbnail labels (1.821818ms)
+✔ revised clinical passages retain verified original sources and bounded claims (1.624381ms)
+(node:113) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/communication-quiz-source-repair-v1.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ legacy answer styling renders both feedback states without an empty DOM token (7.757967ms)
+✔ other courses retain their exact protected source (0.272431ms)
+✖ every free-library card link has a stable tracking slug (10.318424ms)
+✖ library loads consent metrics and emits generic and eBook events (1.002361ms)
+✔ backend and database allow the new events (0.445327ms)
+✔ duplicate webhook and stale approval cannot reactivate a refunded purchase (45261.550895ms)
+✔ approval after an earlier refund restores the same transaction (32031.511286ms)
+✔ unknown product is recorded for reconciliation but grants no access (2174.566581ms)
+✔ one pack approval grants every mapped course (2517.351876ms)
+✔ approval retry with a new event id never extends the same transaction (2302.164629ms)
+✔ cancel, expiry, refund and chargeback revoke the final active purchase (9294.977553ms)
+✔ production grant snapshot contains 12 products with explicit access terms (2299.223869ms)
+✔ Escalas and Pruebas Especiales grant 12 months and resist replay after revocation (2146.883476ms)
+✔ webhook handles unmapped products without logging PII or secrets (4.071588ms)
+✔ approved purchase returns to Academy for license refresh (8.907701ms)
+✔ late refund or chargeback of purchase A cannot revoke newer purchase B (9196.818005ms)
+✔ refund of the last remaining active purchase revokes access (2516.629696ms)
+✔ commercial refund cannot overwrite owner, beta or manual QA access (12060.42152ms)
+✔ purchase deletion requires a reason, is audited, and access remains resilient (3257.52851ms)
+✔ expired commercial access deactivates without affecting owner access (2736.130535ms)
+✔ commercial metrics exclude owner, beta, manual QA and hotmart_test (2767.815948ms)
+✔ invariant queries expose missing, orphaned, revoked and duplicate states (2848.126139ms)
+✔ migration is idempotent and never deletes purchase history (3324.629504ms)
+✔ admin dashboard labels commercial, QA, unclassified and legacy totals explicitly (1.241126ms)
+✔ versioned automation function bodies match the deployed production source (3.643007ms)
+✔ save confirmed, identical retry is idempotent and modified retry cannot replace an earlier work (234.819023ms)
+✔ missing steps, wrong choices and unobserved actions cannot be submitted (316.832528ms)
+✔ unauthorized teacher read and write are denied; cross-origin writes fail (16.193304ms)
+✔ private receipt hides names, answers and secrets and rejects another token (782.520859ms)
+✔ verified owner can review; student reads published feedback; stored attempts survive (18.408064ms)
+✔ storage unavailable or failed cannot produce a false successful receipt (9.936332ms)
+(node:163) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/functions/api/library-feedback.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ library feedback validates input, stores anonymous pending records, moderates, and publishes only approved data (68.592395ms)
+✔ server rejects incorrect types, invalid values, oversized UTF-8 and unexpected origins (25.80787ms)
+✔ server network throttle survives cookie removal and stores no raw IP or contact identity (623.440138ms)
+✔ Preview CERT_REQUESTS and rate secret fail closed without falling back to another KV (3.348228ms)
+✔ unauthenticated, expired, non-owner and unavailable auth cannot read or moderate (63.666619ms)
+✔ moderation requires privacy review, supports redaction, rejects safely, and preserves all five scores (475.480889ms)
+✔ sensitive disclosures are rejected before storage, including accents and third-person patients (13.163237ms)
+✔ pagination, historical scores, retention and projection do not leak identity or distort totals (12.664775ms)
+✔ library feedback honeypot, duplicate cookie, and health detail protections work (293.81086ms)
+✔ authenticated ecosystem owner receives valid protected JavaScript without a per-course purchase row (53.884591ms)
+✔ ordinary learner still requires an active, unexpired license (32.769967ms)
+✔ invalid authentication and a different course never download protected assets (9.60358ms)
+✔ HTML returned as a protected script is rejected (5.054544ms)
+✔ deployment in a different project fails before accessing protected assets (4.931426ms)
+✔ las métricas opcionales requieren aceptación (709.174527ms)
+✖ el visitante puede informarse y cambiar su elección (28.572616ms)
+✔ el servidor descarta métricas enviadas por clientes antiguos sin preferencia (11.049514ms)
+✖ the OTEC review package specifies all eight assessment designs (31.104509ms)
+✔ the proposal cannot be mistaken for active OTEC or SENCE certification (12.19093ms)
+✔ every formerly open finding now has an implemented design or protocol (21.307123ms)
+✔ SSO de aplicaciones usa el dominio KineCheck sin publicar un proxy parcial (16.850143ms)
+✔ Recupera permanece bloqueado y el consentimiento legacy no activa el flujo (2.529394ms)
+✔ KineCheck Clinico mantiene posicionamiento curso + guia en su ficha canonica (2.418995ms)
+✔ sitemap publica audiencias y fichas SEO indexables (2.724088ms)
+✔ Recupera queda Próximamente y sin rutas activas en Academy (28.311842ms)
+✖ el POST SSO productivo de Estudiante permanece intacto (12.905289ms)
+✔ las superficies públicas y el consentimiento legacy no activan Recupera (271.090842ms)
+✔ Clínico y Estudiante declaran uso educativo y bloquean identificadores reales (187.633349ms)
+✔ restored treatment graphic has a complete WebP container and the expected lossless payload (13.340337ms)
+✔ truncated WebP is rejected even when its signature still looks valid (165.61624ms)
+✔ brand detection catches mixed case in extracted lettering and leaves the clinical brand alone (5.863413ms)
+✔ la portada canónica conserva navegación, accesibilidad y rutas públicas (236.932492ms)
+✔ la portada conserva exactamente ocho testimonios anónimos sin rating numérico (26.92899ms)
+✖ la portada agrupa el título móvil sin partir palabras clínicas (11.727672ms)
+✖ la portada referencia assets críticos existentes y versionados (46.185268ms)
+✔ public refund policy does not expose internal launch QA markers (264.054982ms)
+✖ la portada simplificada conserva soporte, tres perfiles y acceso canónico (72.398297ms)
+✔ ninguna superficie pública visible usa /platform/ ni CTAs vacíos (552.374371ms)
+✖ la arquitectura de marca queda distribuida por perfil sin duplicarse en portada (21.288709ms)
+✔ precios públicos y 12 Product IDs técnicos conservan contratos separados (17.69057ms)
+✖ los perfiles activos publican precios y Recupera permanece sin compra (6.845343ms)
+✔ no existe una oferta activa de Pack Profesional (5.291471ms)
+✔ Productos entrega un fallback clínico útil sin JavaScript (10.384026ms)
+✔ la hidratación conserva ocho checkouts históricos y acceso canónico (1.031787ms)
+✔ las rutas de compatibilidad siguen siendo redirecciones (4.819681ms)
+✖ la política conserva la advertencia sin certificación completa de nueve garantías (4.116097ms)
+✔ el dashboard RC separa evidencia automatizada de validación comercial real (7.314247ms)
+✔ los estilos y el menú conservan foco visible y teclado (18.100028ms)
+✔ Recupera remains non-purchasable across Academy and public help (414.511108ms)
+✔ tester beta nunca activa ownerMode por la lógica de presentación (1.646366ms)
+✔ badges distinguen propietario, prueba y licencia normal (0.400168ms)
+✔ marca de agua sólo acepta etiquetas PROPIETARIO o PRUEBA (0.200816ms)
+✔ betaMode queda subordinado a !ownerMode también en apertura de producto (0.366274ms)
+✔ automation-status requires an active owner grant (1.150349ms)
+✔ beta-apply cannot overwrite an existing anonymous application (2.742337ms)
+✔ evidence Hotmart events use the atomic shared processor (2.112442ms)
+✔ course-key fails closed and enforces access terms (1.776755ms)
+✔ premium course payloads stay outside the public tree (0.567564ms)
+✔ deployed metric privacy controls remain in source control (1.033111ms)
+✔ GitHub Actions and service containers use immutable references (10.432103ms)
+✔ Edge Function imports are pinned to exact versions (2.7851ms)
+ℹ tests 131
+ℹ suites 0
+ℹ pass 119
+ℹ fail 12
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140914.937102
+
+✖ failing tests:
+
+test at tests/academic-assessment-platform.test.mjs:32:1
+✖ Academy exposes truthful assessment status without an attempt action (3.626445ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Preparada · no activa/. Input:
+  
+  '(function () {\n' +
+    '  "use strict";\n' +
+    '\n' +
+    '  const COURSE_SLUGS = new Set([\n' +
+    '    "kinecheck-clinico-curso", "comunicacion-clinica", "mas-alla-del-dolor",\n' +
+    '    "evidencia-aplicada", "traumatologia-ortopedia-clinica", "dolor-lumbar-persistente",\n' +
+    '    "dolor-musculoesqueletico", "ejercicio-terapeutico",\n' +
+    '  ]);\n' +
+    '  const config = window.KINECHECK_ACADEMY_CONFIG;\n' +
+    '  if (!config?.supabaseUrl || !config?.supabaseAnonKey) return;\n' +
+    '\n' +
+    '  function escapeHtml(value) {\n' +
+    `    return String(value ?? "").replace(/[&<>"']/g, (character) => ({\n` +
+    `      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",\n` +
+    '    })[character]);\n' +
+    '  }\n' +
+    '\n' +
+    '  function currentSession() {\n' +
+    '    return window.KINECHECK_ACADEMY_SESSION?.get?.() || null;\n' +
+    '  }\n' +
+    '\n' +
+    '  async function api(functionName, body) {\n' +
+    '    const activeSession = currentSession();\n' +
+    '    if (!activeSession?.access_token) throw new Error("Tu sesión venció. Vuelve a ingresar a Academy.");\n' +
+    '    const response = await fetch(`${String(config.supabaseUrl).replace(/\\/$/, "")}/functions/v1/${functionName}`, {\n' +
+    '      method: "POST",\n' +
+    '      cache: "no-store",\n' +
+    '      headers: {\n' +
+    '        apikey: config.supabaseAnonKey,\n' +
+    '        Authorization: `Bearer ${activeSession.access_token}`,\n' +
+    '        "Content-Type": "application/json",\n' +
+    '      },\n' +
+    '      body: JSON.stringify(body || {}),\n' +
+    '    });\n' +
+    '    const data = await response.json().catch(() => ({}));\n' +
+    '    if (!response.ok) {\n' +
+    '      const error = new Error(data.message || "No fue posible completar la solicitud.");\n' +
+    '      error.payload = data;\n' +
+    '      error.status = response.status;\n' +
+    '      throw error;\n' +
+    '    }\n' +
+    '    return data;\n' +
+    '  }\n' +
+    '\n' +
+    '  function ensureDialog() {\n' +
+    '    let dialog = document.querySelector("#academic-assessment-dialog");\n' +
+    '    if (dialog) return dialog;\n' +
+    '    dialog = document.createElement("dialog");\n' +
+    '    dialog.id = "academic-assessment-dialog";\n' +
+    '    dialog.className = "academic-assessment-dialog";\n' +
+    `    dialog.innerHTML = '<div class="academic-assessment-shell"><button type="button" class="academic-dialog-close" aria-label="Cerrar">×</button><div data-academic-dialog-content></div></div>';\n` +
+    '    dialog.querySelector(".academic-dialog-close").addEventListener("click", () => dialog.close());\n' +
+    '    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });\n' +
+    '    document.body.append(dialog);\n' +
+    '    return dialog;\n' +
+    '  }\n' +
+    '\n' +
+    '  function resultMarkup(result) {\n' +
+    '    const pass = result?.passed === true;\n' +
+    '    const exhausted = Number(result?.attemptsUsed || 0) >= Number(result?.maxAttempts || 2) && !pass;\n' +
+    '    return `\n' +
+    '      <p class="academic-dialog-eyebrow">RESULTADO REGISTRADO</p>\n' +
+    '      <h2>${pass ? "Evaluación aprobada" : "Evaluación no aprobada"}</h2>\n' +
+    '      <span class="academic-status-pill ${pass ? "academic-pass" : "academic-review"}">${pass ? "Aprobado" : "Requiere nuevo intento"}</span>\n' +
+    '      <dl class="academic-status-grid">\n' +
+    '        <div><dt>Puntaje</dt><dd>${Number(result?.score || 0).toFixed(0)}%</dd></div>\n' +
+    '        <div><dt>Mínimo</dt><dd>${Number(result?.passingScore || 80).toFixed(0)}%</dd></div>\n' +
+    '        <div><dt>Preguntas correctas</dt><dd>${Number(result?.correct || 0)}/${Number(result?.total || 0)}</dd></div>\n' +
+    '        <div><dt>Seguridad</dt><dd>${result?.safetyGatePassed ? "Cumplida" : "No cumplida"}</dd></div>\n' +
+    '      </dl>\n' +
+    '      <section class="academic-safety"><strong>Condición de seguridad</strong><p>${result?.safetyGatePassed ? "Las preguntas críticas de seguridad fueron respondidas correctamente." : "Al menos una pregunta crítica de seguridad fue incorrecta; este intento no puede aprobarse aunque el puntaje sea suficiente."}</p></section>\n' +
+    '      ${pass ? `<section class="academic-result ${result?.courseCompletionConsolidated ? "academic-result-pass" : ""}"><h3>${result?.courseCompletionConsolidated ? "Finalización académica consolidada" : "Evaluación final aprobada"}</h3><p>${escapeHtml(result?.courseCompletionMessage || "")}</p></section>` : ""}\n' +
+    '      <section>\n' +
+    '        <h3>Retroalimentación</h3>\n' +
+    '        <ol class="academic-feedback-list">\n' +
+    '          ${(result?.feedback || []).map((item) => `<li class="${item.correct ? "is-correct" : "is-incorrect"}"><strong>Pregunta ${escapeHtml(item.itemOrder)}</strong> · ${item.correct ? "Correcta" : "Revisar"}<p>${escapeHtml(item.rationale || "")}</p></li>`).join("")}\n' +
+    '        </ol>\n' +
+    '      </section>\n' +
+    '      ${!pass && !exhausted ? \'<button type="button" class="academic-primary-action" data-academic-back>Volver al estado e iniciar el siguiente intento</button>\' : ""}\n' +
+    '      ${!pass && exhausted ? \'<section class="academic-result"><h3>Intentos utilizados</h3><p>Los dos intentos quedaron registrados. Contacta soporte para una revisión académica antes de habilitar un nuevo intento.</p></section>\' : ""}\n' +
+    '      <p class="academic-status-note">Este resultado corresponde a la evaluación académica interna KineCheck. No equivale a certificación OTEC y el curso no es SENCE.</p>\n' +
+    '    `;\n' +
+    '  }\n' +
+    '\n' +
+    '  function renderAssessment(dialog, payload, slug) {\n' +
+    '    const assessment = payload.assessment || {};\n' +
+    '    const questions = Array.isArray(assessment.questions) ? assessment.questions : [];\n' +
+    '    const content = dialog.querySelector("[data-academic-dialog-content]");\n' +
+    '    content.innerHTML = `\n' +
+    '      <p class="academic-dialog-eyebrow">EVALUACIÓN FINAL KINECHECK</p>\n' +
+    '      <h2>${escapeHtml(payload.course?.title || "Evaluación final")}</h2>\n' +
+    '      <p>Intento ${Number(assessment.attemptNumber || 1)} de ${Number(assessment.maxAttempts || 2)}. Apruebas con ${Number(assessment.passingScore || 80)}% y debes responder correctamente todas las preguntas críticas de seguridad.</p>\n' +
+    '      <section class="academic-safety"><strong>Condición crítica</strong><p>${escapeHtml(assessment.safetyGate || "")}</p></section>\n' +
+    '      <form data-academic-form data-attempt-id="${escapeHtml(assessment.attemptId)}" data-course-slug="${escapeHtml(slug)}">\n' +
+    '        <ol class="academic-question-list">\n' +
+    '          ${questions.map((question, questionIndex) => `\n' +
+    '            <li class="academic-question">\n' +
+    '              <fieldset>\n' +
+    '                <legend><span>Pregunta ${questionIndex + 1}</span>${escapeHtml(question.stem)}</legend>\n' +
+    '                ${(Array.isArray(question.options) ? question.options : []).map((option, optionIndex) => `\n' +
+    '                  <label class="academic-option">\n' +
+    '                    <input type="radio" name="q-${escapeHtml(question.id)}" value="${optionIndex}" required>\n' +
+    '                    <span>${escapeHtml(option)}</span>\n' +
+    '                  </label>\n' +
+    '                `).join("")}\n' +
+    '              </fieldset>\n' +
+    '            </li>\n' +
+    '          `).join("")}\n' +
+    '        </ol>\n' +
+    '        <div class="academic-submit-row">\n' +
+    '          <button type="submit" class="academic-primary-action">Enviar y corregir evaluación</button>\n' +
+    '          <small>El intento se registra al enviarlo. No cierres la ventana mientras se corrige.</small>\n' +
+    '        </div>\n' +
+    '      </form>\n' +
+    '      <p class="academic-status-note">Evaluación interna KineCheck. La certificación OTEC permanece en preparación y no se emite desde esta pantalla.</p>\n' +
+    '    `;\n' +
+    '\n' +
+    '    const form = content.querySelector("[data-academic-form]");\n' +
+    '    form?.addEventListener("submit", async (event) => {\n' +
+    '      event.preventDefault();\n' +
+    `      const submitButton = form.querySelector('button[type="submit"]');\n` +
+    '      const answers = {};\n' +
+    '      questions.forEach((question) => {\n' +
+    '        const selected = form.querySelector(`input[name="q-${CSS.escape(String(question.id))}"]:checked`);\n' +
+    '        if (selected) answers[String(question.id)] = Number(selected.value);\n' +
+    '      });\n' +
+    '      if (Object.keys(answers).length !== questions.length) {\n' +
+    '        window.alert("Responde todas las preguntas antes de enviar.");\n' +
+    '        return;\n' +
+    '      }\n' +
+    '      submitButton.disabled = true;\n' +
+    '      submitButton.textContent = "Corrigiendo y registrando…";\n' +
+    '      try {\n' +
+    '        const result = await api("academic-assessment-submit", {\n' +
+    '          attemptId: assessment.attemptId,\n' +
+    '          answers,\n' +
+    '        });\n' +
+    '        content.innerHTML = resultMarkup(result);\n' +
+    '        content.querySelector("[data-academic-back]")?.addEventListener("click", () => openStatus(slug, dialog));\n' +
+    '      } catch (error) {\n' +
+    '        submitButton.disabled = false;\n' +
+    '        submitButton.textContent = "Enviar y corregir evaluación";\n' +
+    '        const note = document.createElement("p");\n' +
+    '        note.className = "notice error";\n' +
+    '        note.textContent = error.message || "No fue posible corregir la evaluación.";\n' +
+    '        form.prepend(note);\n' +
+    '      }\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  function renderStatus(dialog, data, slug) {\n' +
+    '    const assessment = data.assessment || {};\n' +
+    '    const attempts = Array.isArray(assessment.attempts) ? assessment.attempts : [];\n' +
+    '    const passedAttempt = attempts.find((item) => item?.passed === true);\n' +
+    '    const completion = assessment.completion || null;\n' +
+    '    const passed = passedAttempt || (assessment.completed ? completion : null);\n' +
+    '    const submitted = attempts.filter((item) => item?.submitted_at).length;\n' +
+    '    const remaining = Math.max(0, Number(assessment.maxAttempts || 2) - submitted);\n' +
+    '    const route = assessment.route || {};\n' +
+    '    const routeLabel = route.trackingAvailable\n' +
+    '      ? (route.complete ? "Completo" : "Pendiente")\n' +
+    '      : "Verificación adicional";\n' +
+    '    const canStart = assessment.canStart !== false;\n' +
+    '    const content = dialog.querySelector("[data-academic-dialog-content]");\n' +
+    '\n' +
+    '    content.innerHTML = `\n' +
+    '      <p class="academic-dialog-eyebrow">EVALUACIÓN FINAL KINECHECK</p>\n' +
+    '      <h2>${escapeHtml(data.course?.title || "Evaluación final")}</h2>\n' +
+    '      <span class="academic-status-pill ${assessment.internalActive ? "" : "academic-review"}">${assessment.internalActive ? "Activa" : "No disponible"}</span>\n' +
+    '      <p>${escapeHtml(data.message)}</p>\n' +
+    '      <dl class="academic-status-grid">\n' +
+    '        <div><dt>Preguntas</dt><dd>${Number(assessment.objectiveItemCount || 15)}</dd></div>\n' +
+    '        <div><dt>Aprobación</dt><dd>${Number(assessment.passingScore || 80)}%</dd></div>\n' +
+    '        <div><dt>Intentos</dt><dd>${submitted}/${Number(assessment.maxAttempts || 2)} usados</dd></div>\n' +
+    '        <div><dt>Recorrido</dt><dd>${escapeHtml(routeLabel)}</dd></div>\n' +
+    '        <div><dt>Certificación</dt'... 4282 more characters
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/academic-assessment-platform.test.mjs:33:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '(function () {\n  "use strict";\n\n  const COURSE_SLUGS = new Set([\n    "kinecheck-clinico-curso", "comunicacion-clinica", "mas-alla-del-dolor",\n    "evidencia-aplicada", "traumatologia-ortopedia-clinica", "dolor-lumbar-persistente",\n    "dolor-musculoesqueletico", "ejercicio-terapeutico",\n  ]);\n  const config = window.KINECHECK_ACADEMY_CONFIG;\n  if (!config?.supabaseUrl || !config?.supabaseAnonKey) return;\n\n  function escapeHtml(value) {\n    return String(value ?? "").replace(/[&<>"\']/g, (character) => ({\n      "&": "&amp;", "<": "&lt;", ">": "&gt;", \'"\': "&quot;", "\'": "&#39;",\n    })[character]);\n  }\n\n  function currentSession() {\n    return window.KINECHECK_ACADEMY_SESSION?.get?.() || null;\n  }\n\n  async function api(functionName, body) {\n    const activeSession = currentSession();\n    if (!activeSession?.access_token) throw new Error("Tu sesión venció. Vuelve a ingresar a Academy.");\n    const response = await fetch(`${String(config.supabaseUrl).replace(/\\/$/, "")}/functions/v1/${functionName}`, {\n      method: "POST",\n      cache: "no-store",\n      headers: {\n        apikey: config.supabaseAnonKey,\n        Authorization: `Bearer ${activeSession.access_token}`,\n        "Content-Type": "application/json",\n      },\n      body: JSON.stringify(body || {}),\n    });\n    const data = await response.json().catch(() => ({}));\n    if (!response.ok) {\n      const error = new Error(data.message || "No fue posible completar la solicitud.");\n      error.payload = data;\n      error.status = response.status;\n      throw error;\n    }\n    return data;\n  }\n\n  function ensureDialog() {\n    let dialog = document.querySelector("#academic-assessment-dialog");\n    if (dialog) return dialog;\n    dialog = document.createElement("dialog");\n    dialog.id = "academic-assessment-dialog";\n    dialog.className = "academic-assessment-dialog";\n    dialog.innerHTML = \'<div class="academic-assessment-shell"><button type="button" class="academic-dialog-close" aria-label="Cerrar">×</button><div data-academic-dialog-content></div></div>\';\n    dialog.querySelector(".academic-dialog-close").addEventListener("click", () => dialog.close());\n    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });\n    document.body.append(dialog);\n    return dialog;\n  }\n\n  function resultMarkup(result) {\n    const pass = result?.passed === true;\n    const exhausted = Number(result?.attemptsUsed || 0) >= Number(result?.maxAttempts || 2) && !pass;\n    return `\n      <p class="academic-dialog-eyebrow">RESULTADO REGISTRADO</p>\n      <h2>${pass ? "Evaluación aprobada" : "Evaluación no aprobada"}</h2>\n      <span class="academic-status-pill ${pass ? "academic-pass" : "academic-review"}">${pass ? "Aprobado" : "Requiere nuevo intento"}</span>\n      <dl class="academic-status-grid">\n        <div><dt>Puntaje</dt><dd>${Number(result?.score || 0).toFixed(0)}%</dd></div>\n        <div><dt>Mínimo</dt><dd>${Number(result?.passingScore || 80).toFixed(0)}%</dd></div>\n        <div><dt>Preguntas correctas</dt><dd>${Number(result?.correct || 0)}/${Number(result?.total || 0)}</dd></div>\n        <div><dt>Seguridad</dt><dd>${result?.safetyGatePassed ? "Cumplida" : "No cumplida"}</dd></div>\n      </dl>\n      <section class="academic-safety"><strong>Condición de seguridad</strong><p>${result?.safetyGatePassed ? "Las preguntas críticas de seguridad fueron respondidas correctamente." : "Al menos una pregunta crítica de seguridad fue incorrecta; este intento no puede aprobarse aunque el puntaje sea suficiente."}</p></section>\n      ${pass ? `<section class="academic-result ${result?.courseCompletionConsolidated ? "academic-result-pass" : ""}"><h3>${result?.courseCompletionConsolidated ? "Finalización académica consolidada" : "Evaluación final aprobada"}</h3><p>${escapeHtml(result?.courseCompletionMessage || "")}</p></section>` : ""}\n      <section>\n        <h3>Retroalimentación</h3>\n        <ol class="academic-feedback-list">\n          ${(result?.feedback || []).map((item) => `<li class="${item.correct ? "is-correct" : "is-incorrect"}"><strong>Pregunta ${escapeHtml(item.itemOrder)}</strong> · ${item.correct ? "Correcta" : "Revisar"}<p>${escapeHtml(item.rationale || "")}</p></li>`).join("")}\n        </ol>\n      </section>\n      ${!pass && !exhausted ? \'<button type="button" class="academic-primary-action" data-academic-back>Volver al estado e iniciar el siguiente intento</button>\' : ""}\n      ${!pass && exhausted ? \'<section class="academic-result"><h3>Intentos utilizados</h3><p>Los dos intentos quedaron registrados. Contacta soporte para una revisión académica antes de habilitar un nuevo intento.</p></section>\' : ""}\n      <p class="academic-status-note">Este resultado corresponde a la evaluación académica interna KineCheck. No equivale a certificación OTEC y el curso no es SENCE.</p>\n    `;\n  }\n\n  function renderAssessment(dialog, payload, slug) {\n    const assessment = payload.assessment || {};\n    const questions = Array.isArray(assessment.questions) ? assessment.questions : [];\n    const content = dialog.querySelector("[data-academic-dialog-content]");\n    content.innerHTML = `\n      <p class="academic-dialog-eyebrow">EVALUACIÓN FINAL KINECHECK</p>\n      <h2>${escapeHtml(payload.course?.title || "Evaluación final")}</h2>\n      <p>Intento ${Number(assessment.attemptNumber || 1)} de ${Number(assessment.maxAttempts || 2)}. Apruebas con ${Number(assessment.passingScore || 80)}% y debes responder correctamente todas las preguntas críticas de seguridad.</p>\n      <section class="academic-safety"><strong>Condición crítica</strong><p>${escapeHtml(assessment.safetyGate || "")}</p></section>\n      <form data-academic-form data-attempt-id="${escapeHtml(assessment.attemptId)}" data-course-slug="${escapeHtml(slug)}">\n        <ol class="academic-question-list">\n          ${questions.map((question, questionIndex) => `\n            <li class="academic-question">\n              <fieldset>\n                <legend><span>Pregunta ${questionIndex + 1}</span>${escapeHtml(question.stem)}</legend>\n                ${(Array.isArray(question.options) ? question.options : []).map((option, optionIndex) => `\n                  <label class="academic-option">\n                    <input type="radio" name="q-${escapeHtml(question.id)}" value="${optionIndex}" required>\n                    <span>${escapeHtml(option)}</span>\n                  </label>\n                `).join("")}\n              </fieldset>\n            </li>\n          `).join("")}\n        </ol>\n        <div class="academic-submit-row">\n          <button type="submit" class="academic-primary-action">Enviar y corregir evaluación</button>\n          <small>El intento se registra al enviarlo. No cierres la ventana mientras se corrige.</small>\n        </div>\n      </form>\n      <p class="academic-status-note">Evaluación interna KineCheck. La certificación OTEC permanece en preparación y no se emite desde esta pantalla.</p>\n    `;\n\n    const form = content.querySelector("[data-academic-form]");\n    form?.addEventListener("submit", async (event) => {\n      event.preventDefault();\n      const submitButton = form.querySelector(\'button[type="submit"]\');\n      const answers = {};\n      questions.forEach((question) => {\n        const selected = form.querySelector(`input[name="q-${CSS.escape(String(question.id))}"]:checked`);\n        if (selected) answers[String(question.id)] = Number(selected.value);\n      });\n      if (Object.keys(answers).length !== questions.length) {\n        window.alert("Responde todas las preguntas antes de enviar.");\n        return;\n      }\n      submitButton.disabled = true;\n      submitButton.textContent = "Corrigiendo y registrando…";\n      try {\n        const result = await api("academic-assessment-submit", {\n          attemptId: assessment.attemptId,\n          answers,\n        });\n        content.innerHTML = resultMarkup(result);\n        content.querySelector("[data-academic-back]")?.addEventListener("click", () => openStatus(slug, dialog));\n      } catch (error) {\n        submitButton.disabled = false;\n        submitButton.textContent = "Enviar y corregir evaluación";\n        const note = document.createElement("p");\n        note.className = "notice error";\n        note.textContent = error.message || "No fue posible corregir la evaluación.";\n        form.prepend(note);\n      }\n    });\n  }\n\n  function renderStatus(dialog, data, slug) {\n    const assessment = data.assessment || {};\n    const attempts = Array.isArray(assessment.attempts) ? assessment.attempts : [];\n    const passedAttempt = attempts.find((item) => item?.passed === true);\n    const completion = assessment.completion || null;\n    const passed = passedAttempt || (assessment.completed ? completion : null);\n    const submitted = attempts.filter((item) => item?.submitted_at).length;\n    const remaining = Math.max(0, Number(assessment.maxAttempts || 2) - submitted);\n    const route = assessment.route || {};\n    const routeLabel = route.trackingAvailable\n      ? (route.complete ? "Completo" : "Pendiente")\n      : "Verificación adicional";\n    const canStart = assessment.canStart !== false;\n    const content = dialog.querySelector("[data-academic-dialog-content]");\n\n    content.innerHTML = `\n      <p class="academic-dialog-eyebrow">EVALUACIÓN FINAL KINECHECK</p>\n      <h2>${escapeHtml(data.course?.title || "Evaluación final")}</h2>\n      <span class="academic-status-pill ${assessment.internalActive ? "" : "academic-review"}">${assessment.internalActive ? "Activa" : "No disponible"}</span>\n      <p>${escapeHtml(data.message)}</p>\n      <dl class="academic-status-grid">\n        <div><dt>Preguntas</dt><dd>${Number(assessment.objectiveItemCount || 15)}</dd></div>\n        <div><dt>Aprobación</dt><dd>${Number(assessment.passingScore || 80)}%</dd></div>\n        <div><dt>Intentos</dt><dd>${submitted}/${Number(assessment.maxAttempts || 2)} usados</dd></div>\n        <div><dt>Recorrido</dt><dd>${escapeHtml(routeLabel)}</dd></div>\n        <div><dt>Certificación</dt'... 4282 more characters,
+    expected: /Preparada · no activa/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/free-library-metrics.test.mjs:21:1
+✖ every free-library card link has a stable tracking slug (10.318424ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(cards.length >= 10)
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/free-library-metrics.test.mjs:25:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/free-library-metrics.test.mjs:31:1
+✖ library loads consent metrics and emits generic and eBook events (1.002361ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /metrics-privacy-v1\.css/. Input:
+  
+  '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071d22"><meta name="description" content="Elige tu biblioteca gratuita KineCheck: recursos para profesionales y estudiantes o guías para pacientes."><title>Biblioteca gratuita | KineCheck</title><link rel="canonical" href="https://kinecheck.cl/gratis/"><link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png"><link rel="stylesheet" href="/kinecheck/site-v5.css?v=20260924-room2"><link rel="stylesheet" href="/kinecheck/site-premium-v1.css?v=1"><style>body{margin:0;background:#071d22;color:#eff9f9;font:16px/1.6 system-ui,sans-serif}a{color:#8be4e4}.wrap{max-width:1120px;margin:auto;padding:0 20px}.top{border-bottom:1px solid #2c6972;background:#0b242a}.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:15px;padding-bottom:15px}.top img,.foot img{width:190px;max-width:48vw;height:auto}.hero{text-align:center;padding:48px 0 6px}.hero h1{font-size:clamp(2rem,5vw,3.7rem);line-height:1.15;margin:14px 0}.hero p{color:#cfe4e5;font-size:1.1rem}.eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.09em;color:#88e5e1}.foot{border-top:1px solid #2c6972;margin-top:70px;padding:25px 0;color:#c5dcde}.foot .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}@media(max-width:700px){.hero{padding-top:35px}}</style><style id="kc-watermark">body::before{content:"KINECHECK  •  EDUCACIÓN BASADA EN EVIDENCIA";position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-29deg);font:800 clamp(20px,4.5vw,64px)/1.5 system-ui,sans-serif;letter-spacing:.16em;color:rgba(112,219,215,.065);white-space:nowrap;pointer-events:none;z-index:2;max-width:100vw;overflow:hidden}body>*{position:relative;z-index:3}@media print{body::before{position:fixed;color:rgba(60,130,130,.10)!important}header,nav,footer{display:none!important}}</style><style id="kc-cert-styles">.kc-cert-info{background:linear-gradient(145deg,#103941,#0a2d36);border:1px solid #4babb0;border-radius:22px;padding:clamp(24px,5vw,48px);margin:20px 0 35px;box-shadow:0 15px 35px #0003}.kc-cert-tag{display:inline-block;padding:6px 15px;border:1px solid #338b86;border-radius:99px;background:#13544f;color:#b2f7eb;font-size:.79rem;font-weight:800;letter-spacing:.065em}.kc-cert-info h2{font-size:clamp(1.25rem,2.3vw,1.8rem);line-height:1.35;margin:20px 0}.kc-cert-info p{font-size:clamp(.94rem,1.25vw,1.04rem);line-height:1.65;color:#d2e7e9;margin:0 0 17px}.kc-cert-info strong{color:#fff}.kc-cert-button{display:flex;justify-content:center;align-items:center;gap:14px;background:#65ded8;color:#083239;font-weight:900;border-radius:14px;text-decoration:none;padding:15px 18px;margin-top:28px;text-align:center}.kc-cert-button:hover,.kc-cert-button:focus-visible{background:#8df3ec;outline:2px solid #b9fff6}@media(max-width:600px){.kc-cert-info{border-radius:18px;margin-top:16px}.kc-cert-info h2{margin-top:20px}}</style><style id="kc-3d-type">\n' +
+    '/* Relieve tipográfico discreto, consistente con la identidad metálica KineCheck. */\n' +
+    '.hero h1,.kc-cert-info h2,#elige-biblioteca h2{\n' +
+    ' color:#e9fcfb;\n' +
+    ' background:linear-gradient(180deg,#fff 0%,#d9ffff 24%,#7cdbd9 54%,#e0fffa 76%,#8bc5c8 100%);\n' +
+    ' -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;\n' +
+    ' filter:drop-shadow(0 1px 0 rgba(255,255,255,.27)) drop-shadow(0 3px 0 rgba(8,75,83,.7)) drop-shadow(0 8px 9px rgba(0,0,0,.3));\n' +
+    ' letter-spacing:-.025em;\n' +
+    '}\n' +
+    '.kc-audience-grid a span:nth-child(2){\n' +
+    ' color:#e7fffd;\n' +
+    ' background:linear-gradient(180deg,#fff 0%,#b9f4f0 40%,#64c9c6 75%,#d4faf6 100%);\n' +
+    ' -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;\n' +
+    ' filter:drop-shadow(0 2px 0 rgba(9,76,78,.65)) drop-shadow(0 5px 5px rgba(0,0,0,.24));\n' +
+    '}\n' +
+    '.kc-cert-tag{box-shadow:inset 0 1px 0 rgba(230,255,251,.25),0 4px 9px rgba(0,0,0,.16);text-shadow:0 1px 1px #092d31}\n' +
+    '.kc-cert-button{box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -4px 0 rgba(5,91,96,.22),0 8px 18px rgba(0,0,0,.23);text-shadow:0 1px 0 rgba(255,255,255,.3)}\n' +
+    '@media(max-width:600px){.kc-cert-info h2{font-size:clamp(1.2rem,5.1vw,1.45rem);line-height:1.38}.hero h1{font-size:clamp(1.75rem,7vw,2.45rem)}.kc-audience-grid a span:nth-child(2){font-size:clamp(1.5rem,6vw,1.85rem)!important}}\n' +
+    '@media(prefers-reduced-motion:reduce){.hero h1,.kc-cert-info h2,#elige-biblioteca h2,.kc-audience-grid a span:nth-child(2){filter:none}}\n' +
+    '</style><style id="kc-original-wordmark">.kc-library-heading{display:flex;flex-direction:column;align-items:center;gap:13px}.kc-library-heading .kc-library-wordmark{display:block;width:min(440px,85%);height:auto;max-width:100%;filter:none;-webkit-text-fill-color:initial;background:none}.kc-library-heading span{display:block}@media(max-width:600px){.kc-library-heading .kc-library-wordmark{width:min(320px,88%)}}</style></head><body><header class="top"><div class="wrap"><a href="/" aria-label="KineCheck inicio"><img src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck"></a><a href="/">Volver a KineCheck</a></div></header><main class="wrap"><div class="hero"><span class="eyebrow">ACCESO LIBRE · SIN PAGO NI REGISTRO</span><h1 class="kc-library-heading"><span>Biblioteca gratuita</span><img class="kc-library-wordmark" src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck" width="720" height="111" decoding="async"></h1><p>Selecciona la biblioteca que quieres explorar.</p></div><section aria-label="Horas disponibles en salud" id="horas-disponibles" style="padding:22px 0 16px">\n' +
+    '<div style="border:3px solid #f6d34c;border-radius:24px;padding:clamp(24px,5vw,42px);background:linear-gradient(130deg,#124a4b 0%,#0d333b 55%,#102630 100%);box-shadow:0 15px 45px #0005">\n' +
+    '<span style="display:inline-block;border:1px solid #72e4d4;color:#b9fff1;border-radius:30px;padding:5px 12px;font-size:.77rem;font-weight:800;letter-spacing:.07em">NUEVO · VISTA PREVIA</span>\n' +
+    '<h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);line-height:1.2;margin:17px 0 10px;color:#f1ffff">¿Buscas una hora con un profesional de salud?</h2>\n' +
+    '<p style="color:#ddf7f4;max-width:800px;font-size:1.08rem;margin:0 0 12px">Encuentra horas disponibles en medicina, kinesiología, nutrición, psicología, terapia ocupacional, enfermería y otras especialidades de salud.</p>\n' +
+    '<p style="color:#b7d9dc;margin:0 0 23px">Todas las profesiones de salud en un solo lugar. Contacta directamente al profesional, sin intermediarios.</p>\n' +
+    '<div style="display:flex;flex-wrap:wrap;gap:13px">\n' +
+    '<a href="/horas-disponibles/#searchPanel" style="background:#6de5d5;color:#07282c;font-weight:900;padding:14px 22px;border-radius:12px;text-decoration:none;display:inline-block">Buscar una hora →</a>\n' +
+    '<a href="/horas-disponibles/#publishPanel" style="border:1px solid #7cdcd5;color:#f2fffc;background:#183e45;font-weight:800;padding:14px 22px;border-radius:12px;text-decoration:none;display:inline-block">Soy profesional →</a>\n' +
+    '</div>\n' +
+    '<p style="font-size:.82rem;color:#bdd8da;margin:17px 0 0">Servicio en etapa piloto. Estamos preparando la publicación de horas disponibles para distintas profesiones de salud.</p>\n' +
+    '</div></section><section aria-label="Selecciona tu biblioteca" id="elige-biblioteca" style="padding:18px 0 42px">\n' +
+    '        <h2 style="margin-bottom:8px">¿Para quién buscas recursos?</h2>\n' +
+    '        <p style="color:#c7e3e5;margin-bottom:22px">Selecciona una de las dos bibliotecas gratuitas.</p>\n' +
+    '        <div class="kc-audience-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px">\n' +
+    '          <a href="/gratis/profesionales/" style="display:block;text-decoration:none;color:#f1fcfc;background:linear-gradient(135deg,#123b45,#0b252e);border:1px solid #43959d;border-radius:20px;padding:26px;min-height:230px">\n' +
+    '            <span style="display:block;font-size:.8rem;color:#9dece7;font-weight:800;letter-spacing:.08em">BIBLIOTECA PROFESIONAL</span>\n' +
+    '            <span style="display:block;font-size:2rem;font-weight:850;line-height:1.2;margin:15px 0">Soy profesional o estudiante</span>\n' +
+    '            <span style="display:block;color:#d0e7e9;margin-bottom:20px">Evidencia científica, razonamiento clínico y herramientas de aprendizaje.</span>\n' +
+    '            <strong style="color:#8be8e4">Explorar recursos profesionales →</strong>\n' +
+    '          </a>\n' +
+    '          <a href="/gratis/pacientes/" style="display:block;text-decoration:none;color:#f1fcfc;background:linear-gradient(135deg,#12564f,#0b3037);border:1px solid #57b8a7;border-radius:20px;padding:26px;min-height:230px">\n' +
+    '            <span style="display:block;font-size:.8rem;color:#9df3d7;font-weight:800;letter-spacing:.08em">BIBLIOTECA PARA PACIENTES</span>\n' +
+    '            <span style="display:block;font-size:2rem;font-weight:850;line-height:1.2;margin:15px 0">Soy paciente o público general</span>\n' +
+    '            <span style="display:block;color:#d0e7e9;margin-bottom:20px">Dolor, movimiento y autocuidado explicados con palabras sencillas.</span>\n' +
+    '            <strong style="color:#9df3d7">Explorar recursos para pacientes →</strong>\n' +
+    '          </a>\n' +
+    '        </div>\n' +
+    '      </section>\n' +
+    '</main><footer class="foot"><div class="wrap"><img src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck"><span>Educación basada en evidencia, accesible para todos.</span></div></footer><script defer src="/metrics-v1.js?v=20261021-global-center"></script><script defer src="/assets/library-funnel-v1.js?v=20261011"></script><script defer src="/assets/library-feedback-v1.js?v=20261021-original-no-count"></script></body></html>\n'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/free-library-metrics.test.mjs:32:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071d22"><meta name="description" content="Elige tu biblioteca gratuita KineCheck: recursos para profesionales y estudiantes o guías para pacientes."><title>Biblioteca gratuita | KineCheck</title><link rel="canonical" href="https://kinecheck.cl/gratis/"><link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png"><link rel="stylesheet" href="/kinecheck/site-v5.css?v=20260924-room2"><link rel="stylesheet" href="/kinecheck/site-premium-v1.css?v=1"><style>body{margin:0;background:#071d22;color:#eff9f9;font:16px/1.6 system-ui,sans-serif}a{color:#8be4e4}.wrap{max-width:1120px;margin:auto;padding:0 20px}.top{border-bottom:1px solid #2c6972;background:#0b242a}.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:15px;padding-bottom:15px}.top img,.foot img{width:190px;max-width:48vw;height:auto}.hero{text-align:center;padding:48px 0 6px}.hero h1{font-size:clamp(2rem,5vw,3.7rem);line-height:1.15;margin:14px 0}.hero p{color:#cfe4e5;font-size:1.1rem}.eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.09em;color:#88e5e1}.foot{border-top:1px solid #2c6972;margin-top:70px;padding:25px 0;color:#c5dcde}.foot .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}@media(max-width:700px){.hero{padding-top:35px}}</style><style id="kc-watermark">body::before{content:"KINECHECK  •  EDUCACIÓN BASADA EN EVIDENCIA";position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-29deg);font:800 clamp(20px,4.5vw,64px)/1.5 system-ui,sans-serif;letter-spacing:.16em;color:rgba(112,219,215,.065);white-space:nowrap;pointer-events:none;z-index:2;max-width:100vw;overflow:hidden}body>*{position:relative;z-index:3}@media print{body::before{position:fixed;color:rgba(60,130,130,.10)!important}header,nav,footer{display:none!important}}</style><style id="kc-cert-styles">.kc-cert-info{background:linear-gradient(145deg,#103941,#0a2d36);border:1px solid #4babb0;border-radius:22px;padding:clamp(24px,5vw,48px);margin:20px 0 35px;box-shadow:0 15px 35px #0003}.kc-cert-tag{display:inline-block;padding:6px 15px;border:1px solid #338b86;border-radius:99px;background:#13544f;color:#b2f7eb;font-size:.79rem;font-weight:800;letter-spacing:.065em}.kc-cert-info h2{font-size:clamp(1.25rem,2.3vw,1.8rem);line-height:1.35;margin:20px 0}.kc-cert-info p{font-size:clamp(.94rem,1.25vw,1.04rem);line-height:1.65;color:#d2e7e9;margin:0 0 17px}.kc-cert-info strong{color:#fff}.kc-cert-button{display:flex;justify-content:center;align-items:center;gap:14px;background:#65ded8;color:#083239;font-weight:900;border-radius:14px;text-decoration:none;padding:15px 18px;margin-top:28px;text-align:center}.kc-cert-button:hover,.kc-cert-button:focus-visible{background:#8df3ec;outline:2px solid #b9fff6}@media(max-width:600px){.kc-cert-info{border-radius:18px;margin-top:16px}.kc-cert-info h2{margin-top:20px}}</style><style id="kc-3d-type">\n/* Relieve tipográfico discreto, consistente con la identidad metálica KineCheck. */\n.hero h1,.kc-cert-info h2,#elige-biblioteca h2{\n color:#e9fcfb;\n background:linear-gradient(180deg,#fff 0%,#d9ffff 24%,#7cdbd9 54%,#e0fffa 76%,#8bc5c8 100%);\n -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;\n filter:drop-shadow(0 1px 0 rgba(255,255,255,.27)) drop-shadow(0 3px 0 rgba(8,75,83,.7)) drop-shadow(0 8px 9px rgba(0,0,0,.3));\n letter-spacing:-.025em;\n}\n.kc-audience-grid a span:nth-child(2){\n color:#e7fffd;\n background:linear-gradient(180deg,#fff 0%,#b9f4f0 40%,#64c9c6 75%,#d4faf6 100%);\n -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;\n filter:drop-shadow(0 2px 0 rgba(9,76,78,.65)) drop-shadow(0 5px 5px rgba(0,0,0,.24));\n}\n.kc-cert-tag{box-shadow:inset 0 1px 0 rgba(230,255,251,.25),0 4px 9px rgba(0,0,0,.16);text-shadow:0 1px 1px #092d31}\n.kc-cert-button{box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -4px 0 rgba(5,91,96,.22),0 8px 18px rgba(0,0,0,.23);text-shadow:0 1px 0 rgba(255,255,255,.3)}\n@media(max-width:600px){.kc-cert-info h2{font-size:clamp(1.2rem,5.1vw,1.45rem);line-height:1.38}.hero h1{font-size:clamp(1.75rem,7vw,2.45rem)}.kc-audience-grid a span:nth-child(2){font-size:clamp(1.5rem,6vw,1.85rem)!important}}\n@media(prefers-reduced-motion:reduce){.hero h1,.kc-cert-info h2,#elige-biblioteca h2,.kc-audience-grid a span:nth-child(2){filter:none}}\n</style><style id="kc-original-wordmark">.kc-library-heading{display:flex;flex-direction:column;align-items:center;gap:13px}.kc-library-heading .kc-library-wordmark{display:block;width:min(440px,85%);height:auto;max-width:100%;filter:none;-webkit-text-fill-color:initial;background:none}.kc-library-heading span{display:block}@media(max-width:600px){.kc-library-heading .kc-library-wordmark{width:min(320px,88%)}}</style></head><body><header class="top"><div class="wrap"><a href="/" aria-label="KineCheck inicio"><img src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck"></a><a href="/">Volver a KineCheck</a></div></header><main class="wrap"><div class="hero"><span class="eyebrow">ACCESO LIBRE · SIN PAGO NI REGISTRO</span><h1 class="kc-library-heading"><span>Biblioteca gratuita</span><img class="kc-library-wordmark" src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck" width="720" height="111" decoding="async"></h1><p>Selecciona la biblioteca que quieres explorar.</p></div><section aria-label="Horas disponibles en salud" id="horas-disponibles" style="padding:22px 0 16px">\n<div style="border:3px solid #f6d34c;border-radius:24px;padding:clamp(24px,5vw,42px);background:linear-gradient(130deg,#124a4b 0%,#0d333b 55%,#102630 100%);box-shadow:0 15px 45px #0005">\n<span style="display:inline-block;border:1px solid #72e4d4;color:#b9fff1;border-radius:30px;padding:5px 12px;font-size:.77rem;font-weight:800;letter-spacing:.07em">NUEVO · VISTA PREVIA</span>\n<h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);line-height:1.2;margin:17px 0 10px;color:#f1ffff">¿Buscas una hora con un profesional de salud?</h2>\n<p style="color:#ddf7f4;max-width:800px;font-size:1.08rem;margin:0 0 12px">Encuentra horas disponibles en medicina, kinesiología, nutrición, psicología, terapia ocupacional, enfermería y otras especialidades de salud.</p>\n<p style="color:#b7d9dc;margin:0 0 23px">Todas las profesiones de salud en un solo lugar. Contacta directamente al profesional, sin intermediarios.</p>\n<div style="display:flex;flex-wrap:wrap;gap:13px">\n<a href="/horas-disponibles/#searchPanel" style="background:#6de5d5;color:#07282c;font-weight:900;padding:14px 22px;border-radius:12px;text-decoration:none;display:inline-block">Buscar una hora →</a>\n<a href="/horas-disponibles/#publishPanel" style="border:1px solid #7cdcd5;color:#f2fffc;background:#183e45;font-weight:800;padding:14px 22px;border-radius:12px;text-decoration:none;display:inline-block">Soy profesional →</a>\n</div>\n<p style="font-size:.82rem;color:#bdd8da;margin:17px 0 0">Servicio en etapa piloto. Estamos preparando la publicación de horas disponibles para distintas profesiones de salud.</p>\n</div></section><section aria-label="Selecciona tu biblioteca" id="elige-biblioteca" style="padding:18px 0 42px">\n        <h2 style="margin-bottom:8px">¿Para quién buscas recursos?</h2>\n        <p style="color:#c7e3e5;margin-bottom:22px">Selecciona una de las dos bibliotecas gratuitas.</p>\n        <div class="kc-audience-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px">\n          <a href="/gratis/profesionales/" style="display:block;text-decoration:none;color:#f1fcfc;background:linear-gradient(135deg,#123b45,#0b252e);border:1px solid #43959d;border-radius:20px;padding:26px;min-height:230px">\n            <span style="display:block;font-size:.8rem;color:#9dece7;font-weight:800;letter-spacing:.08em">BIBLIOTECA PROFESIONAL</span>\n            <span style="display:block;font-size:2rem;font-weight:850;line-height:1.2;margin:15px 0">Soy profesional o estudiante</span>\n            <span style="display:block;color:#d0e7e9;margin-bottom:20px">Evidencia científica, razonamiento clínico y herramientas de aprendizaje.</span>\n            <strong style="color:#8be8e4">Explorar recursos profesionales →</strong>\n          </a>\n          <a href="/gratis/pacientes/" style="display:block;text-decoration:none;color:#f1fcfc;background:linear-gradient(135deg,#12564f,#0b3037);border:1px solid #57b8a7;border-radius:20px;padding:26px;min-height:230px">\n            <span style="display:block;font-size:.8rem;color:#9df3d7;font-weight:800;letter-spacing:.08em">BIBLIOTECA PARA PACIENTES</span>\n            <span style="display:block;font-size:2rem;font-weight:850;line-height:1.2;margin:15px 0">Soy paciente o público general</span>\n            <span style="display:block;color:#d0e7e9;margin-bottom:20px">Dolor, movimiento y autocuidado explicados con palabras sencillas.</span>\n            <strong style="color:#9df3d7">Explorar recursos para pacientes →</strong>\n          </a>\n        </div>\n      </section>\n</main><footer class="foot"><div class="wrap"><img src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck"><span>Educación basada en evidencia, accesible para todos.</span></div></footer><script defer src="/metrics-v1.js?v=20261021-global-center"></script><script defer src="/assets/library-funnel-v1.js?v=20261011"></script><script defer src="/assets/library-feedback-v1.js?v=20261021-original-no-count"></script></body></html>\n',
+    expected: /metrics-privacy-v1\.css/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/metrics-consent.test.mjs:20:1
+✖ el visitante puede informarse y cambiar su elección (28.572616ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /body\.kc-library-metrics #kc-metrics-panel:not\(\[hidden\]\)[^{]*\{[^}]*left:50%;[^}]*top:50%;[^}]*transform:translate\(-50%,-50%\)/. Input:
+  
+  '/* Preferencias de medición opcional: UI accesible, CSS de primera parte. */\n' +
+    '#kc-metrics-panel,#kc-metrics-toggle{font:inherit;box-sizing:border-box}\n' +
+    '#kc-metrics-panel *,#kc-metrics-toggle *{box-sizing:border-box}\n' +
+    '#kc-metrics-panel[hidden],#kc-metrics-toggle[hidden]{display:none!important}\n' +
+    '#kc-metrics-panel{position:fixed;z-index:2147483000;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));width:min(440px,calc(100vw - 24px));max-height:min(78vh,530px);overflow:auto;padding:19px;border:1px solid #67d5d8;border-radius:18px;background:#062530;color:#f5ffff;box-shadow:0 15px 55px rgba(0,0,0,.72);font-family:Inter,system-ui,-apple-system,sans-serif}\n' +
+    '#kc-metrics-panel h2{font-size:1.1rem;line-height:1.3;color:#fff;margin:0 0 8px}\n' +
+    '#kc-metrics-panel p{font-size:.91rem;line-height:1.55;color:#e0eeee;margin:0 0 12px}\n' +
+    '#kc-metrics-panel a{color:#a9fff3;text-decoration:underline}\n' +
+    '#kc-metrics-panel .kc-metrics-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}\n' +
+    '#kc-metrics-panel button,#kc-metrics-toggle{font:inherit;cursor:pointer;min-height:44px;border-radius:11px;font-size:.88rem;font-weight:700}\n' +
+    '#kc-metrics-panel button{padding:10px 14px;border:1px solid #76ded8;color:#f5ffff;background:#155160}\n' +
+    '#kc-metrics-panel button[data-kc-metrics="yes"]{background:#61dace;border-color:#61dace;color:#06262a}\n' +
+    '#kc-metrics-panel button:hover,#kc-metrics-toggle:hover{filter:brightness(1.1)}\n' +
+    '#kc-metrics-panel button:focus-visible,#kc-metrics-toggle:focus-visible,#kc-metrics-panel a:focus-visible{outline:3px solid #ffde7c;outline-offset:3px}\n' +
+    '#kc-metrics-toggle{position:fixed;z-index:2147482999;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));padding:8px 13px;border:1px solid #6cbdc3;background:#082c37;color:#f5ffff;box-shadow:0 7px 26px rgba(0,0,0,.35)}\n' +
+    '@media(max-width:560px){#kc-metrics-panel{max-height:65vh;padding:16px}#kc-metrics-panel .kc-metrics-actions button{flex:1 1 auto}}\n' +
+    '\n' +
+    '/* Todas las páginas: cuadro centrado hasta una decisión explícita. */\n' +
+    '#kc-metrics-panel:not([hidden]){position:fixed;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(540px,calc(100vw - 24px));max-height:min(82dvh,650px);margin:0;overflow-y:auto;overscroll-behavior:contain;z-index:2147483000}\n' +
+    '@media(max-width:560px){#kc-metrics-panel:not([hidden]){width:calc(100vw - 24px);max-height:76dvh;padding:16px}}\n'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/metrics-consent.test.mjs:31:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '/* Preferencias de medición opcional: UI accesible, CSS de primera parte. */\n#kc-metrics-panel,#kc-metrics-toggle{font:inherit;box-sizing:border-box}\n#kc-metrics-panel *,#kc-metrics-toggle *{box-sizing:border-box}\n#kc-metrics-panel[hidden],#kc-metrics-toggle[hidden]{display:none!important}\n#kc-metrics-panel{position:fixed;z-index:2147483000;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));width:min(440px,calc(100vw - 24px));max-height:min(78vh,530px);overflow:auto;padding:19px;border:1px solid #67d5d8;border-radius:18px;background:#062530;color:#f5ffff;box-shadow:0 15px 55px rgba(0,0,0,.72);font-family:Inter,system-ui,-apple-system,sans-serif}\n#kc-metrics-panel h2{font-size:1.1rem;line-height:1.3;color:#fff;margin:0 0 8px}\n#kc-metrics-panel p{font-size:.91rem;line-height:1.55;color:#e0eeee;margin:0 0 12px}\n#kc-metrics-panel a{color:#a9fff3;text-decoration:underline}\n#kc-metrics-panel .kc-metrics-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}\n#kc-metrics-panel button,#kc-metrics-toggle{font:inherit;cursor:pointer;min-height:44px;border-radius:11px;font-size:.88rem;font-weight:700}\n#kc-metrics-panel button{padding:10px 14px;border:1px solid #76ded8;color:#f5ffff;background:#155160}\n#kc-metrics-panel button[data-kc-metrics="yes"]{background:#61dace;border-color:#61dace;color:#06262a}\n#kc-metrics-panel button:hover,#kc-metrics-toggle:hover{filter:brightness(1.1)}\n#kc-metrics-panel button:focus-visible,#kc-metrics-toggle:focus-visible,#kc-metrics-panel a:focus-visible{outline:3px solid #ffde7c;outline-offset:3px}\n#kc-metrics-toggle{position:fixed;z-index:2147482999;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));padding:8px 13px;border:1px solid #6cbdc3;background:#082c37;color:#f5ffff;box-shadow:0 7px 26px rgba(0,0,0,.35)}\n@media(max-width:560px){#kc-metrics-panel{max-height:65vh;padding:16px}#kc-metrics-panel .kc-metrics-actions button{flex:1 1 auto}}\n\n/* Todas las páginas: cuadro centrado hasta una decisión explícita. */\n#kc-metrics-panel:not([hidden]){position:fixed;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(540px,calc(100vw - 24px));max-height:min(82dvh,650px);margin:0;overflow-y:auto;overscroll-behavior:contain;z-index:2147483000}\n@media(max-width:560px){#kc-metrics-panel:not([hidden]){width:calc(100vw - 24px);max-height:76dvh;padding:16px}}\n',
+    expected: /body\.kc-library-metrics #kc-metrics-panel:not\(\[hidden\]\)[^{]*\{[^}]*left:50%;[^}]*top:50%;[^}]*transform:translate\(-50%,-50%\)/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/otec-evaluation-package.test.mjs:19:1
+✖ the OTEC review package specifies all eight assessment designs (31.104509ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /80\/100 o más/. Input:
+  
+  '# Instrumentos sumativos y protocolo de pilotaje KineCheck\n' +
+    '\n' +
+    '**Versión:** 2026-10-02  \n' +
+    '**Estado:** propuesta académica completa para revisión de una OTEC.  \n' +
+    '**Alcance:** ocho cursos auditados. No activa certificación, no modifica por sí sola requisitos vigentes y no corresponde a cursos SENCE.\n' +
+    '\n' +
+    '## 1. Propósito\n' +
+    '\n' +
+    'Este documento convierte las brechas detectadas en diseños evaluativos aplicables y auditables. Define qué evaluar, cómo puntuar, qué errores impiden aprobar y cómo validar la carga temporal. La activación requiere aprobación escrita de la versión por la OTEC y despliegue del instrumento en un entorno protegido.\n' +
+    '\n' +
+    'Los bancos de ítems, claves y casos equivalentes deben almacenarse en servidor y no en archivos públicos. Antes de utilizarlos se deben verificar uno a uno contra el contenido y las fuentes originales de la versión del curso.\n' +
+    '\n' +
+    '### Implementación técnica actual\n' +
+    '\n' +
+    'La plataforma contiene un banco protegido de **120 ítems**: 15 por cada uno de los ocho cursos. Las claves y fundamentos permanecen solo en servidor. Academy permite iniciar la evaluación a usuarios autenticados con licencia; Supabase registra curso, versión, intento, respuestas, puntaje, puerta crítica y fecha. El criterio académico interno vigente es **80 %**, con máximo de **dos intentos** y requisito de responder correctamente los ítems críticos de seguridad. Este cierre es de KineCheck: la certificación OTEC sigue desactivada y requiere aprobación escrita independiente.\n' +
+    '\n' +
+    '## 2. Modelo evaluativo propuesto\n' +
+    '\n' +
+    'Para los ocho cursos se implementó una evaluación final objetiva corregida en servidor:\n' +
+    '\n' +
+    '- **15 ítems objetivos** por curso, con decisión clínica, interpretación y seguridad.\n' +
+    '- **Aprobación interna KineCheck:** 80 % o más y todas las preguntas críticas de seguridad correctas.\n' +
+    '- **No aprobación:** menos de 80 % o fallo de la puerta crítica de seguridad.\n' +
+    '- **Intentos:** máximo de dos por versión del curso.\n' +
+    '- **Retroalimentación:** posterior al envío, con fundamento por ítem; la clave no se expone antes de cerrar el intento.\n' +
+    '- **Registro:** resultado y finalización académica se guardan en servidor.\n' +
+    '\n' +
+    'Este umbral es un **requisito académico interno vigente de KineCheck**. No se presenta como criterio aprobado por una OTEC. Traumatología mantiene además su regla histórica de 80 % modular y final; para certificación externa prevalecerá lo que la OTEC apruebe por escrito.\n' +
+    '\n' +
+    '### Rúbrica transversal del caso integrador\n' +
+    '\n' +
+    '| Dimensión | 0 puntos | 7 puntos | 11 puntos | 14 puntos |\n' +
+    '|---|---|---|---|---|\n' +
+    '| Identificación del problema | No identifica el problema o responde otro caso. | Identificación parcial, sin jerarquización. | Problema pertinente con alguna omisión. | Problema central y prioridades claramente jerarquizados. |\n' +
+    '| Uso de evidencia | Afirmaciones sin respaldo o fuente incompatible. | Menciona evidencia sin interpretar límites. | Usa evidencia pertinente y reconoce al menos un límite. | Integra fuente, magnitud/certeza y límites sin sobreinferir. |\n' +
+    '| Decisión y justificación | Conducta incoherente o no justificada. | Conducta plausible con justificación incompleta. | Conducta coherente y reevaluable. | Decisión compartida, proporcional, trazable y con alternativas. |\n' +
+    '| Seguridad y alcance | Incumple la condición crítica. | Reconoce riesgo de forma tardía o incompleta. | Conducta segura con límites explícitos. | Prioriza seguridad, derivación/coordinación y alcance profesional. |\n' +
+    '| Comunicación y seguimiento | Lenguaje alarmista, determinista o sin seguimiento. | Explicación poco clara o genérica. | Comunicación comprensible y plan de control. | Comunicación no estigmatizante, verificación de comprensión y criterios de reevaluación. |\n' +
+    '\n' +
+    'La dimensión de seguridad se califica, pero además funciona como puerta crítica: una respuesta incompatible con la condición descrita para cada curso no puede aprobar aunque el total matemático alcance 80 puntos.\n' +
+    '\n' +
+    '## 3. Especificación por curso\n' +
+    '\n' +
+    '### 3.1 KineCheck Clínico\n' +
+    '\n' +
+    '**Caso integrador:** persona con dolor musculoesquelético, hallazgos funcionales, una señal de posible patología seria y factores contextuales. El estudiante debe priorizar triage, formular hipótesis, seleccionar medidas y proponer manejo/derivación.\n' +
+    '\n' +
+    '| Resultado evaluado | Evidencia requerida | Ponderación |\n' +
+    '|---|---|---:|\n' +
+    '| Integrar evaluación clínica y CIF | Problemas, función, participación y contexto | 20 |\n' +
+    '| Diferenciar screening de diagnóstico | Hipótesis y límites de pruebas | 20 |\n' +
+    '| Seleccionar medidas y PROMs | Elección justificada y plan de reevaluación | 15 |\n' +
+    '| Tomar decisiones seguras | Triage, alcance y coordinación | 25 |\n' +
+    '| Comunicar plan y seguimiento | Lenguaje, metas y retorno funcional | 20 |\n' +
+    '\n' +
+    '**Condición crítica:** no retrasar derivación cuando la combinación de historia y hallazgos exige evaluación urgente; una bandera aislada no se presenta como diagnóstico confirmado.\n' +
+    '\n' +
+    '**Plan de ítems:** tres de seguridad, tres de interpretación de pruebas, tres de PROMs, tres de CIF/objetivos y tres de manejo/reevaluación. Se excluyen distractores absurdos o puramente formales.\n' +
+    '\n' +
+    '### 3.2 Comunicación Clínica\n' +
+    '\n' +
+    '**Caso integrador:** entrevista con una persona preocupada por una etiqueta diagnóstica y una imagen. Se solicita explorar preocupaciones, comunicar incertidumbre, comprobar comprensión y acordar un plan.\n' +
+    '\n' +
+    '| Resultado evaluado | Evidencia requerida | Ponderación |\n' +
+    '|---|---|---:|\n' +
+    '| Escucha y agenda compartida | Preguntas abiertas, validación y prioridades | 20 |\n' +
+    '| Explicación de hallazgos | Lenguaje comprensible y no determinista | 20 |\n' +
+    '| Manejo de incertidumbre | Diferencia dato, hipótesis y límite | 20 |\n' +
+    '| Decisión compartida | Opciones, preferencias y consentimiento | 20 |\n' +
+    '| Cierre y continuidad | Teach-back, seguimiento y señales de reevaluación | 20 |\n' +
+    '\n' +
+    '**Condición crítica:** no entregar falsa certeza, minimizar síntomas ni usar una imagen o etiqueta aislada como causa demostrada.\n' +
+    '\n' +
+    '**Plan de ítems:** tres de escucha/alianza, tres de riesgo comunicacional, tres de imagen y etiquetas, tres de decisión compartida y tres de cierre/teach-back.\n' +
+    '\n' +
+    '### 3.3 Más allá del dolor\n' +
+    '\n' +
+    '**Caso integrador:** dolor persistente con información incompleta sobre mecanismos, sueño, actividad, expectativas y función. Se solicita construir una formulación provisional y un plan multimodal.\n' +
+    '\n' +
+    '| Resultado evaluado | Evidencia requerida | Ponderación |\n' +
+    '|---|---|---:|\n' +
+    '| Diferenciar dolor y nocicepción | Conceptos aplicados sin dualismo | 20 |\n' +
+    '| Formular mecanismos como hipótesis | Nociceptivo, neuropático y nociplástico con límites | 25 |\n' +
+    '| Integrar factores contextuales | Sueño, creencias, función y entorno | 20 |\n' +
+    '| Proponer manejo individualizado | Educación, actividad y coordinación | 20 |\n' +
+    '| Reevaluar y comunicar | Medidas, plazos y lenguaje no estigmatizante | 15 |\n' +
+    '\n' +
+    '**Condición crítica:** no diagnosticar dolor nociplástico por descarte ni equipararlo automáticamente con sensibilización central.\n' +
+    '\n' +
+    '**Plan de ítems:** tres de terminología IASP, tres de mecanismos, tres de factores psicosociales, tres de educación y tres de planificación funcional.\n' +
+    '\n' +
+    '### 3.4 KineCheck Evidencia Aplicada\n' +
+    '\n' +
+    '**Caso integrador:** pregunta clínica con un estudio o guía resumida. Se solicita formular la pregunta, identificar diseño, interpretar efecto y certeza, y decidir aplicabilidad.\n' +
+    '\n' +
+    '| Resultado evaluado | Evidencia requerida | Ponderación |\n' +
+    '|---|---|---:|\n' +
+    '| Formular pregunta clínica | Población, intervención/exposición y desenlace | 15 |\n' +
+    '| Interpretar diseño y sesgo | Diseño, comparador y amenazas principales | 20 |\n' +
+    '| Interpretar resultados | Efecto, precisión y relevancia clínica | 25 |\n' +
+    '| Valorar aplicabilidad | Población, preferencias, recursos y daño | 20 |\n' +
+    '| Comunicar conclusión calibrada | Asociación/causalidad y certeza explícitas | 20 |\n' +
+    '\n' +
+    '**Condición crítica:** no convertir asociación en causalidad, significación estadística en beneficio clínico ni ausencia de evidencia en evidencia de ausencia.\n' +
+    '\n' +
+    '**Plan de ítems:** tres de pregunta/diseño, tres de sesgo, tres de estimación e intervalos, tres de relevancia/aplicabilidad y tres de comunicación de certeza.\n' +
+    '\n' +
+    '### 3.5 Traumatología y Ortopedia Clínica\n' +
+    '\n' +
+    'Se conserva el criterio activo comprobado: al menos 4/5 en cada módulo y 10/12 en el examen final. Para una futura versión certificable se prepara una **Forma B independiente**, sin reutilizar preguntas de los controles modulares.\n' +
+    '\n' +
+    '**Forma B propuesta:** 15 ítems nuevos, distribuidos entre trauma, infección, tumores, columna, extremidad superior y extremidad inferior; al menos cinco ítems exigen priorización de seguridad. Umbral propuesto: 12/15, sujeto a aprobación OTEC.\n' +
+    '\n' +
+    '**Caso de contraste:** escenario de fractura expuesta, articulación caliente o compromiso neurológico donde se diferencia prioridad de derivación, medidas iniciales y acciones reservadas a equipos habilitados.\n' +
+    '\n' +
+    '**Condición crítica:** no retrasar atención urgente ni prescribir fármacos fuera del alcance profesional.\n' +
+    '\n' +
+    'La Forma B debe aprobar revisión de contenido y análisis de ítems antes de reemplazar el examen actual. El certificado interno legado continúa deshabilitado.\n' +
+    '\n' +
+    '### 3.6 Dolor Lumbar Persistente\n' +
+    '\n' +
+    '**Caso integrador:** dolor lumbar persistente con PROMs, factores pronósticos y cambio clínico. Se solicita realizar triage, interpretar mediciones y diseñar una progresión funcional.\n' +
+    '\n' +
+    '| Resultado evaluado | Evidencia requerida | Ponderación |\n' +
+    '|---|---|---:|\n' +
+    '| Triage contextual | Historia, combinación de hallazgos y conducta | 25 |\n' +
+    '| Interpretar PROMs | Puntaje, cambio y límites de medición | 20 |\n' +
+    '| Formular hipótesis | Mecanismos y factores contribuyentes | 20 |\n' +
+    '| Planificar manejo | Educación, actividad y dosificación adaptable | 20 |\n' +
+    '| Reevaluar retorno funcional | Metas, criterios y seguimiento | 15 |\n' +
+    '\n' +
+    '**Condición crítica:** síntomas compatibles con cauda equina u otra patología seria requieren coordinación urgente; una red flag aislada no confirma diagnóstico.\n' +
+    '\n' +
+    '**Plan de ítems:** cuatro de seguridad, tres de PROMs, tres de imagen, tres de manejo activo y dos de pronóstico/retorno funcional.\n' +
+    '\n' +
+    '### 3.7 D'... 5125 more characters
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/otec-evaluation-package.test.mjs:22:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '# Instrumentos sumativos y protocolo de pilotaje KineCheck\n\n**Versión:** 2026-10-02  \n**Estado:** propuesta académica completa para revisión de una OTEC.  \n**Alcance:** ocho cursos auditados. No activa certificación, no modifica por sí sola requisitos vigentes y no corresponde a cursos SENCE.\n\n## 1. Propósito\n\nEste documento convierte las brechas detectadas en diseños evaluativos aplicables y auditables. Define qué evaluar, cómo puntuar, qué errores impiden aprobar y cómo validar la carga temporal. La activación requiere aprobación escrita de la versión por la OTEC y despliegue del instrumento en un entorno protegido.\n\nLos bancos de ítems, claves y casos equivalentes deben almacenarse en servidor y no en archivos públicos. Antes de utilizarlos se deben verificar uno a uno contra el contenido y las fuentes originales de la versión del curso.\n\n### Implementación técnica actual\n\nLa plataforma contiene un banco protegido de **120 ítems**: 15 por cada uno de los ocho cursos. Las claves y fundamentos permanecen solo en servidor. Academy permite iniciar la evaluación a usuarios autenticados con licencia; Supabase registra curso, versión, intento, respuestas, puntaje, puerta crítica y fecha. El criterio académico interno vigente es **80 %**, con máximo de **dos intentos** y requisito de responder correctamente los ítems críticos de seguridad. Este cierre es de KineCheck: la certificación OTEC sigue desactivada y requiere aprobación escrita independiente.\n\n## 2. Modelo evaluativo propuesto\n\nPara los ocho cursos se implementó una evaluación final objetiva corregida en servidor:\n\n- **15 ítems objetivos** por curso, con decisión clínica, interpretación y seguridad.\n- **Aprobación interna KineCheck:** 80 % o más y todas las preguntas críticas de seguridad correctas.\n- **No aprobación:** menos de 80 % o fallo de la puerta crítica de seguridad.\n- **Intentos:** máximo de dos por versión del curso.\n- **Retroalimentación:** posterior al envío, con fundamento por ítem; la clave no se expone antes de cerrar el intento.\n- **Registro:** resultado y finalización académica se guardan en servidor.\n\nEste umbral es un **requisito académico interno vigente de KineCheck**. No se presenta como criterio aprobado por una OTEC. Traumatología mantiene además su regla histórica de 80 % modular y final; para certificación externa prevalecerá lo que la OTEC apruebe por escrito.\n\n### Rúbrica transversal del caso integrador\n\n| Dimensión | 0 puntos | 7 puntos | 11 puntos | 14 puntos |\n|---|---|---|---|---|\n| Identificación del problema | No identifica el problema o responde otro caso. | Identificación parcial, sin jerarquización. | Problema pertinente con alguna omisión. | Problema central y prioridades claramente jerarquizados. |\n| Uso de evidencia | Afirmaciones sin respaldo o fuente incompatible. | Menciona evidencia sin interpretar límites. | Usa evidencia pertinente y reconoce al menos un límite. | Integra fuente, magnitud/certeza y límites sin sobreinferir. |\n| Decisión y justificación | Conducta incoherente o no justificada. | Conducta plausible con justificación incompleta. | Conducta coherente y reevaluable. | Decisión compartida, proporcional, trazable y con alternativas. |\n| Seguridad y alcance | Incumple la condición crítica. | Reconoce riesgo de forma tardía o incompleta. | Conducta segura con límites explícitos. | Prioriza seguridad, derivación/coordinación y alcance profesional. |\n| Comunicación y seguimiento | Lenguaje alarmista, determinista o sin seguimiento. | Explicación poco clara o genérica. | Comunicación comprensible y plan de control. | Comunicación no estigmatizante, verificación de comprensión y criterios de reevaluación. |\n\nLa dimensión de seguridad se califica, pero además funciona como puerta crítica: una respuesta incompatible con la condición descrita para cada curso no puede aprobar aunque el total matemático alcance 80 puntos.\n\n## 3. Especificación por curso\n\n### 3.1 KineCheck Clínico\n\n**Caso integrador:** persona con dolor musculoesquelético, hallazgos funcionales, una señal de posible patología seria y factores contextuales. El estudiante debe priorizar triage, formular hipótesis, seleccionar medidas y proponer manejo/derivación.\n\n| Resultado evaluado | Evidencia requerida | Ponderación |\n|---|---|---:|\n| Integrar evaluación clínica y CIF | Problemas, función, participación y contexto | 20 |\n| Diferenciar screening de diagnóstico | Hipótesis y límites de pruebas | 20 |\n| Seleccionar medidas y PROMs | Elección justificada y plan de reevaluación | 15 |\n| Tomar decisiones seguras | Triage, alcance y coordinación | 25 |\n| Comunicar plan y seguimiento | Lenguaje, metas y retorno funcional | 20 |\n\n**Condición crítica:** no retrasar derivación cuando la combinación de historia y hallazgos exige evaluación urgente; una bandera aislada no se presenta como diagnóstico confirmado.\n\n**Plan de ítems:** tres de seguridad, tres de interpretación de pruebas, tres de PROMs, tres de CIF/objetivos y tres de manejo/reevaluación. Se excluyen distractores absurdos o puramente formales.\n\n### 3.2 Comunicación Clínica\n\n**Caso integrador:** entrevista con una persona preocupada por una etiqueta diagnóstica y una imagen. Se solicita explorar preocupaciones, comunicar incertidumbre, comprobar comprensión y acordar un plan.\n\n| Resultado evaluado | Evidencia requerida | Ponderación |\n|---|---|---:|\n| Escucha y agenda compartida | Preguntas abiertas, validación y prioridades | 20 |\n| Explicación de hallazgos | Lenguaje comprensible y no determinista | 20 |\n| Manejo de incertidumbre | Diferencia dato, hipótesis y límite | 20 |\n| Decisión compartida | Opciones, preferencias y consentimiento | 20 |\n| Cierre y continuidad | Teach-back, seguimiento y señales de reevaluación | 20 |\n\n**Condición crítica:** no entregar falsa certeza, minimizar síntomas ni usar una imagen o etiqueta aislada como causa demostrada.\n\n**Plan de ítems:** tres de escucha/alianza, tres de riesgo comunicacional, tres de imagen y etiquetas, tres de decisión compartida y tres de cierre/teach-back.\n\n### 3.3 Más allá del dolor\n\n**Caso integrador:** dolor persistente con información incompleta sobre mecanismos, sueño, actividad, expectativas y función. Se solicita construir una formulación provisional y un plan multimodal.\n\n| Resultado evaluado | Evidencia requerida | Ponderación |\n|---|---|---:|\n| Diferenciar dolor y nocicepción | Conceptos aplicados sin dualismo | 20 |\n| Formular mecanismos como hipótesis | Nociceptivo, neuropático y nociplástico con límites | 25 |\n| Integrar factores contextuales | Sueño, creencias, función y entorno | 20 |\n| Proponer manejo individualizado | Educación, actividad y coordinación | 20 |\n| Reevaluar y comunicar | Medidas, plazos y lenguaje no estigmatizante | 15 |\n\n**Condición crítica:** no diagnosticar dolor nociplástico por descarte ni equipararlo automáticamente con sensibilización central.\n\n**Plan de ítems:** tres de terminología IASP, tres de mecanismos, tres de factores psicosociales, tres de educación y tres de planificación funcional.\n\n### 3.4 KineCheck Evidencia Aplicada\n\n**Caso integrador:** pregunta clínica con un estudio o guía resumida. Se solicita formular la pregunta, identificar diseño, interpretar efecto y certeza, y decidir aplicabilidad.\n\n| Resultado evaluado | Evidencia requerida | Ponderación |\n|---|---|---:|\n| Formular pregunta clínica | Población, intervención/exposición y desenlace | 15 |\n| Interpretar diseño y sesgo | Diseño, comparador y amenazas principales | 20 |\n| Interpretar resultados | Efecto, precisión y relevancia clínica | 25 |\n| Valorar aplicabilidad | Población, preferencias, recursos y daño | 20 |\n| Comunicar conclusión calibrada | Asociación/causalidad y certeza explícitas | 20 |\n\n**Condición crítica:** no convertir asociación en causalidad, significación estadística en beneficio clínico ni ausencia de evidencia en evidencia de ausencia.\n\n**Plan de ítems:** tres de pregunta/diseño, tres de sesgo, tres de estimación e intervalos, tres de relevancia/aplicabilidad y tres de comunicación de certeza.\n\n### 3.5 Traumatología y Ortopedia Clínica\n\nSe conserva el criterio activo comprobado: al menos 4/5 en cada módulo y 10/12 en el examen final. Para una futura versión certificable se prepara una **Forma B independiente**, sin reutilizar preguntas de los controles modulares.\n\n**Forma B propuesta:** 15 ítems nuevos, distribuidos entre trauma, infección, tumores, columna, extremidad superior y extremidad inferior; al menos cinco ítems exigen priorización de seguridad. Umbral propuesto: 12/15, sujeto a aprobación OTEC.\n\n**Caso de contraste:** escenario de fractura expuesta, articulación caliente o compromiso neurológico donde se diferencia prioridad de derivación, medidas iniciales y acciones reservadas a equipos habilitados.\n\n**Condición crítica:** no retrasar atención urgente ni prescribir fármacos fuera del alcance profesional.\n\nLa Forma B debe aprobar revisión de contenido y análisis de ítems antes de reemplazar el examen actual. El certificado interno legado continúa deshabilitado.\n\n### 3.6 Dolor Lumbar Persistente\n\n**Caso integrador:** dolor lumbar persistente con PROMs, factores pronósticos y cambio clínico. Se solicita realizar triage, interpretar mediciones y diseñar una progresión funcional.\n\n| Resultado evaluado | Evidencia requerida | Ponderación |\n|---|---|---:|\n| Triage contextual | Historia, combinación de hallazgos y conducta | 25 |\n| Interpretar PROMs | Puntaje, cambio y límites de medición | 20 |\n| Formular hipótesis | Mecanismos y factores contribuyentes | 20 |\n| Planificar manejo | Educación, actividad y dosificación adaptable | 20 |\n| Reevaluar retorno funcional | Metas, criterios y seguimiento | 15 |\n\n**Condición crítica:** síntomas compatibles con cauda equina u otra patología seria requieren coordinación urgente; una red flag aislada no confirma diagnóstico.\n\n**Plan de ítems:** cuatro de seguridad, tres de PROMs, tres de imagen, tres de manejo activo y dos de pronóstico/retorno funcional.\n\n### 3.7 D'... 5125 more characters,
+    expected: /80\/100 o más/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/privacy-hardening-clean-extract.test.mjs:30:1
+✖ el POST SSO productivo de Estudiante permanece intacto (12.905289ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /const SSO_ENDPOINT = "https:\/\/kinecheck-clinico\.emmanuelkine\.chatgpt\.site\/api\/license\/sso"/. Input:
+  
+  'const CONFIG = window.KINECHECK_ACADEMY_CONFIG;\n' +
+    'const SESSION_KEY = "kinecheck_secure_session_v1";\n' +
+    'const LAST_PRODUCT_KEY = "kinecheck_last_product_v1";\n' +
+    'const COURSE_PROGRESS_KEY = "kinecheck_academy_progress_v1";\n' +
+    'const ACCESS_HISTORY_KEY = "kinecheck_academy_history_v1";\n' +
+    'const CONTRAST_KEY = "kinecheck_academy_high_contrast_v1";\n' +
+    'const POST_PURCHASE_RETRIES = 4;\n' +
+    'const POST_PURCHASE_DELAY_MS = 5000;\n' +
+    'const SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "").replace(/\\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;\n' +
+    'const SSO_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";\n' +
+    'const SSO_PRODUCTS = new Set(["kinecheck-estudiante"]);\n' +
+    'const PAUSED_PRODUCT = "kinecheck-recupera";\n' +
+    'const OTEC_PREPARATION_COURSES = new Set([\n' +
+    '  "kinecheck-clinico-curso",\n' +
+    '  "comunicacion-clinica",\n' +
+    '  "mas-alla-del-dolor",\n' +
+    '  "evidencia-aplicada",\n' +
+    '  "traumatologia-ortopedia-clinica",\n' +
+    '  "dolor-lumbar-persistente",\n' +
+    '  "dolor-musculoesqueletico",\n' +
+    ']);\n' +
+    '\n' +
+    'const $ = (selector) => document.querySelector(selector);\n' +
+    'const loginView = $("#login-view");\n' +
+    'const dashboardView = $("#dashboard-view");\n' +
+    'const form = $("#auth-form");\n' +
+    'const emailInput = $("#email");\n' +
+    'const passwordInput = $("#password");\n' +
+    'const message = $("#auth-message");\n' +
+    'const progress = $("#auth-progress");\n' +
+    'const loginTab = $("#login-tab");\n' +
+    'const signupTab = $("#signup-tab");\n' +
+    'const submit = $("#auth-submit");\n' +
+    'const signOut = $("#sign-out");\n' +
+    'const grid = $("#course-grid");\n' +
+    'const libraryMessage = $("#library-message");\n' +
+    'const welcome = $("#welcome");\n' +
+    'const accountEmail = $("#account-email");\n' +
+    'const accountGreeting = $("#account-greeting");\n' +
+    'const activeCount = $("#active-license-count");\n' +
+    'const sidebarAccess = $("#sidebar-access");\n' +
+    'const sidebarEmail = $("#sidebar-email");\n' +
+    'const searchInput = $("#library-search");\n' +
+    'const continueHeading = $("#continue-heading");\n' +
+    'const continueCopy = $("#continue-copy");\n' +
+    'const continueButton = $("#continue-button");\n' +
+    'const currentYear = $("#current-year");\n' +
+    'const sidebar = $("#academy-sidebar");\n' +
+    'const sidebarOverlay = $("#sidebar-overlay");\n' +
+    'const mobileMenu = $("#mobile-menu");\n' +
+    'const onboarding = $("#onboarding");\n' +
+    'const onboardingAction = $("#onboarding-action");\n' +
+    'const profileEmail = $("#profile-email");\n' +
+    'const profileAccess = $("#profile-access");\n' +
+    'const accessHistory = $("#access-history");\n' +
+    'const contrastToggle = $("#contrast-toggle");\n' +
+    'const accountAvatar = $("#account-avatar");\n' +
+    'const supportPanel = $("#support-panel");\n' +
+    'const supportLauncher = $("#support-launcher");\n' +
+    '\n' +
+    'let mode = "login";\n' +
+    'let currentFilter = "all";\n' +
+    'let searchQuery = "";\n' +
+    'let licenseState = new Map();\n' +
+    'let ownerMode = false;\n' +
+    'let betaMode = false;\n' +
+    'let betaState = { recognized: false, active: false, expiresAt: null, daysRemaining: 0 };\n' +
+    'let activeStorageScope = "anonymous";\n' +
+    'let transientSession = null;\n' +
+    'let nativeSessionActivation = null;\n' +
+    '\n' +
+    'window.KINECHECK_ACADEMY_SESSION = Object.freeze({\n' +
+    '  get() {\n' +
+    '    if (transientSession?.access_token) return transientSession;\n' +
+    '    return readSession();\n' +
+    '  },\n' +
+    '  async refresh() {\n' +
+    '    return validSession();\n' +
+    '  },\n' +
+    '});\n' +
+    '\n' +
+    'function normalizeEmail(value) {\n' +
+    '  return String(value || "").trim().toLowerCase();\n' +
+    '}\n' +
+    '\n' +
+    'function authHeaders(token) {\n' +
+    '  const headers = {\n' +
+    '    apikey: CONFIG.supabaseAnonKey,\n' +
+    '    "Content-Type": "application/json",\n' +
+    '  };\n' +
+    '  if (token) headers.Authorization = `Bearer ${token}`;\n' +
+    '  return headers;\n' +
+    '}\n' +
+    '\n' +
+    'async function request(path, options = {}) {\n' +
+    '  // Password authentication uses the server-side limiter instead of the direct Auth endpoint.\n' +
+    '  const safePath = path === "/auth/v1/token?grant_type=password"\n' +
+    '    ? "/functions/v1/platform-login"\n' +
+    '    : path;\n' +
+    '  const response = await fetch(`${CONFIG.supabaseUrl}${safePath}`, {\n' +
+    '    ...options,\n' +
+    '    headers: { ...authHeaders(options.token), ...(options.headers || {}) },\n' +
+    '  });\n' +
+    '  const data = await response.json().catch(() => ({}));\n' +
+    '  if (!response.ok) {\n' +
+    '    const error = new Error(\n' +
+    '      data.message || data.error_description || data.msg || data.error || "Solicitud rechazada",\n' +
+    '    );\n' +
+    '    error.status = response.status;\n' +
+    '    throw error;\n' +
+    '  }\n' +
+    '  return data;\n' +
+    '}\n' +
+    '\n' +
+    'function saveSession(session) {\n' +
+    '  const expiresAt = session.expires_at\n' +
+    '    || Math.floor(Date.now() / 1000) + Number(session.expires_in || 3600);\n' +
+    '  localStorage.setItem(SESSION_KEY, JSON.stringify({ ...session, expires_at: expiresAt }));\n' +
+    '}\n' +
+    '\n' +
+    'function readSession() {\n' +
+    '  try {\n' +
+    '    return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");\n' +
+    '  } catch {\n' +
+    '    return null;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'function clearSession() {\n' +
+    '  localStorage.removeItem(SESSION_KEY);\n' +
+    '  transientSession = null;\n' +
+    '  try {\n' +
+    '    delete window.__KINECHECK_NATIVE_ACCESS_TOKEN__;\n' +
+    '  } catch {\n' +
+    '    window.__KINECHECK_NATIVE_ACCESS_TOKEN__ = "";\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'function readStoredJson(key, fallback) {\n' +
+    '  try {\n' +
+    '    const parsed = JSON.parse(localStorage.getItem(key) || "null");\n' +
+    '    return parsed ?? fallback;\n' +
+    '  } catch {\n' +
+    '    return fallback;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'function clampPercent(value) {\n' +
+    '  return Math.max(0, Math.min(100, Math.round(Number(value) || 0)));\n' +
+    '}\n' +
+    '\n' +
+    'function scopedStorageKey(baseKey) {\n' +
+    '  return `${baseKey}:${activeStorageScope}`;\n' +
+    '}\n' +
+    '\n' +
+    'function readProgressState() {\n' +
+    '  const stored = readStoredJson(scopedStorageKey(COURSE_PROGRESS_KEY), {});\n' +
+    '  return stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};\n' +
+    '}\n' +
+    '\n' +
+    'function courseProgress(course) {\n' +
+    '  const record = readProgressState()[course.slug] || {};\n' +
+    '  const percent = clampPercent(record.percent);\n' +
+    '  const started = percent > 0 || Boolean(record.startedAt || record.lastOpenedAt);\n' +
+    '  const totalModules = Math.max(0, Number(record.totalModules || course.modules || 0));\n' +
+    '  const completedModules = Math.min(\n' +
+    '    totalModules,\n' +
+    '    Math.max(0, Number(record.completedModules || 0)),\n' +
+    '  );\n' +
+    '  const minutesRemaining = Math.max(0, Number(record.minutesRemaining || 0));\n' +
+    '\n' +
+    '  return {\n' +
+    '    ...record,\n' +
+    '    percent,\n' +
+    '    measured: record.measurementRecorded === true || percent > 1 || completedModules > 0,\n' +
+    '    started,\n' +
+    '    totalModules,\n' +
+    '    completedModules,\n' +
+    '    minutesRemaining,\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    'function writeProgress(slug, update) {\n' +
+    '  const state = readProgressState();\n' +
+    '  const current = state[slug] || {};\n' +
+    '  state[slug] = { ...current, ...update };\n' +
+    '  localStorage.setItem(scopedStorageKey(COURSE_PROGRESS_KEY), JSON.stringify(state));\n' +
+    '}\n' +
+    '\n' +
+    'function readAccessHistory() {\n' +
+    '  const history = readStoredJson(scopedStorageKey(ACCESS_HISTORY_KEY), []);\n' +
+    '  return Array.isArray(history) ? history : [];\n' +
+    '}\n' +
+    '\n' +
+    'function writeAccessHistory(course, openedAt) {\n' +
+    '  const history = readAccessHistory().filter((item) => item.slug !== course.slug);\n' +
+    '  history.unshift({ slug: course.slug, title: course.title, openedAt });\n' +
+    '  localStorage.setItem(scopedStorageKey(ACCESS_HISTORY_KEY), JSON.stringify(history.slice(0, 6)));\n' +
+    '}\n' +
+    '\n' +
+    'function formatShortDate(value) {\n' +
+    '  const date = new Date(value || 0);\n' +
+    '  if (Number.isNaN(date.getTime())) return "";\n' +
+    '  return new Intl.DateTimeFormat("es-CL", {\n' +
+    '    day: "2-digit",\n' +
+    '    month: "short",\n' +
+    '    hour: "2-digit",\n' +
+    '    minute: "2-digit",\n' +
+    '  }).format(date);\n' +
+    '}\n' +
+    '\n' +
+    'function formatMinutes(value) {\n' +
+    '  const minutes = Math.max(0, Number(value) || 0);\n' +
+    '  if (!minutes) return "";\n' +
+    '  if (minutes < 60) return `${minutes} min`;\n' +
+    '  const hours = Math.floor(minutes / 60);\n' +
+    '  const remainder = minutes % 60;\n' +
+    '  return remainder ? `${hours} h ${remainder} min` : `${hours} h`;\n' +
+    '}\n' +
+    '\n' +
+    'async function refreshSession(session) {\n' +
+    '  if (!session?.refresh_token) throw new Error("No existe una sesión renovable.");\n' +
+    '  const refreshed = await request("/auth/v1/token?grant_type=refresh_token", {\n' +
+    '    method: "POST",\n' +
+    '    body: JSON.stringify({ refresh_token: session.refresh_token }),\n' +
+    '  });\n' +
+    '  saveSession(refreshed);\n' +
+    '  return refreshed;\n' +
+    '}\n' +
+    '\n' +
+    'async function validateIdentity(session, persist = true) {\n' +
+    '  const user = await request("/auth/v1/user", {\n' +
+    '    method: "GET",\n' +
+    '    token: session.access_token,\n' +
+    '  });\n' +
+    '  const verified = { ...session, user };\n' +
+    '  if (persist) saveSession(verified);\n' +
+    '  return verified;\n' +
+    '}\n' +
+    '\n' +
+    'async function validSession() {\n' +
+    '  if (transientSession?.access_token) {\n' +
+    '    if (Number(transientSession.expires_at || 0) <= Math.floor(Date.now() / 1000) + 30) {\n' +
+    '      transientSession = null;\n' +
+    '      return null;\n' +
+    '    }\n' +
+    '    try {\n' +
+    '      transientSession = await validateIdentity(transientSession, false);\n' +
+    '      return transientSession;\n' +
+    '    } catch {\n' +
+    '      transientSession = null;\n' +
+    '      return null;\n' +
+    '    }\n' +
+    '  }\n' +
+    '\n' +
+    '  let session = readSession();\n' +
+    '  if (!session?.access_token) return null;\n' +
+    '\n' +
+    '  try {\n' +
+    '    if (Number(session.expires_at || 0) <= Math.floor(Date.now() / 1000) + 60) {\n' +
+    '      session = await refreshSession(session);\n' +
+    '    }\n' +
+    '    return await validateIdentity(session);\n' +
+    '  } catch {\n' +
+    '    try {\n' +
+    '      session = await refreshSession(session);\n' +
+    '      return await validateIdentity(session);\n' +
+    '    } catch {\n' +
+    '      clearSession();\n' +
+    '      return null;\n' +
+    '    }\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'function accessTokenExpiry(token) {\n' +
+    '  if (typeof token !== "string" || !/^[A-Za-z0-9._~-]{20,8192}$/.test(token)) return 0;\n' +
+    '  try {\n' +
+    '    const parts = token.split(".");\n' +
+    '    if (parts.length !== 3) return 0;\n' +
+    '    const normalized = parts[1].replace(/-/g, "+").replace(/_/g, "/");\n' +
+    '    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);\n' +
+    '    const claims = JSON.parse(atob(padded));\n' +
+    '    const expiresAt = Number(claims?.exp);\n' +
+    '    return Number.isFinite(expiresAt) ? Math.floor(expiresAt) : 0;\n' +
+    '  } catch {\n' +
+    '    return 0;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'function consumeNativeAccessToken() {\n' +
+    '  const token = typeof window.__KINECHECK_NATIVE_ACCESS_TOKEN__ === "string"\n' +
+    '    ? window.__KINECHECK_NATIVE_ACCESS_TOKEN__\n' +
+    '    : "";\n' +
+    '  try {\n' +
+    '    delete window.__KINECHECK_NATIVE_ACCESS_TOKEN__;\n' +
+    '  } catch {\n' +
+    '    window.__KINECHECK_NATIVE_ACCESS_TOKEN__ = "";\n' +
+    '  }\n' +
+    '  return /^[A-Za-z0-9._~-]{20,8192}$/.test(token) ? token : "";\n' +
+    '}\n' +
+    '\n' +
+    'async function receiveNativeSession() {\n' +
+    '  const accessToken = consumeNativeAccessToken();\n' +
+    '  if (!accessToken) return false;\n' +
+    '  if (transientSession?.access_token === accessToken) return true;\n' +
+    '  if (nativeSessionActivation) return nativeSessionActivation;\n' +
+    '\n' +
+    '  nativeSessionActivation = (async () => {\n' +
+    '    const expiresAt = accessTokenExpiry(accessToken);\n' +
+    '    if (expiresAt <= Math.floor(Date.now() / 1000) + 30) {\n' +
+    '      throw new Error("La sesión '... 28856 more characters
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/privacy-hardening-clean-extract.test.mjs:36:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'const CONFIG = window.KINECHECK_ACADEMY_CONFIG;\nconst SESSION_KEY = "kinecheck_secure_session_v1";\nconst LAST_PRODUCT_KEY = "kinecheck_last_product_v1";\nconst COURSE_PROGRESS_KEY = "kinecheck_academy_progress_v1";\nconst ACCESS_HISTORY_KEY = "kinecheck_academy_history_v1";\nconst CONTRAST_KEY = "kinecheck_academy_high_contrast_v1";\nconst POST_PURCHASE_RETRIES = 4;\nconst POST_PURCHASE_DELAY_MS = 5000;\nconst SSO_ENDPOINT = `${String(CONFIG.appSso?.baseUrl || "").replace(/\\/$/, "")}${CONFIG.appSso?.postPath || "/api/license/sso"}`;\nconst SSO_HANDOFF_TYPE = "kinecheck-sso-v3-access-only";\nconst SSO_PRODUCTS = new Set(["kinecheck-estudiante"]);\nconst PAUSED_PRODUCT = "kinecheck-recupera";\nconst OTEC_PREPARATION_COURSES = new Set([\n  "kinecheck-clinico-curso",\n  "comunicacion-clinica",\n  "mas-alla-del-dolor",\n  "evidencia-aplicada",\n  "traumatologia-ortopedia-clinica",\n  "dolor-lumbar-persistente",\n  "dolor-musculoesqueletico",\n]);\n\nconst $ = (selector) => document.querySelector(selector);\nconst loginView = $("#login-view");\nconst dashboardView = $("#dashboard-view");\nconst form = $("#auth-form");\nconst emailInput = $("#email");\nconst passwordInput = $("#password");\nconst message = $("#auth-message");\nconst progress = $("#auth-progress");\nconst loginTab = $("#login-tab");\nconst signupTab = $("#signup-tab");\nconst submit = $("#auth-submit");\nconst signOut = $("#sign-out");\nconst grid = $("#course-grid");\nconst libraryMessage = $("#library-message");\nconst welcome = $("#welcome");\nconst accountEmail = $("#account-email");\nconst accountGreeting = $("#account-greeting");\nconst activeCount = $("#active-license-count");\nconst sidebarAccess = $("#sidebar-access");\nconst sidebarEmail = $("#sidebar-email");\nconst searchInput = $("#library-search");\nconst continueHeading = $("#continue-heading");\nconst continueCopy = $("#continue-copy");\nconst continueButton = $("#continue-button");\nconst currentYear = $("#current-year");\nconst sidebar = $("#academy-sidebar");\nconst sidebarOverlay = $("#sidebar-overlay");\nconst mobileMenu = $("#mobile-menu");\nconst onboarding = $("#onboarding");\nconst onboardingAction = $("#onboarding-action");\nconst profileEmail = $("#profile-email");\nconst profileAccess = $("#profile-access");\nconst accessHistory = $("#access-history");\nconst contrastToggle = $("#contrast-toggle");\nconst accountAvatar = $("#account-avatar");\nconst supportPanel = $("#support-panel");\nconst supportLauncher = $("#support-launcher");\n\nlet mode = "login";\nlet currentFilter = "all";\nlet searchQuery = "";\nlet licenseState = new Map();\nlet ownerMode = false;\nlet betaMode = false;\nlet betaState = { recognized: false, active: false, expiresAt: null, daysRemaining: 0 };\nlet activeStorageScope = "anonymous";\nlet transientSession = null;\nlet nativeSessionActivation = null;\n\nwindow.KINECHECK_ACADEMY_SESSION = Object.freeze({\n  get() {\n    if (transientSession?.access_token) return transientSession;\n    return readSession();\n  },\n  async refresh() {\n    return validSession();\n  },\n});\n\nfunction normalizeEmail(value) {\n  return String(value || "").trim().toLowerCase();\n}\n\nfunction authHeaders(token) {\n  const headers = {\n    apikey: CONFIG.supabaseAnonKey,\n    "Content-Type": "application/json",\n  };\n  if (token) headers.Authorization = `Bearer ${token}`;\n  return headers;\n}\n\nasync function request(path, options = {}) {\n  // Password authentication uses the server-side limiter instead of the direct Auth endpoint.\n  const safePath = path === "/auth/v1/token?grant_type=password"\n    ? "/functions/v1/platform-login"\n    : path;\n  const response = await fetch(`${CONFIG.supabaseUrl}${safePath}`, {\n    ...options,\n    headers: { ...authHeaders(options.token), ...(options.headers || {}) },\n  });\n  const data = await response.json().catch(() => ({}));\n  if (!response.ok) {\n    const error = new Error(\n      data.message || data.error_description || data.msg || data.error || "Solicitud rechazada",\n    );\n    error.status = response.status;\n    throw error;\n  }\n  return data;\n}\n\nfunction saveSession(session) {\n  const expiresAt = session.expires_at\n    || Math.floor(Date.now() / 1000) + Number(session.expires_in || 3600);\n  localStorage.setItem(SESSION_KEY, JSON.stringify({ ...session, expires_at: expiresAt }));\n}\n\nfunction readSession() {\n  try {\n    return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");\n  } catch {\n    return null;\n  }\n}\n\nfunction clearSession() {\n  localStorage.removeItem(SESSION_KEY);\n  transientSession = null;\n  try {\n    delete window.__KINECHECK_NATIVE_ACCESS_TOKEN__;\n  } catch {\n    window.__KINECHECK_NATIVE_ACCESS_TOKEN__ = "";\n  }\n}\n\nfunction readStoredJson(key, fallback) {\n  try {\n    const parsed = JSON.parse(localStorage.getItem(key) || "null");\n    return parsed ?? fallback;\n  } catch {\n    return fallback;\n  }\n}\n\nfunction clampPercent(value) {\n  return Math.max(0, Math.min(100, Math.round(Number(value) || 0)));\n}\n\nfunction scopedStorageKey(baseKey) {\n  return `${baseKey}:${activeStorageScope}`;\n}\n\nfunction readProgressState() {\n  const stored = readStoredJson(scopedStorageKey(COURSE_PROGRESS_KEY), {});\n  return stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};\n}\n\nfunction courseProgress(course) {\n  const record = readProgressState()[course.slug] || {};\n  const percent = clampPercent(record.percent);\n  const started = percent > 0 || Boolean(record.startedAt || record.lastOpenedAt);\n  const totalModules = Math.max(0, Number(record.totalModules || course.modules || 0));\n  const completedModules = Math.min(\n    totalModules,\n    Math.max(0, Number(record.completedModules || 0)),\n  );\n  const minutesRemaining = Math.max(0, Number(record.minutesRemaining || 0));\n\n  return {\n    ...record,\n    percent,\n    measured: record.measurementRecorded === true || percent > 1 || completedModules > 0,\n    started,\n    totalModules,\n    completedModules,\n    minutesRemaining,\n  };\n}\n\nfunction writeProgress(slug, update) {\n  const state = readProgressState();\n  const current = state[slug] || {};\n  state[slug] = { ...current, ...update };\n  localStorage.setItem(scopedStorageKey(COURSE_PROGRESS_KEY), JSON.stringify(state));\n}\n\nfunction readAccessHistory() {\n  const history = readStoredJson(scopedStorageKey(ACCESS_HISTORY_KEY), []);\n  return Array.isArray(history) ? history : [];\n}\n\nfunction writeAccessHistory(course, openedAt) {\n  const history = readAccessHistory().filter((item) => item.slug !== course.slug);\n  history.unshift({ slug: course.slug, title: course.title, openedAt });\n  localStorage.setItem(scopedStorageKey(ACCESS_HISTORY_KEY), JSON.stringify(history.slice(0, 6)));\n}\n\nfunction formatShortDate(value) {\n  const date = new Date(value || 0);\n  if (Number.isNaN(date.getTime())) return "";\n  return new Intl.DateTimeFormat("es-CL", {\n    day: "2-digit",\n    month: "short",\n    hour: "2-digit",\n    minute: "2-digit",\n  }).format(date);\n}\n\nfunction formatMinutes(value) {\n  const minutes = Math.max(0, Number(value) || 0);\n  if (!minutes) return "";\n  if (minutes < 60) return `${minutes} min`;\n  const hours = Math.floor(minutes / 60);\n  const remainder = minutes % 60;\n  return remainder ? `${hours} h ${remainder} min` : `${hours} h`;\n}\n\nasync function refreshSession(session) {\n  if (!session?.refresh_token) throw new Error("No existe una sesión renovable.");\n  const refreshed = await request("/auth/v1/token?grant_type=refresh_token", {\n    method: "POST",\n    body: JSON.stringify({ refresh_token: session.refresh_token }),\n  });\n  saveSession(refreshed);\n  return refreshed;\n}\n\nasync function validateIdentity(session, persist = true) {\n  const user = await request("/auth/v1/user", {\n    method: "GET",\n    token: session.access_token,\n  });\n  const verified = { ...session, user };\n  if (persist) saveSession(verified);\n  return verified;\n}\n\nasync function validSession() {\n  if (transientSession?.access_token) {\n    if (Number(transientSession.expires_at || 0) <= Math.floor(Date.now() / 1000) + 30) {\n      transientSession = null;\n      return null;\n    }\n    try {\n      transientSession = await validateIdentity(transientSession, false);\n      return transientSession;\n    } catch {\n      transientSession = null;\n      return null;\n    }\n  }\n\n  let session = readSession();\n  if (!session?.access_token) return null;\n\n  try {\n    if (Number(session.expires_at || 0) <= Math.floor(Date.now() / 1000) + 60) {\n      session = await refreshSession(session);\n    }\n    return await validateIdentity(session);\n  } catch {\n    try {\n      session = await refreshSession(session);\n      return await validateIdentity(session);\n    } catch {\n      clearSession();\n      return null;\n    }\n  }\n}\n\nfunction accessTokenExpiry(token) {\n  if (typeof token !== "string" || !/^[A-Za-z0-9._~-]{20,8192}$/.test(token)) return 0;\n  try {\n    const parts = token.split(".");\n    if (parts.length !== 3) return 0;\n    const normalized = parts[1].replace(/-/g, "+").replace(/_/g, "/");\n    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);\n    const claims = JSON.parse(atob(padded));\n    const expiresAt = Number(claims?.exp);\n    return Number.isFinite(expiresAt) ? Math.floor(expiresAt) : 0;\n  } catch {\n    return 0;\n  }\n}\n\nfunction consumeNativeAccessToken() {\n  const token = typeof window.__KINECHECK_NATIVE_ACCESS_TOKEN__ === "string"\n    ? window.__KINECHECK_NATIVE_ACCESS_TOKEN__\n    : "";\n  try {\n    delete window.__KINECHECK_NATIVE_ACCESS_TOKEN__;\n  } catch {\n    window.__KINECHECK_NATIVE_ACCESS_TOKEN__ = "";\n  }\n  return /^[A-Za-z0-9._~-]{20,8192}$/.test(token) ? token : "";\n}\n\nasync function receiveNativeSession() {\n  const accessToken = consumeNativeAccessToken();\n  if (!accessToken) return false;\n  if (transientSession?.access_token === accessToken) return true;\n  if (nativeSessionActivation) return nativeSessionActivation;\n\n  nativeSessionActivation = (async () => {\n    const expiresAt = accessTokenExpiry(accessToken);\n    if (expiresAt <= Math.floor(Date.now() / 1000) + 30) {\n      throw new Error("La sesión '... 28856 more characters,
+    expected: /const SSO_ENDPOINT = "https:\/\/kinecheck-clinico\.emmanuelkine\.chatgpt\.site\/api\/license\/sso"/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/public-home-source-regression.test.mjs:45:1
+✖ la portada agrupa el título móvil sin partir palabras clínicas (11.727672ms)
+  AssertionError [ERR_ASSERTION]: falta primera línea
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/public-home-source-regression.test.mjs:48:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/public-home-source-regression.test.mjs:56:1
+✖ la portada referencia assets críticos existentes y versionados (46.185268ms)
+  AssertionError [ERR_ASSERTION]: falta asset crítico ./metrics-v1.js?v=20260925-consent1
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/public-home-source-regression.test.mjs:72:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/public-source-regression.test.mjs:80:1
+✖ la portada simplificada conserva soporte, tres perfiles y acceso canónico (72.398297ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 3
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/public-source-regression.test.mjs:85:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/public-source-regression.test.mjs:111:1
+✖ la arquitectura de marca queda distribuida por perfil sin duplicarse en portada (21.288709ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(home.includes("Estoy en recuperación"))
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/public-source-regression.test.mjs:117:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/public-source-regression.test.mjs:177:1
+✖ los perfiles activos publican precios y Recupera permanece sin compra (6.845343ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(students.includes("RECOMENDADO"))
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/public-source-regression.test.mjs:194:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/public-source-regression.test.mjs:270:1
+✖ la política conserva la advertencia sin certificación completa de nueve garantías (4.116097ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(refunds.includes("Pendiente de certificación comercial"))
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/e19a565378bc/kinecheck/tests/public-source-regression.test.mjs:273:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

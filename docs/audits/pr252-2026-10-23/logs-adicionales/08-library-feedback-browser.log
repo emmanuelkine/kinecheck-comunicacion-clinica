@@ -1,0 +1,24 @@
+(node:103) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/e19a565378bc/kinecheck/functions/api/library-feedback.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/e19a565378bc/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Local synthetic records and rate-limit keys removed; no production data touched.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+    at /workspace/scratch/e19a565378bc/kinecheck/tests/library-feedback-browser.mjs:64:28 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.19.0
