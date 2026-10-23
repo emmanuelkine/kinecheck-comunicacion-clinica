@@ -24,3 +24,5 @@ for(const path of assets){
 }
 console.log(JSON.stringify({assetCount:assets.length,findings,skipped,pixelTextReview:'Required separately for raster images; automated metadata scan cannot certify embedded pixels'},null,2));
 if(findings.length||skipped.length)process.exitCode=1;
+
+// Brand audit covers metadata and extractable text; raster pixel inspection remains a separate visual review.
