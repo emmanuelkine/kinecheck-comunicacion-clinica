@@ -123,7 +123,7 @@ for (const viewport of [
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto(`${BASE}/?qa=public-visual-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
 
-    await expect(page.locator("h1")).toContainText(/evaluación musculoesquelética y razonamiento clínico/i);
+    await expect(page.locator("h1")).toContainText(/aprende a evaluar mejor/i);
     await expect(page.locator(".kc-testimonial")).toHaveCount(8);
     await expect(page.locator(".kc-stars")).toHaveCount(0);
     await expect(page.locator("body")).not.toContainText("★★★★★");
@@ -147,7 +147,7 @@ for (const viewport of [
       await expect(menu).toHaveAttribute("aria-expanded", "false");
     }
 
-    const profileCta = page.getByRole("link", { name: "Elegir mi perfil" }).first();
+    const profileCta = page.getByRole("link", { name: "Conocer la formación" }).first();
     await profileCta.click();
     await expect(page.locator("#elige")).toBeInViewport();
 
