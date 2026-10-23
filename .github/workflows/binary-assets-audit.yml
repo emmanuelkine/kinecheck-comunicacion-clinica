@@ -54,3 +54,62 @@ jobs:
           path: /tmp/kinecheck-regressions.log
           if-no-files-found: error
           retention-days: 14
+  browser-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Install the runner matching the locked Playwright version
+        run: npm install --no-save --package-lock=false @playwright/test@1.62.1
+      - name: Install Chromium
+        run: npx --no-install playwright install --with-deps chromium
+      - name: Prepare isolated browser suite and local static server
+        run: |
+          mkdir -p /tmp/kinecheck-browser-audit
+          cat > /tmp/kinecheck-browser-config.mjs <<'JS'
+          export default {
+            testDir: process.env.GITHUB_WORKSPACE + '/tests',
+            testMatch: ['academy-initialization.spec.mjs', 'app-sso-relay.spec.mjs', 'clinico-buttons.spec.mjs', 'live-academy-runtime.spec.mjs', 'owned-buttons.spec.mjs', 'privacy-hardening-clean-extract.spec.mjs', 'recommended-buttons.spec.mjs', 'tester-p0-access-sso.spec.mjs', 'tester-visual-audit.spec.mjs'],
+            retries: 0,
+            workers: 4,
+            timeout: 30000,
+            reporter: [['json', { outputFile: '/tmp/kinecheck-browser-audit/playwright.json' }]],
+            outputDir: '/tmp/kinecheck-browser-audit/output',
+            use: { headless: true, baseURL: 'http://127.0.0.1:4173' },
+          };
+          JS
+          nohup python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/kinecheck-browser-audit/server.log 2>&1 &
+      - name: Run all 57 Playwright runner cases against local files
+        env:
+          BASE_URL: http://127.0.0.1:4173
+        run: npx --no-install playwright test --config /tmp/kinecheck-browser-config.mjs
+      - name: Run every standalone browser and hardening test despite earlier failures
+        if: always()
+        env:
+          BASE_URL: http://127.0.0.1:4173
+          FEEDBACK_QA_DIR: /tmp/kinecheck-browser-audit/feedback
+        run: |
+          mkdir -p /tmp/kinecheck-browser-audit
+          result=0
+          for file in tests/launch-readiness-post-privacy.spec.mjs tests/launch-readiness-public.spec.mjs tests/mi-kinecheck-roles.spec.mjs tests/platform-hardening-post-privacy.spec.mjs tests/platform-hardening.spec.mjs tests/public-canonical-readiness.spec.mjs tests/library-feedback-browser.mjs tests/product-overflow-diagnostic.mjs; do
+            if timeout 150 node "$file" > "/tmp/kinecheck-browser-audit/$(basename "$file").log" 2>&1; then
+              echo "PASS $file"
+            else
+              result=1
+              echo "FAIL $file"
+            fi
+          done
+          exit "$result"
+      - name: Preserve every browser result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: browser-regressions-${{ github.run_id }}
+          path: /tmp/kinecheck-browser-audit
+          if-no-files-found: error
+          retention-days: 14
