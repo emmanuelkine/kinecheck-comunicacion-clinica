@@ -65,3 +65,10 @@ test('demo configuration points only at staging and public HTML uses DOM-built t
   assert.doesNotMatch(migration, /service_role/i);
   assert.match(headers, /horas-disponibles\/demo\/\*[\s\S]*X-Robots-Tag: noindex, nofollow[\s\S]*connect-src 'self' https:\/\/mhnqtyvwxytppekktvxb\.supabase\.co/);
 });
+
+test('implicit confirmation sessions hydrate the Supabase user id before owner-scoped writes', async () => {
+  const app = await readFile(new URL('../horas-disponibles/demo/demo.js', import.meta.url), 'utf8');
+  assert.match(app, /auth\/v1\/user/);
+  assert.match(app, /async function hydrateSessionUser\(\)/);
+  assert.match(app, /if \(!state\.session\?\.user\?\.id\) throw new Error\('La sesión no tiene una identidad válida/);
+});

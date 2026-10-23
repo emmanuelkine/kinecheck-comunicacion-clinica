@@ -32,9 +32,23 @@ async function refreshSession() {
   try { const fresh = await authRequest('token?grant_type=refresh_token', { refresh_token: state.session.refresh_token }); saveSession(fresh); return fresh; }
   catch { saveSession(null); return null; }
 }
+async function hydrateSessionUser() {
+  if (!state.session?.access_token || state.session.user?.id) return;
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    headers: apiHeaders({ Authorization: `Bearer ${state.session.access_token}` }),
+    cache: 'no-store',
+  });
+  const user = await response.json().catch(() => null);
+  if (!response.ok || !user?.id) {
+    saveSession(null);
+    throw new Error('La sesión no pudo validarse. Solicita un nuevo enlace de acceso.');
+  }
+  saveSession({ ...state.session, user });
+}
 async function ensureFreshSession() {
   if (!state.session) return;
   if (Number(state.session.expires_at || 0) < Date.now() / 1000 + 60) await refreshSession();
+  await hydrateSessionUser();
 }
 async function handleMagicLink() {
   const url = new URL(location.href);
@@ -53,6 +67,8 @@ async function handleMagicLink() {
     if (accessToken && refreshToken) {
       saveSession({ access_token: accessToken, refresh_token: refreshToken, expires_at: Number(hash.get('expires_at') || (Date.now() / 1000 + Number(hash.get('expires_in') || 3600))), user: { email: hash.get('user') || '' } });
       history.replaceState({}, '', url.pathname + url.search);
+      try { await hydrateSessionUser(); }
+      catch (error) { message('#authMessage', error.message, true); }
     }
   }
 }
@@ -120,6 +136,7 @@ async function saveProfile(event) {
   try {
     const profile = normalizeProfile(Object.fromEntries(new FormData(form)));
     await ensureFreshSession();
+    if (!state.session?.user?.id) throw new Error('La sesión no tiene una identidad válida. Solicita un nuevo enlace de acceso.');
     profile.user_id = state.session.user.id;
     profile.demo_identifier = state.profile?.demo_identifier || demoIdentifier();
     if (!state.profile) {
@@ -141,6 +158,7 @@ async function addSlot(event) {
   try {
     const startsAt = toLocalISO(form.elements.date.value, form.elements.time.value);
     await ensureFreshSession();
+    if (!state.session?.user?.id) throw new Error('La sesión no tiene una identidad válida. Solicita un nuevo enlace de acceso.');
     await rest('kc_demo_health_slots', { method: 'POST', body: { profile_id: state.profile.id, owner_user_id: state.session.user.id, starts_at: startsAt, status: 'active' }, prefer: 'return=minimal' });
     form.reset(); message('#slotMessage', 'Horario guardado. Actualizando la vista paciente…');
     await loadProfessional(); renderMySlots(); await loadPublicResults();
