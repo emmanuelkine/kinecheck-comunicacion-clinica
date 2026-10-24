@@ -156,18 +156,53 @@ async function saveProfile(event) {
   } catch (error) { message('#profileMessage', error.message, true); }
 }
 
+function addAvailabilityRow(copyDate = '') {
+  const rows = $('#slotRows');
+  if (rows.children.length >= 20) return message('#slotMessage', 'Puedes publicar hasta 20 horarios en una sola operación.', true);
+  const row = node('div', 'slot-entry');
+  const dateLabel = node('label', '', 'Fecha');
+  const date = node('input'); date.type = 'date'; date.className = 'slot-date'; date.required = true; date.min = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); date.value = copyDate;
+  dateLabel.append(date);
+  const timeLabel = node('label', '', 'Hora');
+  const time = node('input'); time.type = 'time'; time.className = 'slot-time'; time.required = true;
+  timeLabel.append(time);
+  const remove = node('button', 'button secondary remove-slot', 'Quitar'); remove.type = 'button';
+  remove.addEventListener('click', () => {
+    if (rows.children.length === 1) { date.value = ''; time.value = ''; return; }
+    row.remove(); updateAvailabilityRowControls();
+  });
+  row.append(dateLabel, timeLabel, remove); rows.append(row); updateAvailabilityRowControls();
+}
+
+function updateAvailabilityRowControls() {
+  const rows = $('#slotRows');
+  for (const button of rows.querySelectorAll('.remove-slot')) button.disabled = rows.children.length === 1;
+  $('#addSlotRow').disabled = rows.children.length >= 20;
+}
+
 async function addSlot(event) {
   event.preventDefault();
   if (!state.profile?.published) return message('#slotMessage', 'Guarda y activa primero un perfil DEMO.', true);
   const form = event.currentTarget;
   try {
-    const startsAt = toLocalISO(form.elements.date.value, form.elements.time.value);
+    const entries = [...form.querySelectorAll('.slot-entry')];
+    if (!entries.length || entries.some(row => !row.querySelector('.slot-date').value || !row.querySelector('.slot-time').value)) {
+      throw new Error('Completa fecha y hora en cada fila, o quita las filas que no usarás.');
+    }
+    const startsAtList = entries.map(row => toLocalISO(row.querySelector('.slot-date').value, row.querySelector('.slot-time').value));
+    if (new Set(startsAtList).size !== startsAtList.length) throw new Error('Hay una fecha y hora repetida en la lista. Elimínala antes de publicar.');
     await ensureFreshSession();
-    if (!state.session?.user?.id) throw new Error('La sesión no tiene una identidad válida. Solicita un nuevo enlace de acceso.');
-    await rest('kc_demo_health_slots', { method: 'POST', body: { profile_id: state.profile.id, owner_user_id: state.session.user.id, starts_at: startsAt, status: 'active' }, prefer: 'return=minimal' });
-    form.reset(); message('#slotMessage', 'Horario guardado. Actualizando la vista paciente…');
+    if (!isPilotTester() || !state.session?.user?.id) throw new Error(PILOT_MESSAGE);
+    await loadProfessional();
+    const existing = new Set(state.slots.map(slot => new Date(slot.starts_at).toISOString()));
+    const duplicate = startsAtList.find(value => existing.has(value));
+    if (duplicate) throw new Error('Uno de esos horarios ya está en “Mis horarios”. Modifica el existente o elige otra hora.');
+    const body = startsAtList.map(starts_at => ({ profile_id: state.profile.id, owner_user_id: state.session.user.id, starts_at, status: 'active' }));
+    await rest('kc_demo_health_slots', { method: 'POST', body, prefer: 'return=minimal' });
+    $('#slotRows').replaceChildren(); addAvailabilityRow();
+    message('#slotMessage', `${body.length} horario(s) guardado(s). Actualizando la vista paciente…`);
     await loadProfessional(); renderMySlots(); await loadPublicResults();
-    message('#slotMessage', 'Horario DEMO publicado y visible en el buscador.');
+    message('#slotMessage', `${body.length} horario(s) DEMO publicados y visibles en el buscador.`);
   } catch (error) { message('#slotMessage', error.message, true); }
 }
 
@@ -271,6 +306,8 @@ async function init() {
   document.querySelectorAll('.tab').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
   $('#magicLinkForm').addEventListener('submit', sendMagicLink); $('#profileForm').addEventListener('submit', saveProfile); $('#slotForm').addEventListener('submit', addSlot);
   $('#signOut').addEventListener('click', signOut); $('#unpublishProfile').addEventListener('click', deactivateProfile); $('#refreshSearch').addEventListener('click', loadPublicResults);
+  $('#addSlotRow').addEventListener('click', () => { const firstDate = $('#slotRows .slot-date')?.value || ''; addAvailabilityRow(firstDate); });
+  addAvailabilityRow();
   for (const control of document.querySelectorAll('#patientView input,#patientView select')) control.addEventListener('input', drawResults);
   for (const control of document.querySelectorAll('#patientView select')) control.addEventListener('change', drawResults);
   await handleMagicLink(); await ensureFreshSession(); renderWorkspace();
