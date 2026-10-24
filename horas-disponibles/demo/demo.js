@@ -130,60 +130,58 @@ async function loadInstitutionWorkspace() {
   const box = $('#institutionWorkspace'); box.replaceChildren();
   if (!isPilotTester() || !state.session?.user?.id) return;
   const userId = encodeURIComponent(state.session.user.id);
-  const institutions = await rest(`kc_demo_institutions?select=id,demo_identifier,name,region,comuna,booking_url,status&owner_user_id=eq.${userId}&order=created_at.desc&limit=20`);
-  const profiles = await rest(`kc_demo_health_profiles?select=id,demo_identifier,public_name,profession&user_id=eq.${userId}&limit=1`);
+  const [institutions, profiles] = await Promise.all([
+    rest(`kc_demo_institutions?select=id,demo_identifier,name,region,comuna,booking_url,status&owner_user_id=eq.${userId}&order=created_at.desc&limit=20`),
+    rest(`kc_demo_health_profiles?select=id,demo_identifier,public_name,profession&user_id=eq.${userId}&limit=1`),
+  ]);
   for (const institution of institutions || []) {
     const card = node('article', 'institution-card');
     card.append(node('div', 'tag', `${institution.demo_identifier} · INSTITUCIÓN DEMO`));
     card.append(node('h4', '', institution.name));
     card.append(node('p', 'meta', `${institution.comuna}, ${institution.region}`));
-    const url = node('p', 'small', institution.booking_url); card.append(url);
-    const request = node('button', 'button secondary', 'Solicitar vínculo del perfil'); request.type = 'button';
-    request.disabled = !profiles?.length;
-    request.addEventListener('click', async () => {
-      try {
-        await rest('kc_demo_institution_memberships', { method: 'POST', body: {
-          institution_id: institution.id, profile_id: profiles[0].id,
-          professional_user_id: state.session.user.id, status: 'pending',
-        }, prefer: 'return=minimal' });
-        message('#institutionMessage', 'Solicitud de vínculo creada. Cámbiate al rol coordinador DEMO para revisarla.');
-        await loadInstitutionWorkspace();
-      } catch (error) { message('#institutionMessage', error.message.includes('duplicate') ? 'Este perfil ya tiene una solicitud o vínculo con la institución.' : error.message, true); }
-    });
-    card.append(request);
+    card.append(node('p', 'small', institution.booking_url));
     const memberships = await rest(`kc_demo_institution_memberships?select=id,profile_id,status,created_at&institution_id=eq.${encodeURIComponent(institution.id)}&order=created_at.desc&limit=50`);
-    for (const membership of memberships || []) {
-      const profile = (profiles || []).find(item => item.id === membership.profile_id);
-      const row = node('div', 'institution-card');
-      row.append(node('p', 'meta', `${profile?.public_name || 'Perfil DEMO'} · ${profile?.profession || ''} · ${membership.status === 'pending' ? 'solicitud pendiente' : membership.status === 'active' ? 'vínculo activo' : 'solicitud rechazada'}`));
-      if (membership.status === 'pending') {
-        const actions = node('div', 'actions');
-        const approve = node('button', 'button', 'Confirmar vínculo'); approve.type = 'button';
-        approve.addEventListener('click', async () => {
-          try {
-            await rest(`kc_demo_institution_memberships?id=eq.${encodeURIComponent(membership.id)}`, { method: 'PATCH', body: { status: 'active', updated_at: new Date().toISOString() }, prefer: 'return=minimal' });
-            await rest(`kc_demo_health_profiles?id=eq.${encodeURIComponent(membership.profile_id)}`, { method: 'PATCH', body: {
-              exercise_type: 'institutional', institution_name: institution.name,
-              contact_type: 'institution_website', contact_value: institution.booking_url,
-              updated_at: new Date().toISOString(),
+    for (const profile of profiles || []) {
+      const membership = (memberships || []).find(item => item.profile_id === profile.id);
+      const enable = node('button', membership?.status === 'active' ? 'button secondary' : 'button',
+        membership?.status === 'active' ? 'Profesional habilitado' : 'Habilitar profesional en esta clínica');
+      enable.type = 'button';
+      enable.disabled = membership?.status === 'active';
+      enable.addEventListener('click', async () => {
+        try {
+          await ensureFreshSession();
+          if (membership) {
+            await rest(`kc_demo_institution_memberships?id=eq.${encodeURIComponent(membership.id)}`, {
+              method: 'PATCH', body: { status: 'active', updated_at: new Date().toISOString() }, prefer: 'return=minimal',
+            });
+          } else {
+            await rest('kc_demo_institution_memberships', { method: 'POST', body: {
+              institution_id: institution.id, profile_id: profile.id,
+              professional_user_id: profile.user_id || state.session.user.id, status: 'active',
             }, prefer: 'return=minimal' });
-            message('#institutionMessage', 'Vínculo confirmado. El perfil DEMO muestra ahora a la institución y su canal de agenda.');
-            await loadProfessional(); fillProfileForm(); await loadInstitutionWorkspace(); await loadPublicResults();
-          } catch (error) { message('#institutionMessage', error.message, true); }
-        });
-        const reject = node('button', 'button secondary', 'Rechazar'); reject.type = 'button';
-        reject.addEventListener('click', async () => {
-          try { await rest(`kc_demo_institution_memberships?id=eq.${encodeURIComponent(membership.id)}`, { method: 'PATCH', body: { status: 'rejected', updated_at: new Date().toISOString() }, prefer: 'return=minimal' }); await loadInstitutionWorkspace(); }
-          catch (error) { message('#institutionMessage', error.message, true); }
-        });
-        actions.append(approve, reject); row.append(actions);
-      }
+          }
+          await rest(`kc_demo_health_profiles?id=eq.${encodeURIComponent(profile.id)}`, { method: 'PATCH', body: {
+            exercise_type: 'institutional', institution_name: institution.name,
+            contact_type: 'institution_website', contact_value: institution.booking_url,
+            updated_at: new Date().toISOString(),
+          }, prefer: 'return=minimal' });
+          message('#institutionMessage', 'Profesional habilitado por la secretaría DEMO. Ya puede publicar horas vinculadas al canal institucional.');
+          await loadProfessional(); fillProfileForm(); await loadInstitutionWorkspace(); await loadPublicResults();
+        } catch (error) { message('#institutionMessage', error.message, true); }
+      });
+      card.append(enable);
+    }
+    for (const item of memberships || []) {
+      const profile = (profiles || []).find(candidate => candidate.id === item.profile_id);
+      const row = node('div', 'institution-card');
+      const status = item.status === 'active' ? 'habilitado por la secretaría DEMO' : item.status === 'pending' ? 'pendiente de habilitación' : item.status === 'revoked' ? 'deshabilitado' : 'no habilitado';
+      row.append(node('p', 'meta', `${profile?.public_name || 'Perfil DEMO'} · ${profile?.profession || ''} · ${status}`));
       card.append(row);
     }
     box.append(card);
   }
   if (!institutions?.length) box.append(node('p', 'small', 'Todavía no hay instituciones DEMO. Crea una con datos ficticios para recorrer el flujo.'));
-  if (!profiles?.length) box.append(node('p', 'small', 'Para solicitar un vínculo, primero guarda un perfil profesional DEMO.'));
+  if (!profiles?.length) box.append(node('p', 'small', 'Para habilitar a un profesional, primero guarda un perfil profesional DEMO.'));
 }
 
 async function createInstitution(event) {
