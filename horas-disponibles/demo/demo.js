@@ -184,6 +184,9 @@ async function addSlot(event) {
   event.preventDefault();
   if (!state.profile?.published) return message('#slotMessage', 'Guarda y activa primero un perfil DEMO.', true);
   const form = event.currentTarget;
+  if (form.dataset.submitting === 'true') return;
+  form.dataset.submitting = 'true';
+  const submit = form.querySelector('[type="submit"]'); submit.disabled = true;
   try {
     const entries = [...form.querySelectorAll('.slot-entry')];
     if (!entries.length || entries.some(row => !row.querySelector('.slot-date').value || !row.querySelector('.slot-time').value)) {
@@ -204,6 +207,7 @@ async function addSlot(event) {
     await loadProfessional(); renderMySlots(); await loadPublicResults();
     message('#slotMessage', `${body.length} horario(s) DEMO publicados y visibles en el buscador.`);
   } catch (error) { message('#slotMessage', error.message, true); }
+  finally { form.dataset.submitting = 'false'; submit.disabled = false; updateAvailabilityRowControls(); }
 }
 
 async function mutateSlot(id, action, newISO) {
