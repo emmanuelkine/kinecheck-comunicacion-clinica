@@ -362,6 +362,9 @@ function drawResults() {
     card.append(node('p', 'meta', `Modalidad ${profile.modality} · ${fmtDate(slot.starts_at)}`));
     if (profile.exercise_type === 'institutional') card.append(node('p', 'meta', `Institución demostrativa: ${profile.institution_name}`));
     card.append(node('p', 'small', 'Solicitud de contacto · la disponibilidad no es una reserva confirmada.'));
+    if (new Date(slot.starts_at).getTime() - Date.now() <= 2 * 60 * 60 * 1000) {
+      card.append(node('p', 'small', 'Esta hora está disponible con poca anticipación. Antes de continuar, asegúrate de que puedes llegar a tiempo. La reserva se completa en el sistema de la institución.'));
+    }
     const link = node('a', 'button', profile.exercise_type === 'institutional' ? 'Ir al canal institucional' : 'Contactar por WhatsApp');
     try { link.href = makeContactUrl(profile, slot.starts_at); link.target = '_blank'; link.rel = 'noopener noreferrer'; link.referrerPolicy = 'no-referrer'; }
     catch { link.removeAttribute('href'); link.setAttribute('aria-disabled', 'true'); }
