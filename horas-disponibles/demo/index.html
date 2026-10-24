@@ -23,18 +23,18 @@
     <section class="hero">
       <div class="eyebrow">ENTORNO AISLADO · DATOS DE PRUEBA</div>
       <h1>Disponibilidad visible.<br><span>Contacto en un paso.</span></h1>
-      <p class="lead">Publica horas de prueba como profesional y encuéntralas desde la vista paciente. Los datos se guardan en un entorno separado y no generan una reserva clínica.</p>
+      <p class="lead">Publica horas de prueba como profesional y encuéntralas desde la vista paciente. Los datos se guardan en un entorno separado y no generan reservas reales.</p>
       <div class="notice" role="note"><strong>Solo demostración.</strong> Usa nombres y contactos ficticios. No ingreses RUT, número de registro, datos clínicos ni información de pacientes. Ninguna hora mostrada corresponde a una atención real.</div>
     </section>
     <section class="panel institution-flow" aria-labelledby="institutionFlowHeading">
       <div class="eyebrow">FLUJO INSTITUCIONAL · DEMO</div>
-      <h2 id="institutionFlowHeading">La clínica autoriza. La secretaria habilita.</h2>
+      <h2 id="institutionFlowHeading">Cada centro organiza. KineCheck difunde.</h2>
       <div class="institution-flow-grid">
-        <article class="institution-flow-card"><span class="institution-step">1</span><h3>Autorización</h3><p>La clínica autoriza a la secretaria para administrar las horas.</p></article>
-        <article class="institution-flow-card"><span class="institution-step">2</span><h3>Publicación</h3><p>La secretaria habilita a sus profesionales. Ella o el profesional publica la hora disponible en KineCheck.</p></article>
-        <article class="institution-flow-card"><span class="institution-step">3</span><h3>Reserva en la clínica</h3><p>El paciente encuentra la hora, sigue el enlace oficial y reserva directamente con la clínica.</p></article>
+        <article class="institution-flow-card"><span class="institution-step">1</span><h3>Autorización</h3><p>La institución autoriza a la persona encargada y habilita a sus profesionales. En una consulta particular, el profesional administra su propio perfil.</p></article>
+        <article class="institution-flow-card"><span class="institution-step">2</span><h3>Publicación</h3><p>La persona encargada (por ejemplo, la secretaria) o el profesional publica la hora disponible en KineCheck.</p></article>
+        <article class="institution-flow-card"><span class="institution-step">3</span><h3>Reserva con el prestador</h3><p>El paciente encuentra la hora, sigue el enlace oficial del centro o profesional y completa allí la reserva.</p></article>
       </div>
-      <p class="institution-flow-note"><strong>Para evitar que una hora ya tomada siga apareciendo:</strong> tras confirmar la reserva, la secretaria o el profesional la marca como ocupada en KineCheck. KineCheck difunde y deriva; no accede ni modifica la agenda.</p>
+      <p class="institution-flow-note"><strong>Para evitar que una hora ya tomada siga apareciendo:</strong> tras confirmar la reserva en el canal oficial, la persona encargada o el profesional la marca como ocupada en KineCheck. KineCheck difunde y deriva; no accede ni modifica la agenda.</p>
     </section>
     <nav class="tabs" aria-label="Experiencias">
       <button class="tab active" data-view="patient" type="button">Soy paciente</button>
@@ -67,9 +67,9 @@
         <div class="section-head"><div><div class="eyebrow">SECRETARÍA Y PROFESIONAL · DEMO</div><h2>Administración de horas</h2></div><button id="signOut" class="button secondary" type="button">Cerrar sesión</button></div>
         <section class="panel form-panel" aria-labelledby="institutionHeading">
           <div class="eyebrow">VÍNCULO INSTITUCIONAL · DEMO</div><h3 id="institutionHeading">Institución y equipo profesional</h3>
-          <p class="small">Flujo institucional de prueba: la clínica autoriza a la secretaría y esta habilita a sus profesionales. En esta DEMO, ambos roles se representan con la cuenta de prueba autorizada. No se crean cuentas institucionales reales ni se habilita el registro público.</p>
+          <p class="small">Flujo institucional de prueba: la organización autoriza a la persona encargada y esta habilita a sus profesionales. En esta DEMO, ambos roles se representan con la cuenta de prueba autorizada. No se crean cuentas institucionales reales ni se habilita el registro público.</p>
           <form id="institutionForm" class="form-grid">
-            <label>Nombre ficticio de la clínica<input name="name" maxlength="140" required placeholder="Clínica Demo"></label>
+            <label>Nombre ficticio del centro o la consulta<input name="name" maxlength="140" required placeholder="Centro de atención Demo"></label>
             <label>Región<input name="region" maxlength="100" required placeholder="Región de prueba"></label>
             <label>Comuna<input name="comuna" maxlength="100" required placeholder="Comuna de prueba"></label>
             <label>Agenda institucional de prueba (HTTPS)<input name="booking_url" type="url" maxlength="1500" required placeholder="https://agenda.ejemplo.cl/demo"></label>
