@@ -124,6 +124,87 @@ async function loadProfessional() {
   else state.slots = [];
 }
 
+function organizationIdentifier() { return `DEMO-ORG-${crypto.randomUUID().replaceAll('-', '').slice(0, 12).toUpperCase()}`; }
+
+async function loadInstitutionWorkspace() {
+  const box = $('#institutionWorkspace'); box.replaceChildren();
+  if (!isPilotTester() || !state.session?.user?.id) return;
+  const userId = encodeURIComponent(state.session.user.id);
+  const institutions = await rest(`kc_demo_institutions?select=id,demo_identifier,name,region,comuna,booking_url,status&owner_user_id=eq.${userId}&order=created_at.desc&limit=20`);
+  const profiles = await rest(`kc_demo_health_profiles?select=id,demo_identifier,public_name,profession&user_id=eq.${userId}&limit=1`);
+  for (const institution of institutions || []) {
+    const card = node('article', 'institution-card');
+    card.append(node('div', 'tag', `${institution.demo_identifier} · INSTITUCIÓN DEMO`));
+    card.append(node('h4', '', institution.name));
+    card.append(node('p', 'meta', `${institution.comuna}, ${institution.region}`));
+    const url = node('p', 'small', institution.booking_url); card.append(url);
+    const request = node('button', 'button secondary', 'Solicitar vínculo del perfil'); request.type = 'button';
+    request.disabled = !profiles?.length;
+    request.addEventListener('click', async () => {
+      try {
+        await rest('kc_demo_institution_memberships', { method: 'POST', body: {
+          institution_id: institution.id, profile_id: profiles[0].id,
+          professional_user_id: state.session.user.id, status: 'pending',
+        }, prefer: 'return=minimal' });
+        message('#institutionMessage', 'Solicitud de vínculo creada. Cámbiate al rol coordinador DEMO para revisarla.');
+        await loadInstitutionWorkspace();
+      } catch (error) { message('#institutionMessage', error.message.includes('duplicate') ? 'Este perfil ya tiene una solicitud o vínculo con la institución.' : error.message, true); }
+    });
+    card.append(request);
+    const memberships = await rest(`kc_demo_institution_memberships?select=id,profile_id,status,created_at&institution_id=eq.${encodeURIComponent(institution.id)}&order=created_at.desc&limit=50`);
+    for (const membership of memberships || []) {
+      const profile = (profiles || []).find(item => item.id === membership.profile_id);
+      const row = node('div', 'institution-card');
+      row.append(node('p', 'meta', `${profile?.public_name || 'Perfil DEMO'} · ${profile?.profession || ''} · ${membership.status === 'pending' ? 'solicitud pendiente' : membership.status === 'active' ? 'vínculo activo' : 'solicitud rechazada'}`));
+      if (membership.status === 'pending') {
+        const actions = node('div', 'actions');
+        const approve = node('button', 'button', 'Confirmar vínculo'); approve.type = 'button';
+        approve.addEventListener('click', async () => {
+          try {
+            await rest(`kc_demo_institution_memberships?id=eq.${encodeURIComponent(membership.id)}`, { method: 'PATCH', body: { status: 'active', updated_at: new Date().toISOString() }, prefer: 'return=minimal' });
+            await rest(`kc_demo_health_profiles?id=eq.${encodeURIComponent(membership.profile_id)}`, { method: 'PATCH', body: {
+              exercise_type: 'institutional', institution_name: institution.name,
+              contact_type: 'institution_website', contact_value: institution.booking_url,
+              updated_at: new Date().toISOString(),
+            }, prefer: 'return=minimal' });
+            message('#institutionMessage', 'Vínculo confirmado. El perfil DEMO muestra ahora a la institución y su canal de agenda.');
+            await loadProfessional(); fillProfileForm(); await loadInstitutionWorkspace(); await loadPublicResults();
+          } catch (error) { message('#institutionMessage', error.message, true); }
+        });
+        const reject = node('button', 'button secondary', 'Rechazar'); reject.type = 'button';
+        reject.addEventListener('click', async () => {
+          try { await rest(`kc_demo_institution_memberships?id=eq.${encodeURIComponent(membership.id)}`, { method: 'PATCH', body: { status: 'rejected', updated_at: new Date().toISOString() }, prefer: 'return=minimal' }); await loadInstitutionWorkspace(); }
+          catch (error) { message('#institutionMessage', error.message, true); }
+        });
+        actions.append(approve, reject); row.append(actions);
+      }
+      card.append(row);
+    }
+    box.append(card);
+  }
+  if (!institutions?.length) box.append(node('p', 'small', 'Todavía no hay instituciones DEMO. Crea una con datos ficticios para recorrer el flujo.'));
+  if (!profiles?.length) box.append(node('p', 'small', 'Para solicitar un vínculo, primero guarda un perfil profesional DEMO.'));
+}
+
+async function createInstitution(event) {
+  event.preventDefault();
+  if (!isPilotTester() || !state.session?.user?.id) return message('#institutionMessage', PILOT_MESSAGE, true);
+  const form = event.currentTarget;
+  try {
+    const values = Object.fromEntries(new FormData(form));
+    const url = new URL(String(values.booking_url || ''));
+    if (url.protocol !== 'https:' || url.username || url.password) throw new Error('El enlace de agenda debe ser HTTPS y no incluir credenciales.');
+    await ensureFreshSession();
+    await rest('kc_demo_institutions', { method: 'POST', body: {
+      owner_user_id: state.session.user.id, demo_identifier: organizationIdentifier(),
+      name: cleanText(values.name, 140), region: cleanText(values.region, 100),
+      comuna: cleanText(values.comuna, 100), booking_url: url.href, status: 'active',
+    }, prefer: 'return=minimal' });
+    form.reset(); message('#institutionMessage', 'Institución DEMO creada. Ahora puedes vincular un perfil de prueba.');
+    await loadInstitutionWorkspace();
+  } catch (error) { message('#institutionMessage', error.message, true); }
+}
+
 function fillProfileForm() {
   const form = $('#profileForm'); form.reset();
   if (!state.profile) { $('#exerciseType').value = 'independent'; setContactFields(); return; }
@@ -152,7 +233,7 @@ async function saveProfile(event) {
       state.profile = rows[0] || { ...state.profile, ...profile };
     }
     message('#profileMessage', 'Perfil DEMO guardado. El identificador y los datos están aislados del servicio operativo.');
-    await loadProfessional(); fillProfileForm(); await loadPublicResults(); renderWorkspace();
+    await loadProfessional(); fillProfileForm(); await loadInstitutionWorkspace(); await loadPublicResults(); renderWorkspace();
   } catch (error) { message('#profileMessage', error.message, true); }
 }
 
@@ -309,13 +390,14 @@ async function init() {
   $('#exerciseType').addEventListener('change', setContactFields); setContactFields();
   document.querySelectorAll('.tab').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
   $('#magicLinkForm').addEventListener('submit', sendMagicLink); $('#profileForm').addEventListener('submit', saveProfile); $('#slotForm').addEventListener('submit', addSlot);
+  $('#institutionForm').addEventListener('submit', createInstitution);
   $('#signOut').addEventListener('click', signOut); $('#unpublishProfile').addEventListener('click', deactivateProfile); $('#refreshSearch').addEventListener('click', loadPublicResults);
   $('#addSlotRow').addEventListener('click', () => { const firstDate = $('#slotRows .slot-date')?.value || ''; addAvailabilityRow(firstDate); });
   addAvailabilityRow();
   for (const control of document.querySelectorAll('#patientView input,#patientView select')) control.addEventListener('input', drawResults);
   for (const control of document.querySelectorAll('#patientView select')) control.addEventListener('change', drawResults);
   await handleMagicLink(); await ensureFreshSession(); renderWorkspace();
-  if (isPilotTester()) { await loadProfessional(); fillProfileForm(); renderMySlots(); }
+  if (isPilotTester()) { await loadProfessional(); fillProfileForm(); renderMySlots(); await loadInstitutionWorkspace(); }
   await loadPublicResults();
 }
 init();

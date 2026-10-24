@@ -55,6 +55,19 @@
       </div>
       <div id="workspace" class="hidden">
         <div class="section-head"><div><div class="eyebrow">PANEL DEL PROFESIONAL</div><h2>Tu perfil demostrativo</h2></div><button id="signOut" class="button secondary" type="button">Cerrar sesión</button></div>
+        <section class="panel form-panel" aria-labelledby="institutionHeading">
+          <div class="eyebrow">VÍNCULO INSTITUCIONAL · DEMO</div><h3 id="institutionHeading">Clínica y profesional</h3>
+          <p class="small">Este módulo demuestra el flujo con datos ficticios: crear una institución, solicitar el vínculo del perfil y confirmarlo como coordinador. En esta DEMO ambas acciones usan la cuenta de prueba autorizada; el acceso multiusuario se habilitará después de validar el piloto.</p>
+          <form id="institutionForm" class="form-grid">
+            <label>Nombre ficticio de la clínica<input name="name" maxlength="140" required placeholder="Clínica Demo"></label>
+            <label>Región<input name="region" maxlength="100" required placeholder="Región de prueba"></label>
+            <label>Comuna<input name="comuna" maxlength="100" required placeholder="Comuna de prueba"></label>
+            <label>Agenda institucional de prueba (HTTPS)<input name="booking_url" type="url" maxlength="1500" required placeholder="https://agenda.ejemplo.cl/demo"></label>
+            <div class="actions"><button class="button" type="submit">Crear institución DEMO</button></div>
+          </form>
+          <div id="institutionMessage" class="status" aria-live="polite"></div>
+          <div id="institutionWorkspace" class="institution-workspace"></div>
+        </section>
         <div id="profileState" class="status"></div>
         <form id="profileForm" class="panel form-panel">
           <div class="form-heading"><h3>Perfil público de prueba</h3><span class="demo-pill">NO VERIFICADO</span></div>
