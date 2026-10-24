@@ -72,3 +72,18 @@ test('implicit confirmation sessions hydrate the Supabase user id before owner-s
   assert.match(app, /async function hydrateSessionUser\(\)/);
   assert.match(app, /if \(!state\.session\?\.user\?\.id\) throw new Error\('La sesión no tiene una identidad válida/);
 });
+
+test('authorized professionals can publish a batch of independent hours and return later without re-entering profile', async () => {
+  const [app, page] = await Promise.all([
+    readFile(new URL('../horas-disponibles/demo/demo.js', import.meta.url), 'utf8'),
+    readFile(new URL('../horas-disponibles/demo/index.html', import.meta.url), 'utf8'),
+  ]);
+  assert.match(app, /function addAvailabilityRow\(/);
+  assert.match(app, /form\.querySelectorAll\('\.slot-entry'\)/);
+  assert.match(app, /toLocalISO\(row\.querySelector\('\.slot-date'\)\.value, row\.querySelector\('\.slot-time'\)\.value\)/);
+  assert.match(app, /new Set\(startsAtList\)\.size/);
+  assert.match(app, /const body = startsAtList\.map\(starts_at => \(\{ profile_id: state\.profile\.id, owner_user_id: state\.session\.user\.id, starts_at, status: 'active' \}\)\)/);
+  assert.match(app, /await rest\('kc_demo_health_slots', \{ method: 'POST', body,/);
+  assert.match(app, /rows\.children\.length >= 20/);
+  assert.match(page, /vuelve después con esta misma cuenta para publicar nuevas disponibilidades/);
+});
