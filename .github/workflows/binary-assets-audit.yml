@@ -93,7 +93,7 @@ jobs:
           };
           JS
           nohup python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/kinecheck-browser-audit/server.log 2>&1 &
-      - name: Run all 57 Playwright runner cases against local files
+      - name: Run every Playwright runner case against local files
         env:
           BASE_URL: http://127.0.0.1:4173
         run: npx --no-install playwright test --config /tmp/kinecheck-browser-config.mjs
@@ -120,5 +120,34 @@ jobs:
         with:
           name: browser-regressions-${{ github.run_id }}
           path: /tmp/kinecheck-browser-audit
+          if-no-files-found: error
+          retention-days: 14
+  source-validators:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - name: Execute every source and architecture validator
+        run: |
+          mkdir -p /tmp/kinecheck-source-validators
+          result=0
+          for file in scripts/validate-academy-integrity.mjs scripts/validate-academy-ui-contracts.mjs scripts/validate-commercial-funnel-instrumentation.mjs scripts/validate-disaster-recovery.mjs scripts/validate-ecosystem-access.mjs scripts/validate-ecosystem-access-v2.mjs scripts/security-baseline.mjs scripts/audit-brand-integrity.mjs scripts/dashboard-closeout-check.mjs academy/verify-kinecheck-access.mjs; do
+            if timeout 180 node "$file" > "/tmp/kinecheck-source-validators/$(basename "$file").log" 2>&1; then
+              echo "PASS $file"
+            else
+              result=1
+              echo "FAIL $file"
+            fi
+          done
+          exit "$result"
+      - name: Preserve every validator result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: source-validators-${{ github.run_id }}
+          path: /tmp/kinecheck-source-validators
           if-no-files-found: error
           retention-days: 14

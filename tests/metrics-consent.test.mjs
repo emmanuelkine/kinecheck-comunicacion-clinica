@@ -28,8 +28,8 @@ test("el visitante puede informarse y cambiar su elección", async () => {
   assert.match(policy, /25 de septiembre de 2026/);
   assert.match(styles, /#kc-metrics-panel/);
   assert.match(styles, /:focus-visible/);
-  assert.match(styles, /body\.kc-library-metrics #kc-metrics-panel:not\(\[hidden\]\)[^{]*\{[^}]*left:50%;[^}]*top:50%;[^}]*transform:translate\(-50%,-50%\)/);
-  assert.match(home, /metrics-v1\.js\?v=20260925-consent1/);
+  assert.match(styles, /#kc-metrics-panel:not\(\[hidden\]\)[^{]*\{[^}]*left:50%;[^}]*top:50%;[^}]*transform:translate\(-50%,-50%\)/);
+  assert.match(home, /metrics-v1\.js\?v=[\w-]+/);
 });
 
 test("el servidor descarta métricas enviadas por clientes antiguos sin preferencia", async () => {

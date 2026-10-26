@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07141c">
+  <meta name="description" content="Demostración aislada de KineCheck Horas Disponibles. Perfiles y horarios demostrativos, no reservables.">
+  <title>KineCheck · Horas Disponibles · DEMO</title>
+  <link rel="canonical" href="https://kinecheck.cl/horas-disponibles/demo/">
+  <link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png" type="image/png">
+  <link rel="stylesheet" href="./demo.css">
+  <script type="module" src="./demo.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/horas-disponibles/" aria-label="KineCheck Horas Disponibles">
+      <picture><source media="(max-width: 620px)" srcset="/assets/brand/kinecheck-3d-compact.webp"><img src="/assets/brand/kinecheck-3d-header.webp" alt="KineCheck" width="900" height="183"></picture>
+      <span>/ HORAS</span>
+    </a>
+    <span class="demo-pill">MODO DEMOSTRACIÓN</span>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">ENTORNO AISLADO · DATOS DE PRUEBA</div>
+      <h1>Disponibilidad visible.<br><span>Contacto en un paso.</span></h1>
+      <div class="notice" role="note"><strong>¿Elegiste una hora con poca anticipación?</strong> Antes de continuar, asegúrate de que puedes llegar a tiempo. La reserva se completa en el sistema oficial de la institución.</div>
+      <p class="lead">Explora las horas disponibles y continúa al canal institucional para consultar la reserva. Esta versión es una demostración: los perfiles, horarios y enlaces son ficticios y no generan reservas reales.</p>
+      <div class="notice" role="note"><strong>Solo demostración.</strong> Usa nombres y contactos ficticios. No ingreses RUT, número de registro, datos clínicos ni información de pacientes. Ninguna hora mostrada corresponde a una atención real.</div>
+    </section>
+    <section class="panel institution-flow" aria-labelledby="institutionFlowHeading">
+      <div class="eyebrow">FLUJO INSTITUCIONAL · DEMO</div>
+      <h2 id="institutionFlowHeading">Cada centro organiza. KineCheck difunde.</h2>
+      <div class="institution-flow-grid">
+        <article class="institution-flow-card"><span class="institution-step">1</span><h3>Autorización</h3><p>La institución autoriza a la persona encargada y habilita a sus profesionales. En una consulta particular, el profesional administra su propio perfil.</p></article>
+        <article class="institution-flow-card"><span class="institution-step">2</span><h3>Publicación</h3><p>La persona encargada (por ejemplo, la secretaria) o el profesional publica la hora disponible en KineCheck.</p></article>
+        <article class="institution-flow-card"><span class="institution-step">3</span><h3>Reserva con el prestador</h3><p>El paciente encuentra la hora, sigue el enlace oficial del centro o profesional y completa allí la reserva.</p></article>
+      </div>
+      <p class="institution-flow-note"><strong>Para evitar que una hora ya tomada siga apareciendo:</strong> tras confirmar la reserva en el canal oficial, la persona encargada o el profesional la marca como ocupada en KineCheck. KineCheck difunde y deriva; no accede ni modifica la agenda.</p>
+    </section>
+    <nav class="tabs" aria-label="Experiencias">
+      <button class="tab active" data-view="patient" type="button">Soy paciente</button>
+      <button class="tab" data-view="professional" type="button">Soy profesional</button>
+      <span id="sessionStatus" class="session-status">Modo paciente · sin iniciar sesión</span>
+    </nav>
+    <section id="patientView" class="view">
+      <div class="section-head"><div><div class="eyebrow">BUSCADOR DEMOSTRATIVO</div><h2>Encuentra una hora</h2></div><button id="refreshSearch" class="button secondary" type="button">Actualizar resultados</button></div>
+      <div class="filters panel">
+        <label>Profesión<input id="filterProfession" maxlength="100" placeholder="Ej. Kinesiólogo"></label>
+        <label>Especialidad<input id="filterSpecialty" maxlength="120" placeholder="Opcional"></label>
+        <label>Región<input id="filterRegion" maxlength="100" placeholder="Ej. Metropolitana de Santiago"></label>
+        <label>Comuna<input id="filterComuna" maxlength="100" placeholder="Ej. Providencia"></label>
+        <label>Modalidad<select id="filterModality"><option value="">Todas</option><option>Presencial</option><option>Domiciliaria</option><option>Teleatención</option></select></label>
+        <label>Disponibilidad<select id="filterHorizon"><option value="24">Próximas 24 horas</option><option value="48">Próximas 48 horas</option><option value="168" selected>Próximos 7 días</option></select></label>
+      </div>
+      <div id="searchMessage" class="status" aria-live="polite"></div>
+      <div id="results" class="cards" aria-live="polite"></div>
+    </section>
+    <section id="professionalView" class="view hidden">
+      <div id="pilotLock" class="notice" role="status" aria-live="polite">KineCheck Horas Disponibles está preparando un piloto controlado con instituciones. Por ahora, el registro y la publicación o modificación de perfiles y horarios están temporalmente deshabilitados. Pronto se habilitarán. Gracias por tu paciencia.</div>
+      <div id="authPanel" class="panel auth-panel">
+        <div class="eyebrow">ACCESO DEL PROFESIONAL</div><h2>Recibe un enlace de acceso</h2>
+        <p>Ingresa el correo de tu cuenta de prueba autorizada. El registro público está cerrado; este enlace permite acceder a la cuenta existente y el correo no se publica.</p>
+        <form id="magicLinkForm" class="auth-form"><label for="authEmail">Correo electrónico</label><input id="authEmail" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="demo@ejemplo.cl"><button class="button" type="submit">Enviar enlace de acceso</button></form>
+        <div id="authMessage" class="status" aria-live="polite"></div>
+        <p class="small">La autenticación usa enlace por correo. No hay acceso anónimo ni contraseñas guardadas por KineCheck.</p>
+      </div>
+      <div id="workspace" class="hidden">
+        <div class="section-head"><div><div class="eyebrow">SECRETARÍA Y PROFESIONAL · DEMO</div><h2>Administración de horas</h2></div><button id="signOut" class="button secondary" type="button">Cerrar sesión</button></div>
+        <section class="panel form-panel" aria-labelledby="institutionHeading">
+          <div class="eyebrow">VÍNCULO INSTITUCIONAL · DEMO</div><h3 id="institutionHeading">Institución y equipo profesional</h3>
+          <p class="small">Flujo institucional de prueba: la organización autoriza a la persona encargada y esta habilita a sus profesionales. En esta DEMO, ambos roles se representan con la cuenta de prueba autorizada. No se crean cuentas institucionales reales ni se habilita el registro público.</p>
+          <form id="institutionForm" class="form-grid">
+            <label>Nombre ficticio del centro o la consulta<input name="name" maxlength="140" required placeholder="Centro de atención Demo"></label>
+            <label>Región<input name="region" maxlength="100" required placeholder="Región de prueba"></label>
+            <label>Comuna<input name="comuna" maxlength="100" required placeholder="Comuna de prueba"></label>
+            <label>Agenda institucional de prueba (HTTPS)<input name="booking_url" type="url" maxlength="1500" required placeholder="https://agenda.ejemplo.cl/demo"></label>
+            <div class="actions"><button class="button" type="submit">Crear institución DEMO</button></div>
+          </form>
+          <div id="institutionMessage" class="status" aria-live="polite"></div>
+          <div id="institutionWorkspace" class="institution-workspace"></div>
+        </section>
+        <div id="profileState" class="status"></div>
+        <form id="profileForm" class="panel form-panel">
+          <div class="form-heading"><h3>Perfil público de prueba</h3><span class="demo-pill">NO VERIFICADO</span></div>
+          <p class="small">El identificador DEMO se genera automáticamente. El registro profesional oficial no se solicita ni se valida en esta experiencia.</p>
+          <div class="form-grid">
+            <label>Nombre ficticio<input name="public_name" maxlength="120" required placeholder="Ej. Alex Demo"></label>
+            <label>Profesión<input name="profession" maxlength="100" required placeholder="Ej. Kinesiólogo/a"></label>
+            <label>Especialidad (opcional)<input name="specialty" maxlength="120" placeholder="Ej. Musculoesquelética"></label>
+            <label>Región<input name="region" maxlength="100" required placeholder="Ej. Metropolitana de Santiago"></label>
+            <label>Comuna<input name="comuna" maxlength="100" required placeholder="Ej. Providencia"></label>
+            <label>Dirección o sector de prueba<input name="location_label" maxlength="180" required placeholder="Ej. Sector Plaza Demo"></label>
+            <label>Modalidad<select name="modality" required><option value="Presencial">Presencial</option><option value="Domiciliaria">Domiciliaria</option><option value="Teleatención">Teleatención</option></select></label>
+            <label>Tipo de ejercicio<select name="exercise_type" id="exerciseType" required><option value="independent">Independiente</option><option value="institutional">Institucional</option></select></label>
+            <label id="institutionNameField" class="hidden">Institución ficticia<input name="institution_name" maxlength="180" placeholder="Centro Demo (sin relación real)"></label>
+            <label id="contactTypeField">Canal de contacto<select name="contact_type" id="contactType"><option value="whatsapp">WhatsApp</option></select></label>
+            <label>Teléfono o enlace público de prueba<input name="contact_value" maxlength="1500" required placeholder="+56912345678"></label>
+          </div>
+          <label class="consent-check"><input type="checkbox" name="demo_ack" required><span>Confirmo que todos los datos del perfil y contacto son ficticios, autorizo su publicación dentro de esta demo y entiendo que no crean una reserva real.</span></label>
+          <div class="actions"><button class="button" type="submit">Guardar perfil DEMO</button><button id="unpublishProfile" class="button secondary" type="button">Desactivar perfil</button></div>
+          <div id="profileMessage" class="status" aria-live="polite"></div>
+        </form>
+        <div class="panel form-panel">
+          <div class="eyebrow">PUBLICACIÓN DE HORARIOS</div><h3>Agregar varias disponibilidades</h3>
+          <p class="small">Agrega varias horas ahora o vuelve después con esta misma cuenta para publicar nuevas disponibilidades. Tu perfil queda guardado: no tendrás que completar tu identidad nuevamente.</p>
+          <form id="slotForm" class="slot-form"><div id="slotRows" class="slot-rows" aria-label="Fechas y horas para publicar"></div><div class="slot-form-actions"><button id="addSlotRow" class="button secondary" type="button">+ Agregar otra hora</button><button class="button" type="submit">Publicar horarios DEMO</button></div></form>
+          <div id="slotMessage" class="status" aria-live="polite"></div><h3 class="my-slots-title">Mis horarios</h3><div id="mySlots" class="my-slots"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>KineCheck · Horas Disponibles · DEMO · Las solicitudes se realizan con el prestador; KineCheck no confirma citas.</footer>
+</body>
+</html>

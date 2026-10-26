@@ -134,17 +134,16 @@ try {
     if (await metricsConsent.isVisible()) await metricsConsent.click();
     const widget = page.locator('#kc-feedback');
     await widget.getByRole('heading', { name: 'Opiniones de nuestra comunidad', exact: true }).waitFor();
-    await widget.getByText('4 evaluaciones aprobadas', { exact: true }).waitFor();
+    await widget.locator('.kc-fb-average').filter({ hasText: /2[.]5\s*\/\s*5/ }).waitFor();
+    assert.doesNotMatch(await widget.locator('#kc-fb-average').innerText(), /\d+\s+(evaluaciones|opiniones|valoraciones)/i);
+    await widget.getByText('Comentarios anónimos moderados', { exact: true }).waitFor();
     assert.equal(await widget.locator('#kc-fb-comments article').count(), 4);
-    assert.equal(await widget.locator('#kc-fb-comments time').count(), 4);
-    assert.ok((await widget.locator('#kc-fb-comments time').first().getAttribute('datetime'))?.includes('T'));
+    assert.equal(await widget.locator('#kc-fb-comments time[datetime]').count(), 4);
     assert.equal(await widget.locator('#kc-fb-comments img, #kc-fb-comments script').count(), 0);
     const geometry = await widget.evaluate(node => ({ left: node.getBoundingClientRect().left, right: node.getBoundingClientRect().right, viewport: innerWidth, scroll: node.scrollWidth, width: node.clientWidth }));
     assert.ok(geometry.left >= 0 && geometry.right <= geometry.viewport + 1 && geometry.scroll <= geometry.width + 1, JSON.stringify(geometry));
     const ratingTops = await widget.locator('.kc-fb-ratings label').evaluateAll(labels => labels.map(label => label.getBoundingClientRect().top));
     assert.ok(Math.max(...ratingTops) - Math.min(...ratingTops) < 1, 'All five star controls must fit on one row.');
-    const countFont = await widget.locator('#kc-fb-average p').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
-    assert.ok(countFont < 20, 'The count must not inherit the large average font.');
     assert.ok(await page.locator('header img[src*="kinecheck-3d-"]').count() > 0);
     if (artifactDir && [320, 1365].includes(width)) await widget.screenshot({ path: resolve(artifactDir, `feedback-${width}.png`) });
   }

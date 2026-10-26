@@ -82,7 +82,7 @@ test("la portada simplificada conserva soporte, tres perfiles y acceso canónico
   assert.ok(home.includes('href="mailto:soporte.kinecheck@gmail.com"'));
   assertAccessiblePublicShell(home);
   assertOpenGraph(home, "https://kinecheck.cl/");
-  assert.equal(count(home, 'class="icon" aria-hidden="true"'), 3);
+  assert.equal(count(home, 'class="profile-icon" aria-hidden="true"'), 3);
   assert.equal(count(home, 'class="audience-card'), 3);
   assert.ok(home.includes('href="./profesionales/"'));
   assert.ok(home.includes('href="./estudiantes/"'));
@@ -114,10 +114,11 @@ test("la arquitectura de marca queda distribuida por perfil sin duplicarse en po
   assert.equal(count(home, 'class="brand-family-card"'), 0);
   assert.ok(home.includes("Soy profesional"));
   assert.ok(home.includes("Soy estudiante"));
-  assert.ok(home.includes("Estoy en recuperación"));
+  assert.match(home, /class="audience-card rec[^"]*"[\s\S]*?Próximamente/);
 
   const professionals = await read("profesionales/index.html");
-  assert.equal(count(professionals, "KINECHECK FORMACIÓN"), 5);
+  assert.equal(count(professionals, 'class="family-label"'), 6);
+  assert.ok(professionals.includes("KINECHECK FORMACIÓN"));
   assert.equal(count(professionals, "PRÓXIMAMENTE"), 0);
   assert.match(professionals, /curso profesional avanzado/i);
   assert.ok(professionals.includes("guía digital complementaria"));
@@ -127,8 +128,9 @@ test("la arquitectura de marca queda distribuida por perfil sin duplicarse en po
 
   const students = await read("estudiantes/index.html");
   assert.equal(count(students, "KINECHECK APPS"), 1);
-  assert.equal(count(students, "KINECHECK PACKS"), 1);
-  assert.equal(count(students, "KINECHECK FORMACIÓN"), 2);
+  assert.equal(count(students, "RUTA COMBINADA"), 1);
+  assert.equal(count(students, 'class="family-label"'), 5);
+  assert.equal(count(students, "PROFUNDIZA POR HABILIDAD"), 2);
   assert.ok(students.includes("Dolor Lumbar Persistente"));
   assert.ok(students.includes(DOLOR_LUMBAR_CHECKOUT));
 
@@ -176,12 +178,12 @@ test("precios públicos y 12 Product IDs técnicos conservan contratos separados
 
 test("los perfiles activos publican precios y Recupera permanece sin compra", async () => {
   const cases = [
-    ["profesionales/index.html", "https://kinecheck.cl/profesionales/", 5],
-    ["estudiantes/index.html", "https://kinecheck.cl/estudiantes/", 4],
+    ["profesionales/index.html", "https://kinecheck.cl/profesionales/", 6],
+    ["estudiantes/index.html", "https://kinecheck.cl/estudiantes/", 5],
   ];
   for (const [path, url, priceCount] of cases) {
     const source = await read(path);
-    assert.equal(count(source, 'class="price"'), priceCount, `${path}: cantidad de precios incorrecta`);
+    assert.equal(([...source.matchAll(/class="([^"]*)"/g)].filter((match) => match[1].split(/\s+/).includes("price")).length), priceCount, `${path}: cantidad de precios incorrecta`);
     assertOpenGraph(source, url);
     assertAccessiblePublicShell(source);
     assert.ok(source.includes('href="../academy/"'));
@@ -191,7 +193,7 @@ test("los perfiles activos publican precios y Recupera permanece sin compra", as
   assert.match(professionals, /curso profesional avanzado/i);
   assert.ok(professionals.includes("guía digital complementaria"));
   const students = await read("estudiantes/index.html");
-  assert.ok(students.includes("RECOMENDADO"));
+  assert.match(students, /class="recommendation-badge">Empieza aquí/);
   assert.match(students, /Uso exclusivamente educativo/);
   assert.match(students, /casos ficticios, simulados o debidamente anonimizados/);
   assert.match(students, /no ingreses datos identificatorios de pacientes reales/);
@@ -267,10 +269,12 @@ test("las rutas de compatibilidad siguen siendo redirecciones", async () => {
   }
 });
 
-test("la política conserva la advertencia sin certificación completa de nueve garantías", async () => {
+test("la política pública conserva el retracto y la evidencia comercial se registra internamente", async () => {
   const refunds = await read("legal/reembolsos.html");
   const certification = await read("docs/qa/hotmart-8-product-certification.md");
-  assert.ok(refunds.includes("Pendiente de certificación comercial"));
+  assert.ok(refunds.includes("10 días"));
+  assert.ok(refunds.includes("plazo aplicable a una compra concreta"));
+  assert.ok(!refunds.includes("Pendiente de certificación comercial"));
   assert.ok(certification.includes("captura de la garantía mostrada en checkout"));
   assert.ok(certification.includes("Confirmar plazo de garantía mostrado al comprador"));
 });

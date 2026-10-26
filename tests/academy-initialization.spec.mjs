@@ -69,7 +69,9 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
   await expect(page.locator("#sidebar-access")).toHaveText("Acceso propietario");
   await expect(page.locator("[data-kc-home-apps-grid]")).not.toContainText("Verificando tus aplicaciones");
   await expect(page.locator("[data-kc-home-courses-grid]")).not.toContainText("Verificando tus cursos");
-  await expect(page.locator('[data-kc-open-product="kinecheck-estudiante"]')).toBeVisible();
+  const studentApp = page.locator('[data-kc-home-apps-grid] [data-kc-open-product="kinecheck-estudiante"]');
+  await expect(studentApp).toHaveCount(1);
+  await expect(studentApp).toBeVisible();
   await expect(page.locator("[data-kc-home-courses-grid] .kc-summary-card").first()).toBeVisible();
 
   await page.locator("#library-search").evaluate((input) => {
@@ -85,7 +87,7 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
     (request) => request.url() === SSO_POST_URL && request.method() === "POST",
     { timeout: 10000 },
   );
-  await page.locator('[data-kc-open-product="kinecheck-estudiante"]').click();
+  await studentApp.click();
   const relayRequest = await relayPost;
   expect(new URLSearchParams(relayRequest.postData() || "").get("product")).toBe("kinecheck-estudiante");
   await expect(page.locator("#relay-ok")).toHaveText("Relay Estudiante recibido");

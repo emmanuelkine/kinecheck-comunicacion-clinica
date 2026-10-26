@@ -12,7 +12,7 @@ const metricEvent = read("supabase/functions/metric-event/index.ts");
 const commerce = read("academy/academy-commerce-v4.js");
 const home = read("index.html");
 
-assert(home.includes("metrics-v1.js?v=20260902-commercial1"), "Home does not load metrics");
+assert(/metrics-v1\.js\?v=[\w-]+/.test(home), "Home does not load versioned metrics");
 assert(metrics.includes("/^\\/productos\\/([^/]+)(?:\\/|$)/i"), "Product slug is not derived from /productos/{slug}/");
 for (const event of ["buy_click", "checkout_start", "hotmart_outbound"]) {
   assert(metrics.includes(`\"${event}\"`), `Client metric missing: ${event}`);
@@ -32,9 +32,13 @@ assert(slugs.length > 0, "No product pages discovered");
 
 for (const slug of slugs) {
   const html = read(`productos/${slug}/index.html`);
-  assert(html.includes("metrics-v1.js?v=20260902-commercial1"), `Metrics missing on product page: ${slug}`);
-  assert(metrics.includes(`\"${slug}\"`), `Client product allowlist missing: ${slug}`);
-  assert(metricEvent.includes(`\"${slug}\"`), `Server product allowlist missing: ${slug}`);
+  assert(/metrics-v1\.js\?v=[\w-]+/.test(html), `Metrics missing on product page: ${slug}`);
+  // Only products exposing a purchase destination enter the commercial allowlist.
+  // Prepared products still load consent-aware metrics, without expanding collection.
+  if (/href="https:\/\/pay[.]hotmart[.]com\//.test(html)) {
+    assert(metrics.includes(`"${slug}"`), `Client product allowlist missing: ${slug}`);
+    assert(metricEvent.includes(`"${slug}"`), `Server product allowlist missing: ${slug}`);
+  }
 }
 
 const payloadBlock = metrics.match(/const payload = \{([\s\S]*?)\n    \};/);

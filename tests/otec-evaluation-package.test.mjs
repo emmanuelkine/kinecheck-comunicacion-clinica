@@ -19,8 +19,8 @@ const courses = [
 test("the OTEC review package specifies all eight assessment designs", async () => {
   const source = await readFile(packagePath, "utf8");
   for (const course of courses) assert.match(source, new RegExp(course.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
-  assert.match(source, /80\/100 o más/);
-  assert.match(source, /condición crítica de seguridad/);
+  assert.match(source, /80\s*% o más/);
+  assert.match(source, /todas las preguntas críticas de seguridad correctas/);
   assert.match(source, /Forma B independiente/);
   assert.match(source, /al menos 30 finalizaciones por curso/);
 });

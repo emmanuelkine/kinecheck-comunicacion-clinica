@@ -28,12 +28,15 @@ test("Recupera queda Próximamente y sin rutas activas en Academy", async () => 
 });
 
 test("el POST SSO productivo de Estudiante permanece intacto", async () => {
-  const [core, relay] = await Promise.all([
+  const [core, relay, config] = await Promise.all([
     read("academy/academy-v39.js"),
     read("academy/app-sso-relay.js"),
+    read("academy/config.js"),
   ]);
   const submit = core.slice(core.indexOf("function submitSsoAccess"), core.indexOf("async function openCourse"));
-  assert.match(core, /const SSO_ENDPOINT = "https:\/\/kinecheck-clinico\.emmanuelkine\.chatgpt\.site\/api\/license\/sso"/);
+  assert.match(core, /const SSO_ENDPOINT = .*CONFIG\.appSso\?\.baseUrl/);
+  assert.match(config, /baseUrl:\s*"https:\/\/apps\.kinecheck\.cl"/);
+  assert.match(config, /postPath:\s*"\/api\/license\/sso"/);
   assert.match(submit, /ssoForm\.method = "post"/);
   assert.match(submit, /ssoForm\.action = SSO_ENDPOINT/);
   assert.match(submit, /ssoForm\.submit\(\)/);

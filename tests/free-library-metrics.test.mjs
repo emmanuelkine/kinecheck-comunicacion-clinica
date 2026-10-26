@@ -3,7 +3,7 @@ import fs from "node:fs";
 import test from "node:test";
 
 const library = fs.readFileSync(
-  new URL("../gratis/index.html", import.meta.url),
+  new URL("../gratis/profesionales/index.html", import.meta.url),
   "utf8",
 );
 const metricFunction = fs.readFileSync(
@@ -33,6 +33,13 @@ test("library loads consent metrics and emits generic and eBook events", () => {
   assert.match(library, /metrics-v1\.js/);
   assert.match(library, /KINECHECK_METRIC\("free_resource_open"/);
   assert.match(library, /KINECHECK_METRIC\("ebook_download"/);
+});
+
+test("the audience landing keeps both library routes and the consent loader", () => {
+  const landing = fs.readFileSync(new URL('../gratis/index.html', import.meta.url), 'utf8');
+  assert.match(landing, /href="\/gratis\/profesionales\/"/);
+  assert.match(landing, /href="\/gratis\/pacientes\/"/);
+  assert.match(landing, /metrics-v1\.js\?v=[\w-]+/);
 });
 
 test("backend and database allow the new events", () => {
