@@ -63,6 +63,7 @@ test("evidence records expose traceability fields and are explicitly pending cli
     assert.equal(item.reviewStatus, "bibliographic facts checked; professional clinical review pending");
   }
   assert.equal(evidence.items[0].recommendation, "Conditional recommendation in favour of use; low certainty evidence.");
+  assert.ok(evidence.additionalSources.some((item) => item.id === "corvos-hidalgo-1rm-equations-2022" && item.authors === undefined && item.citation.includes("Corvos-Hidalgo")));
 });
 
 test("PWA scope is isolated and worker only caches local shell GET requests", async () => {
