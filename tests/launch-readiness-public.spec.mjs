@@ -157,7 +157,7 @@ try {
     const professionalPurchaseLabels = await page.locator('#cursos a[href^="https://pay.hotmart.com/"]').allTextContents();
     assert.equal(professionalPurchaseLabels.length, 6, `${device}/profesionales: faltan destinos de compra`);
     assert.ok(professionalPurchaseLabels.every((label) => /^comprar(?: curso)?$/i.test(label.trim())), `${device}/profesionales: cada checkout debe informar que inicia una compra`);
-    assert.ok(professionalText.includes("Empieza aquí"), `${device}/profesionales: falta producto recomendado`);
+    assert.match((await page.locator("#cursos .recommendation-badge").textContent()).trim(), /^Empieza aquí$/i, `${device}/profesionales: falta producto recomendado`);
     assert.ok(professionalText.includes("Dolor Lumbar Persistente"), `${device}/profesionales: falta curso disponible de dolor lumbar`);
     assert.ok(professionalText.includes("KINECHECK FORMACIÓN") && professionalText.includes("guía digital complementaria"), `${device}/profesionales: arquitectura de Formación incompleta`);
     assert.ok(!professionalText.includes("Registro kinésico profesional"), `${device}/profesionales: Clínico volvió a presentarse como aplicación de registro`);
@@ -166,7 +166,7 @@ try {
     await assertPublicMenu(page, `${device}/profesionales`, viewport.width <= 900);
     await checkOverflow(page, `${device}/profesionales`);
 
-    // Estudiantes: cuatro opciones, precios completos y badge unificado.
+    // Estudiantes: cinco opciones, precios completos y badge unificado.
     await openPublicPage(page, "/estudiantes/", device);
     assert.equal(await page.locator("#productos .product").count(), 5, `${device}: estudiantes debe mostrar cinco productos`);
     assert.equal(await page.locator("#productos .price").count(), 5, `${device}: estudiantes debe mostrar cinco precios`);
@@ -174,7 +174,7 @@ try {
     for (const price of ["$14.990 CLP", "$49.900 CLP", "$19.900 CLP", "$29.990 CLP"]) {
       assert.ok(studentText.includes(price), `${device}/estudiantes: falta ${price}`);
     }
-    assert.ok(studentText.includes("Empieza aquí"), `${device}/estudiantes: falta badge RECOMENDADO`);
+    assert.match((await page.locator("#productos .recommendation-badge").textContent()).trim(), /^Empieza aquí$/i, `${device}/estudiantes: falta badge RECOMENDADO`);
     assert.ok(!studentText.includes("PRODUCTO PRINCIPAL"), `${device}/estudiantes: conserva badge anterior`);
     const studentPurchaseLabels = await page.locator('#productos a[href^="https://pay.hotmart.com/"]').allTextContents();
     assert.equal(studentPurchaseLabels.length, 5, `${device}/estudiantes: faltan destinos de compra`);

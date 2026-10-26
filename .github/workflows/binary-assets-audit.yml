@@ -111,6 +111,7 @@ jobs:
             else
               result=1
               echo "FAIL $file"
+              tail -80 "/tmp/kinecheck-browser-audit/$(basename "$file").log"
             fi
           done
           exit "$result"
