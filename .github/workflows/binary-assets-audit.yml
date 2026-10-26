@@ -115,6 +115,23 @@ jobs:
             fi
           done
           exit "$result"
+      - name: Verify production mobile layout with and without JavaScript
+        if: always()
+        env:
+          BASE_URL: https://kinecheck.cl
+        run: |
+          mkdir -p /tmp/kinecheck-browser-audit
+          result=0
+          for mode in 0 1; do
+            if NO_JS="$mode" timeout 120 node tests/product-overflow-diagnostic.mjs > "/tmp/kinecheck-browser-audit/production-overflow-nojs-$mode.log" 2>&1; then
+              echo "PASS production overflow NO_JS=$mode"
+            else
+              result=1
+              echo "FAIL production overflow NO_JS=$mode"
+              tail -80 "/tmp/kinecheck-browser-audit/production-overflow-nojs-$mode.log"
+            fi
+          done
+          exit "$result"
       - name: Preserve every browser result
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
