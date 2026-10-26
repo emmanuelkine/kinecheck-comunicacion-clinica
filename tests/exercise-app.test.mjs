@@ -78,5 +78,7 @@ test("PWA scope is isolated and worker only caches local shell GET requests", as
 test("free library entry links to the standalone exercise app", async () => {
   const gratis = await read("../gratis/index.html");
   assert.match(gratis, /href="\/exercise\/"/);
-  assert.match(gratis, /Prescripción del Ejercicio/);
+  assert.match(gratis, /KineCheck Exercise/);
+  assert.match(gratis, /Prescripción del ejercicio basada en evidencia científica/);
+  assert.match(gratis, /Explorar aplicación/);
 });
