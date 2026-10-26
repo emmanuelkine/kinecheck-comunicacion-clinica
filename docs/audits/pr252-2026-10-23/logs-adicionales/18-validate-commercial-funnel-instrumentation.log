@@ -1,0 +1,12 @@
+file:///workspace/scratch/e19a565378bc/kinecheck/scripts/validate-commercial-funnel-instrumentation.mjs:7
+  if (!condition) throw new Error(message);
+                        ^
+
+Error: Home does not load metrics
+    at assert (file:///workspace/scratch/e19a565378bc/kinecheck/scripts/validate-commercial-funnel-instrumentation.mjs:7:25)
+    at file:///workspace/scratch/e19a565378bc/kinecheck/scripts/validate-commercial-funnel-instrumentation.mjs:15:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.19.0

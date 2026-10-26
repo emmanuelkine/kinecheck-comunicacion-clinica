@@ -1,0 +1,141 @@
+{
+  "compared": 27,
+  "unchanged": 27,
+  "results": [
+    {
+      "path": "agentes-fisicos/anatomy-clinical-plate.webp",
+      "sha256": "c8820cf6c411fe0b1733a7a53ef9477e5b0f625c9ed69e4cae1eed7454132555",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-compact.webp",
+      "sha256": "ad17233e12c6841261a3227a73ececb6c3e9219d7a93f04e90e0cdcc111d0faa",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-favicon.png",
+      "sha256": "9cc483376e2dd095fea62273c0b4c0b917fb6cfe97c41fad81065636649473b6",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-header.webp",
+      "sha256": "1e3df9425b857b52f211e303cc94c3a56ffbd12b7c78b2356130fdc9ac71c62d",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-horizontal.png",
+      "sha256": "38492e45ff6a15758639716197d1832915e7f193aa4c955bf14ce3d847366187",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-social.png",
+      "sha256": "182b4080a6f0ae4a4cd3362a1978067ef4baa9005d60fda8ba01600a6f819ba5",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-symbol-192.png",
+      "sha256": "daf86b9ee836a82d103db1c7c3a3bfde7bea07ab369cb6863b0e0682e4ff7163",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-symbol-512.png",
+      "sha256": "1cbbada268a43db889d7c81aa062e2a8b4632f121b868737084d075b56c4e7ea",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/brand/kinecheck-3d-symbol-64.png",
+      "sha256": "39e045b11937fa4b52d6848e9fa7e7b963797054f4fdac2538748711a1d8c6a0",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/clinical-room-no-people-20260924.png",
+      "sha256": "25df0bde5c54757413a9c687841015505bdd0c87f3f773004c9d3e4ee291a4f1",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/evidence/kinecheck-mecanismos-tratamiento.webp",
+      "sha256": "01eea820fe6448b7a1619074ceae2435bcd31a28f1b7e50dbaa50dbdaafdb089",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/kinecheck-mark.svg",
+      "sha256": "9be675c0e9bed03aa4849271e584e288271f285f9d31df137918602c57985489",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/qr/kinecheck-gratis-qr.png",
+      "sha256": "4efd3324d113a8dcb4a1c97594def8689da2610571da6b6ead28ea3a0d018b69",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/qr/kinecheck-gratis-qr.svg",
+      "sha256": "b8717dfbbe56461d850a5b4f09079c82753ed7cc9aa83a6154c6b901937e295e",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "assets/visuals/comunicacion-clinica-intervencion-hero.webp",
+      "sha256": "60b76420ad4c19a592448e4f13e108adda51ad7e9a66b0f1cc7661de615c3d7e",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/ebook/razonamiento-clinico-musculoesqueletico-kinecheck.pdf",
+      "sha256": "e08e8f44377aed3a6fc2366e20ff666b0878bc1c8c20010690876df5b7308cce",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/ejercicio-dolor-lumbar/carga-progresiva.svg",
+      "sha256": "460d2228f6733624e07cdeac6652b455f877fc63cd5c66d7c2bf4037f718e02a",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/ejercicio-dolor-lumbar/columna-lumbar.svg",
+      "sha256": "7386c94a3b1b811a86d2616c827a69851a2227fc5e3b36395ca4960fe92a2058",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/ejercicio-dolor-lumbar/movimiento-funcional.svg",
+      "sha256": "fa6d676ef57862fe5bb5986f9eeb399b08e218c6da78fce180bf207b41ba5547",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/neuromodulacion/neuromodulacion.svg",
+      "sha256": "1f6a059ea313c86a43ad04ac9893622ab69aff2bee599549cde2862d255ceb2f",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/rehabilitacion-personalizada/rehabilitacion.svg",
+      "sha256": "ef7b28823595b84b5fe7d5bca5a7631d8b711a0485fc2bb0f32283dfe2b79b7e",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/tendinopatias/aquiles.svg",
+      "sha256": "eb89e1012c28350baa951dab478674a085fedfc8070f22d05ed63dae49171c07",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/tendinopatias/gluteo.svg",
+      "sha256": "763895e491a556e28b2adc23ddf7b4fd08b34b6ae556d4f2d056f76083773901",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "gratis/tendinopatias/rotuliano.svg",
+      "sha256": "7f19e467fa6065968ed283bc0c3ed360b8cfcb13ce86e4d9ad354dd77ca925b8",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "recursos/banderas-clinicas.svg",
+      "sha256": "70e472a43201aa571043d114953055a50805b0a5ef496a3d9083ea34a218e292",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "recursos/neuroimagen-fibromialgia/neuroimagen-redes-fibromialgia.webp",
+      "sha256": "be75b413cecf3bd3a0f73605ae06520a80acd9987020e797550794cc7e3b2b64",
+      "sameAsManualReview": true
+    },
+    {
+      "path": "recursos/que-mide-una-escala-clinica/resumen-escalas.svg",
+      "sha256": "ad0584a8e783dec1a50b47f8dff430c3c84607f5181ac242aec24d8ebed1775f",
+      "sameAsManualReview": true
+    }
+  ]
+}

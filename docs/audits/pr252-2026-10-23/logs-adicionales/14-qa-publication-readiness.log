@@ -1,0 +1,125 @@
+✓ Source ayuda/index.html: 13095 chars
+✓ Source ayuda/ayuda.js: 1207 chars
+✓ Source bienvenida/index.html: 8028 chars
+✓ Source bienvenida/bienvenida.js: 3543 chars
+✓ Source platform/onboarding.js: 7839 chars
+✓ Source platform/onboarding.css: 3051 chars
+✓ Source 404.html: 2229 chars
+✓ Source robots.txt: 125 chars
+✓ Source sitemap.xml: 4310 chars
+✓ Source site.webmanifest: 627 chars
+✓ Ortografía fuente pública index.html
+✓ Ortografía fuente pública home.js
+✓ Ortografía fuente pública home-core-20260806.js
+✓ Ortografía fuente pública home-commercial-proof-v1.js
+✓ Ortografía fuente pública demo/index.html
+✓ Ortografía fuente pública evidencia-msk/actualizaciones.json
+✓ Ortografía fuente pública evidencia-msk/index.html
+✓ Ortografía fuente pública evidencia-msk/public-evidence.js
+✓ Ortografía fuente pública metodologia/index.html
+✓ Ortografía fuente pública productos/banderas-clinicas/index.html
+✓ Ortografía fuente pública productos/comunicacion-clinica/index.html
+✓ Ortografía fuente pública productos/course-certification-status-v1.js
+✓ Ortografía fuente pública productos/dolor-lumbar-persistente/index.html
+✓ Ortografía fuente pública productos/dolor-musculoesqueletico/index.html
+✓ Ortografía fuente pública productos/ejercicio-terapeutico/index.html
+✓ Ortografía fuente pública productos/evidencia-aplicada/index.html
+✓ Ortografía fuente pública productos/index.html
+✓ Ortografía fuente pública productos/kinecheck-clinico/index.html
+✓ Ortografía fuente pública productos/kinecheck-estudiante/index.html
+✓ Ortografía fuente pública productos/kinecheck-recupera/index.html
+✓ Ortografía fuente pública productos/mas-alla-del-dolor/index.html
+✓ Ortografía fuente pública productos/pack-estudiante/index.html
+✓ Ortografía fuente pública productos/product-clinico-reposition-v1.js
+✓ Ortografía fuente pública productos/product-experience-unification-v1.js
+✓ Ortografía fuente pública productos/product-legacy-router-v1.js
+✓ Ortografía fuente pública productos/product-price-v1.js
+✓ Ortografía fuente pública productos/product.js
+✓ Ortografía fuente pública productos/traumatologia-ortopedia-clinica/index.html
+✓ Ortografía fuente pública profesionales/index.html
+✓ Ortografía fuente pública estudiantes/index.html
+✓ Ortografía fuente pública recupera/consentimiento-recupera.js
+✓ Ortografía fuente pública recupera/consentimiento.html
+✓ Ortografía fuente pública recupera/index.html
+✓ Ortografía fuente pública ayuda/ayuda.js
+✓ Ortografía fuente pública ayuda/index.html
+✓ Ortografía fuente pública bienvenida/bienvenida.js
+✓ Ortografía fuente pública bienvenida/index.html
+✓ Ortografía fuente pública soporte/index.html
+✓ Ortografía fuente pública soporte/support.js
+✓ Ortografía fuente pública legal/privacidad.html
+✓ Ortografía fuente pública legal/reembolsos.html
+✓ Ortografía fuente pública legal/terminos.html
+✓ Ortografía fuente pública assets/kinecheck-mark.svg
+✓ Ortografía fuente pública assets/library-audio-guide-v1.js
+✓ Ortografía fuente pública assets/library-feedback-v1.js
+✓ Ortografía fuente pública assets/library-funnel-v1.js
+✓ Ortografía fuente pública assets/observability.js
+✓ Ortografía fuente pública assets/qr/kinecheck-gratis-qr.svg
+✓ Ortografía fuente pública assets/runtime-config.js
+✓ Escaneo ortográfico de contenido público: 49 archivos revisados
+✓ Platform loads onboarding: security bootstrap reference
+✓ Platform routes support: automated support path
+✓ Legal acceptance remains active
+✓ Server login rate limit remains active
+✓ Help center content and support routing
+✓ Help center avoids manual email-first support
+✓ Personalized welcome guide uses canonical Academy access
+✓ Robots references sitemap
+✓ Private routes excluded from crawlers
+✓ Sitemap includes /
+✓ Sitemap includes /productos/kinecheck-clinico/
+✓ Sitemap includes /ayuda/
+✓ Sitemap includes /bienvenida/
+✓ Sitemap includes /soporte/
+✓ Sitemap includes /legal/terminos.html
+✓ Sitemap includes /legal/privacidad.html
+✓ Sitemap includes /legal/reembolsos.html
+✓ Public /: 200 https://kinecheck.cl/
+✓ Ortografía despliegue /
+✓ Public /demo/: 200 https://kinecheck.cl/demo/
+✓ Ortografía despliegue /demo/
+✓ Public /evidencia-msk/: 200 https://kinecheck.cl/evidencia-msk/
+✓ Ortografía despliegue /evidencia-msk/
+✓ Public /evidencia-msk/actualizaciones.json: 200 https://kinecheck.cl/evidencia-msk/actualizaciones.json
+✓ Ortografía despliegue /evidencia-msk/actualizaciones.json
+✓ Deployed Evidencia MSK version matches source: 2026-10-12.1
+✓ Deployed Evidencia MSK review date matches source: 2026-10-12
+✓ Deployed Evidencia MSK latest entry matches source: weekly-2026-10-12-sonafe-hamstring-guideline
+✓ Public /metodologia/: 200 https://kinecheck.cl/metodologia/
+✓ Ortografía despliegue /metodologia/
+✓ Public /productos/: 200 https://kinecheck.cl/productos/
+✓ Ortografía despliegue /productos/
+✓ Public /profesionales/: 200 https://kinecheck.cl/profesionales/
+✓ Ortografía despliegue /profesionales/
+✓ Public /estudiantes/: 200 https://kinecheck.cl/estudiantes/
+✓ Ortografía despliegue /estudiantes/
+✓ Public /recupera/: 200 https://kinecheck.cl/recupera/
+✓ Ortografía despliegue /recupera/
+✓ Public /productos/kinecheck-clinico/: 200 https://kinecheck.cl/productos/kinecheck-clinico/
+✓ Ortografía despliegue /productos/kinecheck-clinico/
+✓ Public /ayuda/: 200 https://kinecheck.cl/ayuda/
+✓ Ortografía despliegue /ayuda/
+✓ Deployed help center has expected content
+✓ Public /bienvenida/?producto=kinecheck-clinico: 200 https://kinecheck.cl/bienvenida/?producto=kinecheck-clinico
+✓ Ortografía despliegue /bienvenida/?producto=kinecheck-clinico
+✓ Deployed welcome guide has expected content
+✓ Public /soporte/: 200 https://kinecheck.cl/soporte/
+✓ Ortografía despliegue /soporte/
+✓ Public /legal/terminos.html: 200 https://kinecheck.cl/legal/terminos.html
+✓ Ortografía despliegue /legal/terminos.html
+✓ Public /legal/privacidad.html: 200 https://kinecheck.cl/legal/privacidad.html
+✓ Ortografía despliegue /legal/privacidad.html
+✓ Deployed privacy is latest, discloses analytics and does not imply active Recupera
+✗ Public /legal/reembolsos.html: The operation was aborted due to timeout
+✓ Public /robots.txt: 200 https://kinecheck.cl/robots.txt
+✓ Ortografía despliegue /robots.txt
+✓ Deployed robots is valid
+✓ Public /sitemap.xml: 200 https://kinecheck.cl/sitemap.xml
+✓ Deployed sitemap contains new routes
+✓ Public /site.webmanifest: 200 https://kinecheck.cl/site.webmanifest
+✓ Public /404.html: 200 https://kinecheck.cl/404.html
+✓ Ortografía despliegue /404.html
+✓ Public /platform/: 200 https://kinecheck.cl/platform/
+✓ Ortografía despliegue /platform/
+Publication readiness QA found blocking issues.

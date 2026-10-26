@@ -4,11 +4,11 @@ const baseUrl = String(process.env.BASE_URL || "https://kinecheck.cl").replace(/
 const products = [
   ["kinecheck-clinico", "KineCheck Clínico", "https://pay.hotmart.com/L106791841D", 39990, "$39.990"],
   ["kinecheck-estudiante", "KineCheck Estudiante", "https://pay.hotmart.com/G106801166S", 14990, "$14.990"],
-  ["kinecheck-recupera", "KineCheck Recupera", "https://pay.hotmart.com/P106806251E", 9990, "$9.990"],
   ["comunicacion-clinica", "Comunicación Clínica", "https://pay.hotmart.com/T106883983U", 19900, "$19.900"],
   ["mas-alla-del-dolor", "Más allá del dolor", "https://pay.hotmart.com/W106888386Q", 39990, "$39.990"],
   ["evidencia-aplicada", "Evidencia Aplicada", "https://pay.hotmart.com/F106921972I", 29990, "$29.990"],
   ["traumatologia-ortopedia-clinica", "Traumatología y Ortopedia Clínica", "https://pay.hotmart.com/B106913952R", 35900, "$35.900"],
+  ["dolor-lumbar-persistente", "Dolor Lumbar Persistente", "https://pay.hotmart.com/W107198798E", 39990, "$39.990"],
   ["pack-estudiante", "Pack KineCheck Estudiante", "https://pay.hotmart.com/Q106891608M", 49900, "$49.900"],
 ];
 
@@ -76,33 +76,28 @@ async function checkSource() {
   const professionalPrices = countClass(professionals, "price");
   const studentPrices = countClass(students, "price");
   const recoveryPrices = countClass(recovery, "price");
-  const currentArchitecture = homePrices === 0 && professionalPrices === 6 && studentPrices === 5 && recoveryPrices === 1;
+  const currentArchitecture = homePrices === 0 && professionalPrices === 6 && studentPrices === 5 && recoveryPrices === 0;
   record(
     "Current public pricing architecture",
     currentArchitecture ? "PASS" : "FAIL",
     `home=${homePrices}, profesionales=${professionalPrices}, estudiantes=${studentPrices}, recupera=${recoveryPrices}`,
   );
 
-  const exploreLinks = [
-    "./productos/kinecheck-clinico/",
-    "./productos/comunicacion-clinica/",
-    "./productos/kinecheck-estudiante/",
-    "./productos/kinecheck-recupera/",
-  ];
-  const exploreCurrent = home.includes("Explora KineCheck")
-    && home.includes("Toca un producto para conocerlo")
+  const exploreLinks = ["./profesionales/", "./estudiantes/", "./recupera/", "./gratis/", "./demo/"];
+  const exploreCurrent = home.includes("Aprende a evaluar mejor.")
+    && home.includes("Razona con evidencia.")
     && exploreLinks.every((href) => home.includes(`href="${href}"`));
-  record(
-    "Public home Explora KineCheck",
-    exploreCurrent ? "PASS" : "FAIL",
-    exploreCurrent ? "home exposes the current four-product exploration rail" : "home exploration rail is missing or incomplete",
-  );
+  record("Public educational home", exploreCurrent ? "PASS" : "FAIL", "current educational proposal, audience routes and open resources");
+  const recoveryDetail = await read("productos/kinecheck-recupera/index.html");
+  const pausedRecovery = `${recovery}\n${recoveryDetail}`;
+  record("Recupera stays paused", /Próximamente/i.test(recovery) && /Próximamente/i.test(recoveryDetail)
+    && !/pay[.]hotmart[.]com|\$9[.]990|<input|<textarea/i.test(pausedRecovery) ? "PASS" : "FAIL", "both public entries remain without checkout, price or data collection");
 
   const directCheckoutCoverage = products.every(([, , checkout]) => publicCatalog.includes(checkout));
   record(
     "Public purchase coverage",
     directCheckoutCoverage ? "PASS" : "FAIL",
-    directCheckoutCoverage ? "all eight products expose their Hotmart checkout in a public profile" : "one or more Hotmart checkout routes are missing",
+    directCheckoutCoverage ? "all active products expose their Hotmart checkout in a public profile" : "one or more Hotmart checkout routes are missing",
   );
 
   record(
@@ -187,10 +182,10 @@ async function checkCheckout(name, url) {
 }
 
 async function checkLive() {
-  await checkPage("Public home", "/?qa=commercial-current", ["Explora KineCheck", "KineCheck Clínico", "Comunicación Clínica", "KineCheck Estudiante", "KineCheck Recupera", "Elegir mi perfil", "Abrir Biblioteca"]);
-  await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "Formación diseñada para la práctica clínica."]);
-  await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "RECOMENDADO"]);
-  await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "$9.990 CLP", "Acceso por 3 meses"]);
+  await checkPage("Public home", "/?qa=commercial-current", ["Aprende a evaluar mejor.", "Razona con evidencia.", "Decide con criterio clínico.", "Conocer la formación", "Explorar biblioteca gratuita"]);
+  await checkPage("Professional profile", "/profesionales/?qa=commercial-current", ["KineCheck Clínico", "$35.900 CLP", "Convierte evidencia compleja"]);
+  await checkPage("Student profile", "/estudiantes/?qa=commercial-current", ["KineCheck Estudiante", "$49.900 CLP", "Empieza aquí"]);
+  await checkPage("Recovery profile", "/recupera/?qa=commercial-current", ["KineCheck Recupera", "PRÓXIMAMENTE", "No se encuentra disponible para compra ni para registro de datos"]);
   await checkPage("Canonical Academy", "/academy/?qa=commercial-current", ['id="login-view"', "academy-v39.js", "academy-open-v6.js", "academy-owned-native-bridge-v1.js", "../metrics-v1.js"]);
   await checkPage("Legacy platform redirect shell", "/platform/?qa=commercial-current", ["Abriendo Mi KineCheck", "../academy/"]);
   await checkPage("Terms", "/legal/terminos.html", ["Términos y condiciones", "KineCheck"]);

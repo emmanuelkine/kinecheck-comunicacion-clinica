@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-const [health, ready, runtime, observability, publicJs, academyBrand, academySecurity, headers] = await Promise.all([
+const [health, ready, runtime, observability, publicJs, academyBrand, academySecurity, headers, academyHtml] = await Promise.all([
   read("functions/api/health.js"),
   read("functions/api/ready.js"),
   read("assets/runtime-config.js"),
@@ -12,6 +12,7 @@ const [health, ready, runtime, observability, publicJs, academyBrand, academySec
   read("academy/academy-brand-identity.js"),
   read("academy/security-hardening-v1.js"),
   read("_headers"),
+  read("academy/index.html"),
 ]);
 
 assert.match(health, /status:\s*"ok"/);
@@ -39,9 +40,9 @@ assert.doesNotMatch(observability, /localStorage/);
 
 assert.match(publicJs, /runtime-config\.js/);
 assert.match(publicJs, /observability\.js/);
-assert.match(academyBrand, /runtime-config\.js/);
-assert.match(academyBrand, /observability\.js/);
-assert.match(academyBrand, /security-hardening-v1\.js/);
+for (const source of ["../assets/runtime-config.js", "../assets/observability.js", "./security-hardening-v1.js"]) {
+  assert.ok(academyHtml.includes(`src="${source}?`), `Academy must load ${source}`);
+}
 
 assert.match(academyBrand, /#onboarding-action/);
 assert.match(academyBrand, /data-kc-view-link/);

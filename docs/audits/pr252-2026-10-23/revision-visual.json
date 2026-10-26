@@ -1,0 +1,331 @@
+{
+  "method": "Inspección individual de cada recurso renderizado; SVG con CairoSVG y raster con Pillow. Composición sobre blanco/oscuro cuando se necesitó contraste. PDF renderizado con Poppler y revisión de sus 23 páginas. No se infiere una garantía exhaustiva de todos los píxeles.",
+  "graphics": [
+    {
+      "index": 1,
+      "path": "agentes-fisicos/anatomy-clinical-plate.webp",
+      "dimensions": [
+        512,
+        768
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Lámina anatómica sin texto externo visible."
+    },
+    {
+      "index": 2,
+      "path": "assets/brand/kinecheck-3d-compact.webp",
+      "dimensions": [
+        720,
+        111
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Nombre y check KineCheck legibles en formato compacto."
+    },
+    {
+      "index": 3,
+      "path": "assets/brand/kinecheck-3d-favicon.png",
+      "dimensions": [
+        32,
+        32
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Favicon de 32 px: símbolo de KineCheck."
+    },
+    {
+      "index": 4,
+      "path": "assets/brand/kinecheck-3d-header.webp",
+      "dimensions": [
+        900,
+        183
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Logotipo y descriptor de salud musculoesquelética legibles."
+    },
+    {
+      "index": 5,
+      "path": "assets/brand/kinecheck-3d-horizontal.png",
+      "dimensions": [
+        1944,
+        396
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Logotipo horizontal y descriptor conservados."
+    },
+    {
+      "index": 6,
+      "path": "assets/brand/kinecheck-3d-social.png",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Composición social con identidad KineCheck."
+    },
+    {
+      "index": 7,
+      "path": "assets/brand/kinecheck-3d-symbol-192.png",
+      "dimensions": [
+        192,
+        192
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Símbolo de marca de 192 px."
+    },
+    {
+      "index": 8,
+      "path": "assets/brand/kinecheck-3d-symbol-512.png",
+      "dimensions": [
+        512,
+        512
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Símbolo de marca de 512 px."
+    },
+    {
+      "index": 9,
+      "path": "assets/brand/kinecheck-3d-symbol-64.png",
+      "dimensions": [
+        64,
+        64
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Símbolo de marca de 64 px."
+    },
+    {
+      "index": 10,
+      "path": "assets/clinical-room-no-people-20260924.png",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Sala clínica ilustrada, sin texto externo visible."
+    },
+    {
+      "index": 11,
+      "path": "assets/evidence/kinecheck-mecanismos-tratamiento.webp",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Infografía recuperada: título, cuatro bloques, aplicación y referencia legibles."
+    },
+    {
+      "index": 12,
+      "path": "assets/kinecheck-mark.svg",
+      "dimensions": [
+        64,
+        64
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Check vectorial de marca."
+    },
+    {
+      "index": 13,
+      "path": "assets/qr/kinecheck-gratis-qr.png",
+      "dimensions": [
+        1968,
+        1968
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "QR PNG con margen blanco; revisión visual realizada."
+    },
+    {
+      "index": 14,
+      "path": "assets/qr/kinecheck-gratis-qr.svg",
+      "dimensions": [
+        1968,
+        1968
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "QR SVG renderizado sobre blanco; revisión visual realizada."
+    },
+    {
+      "index": 15,
+      "path": "assets/visuals/comunicacion-clinica-intervencion-hero.webp",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Ilustración conceptual de comunicación clínica, sin texto externo visible."
+    },
+    {
+      "index": 16,
+      "path": "gratis/ejercicio-dolor-lumbar/carga-progresiva.svg",
+      "dimensions": [
+        800,
+        480
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Gráfico de progresión: rótulos legibles; relleno triangular negro preexistente."
+    },
+    {
+      "index": 17,
+      "path": "gratis/ejercicio-dolor-lumbar/columna-lumbar.svg",
+      "dimensions": [
+        800,
+        480
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Esquema lumbar y rótulos educativos legibles."
+    },
+    {
+      "index": 18,
+      "path": "gratis/ejercicio-dolor-lumbar/movimiento-funcional.svg",
+      "dimensions": [
+        800,
+        480
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Movimiento y función; firma KineCheck visible."
+    },
+    {
+      "index": 19,
+      "path": "gratis/neuromodulacion/neuromodulacion.svg",
+      "dimensions": [
+        960,
+        500
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Neuromodulación: rótulos legibles."
+    },
+    {
+      "index": 20,
+      "path": "gratis/rehabilitacion-personalizada/rehabilitacion.svg",
+      "dimensions": [
+        1100,
+        560
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Rehabilitación: texto de Persona excede el círculo, pero se puede leer."
+    },
+    {
+      "index": 21,
+      "path": "gratis/tendinopatias/aquiles.svg",
+      "dimensions": [
+        520,
+        420
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Aquiles: rótulos y advertencia de esquema conceptual legibles."
+    },
+    {
+      "index": 22,
+      "path": "gratis/tendinopatias/gluteo.svg",
+      "dimensions": [
+        520,
+        420
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Glúteo medio: rótulos y advertencia conceptual legibles."
+    },
+    {
+      "index": 23,
+      "path": "gratis/tendinopatias/rotuliano.svg",
+      "dimensions": [
+        520,
+        420
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Tendón rotuliano: rótulos y advertencia conceptual legibles."
+    },
+    {
+      "index": 24,
+      "path": "recursos/banderas-clinicas.svg",
+      "dimensions": [
+        1080,
+        1350
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Banderas: tres columnas, ejemplo y referencias legibles."
+    },
+    {
+      "index": 25,
+      "path": "recursos/neuroimagen-fibromialgia/neuroimagen-redes-fibromialgia.webp",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Ilustración de redes cerebrales, sin texto externo visible."
+    },
+    {
+      "index": 26,
+      "path": "recursos/que-mide-una-escala-clinica/resumen-escalas.svg",
+      "dimensions": [
+        1200,
+        640
+      ],
+      "visualReviewPerformed": true,
+      "externalBrandObserved": false,
+      "observation": "Escalas: instrumentos, persona/contexto e interpretación legibles."
+    }
+  ],
+  "pdf": {
+    "path": "gratis/ebook/razonamiento-clinico-musculoesqueletico-kinecheck.pdf",
+    "sha256": "e08e8f44377aed3a6fc2366e20ff666b0878bc1c8c20010690876df5b7308cce",
+    "pagesReviewed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "externalBrandObserved": false,
+    "observations": [
+      "Página 11 vacía salvo marca de agua y pie.",
+      "Recuadro de la página 15 continúa en la 16.",
+      "La legibilidad general y las marcas KineCheck se conservan."
+    ],
+    "modified": false
+  },
+  "limits": [
+    "No es una validación de exactitud clínica ni de todas las referencias.",
+    "Los QR fueron inspeccionados visualmente y la ruta /qr por HTTP; no se decodificó su matriz con un lector independiente."
+  ]
+}

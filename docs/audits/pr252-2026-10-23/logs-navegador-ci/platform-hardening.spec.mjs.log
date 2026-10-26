@@ -1,0 +1,422 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /runtime-config\.js/. Input:
+
+'(() => {\n' +
+  '  "use strict";\n' +
+  '\n' +
+  '  const BRAND_NAME = "Mi KineCheck";\n' +
+  '  const BRAND_DESCRIPTOR = "UN SOLO ACCESO";\n' +
+  '\n' +
+  '  const PUBLIC_PRODUCTS = Object.freeze([\n' +
+  '    {\n' +
+  '      slug: "kinecheck-clinico",\n' +
+  '      icon: "KC",\n' +
+  '      title: "KineCheck Clínico",\n' +
+  '      type: "Curso + guía clínica",\n' +
+  '      audience: "Profesionales",\n' +
+  '      summary: "Evaluación musculoesquelética, seguridad clínica y razonamiento estructurado para apoyar decisiones profesionales.",\n' +
+  '      points: ["Seguridad y banderas clínicas", "Evaluación y razonamiento MSK", "Reevaluación y toma de decisiones"],\n' +
+  '      detailUrl: "../productos/kinecheck-clinico/",\n' +
+  '    },\n' +
+  '    {\n' +
+  '      slug: "comunicacion-clinica",\n' +
+  '      icon: "CC",\n' +
+  '      title: "Comunicación Clínica",\n' +
+  '      type: "Curso",\n' +
+  '      audience: "Profesionales y estudiantes",\n' +
+  '      summary: "Formación aplicada para fortalecer entrevista, explicación clínica y comunicación centrada en la persona.",\n' +
+  '      points: ["Entrevista clínica", "Explicación comprensible", "Comunicación centrada en la persona"],\n' +
+  '      detailUrl: "../productos/comunicacion-clinica/",\n' +
+  '    },\n' +
+  '    {\n' +
+  '      slug: "kinecheck-estudiante",\n' +
+  '      icon: "KE",\n' +
+  '      title: "KineCheck Estudiante",\n' +
+  '      type: "Aplicación",\n' +
+  '      audience: "Estudiantes",\n' +
+  '      summary: "Herramienta para practicar evaluación y razonamiento clínico con una estructura orientada a la formación en kinesiología.",\n' +
+  '      points: ["Organización de la evaluación", "Razonamiento clínico", "Apoyo al aprendizaje"],\n' +
+  '      detailUrl: "../productos/kinecheck-estudiante/",\n' +
+  '    },\n' +
+  '    {\n' +
+  '      slug: "kinecheck-recupera",\n' +
+  '      icon: "KR",\n' +
+  '      title: "KineCheck Recupera",\n' +
+  '      type: "Próximamente",\n' +
+  '      audience: "Personas y pacientes",\n' +
+  '      summary: "Próximamente. No disponible para compra, activación ni registro de información mientras se revisa privacidad y protección de datos.",\n' +
+  '      points: ["Acceso bloqueado", "Sin registro de información", "Revisión de privacidad en curso"],\n' +
+  '      detailUrl: "../productos/kinecheck-recupera/",\n' +
+  '    },\n' +
+  '    {\n' +
+  '      slug: "mas-alla-del-dolor",\n' +
+  '      icon: "MD",\n' +
+  '      title: "Más allá del dolor",\n' +
+  '      type: "Curso",\n' +
+  '      audience: "Estudiantes y profesionales",\n' +
+  '      summary: "Evaluación musculoesquelética integral para relacionar dolor, función, contexto y hallazgos clínicos.",\n' +
+  '      points: ["Evaluación MSK integral", "Función y contexto", "Interpretación clínica"],\n' +
+  '      detailUrl: "../productos/mas-alla-del-dolor/",\n' +
+  '    },\n' +
+  '    {\n' +
+  '      slug: "evidencia-aplicada",\n' +
+  '      icon: "EA",\n' +
+  '      title: "Evidencia Aplicada",\n' +
+  '      type: "Curso",\n' +
+  '      audience: "Profesionales y estudiantes",\n' +
+  '      summary: "Lectura crítica y aplicación de evidencia para sostener decisiones clínicas contextualizadas.",\n' +
+  '      points: ["Lectura crítica", "Aplicación de evidencia", "Decisiones contextualizadas"],\n' +
+  '      detailUrl: "../productos/evidencia-aplicada/",\n' +
+  '    },\n' +
+  '    {\n' +
+  '      slug: "traumatologia-ortopedia-clinica",\n' +
+  '      icon: "TO",\n' +
+  '      title: "Traumatología y Ortopedia Clínica",\n' +
+  '      type: "Curso",\n' +
+  '      audience: "Profesionales y estudiantes",\n' +
+  '      summary: "Del mecanismo lesional y la presentación clínica a una toma de decisiones más segura en traumatología y ortopedia.",\n' +
+  '      points: ["Mecanismo lesional", "Presentación clínica", "Decisión clínica segura"],\n' +
+  '      detailUrl: "../productos/traumatologia-ortopedia-clinica/",\n' +
+  '    },\n' +
+  '    {\n' +
+  '      slug: "pack-estudiante",\n' +
+  '      icon: "PK",\n' +
+  '      title: "Pack KineCheck Estudiante",\n' +
+  '      type: "Pack",\n' +
+  '      audience: "Estudiantes",\n' +
+  '      summary: "Ruta combinada con KineCheck Estudiante y Más allá del dolor para practicar evaluación y razonamiento musculoesquelético.",\n' +
+  '      points: ["KineCheck Estudiante", "Más allá del dolor", "Ruta combinada de aprendizaje"],\n' +
+  '      detailUrl: "../productos/pack-estudiante/",\n' +
+  '    },\n' +
+  '  ]);\n' +
+  '\n' +
+  '  let publicPrices = null;\n' +
+  '\n' +
+  '  function setText(selector, value) {\n' +
+  '    const element = document.querySelector(selector);\n' +
+  '    if (element && element.textContent !== value) element.textContent = value;\n' +
+  '  }\n' +
+  '\n' +
+  '  function setNavigationLabels() {\n' +
+  `    document.querySelectorAll('[data-kc-view-link="inicio"]').forEach((item) => {\n` +
+  '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+  '      if (label && label.textContent.trim() !== "Inicio") label.textContent = "Inicio";\n' +
+  '    });\n' +
+  `    document.querySelectorAll('[data-kc-view-link="biblioteca"]').forEach((item) => {\n` +
+  '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+  '      if (label && !item.hasAttribute("data-kc-scroll-target")) label.textContent = "Biblioteca";\n' +
+  '    });\n' +
+  `    document.querySelectorAll('[data-kc-view-link="herramientas"]').forEach((item) => {\n` +
+  '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+  '      if (label) label.textContent = "Recursos";\n' +
+  '    });\n' +
+  `    document.querySelectorAll('[data-kc-view-link="perfil"]').forEach((item) => {\n` +
+  '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+  '      if (label) label.textContent = "Cuenta y ayuda";\n' +
+  '    });\n' +
+  '  }\n' +
+  '\n' +
+  '  function activateInicioAfterLogin() {\n' +
+  '    const previousUrl = window.location.href;\n' +
+  '    const nextUrl = new URL(previousUrl);\n' +
+  '    nextUrl.hash = "inicio";\n' +
+  '\n' +
+  '    try {\n' +
+  '      window.history.replaceState(window.history.state, "", nextUrl.href);\n' +
+  '    } catch {\n' +
+  '      window.location.hash = "inicio";\n' +
+  '      return;\n' +
+  '    }\n' +
+  '\n' +
+  '    document.body.dataset.kcView = "inicio";\n' +
+  '    document.querySelectorAll("[data-kc-view-link]").forEach((item) => {\n' +
+  '      item.classList.toggle("active", item.dataset.kcViewLink === "inicio");\n' +
+  '    });\n' +
+  '\n' +
+  '    try {\n' +
+  '      window.dispatchEvent(new HashChangeEvent("hashchange", {\n' +
+  '        oldURL: previousUrl,\n' +
+  '        newURL: nextUrl.href,\n' +
+  '      }));\n' +
+  '    } catch {\n' +
+  '      window.dispatchEvent(new Event("hashchange"));\n' +
+  '    }\n' +
+  '\n' +
+  '    window.scrollTo({ top: 0, left: 0, behavior: "auto" });\n' +
+  '  }\n' +
+  '\n' +
+  '  function wireLoginHomeRedirect() {\n' +
+  '    if (window.__KINECHECK_LOGIN_HOME_REDIRECT__) return;\n' +
+  '    window.__KINECHECK_LOGIN_HOME_REDIRECT__ = true;\n' +
+  '\n' +
+  '    const form = document.querySelector("#auth-form");\n' +
+  '    const dashboard = document.querySelector("#dashboard-view");\n' +
+  '    if (!form || !dashboard) return;\n' +
+  '\n' +
+  '    let explicitLoginPending = false;\n' +
+  '\n' +
+  '    form.addEventListener("submit", () => {\n' +
+  '      explicitLoginPending = true;\n' +
+  '    }, { capture: true });\n' +
+  '\n' +
+  '    const observer = new MutationObserver(() => {\n' +
+  '      if (!explicitLoginPending || dashboard.hidden) return;\n' +
+  '      explicitLoginPending = false;\n' +
+  '      activateInicioAfterLogin();\n' +
+  '    });\n' +
+  '\n' +
+  '    observer.observe(dashboard, {\n' +
+  '      attributes: true,\n' +
+  '      attributeFilter: ["hidden"],\n' +
+  '    });\n' +
+  '  }\n' +
+  '\n' +
+  '  function injectPublicLandingStyles() {\n' +
+  '    if (document.querySelector("#kc-public-landing-v2-styles")) return;\n' +
+  '    const style = document.createElement("style");\n' +
+  '    style.id = "kc-public-landing-v2-styles";\n' +
+  '    style.textContent = `\n' +
+  '      .login-layout::before{\n' +
+  '        background-image:\n' +
+  '          linear-gradient(90deg,rgba(2,13,20,.96) 0%,rgba(2,13,20,.86) 42%,rgba(2,13,20,.55) 100%),\n' +
+  '          var(--kc-clinical-photo)!important;\n' +
+  '        background-size:cover!important;\n' +
+  '        background-position:center center!important;\n' +
+  '        opacity:.82!important;\n' +
+  '      }\n' +
+  '      .login-layout::after{\n' +
+  '        background:\n' +
+  '          radial-gradient(circle at 72% 22%,rgba(77,219,216,.10),transparent 28rem),\n' +
+  '          linear-gradient(180deg,rgba(1,12,18,.08),rgba(2,13,20,.92))!important;\n' +
+  '      }\n' +
+  '      .kc-public-products-v2{margin-top:20px;max-width:100%;}\n' +
+  '      .kc-public-products-v2__head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:10px;}\n' +
+  '      .kc-public-products-v2__head strong{color:#70e4d3;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;}\n' +
+  '      .kc-public-products-v2__head span{color:#9db9bf;font-size:.68rem;}\n' +
+  '      .kc-public-products-v2__buttons{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 7px;scrollbar-width:thin;overscroll-behavior-x:contain;}\n' +
+  '      .kc-public-product-v2{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;min-height:42px;padding:7px 11px;border:1px solid rgba(111,230,215,.24);border-radius:999px;background:rgba(4,31,39,.78);color:#eef9fa;cursor:pointer;font-size:.73rem;font-weight:850;white-space:nowrap;backdrop-filter:blur(10px);transition:transform .16s ease,border-color .16s ease,background .16s ease;}\n' +
+  '      .kc-public-product-v2:hover{transform:translateY(-1px);border-color:rgba(111,230,215,.55);background:rgba(63,203,194,.13);}\n' +
+  '      .kc-public-product-v2 b{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:linear-gradient(135deg,#4fd8d3,#72dbba);color:#052a31;font-size:.58rem;font-weight:950;}\n' +
+  '      .kc-public-products-v2--card{display:none;}\n' +
+  '      #kc-public-product-modal-v2[hidden]{display:none!important;}\n' +
+  '      #kc-public-product-modal-v2{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(1,10,15,.80);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);}\n' +
+  '      .kc-public-product-dialog-v2{position:relative;width:min(640px,100%);max-height:calc(100dvh - 36px);overflow:auto;padding:28px;border:1px solid rgba(111,230,215,.25);border-radius:24px;background:radial-gradient(circle at 92% 0,rgba(108,188,255,.16),transparent 36%),linear-gradient(145deg,#0b3741,#061f27 72%);box-shadow:0 34px 100px rgba(0,0,0,.52);color:#f3fbfc;}\n' +
+  '      .kc-public-product-close-v2{position:absolute;top:14px;right:14px;display:grid;place-items:center;width:39px;height:39px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1.25rem;cursor:pointer;}\n' +
+  '      .kc-public-product-dialog-v2__icon{display:grid;place-items:center;width:50px;height:50px;margin-bottom:14px;border-radius:15px;background:linear-gradient(135deg,#4fd8d3,#72dbba);color:#052a31;font-weight:950;}\n' +
+  '      .kc-public-product-dialog-v2__type{display:block;color:#70e4d3;font-size:.7rem;font-weight:900;letter-spacing:.13em;text-transform:upperca'... 10474 more characters
+
+    at file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/tests/platform-hardening.spec.mjs:42:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '(() => {\n' +
+    '  "use strict";\n' +
+    '\n' +
+    '  const BRAND_NAME = "Mi KineCheck";\n' +
+    '  const BRAND_DESCRIPTOR = "UN SOLO ACCESO";\n' +
+    '\n' +
+    '  const PUBLIC_PRODUCTS = Object.freeze([\n' +
+    '    {\n' +
+    '      slug: "kinecheck-clinico",\n' +
+    '      icon: "KC",\n' +
+    '      title: "KineCheck Clínico",\n' +
+    '      type: "Curso + guía clínica",\n' +
+    '      audience: "Profesionales",\n' +
+    '      summary: "Evaluación musculoesquelética, seguridad clínica y razonamiento estructurado para apoyar decisiones profesionales.",\n' +
+    '      points: ["Seguridad y banderas clínicas", "Evaluación y razonamiento MSK", "Reevaluación y toma de decisiones"],\n' +
+    '      detailUrl: "../productos/kinecheck-clinico/",\n' +
+    '    },\n' +
+    '    {\n' +
+    '      slug: "comunicacion-clinica",\n' +
+    '      icon: "CC",\n' +
+    '      title: "Comunicación Clínica",\n' +
+    '      type: "Curso",\n' +
+    '      audience: "Profesionales y estudiantes",\n' +
+    '      summary: "Formación aplicada para fortalecer entrevista, explicación clínica y comunicación centrada en la persona.",\n' +
+    '      points: ["Entrevista clínica", "Explicación comprensible", "Comunicación centrada en la persona"],\n' +
+    '      detailUrl: "../productos/comunicacion-clinica/",\n' +
+    '    },\n' +
+    '    {\n' +
+    '      slug: "kinecheck-estudiante",\n' +
+    '      icon: "KE",\n' +
+    '      title: "KineCheck Estudiante",\n' +
+    '      type: "Aplicación",\n' +
+    '      audience: "Estudiantes",\n' +
+    '      summary: "Herramienta para practicar evaluación y razonamiento clínico con una estructura orientada a la formación en kinesiología.",\n' +
+    '      points: ["Organización de la evaluación", "Razonamiento clínico", "Apoyo al aprendizaje"],\n' +
+    '      detailUrl: "../productos/kinecheck-estudiante/",\n' +
+    '    },\n' +
+    '    {\n' +
+    '      slug: "kinecheck-recupera",\n' +
+    '      icon: "KR",\n' +
+    '      title: "KineCheck Recupera",\n' +
+    '      type: "Próximamente",\n' +
+    '      audience: "Personas y pacientes",\n' +
+    '      summary: "Próximamente. No disponible para compra, activación ni registro de información mientras se revisa privacidad y protección de datos.",\n' +
+    '      points: ["Acceso bloqueado", "Sin registro de información", "Revisión de privacidad en curso"],\n' +
+    '      detailUrl: "../productos/kinecheck-recupera/",\n' +
+    '    },\n' +
+    '    {\n' +
+    '      slug: "mas-alla-del-dolor",\n' +
+    '      icon: "MD",\n' +
+    '      title: "Más allá del dolor",\n' +
+    '      type: "Curso",\n' +
+    '      audience: "Estudiantes y profesionales",\n' +
+    '      summary: "Evaluación musculoesquelética integral para relacionar dolor, función, contexto y hallazgos clínicos.",\n' +
+    '      points: ["Evaluación MSK integral", "Función y contexto", "Interpretación clínica"],\n' +
+    '      detailUrl: "../productos/mas-alla-del-dolor/",\n' +
+    '    },\n' +
+    '    {\n' +
+    '      slug: "evidencia-aplicada",\n' +
+    '      icon: "EA",\n' +
+    '      title: "Evidencia Aplicada",\n' +
+    '      type: "Curso",\n' +
+    '      audience: "Profesionales y estudiantes",\n' +
+    '      summary: "Lectura crítica y aplicación de evidencia para sostener decisiones clínicas contextualizadas.",\n' +
+    '      points: ["Lectura crítica", "Aplicación de evidencia", "Decisiones contextualizadas"],\n' +
+    '      detailUrl: "../productos/evidencia-aplicada/",\n' +
+    '    },\n' +
+    '    {\n' +
+    '      slug: "traumatologia-ortopedia-clinica",\n' +
+    '      icon: "TO",\n' +
+    '      title: "Traumatología y Ortopedia Clínica",\n' +
+    '      type: "Curso",\n' +
+    '      audience: "Profesionales y estudiantes",\n' +
+    '      summary: "Del mecanismo lesional y la presentación clínica a una toma de decisiones más segura en traumatología y ortopedia.",\n' +
+    '      points: ["Mecanismo lesional", "Presentación clínica", "Decisión clínica segura"],\n' +
+    '      detailUrl: "../productos/traumatologia-ortopedia-clinica/",\n' +
+    '    },\n' +
+    '    {\n' +
+    '      slug: "pack-estudiante",\n' +
+    '      icon: "PK",\n' +
+    '      title: "Pack KineCheck Estudiante",\n' +
+    '      type: "Pack",\n' +
+    '      audience: "Estudiantes",\n' +
+    '      summary: "Ruta combinada con KineCheck Estudiante y Más allá del dolor para practicar evaluación y razonamiento musculoesquelético.",\n' +
+    '      points: ["KineCheck Estudiante", "Más allá del dolor", "Ruta combinada de aprendizaje"],\n' +
+    '      detailUrl: "../productos/pack-estudiante/",\n' +
+    '    },\n' +
+    '  ]);\n' +
+    '\n' +
+    '  let publicPrices = null;\n' +
+    '\n' +
+    '  function setText(selector, value) {\n' +
+    '    const element = document.querySelector(selector);\n' +
+    '    if (element && element.textContent !== value) element.textContent = value;\n' +
+    '  }\n' +
+    '\n' +
+    '  function setNavigationLabels() {\n' +
+    `    document.querySelectorAll('[data-kc-view-link="inicio"]').forEach((item) => {\n` +
+    '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+    '      if (label && label.textContent.trim() !== "Inicio") label.textContent = "Inicio";\n' +
+    '    });\n' +
+    `    document.querySelectorAll('[data-kc-view-link="biblioteca"]').forEach((item) => {\n` +
+    '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+    '      if (label && !item.hasAttribute("data-kc-scroll-target")) label.textContent = "Biblioteca";\n' +
+    '    });\n' +
+    `    document.querySelectorAll('[data-kc-view-link="herramientas"]').forEach((item) => {\n` +
+    '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+    '      if (label) label.textContent = "Recursos";\n' +
+    '    });\n' +
+    `    document.querySelectorAll('[data-kc-view-link="perfil"]').forEach((item) => {\n` +
+    '      const label = item.querySelector("b") || item.querySelector("span:last-child") || item;\n' +
+    '      if (label) label.textContent = "Cuenta y ayuda";\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  function activateInicioAfterLogin() {\n' +
+    '    const previousUrl = window.location.href;\n' +
+    '    const nextUrl = new URL(previousUrl);\n' +
+    '    nextUrl.hash = "inicio";\n' +
+    '\n' +
+    '    try {\n' +
+    '      window.history.replaceState(window.history.state, "", nextUrl.href);\n' +
+    '    } catch {\n' +
+    '      window.location.hash = "inicio";\n' +
+    '      return;\n' +
+    '    }\n' +
+    '\n' +
+    '    document.body.dataset.kcView = "inicio";\n' +
+    '    document.querySelectorAll("[data-kc-view-link]").forEach((item) => {\n' +
+    '      item.classList.toggle("active", item.dataset.kcViewLink === "inicio");\n' +
+    '    });\n' +
+    '\n' +
+    '    try {\n' +
+    '      window.dispatchEvent(new HashChangeEvent("hashchange", {\n' +
+    '        oldURL: previousUrl,\n' +
+    '        newURL: nextUrl.href,\n' +
+    '      }));\n' +
+    '    } catch {\n' +
+    '      window.dispatchEvent(new Event("hashchange"));\n' +
+    '    }\n' +
+    '\n' +
+    '    window.scrollTo({ top: 0, left: 0, behavior: "auto" });\n' +
+    '  }\n' +
+    '\n' +
+    '  function wireLoginHomeRedirect() {\n' +
+    '    if (window.__KINECHECK_LOGIN_HOME_REDIRECT__) return;\n' +
+    '    window.__KINECHECK_LOGIN_HOME_REDIRECT__ = true;\n' +
+    '\n' +
+    '    const form = document.querySelector("#auth-form");\n' +
+    '    const dashboard = document.querySelector("#dashboard-view");\n' +
+    '    if (!form || !dashboard) return;\n' +
+    '\n' +
+    '    let explicitLoginPending = false;\n' +
+    '\n' +
+    '    form.addEventListener("submit", () => {\n' +
+    '      explicitLoginPending = true;\n' +
+    '    }, { capture: true });\n' +
+    '\n' +
+    '    const observer = new MutationObserver(() => {\n' +
+    '      if (!explicitLoginPending || dashboard.hidden) return;\n' +
+    '      explicitLoginPending = false;\n' +
+    '      activateInicioAfterLogin();\n' +
+    '    });\n' +
+    '\n' +
+    '    observer.observe(dashboard, {\n' +
+    '      attributes: true,\n' +
+    '      attributeFilter: ["hidden"],\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  function injectPublicLandingStyles() {\n' +
+    '    if (document.querySelector("#kc-public-landing-v2-styles")) return;\n' +
+    '    const style = document.createElement("style");\n' +
+    '    style.id = "kc-public-landing-v2-styles";\n' +
+    '    style.textContent = `\n' +
+    '      .login-layout::before{\n' +
+    '        background-image:\n' +
+    '          linear-gradient(90deg,rgba(2,13,20,.96) 0%,rgba(2,13,20,.86) 42%,rgba(2,13,20,.55) 100%),\n' +
+    '          var(--kc-clinical-photo)!important;\n' +
+    '        background-size:cover!important;\n' +
+    '        background-position:center center!important;\n' +
+    '        opacity:.82!important;\n' +
+    '      }\n' +
+    '      .login-layout::after{\n' +
+    '        background:\n' +
+    '          radial-gradient(circle at 72% 22%,rgba(77,219,216,.10),transparent 28rem),\n' +
+    '          linear-gradient(180deg,rgba(1,12,18,.08),rgba(2,13,20,.92))!important;\n' +
+    '      }\n' +
+    '      .kc-public-products-v2{margin-top:20px;max-width:100%;}\n' +
+    '      .kc-public-products-v2__head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:10px;}\n' +
+    '      .kc-public-products-v2__head strong{color:#70e4d3;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;}\n' +
+    '      .kc-public-products-v2__head span{color:#9db9bf;font-size:.68rem;}\n' +
+    '      .kc-public-products-v2__buttons{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 7px;scrollbar-width:thin;overscroll-behavior-x:contain;}\n' +
+    '      .kc-public-product-v2{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;min-height:42px;padding:7px 11px;border:1px solid rgba(111,230,215,.24);border-radius:999px;background:rgba(4,31,39,.78);color:#eef9fa;cursor:pointer;font-size:.73rem;font-weight:850;white-space:nowrap;backdrop-filter:blur(10px);transition:transform .16s ease,border-color .16s ease,background .16s ease;}\n' +
+    '      .kc-public-product-v2:hover{transform:translateY(-1px);border-color:rgba(111,230,215,.55);background:rgba(63,203,194,.13);}\n' +
+    '      .kc-public-product-v2 b{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:linear-gradient(135deg,#4fd8d3,#72dbba);color:#052a31;font-size:.58rem;font-weight:950;}\n' +
+    '      .kc-public-products-v2--card{display:none;}\n' +
+    '      #kc-public-product-modal-v2[hidden]{display:none!important;}\n' +
+    '      #kc-public-product-modal-v2{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(1,10,15,.80);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);}\n' +
+    '      .kc-public-product-dialog-v2{position:relative;width:min(640px,100%);max-height:calc(100dvh - 36px);overflow:auto;padding:28px;border:1px solid rgba(111,230,215,.25);border-radius:24px;background:radial-gradient(circle at 92% 0,rgba(108,188,255,.16),transparent 36%),linear-gradient(145deg,#0b3741,#061f27 72%);box-shadow:0 34px 100px rgba(0,0,0,.52);color:#f3fbfc;}\n' +
+    '      .kc-public-product-close-v2{position:absolute;top:14px;right:14px;display:grid;place-items:center;width:39px;height:39px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1.25rem;cursor:pointer;}\n' +
+    '      .kc-public-product-dialog-v2__icon{display:grid;place-items:center;width:50px;height:50px;margin-bottom:14px;border-radius:15px;background:linear-gradient(135deg,#4fd8d3,#72dbba);color:#052a31;font-weight:950;}\n' +
+    '      .kc-public-product-dialog-v2__type{display:block;color:#70e4d3;font-size:.7rem;font-weight:900;letter-spacing:.13em;text-transform:upperca'... 10474 more characters,
+  expected: /runtime-config\.js/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

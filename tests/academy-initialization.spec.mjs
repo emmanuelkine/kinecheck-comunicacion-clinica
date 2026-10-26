@@ -16,7 +16,11 @@ test.use({ viewport: { width: 390, height: 844 } });
 test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones DOM", async ({ page }) => {
   const pageErrors = [];
   const consoleErrors = [];
+  const failedResponses = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
+  page.on("response", (response) => {
+    if (response.status() >= 400) failedResponses.push(`${response.status()} ${response.url()}`);
+  });
   page.on("console", (message) => {
     if (message.type() !== "error") return;
     if (/frame-ancestors.*ignored when delivered via/i.test(message.text())) return;
@@ -50,6 +54,16 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
       return nativeFetch(input, init);
     };
   });
+  // The local static HTTP server has no /api/health endpoint. Simulate the
+  // platform health response in this isolated UI test; production probes
+  // exercise the real endpoint independently.
+  if (new URL(BASE).hostname === "127.0.0.1" || new URL(BASE).hostname === "localhost") {
+    await page.route("**/api/health", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: '{"ok":true}',
+    }));
+  }
   await page.route(SSO_POST_URL, (route) => route.fulfill({
     status: 200,
     contentType: "text/html; charset=utf-8",
@@ -69,7 +83,9 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
   await expect(page.locator("#sidebar-access")).toHaveText("Acceso propietario");
   await expect(page.locator("[data-kc-home-apps-grid]")).not.toContainText("Verificando tus aplicaciones");
   await expect(page.locator("[data-kc-home-courses-grid]")).not.toContainText("Verificando tus cursos");
-  await expect(page.locator('[data-kc-open-product="kinecheck-estudiante"]')).toBeVisible();
+  const studentApp = page.locator('[data-kc-home-apps-grid] [data-kc-open-product="kinecheck-estudiante"]');
+  await expect(studentApp).toHaveCount(1);
+  await expect(studentApp).toBeVisible();
   await expect(page.locator("[data-kc-home-courses-grid] .kc-summary-card").first()).toBeVisible();
 
   await page.locator("#library-search").evaluate((input) => {
@@ -85,11 +101,11 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
     (request) => request.url() === SSO_POST_URL && request.method() === "POST",
     { timeout: 10000 },
   );
-  await page.locator('[data-kc-open-product="kinecheck-estudiante"]').click();
+  await studentApp.click();
   const relayRequest = await relayPost;
   expect(new URLSearchParams(relayRequest.postData() || "").get("product")).toBe("kinecheck-estudiante");
   await expect(page.locator("#relay-ok")).toHaveText("Relay Estudiante recibido");
 
   expect(pageErrors).toEqual([]);
-  expect(consoleErrors).toEqual([]);
+  expect(consoleErrors, `Failed HTTP responses: ${failedResponses.join("; ")}`).toEqual([]);
 });

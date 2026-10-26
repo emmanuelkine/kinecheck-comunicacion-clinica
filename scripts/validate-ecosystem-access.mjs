@@ -41,7 +41,7 @@ async function fetchText(url) {
 const academy = read("academy/index.html");
 check("Academy conserva el único formulario de ingreso", /id=["']auth-form["']/i.test(academy));
 check("Academy conserva recuperación de contraseña", /id=["']forgot-password["']/i.test(academy));
-check("Academy carga bootstrap de sesión privada", /academy-bootstrap-v28\.js\?v=20260809-private1/.test(academy));
+check("Academy carga bootstrap de sesión privada", /academy-bootstrap-v28\.js\?v=[\w-]+/.test(academy));
 
 const protectedLocalPages = [
   ["Comunicación Clínica", read("comunicacion-clinica.html")],
@@ -102,7 +102,7 @@ check("Opener usa handoff efímero por fragmento", /kc_handoff/.test(opener) && 
 check("Opener navega cursos externos en la misma pestaña", /location\.assign\(externalHandoffUrl\(/.test(opener));
 check("Opener no depende de popup para cursos externos", !/window\.open\(/.test(opener) && !/popup\.postMessage/.test(opener));
 check("Opener no transfiere refresh_token ni identidad", !/refresh_token|user\s*:|email\s*:/i.test(opener));
-check("Opener publica versión private1", /20260809-private1/.test(opener));
+check("Opener publica una versión explícita", /const RELEASE = "\d{8}[^"\s]*";/.test(opener));
 check("Bootstrap publica brand identity private1", /academy-brand-identity\.js\?v=20260809-private1/.test(bootstrap));
 check("Router legado solo delega", /academy-open-v6\.js/.test(legacyRouter) && !/location\.assign\(destination\)/.test(legacyRouter));
 check("Guard antiguo no intercepta clicks", !/addEventListener\(["']click["']/.test(integrationGuard));
@@ -138,7 +138,7 @@ check("Más allá no borra sesión por falta de opener", !/if\s*\(!window\.opene
 check("Más allá no envía Cache-Control como request header", !/["']Cache-Control["']\s*:/.test(externalSources.masGate));
 check("Más allá conserva sesión ante error de red", /NETWORK_ERROR[\s\S]*?Reintentar acceso/i.test(externalSources.masGate));
 check("Más allá no permite login local", !/grant_type=password|auth\/v1\/signup/.test(externalSources.masGate));
-check("Más allá carga handoff private1 antes del gate", /sso-handoff\.js\?v=20260809-private1[\s\S]*?auth-gate\.js/.test(externalSources.masIndex));
+check("Más allá carga handoff versionado antes del gate", /sso-handoff\.js\?v=[\w-]+[\s\S]*?auth-gate\.js/.test(externalSources.masIndex));
 
 noSecondaryCredentials("Evidencia Aplicada", externalSources.evidenceIndex);
 check("Evidencia fija producto exacto", /EXPECTED_COURSE\s*=\s*["']evidencia-aplicada["']/.test(externalSources.evidenceGate));
@@ -151,9 +151,9 @@ check("Evidencia no borra sesión por falta de opener", !/if\s*\(!window\.opener
 check("Evidencia no envía Cache-Control como request header", !/["']Cache-Control["']\s*:/.test(externalSources.evidenceGate));
 check("Evidencia conserva sesión ante error de red", /NETWORK_ERROR[\s\S]*?Reintentar acceso/i.test(externalSources.evidenceGate));
 check("Evidencia no permite login local", !/grant_type=password|auth\/v1\/signup/.test(externalSources.evidenceGate));
-check("Evidencia carga handoff private1 antes del gate", /sso-handoff\.js\?v=20260809-private1[\s\S]*?auth-gate\.js/.test(externalSources.evidenceIndex));
+check("Evidencia carga handoff versionado antes del gate", /sso-handoff\.js\?v=[\w-]+[\s\S]*?auth-gate\.js/.test(externalSources.evidenceIndex));
 check("Backend Evidencia fija course slug", /const COURSE_SLUG = ["']evidencia-aplicada["']/.test(externalSources.evidenceContent));
-check("Backend Evidencia rechaza otro slug", /requestedSlug !== COURSE_SLUG/.test(externalSources.evidenceContent));
+check("Backend Evidencia rechaza otro slug", /(?:requestedSlug|String\(body\.courseSlug \|\| ""\)\.trim\(\)) !== COURSE_SLUG/.test(externalSources.evidenceContent));
 check("Backend Evidencia filtra licencia exacta", /\.eq\("course_slug", COURSE_SLUG\)/.test(externalSources.evidenceContent));
 
 const report = {

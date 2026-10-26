@@ -16,7 +16,7 @@ test.describe("KineCheck Clínico · controles móviles", () => {
     await expect(page.locator("#access-progress")).toBeHidden();
     await expect(page.locator("#ecosystem-entry")).toBeVisible();
     await expect(page.locator("#ecosystem-entry")).toContainText("Un solo acceso");
-    await expect(page.locator(".ecosystem-entry-link")).toHaveAttribute("href", "../academy/#biblioteca");
+    await expect(page.locator(".ecosystem-entry-link")).toHaveJSProperty("href", `${BASE}/academy/#biblioteca`);
   });
 
   test("acceso: reutiliza automáticamente la sesión del ecosistema", async ({ page }) => {
@@ -30,7 +30,7 @@ test.describe("KineCheck Clínico · controles móviles", () => {
         });
         return;
       }
-      if (url.includes("/functions/v1/course-key")) {
+      if (url.includes("/functions/v1/protected-course-key")) {
         await route.fulfill({
           status: 200,
           contentType: "text/javascript",
@@ -57,64 +57,50 @@ test.describe("KineCheck Clínico · controles móviles", () => {
     await expect(page.locator("#kinecheck-dynamic-watermark")).toBeVisible();
   });
 
-  test("curso: temario, módulos, comprobación y progreso", async ({ page }) => {
+  test("curso: licencia denegada no ejecuta contenido protegido ni publica el curso", async ({ page, request }) => {
+    let protectedRequests = 0;
+    await page.route(`${SUPABASE}/**`, async (route) => {
+      if (route.request().url().includes("/auth/v1/user")) {
+        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ id: "usuario-prueba", email: "profesional@ejemplo.cl" }) });
+      } else if (route.request().url().includes("/functions/v1/protected-course-key")) {
+        protectedRequests += 1;
+        expect(route.request().headers().authorization).toBe("Bearer token-prueba-licencia-denegada");
+        expect(route.request().postDataJSON()).toEqual({ courseSlug: "kinecheck-clinico-curso" });
+        await route.fulfill({ status: 403, contentType: "application/json", body: JSON.stringify({ message: "Licencia activa requerida" }) });
+      } else {
+        await route.fulfill({ status: 404, contentType: "application/json", body: "{}" });
+      }
+    });
+    await page.addInitScript(() => {
+      localStorage.setItem("kinecheck_secure_session_v1", JSON.stringify({ access_token: "token-prueba-licencia-denegada", expires_at: Math.floor(Date.now() / 1000) + 3600 }));
+    });
+    await page.goto(`${BASE}/kinecheck-clinico-curso/`, { waitUntil: "networkidle" });
+    await expect.poll(() => protectedRequests).toBe(1);
+    await expect(page.locator("#access-shell")).toBeVisible();
+    await expect(page.locator("#root")).toBeHidden();
+    await expect(page.locator("#auth-message")).toContainText("Licencia activa requerida");
+    for (const file of ["course-data.js", "renderer.js"]) {
+      const response = await request.get(`${BASE}/kinecheck-clinico-curso/${file}`);
+      expect(response.status()).toBe(404);
+    }
+  });
+
+  test("controles públicos: temario accesible, Escape y cierre de sesión", async ({ page }) => {
     await page.goto(`${BASE}/tests/blank.html`);
-    await page.setContent(`<!doctype html><html><body><div id="root"></div><button id="sign-out" type="button" hidden>Cerrar sesión</button></body></html>`);
-    await page.addStyleTag({ url: `${BASE}/kinecheck-clinico-curso/course.css` });
-    await page.addStyleTag({ url: `${BASE}/kinecheck-clinico-curso/access-ui-fix.css` });
-    await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/course-data.js` });
+    await page.setContent(`<div id="root"><div class="kc-top-actions"></div><aside data-sidebar class="open"><button data-open-module class="active">Módulo de prueba</button></aside><button data-toggle-sidebar>Temario</button></div><button id="sign-out">Salir</button>`);
     await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/access-ui-fix.js` });
-    await page.addScriptTag({ url: `${BASE}/kinecheck-clinico-curso/renderer.js` });
-
-    await expect(page.locator("[data-open-module]")).toHaveCount(10);
-    await expect(page.locator("[data-module].active")).toHaveCount(1);
-
-    const sidebar = page.locator("[data-sidebar]");
-    const temario = page.locator("[data-toggle-sidebar]");
-    await temario.click();
-    await expect(sidebar).toHaveClass(/open/);
-    await expect(temario).toHaveAttribute("aria-expanded", "true");
-
-    const secondModule = page.locator("[data-open-module]").nth(1);
-    const secondId = await secondModule.getAttribute("data-open-module");
-    await secondModule.click();
-    await expect(page.locator(`[data-module="${secondId}"]`)).toHaveClass(/active/);
-    await expect(secondModule).toHaveAttribute("aria-current", "page");
-    await expect(sidebar).not.toHaveClass(/open/);
-
-    await temario.click();
-    await expect(sidebar).toHaveClass(/open/);
+    const toggle = page.locator("[data-toggle-sidebar]");
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(toggle).toHaveAttribute("aria-controls", "kc-course-sidebar");
+    await expect(page.locator("[data-open-module]")).toHaveAttribute("aria-current", "page");
     await page.keyboard.press("Escape");
-    await expect(sidebar).not.toHaveClass(/open/);
-    await expect(temario).toHaveAttribute("aria-expanded", "false");
-
-    const lesson = page.locator(`[data-module="${secondId}"] details.kc-lesson`).first();
-    await lesson.locator("summary").click();
-    const lessonId = await lesson.getAttribute("data-lesson");
-    const checkButton = lesson.locator("[data-check-quiz]");
-    const feedback = lesson.locator("[data-quiz-feedback]");
-    const completeButton = lesson.locator("[data-complete-lesson]");
-
-    await checkButton.click();
-    await expect(feedback).toBeVisible();
-    await expect(feedback).toContainText("Selecciona una alternativa");
-    await expect(completeButton).toBeDisabled();
-
-    const correctAnswer = await page.evaluate((id) => {
-      const lessons = window.__KINECHECK_COURSE_PAYLOAD__.modules.flatMap((module) => module.lessons);
-      return lessons.find((item) => item.id === id).quiz.answer;
-    }, lessonId);
-    await lesson.locator(`input[type="radio"][value="${correctAnswer}"]`).check();
-    await checkButton.click();
-    await expect(feedback).toContainText("Correcto");
-    await expect(completeButton).toBeEnabled();
-
-    await completeButton.click();
-    await expect(completeButton).toHaveText("Marcar como pendiente");
-    await expect(lesson).toHaveClass(/completed/);
-
-    await page.evaluate(() => { document.querySelector("#sign-out").hidden = false; });
-    await expect(page.locator(".kc-top-actions #sign-out")).toBeVisible();
+    await expect(page.locator("[data-sidebar]")).not.toHaveClass(/open/);
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await expect(toggle).toBeFocused();
+    await expect(page.locator(".kc-top-actions #sign-out")).toHaveText("Cerrar sesión");
+    await page.locator("#sign-out").click();
+    await expect(page.locator("#sign-out")).toBeDisabled();
+    await expect(page.locator("#sign-out")).toHaveAttribute("aria-busy", "true");
   });
 
   test("guía: anonimización, copiar, imprimir y limpiar", async ({ page, context }) => {

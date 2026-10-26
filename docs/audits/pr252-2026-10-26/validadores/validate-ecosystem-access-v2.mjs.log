@@ -1,0 +1,15 @@
+✓ Academy mantiene un único ingreso
+✓ Academy publica Inicio y Biblioteca
+✓ Bridge cubre Continuar y productos
+✓ Opener vigente
+✓ Estudiante conserva relay y Recupera queda rechazado
+✓ Evidencia usa handoff externo
+✓ Más allá del dolor queda same-origin
+✓ Más allá usa slug exacto
+✓ Más allá solicita course-key
+✓ Más allá carga contenido protegido
+✓ Course-key valida usuario autenticado
+✓ Course-key filtra slug exacto
+✓ Course-key exige acceso utilizable
+✓ Course-key protege Más allá del dolor
+Acceso del ecosistema aprobado: 14/14 controles.

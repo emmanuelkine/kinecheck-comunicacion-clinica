@@ -381,7 +381,7 @@ test("Escalas and Pruebas Especiales grant 12 months and resist replay after rev
 
     const granted = await db.query(
       `select active, access_source, access_term_months,
-              access_expires_at::text as access_expires_at
+              extract(epoch from access_expires_at)::double precision as access_expires_at
        from public.course_access
        where email=$1 and course_slug=$2`,
       [email, product.slug],
@@ -390,7 +390,7 @@ test("Escalas and Pruebas Especiales grant 12 months and resist replay after rev
       active: true,
       access_source: "hotmart_test",
       access_term_months: 12,
-      access_expires_at: "2027-10-12 12:00:00+00",
+      access_expires_at: Date.parse("2027-10-12T12:00:00Z") / 1000,
     }]);
 
     assert.equal(await event(db, {

@@ -1,0 +1,191 @@
+[
+  {
+    "command": [
+      "node",
+      "tests/launch-readiness-post-privacy.spec.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 0.67,
+    "log": "02-launch-readiness-post-privacy.spec.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/launch-readiness-public.spec.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 8.47,
+    "log": "03-launch-readiness-public.spec.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/mi-kinecheck-roles.spec.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 3.37,
+    "log": "04-mi-kinecheck-roles.spec.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/platform-hardening-post-privacy.spec.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.63,
+    "log": "05-platform-hardening-post-privacy.spec.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/platform-hardening.spec.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 0.72,
+    "log": "06-platform-hardening.spec.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/public-canonical-readiness.spec.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 3.49,
+    "log": "07-public-canonical-readiness.spec.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/library-feedback-browser.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 4.82,
+    "log": "08-library-feedback-browser.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/product-overflow-diagnostic.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 6.81,
+    "log": "09-product-overflow-diagnostic.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/dashboard-closeout-check.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 2.05,
+    "log": "10-dashboard-closeout-check.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/healthcheck.mjs"
+    ],
+    "exitCode": null,
+    "timeout": 180,
+    "seconds": 180.01,
+    "log": "11-healthcheck.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/qa-commercial-post-privacy.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 7.46,
+    "log": "12-qa-commercial-post-privacy.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/qa-commercial.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 148.65,
+    "log": "13-qa-commercial.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/qa-publication-readiness.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 56.62,
+    "log": "14-qa-publication-readiness.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/security-baseline.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.27,
+    "log": "15-security-baseline.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/validate-academy-integrity.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.11,
+    "log": "16-validate-academy-integrity.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/validate-academy-ui-contracts.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.11,
+    "log": "17-validate-academy-ui-contracts.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/validate-commercial-funnel-instrumentation.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 0.11,
+    "log": "18-validate-commercial-funnel-instrumentation.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/validate-disaster-recovery.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.12,
+    "log": "19-validate-disaster-recovery.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/validate-ecosystem-access-v2.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.11,
+    "log": "20-validate-ecosystem-access-v2.log"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/validate-ecosystem-access.mjs"
+    ],
+    "exitCode": 1,
+    "seconds": 7.64,
+    "log": "21-validate-ecosystem-access.log"
+  },
+  {
+    "command": [
+      "node",
+      "academy/verify-kinecheck-access.mjs"
+    ],
+    "exitCode": 0,
+    "log": "academy-access-validation.log"
+  }
+]

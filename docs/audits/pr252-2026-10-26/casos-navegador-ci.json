@@ -1,0 +1,766 @@
+{
+  "stats": {
+    "startTime": "2026-10-26T10:18:24.353Z",
+    "duration": 36519.712,
+    "expected": 58,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "academy-initialization.spec.mjs",
+      "title": "Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones DOM",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 4589,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "app-sso-relay.spec.mjs",
+      "title": "Estudiante conserva el POST SSO probado y el handoff protegido",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 1005,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "app-sso-relay.spec.mjs",
+      "title": "Recupera es rechazado sin POST ni consentimiento operativo",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 1052,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "clinico-buttons.spec.mjs",
+      "title": "acceso: no duplica correo y contraseña cuando falta sesión",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 1402,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "clinico-buttons.spec.mjs",
+      "title": "acceso: reutiliza automáticamente la sesión del ecosistema",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 1141,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "clinico-buttons.spec.mjs",
+      "title": "curso: licencia denegada no ejecuta contenido protegido ni publica el curso",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 954,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "clinico-buttons.spec.mjs",
+      "title": "controles públicos: temario accesible, Escape y cierre de sesión",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 388,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "clinico-buttons.spec.mjs",
+      "title": "guía: anonimización, copiar, imprimir y limpiar",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 4239,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "live-academy-runtime.spec.mjs",
+      "title": "Mis productos registra el toque, usa el opener real y completa una navegación de curso",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 2268,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "live-academy-runtime.spec.mjs",
+      "title": "Mis productos muestra un error visible si la sesión no permite navegar",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 607,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "live-academy-runtime.spec.mjs",
+      "title": "navegación móvil real y botones nativos conservan eventos de puntero",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 745,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "live-academy-runtime.spec.mjs",
+      "title": "Academy no conserva overlays invisibles ni bloquea el scroll o los controles",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 660,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "tarjetas dinámicas conservan su controlador nativo y el bridge no bloquea el clic",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 374,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "los cursos nuevos conservan el controlador nativo de la Biblioteca",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 449,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "productos activos permiten verificar acceso y los que están en preparación usan CTA correcto",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 310,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "Continuar usa el opener unificado sin alterar los botones nativos del catálogo",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 349,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "Continuar actividad usa el opener unificado con el producto recordado",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 261,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "Mis productos, Recursos, Cuenta y navegación móvil funcionan desde el controlador directo",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 593,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "Soporte responde aunque los listeners secundarios no carguen",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 248,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "si el opener todavía no cargó, el bridge espera su disponibilidad",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 407,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "owned-buttons.spec.mjs",
+      "title": "la personalización no renombra la marca ni reintroduce clicks proxy",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 429,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "privacy-hardening-clean-extract.spec.mjs",
+      "title": "Clínico muestra guard contextual y marca educativa de impresión",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 313,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "privacy-hardening-clean-extract.spec.mjs",
+      "title": "portal Estudiantes mantiene advertencias junto a sus textos libres",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 458,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "privacy-hardening-clean-extract.spec.mjs",
+      "title": "consentimiento legacy de Recupera no contiene controles de captura",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 214,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "recommended-buttons.spec.mjs",
+      "title": "los botones dinámicos de los cursos activos abren su producto exacto",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 607,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "recommended-buttons.spec.mjs",
+      "title": "al regresar al ecosistema se libera cualquier navegación bloqueada",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 216,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-p0-access-sso.spec.mjs",
+      "title": "TF-001: handoff reciente en milisegundos no se marca como vencido",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 181,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-p0-access-sso.spec.mjs",
+      "title": "TF-001: handoff reciente legado en segundos tampoco se marca como vencido",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 226,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-p0-access-sso.spec.mjs",
+      "title": "TF-001: un handoff realmente vencido sí es rechazado y no hace POST",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 90,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-p0-access-sso.spec.mjs",
+      "title": "TF-002: botón Estudiante usa opener unificado y Recupera se bloquea al intentar abrir",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 155,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-p0-access-sso.spec.mjs",
+      "title": "TF-002: relay Estudiante conserva POST y campos contractuales",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 184,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "public-mobile: portada, imágenes y controles están utilizables",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 4346,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "public-tablet: portada, imágenes y controles están utilizables",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 3502,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "public-desktop: portada, imágenes y controles están utilizables",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 3723,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "resource-mobile: recurso gratuito, referencias y desafío son utilizables",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 2004,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "resource-tablet: recurso gratuito, referencias y desafío son utilizables",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 1105,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "resource-desktop: recurso gratuito, referencias y desafío son utilizables",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 1122,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "TF-003/005 mobile: soporte, navegación y títulos no se solapan ni recortan",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 897,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "TF-003/005 tablet: soporte, navegación y títulos no se solapan ni recortan",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 872,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "TF-004: tokens premium mantienen contraste mínimo",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 885,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D portada mobile",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 316,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D biblioteca-gratuita mobile",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 740,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D catalogo mobile",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 285,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D ficha-curso mobile",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 269,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D academy-acceso mobile",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 300,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D portada tablet",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 562,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D biblioteca-gratuita tablet",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 463,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D catalogo tablet",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 469,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D ficha-curso tablet",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 531,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D academy-acceso tablet",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 552,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D portada desktop",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 709,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D biblioteca-gratuita desktop",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 656,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D catalogo desktop",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 675,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D ficha-curso desktop",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 658,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "identidad 3D academy-acceso desktop",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 701,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "ejercicio-salud-cerebral mobile: contenido, fuentes y diseño adaptativo",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 713,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "ejercicio-salud-cerebral tablet: contenido, fuentes y diseño adaptativo",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 866,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "tester-visual-audit.spec.mjs",
+      "title": "ejercicio-salud-cerebral desktop: contenido, fuentes y diseño adaptativo",
+      "project": "",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration": 1034,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

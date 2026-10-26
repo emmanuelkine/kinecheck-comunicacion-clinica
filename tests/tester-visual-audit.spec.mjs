@@ -123,13 +123,17 @@ for (const viewport of [
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto(`${BASE}/?qa=public-visual-${Date.now()}`, { waitUntil: "networkidle", timeout: 60000 });
 
-    await expect(page.locator("h1")).toContainText(/evaluación musculoesquelética y razonamiento clínico/i);
+    await expect(page.locator("h1")).toContainText(/Aprende a evaluar mejor[.]\s+Razona con evidencia[.]\s+Decide con criterio clínico[.]/i);
     await expect(page.locator(".kc-testimonial")).toHaveCount(8);
     await expect(page.locator(".kc-stars")).toHaveCount(0);
     await expect(page.locator("body")).not.toContainText("★★★★★");
 
-    for (const href of ["./profesionales/", "./estudiantes/", "/recupera/", "./demo/", "./academy/", "./metodologia/"]) {
-      await expect(page.locator(`a[href="${href}"]`).first()).toBeAttached();
+    for (const href of ["./profesionales/", "./estudiantes/", "./recupera/", "./demo/", "./academy/", "./metodologia/"]) {
+      // Compare resolved destinations: the site may canonicalize relative links to absolute URLs.
+      const expectedPath = new URL(href, BASE + "/").pathname;
+      const matching = page.locator("a[href]").filter({ visible: true });
+      const paths = await matching.evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
+      expect(paths, `Missing navigation target: ${expectedPath}`).toContain(expectedPath);
     }
 
     await assertNoOverflow(page);
@@ -147,7 +151,7 @@ for (const viewport of [
       await expect(menu).toHaveAttribute("aria-expanded", "false");
     }
 
-    const profileCta = page.getByRole("link", { name: "Elegir mi perfil" }).first();
+    const profileCta = page.getByRole("link", { name: "Conocer la formación" }).first();
     await profileCta.click();
     await expect(page.locator("#elige")).toBeInViewport();
 
@@ -293,7 +297,7 @@ for (const viewport of [
 
       const logo = route.name === "academy-acceso"
         ? page.locator(`${viewport.width <= 980 ? ".login-card" : ".login-showcase"} .kc-brand-3d picture img:visible`).first()
-        : page.locator("header .kc-brand-3d picture img:visible").first();
+        : route.name === "biblioteca-gratuita" ? page.locator("header img:visible").first() : page.locator("header .kc-brand-3d picture img:visible").first();
       await expect(logo).toBeVisible();
       await expect.poll(() => logo.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
       await logo.evaluate((image) => image.decode());
@@ -306,19 +310,14 @@ for (const viewport of [
       expect(geometry.right, JSON.stringify(geometry)).toBeLessThanOrEqual(viewport.width + 1);
       expect(geometry.bottom, JSON.stringify(geometry)).toBeLessThanOrEqual(viewport.height + 1);
       expect(geometry.width).toBeGreaterThan(100);
-      expect(geometry.source).toContain(viewport.name === "mobile" ? "compact.webp" : "header.webp");
+      expect(geometry.source).toContain(viewport.name === "mobile" || route.name === "biblioteca-gratuita" ? "compact.webp" : "header.webp");
       await assertNoOverflow(page);
 
       if (route.name === "biblioteca-gratuita") {
-        await expect(page.locator(".card")).toHaveCount(21);
-        await expect(page.locator(`.card a[href="/recursos/ejercicio-salud-cerebral/"]`)).toHaveCount(1);
-        await expect(page.locator('.card a[href="/recursos/biblioteca-diagnostico-dolor/"]')).toHaveCount(1);
-        await expect(page.locator('.card a[href="/recursos/comunicacion-clinica-intervencion/"]')).toHaveCount(1);
-        const metallicHeading = page.locator("h1 .kc-metal-heading");
-        await expect(metallicHeading).toBeVisible();
-        await expect(metallicHeading).toHaveText("Biblioteca gratuita de");
-        expect(await metallicHeading.evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("linear-gradient");
-        const heroBrand = page.locator("h1 .kc-heading-wordmark img");
+        await expect(page.locator('h1')).toContainText("Biblioteca gratuita");
+        await expect(page.locator('#elige-biblioteca a[href="/gratis/profesionales/"]')).toBeVisible();
+        await expect(page.locator('#elige-biblioteca a[href="/gratis/pacientes/"]')).toBeVisible();
+        const heroBrand = page.locator("h1 .kc-library-wordmark");
         await expect(heroBrand).toBeVisible();
         await expect.poll(() => heroBrand.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
       }

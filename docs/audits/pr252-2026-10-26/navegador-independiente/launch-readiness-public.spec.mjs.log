@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "report": [
+    {
+      "device": "mobile",
+      "status": "passed",
+      "products": 7,
+      "publicProfiles": 3
+    },
+    {
+      "device": "tablet",
+      "status": "passed",
+      "products": 7,
+      "publicProfiles": 3
+    },
+    {
+      "device": "desktop",
+      "status": "passed",
+      "products": 7,
+      "publicProfiles": 3
+    }
+  ]
+}

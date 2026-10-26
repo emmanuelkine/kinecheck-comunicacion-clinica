@@ -1,0 +1,19 @@
+(node:6453) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/functions/api/library-feedback.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Synthetic 1-star submission passed for /gratis/.
+Synthetic 2-star submission passed for /gratis/pacientes/.
+Synthetic 3-star submission passed for /gratis/profesionales/.
+Synthetic 4-star submission passed for /gratis/.
+Synthetic 5-star submission passed for /gratis/pacientes/.
+{
+  "environment": "local; synthetic KV and mocked owner verification; no Cloudflare E2E claim",
+  "passed": true,
+  "results": [
+    "All five star choices submit successfully, correct page on all three libraries, cookie blocks duplicate, no page ReferenceError.",
+    "Authenticated local owner can redact/approve/reject; anonymous view stays hidden. Public summary is 4 approved, 2.5/5, distribution [1,1,1,1,0].",
+    "No horizontal overflow at 320, 390, 768, 1365px; long comments wrap, original logo assets remain, comment markup never executes."
+  ]
+}
+Local synthetic records and rate-limit keys removed; no production data touched.

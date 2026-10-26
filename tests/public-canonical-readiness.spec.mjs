@@ -79,7 +79,7 @@ try {
 
     await open(page, "/", `${device}/inicio`);
     const home = await bodyText(page);
-    assert.ok(normalized(home).includes("evaluación musculoesquelética y razonamiento clínico"), `${device}/inicio: falta propuesta principal actual`);
+    assert.ok(normalized(home).includes("aprende a evaluar mejor. razona con evidencia. decide con criterio clínico."), `${device}/inicio: falta propuesta principal actual`);
     assert.ok((await page.locator('a[href*="profesionales/"]').count()) >= 1, `${device}/inicio: falta perfil profesional`);
     assert.ok((await page.locator('a[href*="estudiantes/"]').count()) >= 1, `${device}/inicio: falta perfil estudiante`);
     assert.ok((await page.locator('a[href*="recupera/"]').count()) >= 1, `${device}/inicio: falta perfil recuperación`);

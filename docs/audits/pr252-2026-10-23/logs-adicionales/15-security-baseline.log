@@ -1,0 +1,11 @@
+✓ Secret scan: sin credenciales privadas detectadas
+✓ HSTS: cabecera HSTS declarada
+✓ MIME protection: protección nosniff declarada
+✓ Platform no-store: plataforma sin caché persistente
+✓ Frame protection: protección contra framing declarada
+✓ Temporary session: sesión temporal verificada en código
+✓ Server rate limit: limitación del servidor verificada en código
+✓ Versioned legal acceptance: aceptación legal versionada verificada
+✓ Legal documents: términos, privacidad y reembolsos presentes
+✓ No service-role token in client: sin tokens privilegiados en archivos públicos
+Security baseline passed.
