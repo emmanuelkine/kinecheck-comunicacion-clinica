@@ -147,9 +147,9 @@ try {
 
     // Profesionales: catálogo completo, precios y CTA honestos.
     await openPublicPage(page, "/profesionales/", device);
-    assert.equal(await page.locator("#soluciones .product").count(), 6, `${device}: profesionales debe mostrar seis productos disponibles`);
-    assert.equal(await page.locator("#soluciones .price").count(), 6, `${device}: profesionales debe mostrar seis precios`);
-    assert.equal(await page.locator("#soluciones .tag", { hasText: "PRÓXIMAMENTE" }).count(), 0, `${device}: los seis cursos publicados están disponibles`);
+    assert.equal(await page.locator("#cursos .product").count(), 6, `${device}: profesionales debe mostrar seis productos disponibles`);
+    assert.equal(await page.locator("#cursos .price").count(), 6, `${device}: profesionales debe mostrar seis precios`);
+    assert.equal(await page.locator("#cursos .tag", { hasText: "PRÓXIMAMENTE" }).count(), 0, `${device}: los seis cursos publicados están disponibles`);
     const professionalText = await pageText(page);
     for (const price of ["$39.990 CLP", "$19.900 CLP", "$29.990 CLP", "$35.900 CLP"]) {
       assert.ok(professionalText.includes(price), `${device}/profesionales: falta ${price}`);
