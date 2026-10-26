@@ -13,7 +13,7 @@ function fakeJwt() {
 
 test.use({ viewport: { width: 390, height: 844 } });
 
-test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones DOM", async ({ page }) => {
+test("Academy inicializa aplicaciones y cursos bajo mutaciones continuas y abre el relay Estudiante", async ({ page }) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -75,6 +75,8 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
     timeout: 30000,
   });
   await page.evaluate((token) => {
+    const grid = document.querySelector("#course-grid");
+    window.__kcQaMutationTimer = setInterval(() => grid.classList.toggle("qa-render-stress"), 10);
     window.__KINECHECK_NATIVE_ACCESS_TOKEN__ = token;
     window.dispatchEvent(new Event("kinecheck:native-session"));
   }, accessToken);
@@ -87,6 +89,7 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
   await expect(studentApp).toHaveCount(1);
   await expect(studentApp).toBeVisible();
   await expect(page.locator("[data-kc-home-courses-grid] .kc-summary-card").first()).toBeVisible();
+  await page.evaluate(() => clearInterval(window.__kcQaMutationTimer));
 
   await page.locator("#library-search").evaluate((input) => {
     input.value = "evidencia";
