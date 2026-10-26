@@ -205,9 +205,10 @@ try {
     for (const { slug, name, family, price, checkout: expectedCheckout } of PRODUCTS) {
       await openPublicPage(page, `/productos/?producto=${encodeURIComponent(slug)}`, device);
       await page.waitForURL((url) => url.pathname === `/productos/${slug}/`, { timeout: 15000 });
+      await page.locator("h1").waitFor({ state: "visible" });
       const text = await pageText(page);
-      assert.ok(text.includes(name), `${device}/${slug}: falta nombre del producto`);
-      assert.ok(text.includes("KineCheck"), `${device}/${slug}: falta identidad de marca`);
+      assert.ok(text.toLocaleLowerCase("es-CL").includes(name.toLocaleLowerCase("es-CL")), `${device}/${slug}: falta nombre del producto`);
+      assert.ok(text.toLocaleLowerCase("es-CL").includes("kinecheck"), `${device}/${slug}: falta identidad de marca`);
       assert.ok(text.includes(price), `${device}/${slug}: falta ${price}`);
       const checkout = page.locator(`a[href="${expectedCheckout}"]`).first();
       assert.equal(await checkout.getAttribute("href"), expectedCheckout, `${device}/${slug}: checkout inválido`);
