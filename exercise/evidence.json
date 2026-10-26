@@ -1,0 +1,99 @@
+{
+  "reviewedOn": "2026-10-26",
+  "clinicalReview": "pending",
+  "items": [
+    {
+      "id": "who-chronic-primary-lbp-2023",
+      "condition": "low-back-pain",
+      "kind": "clinical-guideline",
+      "title": "WHO guideline for non-surgical management of chronic primary low back pain in adults in primary and community care settings",
+      "authors": "World Health Organization",
+      "year": 2023,
+      "citation": "World Health Organization. WHO guideline for non-surgical management of chronic primary low back pain in adults in primary and community care settings. Geneva: WHO; 2023. ISBN 978-92-4-008178-9.",
+      "doi": null,
+      "url": "https://www.who.int/publications/i/item/9789240081789",
+      "population": "Adults, including older adults, with chronic primary low back pain in primary or community care.",
+      "intervention": "Structured exercise therapy or programmes, among other non-surgical interventions considered by the guideline.",
+      "result": "The guideline states that structured exercise therapy or a programme may be offered as part of care.",
+      "recommendation": "Conditional recommendation in favour of use; low certainty evidence.",
+      "editorialDecision": "No single modality, frequency, intensity, session duration or progression rule is presented here as a universal prescription. Individual assessment and contextual tailoring remain necessary.",
+      "limitations": "Applies to chronic primary low back pain in adults. It does not establish applicability to acute pain, secondary causes, red flags, or an individual patient without assessment.",
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+    },
+    {
+      "id": "breda-patellar-loading-2021",
+      "condition": "patellar-tendinopathy",
+      "kind": "randomized-clinical-trial",
+      "title": "Effectiveness of progressive tendon-loading exercise therapy in patients with patellar tendinopathy: a randomised clinical trial",
+      "authors": "Breda SJ, Oei EHG, Zwerver J, et al.",
+      "year": 2021,
+      "citation": "Breda SJ, Oei EHG, Zwerver J, et al. Effectiveness of progressive tendon-loading exercise therapy in patients with patellar tendinopathy: a randomised clinical trial. Br J Sports Med. 2021;55(9):501-509.",
+      "doi": "10.1136/bjsports-2020-103403",
+      "url": "https://doi.org/10.1136/bjsports-2020-103403",
+      "population": "76 athletes aged 18-35 years with clinically diagnosed and ultrasound-confirmed patellar tendinopathy; mostly chronic symptoms; 38 per group.",
+      "intervention": "Progressive tendon-loading exercise (PTLE) compared with eccentric exercise therapy (EET), over 24 weeks. The PTLE protocol included consecutive isometric, isotonic, energy-storage and sport-specific stages, progressed according to individual pain response.",
+      "result": "At 24 weeks, adjusted between-group difference in VISA-P was 9 points in favour of PTLE (95% CI 1 to 16; p=0.023). Return to sport, satisfaction and adherence did not differ significantly between groups.",
+      "certainty": "Single randomized trial; no GRADE certainty rating assigned in this app.",
+      "editorialDecision": "The trial protocol is shown as a study finding, not as an individual treatment recommendation or universal dose.",
+      "limitations": "Participants were athletic adults 18-35 with imaging-confirmed diagnosis; most had chronic symptoms and prior treatment. Only one participant was in the early-symptom stratum. Results may not generalize to children, older adults, non-athletes, other diagnoses or all care settings.",
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+    }
+  ],
+  "additionalSources": [
+    {
+      "id": "nice-ng59-safety",
+      "kind": "safety-guideline",
+      "citation": "National Institute for Health and Care Excellence. Low back pain and sciatica in over 16s: assessment and management. NICE guideline NG59. Updated 2026.",
+      "url": "https://www.nice.org.uk/guidance/ng59",
+      "year": 2026,
+      "population": "People aged 16 and over with low back pain and sciatica.",
+      "intervention": "Assessment and management guidance, including referral pathways for suspected cauda equina syndrome and other serious causes.",
+      "result": "The guideline includes an interactive cauda equina pathway and emphasizes assessment of serious causes before routine management.",
+      "certainty": "Guideline; no GRADE certainty claim copied into this app.",
+      "limitations": "A red-flag list cannot exclude serious disease by itself. Clinical assessment and local urgent-care pathways apply.",
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+    },
+    {
+      "id": "corvos-hidalgo-1rm-equations-2022",
+      "kind": "calculator-method",
+      "citation": "Corvos-Hidalgo CA, Bizzozero-Peroni B, Fernandez-Gimenez S, Pintos-Toledo E. Concordancia entre ecuaciones de predicción y el método de 1RM en cuatro ejercicios de entrenamiento resistido. Educación Física y Ciencia. 2022;24(2):e222.",
+      "doi": "10.24215/23142561e222",
+      "url": "https://doi.org/10.24215/23142561e222",
+      "year": 2022,
+      "population": "30 young adults experienced in resistance exercise.",
+      "intervention": "Comparison of Brzycki, Epley and other prediction equations with measured 1RM in squat, bench press, deadlift and military press; sets included 1-7 repetitions.",
+      "result": "Agreement varied by equation and exercise; the study supports treating estimates as exercise-specific rather than interchangeable.",
+      "certainty": "Validation study; no GRADE rating assigned.",
+      "limitations": "Small sample of experienced young adults and four lifts. The app accepts no more than seven repetitions to stay within this study's tested range; results may not generalize to other people or exercises. Output is not an observed maximum or clinical prescription.",
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+    },
+    {
+      "id": "zourdos-rir-accuracy-2021",
+      "kind": "calculator-method",
+      "citation": "Zourdos MC, Goldsmith JA, Helms ER, et al. Proximity to failure and total repetitions performed in a set influences accuracy of intraset repetitions in reserve-based rating of perceived exertion. J Strength Cond Res. 2021;35(Suppl 1):S158-S165.",
+      "doi": "10.1519/JSC.0000000000002995",
+      "url": "https://doi.org/10.1519/JSC.0000000000002995",
+      "year": 2021,
+      "population": "25 trained men; mean age 25.3 years; squat set at 70% of 1RM to failure.",
+      "intervention": "Participants predicted repetitions in reserve at specified points during one set, then continued to failure.",
+      "result": "Prediction error was larger farther from failure and during longer sets in the observed protocol.",
+      "certainty": "Single laboratory study; no GRADE rating assigned.",
+      "limitations": "Small all-male trained sample and a single squat protocol; it does not establish accuracy for every person, exercise, or clinical population.",
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+    },
+    {
+      "id": "franklin-hrr-2022",
+      "kind": "calculator-method",
+      "citation": "Franklin BA, Eijsvogels TMH, Pandey A, Quindry J, Toth PP. Physical activity, cardiorespiratory fitness, and cardiovascular health: a clinical practice statement of the American Society for Preventive Cardiology Part II: physical activity, cardiorespiratory fitness, minimum and goal intensities for exercise training, prescriptive methods, and special patient populations. Am J Prev Cardiol. 2022;12:100425.",
+      "doi": "10.1016/j.ajpc.2022.100425",
+      "url": "https://doi.org/10.1016/j.ajpc.2022.100425",
+      "year": 2022,
+      "population": "Clinical practice statement spanning healthy adults and special patient populations.",
+      "intervention": "Evidence review of methods for determining exercise intensity, including target heart rate derived from heart-rate reserve.",
+      "result": "The heart-rate-reserve method calculates a mathematical target from maximal and resting heart rates plus a chosen intensity fraction.",
+      "certainty": "Clinical practice statement; no GRADE rating copied into this app.",
+      "limitations": "Age-predicted maximums may misestimate values in some groups; medication and cardiovascular conditions can limit heart-rate interpretation. The calculator requires measured inputs and does not select intensity.",
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+    }
+  ]
+}

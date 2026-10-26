@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07191f">
+  <meta name="description" content="KineCheck Exercise: consulta de evidencia y herramientas profesionales para prescripción del ejercicio musculoesquelético.">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="canonical" href="https://kinecheck.cl/exercise/">
+  <link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png" type="image/png">
+  <link rel="manifest" href="/exercise/manifest.webmanifest">
+  <link rel="stylesheet" href="/exercise/app.css?v=20261026-1">
+  <title>KineCheck Exercise</title>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="/gratis/" aria-label="KineCheck: volver a Biblioteca gratuita">
+      <img src="/assets/brand/kinecheck-3d-compact.webp" alt="KineCheck" width="720" height="111">
+      <span>EXERCISE</span>
+    </a>
+    <a class="back-link" href="/gratis/">Biblioteca gratuita</a>
+  </header>
+
+  <main id="contenido" class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">CONSULTA PROFESIONAL · SIN IA</p>
+      <h1 id="page-title">Prescripción del ejercicio</h1>
+      <p class="lead">Explora qué muestran las fuentes sobre ejercicio musculoesquelético. Los datos de estudios y guías se presentan con su alcance y límites; esta versión no genera una prescripción individual.</p>
+      <div class="notice notice-review" role="status">
+        <strong>Versión de revisión clínica</strong>
+        <span>Los resúmenes y criterios de seguridad requieren aprobación profesional antes de su publicación clínica. No usar para tomar decisiones de tratamiento.</span>
+      </div>
+    </section>
+
+    <section aria-labelledby="conditions-title" class="section-block">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 · CONDICIÓN</p><h2 id="conditions-title">Elige una condición</h2></div>
+        <span class="counter" id="access-summary">Demo: 2 de 10</span>
+      </div>
+      <div class="condition-grid" id="condition-list" aria-label="Condiciones disponibles"></div>
+    </section>
+
+    <section id="consultation" class="section-block consultation" aria-labelledby="consult-title" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">02 · CONTEXTO CLÍNICO</p><h2 id="consult-title">Criterios para contextualizar la evidencia</h2></div>
+        <span class="privacy-label">No se guarda</span>
+      </div>
+      <p class="muted">No escribas nombres, RUT, correos ni otros identificadores. Las respuestas se mantienen en memoria mientras esta página está abierta.</p>
+      <form id="clinical-form" novalidate>
+        <div class="form-grid">
+          <label>Edad (años)<input name="age" type="number" min="1" max="120" inputmode="numeric" autocomplete="off"></label>
+          <label>Nivel de actividad
+            <select name="activity"><option value="">Seleccionar</option><option>Poco activo</option><option>Actividad recreativa</option><option>Entrenamiento regular</option><option>Deporte competitivo</option></select>
+          </label>
+          <label>Irritabilidad informada
+            <select name="irritability"><option value="">Seleccionar</option><option>Baja</option><option>Moderada</option><option>Alta</option><option>No determinada</option></select>
+          </label>
+          <label>Tolerancia actual a la carga
+            <select name="tolerance"><option value="">Seleccionar</option><option>Buena</option><option>Variable</option><option>Limitada</option><option>No determinada</option></select>
+          </label>
+          <label>Objetivo funcional
+            <select name="goal"><option value="">Seleccionar</option><option>Actividades cotidianas</option><option>Trabajo o estudio</option><option>Actividad física recreativa</option><option>Retorno al deporte</option><option>Otro objetivo conversado</option></select>
+          </label>
+          <label>Experiencia con ejercicio
+            <select name="experience"><option value="">Seleccionar</option><option>Sin experiencia reciente</option><option>Experiencia previa</option><option>Entrenamiento regular</option><option>No determinada</option></select>
+          </label>
+          <label class="field-wide">Limitaciones o contraindicaciones relevantes
+            <select name="limitations"><option value="">Seleccionar</option><option>No identificadas en evaluación</option><option>Presentes; requieren revisión antes de ejercicio</option><option>No evaluadas</option></select>
+          </label>
+        </div>
+        <label class="acknowledge"><input type="checkbox" name="safety-read"> Revisé si hay señales de alarma, trauma importante o síntomas nuevos que requieren evaluación clínica antes de usar esta herramienta.</label>
+        <button class="button button-primary" type="submit">Consultar evidencia</button>
+      </form>
+      <p id="form-message" class="inline-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="results" class="section-block results" aria-labelledby="results-title" hidden aria-live="polite">
+      <div class="section-heading"><div><p class="eyebrow">03 · RESULTADO</p><h2 id="results-title">Evidencia relacionada</h2></div><button id="clear-result" class="button button-quiet" type="button">Limpiar</button></div>
+      <div id="evidence-result"></div>
+    </section>
+
+    <section class="section-block pro-section" id="pro-access" aria-labelledby="pro-title">
+      <div class="pro-copy"><p class="eyebrow">KINECHECK EXERCISE PRO</p><h2 id="pro-title">Herramientas profesionales</h2><p>El acceso Pro contempla calculadoras de entrenamiento y contenidos ampliados por condición. La autorización se verifica en Supabase para cada consulta.</p>
+        <div class="plan-row" aria-label="Planes en preparación"><div><strong>Mensual</strong><span>Checkout pendiente de configuración</span></div><div><strong>Anual</strong><span>Checkout pendiente de configuración</span></div></div>
+        <div class="pro-actions"><a class="button button-secondary" href="/academy/">Iniciar sesión en KineCheck</a><button id="verify-pro" class="button button-primary" type="button">Verificar acceso Pro</button></div>
+        <p id="pro-message" class="inline-message" role="status" aria-live="polite">Los enlaces de compra se habilitarán cuando existan productos y pruebas aprobadas en Hotmart.</p>
+      </div>
+      <div id="pro-tools" class="pro-tools" hidden>
+        <h3>Calculadoras</h3>
+        <p class="muted">Estimaciones matemáticas para apoyar el análisis profesional. Ninguna cifra es una prescripción clínica universal.</p>
+        <form id="calc-1rm" class="calculator" data-action="estimate-1rm">
+          <h4>Estimación de 1RM</h4><div class="form-grid"><label>Carga levantada (kg)<input name="load" type="number" min="0.1" step="0.1" required></label><label>Repeticiones completadas (1–7)<input name="reps" type="number" min="1" max="7" step="1" required></label></div>
+          <p class="muted">Modelos Epley y Brzycki. El rango implementado corresponde a la muestra del estudio citado; la precisión varía según ejercicio, persona y condiciones de evaluación.</p><button class="button button-secondary" type="submit">Calcular</button><output></output>
+        </form>
+        <form id="calc-rpe-rir" class="calculator" data-action="rpe-rir">
+          <h4>RPE y RIR</h4><div class="form-grid"><label>RPE observado (0–10)<input name="rpe" type="number" min="0" max="10" step="0.5" required></label><label>RIR estimado (0–10)<input name="rir" type="number" min="0" max="10" step="1" required></label></div>
+          <p class="muted">Se registran como valoraciones separadas; esta herramienta no convierte una escala en la otra.</p><button class="button button-secondary" type="submit">Validar valores</button><output></output>
+        </form>
+        <form id="calc-volume" class="calculator" data-action="volume-load">
+          <h4>Volumen de entrenamiento</h4><div class="form-grid"><label>Series<input name="sets" type="number" min="1" step="1" required></label><label>Repeticiones por serie<input name="reps" type="number" min="1" step="1" required></label><label>Carga por repetición (kg)<input name="load" type="number" min="0.1" step="0.1" required></label></div>
+          <p class="muted">Volumen-carga = series × repeticiones × carga. Es una unidad de seguimiento, no una medida directa del estímulo ni del riesgo.</p><button class="button button-secondary" type="submit">Calcular volumen</button><output></output>
+        </form>
+        <form id="calc-variation" class="calculator" data-action="load-variation">
+          <h4>Carga total y variación</h4><div class="form-grid"><label>Carga total período anterior<input name="previous" type="number" min="0.1" step="0.1" required></label><label>Carga total período actual<input name="current" type="number" min="0" step="0.1" required></label></div>
+          <button class="button button-secondary" type="submit">Calcular variación</button><output></output>
+        </form>
+        <form id="calc-hrr" class="calculator" data-action="heart-rate-reserve">
+          <h4>Frecuencia cardíaca de reserva</h4><div class="form-grid"><label>FC máxima medida (lpm)<input name="maxHr" type="number" min="50" max="250" step="1" required></label><label>FC de reposo medida (lpm)<input name="restHr" type="number" min="25" max="150" step="1" required></label><label>Intensidad fraccional elegida (0–100%)<input name="intensity" type="number" min="1" max="100" step="1" required></label></div>
+          <p class="muted">Solo si corresponde clínicamente. Usa FC máxima medida; no estima FC máxima por edad. Medicación, arritmias y otras condiciones pueden limitar la interpretación.</p><button class="button button-secondary" type="submit">Calcular objetivo matemático</button><output></output>
+        </form>
+      </div>
+    </section>
+
+    <section class="section-block safety" aria-labelledby="safety-title"><p class="eyebrow">SEGURIDAD</p><h2 id="safety-title">Antes de usar ejercicio</h2><p>Si hay síntomas nuevos o preocupantes, trauma importante, debilidad progresiva, alteraciones de control vesical o intestinal, anestesia en silla de montar, fiebre asociada a dolor u otra señal de alarma, no uses esta herramienta para decidir una pauta: corresponde evaluación médica o atención urgente según el cuadro.</p><p>La herramienta no diagnostica, no reemplaza evaluación clínica y no almacena información clínica individual.</p></section>
+
+    <section class="section-block references" aria-labelledby="references-title"><p class="eyebrow">TRAZABILIDAD</p><h2 id="references-title">Fuentes y límites</h2><p>Las recomendaciones de guías, los hallazgos de estudios y las decisiones editoriales se presentan por separado. Revisión bibliográfica: 26 de octubre de 2026. Revisión clínica de esta versión: pendiente.</p><div id="reference-list" class="reference-list"></div></section>
+  </main>
+  <footer class="site-footer"><span>KineCheck Exercise · Versión de revisión</span><a href="/gratis/">Volver a Biblioteca gratuita</a></footer>
+  <script src="/exercise/app.js?v=20261026-1" defer></script>
+</body>
+</html>

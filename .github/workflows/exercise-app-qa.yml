@@ -1,0 +1,46 @@
+name: KineCheck Exercise QA
+
+on:
+  pull_request:
+    paths:
+      - "exercise/**"
+      - "supabase/functions/_shared/exercise-calculations.mjs"
+      - "supabase/functions/exercise-pro-api/**"
+      - "gratis/index.html"
+      - "_headers"
+      - "_redirects"
+      - "tests/exercise-app*"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/exercise-app-qa.yml"
+  push:
+    branches: [main]
+    paths:
+      - "exercise/**"
+      - "supabase/functions/_shared/exercise-calculations.mjs"
+      - "supabase/functions/exercise-pro-api/**"
+      - "gratis/index.html"
+      - "_headers"
+      - "_redirects"
+      - "tests/exercise-app*"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/exercise-app-qa.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  unit-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:exercise
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:exercise:browser
