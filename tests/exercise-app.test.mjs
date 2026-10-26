@@ -82,4 +82,11 @@ test("free library entry links to the standalone exercise app", async () => {
   assert.match(gratis, /KineCheck Exercise/);
   assert.match(gratis, /Prescripción del ejercicio basada en evidencia científica/);
   assert.match(gratis, /Explorar aplicación/);
+  assert.match(gratis, /class="exercise-launch-card__badge"[^>]*>.*NOVEDAD/);
+  assert.match(gratis, /DEMO GRATUITA/);
+  assert.match(gratis, /kinecheck-3d-symbol-192\.png/);
+  assert.match(gratis, /exercise-launch-v1\.css/);
+  const cardStyles = await read("../gratis/exercise-launch-v1.css");
+  assert.match(cardStyles, /:focus-visible/);
+  assert.match(cardStyles, /prefers-reduced-motion/);
 });

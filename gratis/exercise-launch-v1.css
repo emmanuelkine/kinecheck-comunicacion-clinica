@@ -1,0 +1,233 @@
+.exercise-launch-section {
+  padding: 22px 0 28px;
+}
+
+.exercise-launch-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(105, 232, 225, .78);
+  border-radius: 24px;
+  padding: clamp(22px, 4vw, 38px);
+  background:
+    radial-gradient(ellipse at 94% 4%, rgba(31, 188, 210, .2), transparent 37%),
+    linear-gradient(135deg, #102e3b 0%, #0b252e 58%, #091d27 100%);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(204, 255, 250, .12);
+}
+
+.exercise-launch-card::after {
+  position: absolute;
+  z-index: 0;
+  top: -68px;
+  right: -72px;
+  width: 220px;
+  height: 220px;
+  border: 1px solid rgba(91, 224, 219, .13);
+  border-radius: 50%;
+  box-shadow: 0 0 0 22px rgba(91, 224, 219, .035), 0 0 0 46px rgba(91, 224, 219, .025);
+  content: "";
+  pointer-events: none;
+}
+
+.exercise-launch-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.exercise-launch-card__topline,
+.exercise-launch-card__identity,
+.exercise-launch-card__actions {
+  display: flex;
+  align-items: center;
+}
+
+.exercise-launch-card__topline {
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.exercise-launch-card__badge,
+.exercise-launch-card__tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: .75rem;
+  font-weight: 850;
+  letter-spacing: .1em;
+  line-height: 1.2;
+}
+
+.exercise-launch-card__badge {
+  gap: 7px;
+  border: 1px solid rgba(111, 239, 229, .55);
+  background: rgba(20, 104, 111, .32);
+  color: #b6fff5;
+}
+
+.exercise-launch-card__badge-mark {
+  color: #7df4e9;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.exercise-launch-card__tag {
+  border: 1px solid rgba(193, 215, 229, .25);
+  background: rgba(7, 25, 36, .42);
+  color: #c9e2e8;
+  letter-spacing: .07em;
+}
+
+.exercise-launch-card__identity {
+  gap: 15px;
+  margin-bottom: 14px;
+}
+
+.exercise-launch-card__logo {
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(78, 229, 225, .22));
+}
+
+.exercise-launch-card__eyebrow {
+  margin: 0 0 3px;
+  color: #91eae5;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  line-height: 1.4;
+}
+
+.exercise-launch-card__title {
+  margin: 0;
+  color: #f1ffff;
+  font-size: clamp(1.55rem, 4vw, 2.25rem);
+  font-weight: 850;
+  letter-spacing: -.035em;
+  line-height: 1.12;
+}
+
+.exercise-launch-card__lead {
+  max-width: 780px;
+  margin: 0 0 5px;
+  color: #f0ffff;
+  font-size: clamp(1.05rem, 2.3vw, 1.25rem);
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.exercise-launch-card__description {
+  max-width: 760px;
+  margin: 0 0 23px;
+  color: #c7dde2;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.exercise-launch-card__actions {
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.exercise-launch-card__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 54px;
+  border: 1px solid #8efff2;
+  border-radius: 13px;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, #81eee4, #53d8d2);
+  box-shadow: 0 8px 22px rgba(39, 215, 207, .2);
+  color: #062b32;
+  font-size: 1rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.exercise-launch-card__button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #a4fff3, #6be9df);
+  box-shadow: 0 12px 26px rgba(39, 215, 207, .28);
+}
+
+.exercise-launch-card__button:focus-visible {
+  outline: 3px solid #e6fffc;
+  outline-offset: 4px;
+}
+
+.exercise-launch-card__arrow {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.exercise-launch-card__note {
+  margin: 0;
+  color: #bed4da;
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .exercise-launch-section {
+    padding-top: 18px;
+    padding-bottom: 22px;
+  }
+
+  .exercise-launch-card {
+    border-radius: 21px;
+    padding: 22px 20px 23px;
+  }
+
+  .exercise-launch-card__topline {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .exercise-launch-card__badge,
+  .exercise-launch-card__tag {
+    min-height: 32px;
+    padding: 5px 10px;
+    font-size: .68rem;
+  }
+
+  .exercise-launch-card__identity {
+    gap: 12px;
+  }
+
+  .exercise-launch-card__logo {
+    flex-basis: 50px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .exercise-launch-card__eyebrow {
+    font-size: .64rem;
+  }
+
+  .exercise-launch-card__actions {
+    align-items: stretch;
+    gap: 13px;
+  }
+
+  .exercise-launch-card__button {
+    width: 100%;
+    min-height: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exercise-launch-card__button {
+    transition: none;
+  }
+
+  .exercise-launch-card__button:hover {
+    transform: none;
+  }
+}
