@@ -54,6 +54,16 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
       return nativeFetch(input, init);
     };
   });
+  // The local static HTTP server has no /api/health endpoint. Simulate the
+  // platform health response in this isolated UI test; production probes
+  // exercise the real endpoint independently.
+  if (new URL(BASE).hostname === "127.0.0.1" || new URL(BASE).hostname === "localhost") {
+    await page.route("**/api/health", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: '{"ok":true}',
+    }));
+  }
   await page.route(SSO_POST_URL, (route) => route.fulfill({
     status: 200,
     contentType: "text/html; charset=utf-8",
