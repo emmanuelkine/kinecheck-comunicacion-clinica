@@ -168,15 +168,15 @@ try {
 
     // Estudiantes: cinco opciones, precios completos y badge unificado.
     await openPublicPage(page, "/estudiantes/", device);
-    assert.equal(await page.locator("#productos .product").count(), 5, `${device}: estudiantes debe mostrar cinco productos`);
-    assert.equal(await page.locator("#productos .price").count(), 5, `${device}: estudiantes debe mostrar cinco precios`);
+    assert.equal(await page.locator("#opciones .product").count(), 5, `${device}: estudiantes debe mostrar cinco productos`);
+    assert.equal(await page.locator("#opciones .price").count(), 5, `${device}: estudiantes debe mostrar cinco precios`);
     const studentText = await pageText(page);
     for (const price of ["$14.990 CLP", "$49.900 CLP", "$19.900 CLP", "$29.990 CLP"]) {
       assert.ok(studentText.includes(price), `${device}/estudiantes: falta ${price}`);
     }
-    assert.match((await page.locator("#productos .recommendation-badge").textContent()).trim(), /^Empieza aquí$/i, `${device}/estudiantes: falta badge RECOMENDADO`);
+    assert.match((await page.locator("#opciones .recommendation-badge").textContent()).trim(), /^Empieza aquí$/i, `${device}/estudiantes: falta badge RECOMENDADO`);
     assert.ok(!studentText.includes("PRODUCTO PRINCIPAL"), `${device}/estudiantes: conserva badge anterior`);
-    const studentPurchaseLabels = await page.locator('#productos a[href^="https://pay.hotmart.com/"]').allTextContents();
+    const studentPurchaseLabels = await page.locator('#opciones a[href^="https://pay.hotmart.com/"]').allTextContents();
     assert.equal(studentPurchaseLabels.length, 5, `${device}/estudiantes: faltan destinos de compra`);
     assert.ok(studentPurchaseLabels.every((label) => /^comprar(?: curso| pack)?$/i.test(label.trim())), `${device}/estudiantes: cada checkout debe informar que inicia una compra`);
     assert.ok(studentText.includes("KINECHECK APPS") && studentText.includes("PROFUNDIZA POR HABILIDAD") && studentText.includes("RUTA COMBINADA"), `${device}/estudiantes: arquitectura de marca incompleta`);
