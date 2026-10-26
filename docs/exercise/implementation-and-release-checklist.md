@@ -50,7 +50,7 @@ Por esa revisión pendiente, esta rama no se debe fusionar ni anunciar como herr
 
 - `npm run test:exercise`: 9/9 pruebas unitarias aprobadas.
 - `npm test`: 151/151 pruebas del repositorio aprobadas; la verificación de referencias SHA fijó también el workflow nuevo.
-- Chromium y WebKit: el workflow `KineCheck Exercise QA` pasó para escritorio y preset móvil iPhone. Verifica recorrido demo, 10 condiciones, 8 bloqueos, ausencia de overflow, bloqueo Pro sin sesión, manifest, service worker activo y limitado a `/exercise/`, landmark `main`, encabezado principal y etiquetas de formularios. Tras ampliar estas verificaciones, el job corre nuevamente con el commit más reciente.
+- Chromium y WebKit: el workflow `KineCheck Exercise QA` pasó para escritorio y presets móviles iPhone/Pixel 7. Verifica recorrido demo, 10 condiciones, 8 bloqueos, ausencia de overflow, bloqueo Pro sin sesión, manifest, service worker activo y limitado a `/exercise/`, landmark `main`, encabezado principal y etiquetas de formularios. La instalación nativa en dispositivos físicos sigue pendiente.
 - La descarga local de Playwright falló por respuesta CDN vacía/inválida; por eso la ejecución real de motores se hizo en GitHub Actions, donde Chromium y WebKit se instalaron y aprobaron.
 - Vista previa Cloudflare Pages comprobada por HTTP 200 en `https://feat-kinecheck-exercise-demo.kinecheck-comunicacion-clinica.pages.dev/exercise/` y `/gratis/`; la tarjeta apunta a `/exercise/`. Producción `/exercise/` sigue en 404, pues el PR permanece abierto y en borrador.
 - Supabase staging: `exercise-pro-api` v1 activa; respuesta 401 sin sesión y 403 para origen ajeno. Producción sin cambios.

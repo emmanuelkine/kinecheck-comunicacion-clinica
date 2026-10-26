@@ -78,6 +78,7 @@ try {
   await verify(webkit);
   await verify(chromium, devices["iPhone 13"]);
   await verify(webkit, devices["iPhone 13"]);
+  await verify(chromium, devices["Pixel 7"]);
   console.log(JSON.stringify({ result: "passed", reports }, null, 2));
 } finally {
   server.close();
