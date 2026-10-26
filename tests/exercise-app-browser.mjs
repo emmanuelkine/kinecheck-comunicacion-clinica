@@ -10,6 +10,7 @@ const server = createServer(async (request, response) => {
   const url = new URL(request.url, "http://localhost");
   let pathname = decodeURIComponent(url.pathname);
   if (pathname === "/exercise/") pathname = "/exercise/index.html";
+  if (pathname === "/gratis/") pathname = "/gratis/index.html";
   if (pathname === "/") pathname = "/index.html";
   const path = normalize(join(root, pathname));
   if (!path.startsWith(root)) { response.writeHead(403).end(); return; }
@@ -68,7 +69,14 @@ async function verify(browserType, device = null) {
       return { ok: response.ok, scope: data.scope, startUrl: data.start_url, display: data.display, icons: data.icons?.length || 0 };
     }, manifest);
     if (!manifestData.ok || manifestData.scope !== "/exercise/" || manifestData.startUrl !== "/exercise/" || manifestData.display !== "standalone" || manifestData.icons < 1) throw new Error(`Manifest no cumple requisitos básicos: ${JSON.stringify(manifestData)}`);
-    reports.push({ engine: browserType.name(), device: device?.defaultBrowserType ? "mobile preset" : "desktop", viewport: width, conditions: 10, proLocked: 8, serviceWorker: "active and scoped", manifest: manifestData });
+    await page.goto(`${base}/gratis/`, { waitUntil: "domcontentloaded" });
+    const launchCard = page.locator(".exercise-launch-card");
+    await launchCard.getByRole("heading", { name: "KineCheck Exercise" }).waitFor();
+    if (!(await launchCard.getByText("NOVEDAD", { exact: false }).isVisible())) throw new Error("El distintivo de novedad no está visible.");
+    if (await launchCard.getByRole("link", { name: /Explorar aplicación/ }).getAttribute("href") !== "/exercise/") throw new Error("La tarjeta no enlaza a Exercise.");
+    const libraryWidth = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+    if (libraryWidth.scroll > libraryWidth.client + 1) throw new Error(`Overflow horizontal en Biblioteca: ${JSON.stringify(libraryWidth)}`);
+    reports.push({ engine: browserType.name(), device: device?.defaultBrowserType ? "mobile preset" : "desktop", viewport: width, conditions: 10, proLocked: 8, serviceWorker: "active and scoped", manifest: manifestData, libraryCard: "new and responsive" });
     await context.close();
   } finally { await browser.close(); }
 }
