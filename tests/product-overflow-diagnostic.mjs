@@ -17,12 +17,27 @@ try {
     },
   });
   const page = await context.newPage();
+  const failedResources = [];
+  page.on("response", (response) => {
+    if (response.status() >= 400 && ["stylesheet", "image"].includes(response.request().resourceType())) {
+      failedResources.push({ status: response.status(), url: response.url() });
+    }
+  });
   const target = `${BASE}/productos/kinecheck-clinico/?qa=overflow-${NO_JS ? "nojs" : "js"}-${Date.now()}`;
   const response = await page.goto(target, {
-    waitUntil: NO_JS ? "domcontentloaded" : "networkidle",
+    // DOMContentLoaded can precede CSS/image completion without deferred JS.
+    // Measure the rendered layout after the load event in the no-JS case.
+    waitUntil: NO_JS ? "load" : "networkidle",
     timeout: 60000,
   });
   assert.ok(response && response.status() < 500, `La ficha canónica respondió ${response?.status() ?? "sin respuesta"}`);
+
+  const stylesheets = await page.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((link) => ({ href: link.href, loaded: Boolean(link.sheet) })));
+  assert.ok(stylesheets.length > 0, "La ficha debe declarar sus estilos");
+  assert.deepEqual(stylesheets.filter((sheet) => !sheet.loaded), [], `Estilos sin cargar: ${JSON.stringify({ stylesheets, failedResources })}`);
+  const brokenBrandImages = await page.locator("header img, footer img").evaluateAll((images) => images.filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.currentSrc || image.src));
+  assert.deepEqual(brokenBrandImages, [], `Logotipos sin cargar: ${JSON.stringify({ brokenBrandImages, failedResources })}`);
+  assert.deepEqual(failedResources, [], "Las dependencias visuales no deben devolver errores HTTP");
 
   const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
   const normalized = text.toLocaleLowerCase("es-CL");
