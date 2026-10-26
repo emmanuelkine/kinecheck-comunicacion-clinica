@@ -129,7 +129,11 @@ for (const viewport of [
     await expect(page.locator("body")).not.toContainText("★★★★★");
 
     for (const href of ["./profesionales/", "./estudiantes/", "./recupera/", "./demo/", "./academy/", "./metodologia/"]) {
-      await expect(page.locator(`a[href="${href}"]`).first()).toBeAttached();
+      // Compare resolved destinations: the site may canonicalize relative links to absolute URLs.
+      const expectedPath = new URL(href, BASE + "/").pathname;
+      const matching = page.locator("a[href]").filter({ visible: true });
+      const paths = await matching.evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
+      expect(paths, `Missing navigation target: ${expectedPath}`).toContain(expectedPath);
     }
 
     await assertNoOverflow(page);
