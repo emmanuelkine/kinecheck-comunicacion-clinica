@@ -70,7 +70,7 @@ async function openPublicPage(page, path, device) {
 }
 
 async function assertCatalogDestination(page, context, device) {
-  const catalog = page.locator(".kc-catalog-button");
+  const catalog = page.locator("#explorar .section-heading a[href]");
   await catalog.waitFor({ state: "attached", timeout: 15000 });
   const href = await catalog.getAttribute("href") || "";
 
