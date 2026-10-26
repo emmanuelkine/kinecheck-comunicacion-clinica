@@ -34,6 +34,16 @@ async function verify(browserType, device = null) {
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(`${base}/exercise/`, { waitUntil: "networkidle" });
     await page.getByRole("heading", { name: "Prescripción del ejercicio" }).waitFor();
+    await page.evaluate(async () => {
+      const registration = await navigator.serviceWorker.ready;
+      if (registration.scope !== `${location.origin}/exercise/`) throw new Error("Service worker fuera del alcance de Exercise.");
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    if (!(await page.evaluate(() => Boolean(navigator.serviceWorker.controller)))) throw new Error("Service worker no controla la PWA tras la segunda carga.");
+    if (await page.locator("main").count() !== 1) throw new Error("Falta el landmark main.");
+    if (await page.locator("h1").count() !== 1) throw new Error("Debe existir un único encabezado principal.");
+    const unlabeled = await page.locator("input, select, textarea").evaluateAll((fields) => fields.filter((field) => !field.labels?.length && !field.getAttribute("aria-label")).length);
+    if (unlabeled) throw new Error(`${unlabeled} controles de formulario carecen de etiqueta accesible.`);
     if (await page.locator(".condition-card").count() !== 10) throw new Error("No se muestran las diez condiciones.");
     if (await page.locator(".condition-card.is-pro").count() !== 8) throw new Error("No se muestran ocho condiciones Pro bloqueadas.");
     await page.getByRole("button", { name: "Ver evidencia de Dolor lumbar inespecífico" }).click();
@@ -52,7 +62,13 @@ async function verify(browserType, device = null) {
     if (errors.length) throw new Error(`Errores de página: ${errors.join("; ")}`);
     const manifest = await page.locator('link[rel="manifest"]').getAttribute("href");
     if (manifest !== "/exercise/manifest.webmanifest") throw new Error("Manifest PWA ausente o incorrecto.");
-    reports.push({ engine: browserType.name(), device: device?.defaultBrowserType ? "mobile preset" : "desktop", viewport: width, conditions: 10, proLocked: 8, manifest });
+    const manifestData = await page.evaluate(async (href) => {
+      const response = await fetch(href);
+      const data = await response.json();
+      return { ok: response.ok, scope: data.scope, startUrl: data.start_url, display: data.display, icons: data.icons?.length || 0 };
+    }, manifest);
+    if (!manifestData.ok || manifestData.scope !== "/exercise/" || manifestData.startUrl !== "/exercise/" || manifestData.display !== "standalone" || manifestData.icons < 1) throw new Error(`Manifest no cumple requisitos básicos: ${JSON.stringify(manifestData)}`);
+    reports.push({ engine: browserType.name(), device: device?.defaultBrowserType ? "mobile preset" : "desktop", viewport: width, conditions: 10, proLocked: 8, serviceWorker: "active and scoped", manifest: manifestData });
     await context.close();
   } finally { await browser.close(); }
 }

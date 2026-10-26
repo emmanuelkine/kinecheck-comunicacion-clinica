@@ -260,5 +260,5 @@
 
   buildConditions();
   renderReferences();
-  if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("/exercise/sw.js", { scope: "/exercise/" }).catch(() => {});
+  if ("serviceWorker" in navigator && window.isSecureContext) navigator.serviceWorker.register("/exercise/sw.js", { scope: "/exercise/" }).catch(() => {});
 })();

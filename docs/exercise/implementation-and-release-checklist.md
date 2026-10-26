@@ -19,8 +19,9 @@ Fecha de revisión del cambio: 26 de octubre de 2026. Rama del PR: `feat/kineche
 - `main` inspeccionada en `8d353152c9d96d40e276b00e0ceb79210b0516b2`; el repositorio tiene curso «Ejercicio Terapéutico» y el endpoint protegido `exercise-course-content`. Esa licencia conserva el slug `ejercicio-terapeutico` y no habilita Exercise Pro.
 - Supabase producción (`eqhcdclyeoapmqtlduwf`) y staging (`mhnqtyvwxytppekktvxb`) están activos. Producción ya tiene `hotmart_product_grants`, `course_access`, webhook Hotmart y funciones protegidas con verificación JWT. El slug Exercise Pro todavía no tiene un producto asociado.
 - Se inspeccionó el registro de productos activos. No se añadieron identificadores, precios, checkout URLs ni secretos ficticios.
-- No se realizaron cambios de esquema ni escrituras en la base de producción.
-- `exercise-pro-api` debe desplegarse con `verify_jwt=true`. El código también valida el usuario y la licencia mediante el servidor.
+- No se realizaron cambios de esquema ni escrituras en la base de producción. Se desplegó `exercise-pro-api` v1 solo en staging con `verify_jwt=true`.
+- La llamada real a staging sin JWT válido respondió 401; un `Origin` ajeno a KineCheck respondió 403. Las calculadoras también requieren verificación JWT y consulta server side de licencia en cada operación.
+- No se dispone de cuenta de prueba con una licencia `kinecheck-exercise-pro`; no se validaron estados 403/200 de suscripción, renovación ni revocación de este producto.
 - En revisión del changelog Supabase al 26 de octubre de 2026, el único cambio marcado como breaking change de Edge Functions era la retirada futura de un subconjunto de cifrados TLS el 10 de noviembre; no afecta a la implementación sobre HTTPS moderno.
 
 ## Evidencia clínica y editorial
@@ -48,7 +49,10 @@ Por esa revisión pendiente, esta rama no se debe fusionar ni anunciar como herr
 ## Resultados registrados en esta rama
 
 - `npm run test:exercise`: 9/9 pruebas unitarias aprobadas.
-- Chromium/WebKit local: no ejecutado. Playwright no encontró binarios; la descarga del CDN devolvió un archivo vacío/inválido en este entorno. El workflow `KineCheck Exercise QA` está preparado para instalar y ejecutar Chromium, WebKit y presets móviles en CI.
-- Despliegue de Cloudflare Pages: pendiente de PR.
-- Despliegue de Supabase staging: pendiente.
+- `npm test`: 151/151 pruebas del repositorio aprobadas; la verificación de referencias SHA fijó también el workflow nuevo.
+- Chromium y WebKit: el workflow `KineCheck Exercise QA` pasó para escritorio y preset móvil iPhone. Verifica recorrido demo, 10 condiciones, 8 bloqueos, ausencia de overflow, bloqueo Pro sin sesión, manifest, service worker activo y limitado a `/exercise/`, landmark `main`, encabezado principal y etiquetas de formularios. Tras ampliar estas verificaciones, el job corre nuevamente con el commit más reciente.
+- La descarga local de Playwright falló por respuesta CDN vacía/inválida; por eso la ejecución real de motores se hizo en GitHub Actions, donde Chromium y WebKit se instalaron y aprobaron.
+- Vista previa Cloudflare Pages comprobada por HTTP 200 en `https://feat-kinecheck-exercise-demo.kinecheck-comunicacion-clinica.pages.dev/exercise/` y `/gratis/`; la tarjeta apunta a `/exercise/`. Producción `/exercise/` sigue en 404, pues el PR permanece abierto y en borrador.
+- Supabase staging: `exercise-pro-api` v1 activa; respuesta 401 sin sesión y 403 para origen ajeno. Producción sin cambios.
+- Sin auditoría profesional, análisis Lighthouse, prueba de instalación nativa en dispositivos físicos, cuenta autorizada Pro ni ciclo Hotmart verificado. No activar ventas ni anunciar una herramienta clínica hasta cerrar estas validaciones.
 - Checkout, ciclo Hotmart y revisión profesional: pendientes.
