@@ -35,10 +35,10 @@
       const card = element("article", `condition-card${condition.demo ? "" : " is-pro"}`);
       const title = element("h3", "", condition.name);
       const note = element("p", "", condition.demo ? condition.note : "Contenido ampliado, herramientas clínicas y referencias verificables disponibles en Pro.");
-      const button = element("button", `button ${condition.demo ? "button-secondary" : "button-quiet"}`, condition.demo ? "Ver evidencia" : "🔒 Pro · Ver beneficios");
+      const button = element("button", `button ${condition.demo ? "button-secondary" : "button-quiet"}`, condition.demo ? "Ver recomendaciones" : "🔒 Pro · Ver beneficios");
       button.type = "button";
       if (condition.demo) {
-        button.setAttribute("aria-label", `Ver evidencia de ${condition.name}`);
+        button.setAttribute("aria-label", `Ver recomendaciones para ${condition.name}`);
         button.addEventListener("click", () => selectCondition(condition));
       } else {
         button.setAttribute("aria-label", `${condition.name}, bloqueada hasta activar Pro`);
@@ -91,7 +91,11 @@
     addDefinition(details, "Resultado", item.result);
     addDefinition(details, "Certeza / diseño", item.recommendation || item.certainty || "No se asignó certeza GRADE en esta aplicación.");
     addDefinition(details, "Aplicabilidad y límites", item.limitations);
-    addDefinition(details, "FITT-VP", item.condition === "low-back-pain" ? "La guía no establece aquí una dosis universal: modalidad, frecuencia, intensidad, volumen y progresión requieren revisión individual." : "El protocolo del ensayo describe etapas y respuesta al dolor, pero no es una dosis universal. La ficha no resume un volumen completo por ejercicio.");
+    addDefinition(details, "Prescripción orientativa", item.condition === "low-back-pain" ? "Ofrecer un programa de ejercicio estructurado, adaptado a las preferencias, capacidades y objetivos del adulto con dolor lumbar primario crónico. La guía OMS no identifica aquí una dosis única ni una modalidad superior para todas las personas." : "Considerar un programa progresivo de carga del tendón: comenzar por una etapa isométrica, avanzar a ejercicios isotónicos, luego almacenamiento/liberación de energía y finalmente tareas específicas del deporte, según respuesta clínica. Es la secuencia estudiada, no una pauta universal.");
+    addDefinition(details, "Frecuencia e intensidad", "Individualizar según evaluación, tolerancia y protocolo pertinente. La ficha resumida no justifica una cifra universal.");
+    addDefinition(details, "Volumen y recuperación", "Definir y registrar series, repeticiones, carga y recuperación según evaluación y fuente completa; no extrapolar dosis de poblaciones diferentes.");
+    addDefinition(details, "Progresión", context.irritability === "Alta" || context.tolerance === "Limitada" ? "Priorizar una exposición inicial tolerable, registrar respuesta durante y después de la actividad y reevaluar antes de aumentar demanda." : context.tolerance === "Buena" && context.irritability === "Baja" ? "Considerar progresión gradual hacia las demandas funcionales, comprobando la respuesta antes de cada ajuste." : "Ajustar progresivamente según respuesta clínica, función y tolerancia; no aplicar incrementos automáticos.");
+    addDefinition(details, "Objetivo funcional", context.goal ? "Relacionar la selección de ejercicios con: " + context.goal.toLowerCase() + "." : "Definir con la persona un objetivo funcional medible.");
     card.append(details);
     const editorial = element("p", "", `Decisión editorial: ${item.editorialDecision}`);
     card.append(editorial);
@@ -103,7 +107,7 @@
     refs.evidence.append(card);
     const banner = element("div", "notice notice-review");
     banner.setAttribute("role", "note");
-    banner.append(element("strong", "", "Sin recomendación individual"), element("span", "", "Este resultado muestra evidencia contextualizada. No calcula dosis, progresión ni autorización para hacer ejercicio. Revisión profesional pendiente."));
+    banner.append(element("strong", "", "Aplicación clínica responsable"), element("span", "", "Estas son orientaciones basadas en la fuente indicada; el kinesiólogo define la dosis concreta tras evaluar al paciente. Revisión profesional del contenido pendiente."));
     refs.evidence.append(banner);
     refs.result.hidden = false;
     refs.result.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -131,7 +135,7 @@
     }
     const item = sourceData.find((entry) => entry.condition === currentCondition.id);
     if (!item) {
-      refs.message.textContent = "No hay una ficha de evidencia disponible para esta condición.";
+      refs.message.textContent = "No se pudo cargar la ficha. Vuelve a intentar; si el problema continúa, revisa la conexión.";
       return;
     }
     refs.message.textContent = "";
