@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "products": 7,
+  "viewports": [
+    "mobile",
+    "tablet",
+    "desktop"
+  ]
+}

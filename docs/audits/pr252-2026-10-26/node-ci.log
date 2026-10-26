@@ -1,0 +1,186 @@
+
+> test
+> node --test tests/*.test.mjs
+
+✔ preparation includes all eight courses and keeps OTEC certification disabled (1.09027ms)
+✔ assessment status requires authentication and never returns answer keys (0.228409ms)
+✔ completion sync is blocked while OTEC certification is inactive (0.166062ms)
+✔ assessment UI follows server activation, route eligibility and certification status (13.362704ms)
+✔ saved timestamps do not complete empty or absent written activities (4.079431ms)
+✔ mandatory academic work must satisfy its published length and every configured criterion (3.013557ms)
+✔ all eight programs retain the verified structure and existing planned minutes (1.802338ms)
+✔ every essential reference resolves to an identified source and tools are not certified courses (0.915041ms)
+✔ opening a course records access without manufacturing study percentage (6.91333ms)
+✔ legacy access-only one percent is not shown as measured learning (0.86692ms)
+✔ explicit one percent, module completion and existing measured progress are preserved (3.171293ms)
+✔ Academy conserva el contrato DOM de inicialización y sus listeners directos (7.776169ms)
+✔ admin Preview authenticates without changing the production login path (1.732207ms)
+✔ admin Preview sends credentials only to its same-origin login endpoint (0.354155ms)
+✔ admin Preview loads and controls the dashboard through its owner-checked same-origin proxy (0.400734ms)
+(node:2410) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/functions/api/admin-preview-automation.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Preview automation proxy is unavailable in production and rejects cross-origin requests (52.489583ms)
+✔ Preview automation proxy requires a bearer token and a permitted operation (4.427254ms)
+✔ Preview status proves owner authorization before forwarding the bearer token server-side (3.363435ms)
+✔ Preview automation proxy never forwards a non-owner request (1.78646ms)
+✔ Preview control forwards only allowlisted administrative actions (3.523205ms)
+✔ Preview automation proxy converts upstream network failures into explicit JSON errors (1.203142ms)
+(node:2411) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/functions/api/admin-preview-login.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ preview login is unavailable outside Preview and rejects cross-origin posts (53.095923ms)
+✔ preview login rejects malformed or oversized credentials (2.68029ms)
+✔ preview login returns a session only after owner verification (3.657167ms)
+✔ preview login does not return a session to a non-owner (2.496745ms)
+✔ preview login hides upstream auth details and handles outages (2.831714ms)
+✔ beta declara acceso temporal sin compra (1.383722ms)
+✔ Recupera y perfil paciente quedan fuera de la convocatoria activa (0.241294ms)
+✔ el submit rechaza valores legacy pausados antes de enviar (0.363854ms)
+(node:2437) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/functions/api/certificacion.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Certification email service rejected the request 503
+Certification email send returned no messageId
+Certification email service rejected the request 502
+Certification email service rejected the request 403
+✔ formulario → Pages Function → Worker → Email Service confirma el envío (46.098661ms)
+✔ no anuncia un envío si el Worker rechaza el mensaje (1.317677ms)
+✔ no anuncia un envío si Email Service no confirma la aceptación (2.162656ms)
+✔ no acepta solicitudes sin consentimiento ni anuncia correo sin binding (1.842755ms)
+✔ Pages Function envía mediante Resend con remitente fijo y confirma el id (1.367291ms)
+✔ un rechazo de Resend no confirma el envío (1.500051ms)
+(node:2444) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/functions/api/certificacion-solicitudes.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ requiere sesión y rechaza cuentas que no son owner (48.1243ms)
+✔ owner ve los campos necesarios y no el HTML guardado del correo (2.365338ms)
+(node:2450) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/communication-academic-revision-v1.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ academic revisions resolve actual viewer counters and thumbnail labels (1.740072ms)
+✔ revised clinical passages retain verified original sources and bounded claims (2.454395ms)
+(node:2460) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/communication-quiz-source-repair-v1.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ legacy answer styling renders both feedback states without an empty DOM token (3.658379ms)
+✔ other courses retain their exact protected source (0.26032ms)
+✔ every free-library card link has a stable tracking slug (3.77852ms)
+✔ library loads consent metrics and emits generic and eBook events (0.294944ms)
+✔ the audience landing keeps both library routes and the consent loader (0.428826ms)
+✔ backend and database allow the new events (0.287501ms)
+✔ each audience library resolves its local stylesheets after folder moves (1.57977ms)
+✔ duplicate webhook and stale approval cannot reactivate a refunded purchase (2126.790402ms)
+✔ approval after an earlier refund restores the same transaction (1272.55123ms)
+✔ unknown product is recorded for reconciliation but grants no access (1250.766762ms)
+✔ one pack approval grants every mapped course (1207.463935ms)
+✔ approval retry with a new event id never extends the same transaction (1208.250777ms)
+✔ cancel, expiry, refund and chargeback revoke the final active purchase (4655.895386ms)
+✔ production grant snapshot contains 12 products with explicit access terms (1215.852145ms)
+✔ Escalas and Pruebas Especiales grant 12 months and resist replay after revocation (1225.405312ms)
+✔ webhook handles unmapped products without logging PII or secrets (1.274165ms)
+✔ approved purchase returns to Academy for license refresh (0.82412ms)
+✔ late refund or chargeback of purchase A cannot revoke newer purchase B (4974.943159ms)
+✔ refund of the last remaining active purchase revokes access (1312.026282ms)
+✔ commercial refund cannot overwrite owner, beta or manual QA access (5347.671056ms)
+✔ purchase deletion requires a reason, is audited, and access remains resilient (1378.879512ms)
+✔ expired commercial access deactivates without affecting owner access (1411.524494ms)
+✔ commercial metrics exclude owner, beta, manual QA and hotmart_test (1353.24185ms)
+✔ invariant queries expose missing, orphaned, revoked and duplicate states (1337.961788ms)
+✔ migration is idempotent and never deletes purchase history (1364.39617ms)
+✔ admin dashboard labels commercial, QA, unclassified and legacy totals explicitly (1.395598ms)
+✔ versioned automation function bodies match the deployed production source (2.760416ms)
+✔ profile normalization accepts only the demo contact mode and bounded public fields (1.636026ms)
+✔ institutional channel requires HTTPS; userinfo and script URLs are rejected (0.286108ms)
+✔ WhatsApp link contains selected Santiago date and time and requires a patient click (52.404416ms)
+✔ institutional URL opens the configured HTTPS booking channel (0.626919ms)
+✔ slot input must be a valid future local date and time (0.729703ms)
+✔ demo identifiers use a recognizable prefix and random hexadecimal token (0.317187ms)
+✔ demo configuration points only at staging and public HTML uses DOM-built text, not interpolated HTML (25.499004ms)
+✔ implicit confirmation sessions hydrate the Supabase user id before owner-scoped writes (2.925914ms)
+✔ authorized professionals can publish a batch of independent hours and return later without re-entering profile (2.225245ms)
+✔ save confirmed, identical retry is idempotent and modified retry cannot replace an earlier work (59.142328ms)
+✔ missing steps, wrong choices and unobserved actions cannot be submitted (7.89603ms)
+✔ unauthorized teacher read and write are denied; cross-origin writes fail (1.88272ms)
+✔ private receipt hides names, answers and secrets and rejects another token (22.00143ms)
+✔ verified owner can review; student reads published feedback; stored attempts survive (5.332937ms)
+✔ storage unavailable or failed cannot produce a false successful receipt (2.243375ms)
+(node:2509) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/functions/api/library-feedback.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/runner/work/kinecheck-comunicacion-clinica/kinecheck-comunicacion-clinica/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ library feedback validates input, stores anonymous pending records, moderates, and publishes only approved data (63.746923ms)
+✔ server rejects incorrect types, invalid values, oversized UTF-8 and unexpected origins (8.039447ms)
+✔ server network throttle survives cookie removal and stores no raw IP or contact identity (10.394195ms)
+✔ Preview CERT_REQUESTS and rate secret fail closed without falling back to another KV (4.946822ms)
+✔ unauthenticated, expired, non-owner and unavailable auth cannot read or moderate (2.995562ms)
+✔ moderation requires privacy review, supports redaction, rejects safely, and preserves all five scores (24.737765ms)
+✔ sensitive disclosures are rejected before storage, including accents and third-person patients (1.384944ms)
+✔ pagination, historical scores, retention and projection do not leak identity or distort totals (2.814071ms)
+✔ library feedback honeypot, duplicate cookie, and health detail protections work (3.481055ms)
+✔ authenticated ecosystem owner receives valid protected JavaScript without a per-course purchase row (45.987426ms)
+✔ ordinary learner still requires an active, unexpired license (11.610321ms)
+✔ invalid authentication and a different course never download protected assets (3.957762ms)
+✔ HTML returned as a protected script is rejected (2.456529ms)
+✔ deployment in a different project fails before accessing protected assets (1.380405ms)
+✔ las métricas opcionales requieren aceptación (10.362946ms)
+✔ el visitante puede informarse y cambiar su elección (3.083538ms)
+✔ el servidor descarta métricas enviadas por clientes antiguos sin preferencia (3.678534ms)
+✔ the OTEC review package specifies all eight assessment designs (6.244409ms)
+✔ the proposal cannot be mistaken for active OTEC or SENCE certification (1.831584ms)
+✔ every formerly open finding now has an implemented design or protocol (2.454384ms)
+✔ SSO de aplicaciones usa el dominio KineCheck sin publicar un proxy parcial (1.707962ms)
+✔ Recupera permanece bloqueado y el consentimiento legacy no activa el flujo (1.466728ms)
+✔ KineCheck Clinico mantiene posicionamiento curso + guia en su ficha canonica (0.56384ms)
+✔ sitemap publica audiencias y fichas SEO indexables (0.789655ms)
+✔ Recupera queda Próximamente y sin rutas activas en Academy (13.640509ms)
+✔ el POST SSO productivo de Estudiante permanece intacto (5.261724ms)
+✔ las superficies públicas y el consentimiento legacy no activan Recupera (3.083629ms)
+✔ Clínico y Estudiante declaran uso educativo y bloquean identificadores reales (3.191281ms)
+✔ restored treatment graphic has a complete WebP container and the expected lossless payload (3.402558ms)
+✔ truncated WebP is rejected even when its signature still looks valid (2.899723ms)
+✔ brand detection catches mixed case in extracted lettering and leaves the clinical brand alone (1.363675ms)
+✔ la portada canónica conserva navegación, accesibilidad y rutas públicas (8.098288ms)
+✔ la portada conserva exactamente ocho testimonios anónimos sin rating numérico (4.628554ms)
+✔ la portada agrupa el título móvil sin partir palabras clínicas (3.854237ms)
+✔ la portada referencia assets críticos existentes y versionados (2.139684ms)
+✔ public refund policy does not expose internal launch QA markers (6.382782ms)
+✔ la portada simplificada conserva soporte, tres perfiles y acceso canónico (11.148613ms)
+✔ ninguna superficie pública visible usa /platform/ ni CTAs vacíos (28.905775ms)
+✔ la arquitectura de marca queda distribuida por perfil sin duplicarse en portada (3.170511ms)
+✔ precios públicos y 12 Product IDs técnicos conservan contratos separados (3.092145ms)
+✔ los perfiles activos publican precios y Recupera permanece sin compra (2.294364ms)
+✔ no existe una oferta activa de Pack Profesional (2.174368ms)
+✔ Productos entrega un fallback clínico útil sin JavaScript (1.48341ms)
+✔ la hidratación conserva ocho checkouts históricos y acceso canónico (1.999049ms)
+✔ las rutas de compatibilidad siguen siendo redirecciones (2.643691ms)
+✔ la política pública conserva el retracto y la evidencia comercial se registra internamente (1.549744ms)
+✔ el dashboard RC separa evidencia automatizada de validación comercial real (2.035357ms)
+✔ los estilos y el menú conservan foco visible y teclado (1.647298ms)
+✔ Recupera remains non-purchasable across Academy and public help (8.86164ms)
+✔ tester beta nunca activa ownerMode por la lógica de presentación (1.759378ms)
+✔ badges distinguen propietario, prueba y licencia normal (0.512393ms)
+✔ marca de agua sólo acepta etiquetas PROPIETARIO o PRUEBA (0.235984ms)
+✔ betaMode queda subordinado a !ownerMode también en apertura de producto (0.232788ms)
+✔ automation-status requires an active owner grant (1.643761ms)
+✔ beta-apply cannot overwrite an existing anonymous application (2.414399ms)
+✔ evidence Hotmart events use the atomic shared processor (0.326323ms)
+✔ course-key fails closed and enforces access terms (0.501493ms)
+✔ premium course payloads stay outside the public tree (0.730604ms)
+✔ deployed metric privacy controls remain in source control (0.315904ms)
+✔ GitHub Actions and service containers use immutable references (6.550217ms)
+✔ Edge Function imports are pinned to exact versions (2.19091ms)
+ℹ tests 142
+ℹ suites 0
+ℹ pass 142
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33319.267329

@@ -1,0 +1,83 @@
+✓ Academy conserva el único formulario de ingreso
+✓ Academy conserva recuperación de contraseña
+✓ Academy carga bootstrap de sesión privada
+✓ Comunicación Clínica: sin formulario secundario
+✓ Comunicación Clínica: sin campo de contraseña
+✓ Comunicación Clínica: regreso claro a biblioteca
+✓ Traumatología: sin formulario secundario
+✓ Traumatología: sin campo de contraseña
+✓ Traumatología: regreso claro a biblioteca
+✓ KineCheck Clínico curso: sin formulario secundario
+✓ KineCheck Clínico curso: sin campo de contraseña
+✓ KineCheck Clínico curso: regreso claro a biblioteca
+✓ Ruta antigua segura: sin formulario secundario
+✓ Ruta antigua segura: sin campo de contraseña
+✓ Ruta antigua segura: regreso claro a biblioteca
+✓ Guía Clínico sin autenticación duplicada
+✓ Guía Clínico advierte que requiere licencia
+✓ Comunicación fija su slug
+✓ Traumatología fija su slug
+✓ Curso Clínico fija su slug
+✓ Gate común no inicia sesión por contraseña
+✓ Gate común solicita el slug configurado
+✓ Gate común valida identidad
+✓ Gate común no envía Cache-Control como request header
+✓ Gate común conserva sesión ante error de red
+✓ Course-key compara correo autenticado
+✓ Course-key filtra slug exacto
+✓ Course-key exige licencia activa
+✓ Course-key separa contenido por slug
+✓ Opener final está instalado
+✓ Opener limita aplicaciones externas
+✓ Opener limita cursos alojados externamente
+✓ Opener usa sesión temporal
+✓ Bridge cubre Inicio, ruta, recomendaciones, Mis productos y Continuar
+✓ Bridge usa captura antes de handlers de document
+✓ Opener usa handoff efímero por fragmento
+✓ Opener navega cursos externos en la misma pestaña
+✓ Opener no depende de popup para cursos externos
+✓ Opener no transfiere refresh_token ni identidad
+✓ Opener publica una versión explícita
+✓ Bootstrap publica brand identity private1
+✓ Router legado solo delega
+✓ Guard antiguo no intercepta clicks
+✓ Relay limita aplicaciones externas
+✓ Relay rechaza Recupera antes del POST
+✓ Ruta Clínica antigua excluida del relay
+✓ Relay envía product al servidor
+✓ Clínico se abre como guía local
+✓ Clínico incluye curso central
+✓ Config SSO solo expone Estudiante
+✓ Config mantiene Recupera Próximamente
+✓ Más allá del dolor: sin formulario secundario
+✓ Más allá del dolor: sin campo de contraseña
+✓ Más allá del dolor: regreso claro a biblioteca
+✓ Más allá fija producto exacto
+✓ Más allá solicita licencia exacta
+✓ Más allá usa sesión temporal
+✓ Más allá consume handoff privado
+✓ Más allá limpia el handoff de la URL
+✓ Más allá conserva postMessage como compatibilidad
+✓ Más allá no borra sesión por falta de opener
+✓ Más allá no envía Cache-Control como request header
+✓ Más allá conserva sesión ante error de red
+✓ Más allá no permite login local
+✓ Más allá carga handoff versionado antes del gate
+✓ Evidencia Aplicada: sin formulario secundario
+✓ Evidencia Aplicada: sin campo de contraseña
+✓ Evidencia Aplicada: regreso claro a biblioteca
+✓ Evidencia fija producto exacto
+✓ Evidencia solicita contenido exacto
+✓ Evidencia usa sesión temporal
+✓ Evidencia consume handoff privado
+✓ Evidencia limpia el handoff de la URL
+✓ Evidencia conserva postMessage como compatibilidad
+✓ Evidencia no borra sesión por falta de opener
+✓ Evidencia no envía Cache-Control como request header
+✓ Evidencia conserva sesión ante error de red
+✓ Evidencia no permite login local
+✓ Evidencia carga handoff versionado antes del gate
+✓ Backend Evidencia fija course slug
+✓ Backend Evidencia rechaza otro slug
+✓ Backend Evidencia filtra licencia exacta
+Acceso del ecosistema aprobado: 82/82 controles.

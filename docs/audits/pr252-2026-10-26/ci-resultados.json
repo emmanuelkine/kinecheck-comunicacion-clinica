@@ -1,0 +1,172 @@
+{
+  "commit": "bb32e565a8dbbe50e67a9c93a5690d16fb48edc7",
+  "runId": 40306295817,
+  "checks": [
+    {
+      "id": 121516236250,
+      "name": "synthetic-feedback",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295752/job/121516236250"
+    },
+    {
+      "id": 121516191390,
+      "name": "Cloudflare Pages",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://dash.cloudflare.com/?to=/db227be8b6673c950fb8e51566335c4d/pages/view/kinecheck-comunicacion-clinica/9678f309-631a-481c-a003-5ad818e525d2"
+    },
+    {
+      "id": 121516122656,
+      "name": "validate",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295834/job/121516122656"
+    },
+    {
+      "id": 121516122163,
+      "name": "regressions",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295817/job/121516122163"
+    },
+    {
+      "id": 121516122109,
+      "name": "browser-regressions",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295817/job/121516122109"
+    },
+    {
+      "id": 121516122096,
+      "name": "visual-audit (webkit)",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295901/job/121516122096"
+    },
+    {
+      "id": 121516122070,
+      "name": "public-sso-probe",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295766/job/121516122070"
+    },
+    {
+      "id": 121516122001,
+      "name": "binary-audit",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295817/job/121516122001"
+    },
+    {
+      "id": 121516121819,
+      "name": "validate-publication",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295869/job/121516121819"
+    },
+    {
+      "id": 121516121817,
+      "name": "validate",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295771/job/121516121817"
+    },
+    {
+      "id": 121516121749,
+      "name": "validate",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295815/job/121516121749"
+    },
+    {
+      "id": 121516121711,
+      "name": "end-to-end-healthcheck",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295725/job/121516121711"
+    },
+    {
+      "id": 121516121664,
+      "name": "source-validators",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295817/job/121516121664"
+    },
+    {
+      "id": 121516121623,
+      "name": "visual-audit (chromium)",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295901/job/121516121623"
+    },
+    {
+      "id": 121516121581,
+      "name": "platform-hardening",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295775/job/121516121581"
+    },
+    {
+      "id": 121516121475,
+      "name": "validate",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295720/job/121516121475"
+    },
+    {
+      "id": 121516121468,
+      "name": "academy-ui-contracts",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295841/job/121516121468"
+    },
+    {
+      "id": 121516121399,
+      "name": "live",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295843/job/121516121399"
+    },
+    {
+      "id": 121516121316,
+      "name": "browser-buttons",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295749/job/121516121316"
+    },
+    {
+      "id": 121516121170,
+      "name": "hotmart-access",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295806/job/121516121170"
+    },
+    {
+      "id": 121516121135,
+      "name": "consent",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295738/job/121516121135"
+    },
+    {
+      "id": 121516121108,
+      "name": "scan",
+      "status": "completed",
+      "conclusion": "success",
+      "detailsUrl": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40306295735/job/121516121108"
+    }
+  ],
+  "visual": [
+    {
+      "engine": "chromium",
+      "job": 121516121623,
+      "passed": 27
+    },
+    {
+      "engine": "webkit",
+      "job": 121516122096,
+      "passed": 27
+    }
+  ]
+}

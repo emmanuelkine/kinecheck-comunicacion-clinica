@@ -1,5 +1,7 @@
 # Informe de conformidad — PR #252
 
+**Registro histórico del 23 de octubre.** El estado posterior se documenta en el [informe del 26 de octubre](../pr252-2026-10-26/INFORME_CONFORMIDAD.md) y en el cierre del PR.
+
 **Resultado: conformidad parcial. La reparación de activos aprueba; la fusión y la publicación quedan bloqueadas por pruebas fallidas.**
 
 Fecha: 23 de octubre de 2026. Cierre documental: 2026-10-23T16:29:11-03:00 (America/Santiago). Repositorio: `emmanuelkine/kinecheck-comunicacion-clinica`. Código probado: `e7890dd9217125c576ef0cd0fbb4f8851eada133`. Base contrastada: `17d619eb120e004f0dfc23f97c1ff837d66a2c25`.

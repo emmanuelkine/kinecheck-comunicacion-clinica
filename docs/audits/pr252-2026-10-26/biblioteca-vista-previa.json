@@ -1,0 +1,20 @@
+{
+  "method": "Manual cloud-browser screenshot and live DOM inspection",
+  "previewCommit": "f4b7e9b6e085773a729e92cac45ae4b6f1129513",
+  "url": "https://9967b6d8.kinecheck-comunicacion-clinica.pages.dev/gratis/profesionales/",
+  "logo": {
+    "source": "/assets/brand/kinecheck-3d-header.webp",
+    "nativeWidth": 900,
+    "nativeHeight": 183,
+    "displayWidth": 245.328125,
+    "displayHeight": 49.875
+  },
+  "horizontalOverflow": false,
+  "resourceCards": 45,
+  "stylesLoaded": [
+    "/assets/brand/kinecheck-3d.css?v=1",
+    "/gratis/brand-3d.css?v=3",
+    "/gratis/mobile-readability-v1.css?v=20261005"
+  ],
+  "observation": "Original logo displays proportionately; shared brand and mobile styles load at their correct paths. Screenshot inspected visually."
+}

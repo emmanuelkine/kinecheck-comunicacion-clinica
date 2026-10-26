@@ -1,0 +1,88 @@
+
+KineCheck end-to-end healthcheck · producción canónica
+
+✅ Archivo local presente: index.html
+✅ Archivo local presente: profesionales/index.html
+✅ Archivo local presente: estudiantes/index.html
+✅ Archivo local presente: recupera/index.html
+✅ Archivo local presente: productos/index.html
+✅ Archivo local presente: productos/product.js
+✅ Archivo local presente: productos/dolor-lumbar-persistente/index.html
+✅ Archivo local presente: productos/dolor-musculoesqueletico/index.html
+✅ Archivo local presente: academy/index.html
+✅ Archivo local presente: productos/banderas-clinicas/index.html
+✅ Archivo local presente: academy/academy-v39.js
+✅ Archivo local presente: academy/academy-open-v6.js
+✅ Archivo local presente: academy/academy-owned-native-bridge-v1.js
+✅ Archivo local presente: academy/academy-launch-router-v4.js
+✅ Archivo local presente: academy/academy-integration-guard-v4.js
+✅ Archivo local presente: academy/salir.html
+✅ Archivo local presente: academy/compra-aprobada.html
+✅ Archivo local presente: academy/pago-pendiente.html
+✅ Archivo local presente: academy/pago-en-analisis.html
+✅ Archivo local presente: kinecheck/index.html
+✅ Archivo local presente: kinecheck/profesionales/index.html
+✅ Archivo local presente: kinecheck/estudiantes/index.html
+✅ Archivo local presente: kinecheck/recupera/index.html
+✅ Archivo local presente: assets/kinecheck-mark.svg
+✅ Archivo local presente: comunicacion-clinica.html
+✅ Academy utiliza el runtime estable con caché v20261003-route-hardening1.
+✅ La Biblioteca prioriza productos adquiridos y separa los productos por explorar.
+✅ Las páginas públicas apuntan a la entrada canónica limpia de Academy.
+✅ Los botones de lanzamiento pueden renovar la sesión antes de abrir un producto.
+✅ El router principal delega en el opener unificado vigente.
+✅ El router de recomendaciones delega en el opener unificado vigente.
+✅ El opener unificado mantiene ruta protegida, renovación y handoff efímero access-only sin popup.
+✅ Los cursos protegidos conservan la sesión aislada y el traspaso SSO vigente.
+✅ Producto activo en modo no comercial: Dolor Musculoesquelético: del mecanismo a la decisión clínica
+✅ Producto activo en modo no comercial: KineCheck Banderas Clínicas
+✅ Producto activo en modo no comercial: Ejercicio Terapéutico
+✅ Dolor Lumbar Persistente está activo con Product ID Hotmart 8330940.
+✅ Producto activo representado en páginas públicas canónicas: Guía complementaria KineCheck Clínico / KineCheck Clínico
+✅ Producto activo representado en páginas públicas canónicas: KineCheck Estudiante
+✅ Producto activo representado en páginas públicas canónicas: Comunicación Clínica
+✅ Producto activo representado en páginas públicas canónicas: Más allá del dolor
+✅ Producto activo representado en páginas públicas canónicas: KineCheck Evidencia Aplicada
+✅ Producto activo representado en páginas públicas canónicas: Traumatología y Ortopedia Clínica
+✅ Producto activo representado en páginas públicas canónicas: Dolor Lumbar Persistente
+✅ KineCheck Estudiante y Pack mantienen ventas activas tras el cierre de #56 y #78.
+✅ KineCheck Recupera permanece Próximamente, sin precio ni checkout público.
+::warning::El checkout responde en Hotmart, pero el nombre de KineCheck Clínico no está expuesto en el HTML automatizable.
+::warning::El checkout responde en Hotmart, pero el nombre de Comunicación Clínica no está expuesto en el HTML automatizable.
+::warning::El checkout responde en Hotmart, pero el nombre de KineCheck Estudiante no está expuesto en el HTML automatizable.
+::warning::El checkout responde en Hotmart, pero el nombre de Pack KineCheck Estudiante no está expuesto en el HTML automatizable.
+::warning::El checkout responde en Hotmart, pero el nombre de Más allá del Dolor no está expuesto en el HTML automatizable.
+::warning::El checkout responde en Hotmart, pero el nombre de KineCheck Evidencia Aplicada no está expuesto en el HTML automatizable.
+✅ Checkout correcto: Traumatología y Ortopedia Clínica (HTTP 200)
+::warning::El checkout responde en Hotmart, pero el nombre de Dolor Lumbar Persistente no está expuesto en el HTML automatizable.
+✅ Portada KineCheck responde HTTP 200
+✅ Página para profesionales responde HTTP 200
+✅ Página para estudiantes responde HTTP 200
+✅ Página Recupera responde HTTP 200
+✅ Detalle de productos responde HTTP 200
+✅ Detalle Dolor Lumbar Persistente responde HTTP 200
+✅ Detalle Dolor Musculoesquelético responde HTTP 200
+✅ Detalle Banderas Clínicas responde HTTP 200
+✅ Ruta heredada KineCheck responde HTTP 200
+✅ Acceso Comunicación Clínica responde HTTP 308
+✅ KineCheck Academy responde HTTP 200
+✅ Página compra aprobada responde HTTP 308
+✅ Página pago pendiente responde HTTP 308
+✅ Página compra en análisis responde HTTP 308
+✅ Acceso Guía complementaria KineCheck Clínico responde HTTP 200
+✅ Acceso KineCheck Clínico responde HTTP 200
+✅ Acceso KineCheck Estudiante responde HTTP 200
+✅ Acceso Comunicación Clínica responde HTTP 308
+✅ Acceso Más allá del dolor responde HTTP 200
+✅ Acceso KineCheck Evidencia Aplicada responde HTTP 200
+✅ Acceso Traumatología y Ortopedia Clínica responde HTTP 200
+✅ Acceso Dolor Lumbar Persistente responde HTTP 200
+✅ Acceso Dolor Musculoesquelético: del mecanismo a la decisión clínica responde HTTP 200
+✅ Acceso KineCheck Banderas Clínicas responde HTTP 200
+✅ Acceso Ejercicio Terapéutico responde HTTP 200
+✅ Edge Function course-key responde HTTP 401
+✅ Webhook Hotmart general responde HTTP 405
+✅ Contenido Evidencia Aplicada responde HTTP 401
+✅ Webhook Evidencia Aplicada responde HTTP 405
+
+Resultado: 0 fallo(s), 7 advertencia(s).

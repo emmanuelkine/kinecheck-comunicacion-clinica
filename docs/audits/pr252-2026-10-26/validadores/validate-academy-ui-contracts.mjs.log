@@ -1,0 +1,13 @@
+✔ Contrato DOM de las cinco vistas principales verificado.
+✔ Controlador de visibilidad y navegación presente.
+✔ Contrato HTML/CSS/JS de Recursos verificado.
+✔ Contrato visual de Inicio verificado.
+✔ Contrato visual de Biblioteca verificado.
+✔ Inicio, Biblioteca y Recursos comparten ancho y ritmo visual.
+✔ Handlers críticos y descriptor de marca protegidos.
+✔ Assets directos de Academy usan una sola versión y existen.
+✔ Contrato visual compartido está referenciado.
+✔ Academy mantiene no-store para HTML, CSS y JS.
+✔ Archivos UI críticos presentes.
+
+Academy UI contracts: OK

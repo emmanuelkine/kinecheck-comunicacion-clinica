@@ -1,0 +1,94 @@
+{
+  "checkedAt": "2026-10-26T10:05:46.330127+00:00",
+  "results": [
+    {
+      "slug": "kinecheck-clinico",
+      "url": "https://pay.hotmart.com/L106791841D",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/L106791841D",
+      "bytes": 218245,
+      "title": "KineCheck Clínico | Registro Kinésico Profesional",
+      "hotmartHost": true,
+      "sha256": "9ec9e2ce70d4d38e5e8d6042fa116c808f327b1b20fd7112ecd742b92ea2aef3"
+    },
+    {
+      "slug": "kinecheck-estudiante",
+      "url": "https://pay.hotmart.com/G106801166S",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/G106801166S",
+      "bytes": 218201,
+      "title": "KineCheck Estudiante | Evaluación y Razonamiento Clínico",
+      "hotmartHost": true,
+      "sha256": "5ec906567e67890f855d9a76373e48c6b94172beca9a98acd4f268999956c11c"
+    },
+    {
+      "slug": "comunicacion-clinica",
+      "url": "https://pay.hotmart.com/T106883983U",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/T106883983U",
+      "bytes": 218941,
+      "title": "KineCheck Comunicación Clínica — El arte de comunicar en salud",
+      "hotmartHost": true,
+      "sha256": "5a4acb20f6ea49b1dcf6e6a69c395606002a9af983e1a3209541f4f9fba0afa4"
+    },
+    {
+      "slug": "mas-alla-del-dolor",
+      "url": "https://pay.hotmart.com/W106888386Q",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/W106888386Q",
+      "bytes": 218595,
+      "title": "Más allá del dolor: evaluación MSK integral",
+      "hotmartHost": true,
+      "sha256": "05d922b1e004f8c8ac69f8fd05b6a5a1303edc721db7f84e815cb0e05ff38a2e"
+    },
+    {
+      "slug": "evidencia-aplicada",
+      "url": "https://pay.hotmart.com/F106921972I",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/F106921972I",
+      "bytes": 218599,
+      "title": "KineCheck Evidencia Aplicada | Razonamiento Clínico con Evidencia",
+      "hotmartHost": true,
+      "sha256": "b4883d2f4fcff0fd7caef6f30e890701724e2d47644aa6ec1d13fc99a0ae7f88"
+    },
+    {
+      "slug": "traumatologia-ortopedia-clinica",
+      "url": "https://pay.hotmart.com/B106913952R",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/B106913952R",
+      "bytes": 218753,
+      "title": "KineCheck Traumatología y Ortopedia Clínica; Del mecanismo lesional a la decisión clínica segura",
+      "hotmartHost": true,
+      "sha256": "22dcd50889ebf367fbbe47a2385b222382eb44cb2c0000b83eda8e19f73fb88b"
+    },
+    {
+      "slug": "dolor-lumbar-persistente",
+      "url": "https://pay.hotmart.com/W107198798E",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/W107198798E",
+      "bytes": 218108,
+      "title": "KineCheck · Dolor Lumbar Persistente",
+      "hotmartHost": true,
+      "sha256": "039df53f9b60c127ebbe21bfd43cf01f7260b3ba798f87df29cde0bb166d7a17"
+    },
+    {
+      "slug": "pack-estudiante",
+      "url": "https://pay.hotmart.com/Q106891608M",
+      "method": "GET; no form submitted",
+      "status": 200,
+      "finalUrl": "https://pay.hotmart.com/Q106891608M",
+      "bytes": 219741,
+      "title": "Pack KineCheck Estudiante | Evaluación y razonamiento clínico",
+      "hotmartHost": true,
+      "sha256": "97e7203ad034031b1e462d4bbc997117206b6f253c848c1fa606cffd9b8b0f93"
+    }
+  ],
+  "limitation": "Read-only HTTP availability. No purchase, payment, webhook delivery, actual license activation or refund was performed."
+}
