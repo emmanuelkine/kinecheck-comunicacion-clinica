@@ -16,7 +16,11 @@ test.use({ viewport: { width: 390, height: 844 } });
 test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones DOM", async ({ page }) => {
   const pageErrors = [];
   const consoleErrors = [];
+  const failedResponses = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
+  page.on("response", (response) => {
+    if (response.status() >= 400) failedResponses.push(`${response.status()} ${response.url()}`);
+  });
   page.on("console", (message) => {
     if (message.type() !== "error") return;
     if (/frame-ancestors.*ignored when delivered via/i.test(message.text())) return;
@@ -93,5 +97,5 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
   await expect(page.locator("#relay-ok")).toHaveText("Relay Estudiante recibido");
 
   expect(pageErrors).toEqual([]);
-  expect(consoleErrors).toEqual([]);
+  expect(consoleErrors, `Failed HTTP responses: ${failedResponses.join("; ")}`).toEqual([]);
 });
