@@ -154,7 +154,9 @@ try {
     for (const price of ["$39.990 CLP", "$19.900 CLP", "$29.990 CLP", "$35.900 CLP"]) {
       assert.ok(professionalText.includes(price), `${device}/profesionales: falta ${price}`);
     }
-    assert.ok(!professionalText.includes("Ver curso"), `${device}/profesionales: un checkout sigue rotulado como “Ver curso”`);
+    const professionalPurchaseLabels = await page.locator('#cursos a[href^="https://pay.hotmart.com/"]').allTextContents();
+    assert.equal(professionalPurchaseLabels.length, 6, `${device}/profesionales: faltan destinos de compra`);
+    assert.ok(professionalPurchaseLabels.every((label) => /^comprar(?: curso)?$/i.test(label.trim())), `${device}/profesionales: cada checkout debe informar que inicia una compra`);
     assert.ok(professionalText.includes("Empieza aquí"), `${device}/profesionales: falta producto recomendado`);
     assert.ok(professionalText.includes("Dolor Lumbar Persistente"), `${device}/profesionales: falta curso disponible de dolor lumbar`);
     assert.ok(professionalText.includes("KINECHECK FORMACIÓN") && professionalText.includes("guía digital complementaria"), `${device}/profesionales: arquitectura de Formación incompleta`);
@@ -174,7 +176,9 @@ try {
     }
     assert.ok(studentText.includes("Empieza aquí"), `${device}/estudiantes: falta badge RECOMENDADO`);
     assert.ok(!studentText.includes("PRODUCTO PRINCIPAL"), `${device}/estudiantes: conserva badge anterior`);
-    assert.ok(!studentText.includes("Ver curso"), `${device}/estudiantes: un checkout sigue rotulado como “Ver curso”`);
+    const studentPurchaseLabels = await page.locator('#productos a[href^="https://pay.hotmart.com/"]').allTextContents();
+    assert.equal(studentPurchaseLabels.length, 5, `${device}/estudiantes: faltan destinos de compra`);
+    assert.ok(studentPurchaseLabels.every((label) => /^comprar(?: curso| pack)?$/i.test(label.trim())), `${device}/estudiantes: cada checkout debe informar que inicia una compra`);
     assert.ok(studentText.includes("KINECHECK APPS") && studentText.includes("PROFUNDIZA POR HABILIDAD") && studentText.includes("RUTA COMBINADA"), `${device}/estudiantes: arquitectura de marca incompleta`);
     await assertCleanAcademyLinks(page, `${device}/estudiantes`);
     await assertOpenGraph(page, `${device}/estudiantes`);

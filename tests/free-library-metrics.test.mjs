@@ -50,3 +50,23 @@ test("backend and database allow the new events", () => {
   assert.match(migration, /is_qa = false/);
   assert.match(migration, /revoke all .* from public, anon, authenticated/s);
 });
+
+// A move into /gratis/profesionales/ must not break shared brand/readability CSS.
+test("each audience library resolves its local stylesheets after folder moves", () => {
+  const repository = new URL("../", import.meta.url);
+  for (const path of ["gratis/index.html", "gratis/profesionales/index.html", "gratis/pacientes/index.html"]) {
+    const file = new URL(path, repository);
+    const html = fs.readFileSync(file, "utf8");
+    const links = [...html.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag);
+    const styles = links.filter((tag) => /rel=["']stylesheet["']/.test(tag));
+    assert.ok(styles.length > 0 || /<style\b/.test(html), `${path}: no styling`);
+    for (const tag of styles) {
+      const href = tag.match(/href=["']([^"']+)["']/)?.[1];
+      assert.ok(href, `${path}: stylesheet without href`);
+      if (/^https?:/.test(href)) continue;
+      const resolved = href.startsWith("/") ? new URL(href.slice(1), repository) : new URL(href, file);
+      resolved.search = "";
+      assert.ok(fs.existsSync(resolved), `${path}: stylesheet does not exist: ${href}`);
+    }
+  }
+});
