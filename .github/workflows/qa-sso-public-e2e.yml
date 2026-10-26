@@ -14,7 +14,7 @@ permissions:
 jobs:
   public-sso-probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
@@ -70,12 +70,19 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Chromium and WebKit public navigation
+      - name: Install public-navigation test runner
         shell: bash
         run: |
-          npm init -y >/dev/null 2>&1
-          npm install playwright@1.55.0 >/dev/null 2>&1
-          npx playwright install --with-deps chromium webkit >/dev/null 2>&1
+          npm init -y
+          npm install playwright@1.55.0
+      - name: Install Chromium and WebKit with visible diagnostics
+        timeout-minutes: 20
+        shell: bash
+        run: npx playwright install --with-deps chromium webkit
+      - name: Chromium and WebKit public navigation
+        timeout-minutes: 3
+        shell: bash
+        run: |
           node <<'NODE'
           const { chromium, webkit } = require('playwright');
           const engines = [['chromium', chromium], ['webkit', webkit]];
