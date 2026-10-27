@@ -57,7 +57,17 @@ async function verify(browserType, device = null) {
     await page.getByText("La OMS sugiere ofrecer programas estructurados de ejercicio", { exact: false }).waitFor();
     await page.getByRole("link", { name: /Abrir fuente verificable/ }).waitFor();
     const width = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
-    if (width.scroll > width.client + 1) throw new Error(`Overflow horizontal: ${JSON.stringify(width)}`);
+    if (width.scroll > width.client + 1) {
+      const overflow = await page.evaluate(() => {
+        const viewport = document.documentElement.clientWidth;
+        const elements = [...document.querySelectorAll('body *')].filter(el => el.getBoundingClientRect().right + scrollX > viewport + 1).slice(0, 14).map(el => ({ tag: el.tagName, id: el.id, class: el.className, right: el.getBoundingClientRect().right + scrollX, width: el.getBoundingClientRect().width, minWidth: getComputedStyle(el).minWidth, whiteSpace: getComputedStyle(el).whiteSpace }));
+        const text = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let child;
+        while ((child = walker.nextNode())) { if (!child.textContent.trim() || !child.parentElement.getClientRects().length) continue; const range = document.createRange(); range.selectNodeContents(child); if (range.getBoundingClientRect().right + scrollX > viewport + 1) text.push({ parent: child.parentElement.id || child.parentElement.className || child.parentElement.tagName, text: child.textContent.trim().slice(0, 80), right: range.getBoundingClientRect().right + scrollX }); }
+        return { elements, text: text.slice(0, 12) };
+      });
+      console.log(JSON.stringify({ engine: browserType.name(), device: device?.name || 'mobile preset', width, overflow }, null, 2));
+      throw new Error(`Overflow horizontal: ${JSON.stringify(width)}`);
+    }
     await page.getByRole("button", { name: "Verificar acceso Pro" }).click();
     await page.getByText("Inicia sesión en KineCheck y vuelve a verificar.").waitFor();
     if (await page.locator("#pro-tools").isVisible()) throw new Error("Pro se mostró sin sesión autorizada.");
