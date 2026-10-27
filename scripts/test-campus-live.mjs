@@ -3,11 +3,16 @@
 import { readFile,writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { createHandler } from '../functions/api/campus/[[path]].js';
+import { isCampusPreviewHost } from '../campus/environment.mjs';
 const fixtures=JSON.parse(await readFile(process.argv[2],'utf8'));
+if(fixtures.some(u=>!/^campus-qa-[a-f0-9]+@example\.invalid$/.test(u.email)))throw new Error('Only disposable Campus QA fixtures are permitted.');
 const handler=createHandler({base:'https://mhnqtyvwxytppekktvxb.supabase.co',key:'sb_publishable_JLWKq6m0g4yB30iIQLE4bg_AkspSDYD'});
-const origin='https://campus-staging.example';const jars=fixtures.map(()=>({}));const results=[];
+const remote=process.argv[3];
+if(remote && (!isCampusPreviewHost(new URL(remote).hostname)||new URL(remote).protocol!=='https:'))throw new Error('Remote tests are limited to the Campus Pages preview.');
+const origin=remote?new URL(remote).origin:'https://campus-staging.example';const jars=fixtures.map(()=>({}));const results=[];
 async function call(index,path,body,expected=200,override){
- const response=await handler({request:new Request(`${origin}/api/campus/${path}`,{method:'POST',headers:{origin,'content-type':'application/json',cookie:override||Object.entries(jars[index]).map(([k,v])=>`${k}=${v}`).join('; ')},body:JSON.stringify(body)})});
+ const request=new Request(`${origin}/api/campus/${path}`,{method:'POST',headers:{origin,'content-type':'application/json',cookie:override||Object.entries(jars[index]).map(([k,v])=>`${k}=${v}`).join('; ')},body:JSON.stringify(body)});
+ const response=remote?await fetch(request):await handler({request});
  const data=await response.json();assert.equal(response.status,expected,`${path}: ${JSON.stringify(data)}`);
  for(const item of response.headers.getSetCookie()){const [pair]=item.split(';');const split=pair.indexOf('=');jars[index][pair.slice(0,split)]=pair.slice(split+1);}
  return data;

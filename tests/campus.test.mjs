@@ -4,6 +4,12 @@ import { readFile, readdir } from 'node:fs/promises';
 import { PGlite } from '@electric-sql/pglite';
 import { cases, publicCatalog, gradeCase, gradeQuestion } from '../functions/_shared/campus-content.mjs';
 import { createHandler } from '../functions/api/campus/[[path]].js';
+import { isCampusPreviewHost } from '../campus/environment.mjs';
+test('preview selection is restricted to this Cloudflare Pages project',()=>{
+ assert.equal(isCampusPreviewHost('abc.kinecheck-comunicacion-clinica.pages.dev'),true);
+ assert.equal(isCampusPreviewHost('kinecheck-comunicacion-clinica.pages.dev'),true);
+ for(const host of ['kinecheck.cl','www.kinecheck.cl','kinecheck.cl.evil.test','kinecheck-comunicacion-clinica.pages.dev.evil.test','other-project.pages.dev'])assert.equal(isCampusPreviewHost(host),false);
+});
 
 test('six academic levels, original resource URLs and server-only keys',()=>{
  const catalog=publicCatalog();assert.deepEqual(catalog.levels.map(l=>l.level),[1,2,3,4,5,6]);
@@ -26,6 +32,15 @@ test('tokens stay in scoped HttpOnly cookies and never appear in JSON',async()=>
  const calls=[];const handler=createHandler({fetcher:async(url,options)=>{calls.push({url,options});return new Response(JSON.stringify({access_token:'test-access',refresh_token:'test-refresh',expires_in:3600}),{status:200});}});
  const response=await handler({request:request('auth/login',{email:'test@example.com',password:'Existing8'})});
  assert.equal(response.status,200);assert.match(response.headers.get('set-cookie'),/HttpOnly; Secure; SameSite=Strict/);assert.match(response.headers.get('set-cookie'),/Path=\/api\/campus/);assert.doesNotMatch(await response.text(),/test-access|test-refresh/);assert.equal(calls.length,1);
+});
+test('email callbacks require a flow initiated in the same browser',async()=>{
+ let upstreamCalls=0;
+ const handler=createHandler({fetcher:async()=>{upstreamCalls++;return new Response(JSON.stringify({access_token:'test-access',refresh_token:'test-refresh',expires_in:3600}),{status:200});}});
+ assert.equal((await handler({request:request('auth/callback',{refresh_token:'attacker-token'})})).status,403);
+ assert.equal((await handler({request:request('auth/callback',{refresh_token:'attacker-token',flow:'a'.repeat(32)},{cookie:'__Secure-kc_campus_flow='+ 'b'.repeat(32)})})).status,403);
+ assert.equal(upstreamCalls,0);
+ const response=await handler({request:request('auth/callback',{refresh_token:'flow-token',flow:'a'.repeat(32)},{cookie:'__Secure-kc_campus_flow='+ 'a'.repeat(32)})});
+ assert.equal(response.status,200);assert.equal(upstreamCalls,1);assert.match(response.headers.get('set-cookie'),/__Secure-kc_campus_flow=; Path=\/api\/campus; Max-Age=0/);
 });
 test('authenticated API uses the verified user and forwards no caller identity or role',async()=>{
  const calls=[];const handler=createHandler({fetcher:async(url,options)=>{calls.push({url,options});return new Response(JSON.stringify(url.endsWith('/user')?{id:'real-id',email:'test@example.com',email_confirmed_at:'2026-01-01'}:{profile:null,memberships:[],progress:[]}),{status:200});}});

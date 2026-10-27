@@ -1,9 +1,11 @@
 import { publicCatalog, gradeCase, gradeQuestion } from '../../_shared/campus-content.mjs';
+import { isCampusPreviewHost } from '../../../campus/environment.mjs';
 
 const SUPABASE = 'https://eqhcdclyeoapmqtlduwf.supabase.co';
 const KEY = 'sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_';
 const ACCESS = '__Secure-kc_campus_access';
 const REFRESH = '__Secure-kc_campus_refresh';
+const FLOW = '__Secure-kc_campus_flow';
 const HEADERS = { 'content-type':'application/json; charset=utf-8', 'cache-control':'private, no-store', 'x-content-type-options':'nosniff', 'referrer-policy':'no-referrer' };
 class CampusError extends Error { constructor(message,status=400) { super(message); this.status=status; } }
 const json = (data,status=200) => new Response(JSON.stringify(data), {status,headers:HEADERS});
@@ -13,6 +15,10 @@ function sessionCookies(response,session) {
   const fields = [[ACCESS,session?.access_token || '',session ? Math.min(Number(session.expires_in)||3600,3600):0],[REFRESH,session?.refresh_token || '',age]];
   for (const [name,value,maxAge] of fields) response.headers.append('set-cookie',`${name}=${encodeURIComponent(value)}; Path=/api/campus; Max-Age=${maxAge}; HttpOnly; Secure; SameSite=Strict`);
   return response;
+}
+function flowCookie(response,value='') {
+ response.headers.append('set-cookie',`${FLOW}=${value}; Path=/api/campus; Max-Age=${value?3600:0}; HttpOnly; Secure; SameSite=Strict`);
+ return response;
 }
 async function readInput(request) {
   if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type') || '')) throw new CampusError('Formato no permitido.',415);
@@ -57,9 +63,10 @@ export function createHandler({fetcher=fetch,base=SUPABASE,key=KEY}={}) {
    const token=decodeURIComponent(jar[ACCESS]||'');
    if(path==='auth/signup') {
     if(body.accept_privacy!==true)throw new CampusError('Debes aceptar el aviso de privacidad de Campus.');
-    const data=await call(`/auth/v1/signup?redirect_to=${encodeURIComponent(url.origin+'/campus/')}`,{body:{email:email(body.email),password:password(body.password)}});
+    const flow=crypto.randomUUID().replaceAll('-','');
+    const data=await call(`/auth/v1/signup?redirect_to=${encodeURIComponent(url.origin+'/campus/?campus_flow='+flow)}`,{body:{email:email(body.email),password:password(body.password)}});
     const response=json({confirmation_required:!data?.access_token,message:data?.access_token?'Cuenta disponible. Completa tu perfil.':'Revisa tu correo y confirma el registro. Luego vuelve a Campus para ingresar.'});
-    return data?.access_token?sessionCookies(response,data):response;
+    return data?.access_token?sessionCookies(response,data):flowCookie(response,flow);
    }
    if(path==='auth/login') {
     if(typeof body.password!=='string'||!body.password||body.password.length>128)throw new CampusError('Ingresa tu contraseña.');
@@ -74,7 +81,7 @@ export function createHandler({fetcher=fetch,base=SUPABASE,key=KEY}={}) {
    }
    if(path==='auth/logout') {
     if(token)await call('/auth/v1/logout?scope=local',{token,body:{}}).catch(()=>null);
-    return sessionCookies(json({signed_out:true}),null);
+    return flowCookie(sessionCookies(json({signed_out:true}),null));
    }
    if(path==='auth/confirm') {
     if(!/^[0-9]{6,10}$/.test(body.code||'') || !['signup','recovery'].includes(body.type))throw new CampusError('Código inválido.');
@@ -82,15 +89,19 @@ export function createHandler({fetcher=fetch,base=SUPABASE,key=KEY}={}) {
     return sessionCookies(json({signed_in:true}),data);
    }
    if(path==='auth/recover') {
-    await call(`/auth/v1/recover?redirect_to=${encodeURIComponent(url.origin+'/campus/')}`,{body:{email:email(body.email)}});
-    return json({message:'Si el correo está registrado, recibirás instrucciones para recuperar el acceso.'});
+    const flow=crypto.randomUUID().replaceAll('-','');
+    await call(`/auth/v1/recover?redirect_to=${encodeURIComponent(url.origin+'/campus/?campus_flow='+flow)}`,{body:{email:email(body.email)}});
+    return flowCookie(json({message:'Si el correo está registrado, recibirás instrucciones. Abre el enlace en este mismo navegador.'}),flow);
    }
    // Supabase confirmation callbacks may return an implicit session. Validate
    // both tokens by exchanging the refresh token; never trust browser identity.
    if(path==='auth/callback') {
+    // Bind the email callback to a flow started in this browser. This blocks
+    // login CSRF: an attacker's own refresh token cannot log in another user.
+    if(!/^[a-f0-9]{32}$/.test(body.flow||'')||body.flow!==jar[FLOW])throw new CampusError('El enlace debe abrirse en el navegador donde solicitaste el acceso. Solicita uno nuevo.',403);
     if(typeof body.refresh_token!=='string'||body.refresh_token.length>2048)throw new CampusError('Enlace inválido.');
     const data=await call('/auth/v1/token?grant_type=refresh_token',{body:{refresh_token:body.refresh_token}});
-    return sessionCookies(json({signed_in:true}),data);
+    return flowCookie(sessionCookies(json({signed_in:true}),data));
    }
    if(path==='practice') {
     try {return json({...gradeCase(body.case_id,body.answers),saved:false});}catch(e){throw new CampusError(e.message);}
@@ -112,4 +123,10 @@ export function createHandler({fetcher=fetch,base=SUPABASE,key=KEY}={}) {
   }catch(error){return json({error:error instanceof CampusError?error.message:'No se pudo completar la solicitud.'},error instanceof CampusError?error.status:500);}
  };
 }
-export const onRequest = createHandler();
+const productionHandler=createHandler();
+const previewHandler=createHandler({base:'https://mhnqtyvwxytppekktvxb.supabase.co',key:'sb_publishable_JLWKq6m0g4yB30iIQLE4bg_AkspSDYD'});
+export const onRequest = context => {
+  const host=new URL(context.request.url).hostname;
+  const preview=isCampusPreviewHost(host);
+  return (preview?previewHandler:productionHandler)(context);
+};

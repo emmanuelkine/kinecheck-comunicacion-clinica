@@ -1,3 +1,4 @@
+import { isCampusPreviewHost } from './environment.mjs';
 const $ = (s,root=document)=>root.querySelector(s);
 const state={catalog:null,context:null,mode:'login',institution:null,case:null,answers:[],refresh:null,workspace:0};
 const node=(tag,cls,text)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;};
@@ -139,12 +140,18 @@ $('#exportProgress').addEventListener('click',event=>busy(event.currentTarget,'#
 $('#deleteProgress').addEventListener('click',event=>busy(event.currentTarget,'#privacyStatus',async()=>{if(!$('#confirmDelete').checked)throw new Error('Marca la confirmación para eliminar tus intentos.');await action('delete_progress');$('#confirmDelete').checked=false;await loadContext();message('#privacyStatus','Tus intentos de Campus fueron eliminados.');}));
 async function boot(){
  try{
+  if(isCampusPreviewHost(location.hostname)){
+   const notice=node('p','notice','Entorno de pruebas de Campus. Las cuentas y el avance de esta previsualización están separados de kinecheck.cl. No corresponde a un convenio universitario.');
+   $('#contenido').prepend(notice);
+  }
+  const currentUrl=new URL(location.href),flow=currentUrl.searchParams.get('campus_flow');
   const hash=new URLSearchParams(location.hash.slice(1));const invitation=hash.get('invitation');const refresh=hash.get('refresh_token');
   if(invitation&&/^[a-f0-9]{64}$/.test(invitation))sessionStorage.setItem('kc_campus_invitation',invitation);
-  if(invitation||refresh)history.replaceState({},'',location.pathname+location.search);
+  currentUrl.searchParams.delete('campus_flow');
+  if(invitation||refresh||flow)history.replaceState({},'',currentUrl.pathname+currentUrl.search);
   const pending=sessionStorage.getItem('kc_campus_invitation');if(pending)$('#joinForm [name=token]').value=pending;
   const response=await fetch('/campus/catalog.json',{cache:'no-store'});if(!response.ok)throw new Error('No se pudo cargar el contenido. Recarga la página.');state.catalog=await response.json();renderRoutes();renderResources();renderProgress();
-  if(refresh){await api('auth/callback',{refresh_token:refresh});if(hash.get('type')==='recovery')$('#passwordDetails').open=true;}
+  if(refresh){try{await api('auth/callback',{refresh_token:refresh,flow});if(hash.get('type')==='recovery')$('#passwordDetails').open=true;}catch(e){message('#authStatus',e.message,true);}}
   await loadContext(true);message('#globalStatus','');
  }catch(e){message('#globalStatus',e.message,true);}
 }

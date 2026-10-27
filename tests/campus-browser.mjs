@@ -8,7 +8,7 @@ import { resolve, extname } from 'node:path';
 import assert from 'node:assert/strict';
 import { publicCatalog, gradeCase, gradeQuestion } from '../functions/_shared/campus-content.mjs';
 const root=resolve(new URL('..',import.meta.url).pathname);const output=resolve(root,'qa-campus-browser');await mkdir(output,{recursive:true});
-const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');let path=resolve(root,'.'+decodeURIComponent(url.pathname));if(!path.startsWith(root+'/'))throw new Error();if(!extname(path))path+='/index.html';const data=await readFile(path);res.writeHead(200,{'content-type':({'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp'})[extname(path)]||'application/octet-stream'});res.end(data);}catch{res.writeHead(404);res.end();}});
+const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');let path=resolve(root,'.'+decodeURIComponent(url.pathname));if(!path.startsWith(root+'/'))throw new Error();if(!extname(path))path+='/index.html';const data=await readFile(path);res.writeHead(200,{'content-type':({'.html':'text/html','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp'})[extname(path)]||'application/octet-stream'});res.end(data);}catch{res.writeHead(404);res.end();}});
 await new Promise(done=>server.listen(0,'127.0.0.1',done));const origin=`http://127.0.0.1:${server.address().port}`;
 const report=[];
 try{

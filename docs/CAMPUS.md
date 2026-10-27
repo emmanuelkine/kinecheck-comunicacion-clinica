@@ -4,7 +4,7 @@ Campus amplía el portal del PR #287 con seis rutas de Kinesiología, desde prim
 
 ## Cuenta y acceso
 
-Registro individual gratuito por correo y contraseña, confirmación de correo, recuperación, cambio de contraseña y cierre de sesión. Se reutiliza Supabase Auth; Campus usa cookies propias HttpOnly, Secure y SameSite=Strict bajo `/api/campus`, sin escribir tokens en localStorage ni modificar sesiones de otros productos. El navegador se comunica únicamente con su propio origen. Los mensajes de correo dependen del proveedor de Auth existente.
+Registro individual gratuito por correo y contraseña, confirmación de correo, recuperación, cambio de contraseña y cierre de sesión. Se reutiliza Supabase Auth; Campus usa cookies propias HttpOnly, Secure y SameSite=Strict bajo `/api/campus`, sin escribir tokens en localStorage ni modificar sesiones de otros productos. Los enlaces por correo se vinculan a una solicitud iniciada en el mismo navegador mediante un valor aleatorio en cookie HttpOnly, para evitar fijación de sesión. El navegador se comunica únicamente con su propio origen. Los mensajes de correo dependen del proveedor de Auth existente; abrir los enlaces en otro navegador no inicia sesión automáticamente, aunque tras confirmar el registro se puede ingresar por contraseña.
 
 El estudiante completa un perfil y mantiene su historial por `auth.users.id`. Vincularse o desvincularse no cambia esa identidad ni borra el avance. La invitación es personal, corresponde a un correo verificado, se guarda mediante SHA-256, sirve una sola vez y vence en siete días. La invitación no se envía automáticamente: el administrador copia el enlace y lo entrega por un canal autorizado.
 
@@ -29,7 +29,7 @@ Los administradores ven únicamente nombres elegidos y roles para gestionar inte
 
 ## Integración y despliegue
 
-Campus usa Pages Functions en `/api/campus/[[path]]` y archivos propios bajo `/campus/`. La navegación de portada, la biblioteca gratuita y la biblioteca profesional enlazan a Campus. Se mantienen sin cambios Academy, Exercise, Horas Disponibles, Hotmart, reglas de licencias, webhooks y configuración de Auth. Los recursos se enlazan, no se copian ni se desbloquean.
+Campus usa Pages Functions en `/api/campus/[[path]]` y archivos propios bajo `/campus/`. Las previsualizaciones del proyecto en `*.kinecheck-comunicacion-clinica.pages.dev` usan KineCheck Staging y muestran un aviso visible: sus cuentas y datos no se mezclan con producción. La navegación de portada, la biblioteca gratuita y la biblioteca profesional enlazan a Campus. Se mantienen sin cambios Academy, Exercise, Horas Disponibles, Hotmart, reglas de licencias, webhooks y configuración de Auth. Los recursos se enlazan, no se copian ni se desbloquean.
 
 El catálogo público y la migración se generan desde `functions/_shared/campus-content.mjs` y `supabase/schema/campus.sql` con `node scripts/build-campus.mjs`. El catálogo no lleva claves de respuestas. No modificar el catálogo generado manualmente. La migración inicial fue nombrada con Supabase CLI. Aplicar primero en staging, validar y solo después aplicar en producción y fusionar el PR. La publicación usa el despliegue existente de Cloudflare Pages.
 
