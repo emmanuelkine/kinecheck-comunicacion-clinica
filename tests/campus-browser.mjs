@@ -53,6 +53,7 @@ try{
    role='docente';await page.reload();await page.locator('#teacherWorkspace').waitFor({state:'visible'});await page.locator('#metricsPanel').filter({hasText:'5 estudiantes'}).waitFor();assert.equal(await page.locator('#adminWorkspace').isVisible(),false);
    role='administrador';await page.reload();await page.locator('#adminWorkspace').waitFor({state:'visible'});await page.locator('#membersList').filter({hasText:'Estudiante de prueba'}).waitFor();
    const staffAxe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(staffAxe.violations.map(v=>v.id),[]);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${engineName} ${width} institutional panel overflow`);
    await page.screenshot({path:resolve(output,`${engineName}-${width}-cuenta.png`),fullPage:true});assert.deepEqual(errors,[]);report.push({engine:engineName,width,passed:true,axeViolations:0,fixtureOnly:true});await context.close();
   }}finally{await browser.close();}
  }
