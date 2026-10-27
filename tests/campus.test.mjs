@@ -62,6 +62,9 @@ test('database migration and multi-tenant authorization',async t=>{
  grant usage on schema auth to authenticated;grant execute on function auth.jwt(),auth.uid() to authenticated;`);
  const path=(await readdir(new URL('../supabase/migrations/',import.meta.url))).find(p=>p.endsWith('_campus_institutional_platform.sql'));
  await db.exec(await readFile(new URL('../supabase/migrations/'+path,import.meta.url),'utf8'));
+ const upgrade=(await readdir(new URL('../supabase/migrations/',import.meta.url))).find(p=>p.endsWith('_campus_isolated_function_namespace.sql'));
+ await db.exec(await readFile(new URL('../supabase/migrations/'+upgrade,import.meta.url),'utf8'));
+ assert.equal((await db.query("select has_schema_privilege('authenticated','private','usage') allowed")).rows[0].allowed,false,'Campus must not grant access to the shared private namespace');
  for(let i=0;i<ids.length;i++){await db.query('insert into auth.users values($1,$2,now(),null)',[ids[i],`qa-${i}@example.invalid`]);await db.query('insert into auth.sessions values($1,$2,null)',[sessions[i],ids[i]]);}
  await db.query('insert into private.campus_operators values($1)',[ids[0]]);
  await t.test('only the verified platform operator can provision an institution',async()=>{

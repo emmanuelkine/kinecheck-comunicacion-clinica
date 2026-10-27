@@ -1,6 +1,7 @@
 -- Campus owns only campus_* objects. Existing products, auth configuration,
 -- entitlements and auth.users triggers are deliberately untouched.
 create schema if not exists private;
+create schema if not exists campus_internal;
 create table private.campus_profiles (
  user_id uuid primary key references auth.users(id) on delete cascade,
  display_name text not null check (length(display_name) between 1 and 80),
@@ -59,7 +60,7 @@ create index campus_audit_institution_idx on private.campus_audit(institution_id
 -- No table is exposed through PostgREST. Invoker RPC wrappers call this single
 -- private entry point. SECURITY DEFINER is required because clients have no
 -- direct table privileges; every action checks a current verified auth session.
-create function private.campus_actor() returns uuid language plpgsql stable security definer set search_path='' as $$
+create function campus_internal.campus_actor() returns uuid language plpgsql stable security definer set search_path='' as $$
 declare actor uuid := auth.uid();
 begin
  if actor is null or not exists(select 1 from auth.users u join auth.sessions s on s.user_id=u.id
@@ -68,12 +69,12 @@ begin
  then raise exception 'Sesión verificada requerida' using errcode='28000'; end if;
  return actor;
 end $$;
-revoke all on function private.campus_actor() from public,anon,authenticated;
+revoke all on function campus_internal.campus_actor() from public,anon,authenticated;
 
-create function private.campus_dispatch(action text, payload jsonb default '{}') returns jsonb
+create function campus_internal.campus_dispatch(action text, payload jsonb default '{}') returns jsonb
  language plpgsql security definer set search_path='' as $$
 declare
- actor uuid := private.campus_actor(); org uuid; actor_role text; operator boolean;
+ actor uuid := campus_internal.campus_actor(); org uuid; actor_role text; operator boolean;
  result jsonb; token text; invitation private.campus_invitations;
  item private.campus_case_keys; answer jsonb; feedback jsonb:='[]'; i int; points int:=0; score int;
  subject uuid; cohort int;
@@ -194,10 +195,10 @@ begin
  end if;
  raise exception 'Acción no permitida' using errcode='42501';
 end $$;
-revoke all on function private.campus_dispatch(text,jsonb) from public,anon;
-grant usage on schema private to authenticated;
-grant execute on function private.campus_dispatch(text,jsonb) to authenticated;
-create function public.campus_api(action text,payload jsonb default '{}') returns jsonb language sql security invoker set search_path='' as $$ select private.campus_dispatch(action,payload) $$;
+revoke all on function campus_internal.campus_dispatch(text,jsonb) from public,anon;
+grant usage on schema campus_internal to authenticated;
+grant execute on function campus_internal.campus_dispatch(text,jsonb) to authenticated;
+create function public.campus_api(action text,payload jsonb default '{}') returns jsonb language sql security invoker set search_path='' as $$ select campus_internal.campus_dispatch(action,payload) $$;
 revoke all on function public.campus_api(text,jsonb) from public,anon;
 grant execute on function public.campus_api(text,jsonb) to authenticated;
 

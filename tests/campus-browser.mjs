@@ -52,8 +52,13 @@ try{
    await page.locator('#authForm [name=email]').fill('persona@example.invalid');await page.locator('#authForm [name=password]').fill('Fixture-password-123');await page.locator('#authSubmit').click();await page.locator('#signedIn').waitFor({state:'visible'});await page.locator('#institutionRole').filter({hasText:'estudiante'}).waitFor();assert.equal(await page.locator('#teacherWorkspace').isVisible(),false);
    role='docente';await page.reload();await page.locator('#teacherWorkspace').waitFor({state:'visible'});await page.locator('#metricsPanel').filter({hasText:'5 estudiantes'}).waitFor();assert.equal(await page.locator('#adminWorkspace').isVisible(),false);
    role='administrador';await page.reload();await page.locator('#adminWorkspace').waitFor({state:'visible'});await page.locator('#membersList').filter({hasText:'Estudiante de prueba'}).waitFor();
+   const staffBefore=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:innerWidth}));
    const staffAxe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(staffAxe.violations.map(v=>v.id),[]);
-   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${engineName} ${width} institutional panel overflow`);
+   const staffAfter=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:innerWidth,offenders:[...document.querySelectorAll('body *')].filter(el=>el.getBoundingClientRect().right>innerWidth+1).slice(0,12).map(el=>({tag:el.tagName,id:el.id,class:el.className,right:el.getBoundingClientRect().right,width:el.getBoundingClientRect().width,position:getComputedStyle(el).position,display:getComputedStyle(el).display}))}));
+   await writeFile(resolve(output,`${engineName}-${width}-layout.json`),JSON.stringify({staffBefore,staffAfter},null,2));
+   if(staffAfter.scroll>staffAfter.client)console.log(JSON.stringify({engineName,width,staffBefore,staffAfter},null,2));
+   await page.screenshot({path:resolve(output,`${engineName}-${width}-panel.png`)});
+   assert.equal(staffAfter.scroll>staffAfter.client,false,`${engineName} ${width} institutional panel overflow`);
    await page.screenshot({path:resolve(output,`${engineName}-${width}-cuenta.png`),fullPage:true});assert.deepEqual(errors,[]);report.push({engine:engineName,width,passed:true,axeViolations:0,fixtureOnly:true});await context.close();
   }}finally{await browser.close();}
  }
