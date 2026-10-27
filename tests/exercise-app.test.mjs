@@ -76,10 +76,12 @@ test("PWA scope is isolated and worker only caches local shell GET requests", as
   assert.doesNotMatch(worker, /functions\/v1|supabase\.co/);
 });
 
-test("free library entry links to the standalone exercise app", async () => {
+test("professional library entry links to the standalone exercise app", async () => {
   const gratis = await read("../gratis/index.html");
-  assert.match(gratis, /href="\/exercise\/"/);
-  assert.match(gratis, /KineCheck Exercise/);
-  assert.match(gratis, /Prescripción del ejercicio basada en evidencia científica/);
-  assert.match(gratis, /Explorar aplicación/);
+  const profesionales = await read("../gratis/profesionales/index.html");
+  assert.doesNotMatch(gratis, /KineCheck Exercise destacado/);
+  assert.match(profesionales, /href="\/exercise\/"/);
+  assert.match(profesionales, /KineCheck Exercise/);
+  assert.match(profesionales, /Prescripción del ejercicio basada en evidencia científica/);
+  assert.match(profesionales, /Explorar aplicación/);
 });
