@@ -18,7 +18,15 @@
       "recommendation": "Conditional recommendation in favour of use; low certainty evidence.",
       "editorialDecision": "No single modality, frequency, intensity, session duration or progression rule is presented here as a universal prescription. Individual assessment and contextual tailoring remain necessary.",
       "limitations": "Applies to chronic primary low back pain in adults. It does not establish applicability to acute pain, secondary causes, red flags, or an individual patient without assessment.",
-      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending",
+      "titleEs": "Guía de la OMS para el manejo no quirúrgico del dolor lumbar primario crónico",
+      "populationEs": "Personas adultas, incluidas personas mayores, con dolor lumbar primario crónico atendidas en atención primaria o comunitaria.",
+      "interventionEs": "Programas estructurados de ejercicio terapéutico como parte de un abordaje no quirúrgico.",
+      "resultEs": "La OMS señala que se pueden ofrecer programas estructurados de ejercicio como parte de la atención.",
+      "recommendationEs": "Recomendación condicional a favor; certeza baja de la evidencia.",
+      "limitationsEs": "Aplicable a dolor lumbar primario crónico en adultos. No debe extrapolarse automáticamente a dolor agudo, causas específicas ni situaciones con señales de alarma.",
+      "editorialDecisionEs": "La guía apoya ofrecer ejercicio estructurado, pero no identifica una modalidad ni una dosis única para todas las personas. El profesional determina la selección y progresión.",
+      "guidanceEs": "Para adultos con dolor lumbar primario crónico, la OMS sugiere ofrecer programas estructurados de ejercicio como parte de la atención. La modalidad, frecuencia, intensidad y progresión se ajustan tras evaluación, preferencias, capacidad y respuesta de la persona; esta guía no define una pauta universal."
     },
     {
       "id": "breda-patellar-loading-2021",
@@ -36,7 +44,15 @@
       "certainty": "Single randomized trial; no GRADE certainty rating assigned in this app.",
       "editorialDecision": "The trial protocol is shown as a study finding, not as an individual treatment recommendation or universal dose.",
       "limitations": "Participants were athletic adults 18-35 with imaging-confirmed diagnosis; most had chronic symptoms and prior treatment. Only one participant was in the early-symptom stratum. Results may not generalize to children, older adults, non-athletes, other diagnoses or all care settings.",
-      "reviewStatus": "bibliographic facts checked; professional clinical review pending"
+      "reviewStatus": "bibliographic facts checked; professional clinical review pending",
+      "titleEs": "Ensayo clínico sobre ejercicio de carga progresiva en tendinopatía rotuliana",
+      "populationEs": "76 deportistas de 18 a 35 años con tendinopatía rotuliana diagnosticada clínicamente y confirmada mediante ecografía; síntomas predominantemente crónicos.",
+      "interventionEs": "Programa de carga progresiva del tendón frente a ejercicio excéntrico durante 24 semanas. El programa progresivo incluyó fases isométricas, isotónicas, almacenamiento y liberación de energía y tareas deportivas.",
+      "resultEs": "A las 24 semanas, la diferencia ajustada en VISA-P fue de 9 puntos a favor de la carga progresiva (IC del 95 %: 1 a 16; p = 0,023). No hubo diferencias estadísticamente significativas en retorno deportivo, satisfacción ni adherencia.",
+      "certaintyEs": "Un ensayo clínico aleatorizado; esta aplicación no asigna una calificación GRADE.",
+      "limitationsEs": "Estudio en deportistas de 18 a 35 años con diagnóstico confirmado. Sus resultados no se extrapolan automáticamente a personas mayores, no deportistas u otros diagnósticos.",
+      "editorialDecisionEs": "El protocolo se presenta como intervención investigada, no como una pauta obligatoria ni una dosis universal para cada paciente.",
+      "guidanceEs": "En deportistas adultos jóvenes con tendinopatía rotuliana, un ensayo favoreció un programa de carga tendinosa progresiva frente a un protocolo excéntrico. La intervención estudiada avanzó por fases —isométrica, isotónica, almacenamiento de energía y específica del deporte— según la respuesta al dolor. La elección de ejercicios y dosis requiere valoración clínica."
     }
   ],
   "additionalSources": [

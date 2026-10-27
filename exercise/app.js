@@ -67,7 +67,7 @@
         const payload = await response.json();
         sourceData = Array.isArray(payload.items) ? payload.items : [];
       } catch {
-        refs.message.textContent = "La evidencia no está disponible en este momento. Intenta nuevamente.";
+        refs.message.textContent = "No se pudieron cargar las fuentes. Revisa tu conexión y vuelve a intentarlo.";
       }
     }
   }
@@ -82,18 +82,21 @@
     refs.evidence.replaceChildren();
     const card = element("article", "result-card");
     const badge = element("span", "tag", item.kind === "clinical-guideline" ? "RECOMENDACIÓN DE GUÍA" : "HALLAZGO DE ESTUDIO");
-    card.append(badge, element("h3", "", item.title), element("p", "", item.citation));
+    card.append(badge, element("h3", "", (item.titleEs || item.title)), element("p", "", item.citation));
     const contextLine = element("p", "", `Contexto seleccionado: ${context.activity || "actividad no indicada"}; irritabilidad ${context.irritability || "no indicada"}; tolerancia a carga ${context.tolerance || "no indicada"}. Estos campos se usan solo en esta sesión y no se interpretan como diagnóstico.`);
     card.append(contextLine);
     const details = element("dl");
-    addDefinition(details, "Población estudiada", item.population);
-    addDefinition(details, "Intervención", item.intervention);
-    addDefinition(details, "Resultado", item.result);
-    addDefinition(details, "Certeza / diseño", item.recommendation || item.certainty || "No se asignó certeza GRADE en esta aplicación.");
-    addDefinition(details, "Aplicabilidad y límites", item.limitations);
+    addDefinition(details, "Población estudiada", item.populationEs || item.population);
+    addDefinition(details, "Intervención", item.interventionEs || item.intervention);
+    addDefinition(details, "Resultado", item.resultEs || item.result);
+    addDefinition(details, "Certeza / diseño", item.recommendationEs || item.certaintyEs || item.recommendation || item.certainty || "No se asignó certeza GRADE en esta aplicación.");
+    addDefinition(details, "Aplicabilidad y límites", item.limitationsEs || item.limitations);
     addDefinition(details, "FITT-VP", item.condition === "low-back-pain" ? "La guía no establece aquí una dosis universal: modalidad, frecuencia, intensidad, volumen y progresión requieren revisión individual." : "El protocolo del ensayo describe etapas y respuesta al dolor, pero no es una dosis universal. La ficha no resume un volumen completo por ejercicio.");
     card.append(details);
-    const editorial = element("p", "", `Decisión editorial: ${item.editorialDecision}`);
+    const guidance = element("section", "guidance-card");
+    guidance.append(element("h4", "", "¿Qué recomienda la evidencia?"), element("p", "", item.guidanceEs || "Consulta las recomendaciones de la fuente original y sus límites de aplicación."));
+    card.append(guidance);
+    const editorial = element("p", "", `Interpretación clínica: ${item.editorialDecisionEs || item.editorialDecision}`);
     card.append(editorial);
     const link = element("a", "", "Abrir fuente verificable ↗");
     link.href = item.url;
@@ -103,7 +106,7 @@
     refs.evidence.append(card);
     const banner = element("div", "notice notice-review");
     banner.setAttribute("role", "note");
-    banner.append(element("strong", "", "Sin recomendación individual"), element("span", "", "Este resultado muestra evidencia contextualizada. No calcula dosis, progresión ni autorización para hacer ejercicio. Revisión profesional pendiente."));
+    banner.append(element("strong", "", "Orientación general basada en evidencia"), element("span", "", "La recomendación anterior es general y no constituye una pauta individual. La selección, dosificación y progresión requieren evaluación profesional. Revisión clínica de esta versión pendiente."));
     refs.evidence.append(banner);
     refs.result.hidden = false;
     refs.result.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -131,7 +134,7 @@
     }
     const item = sourceData.find((entry) => entry.condition === currentCondition.id);
     if (!item) {
-      refs.message.textContent = "No hay una ficha de evidencia disponible para esta condición.";
+      refs.message.textContent = "No se pudo recuperar la ficha de esta condición. Vuelve a intentarlo o revisa las fuentes disponibles al final de la página.";
       return;
     }
     refs.message.textContent = "";

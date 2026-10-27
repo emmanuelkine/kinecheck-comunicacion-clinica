@@ -13,3 +13,8 @@
 .learning-caution{font-size:.88rem;color:#ffe2a0;margin:18px 0 0}
 .condition-card:not(.is-pro){border:2px solid #53c9c1;background:linear-gradient(145deg,#164b50,#0b3037);box-shadow:0 10px 26px #0003}
 @media(max-width:620px){.learning-grid{grid-template-columns:1fr}.learning-grid article{padding:15px}.learning-examples{padding:15px}}
+
+/* Recomendaciones generales, diferenciadas de la evidencia descriptiva */
+.guidance-card{margin:18px 0;padding:18px 20px;border:1px solid #58c9bb;border-left:5px solid #66e6d5;border-radius:14px;background:linear-gradient(135deg,#11443e,#0c3035)}
+.guidance-card h4{margin:0 0 9px;color:#b7fff1;font-size:1.08rem}
+.guidance-card p{margin:0;color:#e6f8f4;line-height:1.65}

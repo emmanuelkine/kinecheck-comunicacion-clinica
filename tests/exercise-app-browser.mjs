@@ -52,7 +52,9 @@ async function verify(browserType, device = null) {
     await page.getByLabel("Limitaciones o contraindicaciones relevantes").selectOption("No identificadas en evaluación");
     await page.getByLabel("Revisé si hay señales de alarma, trauma importante o síntomas nuevos que requieren evaluación clínica antes de usar esta herramienta.").check();
     await page.getByRole("button", { name: "Consultar evidencia" }).click();
-    await page.getByText("Sin recomendación individual").waitFor();
+    await page.getByRole("heading", { name: "¿Qué recomienda la evidencia?" }).waitFor();
+    await page.getByText("Orientación general basada en evidencia").waitFor();
+    await page.getByText("La OMS sugiere ofrecer programas estructurados de ejercicio", { exact: false }).waitFor();
     await page.getByRole("link", { name: /Abrir fuente verificable/ }).waitFor();
     const width = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
     if (width.scroll > width.client + 1) throw new Error(`Overflow horizontal: ${JSON.stringify(width)}`);
