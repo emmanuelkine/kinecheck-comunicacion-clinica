@@ -1,0 +1,38 @@
+name: Campus functional security and mobile QA
+on:
+  pull_request:
+    paths: ['campus/**','functions/api/campus/**','functions/_shared/campus-content.mjs','supabase/**','tests/campus*','scripts/build-campus.mjs','_headers','index.html','gratis/**','package*.json','.github/workflows/campus-platform.yml']
+  push:
+    branches: [main]
+    paths: ['campus/**','functions/api/campus/**','functions/_shared/campus-content.mjs','supabase/**','tests/campus*','scripts/build-campus.mjs','_headers','index.html','gratis/**','package*.json','.github/workflows/campus-platform.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  campus-unit-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: '22'}
+      - run: npm ci
+      - run: npm run test:campus
+      - run: npm test
+      - run: node scripts/audit-brand-integrity.mjs
+  campus-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: '22'}
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: node tests/campus-browser.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: campus-browser-evidence
+          path: qa-campus-browser/
+          retention-days: 30

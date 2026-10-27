@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "test:campus": "node scripts/build-campus.mjs --check && node --test tests/campus.test.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:exercise": "node --test tests/exercise-app.test.mjs",
     "test:exercise:browser": "node tests/exercise-app-browser.mjs",
@@ -10,6 +11,7 @@
     "test:disaster-recovery": "node scripts/validate-disaster-recovery.mjs"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@electric-sql/pglite": "0.5.4",
     "playwright": "1.62.1"
   }
