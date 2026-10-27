@@ -4,7 +4,7 @@ Fecha: 27 de octubre de 2026. Estado: **prepublicación; no integrado ni publica
 
 ## Evidencia ejecutada
 
-Revisión funcional comprobada: `de4d1f8b37c67d1d1caba8cbe715272b7a365561`, sobre `main` `9e2adf5af9c95c3d2e50fe4a064e6f465240877c`. Sus 22 checks de GitHub terminaron satisfactoriamente. Los cambios posteriores de este informe y de la comprobación HTTPS deben pasar sus propios checks antes de integrar.
+Revisión comprobada: `15b8be9b0f873f7bdf489152382e75cfd52d3eb7`, sobre `main` `9e2adf5af9c95c3d2e50fe4a064e6f465240877c`. Sus 25 checks ejecutados de GitHub terminaron satisfactoriamente; el job HTTPS duplicado del evento pull request se omite deliberadamente, porque se ejecuta en el evento push. La revisión funcional anterior `de4d1f8b37c67d1d1caba8cbe715272b7a365561` tenía sus 22 checks aprobados.
 
 | Control | Resultado verificable |
 | --- | --- |
@@ -12,8 +12,10 @@ Revisión funcional comprobada: `de4d1f8b37c67d1d1caba8cbe715272b7a365561`, sobr
 | Campus: generación, HTTP, permisos y PostgreSQL | 15 pruebas/subpruebas aprobadas |
 | Campus: navegador | Chromium y WebKit, 360/390/768/1280 px; ocho combinaciones aprobadas, sin desbordamiento; cero infracciones detectadas por axe WCAG A/AA en inicio, caso y panel institucional |
 | Campus: sesiones y RPC reales | Ocho escenarios aprobados en staging y mediante el BFF HTTPS de Pages; incluye roles, separación institucional, invitación de un uso, puntaje del servidor, progreso, consentimiento, revocación y cierre de sesión |
+| Campus: HTTPS real en previsualización | Aprobado a las 20:55:33 UTC: cinco archivos exactos por SHA-256, caso de visitante completo y API real en ocho combinaciones Chromium/WebKit a 360/390/768/1280 px; cero infracciones axe, sin desbordamiento, acceso anónimo 401 y origen ajeno 403 |
 | Exercise: lógica | Nueve pruebas aprobadas |
 | Exercise: escritorio/móvil | Cinco combinaciones aprobadas: Chromium/WebKit a 1280 px, Chromium/WebKit iPhone 13 a 390 px y Chromium Pixel 7 a 412 px; ancho desplazable igual al viewport en todas |
+| Exercise: HTTPS real en previsualización | Las mismas cinco combinaciones aprobadas contra Pages, incluida caché PWA activa y bloqueos Pro |
 | Regresión general/Academy | 58 pruebas Playwright aprobadas y ocho scripts adicionales aprobados, incluidos roles, privacidad, biblioteca y desbordamiento |
 | Contratos Academy, Hotmart, Horas y comercio | Checks específicos aprobados; no se modificó su código operativo |
 | Dependencias | `npm ci`: cero vulnerabilidades informadas en la ejecución de CI |
@@ -24,6 +26,8 @@ Evidencia CI:
 - [Exercise: lógica y cinco navegadores/dispositivos](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40578539676).
 - [Regresiones generales y Academy](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40578539687).
 - [Capturas y resultados de regresión](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40578539687/artifacts/12767884276).
+- [Última revisión: Campus y comprobación HTTPS real](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40582161382).
+- [Evidencia HTTPS: capturas, axe, hashes y resultados Exercise](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40582161382/artifacts/12769682774).
 
 Los paneles del test visual usan fixtures solo en el servidor de pruebas. Las pruebas de permisos usan PostgreSQL y GoTrue reales de staging; no representan instituciones comerciales activas. Las cuentas e instituciones temporales de staging se eliminaron y se comprobó que no quedaban cuentas QA.
 
