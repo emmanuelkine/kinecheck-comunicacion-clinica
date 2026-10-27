@@ -36,3 +36,23 @@ jobs:
           name: campus-browser-evidence
           path: qa-campus-browser/
           retention-days: 30
+  campus-public-https:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      KINECHECK_PUBLIC_ORIGIN: ${{ github.ref == 'refs/heads/main' && 'https://kinecheck.cl' || 'https://feat-kinecheck-campus-202610.kinecheck-comunicacion-clinica.pages.dev' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: '22'}
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: node tests/campus-public-live.mjs
+      - run: node tests/exercise-app-browser.mjs > qa-campus-public/exercise-results.log
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: campus-public-https-evidence
+          path: qa-campus-public/
+          retention-days: 30

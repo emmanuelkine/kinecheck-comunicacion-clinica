@@ -20,9 +20,10 @@ const server = createServer(async (request, response) => {
   } catch { response.writeHead(404).end("not found"); }
 });
 
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-const address = server.address();
-const base = `http://127.0.0.1:${address.port}`;
+const liveOrigin = process.env.KINECHECK_PUBLIC_ORIGIN;
+if (liveOrigin && !/^https:\/\/(?:kinecheck\.cl|[a-z0-9-]+\.kinecheck-comunicacion-clinica\.pages\.dev)$/.test(liveOrigin)) throw new Error("Origen de verificación no permitido.");
+if (!liveOrigin) await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+const base = liveOrigin || `http://127.0.0.1:${server.address().port}`;
 const reports = [];
 
 async function verify(browserType, device = null) {
@@ -91,7 +92,7 @@ try {
   await verify(chromium, devices["iPhone 13"]);
   await verify(webkit, devices["iPhone 13"]);
   await verify(chromium, devices["Pixel 7"]);
-  console.log(JSON.stringify({ result: "passed", reports }, null, 2));
+  console.log(JSON.stringify({ result: "passed", origin: base, live: Boolean(liveOrigin), reports }, null, 2));
 } finally {
   server.close();
 }
