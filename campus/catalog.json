@@ -1,0 +1,436 @@
+{
+  "version": "2026-10-27.1",
+  "levels": [
+    {
+      "level": 1,
+      "title": "Primer año",
+      "focus": "Bases del movimiento y comunicación",
+      "caseId": "escuchar"
+    },
+    {
+      "level": 2,
+      "title": "Segundo año",
+      "focus": "Entrevista y evaluación inicial",
+      "caseId": "entrevista"
+    },
+    {
+      "level": 3,
+      "title": "Tercer año",
+      "focus": "Hipótesis y razonamiento clínico",
+      "caseId": "hipotesis"
+    },
+    {
+      "level": 4,
+      "title": "Cuarto año",
+      "focus": "Intervención y reevaluación",
+      "caseId": "plan"
+    },
+    {
+      "level": 5,
+      "title": "Quinto año",
+      "focus": "Integración clínica y contexto",
+      "caseId": "integracion"
+    },
+    {
+      "level": 6,
+      "title": "Internado",
+      "focus": "Seguridad y práctica supervisada",
+      "caseId": "internado"
+    }
+  ],
+  "resources": [
+    {
+      "id": "comunicacion",
+      "title": "Comunicación como intervención clínica",
+      "url": "/recursos/comunicacion-clinica-intervencion/",
+      "access": "Gratuito",
+      "levels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "anatomia",
+      "title": "Anatomía medular y dolor",
+      "url": "/recursos/anatomia-medular-dolor/",
+      "access": "Gratuito",
+      "levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "evaluacion",
+      "title": "Evaluación y pruebas clínicas",
+      "url": "/recursos/evaluacion-pruebas-clinicas/",
+      "access": "Gratuito",
+      "levels": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "banderas",
+      "title": "Banderas clínicas y seguridad",
+      "url": "/recursos/banderas-clinicas/",
+      "access": "Gratuito",
+      "levels": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "razonamiento",
+      "title": "Enseñanza del razonamiento clínico",
+      "url": "/recursos/razonamiento-clinico-ensenanza/",
+      "access": "Gratuito",
+      "levels": [
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "ejercicio",
+      "title": "Prescripción del ejercicio y razonamiento",
+      "url": "/recursos/prescripcion-ejercicio-razonamiento/",
+      "access": "Gratuito",
+      "levels": [
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "lumbar",
+      "title": "Ejercicio individualizado en dolor lumbar",
+      "url": "/gratis/ejercicio-dolor-lumbar/",
+      "access": "Gratuito",
+      "levels": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "persona",
+      "title": "Razonamiento centrado en la persona",
+      "url": "/recursos/pch-razonamiento-centrado-persona/",
+      "access": "Gratuito",
+      "levels": [
+        5,
+        6
+      ]
+    },
+    {
+      "id": "academy",
+      "title": "Formación KineCheck Academy",
+      "url": "/academy/",
+      "access": "Requiere licencia vigente del producto",
+      "levels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "exercise",
+      "title": "KineCheck Exercise",
+      "url": "/exercise/",
+      "access": "Funciones gratuitas y funciones con licencia propia",
+      "levels": [
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "escuchar",
+      "level": 1,
+      "title": "Escuchar antes de explicar",
+      "minutes": 8,
+      "objective": "Reconocer objetivos personales y comunicar sin atribuir un diagnóstico.",
+      "resources": [
+        "comunicacion",
+        "anatomia"
+      ],
+      "sources": [
+        {
+          "title": "NICE NG197 · Decisiones compartidas (2021)",
+          "url": "https://www.nice.org.uk/guidance/ng197/chapter/recommendations"
+        }
+      ],
+      "narrative": "En una actividad de observación, Paula, personaje ficticio de 22 años, comenta: «Me molesta la espalda después de estudiar y me da miedo moverme. Quiero volver a bailar». No hay una evaluación clínica disponible. Tu tarea como estudiante de primer año es escuchar, reconocer los límites de tu rol y transmitir lo observado al docente.",
+      "questions": [
+        {
+          "prompt": "¿Qué pregunta abre mejor la conversación?",
+          "options": [
+            "¿Qué significa para ti volver a bailar y qué te preocupa?",
+            "¿Por qué dejaste que tu postura empeorara?",
+            "¿Quieres que te diga qué lesión tienes?"
+          ]
+        },
+        {
+          "prompt": "¿Qué puedes concluir con este relato?",
+          "options": [
+            "Que tiene una lesión específica.",
+            "Que faltan antecedentes y una evaluación supervisada.",
+            "Que bailar está contraindicado."
+          ]
+        },
+        {
+          "prompt": "¿Cómo comprobarías la comprensión de una explicación educativa?",
+          "options": [
+            "Preguntando únicamente si entendió.",
+            "Pidiendo que memorice nombres anatómicos.",
+            "Invitando a explicar con sus palabras lo conversado."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "entrevista",
+      "level": 2,
+      "title": "De la entrevista a la evaluación",
+      "minutes": 10,
+      "objective": "Ordenar la entrevista y proponer una evaluación que responda una pregunta.",
+      "resources": [
+        "evaluacion",
+        "banderas",
+        "comunicacion"
+      ],
+      "sources": [
+        {
+          "title": "NICE NG197 · Decisiones compartidas (2021)",
+          "url": "https://www.nice.org.uk/guidance/ng197/chapter/recommendations"
+        }
+      ],
+      "narrative": "Diego, personaje ficticio de 35 años, refiere molestias en el hombro desde hace cuatro semanas al ordenar cajas. Quiere volver a trabajar con confianza. Aún no conoces la evolución, los antecedentes, el impacto funcional ni los síntomas asociados. El docente te pide planificar la entrevista antes de realizar pruebas.",
+      "questions": [
+        {
+          "prompt": "¿Qué conviene hacer primero?",
+          "options": [
+            "Aplicar todas las pruebas disponibles.",
+            "Explorar evolución, función, expectativas y posibles alertas.",
+            "Elegir un tratamiento por la zona dolorosa."
+          ]
+        },
+        {
+          "prompt": "¿Qué justifica seleccionar una prueba clínica?",
+          "options": [
+            "Que la prueba es conocida.",
+            "Que duele al realizarla.",
+            "Que puede modificar una hipótesis o una decisión."
+          ]
+        },
+        {
+          "prompt": "¿Qué información distingue mejor un objetivo funcional?",
+          "options": [
+            "Quiere alcanzar una repisa en su trabajo.",
+            "Le duele el hombro.",
+            "Tiene una etiqueta diagnóstica."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hipotesis",
+      "level": 3,
+      "title": "Una hipótesis que puede cambiar",
+      "minutes": 12,
+      "objective": "Distinguir hipótesis, evidencia y certeza al razonar un caso.",
+      "resources": [
+        "razonamiento",
+        "evaluacion",
+        "banderas"
+      ],
+      "sources": [
+        {
+          "title": "NICE NG197 · Decisiones compartidas (2021)",
+          "url": "https://www.nice.org.uk/guidance/ng197/chapter/recommendations"
+        }
+      ],
+      "narrative": "Camila, personaje ficticio de 41 años, consulta por dolor de rodilla al subir escaleras. Un compañero plantea una hipótesis antes de completar la evaluación. Todavía faltan antecedentes de carga, evolución y examen físico. Debes explicar qué datos faltan y cómo evitar que una primera impresión cierre el razonamiento.",
+      "questions": [
+        {
+          "prompt": "¿Cómo tratarías la primera hipótesis?",
+          "options": [
+            "Como una explicación provisional contrastable.",
+            "Como un diagnóstico definitivo.",
+            "Como una razón para omitir la entrevista."
+          ]
+        },
+        {
+          "prompt": "Un hallazgo contradice la hipótesis inicial. ¿Qué haces?",
+          "options": [
+            "Lo omites para mantener coherencia.",
+            "Repites solo las pruebas favorables.",
+            "Revisas la hipótesis e incorporas explicaciones alternativas."
+          ]
+        },
+        {
+          "prompt": "¿Qué respuesta muestra mejor el razonamiento?",
+          "options": [
+            "Una lista de pruebas sin interpretación.",
+            "Datos relevantes, hipótesis, incertidumbre y siguiente decisión.",
+            "Una etiqueta sin justificación."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "level": 4,
+      "title": "Un plan que se puede revisar",
+      "minutes": 12,
+      "objective": "Relacionar metas, preferencias, ejercicio y reevaluación sin prometer resultados.",
+      "resources": [
+        "ejercicio",
+        "lumbar",
+        "razonamiento"
+      ],
+      "sources": [
+        {
+          "title": "OMS · Dolor lumbar primario crónico (2023)",
+          "url": "https://www.who.int/publications/i/item/9789240081789"
+        },
+        {
+          "title": "NICE NG197 · Decisiones compartidas (2021)",
+          "url": "https://www.nice.org.uk/guidance/ng197/chapter/recommendations"
+        }
+      ],
+      "narrative": "Andrés, personaje ficticio de 48 años, tiene dolor lumbar primario crónico ya evaluado por su equipo tratante. Quiere caminar para acompañar a su hija. El caso no presenta nuevas alertas clínicas. Refiere poco tiempo disponible y preocupación por el ejercicio. En esta actividad educativa debes razonar un plan supervisado, sin prescribir una dosis universal.",
+      "questions": [
+        {
+          "prompt": "¿Qué debe orientar la propuesta inicial?",
+          "options": [
+            "Una rutina idéntica para todas las personas.",
+            "Metas, preferencias, evaluación y posibilidades reales.",
+            "Una promesa de eliminar todo dolor."
+          ]
+        },
+        {
+          "prompt": "¿Qué acuerdo facilita reevaluar?",
+          "options": [
+            "Definir una actividad relevante y cómo revisar la respuesta.",
+            "Cambiar el objetivo en cada sesión sin registrarlo.",
+            "Usar solo el nombre del ejercicio como resultado."
+          ]
+        },
+        {
+          "prompt": "¿Cómo comunicarías la evidencia?",
+          "options": [
+            "Como garantía de recuperación.",
+            "Como una prueba de que las preferencias no importan.",
+            "Explicando opciones, incertidumbre y decisiones compartidas."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "integracion",
+      "level": 5,
+      "title": "Integrar sin perder a la persona",
+      "minutes": 12,
+      "objective": "Integrar función, contexto e incertidumbre al comunicar un plan clínico.",
+      "resources": [
+        "persona",
+        "razonamiento",
+        "comunicacion"
+      ],
+      "sources": [
+        {
+          "title": "NICE NG197 · Decisiones compartidas (2021)",
+          "url": "https://www.nice.org.uk/guidance/ng197/chapter/recommendations"
+        }
+      ],
+      "narrative": "Rosa, personaje ficticio de 57 años, presenta dolor persistente de hombro evaluado previamente, duerme poco y cuida a un familiar. La actividad que más le importa es vestirse sin ayuda. Un plan técnicamente elaborado resulta imposible de cumplir en su rutina. Debes revisar el razonamiento con tu docente e incorporar el contexto.",
+      "questions": [
+        {
+          "prompt": "¿Qué información debe incorporarse al plan?",
+          "options": [
+            "Solo el hallazgo físico más llamativo.",
+            "Solo el resultado de una imagen.",
+            "Las demandas, prioridades y posibilidades de Rosa."
+          ]
+        },
+        {
+          "prompt": "¿Qué harías si el plan no encaja en su rutina?",
+          "options": [
+            "Adaptar opciones y acordar una alternativa factible.",
+            "Atribuirlo automáticamente a falta de interés.",
+            "Añadir más tareas sin conversar."
+          ]
+        },
+        {
+          "prompt": "¿Qué comunica mejor una derivación académica al supervisor?",
+          "options": [
+            "Una etiqueta aislada.",
+            "Motivo, datos relevantes, límites de la interpretación y pregunta concreta.",
+            "Todos los datos sin priorizarlos."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "internado",
+      "level": 6,
+      "title": "Reconocer límites y pedir apoyo",
+      "minutes": 12,
+      "objective": "Priorizar seguridad, supervisión y resguardo de información en internado.",
+      "resources": [
+        "banderas",
+        "persona",
+        "comunicacion"
+      ],
+      "sources": [
+        {
+          "title": "NICE NG197 · Decisiones compartidas (2021)",
+          "url": "https://www.nice.org.uk/guidance/ng197/chapter/recommendations"
+        }
+      ],
+      "narrative": "En un escenario de internado ficticio, Luis refiere un cambio clínico importante y síntomas nuevos que no estaban en la evaluación anterior. No dispones de información suficiente para establecer su causa. Un compañero propone continuar el plan sin informar al supervisor y compartir una fotografía de la ficha en un grupo de estudio. Debes decidir cómo actuar dentro de tu rol.",
+      "questions": [
+        {
+          "prompt": "¿Qué priorizas frente al cambio clínico?",
+          "options": [
+            "Continuar automáticamente el plan anterior.",
+            "Detener la decisión automática y solicitar valoración del supervisor según el protocolo local.",
+            "Asegurar una causa específica sin evaluar."
+          ]
+        },
+        {
+          "prompt": "¿Cómo utilizarías este caso en una actividad académica?",
+          "options": [
+            "Copiando la ficha identificable.",
+            "Publicando la imagen si el grupo es pequeño.",
+            "Usando un escenario ficticio sin datos identificables."
+          ]
+        },
+        {
+          "prompt": "¿Qué demuestra una actuación reflexiva?",
+          "options": [
+            "Reconocer incertidumbre, documentar lo pertinente y pedir apoyo oportuno.",
+            "Ocultar dudas para parecer autónomo.",
+            "Tratar la autoevaluación como autorización para atender sin supervisión."
+          ]
+        }
+      ]
+    }
+  ]
+}
