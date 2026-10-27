@@ -56,7 +56,10 @@ try{
    const staffAxe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(staffAxe.violations.map(v=>v.id),[]);
    const staffAfter=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:innerWidth,offenders:[...document.querySelectorAll('body *')].filter(el=>el.getBoundingClientRect().right>innerWidth+1).slice(0,12).map(el=>({tag:el.tagName,id:el.id,class:el.className,right:el.getBoundingClientRect().right,width:el.getBoundingClientRect().width,position:getComputedStyle(el).position,display:getComputedStyle(el).display}))}));
    await writeFile(resolve(output,`${engineName}-${width}-layout.json`),JSON.stringify({staffBefore,staffAfter},null,2));
-   if(staffAfter.scroll>staffAfter.client)console.log(JSON.stringify({engineName,width,staffBefore,staffAfter},null,2));
+   if(staffAfter.scroll>staffAfter.client){
+    const textOverflow=await page.evaluate(()=>{const out=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=walker.nextNode()){if(!n.textContent.trim()||!n.parentElement.getClientRects().length)continue;const range=document.createRange();range.selectNodeContents(n);const r=range.getBoundingClientRect();if(r.right>innerWidth+1)out.push({parent:n.parentElement.id||n.parentElement.tagName,text:n.textContent.trim().slice(0,90),right:r.right,whiteSpace:getComputedStyle(n.parentElement).whiteSpace});}return out.slice(0,12);});
+    console.log(JSON.stringify({engineName,width,staffBefore,staffAfter,textOverflow},null,2));
+   }
    await page.screenshot({path:resolve(output,`${engineName}-${width}-panel.png`)});
    assert.equal(staffAfter.scroll>staffAfter.client,false,`${engineName} ${width} institutional panel overflow`);
    await page.screenshot({path:resolve(output,`${engineName}-${width}-cuenta.png`),fullPage:true});assert.deepEqual(errors,[]);report.push({engine:engineName,width,passed:true,axeViolations:0,fixtureOnly:true});await context.close();
