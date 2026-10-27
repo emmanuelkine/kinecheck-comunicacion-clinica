@@ -37,7 +37,11 @@ try{
    await page.selectOption('#resourceLevel','1');assert.equal(await page.locator('#resourcesGrid article').count(),3);
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);assert.equal(overflow,false,`${engineName} ${width} overflow`);
    await page.locator('.skip').focus();await page.keyboard.press('Enter');assert.ok((await page.url()).includes('#contenido'));
-   const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(axe.violations.map(v=>({id:v.id,nodes:v.nodes.length})),[],`${engineName} ${width} accessibility`);
+   const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+   await writeFile(resolve(output,`${engineName}-${width}-axe.json`),JSON.stringify(axe.violations,null,2));
+   await page.screenshot({path:resolve(output,`${engineName}-${width}-inicio.png`)});
+   if(axe.violations.length)console.log(JSON.stringify(axe.violations.map(v=>({id:v.id,nodes:v.nodes.slice(0,5).map(n=>({html:n.html,target:n.target,summary:n.failureSummary}))})),null,2));
+   assert.deepEqual(axe.violations.map(v=>({id:v.id,nodes:v.nodes.length})),[],`${engineName} ${width} accessibility`);
    await page.locator('#routesGrid button').filter({hasText:'Resolver caso'}).first().click();
    for(const [index,answer] of [0,1,2].entries()){
     const field=page.locator('.case-step').nth(index);await field.locator(`input[value="${answer}"]`).check();await field.getByRole('button',{name:'Comprobar y continuar'}).click();await field.locator('.feedback').waitFor();
