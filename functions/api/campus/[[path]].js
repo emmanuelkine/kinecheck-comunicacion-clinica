@@ -28,6 +28,7 @@ async function upstream(path,{token,body,method='POST',fetcher=fetch,base=SUPABA
   let response; try {response=await fetcher(`${base}${path}`,{method,headers:{apikey:key,'content-type':'application/json',...(token?{authorization:`Bearer ${token}`}:{})},body:body===undefined?undefined:JSON.stringify(body),cache:'no-store',signal:AbortSignal.timeout(12000)});}catch{throw new CampusError('No pudimos conectar. Inténtalo de nuevo.',503);}
   const data=await response.json().catch(()=>null);
   if(!response.ok){
+    if(path==='/auth/v1/user' && [401,403].includes(response.status))throw new CampusError('La sesión venció. Vuelve a ingresar.',401);
     if(response.status===429)throw new CampusError('Demasiados intentos. Espera antes de reintentar.',429);
     if(data?.code==='28000' || response.status===401)throw new CampusError('La sesión venció. Vuelve a ingresar.',401);
     if(data?.code==='42501' || response.status===403)throw new CampusError('No tienes permiso para esta operación o la invitación no es válida.',403);

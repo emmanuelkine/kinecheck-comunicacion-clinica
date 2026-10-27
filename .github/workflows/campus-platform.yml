@@ -3,7 +3,7 @@ on:
   pull_request:
     paths: ['campus/**','functions/api/campus/**','functions/_shared/campus-content.mjs','supabase/**','tests/campus*','scripts/build-campus.mjs','_headers','index.html','gratis/**','package*.json','.github/workflows/campus-platform.yml']
   push:
-    branches: [main]
+    branches: [main, feat/kinecheck-campus-20261027]
     paths: ['campus/**','functions/api/campus/**','functions/_shared/campus-content.mjs','supabase/**','tests/campus*','scripts/build-campus.mjs','_headers','index.html','gratis/**','package*.json','.github/workflows/campus-platform.yml']
   workflow_dispatch:
 permissions:
