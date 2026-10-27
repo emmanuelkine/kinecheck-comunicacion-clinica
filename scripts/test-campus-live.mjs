@@ -12,7 +12,7 @@ if(remote && (!isCampusPreviewHost(new URL(remote).hostname)||new URL(remote).pr
 const origin=remote?new URL(remote).origin:'https://campus-staging.example';const jars=fixtures.map(()=>({}));const results=[];
 async function call(index,path,body,expected=200,override){
  const request=new Request(`${origin}/api/campus/${path}`,{method:'POST',headers:{origin,'content-type':'application/json',cookie:override||Object.entries(jars[index]).map(([k,v])=>`${k}=${v}`).join('; ')},body:JSON.stringify(body)});
- const response=remote?await fetch(request):await handler({request});
+ const response=remote?await fetch(request,{signal:AbortSignal.timeout(30000)}):await handler({request});
  const data=await response.json();assert.equal(response.status,expected,`${path}: ${JSON.stringify(data)}`);
  for(const item of response.headers.getSetCookie()){const [pair]=item.split(';');const split=pair.indexOf('=');jars[index][pair.slice(0,split)]=pair.slice(split+1);}
  return data;
@@ -32,4 +32,4 @@ await act(2,'assign',{institution_id:org,case_id:'hipotesis',title:'Actividad tÃ
 await call(1,'auth/refresh',{});assert.equal((await act(1,'export')).attempts.length,1);results.push('Real refresh and personal export');
 await act(0,'revoke',{institution_id:org,user_id:fixtures[1].id});assert.equal((await act(1,'context')).memberships.length,0);assert.equal((await act(1,'context')).progress.length,1);results.push('Revoked membership immediately denied; personal progress preserved');
 const previous=Object.entries(jars[1]).map(([k,v])=>`${k}=${v}`).join('; ');await call(1,'auth/logout',{});await call(1,'action',{action:'context',payload:{}},401,previous);results.push('Logout invalidates database authorization for the previous access token');
-await writeFile('/tmp/kc-campus-live-result.json',JSON.stringify({institution_id:org,results},null,2));console.log(JSON.stringify({passed:results.length,checks:results},null,2));
+await writeFile('/tmp/kc-campus-live-result.json',JSON.stringify({origin,institution_id:org,results},null,2));console.log(JSON.stringify({origin,passed:results.length,checks:results},null,2));
