@@ -1,4 +1,4 @@
-const CACHE = "kinecheck-exercise-shell-v2";
+const CACHE = "kinecheck-exercise-shell-v3-mobile-wrap";
 const SHELL = ["/exercise/", "/exercise/app.css?v=20261026-3", "/exercise/app.js?v=20261026-3", "/exercise/evidence.json", "/exercise/manifest.webmanifest"];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
