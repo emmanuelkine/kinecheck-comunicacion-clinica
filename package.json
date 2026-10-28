@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "test:campus": "node scripts/build-campus.mjs --check && node --test tests/campus.test.mjs",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "test:exercise": "node --test tests/exercise-app.test.mjs",
     "test:exercise:browser": "node tests/exercise-app-browser.mjs",
     "test:feedback": "node --test tests/library-feedback.test.mjs",

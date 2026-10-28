@@ -1,10 +1,30 @@
-# KineCheck MSK Advanced · estado editorial 0.1
+# KineCheck Ortho · estado editorial 0.2
 
 **Título:** Rehabilitación Musculoesquelética Avanzada: del razonamiento clínico a la intervención basada en evidencia.
-**Estado:** preparación curricular; no es un curso aprobado ni publicado.
+**Estado:** contenido autoral completo en staging y en revisión editorial inicial; todavía no es un curso aprobado ni publicado.
 **Público:** kinesiólogos, fisioterapeutas, profesionales MSK y estudiantes avanzados con actividades de nivelación.
 **Modalidad propuesta:** asincrónica, en línea.
-**Carga propuesta:** 50 horas estimadas, aún no validadas mediante pilotaje de tiempo.
+**Carga propuesta:** 50 horas; suma de módulos desarrollados, aún no validada mediante pilotaje de tiempo.
+
+## Estado comprobable al 28-10-2026
+
+- **Implementado:** 12 lecciones profundas, una por módulo; cada una tiene resultados observables, requisitos, explicación por secciones, ejemplo clínico, esquema conceptual original, recomendaciones enlazadas a afirmaciones con nivel de certeza, incertidumbre, algoritmo, actividad, tres preguntas formativas con retroalimentación por alternativa, síntesis y referencias.
+- **Implementado:** 12 casos originales progresivos, de 5 etapas cada uno excepto el integrador final con 6; decisiones con opciones clínicamente plausibles, consecuencia educativa y rúbrica analítica de seis dominios, incluido un criterio crítico de seguridad.
+- **Implementado:** examen integrador borrador con 12 preguntas vinculadas a los 12 casos, alternativas plausibles, retroalimentación, referencias y seis ítems críticos de seguridad. Permanece desactivado y requiere versionamiento con clave privada en Academy v2.
+- **Implementado:** ocho rutas de especialización con módulos reutilizados, competencias y evaluación propia basada en un caso longitudinal específico. Su contenido es reutilizado y filtrado del núcleo; todavía no constituye ocho cursos autónomos con bancos independientes validados.
+- **Implementado:** progreso de estudio local, módulos marcados, marcadores de lección, reanudación local, biblioteca de referencias y estados separados de finalización, aprobación y certificado. Estos datos aún no se sincronizan con Academy y no son registros académicos.
+- **Implementado:** migración de controles de publicación, activos protegidos y panel docente agregador aplicada sólo a Supabase staging. Los archivos de 155,735 y 13,280 bytes están en `academy_ortho.content_assets`; ambos SHA-256 se compararon en PostgreSQL y coinciden. `qa_access_enabled`, `learner_access_enabled`, `summative_assessment_enabled`, `commercial_enabled` y `otec_issuance_enabled` siguen falsos.
+- **Implementado:** Edge Function `protected-course-key` desplegada en staging, versión 3, verificación JWT activa. Ortho se sirve desde el esquema privado sólo si hay acceso válido y el flag QA/publicación permite el entorno; los otros cursos conservan la descarga desde `course-assets`.
+- **Implementado:** producto Hotmart y ocho ofertas se prepararon con estado `unconfigured`, sin ID, plazo de licencia, precio ni activación. No se creó producto ni se generó cobro.
+- **Implementado:** requisitos, dominios, evidencia y protocolo de pilotaje se estructuraron en la migración; la revisión y el pilotaje siguen pendientes porque no se han recibido registros reales.
+- **Bloqueado:** no existe en staging una licencia Ortho comercial real identificada para la prueba de acceso positiva. No se creó una licencia ficticia para sustituirla.
+- **Bloqueado:** no hay confirmación documental de convenio ni autorización OTEC. No se puede habilitar solicitud/emisión real.
+- **Implementado:** panel docente Ortho con métricas agregadas de eventos reales, distribución de calificaciones, resultados por competencia, proporción de error por ítem, versiones, revisiones, pilotajes, controles y configuración comercial; incluye descarga CSV sin identificadores. La consulta exige sesión Supabase confirmada y rol académico. La API Ortho exige variables explícitas de Supabase staging y no recurre al proyecto productivo.
+- **Probado:** suite completa del repositorio: 206 pruebas aprobaron con concurrencia serial (40 s); 16 pruebas Ortho/académicas enfocadas también aprobaron tras añadir el panel. Migraciones staging aplicadas, RPC presente, `anon` sin permiso y `authenticated` con permiso sujeto a autorización interna; cero matrículas Ortho observadas y todos los gates siguen apagados. Hashes de ambos activos verificados en staging. El despliegue de Edge Function quedó `ACTIVE` con JWT obligatorio.
+- **Pendiente:** el RPC no se ha ejercido con una sesión real de rol académico; no hay matrículas ni intentos con los que contrastar agregados y exportación en vivo. La visibilidad del panel depende de configurar `ORTHO_SUPABASE_URL` y `ORTHO_SUPABASE_PUBLISHABLE_KEY` como secretos/variables de staging.
+- **Pendiente:** prueba de navegador completa: Playwright WebKit no inicia por librerías del sistema ausentes; la descarga de Chromium falló en este entorno. La auditoría automática aXe del alumno no se pudo ejecutar.
+- **Pendiente:** revisión del texto completo de cada guía y fuente primaria por afirmación. Se comprobó registro/resumen y páginas oficiales enlazadas; esa verificación no equivale a revisar todos los textos completos.
+- **Pendiente:** revisión humana clínica, científica, pedagógica y de accesibilidad; piloto de tiempo, evaluación e interpretación; activación de progreso académico remoto; configuración Hotmart y convenio OTEC.
 
 ## Estructura curricular propuesta
 
@@ -24,17 +44,17 @@
 | 12. Integración clínica avanzada | 6 | Integrar evidencia, preferencias, incertidumbre, modificación y alta | Caso con comorbilidad, más de una fuente probable de síntomas y respuesta parcial |
 | **Total** | **50** |  |  |
 
-La estimación debe desglosarse en lectura, microlecciones, práctica deliberada, casos, retroalimentación y evaluación. No se presentará como carga certificada hasta medirla con estudiantes representativos y revisar la accesibilidad de las actividades.
+La suma de 50 horas está desglosada por módulo, no por tiempo observado. Aún debe medirse lectura, microlecciones, práctica, casos, retroalimentación y evaluación con estudiantes representativos y con accesibilidad revisada.
 
 ## Especificación pedagógica y evaluación
 
-- Cada módulo deberá incluir introducción, requisitos, resultados observables, explicación mecanística, aplicación clínica, esquema original, decisión paso a paso, actividad, retroalimentación, evaluación formativa, resumen y bibliografía.
-- El curso integral contempla al menos 12 casos progresivos; cada caso revela nueva información tras una decisión razonada. Las consecuencias explican el razonamiento educativo y no predicen desenlaces reales.
+- Cada módulo incluye introducción, requisitos, resultados observables, explicación mecanística por secciones, aplicación clínica, esquema original, algoritmo de decisión, actividad, retroalimentación, evaluación formativa, resumen y bibliografía.
+- El contenido incluye 12 casos progresivos; cada caso revela información tras una decisión razonada. Las consecuencias explican razonamiento educativo y no predicen desenlaces reales.
 - Distribución propuesta del resultado: evaluación formativa por módulos 30%; casos integradores 30%; examen final 40%.
 - Aprobación propuesta: ≥70/100 y cumplimiento separado de todos los criterios críticos de seguridad. Una buena puntuación no compensa una falla crítica.
 - Propuesta de reevaluación: hasta tres intentos; entre intentos, revisión de retroalimentación y remediación de los dominios débiles. La parametrización queda pendiente de aprobación académica y pilotaje.
 - Las respuestas abiertas requieren corrección humana con rúbrica y fundamento; una pregunta de selección múltiple no demuestra por sí sola razonamiento clínico.
-- El flujo de finalización, aprobación y certificado se apoya en la base preparada por PR #290. El progreso local del reproductor no es una finalización oficial.
+- El flujo de finalización, aprobación y certificado se apoya en la base preparada por PR #290. El progreso local del reproductor no es una finalización oficial. El banco sumativo está en el activo protegido como borrador; todavía no se cargó en Academy v2 ni se activó porque falta revisión por pares.
 
 ## Rutas independientes preparadas
 
@@ -49,11 +69,11 @@ La estimación debe desglosarse en lectura, microlecciones, práctica deliberada
 | Evaluación y razonamiento MSK | M1–M3, M12 | Reducir incertidumbre mediante información útil, pruebas justificadas y actualización de hipótesis | Caso secuencial de diagnóstico diferencial y derivación |
 | Prescripción avanzada del ejercicio | M1, M3–M4, M12 | Diseñar y ajustar una dosis individual, medible y segura | Caso de prescripción con comorbilidad, adherencia y autorregulación |
 
-Todas las rutas permanecen en preparación: faltan contenido de lecciones, banco de preguntas, equivalencias de tiempo, revisión externa, prueba de navegación y decisión comercial. No tienen precio ni producto Hotmart asignado.
+Todas las rutas permanecen en preparación: sus competencias y casos de evaluación propia están definidos y reutilizan lecciones del núcleo, pero faltan revisiones externas, pilotaje, equivalencias de tiempo y decisión comercial. No tienen precio ni producto Hotmart asignado.
 
 ## Fuentes rastreadas para comenzar la revisión
 
-Las referencias son puntos de partida para escribir contenido original. No implican que cada recomendación esté transcrita ni que el curso esté revisado. El equipo autor deberá comprobar el texto completo, alcance, fecha de búsqueda, certeza y aplicabilidad por población antes de aprobar cada unidad.
+Las referencias están enlazadas a afirmaciones concretas del contenido y llevan nivel de evidencia, alcance y nota de verificación. Se revisaron registros/abstracts de PubMed y páginas oficiales, pero no se ha verificado el texto completo de todas las fuentes ni la aplicabilidad final de cada recomendación. Este trabajo es necesario antes de declarar validez científica.
 
 | Tema | Fuente accesible | Uso previsto y límite |
 |---|---|---|
@@ -70,13 +90,15 @@ Las referencias son puntos de partida para escribir contenido original. No impli
 | Fractura distal del radio | [JOSPT 2024 CPG, PMID 39213418](https://pubmed.ncbi.nlm.nih.gov/39213418/) | Pronóstico, examen y rehabilitación; distinguir fijación, etapa y restricciones médicas |
 | Rehabilitación de artroplastia total de rodilla | [APTA CPG revision 2026, PMID 42506877](https://pubmed.ncbi.nlm.nih.gov/42506877/) | Guía reciente con recomendaciones y brechas; cotejar procedimiento, comorbilidad y protocolo del equipo quirúrgico |
 
-## Bloqueos antes de activar o vender
+## Pendientes antes de activar o vender
 
-1. Redactar el texto profundo de las 12 unidades, esquemas y 12 casos secuenciales; actualmente existe un mapa de alcance, no lecciones completas.
-2. Completar una referencia verificable por afirmación clínica; revisar texto completo de guías y fuentes primarias, además de vigencia.
-3. Revisión por pares clínica, metodológica, pedagógica, accesible y legal de todo el banco, las claves y las rúbricas.
-4. Pilotaje y estimación real de horas; análisis de comprensión e ítems, seguridad y funcionamiento móvil.
-5. Crear edición inmutable del banco de evaluación y cargarla en el esquema privado. PR #290 está abierto y en borrador; esta rama depende de su aprobación y migración.
-6. Validar producto Hotmart, identificador, términos, licencia, precio y conciliación antes de activar compra.
-7. Confirmar convenio y autorización OTEC, plantillas y proceso de emisión. La emisión debe continuar deshabilitada hasta entonces.
-8. Cargar contenido y renderer en el bucket privado `course-assets`; por ahora no se ha cargado nada ni se ha aplicado una migración o desplegado una función.
+1. Completar la revisión del texto completo de las fuentes y validar cada afirmación clínica con alcance y fecha.
+2. Obtener revisión humana independiente clínica, científica y pedagógica; resolver hallazgos antes de aprobar contenido o banco.
+3. Pilotear duración, comprensión, evaluación, navegación móvil y accesibilidad manual con tecnologías de asistencia.
+4. Probar flujo de acceso positivo con cuenta y licencia real de Ortho en staging; hoy no existe esa licencia disponible. QA y acceso alumno siguen desactivados.
+5. Habilitar persistencia oficial del progreso y las evaluaciones sólo al instalar/versionar el banco aprobado sobre Academy v2.
+6. Validar producto Hotmart, identificador, términos de uso, plazo de acceso, precio y conciliación con responsables comerciales; no se asignaron valores por suposición.
+7. Confirmar convenio y autorización OTEC documentados; mantener solicitud y emisión apagadas mientras falten.
+8. Pilotear el panel docente con una cuenta académica de staging y matrículas autorizadas; contrastar agregados, duración, exportación y permisos cuando existan eventos reales. La implementación del panel está instalada, pero los datos son aún cero/no observados.
+9. Completar las rutas como productos autónomos, con contenido filtrado, prerrequisitos y evaluaciones propias revisadas. La estructura y especificaciones están creadas; publicación comercial pendiente.
+10. Terminar regresión de navegadores y QA real de producción antes de cualquier fusión/publicación pública.

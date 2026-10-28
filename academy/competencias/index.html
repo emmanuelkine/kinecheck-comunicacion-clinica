@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Evaluación por competencias | KineCheck</title><link rel="stylesheet" href="./workflow.css"><script type="module" src="./workflow.mjs"></script></head>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Evaluación por competencias | KineCheck</title><link rel="stylesheet" href="./workflow.css"><link rel="stylesheet" href="./ortho-metrics.css"><script type="module" src="./workflow.mjs"></script></head>
 <body><header><a href="../">Volver a Academy</a><span>KineCheck</span></header><main>
 <p class="eyebrow">PILOTO POR COMPETENCIAS</p><h1>Tu estado académico</h1>
 <p>Esta versión requiere una matrícula de piloto autorizada. Los exámenes actuales de Academy mantienen sus condiciones. Certificación OTEC en preparación.</p>
 <p id="notice" role="status" tabindex="-1">Ingresa primero a Academy y utiliza el identificador de matrícula entregado para este piloto.</p>
 <form id="lookup"><label for="enrollment">Identificador de matrícula</label><div class="actions"><input id="enrollment" name="enrollment" autocomplete="off" pattern="[0-9a-fA-F-]{36}" required><button>Consultar</button></div></form>
 <section id="student" aria-label="Estado y evaluación"></section>
-<details id="management"><summary>Gestión académica y administrativa</summary><p>Las operaciones requieren el rol institucional correspondiente.</p><div class="actions"><button type="button" data-admin="dashboard">Panel académico</button><button type="button" data-admin="review_queue">Respuestas por revisar</button><button type="button" data-admin="item_analysis">Análisis de preguntas</button></div>
+<details id="management"><summary>Gestión académica y administrativa</summary><p>Las operaciones requieren el rol institucional correspondiente.</p><div class="actions"><button type="button" data-admin="dashboard">Panel académico</button><button type="button" data-admin="ortho_teacher_metrics">Panel docente KineCheck Ortho</button><button type="button" data-admin="review_queue">Respuestas por revisar</button><button type="button" data-admin="item_analysis">Análisis de preguntas</button></div>
 <form id="monthly"><label for="month">Mes de emisión en Chile</label><input type="month" id="month" required><button>Exportar reporte mensual JSON</button></form><p>El reporte incluye documentos efectivamente emitidos. El generador de Excel utiliza este archivo y conserva las anulaciones para conciliación.</p><section id="admin-output" aria-live="polite"></section></details>
 </main></body></html>
