@@ -1,4 +1,4 @@
-# KineCheck Ortho · estado editorial 0.1
+# KineCheck MSK Advanced · estado editorial 0.1
 
 **Título:** Rehabilitación Musculoesquelética Avanzada: del razonamiento clínico a la intervención basada en evidencia.
 **Estado:** preparación curricular; no es un curso aprobado ni publicado.
