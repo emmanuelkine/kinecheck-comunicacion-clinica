@@ -129,7 +129,7 @@ window.KINECHECK_ACADEMY_CONFIG = Object.freeze({
     },
     {
       slug: "kinecheck-ortho",
-      title: "KineCheck Ortho",
+      title: "KineCheck MSK Advanced",
       subtitle: "Rehabilitación musculoesquelética avanzada: del razonamiento clínico a la intervención basada en evidencia.",
       icon: "KO",
       kind: "course",
