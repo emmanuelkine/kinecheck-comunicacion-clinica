@@ -1,0 +1,10 @@
+[
+  {
+    "engine": "webkit",
+    "width": 360,
+    "authFixtureOnly": true,
+    "realDatabase": true,
+    "passed": true,
+    "axeViolations": 0
+  }
+]
