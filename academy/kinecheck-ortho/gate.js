@@ -18,12 +18,12 @@
   }
 
   function deny(message) {
-    gate.innerHTML = `<p class="kicker">CURSO PRIVADO</p><h1>Abre Ortho desde Academy</h1><p>${message}</p><a class="button" href="${academyUrl}">Volver a Academy</a>`;
+    gate.innerHTML = `<p class="kicker">CURSO PRIVADO</p><h1>Abre MSK Advanced desde Academy</h1><p>${message}</p><a class="button" href="${academyUrl}">Volver a Academy</a>`;
   }
 
   async function load() {
     const session = currentSession();
-    if (!session) return deny("Inicia sesión en Academy con una cuenta que tenga acceso activo a KineCheck Ortho.");
+    if (!session) return deny("Inicia sesión en Academy con una cuenta que tenga acceso activo a KineCheck MSK Advanced.");
     const cfg = CONFIG;
     if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) return deny("La conexión segura del curso no está configurada.");
     try {
@@ -35,7 +35,7 @@
       const source = await response.text();
       if (!response.ok || !source.includes("KC_ORTHO_DATA")) {
         if (response.status === 403) return deny("No encontramos una licencia activa asociada a esta cuenta.");
-        if (response.status === 400) return deny("El acceso comercial de Ortho aún no está habilitado.");
+        if (response.status === 400) return deny("El acceso comercial de MSK Advanced aún no está habilitado.");
         return deny("No fue posible cargar el material protegido. Inténtalo desde Academy más tarde.");
       }
       const script = document.createElement("script");
