@@ -17,6 +17,10 @@ const protectedAssets: Record<string, string[]> = {
     "issue213-r5-20261014/dolor-lumbar-persistente/data.r5.js",
     "issue213-r5-20261014/dolor-lumbar-persistente/app.r5.js",
   ],
+  "kinecheck-ortho": [
+    "kinecheck-ortho/current/course-data.js",
+    "kinecheck-ortho/current/renderer.js",
+  ],
 };
 
 function json(payload: unknown, status = 200) {
