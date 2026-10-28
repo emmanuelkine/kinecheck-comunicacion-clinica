@@ -17,7 +17,13 @@ const protectedAssets: Record<string, string[]> = {
     "issue213-r5-20261014/dolor-lumbar-persistente/data.r5.js",
     "issue213-r5-20261014/dolor-lumbar-persistente/app.r5.js",
   ],
+  "kinecheck-ortho": [
+    "kinecheck-ortho/current/course-data.js",
+    "kinecheck-ortho/current/renderer.js",
+  ],
 };
+const productionUrl = "https://eqhcdclyeoapmqtlduwf.supabase.co";
+const stagingUrl = "https://mhnqtyvwxytppekktvxb.supabase.co";
 
 function json(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
@@ -26,7 +32,7 @@ function json(payload: unknown, status = 200) {
   });
 }
 
-async function moduleSource(source: string) {
+async function moduleSource(source: string, edition: string) {
   const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source))), b => b.toString(16).padStart(2,"0")).join("");
   return new Response(source, {
     status: 200,
@@ -34,7 +40,7 @@ async function moduleSource(source: string) {
       ...corsHeaders,
       "Content-Type": "text/javascript; charset=utf-8",
       "X-Content-Type-Options": "nosniff",
-      "X-KineCheck-Material-Edition": "2026-10-14-r5",
+      "X-KineCheck-Material-Edition": edition,
       "X-KineCheck-Material-Sha256": digest,
     },
   });
@@ -83,7 +89,12 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    if (supabaseUrl !== "https://eqhcdclyeoapmqtlduwf.supabase.co" || !anonKey || !serviceRoleKey) {
+    const environment = supabaseUrl === productionUrl
+      ? "production"
+      : supabaseUrl === stagingUrl
+        ? "staging"
+        : null;
+    if (!environment || !anonKey || !serviceRoleKey) {
       return json({ message: "La autorización del curso no está configurada." }, 503);
     }
 
@@ -91,6 +102,9 @@ serve(async (req) => {
     const courseSlug = String(body.courseSlug || "").trim();
     const assetPaths = protectedAssets[courseSlug];
     if (!assetPaths) return json({ message: "Curso no reconocido." }, 400);
+    if (courseSlug !== "kinecheck-ortho" && environment !== "production") {
+      return json({ message: "El curso solicitado no está disponible en este entorno." }, 400);
+    }
 
     const userClient = createClient(supabaseUrl, anonKey, {
       global: { headers: { Authorization: authorization } },
@@ -131,23 +145,48 @@ serve(async (req) => {
     }
 
     const sources: string[] = [];
-    for (const protectedPath of assetPaths) {
-      const { data: protectedFile, error: storageError } = await admin.storage
-        .from("course-assets")
-        .download(protectedPath);
-      if (storageError || !protectedFile) {
-        console.error("protected-course-key storage", { courseSlug, protectedPath, storageError });
-        return json({ message: "No fue posible cargar el contenido protegido del curso." }, 500);
+    if (courseSlug === "kinecheck-ortho") {
+      const { data: assets, error: assetError } = await admin.rpc("kinecheck_ortho_protected_assets", {
+        requested_environment: environment,
+      });
+      const expected = [
+        "kinecheck-ortho/current/course-data.js",
+        "kinecheck-ortho/current/renderer.js",
+      ];
+      if (assetError || !Array.isArray(assets) || assets.length !== expected.length) {
+        console.error("protected-course-key Ortho asset lookup", { environment, assetError });
+        return json({ message: "El contenido protegido del curso no está publicado en este entorno." }, 404);
       }
-      const source = await protectedFile.text();
-      if (!isJavaScript(source)) {
-        console.error("protected-course-key invalid asset", { courseSlug, protectedPath });
-        return json({ message: "El contenido protegido no es válido." }, 500);
+      for (const [index, asset] of assets.entries()) {
+        const source = String(asset?.source || "");
+        const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source))), b => b.toString(16).padStart(2,"0")).join("");
+        if (asset?.asset_slug !== expected[index] || asset?.content_version !== "2026.10-authoring-3"
+          || digest !== asset?.sha256 || !isJavaScript(source)) {
+          console.error("protected-course-key invalid Ortho asset", { environment, assetSlug: asset?.asset_slug });
+          return json({ message: "La edición protegida del curso no superó la verificación de integridad." }, 500);
+        }
+        sources.push(source);
       }
-      sources.push(source);
+    } else {
+      for (const protectedPath of assetPaths) {
+        const { data: protectedFile, error: storageError } = await admin.storage
+          .from("course-assets")
+          .download(protectedPath);
+        if (storageError || !protectedFile) {
+          console.error("protected-course-key storage", { courseSlug, protectedPath, storageError });
+          return json({ message: "No fue posible cargar el contenido protegido del curso." }, 500);
+        }
+        const source = await protectedFile.text();
+        if (!isJavaScript(source)) {
+          console.error("protected-course-key invalid asset", { courseSlug, protectedPath });
+          return json({ message: "El contenido protegido no es válido." }, 500);
+        }
+        sources.push(source);
+      }
     }
 
-    return moduleSource("window.KC_CANDIDATE_SUBJECT = " + JSON.stringify(user.id) + ";\n" + sources.join("\n;\n"));
+    const edition = courseSlug === "kinecheck-ortho" ? "2026.10-authoring-3" : "2026-10-14-r5";
+    return moduleSource("window.KC_CANDIDATE_SUBJECT = " + JSON.stringify(user.id) + ";\n" + sources.join("\n;\n"), edition);
   } catch (error) {
     console.error("protected-course-key error", error);
     return json({ message: "Error inesperado durante la validación." }, 500);

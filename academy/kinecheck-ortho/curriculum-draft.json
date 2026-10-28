@@ -1,0 +1,69 @@
+{
+  "version": "0.1.0-draft",
+  "status": "curriculum_map_only",
+  "title": "Rehabilitación Musculoesquelética Avanzada: del razonamiento clínico a la intervención basada en evidencia",
+  "brand": "KineCheck MSK Advanced",
+  "audience": ["kinesiólogos", "fisioterapeutas", "profesionales de rehabilitación musculoesquelética", "estudiantes avanzados de kinesiología"],
+  "modality": "online_asynchronous_interactive",
+  "level": "intermediate_advanced",
+  "proposedHours": 50,
+  "hoursStatus": "unvalidated_estimate",
+  "contentStatus": "lessons_and_cases_not_yet_authored_or_peer_reviewed",
+  "accessStatus": "preparing_not_for_sale",
+  "otecIssuanceEnabled": false,
+  "assessment": {
+    "formativeModulesPercent": 30,
+    "integrativeCasesPercent": 30,
+    "finalExamPercent": 40,
+    "passPercent": 70,
+    "criticalSafetyGate": true,
+    "proposedMaximumAttempts": 3,
+    "policyStatus": "proposal_for_academic_approval",
+    "humanReviewRequiredForOpenResponses": true
+  },
+  "requiredLessonElements": [
+    "introduction_and_prerequisites", "observable_learning_outcomes", "original_explanation_with_mechanisms",
+    "clinical_application", "original_diagram", "reasoning_sequence", "recommendation_and_certainty",
+    "uncertainty_and_limits", "interactive_progressive_case", "formative_activity", "question_with_feedback",
+    "module_assessment", "summary", "verifiable_references"
+  ],
+  "modules": [
+    {"id":"m01","title":"Fundamentos de rehabilitación musculoesquelética","hours":3,"outcomes":["Traducir motivo de consulta en objetivos de función y participación.","Explicar cómo interacción entre estructura, actividad, entorno y experiencia modifica el plan.","Distinguir evolución esperable de señales que requieren revaloración."],"topics":["modelos contemporáneos y biopsicosocial","CIF","historia natural y pronóstico","adaptación tisular","mecanismos de dolor y factores contextuales","recuperación funcional","práctica basada en evidencia","decisión compartida"],"caseId":"case-01","sharedRouteIds":["shoulder","upper-limb","hip","knee","ankle-foot","post-op","clinical-reasoning","exercise"]},
+    {"id":"m02","title":"Razonamiento clínico avanzado","hours":5,"outcomes":["Priorizar preguntas de entrevista según impacto en hipótesis y seguridad.","Actualizar probabilidad con información preprueba, pruebas y respuesta temporal.","Explicitar incertidumbre, alternativas y umbrales de derivación."],"topics":["entrevista estructurada","hipótesis y diagnóstico diferencial","banderas rojas y derivación","factores psicosociales","probabilidad preprueba y posprueba","sensibilidad, especificidad y razones de verosimilitud","incertidumbre y sesgos cognitivos","justificación clínica"],"caseId":"case-02","sharedRouteIds":["shoulder","upper-limb","hip","knee","ankle-foot","post-op","clinical-reasoning","exercise"]},
+    {"id":"m03","title":"Evaluación musculoesquelética","hours":4,"outcomes":["Seleccionar medidas relevantes para la pregunta clínica.","Interpretar exploración en relación con fiabilidad, validez, error y cambio importante.","Combinar hallazgos sin atribuir diagnóstico a una prueba o imagen aislada."],"topics":["examen subjetivo y objetivo","inspección, movimiento activo y pasivo","fuerza y goniometría","pruebas ortopédicas","propiedades clinimétricas","PROMs y medidas funcionales","imagen clínica crítica","reevaluación"],"caseId":"case-03","sharedRouteIds":["shoulder","upper-limb","hip","knee","ankle-foot","clinical-reasoning","exercise"]},
+    {"id":"m04","title":"Prescripción del ejercicio terapéutico","hours":6,"outcomes":["Elegir modalidad de ejercicio ligada a objetivo y tolerancia.","Definir componentes FITT-VP y una regla explícita de autorregulación.","Usar RPE/RIR y respuesta longitudinal para progresar o regresar."],"topics":["adaptaciones neuromusculares y tendinosas","fuerza, hipertrofia, resistencia y potencia","control motor y ejercicio aeróbico","FITT-VP","RPE y RIR","sobrecarga progresiva","monitorización de síntomas","adherencia e individualización"],"caseId":"case-04","sharedRouteIds":["shoulder","upper-limb","hip","knee","ankle-foot","exercise"]},
+    {"id":"m05","title":"Rehabilitación del hombro","hours":4,"outcomes":["Formular problemas prioritarios en dolor relacionado con manguito y rigidez.","Elegir una intervención no quirúrgica y acordar cómo valorar respuesta.","Definir criterios funcionales de progresión y retorno contextualizado."],"topics":["dolor relacionado con manguito rotador","tendinopatías","inestabilidad glenohumeral","rigidez y capsulitis adhesiva","lesiones traumáticas","rehabilitación posoperatoria","dosificación","retorno a actividades y deporte"],"caseId":"case-05","sharedRouteIds":["shoulder","post-op","exercise"]},
+    {"id":"m06","title":"Codo, muñeca y mano","hours":3,"outcomes":["Diferenciar presentación local, neural y referida con historia y hallazgos.","Seleccionar medidas de movilidad, fuerza y función.","Progresar carga respetando estabilidad, lesión y respuesta."],"topics":["dolor lateral y medial de codo","tendinopatías","lesiones ligamentarias y traumáticas","alteraciones de muñeca","rehabilitación funcional de mano","fuerza y movilidad","criterios de progresión"],"caseId":"case-06","sharedRouteIds":["upper-limb","post-op","exercise"]},
+    {"id":"m07","title":"Cadera y pelvis","hours":3,"outcomes":["Distinguir patrones clínicos de dolor de cadera y pelvis.","Relacionar objetivos de actividad, tolerancia y fuerza con elección de intervención.","Establecer seguimiento funcional tras artroplastia o dolor persistente."],"topics":["dolor de cadera y artrosis","tendinopatía glútea","dolor inguinal","síndrome de dolor trocantérico","artroplastia","ejercicio terapéutico","función y retorno a actividades"],"caseId":"case-07","sharedRouteIds":["hip","post-op","exercise"]},
+    {"id":"m08","title":"Rodilla","hours":5,"outcomes":["Priorizar déficits relevantes en dolor patelofemoral, LCA, menisco y artrosis.","Seleccionar una progresión de fuerza ligada a tareas y criterios de seguridad.","Justificar retorno deportivo como decisión multidimensional, no por un único umbral."],"topics":["dolor patelofemoral","LCA","lesión meniscal","artrosis","tendinopatía rotuliana","posoperatorio","fuerza","evaluación funcional y retorno deportivo"],"caseId":"case-08","sharedRouteIds":["knee","post-op","exercise"]},
+    {"id":"m09","title":"Tobillo y pie","hours":3,"outcomes":["Diferenciar lesión aguda, inestabilidad, tendinopatía y dolor plantar.","Elegir progresión de carga, equilibrio y tareas según presentación.","Tomar decisión de retorno con síntomas, función y demanda del deporte."],"topics":["esguince e inestabilidad crónica","tendinopatía aquílea","dolor plantar","lesión por sobrecarga y fracturas","fuerza","propiocepción y equilibrio","función y retorno al deporte"],"caseId":"case-09","sharedRouteIds":["ankle-foot","post-op","exercise"]},
+    {"id":"m10","title":"Columna vertebral","hours":4,"outcomes":["Integrar dolor cervical/lumbar con función, factores pronósticos y contexto.","Realizar una evaluación neurológica pertinente ante sospecha radicular.","Identificar necesidad y oportunidad de derivar, educar y reevaluar."],"topics":["dolor cervical y lumbar","dolor persistente","síntomas radiculares","evaluación neurológica","factores pronósticos","ejercicio y educación","autogestión","derivación"],"caseId":"case-10","sharedRouteIds":["clinical-reasoning","exercise"]},
+    {"id":"m11","title":"Rehabilitación posoperatoria","hours":4,"outcomes":["Extraer restricciones del procedimiento y confirmar dudas con equipo tratante.","Progresar movilidad y carga según seguridad, objetivo y evolución individual.","Reconocer complicaciones que requieren coordinación o evaluación urgente."],"topics":["cicatrización y adaptación tisular","precauciones por procedimiento","complicaciones","criterios de carga","movilidad y fuerza","progresión funcional","objetivos","coordinación interdisciplinaria"],"caseId":"case-11","sharedRouteIds":["shoulder","hip","knee","ankle-foot","post-op"]},
+    {"id":"m12","title":"Integración clínica avanzada","hours":6,"outcomes":["Integrar síntomas, comorbilidad, evidencia, preferencias y evolución.","Revisar hipótesis y adaptar la intervención ante respuesta insuficiente o cambiante.","Justificar derivación, alta y plan de autogestión según objetivos y seguridad."],"topics":["casos complejos","comorbilidades y fuentes múltiples","incertidumbre","decisión compartida y pronóstico","seguimiento y modificación","alta","prevención de recurrencias","evaluación integradora"],"caseId":"case-12","sharedRouteIds":["clinical-reasoning","exercise","post-op"]}
+  ],
+  "specializations": [
+    {"id":"shoulder","title":"Rehabilitación avanzada del hombro","modules":["m01","m02","m03","m04","m05"],"assessmentCase":"Hombro con limitación funcional, hipótesis competidoras y progresión ajustada a respuesta."},
+    {"id":"upper-limb","title":"Codo, muñeca y mano","modules":["m01","m02","m03","m04","m06"],"assessmentCase":"Extremidad superior con carga laboral, posibilidad de dolor referido y medición funcional."},
+    {"id":"hip","title":"Rehabilitación de cadera","modules":["m01","m02","m03","m04","m07"],"assessmentCase":"Dolor lateral de cadera con lectura crítica de imagen y decisión de carga compartida."},
+    {"id":"knee","title":"Rehabilitación de rodilla","modules":["m01","m02","m03","m04","m08"],"assessmentCase":"Rodilla con déficit de fuerza, demanda deportiva y decisión de retorno por criterios."},
+    {"id":"ankle-foot","title":"Rehabilitación de tobillo y pie","modules":["m01","m02","m03","m04","m09"],"assessmentCase":"Esguince recurrente, equilibrio, función, síntomas y exigencia deportiva."},
+    {"id":"post-op","title":"Rehabilitación posoperatoria","modules":["m01","m02","m03","m04","m11"],"assessmentCase":"Plan quirúrgico con restricciones específicas, comorbilidad y necesidad de coordinación."},
+    {"id":"clinical-reasoning","title":"Evaluación y razonamiento clínico musculoesquelético","modules":["m01","m02","m03","m12"],"assessmentCase":"Problema MSK con datos incompletos, probabilidades, pruebas y cambio de hipótesis."},
+    {"id":"exercise","title":"Prescripción avanzada del ejercicio","modules":["m01","m03","m04","m12"],"assessmentCase":"Diseño y autorregulación FITT-VP con comorbilidad, preferencias y respuesta medida."}
+  ],
+  "references": [
+    {"id":"who-icf","citation":"World Health Organization. International Classification of Functioning, Disability and Health.","url":"https://www.who.int/Standards/Classifications/International-Classification-of-Functioning-Disability-and-Health","modules":["m01"]},
+    {"id":"nice-ng197","citation":"NICE. Shared decision making. NG197 (2021).","url":"https://www.nice.org.uk/guidance/ng197/chapter/Recommendations","modules":["m01","m12"]},
+    {"id":"nice-ng59","citation":"NICE. Low back pain and sciatica in over 16s: assessment and management. NG59 (updated 2020).","url":"https://www.nice.org.uk/guidance/ng59/chapter/Recommendations","modules":["m02","m10"]},
+    {"id":"shoulder-cpg-2025","citation":"Desmeules F, et al. Rotator Cuff Tendinopathy Diagnosis, Nonsurgical Medical Care, and Rehabilitation. JOSPT. 2025. PMID 40165544.","url":"https://pubmed.ncbi.nlm.nih.gov/40165544/","modules":["m05"]},
+    {"id":"pfp-guide-2024","citation":"Neal BS, et al. Best practice guide for patellofemoral pain. BJSM. 2024. PMID 39401870.","url":"https://pubmed.ncbi.nlm.nih.gov/39401870/","modules":["m08"]},
+    {"id":"hip-oa-2024","citation":"Hannon CP, et al. AAOS Clinical Practice Guideline Summary: Management of Osteoarthritis of the Hip. 2024. PMID 38781351.","url":"https://pubmed.ncbi.nlm.nih.gov/38781351/","modules":["m07"]},
+    {"id":"tendon-dose-2023","citation":"Pavlova AV, et al. Effect of resistance exercise dose components for tendinopathy management: systematic review and meta-analysis. BJSM. 2023. PMID 37169370.","url":"https://pubmed.ncbi.nlm.nih.gov/37169370/","modules":["m04","m05","m06","m07","m09"]},
+    {"id":"ankle-cpg-2021","citation":"Martin RL, et al. Lateral Ankle Ligament Sprains Revision 2021. JOSPT. PMID 33789434.","url":"https://pubmed.ncbi.nlm.nih.gov/33789434/","modules":["m09"]},
+    {"id":"paass-2021","citation":"International consensus. Return to sport decisions after an acute lateral ankle sprain injury: the PAASS framework. BJSM. 2021. PMID 34158354.","url":"https://pubmed.ncbi.nlm.nih.gov/34158354/","modules":["m09"]},
+    {"id":"elbow-cpg-2022","citation":"Lucado AM, et al. Lateral Elbow Pain and Muscle Function Impairments. JOSPT. 2022. PMID 36453071.","url":"https://pubmed.ncbi.nlm.nih.gov/36453071/","modules":["m06"]},
+    {"id":"wrist-cpg-2024","citation":"Mehta SP, et al. Distal Radius Fracture Rehabilitation. JOSPT. 2024. PMID 39213418.","url":"https://pubmed.ncbi.nlm.nih.gov/39213418/","modules":["m06","m11"]},
+    {"id":"tka-cpg-2026","citation":"Bove AM, et al. Clinical practice guideline for physical therapist management of total knee arthroplasty: revision 2026. Phys Ther. PMID 42506877.","url":"https://pubmed.ncbi.nlm.nih.gov/42506877/","modules":["m08","m11"]}
+  ],
+  "releaseGates": ["academic_peer_review", "clinical_safety_review", "source_verification", "time_on_task_pilot", "accessibility_and_mobile_qa", "assessment_item_pilot", "hotmart_product_validation", "otec_authorization_and_agreement", "private_storage_population", "production_verification"]
+}

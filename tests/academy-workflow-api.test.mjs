@@ -27,6 +27,15 @@ test('upstream permissions and outages fail closed without leaking database deta
   const result=await h({request:request({action:'start',payload:{}}),env});assert.equal(result.status,expected);assert.doesNotMatch(await result.text(),/PRIVATE/);
  }
 });
+test('Ortho metrics require an explicit Supabase environment and never fall back to production',async()=>{
+ let calls=[];const h=createHandler({fetcher:async(url,options)=>{calls.push({url,options});return new Response(JSON.stringify(url.endsWith('/user')?{id:'verified-user',email_confirmed_at:'2026-10-28'}:{status:'sin_matriculas'}));}});
+ const body={action:'ortho_teacher_metrics',payload:{}};
+ assert.equal((await h({request:request(body),env})).status,503);assert.equal(calls.length,0);
+ const staged={...env,ORTHO_SUPABASE_URL:'https://mhnqtyvwxytppekktvxb.supabase.co',ORTHO_SUPABASE_PUBLISHABLE_KEY:'sb_publishable_synthetic_test_key'};
+ const result=await h({request:request(body),env:staged});assert.equal(result.status,200);assert.equal(calls.length,2);
+ assert.ok(calls.every(call=>call.url.startsWith(staged.ORTHO_SUPABASE_URL)));
+ assert.equal(calls[1].url,staged.ORTHO_SUPABASE_URL+'/rest/v1/rpc/academy_ortho_teacher_metrics');
+});
 test('student states and dashboard never equate completed, passed and issued',()=>{
  const html=statesMarkup({courseCompleted:true,coursePassed:false,certificateIssued:false});
  assert.equal((html.match(/data-met="true"/g)||[]).length,1);assert.match(html,/Todavía debes aprobar/);
