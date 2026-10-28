@@ -14,6 +14,7 @@ if (source) {
 const protectedPayloadSkip = course ? false : 'protected authoring payload is checked locally and kept out of the public repository';
 
 test('protected Ortho authoring payload contains 12 full modules and 12 sequential cases', { skip: protectedPayloadSkip }, () => {
+  assert.equal(course.version, '2026.10-authoring-3');
   assert.equal(course.modules.length, 12);
   assert.equal(new Set(course.modules.map(module => module.id)).size, 12);
   const cases = course.modules.flatMap(module => module.lessons.map(lesson => lesson.case).filter(Boolean));
@@ -63,6 +64,17 @@ test('clinical claim registry has source links and every lesson recommendation r
     }
     for (const reference of lesson.references) assert.match(reference.url, /^https:\/\//);
   }
+});
+
+test('Module 1 documentary audit replaces indirect pain and prognosis support without claiming peer approval', { skip: protectedPayloadSkip }, async () => {
+  for (const id of ['C26','C27','C28','C29','C30','C31']) assert.ok(course.evidenceClaims[id], `${id}: audited claim`);
+  const module = course.modules.find(item => item.id === 'm01');
+  const claimIds = new Set(module.lessons[0].sections.flatMap(section => section.claimIds));
+  for (const id of ['C26','C27','C28','C29','C30','C31']) assert.ok(claimIds.has(id), `${id}: used by Module 1`);
+  const audit = await readFile(new URL('../docs/academic/kinecheck-ortho/MODULE_01_CLAIM_AUDIT.md', import.meta.url), 'utf8');
+  assert.equal((audit.match(/\| M1-A\d{2} \|/g) || []).length, 30);
+  assert.match(audit, /revisión clínica, científica y pedagógica independiente pendiente/i);
+  assert.doesNotMatch(audit, /revisión por pares aprobada/i);
 });
 
 test('all specialization routes identify prerequisites, competencies and an assessment case', { skip: protectedPayloadSkip }, () => {
@@ -121,12 +133,19 @@ test('release migration keeps external activation disabled and requires review, 
   assert.match(migration, /authorization_reference/);
   assert.match(migration, /status text not null default 'unconfigured'/);
   assert.match(migration, /2026\.10-authoring-2/);
+  const auditMigration = await readFile(new URL('../supabase/migrations/20261028225813_kinecheck_ortho_module_01_audit.sql', import.meta.url), 'utf8');
+  assert.match(auditMigration, /2026\.10-authoring-3/);
+  assert.match(auditMigration, /humanPeerReview',false/);
+  assert.match(auditMigration, /pilotCompleted',false/);
+  for (const flag of ['qa_access_enabled','learner_access_enabled','summative_assessment_enabled','commercial_enabled','otec_issuance_enabled']) {
+    assert.match(auditMigration, new RegExp(`${flag} = false`));
+  }
 });
 
 test('protected asset manifest records the staged version and exact verified hashes', async () => {
   const manifest = await readFile(new URL('../docs/academic/kinecheck-ortho/ASSET_MANIFEST.md', import.meta.url), 'utf8');
-  assert.match(manifest, /2026\.10-authoring-2/);
-  assert.match(manifest, /50b03333ae8ede9387d55e17bb6b6e66b9714c10b1820f8c325b7e9fa2f91815/);
+  assert.match(manifest, /2026\.10-authoring-3/);
+  assert.match(manifest, /ac3e8776bc29cf3245ece7d2979cb0b73f5611079939e1e7648c17a5c557d08f/);
   assert.match(manifest, /0ba54c4bd6f1b562f05d1e6bc07b20e8c2d55f4fd925c88b4a50c842b5e45c0b/);
   assert.match(manifest, /acceso alumno permanecen apagados/);
 });

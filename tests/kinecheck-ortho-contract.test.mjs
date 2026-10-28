@@ -21,6 +21,7 @@ test('protected course function serves Ortho only through the existing licensed-
   assert.match(edge, /kinecheck-ortho\/current\/renderer\.js/);
   assert.match(edge, /kinecheck_ortho_protected_assets/);
   assert.match(edge, /crypto\.subtle\.digest/);
+  assert.match(edge, /2026\.10-authoring-3/);
   assert.match(edge, /environment !== "production"/);
   assert.match(edge, /isUsableAccess\(access\)/);
 });

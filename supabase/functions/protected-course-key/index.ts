@@ -160,7 +160,7 @@ serve(async (req) => {
       for (const [index, asset] of assets.entries()) {
         const source = String(asset?.source || "");
         const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source))), b => b.toString(16).padStart(2,"0")).join("");
-        if (asset?.asset_slug !== expected[index] || asset?.content_version !== "2026.10-authoring-2"
+        if (asset?.asset_slug !== expected[index] || asset?.content_version !== "2026.10-authoring-3"
           || digest !== asset?.sha256 || !isJavaScript(source)) {
           console.error("protected-course-key invalid Ortho asset", { environment, assetSlug: asset?.asset_slug });
           return json({ message: "La edición protegida del curso no superó la verificación de integridad." }, 500);
@@ -185,7 +185,7 @@ serve(async (req) => {
       }
     }
 
-    const edition = courseSlug === "kinecheck-ortho" ? "2026.10-authoring-2" : "2026-10-14-r5";
+    const edition = courseSlug === "kinecheck-ortho" ? "2026.10-authoring-3" : "2026-10-14-r5";
     return moduleSource("window.KC_CANDIDATE_SUBJECT = " + JSON.stringify(user.id) + ";\n" + sources.join("\n;\n"), edition);
   } catch (error) {
     console.error("protected-course-key error", error);
