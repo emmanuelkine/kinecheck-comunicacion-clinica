@@ -7,6 +7,19 @@ on:
     paths: ['academy/**','functions/api/quality/**','functions/_shared/quality-*','supabase/**','tests/quality-*','tests/helpers/quality-*','package*.json','_headers','.github/workflows/quality-impact.yml']
 permissions: {contents: read}
 jobs:
+  quality-pages-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: '22'}
+      - name: Install locked runtime dependencies, as required by Pages
+        run: npm ci --omit=dev --ignore-scripts
+      - name: Compile all Pages Functions with the remote build version
+        run: npx --yes wrangler@3.114.17 pages functions build --project-directory . --outdir "$RUNNER_TEMP/quality-pages-worker"
   quality-unit-integration:
     runs-on: ubuntu-latest
     timeout-minutes: 20
