@@ -1,0 +1,10 @@
+{
+  "courses": 8,
+  "items": 56,
+  "all_cases_total": 100,
+  "stages_per_case": 7,
+  "validation_status": "draft_not_validated",
+  "unique_item_ids": true,
+  "sha256": "ee5d9449ea27383ad798055fd9054424025d9ed2ada329573c64d6bc3bc97130",
+  "clinical_human_validation": false
+}
