@@ -1,0 +1,346 @@
+{
+  "id": "52cc985b-67af-413a-8fa1-0dd82f32ac54",
+  "sha256": "be9d2533dfa5b8cbd759dd266959c6eab0f200e52af0bc46eb72447b16e4ff5c",
+  "approval": null,
+  "revision": 1,
+  "snapshot": {
+    "cohort": {
+      "id": "320c5656-a5b6-4c3a-8df1-0e1ce81bdef1",
+      "name": "Cohorte SINTÉTICA",
+      "ends_on": "2027-01-01",
+      "data_mode": "test",
+      "starts_on": "2026-01-01",
+      "created_at": "2026-10-28T17:15:23.176-04:00",
+      "created_by": "70000000-0000-4000-8000-000000000001",
+      "program_id": "6196a45f-6a71-4275-942a-20503a2a7bc0",
+      "learning_id": "874f83ab-4f9a-4231-908d-0961f590a9c4",
+      "competency_id": "794451b5-c862-452b-8187-906795983438",
+      "institution_id": null
+    },
+    "paired": {
+      "n": 5,
+      "missing": 2,
+      "relative_n": 2,
+      "instrument_id": "874f83ab-4f9a-4231-908d-0961f590a9c4"
+    },
+    "period": {
+      "from": "2026-06-28",
+      "to_exclusive": "2026-10-28"
+    },
+    "metrics": [
+      {
+        "key": "enrolled",
+        "unit": "personas",
+        "label": "Participantes registrados",
+        "value": 7,
+        "source": "qi_participants / course_access",
+        "missing": 0,
+        "numerator": 7,
+        "definition": "Personas vinculadas a esta cohorte antes del fin; no equivale a todas las matrículas Hotmart.",
+        "denominator": 7
+      },
+      {
+        "key": "started",
+        "unit": "personas",
+        "label": "Inicio registrado",
+        "value": 7,
+        "source": "qi_participants.started_at",
+        "missing": 0,
+        "numerator": 7,
+        "definition": "Inicio prospectivo registrado; no se reconstruye desde una fecha de actualización.",
+        "denominator": 7
+      },
+      {
+        "key": "completion",
+        "unit": "%",
+        "label": "Finalización verificada",
+        "value": 42.86,
+        "source": "course_completions",
+        "missing": 4,
+        "numerator": 3,
+        "definition": "Finalizaciones de la misma versión verificadas en Academy dentro del periodo / participantes registrados.",
+        "denominator": 7
+      },
+      {
+        "key": "approval",
+        "unit": "%",
+        "label": "Aprobación verificada",
+        "value": 0,
+        "source": "course_assessment_attempts.passed",
+        "missing": 7,
+        "numerator": 0,
+        "definition": "Participantes con intento aprobado de la evaluación vigente de Academy dentro del periodo / registrados. Sin intento no implica reprobación.",
+        "denominator": 7
+      },
+      {
+        "key": "pre",
+        "unit": "/100",
+        "label": "Promedio inicial",
+        "value": 50,
+        "source": "qi_attempts / qi_reviews",
+        "missing": 1,
+        "numerator": 6,
+        "definition": "Media de puntuaciones iniciales completas, instrumento fijo de la cohorte.",
+        "denominator": 6
+      },
+      {
+        "key": "post",
+        "unit": "/100",
+        "label": "Promedio final",
+        "value": 100,
+        "source": "qi_attempts / qi_reviews",
+        "missing": 2,
+        "numerator": 5,
+        "definition": "Media de puntuaciones finales completas, instrumento fijo de la cohorte.",
+        "denominator": 5
+      },
+      {
+        "key": "change",
+        "unit": "puntos",
+        "label": "Cambio absoluto pareado",
+        "value": 60,
+        "source": "qi_attempts / qi_reviews",
+        "missing": 2,
+        "numerator": 5,
+        "definition": "Media pos menos pre de las mismas personas con el mismo instrumento y versión, ambos dentro del periodo.",
+        "denominator": 5
+      },
+      {
+        "key": "relative",
+        "unit": "%",
+        "label": "Cambio relativo pareado",
+        "value": 0,
+        "source": "qi_attempts / qi_reviews",
+        "missing": 3,
+        "numerator": 2,
+        "definition": "Media de 100*(pos-pre)/pre; se excluyen bases iguales a cero y se informa su cantidad como datos faltantes.",
+        "denominator": 2
+      },
+      {
+        "key": "satisfaction",
+        "unit": "/5",
+        "label": "Satisfacción global voluntaria",
+        "value": null,
+        "source": "qi_surveys / experience-v1",
+        "missing": 7,
+        "numerator": 0,
+        "definition": "Media de satisfacción global de quienes responden; no mide aprendizaje.",
+        "denominator": 7
+      },
+      {
+        "key": "incidents",
+        "unit": "incidencias",
+        "label": "Incidencias registradas",
+        "value": 0,
+        "source": "qi_records / incident",
+        "missing": 0,
+        "numerator": 0,
+        "definition": "Incidencias de calidad detectadas en el periodo; no se infieren tiempos desde la última actualización del soporte.",
+        "denominator": 0
+      },
+      {
+        "key": "resolution",
+        "unit": "horas",
+        "label": "Tiempo medio de resolución",
+        "value": null,
+        "source": "qi_records / incident",
+        "missing": 0,
+        "numerator": 0,
+        "definition": "Media de fecha de resolución menos fecha de detección; se excluyen incidencias sin fecha de cierre.",
+        "denominator": 0
+      },
+      {
+        "key": "improvements",
+        "unit": "acciones",
+        "label": "Mejoras implementadas",
+        "value": 0,
+        "source": "qi_records / improvement",
+        "missing": 0,
+        "numerator": 0,
+        "definition": "Última revisión de cada acción implementada o reevaluada en el periodo.",
+        "denominator": 0
+      }
+    ],
+    "program": {
+      "id": "6196a45f-6a71-4275-942a-20503a2a7bc0",
+      "source": "Fixture sintético de pruebas automatizadas",
+      "dossier": {
+        "name": "Curso sintético de prueba",
+        "audience": "Profesionales",
+        "contents": "Caso clínico simulado",
+        "outcomes": "Explicar incertidumbre",
+        "valid_to": "2027-01-01",
+        "workload": "60 minutos de prueba",
+        "evaluation": "Prueba y revisión humana",
+        "objectives": "Justificar decisiones",
+        "valid_from": "2026-01-01",
+        "bibliography": "Fuente de prueba, no validada para docencia",
+        "competencies": "Comunicación",
+        "responsibles": "Equipo académico de prueba",
+        "change_reason": "Versión sintética para pruebas",
+        "methodologies": "Caso y reflexión",
+        "content_version": "test-content-v1",
+        "entry_requirements": "Formación clínica"
+      },
+      "version": "test-v1",
+      "created_at": "2026-10-28T17:15:23.151-04:00",
+      "created_by": "70000000-0000-4000-8000-000000000001",
+      "course_slug": "quality-test"
+    },
+    "records": [],
+    "followups": [
+      {
+        "day": 30,
+        "applied": 0,
+        "eligible": 3,
+        "responses": 0
+      },
+      {
+        "day": 90,
+        "applied": 0,
+        "eligible": 3,
+        "responses": 0
+      },
+      {
+        "day": 120,
+        "applied": 0,
+        "eligible": 3,
+        "responses": 0
+      }
+    ],
+    "continuity": [
+      {
+        "month": "2024-10",
+        "documented": false
+      },
+      {
+        "month": "2024-11",
+        "documented": false
+      },
+      {
+        "month": "2024-12",
+        "documented": false
+      },
+      {
+        "month": "2025-01",
+        "documented": false
+      },
+      {
+        "month": "2025-02",
+        "documented": false
+      },
+      {
+        "month": "2025-03",
+        "documented": false
+      },
+      {
+        "month": "2025-04",
+        "documented": false
+      },
+      {
+        "month": "2025-05",
+        "documented": false
+      },
+      {
+        "month": "2025-06",
+        "documented": false
+      },
+      {
+        "month": "2025-07",
+        "documented": false
+      },
+      {
+        "month": "2025-08",
+        "documented": false
+      },
+      {
+        "month": "2025-09",
+        "documented": false
+      },
+      {
+        "month": "2025-10",
+        "documented": false
+      },
+      {
+        "month": "2025-11",
+        "documented": false
+      },
+      {
+        "month": "2025-12",
+        "documented": false
+      },
+      {
+        "month": "2026-01",
+        "documented": false
+      },
+      {
+        "month": "2026-02",
+        "documented": false
+      },
+      {
+        "month": "2026-03",
+        "documented": false
+      },
+      {
+        "month": "2026-04",
+        "documented": false
+      },
+      {
+        "month": "2026-05",
+        "documented": false
+      },
+      {
+        "month": "2026-06",
+        "documented": false
+      },
+      {
+        "month": "2026-07",
+        "documented": false
+      },
+      {
+        "month": "2026-08",
+        "documented": false
+      },
+      {
+        "month": "2026-09",
+        "documented": false
+      }
+    ],
+    "updated_at": "2026-10-28T17:15:23.261-04:00",
+    "limitations": [
+      "No se infiere competencia clínica ni resultados en pacientes desde una prueba.",
+      "Seguimiento voluntario: transferencia profesional autoinformada.",
+      "El registro de licencias es mutable; la matrícula histórica y la fecha de inicio pueden faltar.",
+      "Los periodos anteriores sin evidencia permanecen sin acreditar.",
+      "CEL: requisitos preliminares pendientes de validación oficial.",
+      "Aprobación y certificados conservan sus reglas de Academy."
+    ],
+    "competencies": [
+      {
+        "average": 3,
+        "maximum": 4,
+        "dimension": "Comunicación clínica",
+        "dimension_id": "communication",
+        "distribution": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          4
+        ],
+        "observations": 6
+      }
+    ],
+    "source_digest": "2c48a0121d11f546210741529edc508aef24ad774a829db09fc5089229f1cf4e",
+    "schema_version": "qi-summary-v1",
+    "evidence_summary": []
+  },
+  "cohort_id": "320c5656-a5b6-4c3a-8df1-0e1ce81bdef1",
+  "created_at": "2026-10-28T17:15:23.261-04:00",
+  "created_by": "70000000-0000-4000-8000-000000000001",
+  "period_end": "2026-10-28",
+  "period_start": "2026-06-28",
+  "example_only": true,
+  "notice": "DATOS SINTÉTICOS DE PRUEBA. No acreditan actividad educativa, calidad ni certificación CEL."
+}
