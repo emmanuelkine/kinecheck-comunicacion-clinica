@@ -141,6 +141,34 @@ async function loadInstitutionWorkspace() {
     card.append(node('p', 'meta', `${institution.comuna}, ${institution.region}`));
     card.append(node('p', 'small', institution.booking_url));
     const memberships = await rest(`kc_demo_institution_memberships?select=id,profile_id,status,created_at&institution_id=eq.${encodeURIComponent(institution.id)}&order=created_at.desc&limit=50`);
+    const metrics = node('section', 'panel');
+    metrics.append(node('h4', '', 'Indicadores del piloto · datos DEMO'));
+    const metricsText = node('p', 'meta', 'Cargando métricas de prueba…');
+    metrics.append(metricsText);
+    try {
+      const summary = await rest('rpc/kc_demo_pilot_summary', { method: 'POST', body: { p_institution: institution.id } });
+      const counts = Array.isArray(summary) ? summary[0] : summary;
+      const published = Number(counts?.published || 0);
+      const recovered = Number(counts?.recovered || 0);
+      metricsText.textContent = `Horas publicadas: ${published} · Recuperadas confirmadas: ${recovered} · Tasa: ${published ? (100 * recovered / published).toFixed(1) : '0,0'} %`;
+      metrics.append(node('p', 'small', 'Datos ficticios. No se registran contactos ni ingresos: estos indicadores no representan actividad real.'));
+    } catch { metricsText.textContent = 'No fue posible consultar las métricas. Revisa los permisos de la institución.'; }
+    card.append(metrics);
+    for (const slot of state.slots.filter(item => (memberships || []).some(m => m.profile_id === item.profile_id && m.status === 'active'))) {
+      const action = node('button', 'button secondary', `Confirmar recuperación · ${fmtDate(slot.starts_at)}`);
+      action.type = 'button';
+      action.addEventListener('click', async () => {
+        if (!confirm('¿La institución confirmó que esta hora DEMO fue agendada en su canal oficial?')) return;
+        action.disabled = true;
+        try {
+          await ensureFreshSession();
+          const created = await rest('rpc/kc_demo_confirm_recovery', { method: 'POST', body: { p_institution: institution.id, p_slot: slot.id } });
+          message('#institutionMessage', created ? 'Hora DEMO registrada como recuperada.' : 'La hora ya estaba registrada como recuperada.');
+          await loadInstitutionWorkspace();
+        } catch (error) { action.disabled = false; message('#institutionMessage', error.message, true); }
+      });
+      card.append(action);
+    }
     for (const profile of profiles || []) {
       const membership = (memberships || []).find(item => item.profile_id === profile.id);
       const enable = node('button', membership?.status === 'active' ? 'button secondary' : 'button',
