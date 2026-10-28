@@ -407,10 +407,10 @@ begin
    if obj is null or source->>'origin' is null or source->>'origin' not in ('recovered','new') or nullif(source->>'event_date','') is null or (source->>'event_date')::date>current_date then raise exception 'Historia sin procedencia verificable';end if;
   elsif p_payload->>'kind'='improvement' then
    if length(coalesce(source->>'problem',''))<5 or length(coalesce(source->>'source_indicator',''))<3 or length(coalesce(source->>'responsible',''))<3 or length(coalesce(source->>'proposed_action',''))<5 or source->>'status' is null or source->>'status' not in ('proposed','in_progress','implemented','reevaluated') then raise exception 'Acción de mejora incompleta';end if;
-   if source->>'status' in ('implemented','reevaluated') and nullif(source->>'implemented_on','') is null then raise exception 'Falta fecha de implementación';end if;
+   if source->>'status' in ('implemented','reevaluated') and (nullif(source->>'implemented_on','') is null or (source->>'implemented_on')::date>current_date) then raise exception 'Falta fecha real de implementación';end if;
    if source->>'status'='reevaluated' and (length(coalesce(source->>'reevaluation',''))<10 or obj is null) then raise exception 'Falta evidencia de reevaluación';end if;
   elsif p_payload->>'kind'='incident' then
-   if nullif(source->>'opened_at','') is null or (source->>'opened_at')::timestamptz>now() or (nullif(source->>'resolved_at','') is not null and (source->>'resolved_at')::timestamptz<(source->>'opened_at')::timestamptz) then raise exception 'Fechas de incidencia inválidas';end if;
+   if nullif(source->>'opened_at','') is null or (source->>'opened_at')::timestamptz>now() or (nullif(source->>'resolved_at','') is not null and ((source->>'resolved_at')::timestamptz<(source->>'opened_at')::timestamptz or (source->>'resolved_at')::timestamptz>now())) then raise exception 'Fechas de incidencia inválidas';end if;
   elsif p_payload->>'kind'='evidence_review' then
    if obj is null or source->>'status' is null or source->>'status' not in ('accepted','rejected') or length(coalesce(source->>'rationale',''))<10 then raise exception 'Revisión documental incompleta';end if;
   elsif p_payload->>'kind'<>'commitment' then raise exception 'Tipo de registro no permitido';end if;
@@ -572,7 +572,7 @@ end $$;
 
 -- Existing pg_cron infrastructure runs only this module's isolated maintenance.
 -- No external email, no third-party submission, no automatic report approval.
-create function qi_internal.maintenance() returns void language plpgsql security definer set search_path='' as $$
+create function qi_internal.maintenance() returns void language plpgsql security invoker set search_path='' as $$
 declare c private.qi_cohorts;period_begin date;period_finish date;snapshot jsonb;
 begin
  for c in select * from private.qi_cohorts where data_mode='real' loop

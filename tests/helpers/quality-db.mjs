@@ -24,7 +24,7 @@ export async function createQualityDB(){
  create table public.course_assessment_attempts(user_id uuid,course_slug text,content_version text,submitted_at timestamptz,passed boolean);
  create table public.kinecheck_notifications(email text,notification_type text,title text,body text,course_slug text,action_url text,action_label text,dedupe_key text unique,metadata jsonb);
  insert into public.course_academic_load values('quality-test','Curso sintético de prueba','test-content-v1',60,'Caso simulado');`);
- await db.exec(await readFile(new URL('../../supabase/schema/quality_impact.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../../supabase/migrations/20261028124334_quality_impact.sql',import.meta.url),'utf8'));
  for(let i=0;i<ids.length;i++){
   await db.query('insert into auth.users values($1,$2,now(),null)',[ids[i],`quality-${i}@example.invalid`]);
   await db.query('insert into auth.sessions values($1,$2,null)',[sessions[i],ids[i]]);

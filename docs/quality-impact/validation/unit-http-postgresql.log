@@ -3,27 +3,27 @@ npm warn Unknown env config "http-proxy". This will stop working in the next maj
 > test:quality
 > node --test tests/quality-impact*.test.mjs
 
-(node:26) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/quality/%5B%5Bpath%5D%5D.js is not specified and it doesn't parse as CommonJS.
+(node:35) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/quality/%5B%5Bpath%5D%5D.js is not specified and it doesn't parse as CommonJS.
 Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
 To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
-✔ HTTP requires same origin, bounded UTF8 JSON and verified identity (9.782842ms)
-✔ CSV formulas are escaped, small-cohort diffusion suppressed (0.962004ms)
-✔ HTTP -> PostgreSQL -> PDF/CSV exports, roles and approval work without real data (2461.593089ms)
+✔ HTTP requires same origin, bounded UTF8 JSON and verified identity (11.731465ms)
+✔ CSV formulas are escaped, small-cohort diffusion suppressed (0.995624ms)
+✔ HTTP -> PostgreSQL -> PDF/CSV exports, roles and approval work without real data (6088.692046ms)
 ▶ Quality & Impact: migrations, authorization, educational records and denominators
-  ✔ RLS, no public tables or helper access, no user-metadata authorization (18.587787ms)
-  ✔ empty cohort does not invent results (21.801597ms)
-  ✔ enrolment requires existing verified access and preserves sources (29.419853ms)
-  ✔ server-scored pre/post, missing values, no client score, no initial after final (43.702361ms)
-  ✔ manual competencies use explicit rubric, alternatives and append-only review revisions (20.062234ms)
-  ✔ experience is voluntary and separate from learning; follow-up uses completion dates and consent (26.778235ms)
-  ✔ institutional data isolation and immediate role revocation (26.705608ms)
-  ✔ evidence provenance, CEL validation and optimistic revision history (19.136935ms)
-  ✔ four-month reports have real snapshots, approval separation and unchanged historical data (31.537369ms)
-  ✔ immutable academic versions and scheduled four-month drafts (29.368146ms)
-  ✔ personal deletion removes responses and files without changing Academy (9.385739ms)
-  ✔ revoked sessions reject still-unexpired tokens (2.862727ms)
-✔ Quality & Impact: migrations, authorization, educational records and denominators (2380.74054ms)
+  ✔ RLS, no public tables or helper access, no user-metadata authorization (22.006082ms)
+  ✔ empty cohort does not invent results (34.574929ms)
+  ✔ enrolment requires existing verified access and preserves sources (51.469712ms)
+  ✔ server-scored pre/post, missing values, no client score, no initial after final (60.820648ms)
+  ✔ manual competencies use explicit rubric, alternatives and append-only review revisions (33.987288ms)
+  ✔ experience is voluntary and separate from learning; follow-up uses completion dates and consent (38.604048ms)
+  ✔ institutional data isolation and immediate role revocation (34.739134ms)
+  ✔ evidence provenance, CEL validation and optimistic revision history (37.745951ms)
+  ✔ four-month reports have real snapshots, approval separation and unchanged historical data (50.485977ms)
+  ✔ immutable academic versions and scheduled four-month drafts (34.598371ms)
+  ✔ personal deletion removes responses and files without changing Academy (8.270677ms)
+  ✔ revoked sessions reject still-unexpired tokens (3.523345ms)
+✔ Quality & Impact: migrations, authorization, educational records and denominators (6231.380659ms)
 ℹ tests 16
 ℹ suites 0
 ℹ pass 16
@@ -31,4 +31,4 @@ To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 2766.021337
+ℹ duration_ms 6549.257236

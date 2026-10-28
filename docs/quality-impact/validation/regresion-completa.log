@@ -1,0 +1,237 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> test
+> node --test --test-concurrency=2 tests/*.test.mjs
+
+✔ preparation includes all eight courses and keeps OTEC certification disabled (1.168212ms)
+✔ assessment status requires authentication and never returns answer keys (0.32217ms)
+✔ completion sync is blocked while OTEC certification is inactive (0.188611ms)
+✔ assessment UI follows server activation, route eligibility and certification status (18.609233ms)
+✔ saved timestamps do not complete empty or absent written activities (2.675178ms)
+✔ mandatory academic work must satisfy its published length and every configured criterion (1.34851ms)
+✔ all eight programs retain the verified structure and existing planned minutes (1.191266ms)
+✔ every essential reference resolves to an identified source and tools are not certified courses (0.826653ms)
+✔ opening a course records access without manufacturing study percentage (4.011801ms)
+✔ legacy access-only one percent is not shown as measured learning (0.915705ms)
+✔ explicit one percent, module completion and existing measured progress are preserved (2.33417ms)
+✔ Academy conserva el contrato DOM de inicialización y sus listeners directos (6.080886ms)
+✔ admin Preview authenticates without changing the production login path (0.860974ms)
+✔ admin Preview sends credentials only to its same-origin login endpoint (0.198977ms)
+✔ admin Preview loads and controls the dashboard through its owner-checked same-origin proxy (0.15389ms)
+(node:86) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/admin-preview-automation.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Preview automation proxy is unavailable in production and rejects cross-origin requests (4.546077ms)
+✔ Preview automation proxy requires a bearer token and a permitted operation (2.014103ms)
+✔ Preview status proves owner authorization before forwarding the bearer token server-side (1.574827ms)
+✔ Preview automation proxy never forwards a non-owner request (0.701776ms)
+✔ Preview control forwards only allowlisted administrative actions (1.644642ms)
+✔ Preview automation proxy converts upstream network failures into explicit JSON errors (1.659955ms)
+(node:87) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/admin-preview-login.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ preview login is unavailable outside Preview and rejects cross-origin posts (5.638787ms)
+✔ preview login rejects malformed or oversized credentials (2.208001ms)
+✔ preview login returns a session only after owner verification (3.686175ms)
+✔ preview login does not return a session to a non-owner (2.320991ms)
+✔ preview login hides upstream auth details and handles outages (1.742287ms)
+✔ beta declara acceso temporal sin compra (0.90535ms)
+✔ Recupera y perfil paciente quedan fuera de la convocatoria activa (0.152137ms)
+✔ el submit rechaza valores legacy pausados antes de enviar (0.272076ms)
+(node:108) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/campus/%5B%5Bpath%5D%5D.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ preview selection is restricted to this Cloudflare Pages project (1.502831ms)
+✔ six academic levels, original resource URLs and server-only keys (3.919904ms)
+✔ API enforces origin, payload bounds, session and server grading (10.108931ms)
+✔ tokens stay in scoped HttpOnly cookies and never appear in JSON (1.899662ms)
+✔ email callbacks require a flow initiated in the same browser (1.652143ms)
+✔ authenticated API uses the verified user and forwards no caller identity or role (0.985469ms)
+▶ database migration and multi-tenant authorization
+  ✔ only the verified platform operator can provision an institution (20.545861ms)
+  ✔ personal progress precedes institutional linkage and client scores are ignored (18.963561ms)
+  ✔ email-bound one-use invitation cannot be stolen or replayed (20.080078ms)
+  ✔ students cannot read staff metrics, other tenants, raw tables or answer keys (8.453814ms)
+  ✔ small cohorts are suppressed; docente has aggregate access but no roster or invites (18.60605ms)
+  ✔ metrics exclude other tenants, personal attempts and participants without consent (19.459411ms)
+  ✔ revocation takes effect immediately without deleting personal progress (9.465051ms)
+  ✔ revoked sessions cannot use a still-unexpired JWT (3.453359ms)
+✔ database migration and multi-tenant authorization (2180.8229ms)
+(node:122) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/certificacion.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Certification email service rejected the request 503
+Certification email send returned no messageId
+Certification email service rejected the request 502
+Certification email service rejected the request 403
+✔ formulario → Pages Function → Worker → Email Service confirma el envío (8.894881ms)
+✔ no anuncia un envío si el Worker rechaza el mensaje (1.241892ms)
+✔ no anuncia un envío si Email Service no confirma la aceptación (1.665183ms)
+✔ no acepta solicitudes sin consentimiento ni anuncia correo sin binding (0.796277ms)
+✔ Pages Function envía mediante Resend con remitente fijo y confirma el id (3.035796ms)
+✔ un rechazo de Resend no confirma el envío (0.987863ms)
+(node:134) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/certificacion-solicitudes.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ requiere sesión y rechaza cuentas que no son owner (7.411324ms)
+✔ owner ve los campos necesarios y no el HTML guardado del correo (2.334991ms)
+(node:142) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/communication-academic-revision-v1.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ academic revisions resolve actual viewer counters and thumbnail labels (0.923807ms)
+✔ revised clinical passages retain verified original sources and bounded claims (0.81134ms)
+(node:150) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/communication-quiz-source-repair-v1.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ legacy answer styling renders both feedback states without an empty DOM token (2.925411ms)
+✔ other courses retain their exact protected source (0.145858ms)
+✔ 1RM estimation returns both equations and rejects out-of-range repetitions (1.518854ms)
+✔ RPE and RIR stay separate values and are range checked (0.242571ms)
+✔ volume-load and load variation use explicit arithmetic (0.174861ms)
+✔ heart-rate reserve uses measured values and validates ordering (0.389191ms)
+✔ app contains exactly two demo conditions and eight named Pro locks (9.277301ms)
+✔ Pro endpoint verifies JWT user and entitlement before calculations (1.031929ms)
+✔ evidence records expose traceability fields and are explicitly pending clinical review (1.255081ms)
+✔ PWA scope is isolated and worker only caches local shell GET requests (1.572295ms)
+✔ professional library entry links to the standalone exercise app (4.813707ms)
+✔ every free-library card link has a stable tracking slug (1.137516ms)
+✔ library loads consent metrics and emits generic and eBook events (0.211866ms)
+✔ the audience landing keeps both library routes and the consent loader (0.379226ms)
+✔ backend and database allow the new events (0.186728ms)
+✔ each audience library resolves its local stylesheets after folder moves (1.28789ms)
+✔ duplicate webhook and stale approval cannot reactivate a refunded purchase (2134.207235ms)
+✔ approval after an earlier refund restores the same transaction (1897.641909ms)
+✔ unknown product is recorded for reconciliation but grants no access (1663.936553ms)
+✔ one pack approval grants every mapped course (1551.237531ms)
+✔ approval retry with a new event id never extends the same transaction (1397.895196ms)
+✔ cancel, expiry, refund and chargeback revoke the final active purchase (5257.792199ms)
+✔ production grant snapshot contains 12 products with explicit access terms (1145.151072ms)
+✔ Escalas and Pruebas Especiales grant 12 months and resist replay after revocation (1239.923275ms)
+✔ webhook handles unmapped products without logging PII or secrets (1.638172ms)
+✔ approved purchase returns to Academy for license refresh (0.863948ms)
+✔ late refund or chargeback of purchase A cannot revoke newer purchase B (5180.21846ms)
+✔ refund of the last remaining active purchase revokes access (1335.993663ms)
+✔ commercial refund cannot overwrite owner, beta or manual QA access (5204.238416ms)
+✔ purchase deletion requires a reason, is audited, and access remains resilient (1296.391303ms)
+✔ expired commercial access deactivates without affecting owner access (1895.700239ms)
+✔ commercial metrics exclude owner, beta, manual QA and hotmart_test (2008.67678ms)
+✔ invariant queries expose missing, orphaned, revoked and duplicate states (1441.57508ms)
+✔ migration is idempotent and never deletes purchase history (1319.343505ms)
+✔ admin dashboard labels commercial, QA, unclassified and legacy totals explicitly (1.136096ms)
+✔ versioned automation function bodies match the deployed production source (2.497568ms)
+✔ profile normalization accepts only the demo contact mode and bounded public fields (1.407178ms)
+✔ institutional channel requires HTTPS; userinfo and script URLs are rejected (0.23536ms)
+✔ WhatsApp link contains selected Santiago date and time and requires a patient click (14.434409ms)
+✔ institutional URL opens the configured HTTPS booking channel (0.444753ms)
+✔ slot input must be a valid future local date and time (0.670509ms)
+✔ demo identifiers use a recognizable prefix and random hexadecimal token (0.27489ms)
+✔ demo configuration points only at staging and public HTML uses DOM-built text, not interpolated HTML (7.836263ms)
+✔ implicit confirmation sessions hydrate the Supabase user id before owner-scoped writes (1.571152ms)
+✔ authorized professionals can publish a batch of independent hours and return later without re-entering profile (1.848456ms)
+✔ save confirmed, identical retry is idempotent and modified retry cannot replace an earlier work (14.027624ms)
+✔ missing steps, wrong choices and unobserved actions cannot be submitted (3.23281ms)
+✔ unauthorized teacher read and write are denied; cross-origin writes fail (1.26106ms)
+✔ private receipt hides names, answers and secrets and rejects another token (4.11841ms)
+✔ verified owner can review; student reads published feedback; stored attempts survive (5.154685ms)
+✔ storage unavailable or failed cannot produce a false successful receipt (1.833483ms)
+(node:214) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/library-feedback.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ library feedback validates input, stores anonymous pending records, moderates, and publishes only approved data (19.975411ms)
+✔ server rejects incorrect types, invalid values, oversized UTF-8 and unexpected origins (8.965216ms)
+✔ server network throttle survives cookie removal and stores no raw IP or contact identity (4.815149ms)
+✔ Preview CERT_REQUESTS and rate secret fail closed without falling back to another KV (1.847605ms)
+✔ unauthenticated, expired, non-owner and unavailable auth cannot read or moderate (4.960625ms)
+✔ moderation requires privacy review, supports redaction, rejects safely, and preserves all five scores (19.805904ms)
+✔ sensitive disclosures are rejected before storage, including accents and third-person patients (1.101633ms)
+✔ pagination, historical scores, retention and projection do not leak identity or distort totals (6.900177ms)
+✔ library feedback honeypot, duplicate cookie, and health detail protections work (1.964899ms)
+✔ authenticated ecosystem owner receives valid protected JavaScript without a per-course purchase row (10.375208ms)
+✔ ordinary learner still requires an active, unexpired license (11.443381ms)
+✔ invalid authentication and a different course never download protected assets (3.193701ms)
+✔ HTML returned as a protected script is rejected (1.03274ms)
+✔ deployment in a different project fails before accessing protected assets (1.047102ms)
+✔ las métricas opcionales requieren aceptación (17.045218ms)
+✔ el visitante puede informarse y cambiar su elección (3.45421ms)
+✔ el servidor descarta métricas enviadas por clientes antiguos sin preferencia (0.980211ms)
+✔ the OTEC review package specifies all eight assessment designs (5.73516ms)
+✔ the proposal cannot be mistaken for active OTEC or SENCE certification (7.644486ms)
+✔ every formerly open finding now has an implemented design or protocol (3.170447ms)
+✔ SSO de aplicaciones usa el dominio KineCheck sin publicar un proxy parcial (1.298606ms)
+✔ Recupera permanece bloqueado y el consentimiento legacy no activa el flujo (0.857579ms)
+✔ KineCheck Clinico mantiene posicionamiento curso + guia en su ficha canonica (0.74438ms)
+✔ sitemap publica audiencias y fichas SEO indexables (0.729077ms)
+✔ Recupera queda Próximamente y sin rutas activas en Academy (8.211413ms)
+✔ el POST SSO productivo de Estudiante permanece intacto (3.645625ms)
+✔ las superficies públicas y el consentimiento legacy no activan Recupera (2.965942ms)
+✔ Clínico y Estudiante declaran uso educativo y bloquean identificadores reales (3.926645ms)
+✔ restored treatment graphic has a complete WebP container and the expected lossless payload (5.958739ms)
+✔ truncated WebP is rejected even when its signature still looks valid (1.938521ms)
+✔ brand detection catches mixed case in extracted lettering and leaves the clinical brand alone (0.903287ms)
+✔ la portada canónica conserva navegación, accesibilidad y rutas públicas (8.276989ms)
+✔ la portada conserva exactamente ocho testimonios anónimos sin rating numérico (3.992533ms)
+✔ la portada agrupa el título móvil sin partir palabras clínicas (4.807928ms)
+✔ la portada referencia assets críticos existentes y versionados (2.189675ms)
+✔ public refund policy does not expose internal launch QA markers (4.147183ms)
+✔ la portada simplificada conserva soporte, tres perfiles y acceso canónico (7.789692ms)
+✔ ninguna superficie pública visible usa /platform/ ni CTAs vacíos (106.67936ms)
+✔ la arquitectura de marca queda distribuida por perfil sin duplicarse en portada (8.577507ms)
+✔ precios públicos y 12 Product IDs técnicos conservan contratos separados (7.956036ms)
+✔ los perfiles activos publican precios y Recupera permanece sin compra (3.468411ms)
+✔ no existe una oferta activa de Pack Profesional (1.90537ms)
+✔ Productos entrega un fallback clínico útil sin JavaScript (1.83728ms)
+✔ la hidratación conserva ocho checkouts históricos y acceso canónico (4.508712ms)
+✔ las rutas de compatibilidad siguen siendo redirecciones (25.102982ms)
+✔ la política pública conserva el retracto y la evidencia comercial se registra internamente (2.174933ms)
+✔ el dashboard RC separa evidencia automatizada de validación comercial real (1.362011ms)
+✔ los estilos y el menú conservan foco visible y teclado (9.77645ms)
+(node:326) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/77761958f3e6/kinecheck/functions/api/quality/%5B%5Bpath%5D%5D.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/77761958f3e6/kinecheck/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ HTTP requires same origin, bounded UTF8 JSON and verified identity (11.682698ms)
+✔ CSV formulas are escaped, small-cohort diffusion suppressed (1.112549ms)
+✔ HTTP -> PostgreSQL -> PDF/CSV exports, roles and approval work without real data (2883.672242ms)
+▶ Quality & Impact: migrations, authorization, educational records and denominators
+  ✔ RLS, no public tables or helper access, no user-metadata authorization (18.326894ms)
+  ✔ empty cohort does not invent results (26.068901ms)
+  ✔ enrolment requires existing verified access and preserves sources (36.100852ms)
+  ✔ server-scored pre/post, missing values, no client score, no initial after final (51.710906ms)
+  ✔ manual competencies use explicit rubric, alternatives and append-only review revisions (21.400155ms)
+  ✔ experience is voluntary and separate from learning; follow-up uses completion dates and consent (31.007414ms)
+  ✔ institutional data isolation and immediate role revocation (26.554801ms)
+  ✔ evidence provenance, CEL validation and optimistic revision history (28.35929ms)
+  ✔ four-month reports have real snapshots, approval separation and unchanged historical data (34.651513ms)
+  ✔ immutable academic versions and scheduled four-month drafts (22.841896ms)
+  ✔ personal deletion removes responses and files without changing Academy (7.604478ms)
+  ✔ revoked sessions reject still-unexpired tokens (3.085941ms)
+✔ Quality & Impact: migrations, authorization, educational records and denominators (2428.66008ms)
+✔ Recupera remains non-purchasable across Academy and public help (4.175445ms)
+✔ tester beta nunca activa ownerMode por la lógica de presentación (1.171416ms)
+✔ badges distinguen propietario, prueba y licencia normal (0.55685ms)
+✔ marca de agua sólo acepta etiquetas PROPIETARIO o PRUEBA (0.286497ms)
+✔ betaMode queda subordinado a !ownerMode también en apertura de producto (0.139188ms)
+✔ automation-status requires an active owner grant (0.983677ms)
+✔ beta-apply cannot overwrite an existing anonymous application (0.408369ms)
+✔ evidence Hotmart events use the atomic shared processor (0.215772ms)
+✔ course-key fails closed and enforces access terms (0.401288ms)
+✔ premium course payloads stay outside the public tree (0.378955ms)
+✔ deployed metric privacy controls remain in source control (0.220789ms)
+✔ GitHub Actions and service containers use immutable references (4.286611ms)
+✔ Edge Function imports are pinned to exact versions (1.194601ms)
+ℹ tests 182
+ℹ suites 0
+ℹ pass 182
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37441.879531

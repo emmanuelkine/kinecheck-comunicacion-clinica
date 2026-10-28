@@ -65,6 +65,7 @@ test('Quality & Impact: migrations, authorization, educational records and denom
    await assert.rejects(rpc('record_save',{kind:'cel',record_key:'trajectory',previous_id:first.id,evidence_id:e,record:{...record,status:'validado_documentalmente'}}),/oficial/);
    await rpc('record_save',{kind:'cel',record_key:'trajectory',previous_id:first.id,evidence_id:e,record:{...record,status:'pendiente_validacion'}});
    assert.equal((await rpc('cel_records')).length,1);
+   await assert.rejects(rpc('record_save',scoped({kind:'incident',record_key:'synthetic-future-close',record:{title:'Incidencia sintética con cierre futuro',opened_at:new Date(Date.now()-3600000).toISOString(),resolved_at:new Date(Date.now()+86400000).toISOString()}})),/Fechas de incidencia/);
    await actor(1);await assert.rejects(rpc('evidence_file',{cohort_id:cohort,id:e}),/restringido/);
   });
   await t.test('four-month reports have real snapshots, approval separation and unchanged historical data',async()=>{

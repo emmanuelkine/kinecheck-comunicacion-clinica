@@ -1,6 +1,7 @@
 import {PDFDocument,rgb} from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import {regular,bold as boldBytes,logo} from './quality-embedded-assets.mjs';
+import {evidenceLabels,recordLabels,recordValue} from '../../academy/calidad/quality-labels.mjs';
 export const reportSections=[
  ['Actividad educativa desarrollada','history'],['Cursos y versiones impartidas','program'],['Participación y finalización','participation'],
  ['Resultados de aprendizaje','learning'],['Competencias evaluadas','competencies'],['Experiencia del estudiante','experience'],
@@ -61,12 +62,12 @@ export async function qualityPDF({summary,report=null,dossier=null}){
     for(const d of summary.competencies)text(`${d.dimension}: ${d.average}/${d.maximum}; n=${d.observations}. Distribución: ${d.distribution.join(', ')}.`);
    }else if(key==='followups'||key==='transfer'){
     for(const f of summary.followups)text(`${f.day} días: ${f.responses??'sin datos'} respuestas / ${f.eligible??'sin datos'} elegibles; aplicación autoinformada: ${f.applied??'sin datos'} / ${f.responses??'sin datos'} respuestas.`);
-    if(key==='transfer'){text('La percepción de aplicación no demuestra impacto clínico. Evidencia externa y resultados en pacientes requieren documentación y mediciones independientes.');for(const d of summary.evidence_summary||[])text(`${d.classification}: ${d.available} documentos; ${d.reviewed} revisados y aceptados. La clasificación declarada no sustituye la verificación del resultado.`);}
+    if(key==='transfer'){text('La percepción de aplicación no demuestra impacto clínico. Evidencia externa y resultados en pacientes requieren documentación y mediciones independientes.');for(const d of summary.evidence_summary||[])text(`${evidenceLabels[d.classification]||d.classification}: ${d.available} documentos; ${d.reviewed} revisados y aceptados. La clasificación declarada no sustituye la verificación del resultado.`);}
    }else if(key==='limitations')for(const l of summary.limitations)text(l);
    else{
     const kind=key==='implemented'?'improvement':key;const rows=summary.records.filter(r=>r.kind===kind&&(key!=='implemented'||['implemented','reevaluated'].includes(r.payload.status)));
     if(!rows.length)text('Sin evidencia registrada para este apartado.');
-    for(const r of rows){text(`${r.payload.title} | revisión ${r.revision}`,{strong:true});for(const [field,val] of Object.entries(r.payload).filter(([k])=>k!=='title'))text(`${field}: ${typeof val==='object'?JSON.stringify(val):val}`,{size:9});text(`Evidencia: ${r.evidence_id||'no asociada'} | Registrado: ${r.created_at}`,{size:8});}
+    for(const r of rows){text(`${r.payload.title} | revisión ${r.revision}`,{strong:true});for(const [field,val] of Object.entries(r.payload).filter(([k])=>k!=='title'))text(`${recordLabels[field]||field}: ${typeof val==='object'?JSON.stringify(val):recordValue(field,val)}`,{size:9});text(`Evidencia: ${r.evidence_id||'no asociada'} | Registrado: ${r.created_at}`,{size:8});}
    }
   }
   heading('Respaldo y reproducibilidad');text(`Definiciones: ${summary.schema_version}. Actualización: ${summary.updated_at}.`);text(`Huella de las evaluaciones fuente: ${summary.source_digest||'Suprimida para difusión'}`,{size:8});

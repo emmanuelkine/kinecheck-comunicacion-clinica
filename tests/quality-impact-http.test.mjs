@@ -12,6 +12,8 @@ test('HTTP requires same origin, bounded UTF8 JSON and verified identity',async(
  assert.equal((await handler({request:req({action:'context',payload:{x:'x'.repeat(160001)}})})).status,413);
  assert.equal((await handler({request:req({action:'not_allowed'})})).status,404);assert.equal(calls,0);
  assert.equal((await handler({request:req({action:'context'})})).status,401);assert.equal(calls,1);
+ const unavailable=createQualityHandler({fetcher:async url=>url.endsWith('/auth/v1/user')?Response.json({id:'synthetic-id',email_confirmed_at:'2026-01-01'}):Response.json({code:'PGRST202'},{status:404})});
+ const pending=await unavailable({request:req({action:'context'})});assert.equal(pending.status,503);assert.match((await pending.json()).error,/aún no está habilitado/);
 });
 test('CSV formulas are escaped, small-cohort diffusion suppressed',()=>{
  for(const cell of ['=HYPERLINK("https://example.invalid")','  +SUM(A1)','-2','@IMPORT','\tformula'])assert.ok(csvCell(cell).startsWith('"\''));
