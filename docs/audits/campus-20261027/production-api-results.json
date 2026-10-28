@@ -1,0 +1,55 @@
+{
+  "environment": "production",
+  "origin": "https://kinecheck.cl",
+  "source": "e8cca4a8905f6e09dac70337f64da77f2fabfbe2",
+  "permissions": {
+    "origin": "https://kinecheck.cl",
+    "results": [
+      "3 real sessions and profiles (existing Auth autoconfirm policy)",
+      "Server grading ignores caller score and identity",
+      "Email-bound invitations, replay denied and progress preserved",
+      "Role and cross-tenant denials",
+      "Teacher activity, student access and privacy threshold",
+      "Real refresh and personal export",
+      "Revoked membership immediately denied; personal progress preserved",
+      "Logout invalidates database authorization for the previous access token"
+    ]
+  },
+  "recovery": {
+    "verifiedAt": "2026-10-27T21:38:53.955Z",
+    "redirectStatus": 303,
+    "destination": "https://kinecheck.cl/campus/",
+    "flowMatches": true,
+    "wrongFlow": 403,
+    "callback": 200,
+    "authenticatedContext": 200,
+    "profileAvailable": true,
+    "cookiesHttpOnly": true
+  },
+  "registration": {
+    "verifiedAt": "2026-10-28T00:41:09.381Z",
+    "origin": "https://kinecheck.cl",
+    "signup": 200,
+    "privacyRequired": true,
+    "individualWithoutInstitution": true,
+    "operatorDenied": 403,
+    "savedScore": 100,
+    "exportedAttempts": 1,
+    "logoutOldSession": 401
+  },
+  "password": {
+    "verifiedAt": "2026-10-28T00:41:42.819Z",
+    "origin": "https://kinecheck.cl",
+    "refresh": 200,
+    "passwordUpdate": 200,
+    "oldPasswordDenied": 400,
+    "newPasswordLogin": 200,
+    "authenticatedContext": 200,
+    "logout": 200
+  },
+  "cleanup": {
+    "temporaryAccountsRemaining": 0,
+    "temporaryInstitutionsRemaining": 0,
+    "ownerOperatorPreserved": true
+  }
+}

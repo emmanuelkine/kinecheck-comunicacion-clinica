@@ -1,0 +1,133 @@
+{
+  "origin": "https://kinecheck.cl",
+  "verifiedAt": "2026-10-28T00:43:51.405Z",
+  "source": "9d4d98a951391d2820a18fd2d5d80d5b10b763cb",
+  "exactAssets": [
+    {
+      "path": "campus/index.html",
+      "hash": "b9061baa8e6883cff6a789880e551f010ba0b9c92deeba3b1ba6da3326de257b"
+    },
+    {
+      "path": "campus/campus.js",
+      "hash": "e0489de9e710b80bab3e5e050c77f8e37035853ce74dfd1f82a6884af4a821b9"
+    },
+    {
+      "path": "campus/campus.css",
+      "hash": "452959227520a598273418be4568e560fc3b84d04b5e8be4f76e4cfb5fcf106f"
+    },
+    {
+      "path": "exercise/app.css",
+      "hash": "1b75d49b8d9f5ad1ef69c8e2265b5d247183292e95fdc07f3ceb711fbaa38c15"
+    },
+    {
+      "path": "exercise/sw.js",
+      "hash": "6ee815fa4c15af22b89187decdff6e655566b0e0d1715b45603cf46d0bd49f41"
+    }
+  ],
+  "reports": [
+    {
+      "engine": "chromium",
+      "width": 360,
+      "layout": {
+        "scroll": 360,
+        "client": 360
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "layout": {
+        "scroll": 390,
+        "client": 390
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    },
+    {
+      "engine": "chromium",
+      "width": 768,
+      "layout": {
+        "scroll": 768,
+        "client": 768
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    },
+    {
+      "engine": "chromium",
+      "width": 1280,
+      "layout": {
+        "scroll": 1280,
+        "client": 1280
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "layout": {
+        "scroll": 360,
+        "client": 360
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "layout": {
+        "scroll": 390,
+        "client": 390
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    },
+    {
+      "engine": "webkit",
+      "width": 768,
+      "layout": {
+        "scroll": 768,
+        "client": 768
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "layout": {
+        "scroll": 1280,
+        "client": 1280
+      },
+      "guestCase": "100%, sin guardar",
+      "anonymousAccess": 401,
+      "crossOrigin": 403,
+      "axeViolations": 0,
+      "live": true
+    }
+  ]
+}
