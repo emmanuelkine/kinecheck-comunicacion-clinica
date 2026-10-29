@@ -24,6 +24,9 @@ Idioma principal: español (Chile).
 - [Comunicación clínica](https://kinecheck.cl/productos/comunicacion-clinica/)
 - [Evidencia aplicada](https://kinecheck.cl/productos/evidencia-aplicada/)
 
+## Transparencia editorial
+- [Política editorial y fuentes](https://kinecheck.cl/editorial/): criterios, incertidumbre clínica, límites y enlaces a recursos públicos.
+
 ## Descubrimiento e indexación
 - [Mapa del sitio](https://kinecheck.cl/sitemap.xml)
 - [Directivas para rastreadores](https://kinecheck.cl/robots.txt)
