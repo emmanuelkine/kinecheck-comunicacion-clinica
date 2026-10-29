@@ -37,3 +37,11 @@ test('publication still requires the pre-existing independent verification gate'
   assert.match(migration, /aceptación y verificación independiente vigente/);
   assert.match(html, /KineCheck no afirma haber comprobado credenciales que no haya validado por una fuente independiente/);
 });
+
+test('patient search and official booking path remain without an extra warning card', () => {
+  const demo = fs.readFileSync(new URL('../horas-disponibles/demo/index.html', import.meta.url), 'utf8');
+  assert.match(html, /id="searchPanel"/);
+  assert.match(html, /KineCheck muestra horas liberadas y te dirige al sistema oficial de agendamiento/);
+  assert.doesNotMatch(html + demo, /patient-notice|¿Elegiste una hora con poca anticipación\?/);
+  assert.match(demo, /MODO DEMOSTRACIÓN/);
+});
