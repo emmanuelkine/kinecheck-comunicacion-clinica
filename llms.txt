@@ -1,0 +1,32 @@
+# KineCheck
+
+> Plataforma chilena de educación y recursos digitales sobre kinesiología musculoesquelética, evaluación, razonamiento clínico y aplicación crítica de la evidencia. Los contenidos son educativos y no sustituyen una evaluación profesional individual.
+
+Sitio oficial: https://kinecheck.cl/
+Idioma principal: español (Chile).
+
+## Explorar KineCheck
+- [Inicio](https://kinecheck.cl/): presentación general del ecosistema.
+- [Biblioteca gratuita](https://kinecheck.cl/gratis/): recursos de libre acceso.
+- [Profesionales](https://kinecheck.cl/profesionales/): contenidos dirigidos a profesionales.
+- [Estudiantes](https://kinecheck.cl/estudiantes/): contenidos de formación y práctica clínica.
+- [Metodología](https://kinecheck.cl/metodologia/): enfoque formativo y razonamiento clínico.
+- [Evidencia MSK](https://kinecheck.cl/evidencia-msk/): contenidos para explorar evidencia en salud musculoesquelética.
+
+## Recursos educativos abiertos
+- [Banderas clínicas](https://kinecheck.cl/recursos/banderas-clinicas/): apoyo al reconocimiento de señales de alerta.
+- [Etiquetas diagnósticas y dolor](https://kinecheck.cl/recursos/etiquetas-diagnosticas-y-dolor/): recurso educativo sobre comunicación y diagnósticos.
+
+## Cursos y formación
+- [Más allá del dolor](https://kinecheck.cl/productos/mas-alla-del-dolor/)
+- [Dolor lumbar persistente](https://kinecheck.cl/productos/dolor-lumbar-persistente/)
+- [Ejercicio terapéutico](https://kinecheck.cl/productos/ejercicio-terapeutico/)
+- [Comunicación clínica](https://kinecheck.cl/productos/comunicacion-clinica/)
+- [Evidencia aplicada](https://kinecheck.cl/productos/evidencia-aplicada/)
+
+## Descubrimiento e indexación
+- [Mapa del sitio](https://kinecheck.cl/sitemap.xml)
+- [Directivas para rastreadores](https://kinecheck.cl/robots.txt)
+
+## Advertencias
+La disponibilidad, condiciones de acceso y precios pueden cambiar: verificar siempre las páginas oficiales. Las citas científicas deben comprobarse en sus fuentes originales. No considerar materiales educativos como diagnóstico personalizado. No indexar ni reproducir contenido de cuentas, aulas o áreas privadas. Este archivo es orientativo; no garantiza indexación ni inclusión en respuestas de sistemas de IA.
