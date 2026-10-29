@@ -35,6 +35,7 @@ const REVOKE_EVENTS = new Set([
   "PURCHASE_EXPIRED",
   "PURCHASE_REFUNDED",
   "PURCHASE_DELAYED",
+  "PURCHASE_PROTEST",
 
   // Compatibilidad con nombres alternativos.
   "CANCELED",
@@ -43,6 +44,7 @@ const REVOKE_EVENTS = new Set([
   "EXPIRED",
   "REFUNDED",
   "DELAYED",
+  "PROTEST",
 ]);
 
 /*

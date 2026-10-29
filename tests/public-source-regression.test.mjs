@@ -296,6 +296,23 @@ test("el dashboard RC separa evidencia automatizada de validación comercial rea
   assert.ok(!protocol.includes("| PASS |"));
 });
 
+test("el cierre de validación conserva los 14 controles y separa simulación de evidencia real", async () => {
+  const report = await read("VALIDACION_REAL_KINECHECK.md");
+  for (const control of [
+    "01. Compra Hotmart real", "02. Recepción de webhook auténtico",
+    "03. Licencia real y producto visible en Academy",
+    "04. Correo de compra distinto al correo de cuenta", "05. Reembolso actualiza la licencia",
+    "06. Chargeback, cancelación o protesta", "07. Revocación efectiva del acceso",
+    "08. Pago fallido o pendiente sin licencia", "09. Expiración de sesión y tokens inválidos",
+    "10. Misma cuenta en dos dispositivos físicos", "11. iPhone físico con Safari",
+    "12. Android físico con Chrome", "13. Lector de pantalla real",
+    "14. Prueba de penetración independiente autorizada",
+  ]) assert.ok(report.includes(control), `informe: falta ${control}`);
+  assert.ok(report.includes("Una simulación controlada demuestra lógica y regresión"));
+  assert.ok(report.includes("no equivale"));
+  assert.ok(report.includes("No se hicieron pagos, reembolsos, chargebacks, despliegues, merges"));
+});
+
 test("los estilos y el menú conservan foco visible y teclado", async () => {
   const siteCss = await read("kinecheck/site-v5.css");
   const productCss = await read("productos/product.css");
