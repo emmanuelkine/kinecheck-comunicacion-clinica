@@ -33,3 +33,33 @@ jobs:
           node-version: '22'
       - name: Validate SEO routes and tags
         run: node --test tests/seo-public.test.mjs
+
+  lighthouse-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - slug: home
+            url: https://kinecheck.cl/
+          - slug: library
+            url: https://kinecheck.cl/gratis/
+          - slug: professionals
+            url: https://kinecheck.cl/gratis/profesionales/
+          - slug: patients
+            url: https://kinecheck.cl/gratis/pacientes/
+    steps:
+      - name: Install Lighthouse CLI
+        run: npm install --no-save --prefix /tmp/kc-lighthouse lighthouse@12
+      - name: Run Lighthouse mobile against production
+        run: |
+          mkdir -p lighthouse-report
+          node /tmp/kc-lighthouse/node_modules/lighthouse/cli/index.js "${{ matrix.url }}" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --output=json --output-path="lighthouse-report/${{ matrix.slug }}.json" --only-categories=performance,seo,accessibility
+      - name: Preserve lab report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ matrix.slug }}
+          path: lighthouse-report/
+          if-no-files-found: warn
