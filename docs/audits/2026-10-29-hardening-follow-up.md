@@ -39,16 +39,14 @@ No se ejecutó ningún cambio en bases de datos ni se publicó ningún documento
 
 ### 1. Protección contra contraseñas filtradas (prioridad media)
 
-No hay herramienta disponible en esta sesión para cambiar la opción de Auth.
+No hay herramienta disponible en esta sesión para cambiar la opción de Auth y el plan actual bloquea la función.
 
-1. En Supabase Dashboard, abrir el proyecto **staging**.
-2. Ir a **Authentication → Settings** (la etiqueta exacta puede variar en la versión del Dashboard) → **Password Security**.
-3. Activar **Leaked password protection** / protección contra contraseñas comprometidas.
-4. Guardar. Revisar el Security Advisor.
-5. Con una cuenta sintética nueva en staging, probar registro/cambio de contraseña con una contraseña de prueba no comprometida y una contraseña de prueba incluida en el mecanismo de prueba recomendado por Supabase; verificar que la segunda se rechace y que recuperación de acceso siga funcionando.
-6. Registrar la evidencia y la versión/configuración. Repetir en producción solo con autorización explícita, plan de reversión y pruebas satisfactorias en staging.
-
-No compartir contraseñas reales con el equipo de auditoría.
+1. En Supabase Dashboard, abrir el proyecto **KineCheck Staging**.
+2. En la navegación del proyecto, ir a **Authentication → Sign In / Providers → Email**.
+3. El ajuste de seguridad de contraseñas se configura en la opción de protección contra contraseñas filtradas. Si no aparece habilitado, no se puede activar con el plan actual.
+4. Verificación de plan: staging y producción pertenecen a la organización **KineCheck Academy**, cuyo plan actual es **Free**. La documentación de Supabase indica que la protección contra contraseñas filtradas está disponible en Pro o superior. Por eso no es posible activarla ahora en esta organización. No se inició ni se recomienda un cambio de plan sin autorización explícita de costo.
+5. Si el titular autoriza posteriormente un plan compatible, activar primero en staging, revisar el Security Advisor y probar registro/cambio de contraseña y recuperación con cuentas sintéticas. Solo después de pruebas satisfactorias y autorización explícita se configura producción.
+6. No compartir contraseñas reales ni usar las cuentas personales existentes como fixtures.
 
 ### 2. Cuentas y datos de prueba para autorización
 
