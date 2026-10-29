@@ -1,0 +1,35 @@
+name: SEO public checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - 'index.html'
+      - 'gratis/**'
+      - 'campus/index.html'
+      - 'evidencia-msk/index.html'
+      - 'tests/seo-public.test.mjs'
+      - '.github/workflows/seo-public.yml'
+  pull_request:
+    paths:
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - 'index.html'
+      - 'gratis/**'
+      - 'campus/index.html'
+      - 'evidencia-msk/index.html'
+      - 'tests/seo-public.test.mjs'
+      - '.github/workflows/seo-public.yml'
+  workflow_dispatch:
+jobs:
+  static-seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate SEO routes and tags
+        run: node --test tests/seo-public.test.mjs
