@@ -14,6 +14,16 @@ create table kc_hours_private.release (
 );
 insert into kc_hours_private.release(singleton) values(true);
 create table kc_hours_private.operators(user_id uuid primary key references auth.users(id) on delete cascade);
+create table kc_hours_private.booking_hosts (
+  subject_type text not null check(subject_type in ('professional','institution')),
+  subject_id uuid not null,
+  hostname text not null,
+  active boolean not null default true,
+  verified_by uuid not null references auth.users(id),
+  evidence_url text not null,
+  verified_at timestamptz not null default now(),
+  primary key(subject_type,subject_id,hostname)
+);
 create table kc_hours_private.pilots (
   subject_type text not null check(subject_type in ('professional','institution')),
   subject_id uuid not null,
@@ -88,7 +98,7 @@ create table kc_hours_private.rate_limits (
 );
 -- Internal tables are deliberately inaccessible to Data API roles, with forced RLS.
 do $$ declare t text; begin
-  foreach t in array array['release','operators','pilots','staff','delegations','invitations','reports','metrics','audit','rate_limits'] loop
+  foreach t in array array['release','operators','booking_hosts','pilots','staff','delegations','invitations','reports','metrics','audit','rate_limits'] loop
     execute format('alter table kc_hours_private.%I enable row level security',t);
     execute format('alter table kc_hours_private.%I force row level security',t);
     execute format('revoke all on kc_hours_private.%I from public,anon,authenticated',t);
@@ -160,6 +170,11 @@ create function kc_hours_private.safe_url(value text) returns boolean language s
  and value !~* '^https://([^/]*\.)?(localhost|local|internal|invalid|test|example)(/|$)'
  and value !~* '^https://[^/]*\.\.'
 $$;
+create function kc_hours_private.booking_allowed(pro uuid,org uuid,value text) returns boolean language sql stable security definer set search_path='' as $$
+ select kc_hours_private.safe_url(value) and exists(select 1 from kc_hours_private.booking_hosts h
+ where h.subject_type=case when org is null then 'professional' else 'institution' end
+ and h.subject_id=coalesce(org,pro) and h.hostname=lower(substring(value from '^https://([^/]+)')) and h.active)
+$$;
 
 -- Remove broad legacy client write paths. All new writes use the checked API below.
 revoke insert,update,delete on public.kc_health_professionals,public.kc_health_institutions,public.kc_health_institution_members,public.kc_health_slots,public.kc_health_responsibility_acceptances from anon,authenticated;
@@ -170,7 +185,8 @@ drop policy kc_slots_owner_update on public.kc_health_slots;
 drop policy kc_slots_public_read on public.kc_health_slots;
 create policy kc_slots_public_read on public.kc_health_slots for select to anon,authenticated using(
  status='active' and not is_suspended and starts_at>now() and (expires_at is null or expires_at>now())
- and kc_hours_private.slot_visible(professional_id,institution_id));
+ and kc_hours_private.slot_visible(professional_id,institution_id)
+ and kc_hours_private.booking_allowed(professional_id,institution_id,booking_url));
 -- Public direct reads expose only the existing non-identifying columns; RPC search
 -- returns the public professional name but never Auth email, declarations or staff.
 create policy kc_slots_team_read on public.kc_health_slots for select to authenticated using(
@@ -190,6 +206,8 @@ begin
      raise exception 'Publicación requiere piloto activo, aceptación y verificación independiente vigente' using errcode='42501'; end if;
    if not kc_hours_private.safe_url(new.booking_url) then
      raise exception 'Enlace oficial HTTPS válido requerido' using errcode='23514'; end if;
+   if not kc_hours_private.booking_allowed(new.professional_id,new.institution_id,new.booking_url) then
+     raise exception 'El dominio de agendamiento requiere validación independiente para este prestador' using errcode='42501'; end if;
  end if;
  new.updated_at:=statement_timestamp();
  return new;
@@ -364,14 +382,24 @@ begin
    if not kc_hours_private.is_admin(org,u) then raise exception 'Permisos institucionales insuficientes' using errcode='42501'; end if;
    return jsonb_build_object('enabled_professionals',(select count(*) from public.kc_health_institution_members where institution_id=org and membership_status='active' and professional_consent),
      'published',(select count(*) from public.kc_health_slots where institution_id=org),
-     'currently_available',(select count(*) from public.kc_health_slots sl where institution_id=org and sl.status='active' and not sl.is_suspended and sl.starts_at>now() and sl.expires_at>now() and kc_hours_private.slot_visible(sl.professional_id,org)),
+     'currently_available',(select count(*) from public.kc_health_slots sl where institution_id=org and sl.status='active' and not sl.is_suspended and sl.starts_at>now() and sl.expires_at>now() and kc_hours_private.slot_visible(sl.professional_id,org) and kc_hours_private.booking_allowed(sl.professional_id,org,sl.booking_url)),
      'contacts',(select coalesce(sum(m.contacts),0) from kc_hours_private.metrics m join public.kc_health_slots sl on sl.id=m.slot_id where sl.institution_id=org),
      'booked',(select count(*) from public.kc_health_slots where institution_id=org and deactivation_reason='booked'),
      'pricing_basis','enabled_professionals','automatic_charges',false);
- elsif action in ('verify_professional','verify_institution','suspend_slot','suspend_professional','reports') then
+ elsif action in ('verify_professional','verify_institution','approve_booking_host','revoke_booking_host','suspend_slot','suspend_professional','reports') then
    if not exists(select 1 from kc_hours_private.operators where user_id=u) then raise exception 'Acceso restringido a moderación' using errcode='42501'; end if;
    if action='reports' then return coalesce((select jsonb_agg(to_jsonb(x)) from (select * from kc_hours_private.reports where resolved_at is null order by day desc limit 50 offset off) x),'[]'::jsonb); end if;
-   if action in ('verify_professional','verify_institution') then
+   if action in ('approve_booking_host','revoke_booking_host') then
+     if not kc_hours_private.safe_url(payload->>'booking_url') then raise exception 'Enlace oficial HTTPS válido requerido'; end if;
+     kind:=case when org is null then 'professional' else 'institution' end;subject:=coalesce(org,pro);
+     if subject is null then raise exception 'Prestador requerido'; end if;
+     if action='approve_booking_host' then
+       if not kc_hours_private.safe_url(payload->>'evidence_url') then raise exception 'Fuente independiente HTTPS requerida'; end if;
+       insert into kc_hours_private.booking_hosts(subject_type,subject_id,hostname,verified_by,evidence_url)
+       values(kind,subject,lower(substring(payload->>'booking_url' from '^https://([^/]+)')),u,payload->>'evidence_url')
+       on conflict(subject_type,subject_id,hostname) do update set active=true,verified_by=u,evidence_url=excluded.evidence_url,verified_at=now();
+     else update kc_hours_private.booking_hosts set active=false where subject_type=kind and subject_id=subject and hostname=lower(substring(payload->>'booking_url' from '^https://([^/]+)')); end if;
+   elsif action in ('verify_professional','verify_institution') then
      if not kc_hours_private.safe_url(payload->>'evidence_url') then raise exception 'Fuente independiente HTTPS requerida'; end if;
      if action='verify_professional' then update public.kc_health_professionals set verification_status='verified' where user_id=pro;
      else update public.kc_health_institutions set verification_status='verified' where id=org; end if;
@@ -391,7 +419,7 @@ create function kc_hours_private.search(filters jsonb default '{}') returns json
  select coalesce(jsonb_agg(to_jsonb(x)),'[]'::jsonb) from (
  select s.id,p.full_name,p.profession,s.specialty,s.region,s.comuna,s.starts_at,s.location_text,s.facility_type,s.modality,s.booking_url,s.public_contact,i.public_name as institution_name
  from public.kc_health_slots s join public.kc_health_professionals p on p.user_id=s.professional_id left join public.kc_health_institutions i on i.id=s.institution_id
- where s.status='active' and not s.is_suspended and s.starts_at>now() and s.expires_at>now() and kc_hours_private.slot_visible(s.professional_id,s.institution_id)
+ where s.status='active' and not s.is_suspended and s.starts_at>now() and s.expires_at>now() and kc_hours_private.slot_visible(s.professional_id,s.institution_id) and kc_hours_private.booking_allowed(s.professional_id,s.institution_id,s.booking_url)
  and (coalesce(filters->>'specialty','')='' or position(lower(left(filters->>'specialty',100)) in lower(p.profession||' '||s.specialty))>0)
  and (coalesce(filters->>'region','')='' or replace(lower(s.region),'región de ','')=replace(lower(filters->>'region'),'región de ',''))
  and (coalesce(filters->>'comuna','')='' or position(lower(left(filters->>'comuna',100)) in lower(s.comuna))>0)
@@ -404,7 +432,7 @@ create function kc_hours_private.search(filters jsonb default '{}') returns json
 $$;
 create function kc_hours_private.public_event(slot_id uuid,event text) returns jsonb language plpgsql security definer set search_path='' as $$
 begin
- if not exists(select 1 from public.kc_health_slots s where s.id=slot_id and s.status='active' and not s.is_suspended and s.starts_at>now() and s.expires_at>now() and kc_hours_private.slot_visible(s.professional_id,s.institution_id)) then return jsonb_build_object('received',true); end if;
+ if not exists(select 1 from public.kc_health_slots s where s.id=slot_id and s.status='active' and not s.is_suspended and s.starts_at>now() and s.expires_at>now() and kc_hours_private.slot_visible(s.professional_id,s.institution_id) and kc_hours_private.booking_allowed(s.professional_id,s.institution_id,s.booking_url)) then return jsonb_build_object('received',true); end if;
  if event='contact' then
    insert into kc_hours_private.metrics(slot_id,contacts) values(slot_id,1)
    on conflict on constraint metrics_pkey do update set contacts=kc_hours_private.metrics.contacts+1 where kc_hours_private.metrics.contacts<10000;
@@ -422,6 +450,7 @@ create function public.kc_hours_public_event(slot_id uuid,event text) returns js
 revoke all on all functions in schema kc_hours_private from public,anon,authenticated;
 grant execute on function kc_hours_private.api(text,jsonb) to authenticated;
 grant execute on function kc_hours_private.search(jsonb),kc_hours_private.public_event(uuid,text),kc_hours_private.slot_visible(uuid,uuid) to anon,authenticated;
+grant execute on function kc_hours_private.booking_allowed(uuid,uuid,text) to anon,authenticated;
 grant execute on function kc_hours_private.can_manage(uuid,uuid,uuid) to authenticated;
 revoke all on function public.kc_hours_api(text,jsonb),public.kc_hours_search(jsonb),public.kc_hours_public_event(uuid,text) from public,anon,authenticated;
 grant execute on function public.kc_hours_api(text,jsonb) to authenticated;

@@ -138,7 +138,7 @@ async function loadModeration(){show('moderationPanel',!!context?.operator);if(!
 $('moderationReports').addEventListener('click',async e=>{const b=e.target.closest('[data-suspend]');if(!b)return;try{await rpc('suspend_slot',{slot_id:b.dataset.suspend});await loadModeration();await loadSlots();}catch(err){$('moderationMessage').textContent=err.message;}});
 $('institutionBtn').onclick=()=>{const open=$('institutionPanel').classList.contains('hidden');show('institutionPanel',open);$('institutionBtn').setAttribute('aria-expanded',String(open));if(open)$('institutionPanel').scrollIntoView({behavior:'smooth'});};
 $('searchBtn').onclick=()=>$('searchPanel').scrollIntoView({behavior:'smooth'});
-$('publishBtn').onclick=()=>{show('publishPanel',true);$('publishPanel').scrollIntoView({behavior:'smooth'});};
+$('publishBtn').onclick=()=>{show('publishPanel',true);history.replaceState(null,'',location.pathname+'#publishPanel');$('publishPanel').scrollIntoView({behavior:'smooth'});};
 $('filterBtn').onclick=()=>{resultsOffset=0;loadSlots();};
 $('resultsPrevious').onclick=()=>{resultsOffset=Math.max(0,resultsOffset-24);loadSlots();};$('resultsNext').onclick=()=>{resultsOffset+=24;loadSlots();};
 $('membersPrevious').onclick=()=>{membersOffset=Math.max(0,membersOffset-50);loadMembers().catch(e=>$('institutionMessage').textContent=e.message);};$('membersNext').onclick=()=>{membersOffset+=50;loadMembers().catch(e=>$('institutionMessage').textContent=e.message);};$('memberSearchBtn').onclick=()=>{membersOffset=0;loadMembers().catch(e=>$('institutionMessage').textContent=e.message);};

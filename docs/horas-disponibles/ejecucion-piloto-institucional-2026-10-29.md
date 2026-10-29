@@ -34,7 +34,7 @@ La ruta pública comprobada en navegador sigue redirigiendo a `https://kinecheck
 - Invitaciones: token aleatorio de dos UUID, hash SHA-256, caducidad de siete días, correo vinculado, bloqueo transaccional y un solo uso. Se comprueba que quien invita conserve su autorización.
 - Revocar secretaría invalida sus delegaciones. Se consulta el estado actual en la base de datos sin esperar un JWT nuevo.
 - Cada escritura de una hora revalida vigencia, piloto, credenciales, declaración y enlace. Las publicaciones suspendidas no se pueden editar ni reactivar mediante esta API.
-- Enlaces HTTPS sin credenciales, direcciones IP ni hosts locales; no se realizan solicitudes de servidor a esas direcciones. El paciente sale al sitio del prestador.
+- Enlaces HTTPS sin credenciales, direcciones IP ni hosts locales; dominios de reserva habilitados mediante validación independiente por prestador, con revocación que oculta de inmediato sus horas; no se realizan solicitudes de servidor a esas direcciones. El paciente sale al sitio del prestador.
 - Presupuesto de operaciones por cuenta; límites de publicaciones activas y tamaño de payload; denuncias y métricas acotadas por día. Los contactos son métricas orientativas susceptibles de automatización; no prueban conversiones reales.
 - Búsquedas de 24 resultados y listados institucionales de 50, con índices de agenda, instituciones, vínculos y permisos. Las pruebas locales de cinco páginas con 205 profesionales adicionales tardaron decenas de milisegundos; esto **no es un benchmark de producción ni una prueba de carga real**.
 - CSP propia sin scripts inline para Horas, selección de staging restringida al proyecto Pages conocido y entorno local de pruebas. Inicio por enlace mágico vinculado a una solicitud del mismo navegador durante 15 minutos.
@@ -53,13 +53,15 @@ La migración añade tablas/columnas e índices y restringe los permisos del mó
 
 ## Pruebas y evidencia
 
-- `npm test`: 187 pruebas aprobadas, 0 fallidas tras actualizar el contrato de registro atómico.
-- Pruebas focales de declaración y piloto: 21 aprobadas, 0 fallidas (incluyen los escenarios funcionales y de seguridad).
+- `npm test`: 190 pruebas aprobadas, 0 fallidas tras actualizar el contrato de registro atómico.
+- Pruebas focales de declaración y piloto: 24 aprobadas, 0 fallidas (incluyen los escenarios funcionales y de seguridad).
 - Validadores de marca, contratos UI de Academy y coherencia de Campus: aprobados.
 - Compatibilidad con #294: `git merge-tree --write-tree HEAD origin/audit/security-privacy-followup-2026-10-29` sin conflictos. No se integró ni alteró esa rama.
 - El PR incorpora `.github/workflows/hours-institutional-pilot.yml`: PostgreSQL embebido y pruebas de interfaz Chromium/WebKit en 360, 390, 768 y 1.280 px, incluyendo accesibilidad, registro, casilla obligatoria, publicación institucional, secretaría y paginación. Las respuestas de API de esas pruebas de navegador son fixtures del proceso, no cuentas ni sesiones reales.
 - Descarga de navegadores local bloqueada por archivos incompletos de la red del entorno. La ejecución visual se traslada a CI; no se marca aprobada hasta ver sus resultados.
 - **Pendiente obligatorio:** pruebas HTTP con JWT emitidos por Supabase Auth de staging, confirmación real del correo/enlace, dos clínicas con sesiones independientes, revocación con sesión existente y migración instalada. Los JWT simulados de la prueba SQL no reemplazan ese control.
+- Primer CI del commit `19c43ae`: regresiones compartidas, Campus navegador/unidad, Exercise, Hotmart, marca, contratos y validadores aprobados. La prueba nueva de Horas detectó que el panel profesional no conservaba su apertura al recargar; se corrigió la navegación y se repite ese CI.
+- Cloudflare creó correctamente la vista previa `https://d3494636.kinecheck-comunicacion-clinica.pages.dev` del commit `19c43ae`. Se comprobó en navegador: conserva la redirección al demo y ya elimina la advertencia extra al paciente. No equivale a probar el nuevo panel con Auth.
 - **Pendiente:** prueba del despliegue de vista previa y, después de aprobación de apertura, móvil/escritorio y registro reales en producción.
 
 ## Producción y Cloudflare
