@@ -55,7 +55,16 @@ jobs:
       - name: Run Lighthouse mobile against production
         run: |
           mkdir -p lighthouse-report
-          node /tmp/kc-lighthouse/node_modules/lighthouse/cli/index.js "${{ matrix.url }}" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --output=json --output-path="lighthouse-report/${{ matrix.slug }}.json" --only-categories=performance,seo,accessibility
+          success=0
+          for attempt in 1 2 3; do
+            if node /tmp/kc-lighthouse/node_modules/lighthouse/cli/index.js "${{ matrix.url }}" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --output=json --output-path="lighthouse-report/${{ matrix.slug }}.json" --only-categories=performance,seo,accessibility; then
+              success=1
+              break
+            fi
+            echo "Lighthouse transient error, retry $attempt/3"
+            sleep 5
+          done
+          test "$success" -eq 1
       - name: Preserve lab report
         if: always()
         uses: actions/upload-artifact@v4
