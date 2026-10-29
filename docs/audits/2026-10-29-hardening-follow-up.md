@@ -129,5 +129,5 @@ Los reportes de Actions se conservaron como artefactos de CI. No se publicó el 
 
 ### Estado de creación de cuentas de prueba
 
-No se crearon cuentas en Supabase Auth. El panel de staging redirige a la pantalla de inicio de sesión y esta sesión no cuenta con Auth Admin API ni una sesión autenticada del Dashboard. No se intentó crear filas manualmente en `auth.users`, enviar correos a terceros ni almacenar contraseñas de prueba. Para seguir, la persona responsable debe iniciar sesión en Dashboard; después se crearán cuentas de prueba con correos ficticios controlados y verificación de correo desactivada solo para staging, o mediante el flujo administrativo que el responsable autorice.
+No se crearon cuentas en Supabase Auth. El panel de staging redirige a la pantalla de inicio de sesión y esta sesión no cuenta con Auth Admin API ni una sesión autenticada del Dashboard. No se intentó crear filas manualmente en `auth.users`, enviar correos a terceros ni almacenar contraseñas de prueba. Para seguir, la persona responsable debe iniciar sesión en Dashboard; después se crearán cuentas de prueba mediante el flujo administrativo de Auth con correos de prueba controlados. No se desactivará globalmente la confirmación de correo ni se enviarán mensajes a terceros; usar una bandeja de pruebas controlada o alta administrativa confirmada en staging.
 
