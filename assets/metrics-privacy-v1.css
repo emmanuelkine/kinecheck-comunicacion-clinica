@@ -18,3 +18,11 @@
 /* Todas las páginas: cuadro centrado hasta una decisión explícita. */
 #kc-metrics-panel:not([hidden]){position:fixed;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(540px,calc(100vw - 24px));max-height:min(82dvh,650px);margin:0;overflow-y:auto;overscroll-behavior:contain;z-index:2147483000}
 @media(max-width:560px){#kc-metrics-panel:not([hidden]){width:calc(100vw - 24px);max-height:76dvh;padding:16px}}
+
+/* Bibliotecas: panel discreto inspirado en la disposición inferior de un aviso de consentimiento. */
+body.kc-library-metrics #kc-metrics-panel:not([hidden]){left:max(18px,env(safe-area-inset-left));top:auto;bottom:max(18px,env(safe-area-inset-bottom));transform:none;width:min(420px,calc(100vw - 36px));max-height:min(78dvh,580px);border-color:#397a83;border-radius:17px;box-shadow:0 16px 50px rgba(0,0,0,.6);padding:22px}
+body.kc-library-metrics #kc-metrics-panel h2{font-size:1.22rem;letter-spacing:-.01em;margin-bottom:14px}
+body.kc-library-metrics #kc-metrics-panel .kc-metrics-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+body.kc-library-metrics #kc-metrics-panel .kc-metrics-actions button{padding:10px 8px;min-width:0}
+body.kc-library-metrics #kc-metrics-toggle{font-size:.78rem;opacity:.95}
+@media(max-width:560px){body.kc-library-metrics #kc-metrics-panel:not([hidden]){left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));width:auto;max-height:76dvh;padding:16px}body.kc-library-metrics #kc-metrics-panel .kc-metrics-actions{grid-template-columns:1fr}}
