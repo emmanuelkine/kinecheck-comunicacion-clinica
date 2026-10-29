@@ -76,7 +76,7 @@ try {
     page.on('pageerror', error => errors.push(error.message));
     const path = ['/gratis/', '/gratis/pacientes/', '/gratis/profesionales/'][(rating - 1) % 3];
     await page.goto(origin + path);
-    const metricsConsent = page.getByRole('button', { name: 'Rechazar métricas', exact: true });
+    const metricsConsent = page.getByRole('button', { name: /^(Rechazar métricas|Solo obligatorias)$/, exact: false });
     if (await metricsConsent.isVisible()) await metricsConsent.click();
     const widget = page.locator('#kc-feedback');
     await widget.locator('#kc-fb-average').filter({ hasText: 'Aún sin valoraciones' }).waitFor();
@@ -130,7 +130,7 @@ try {
   for (const width of [320, 390, 768, 1365]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(origin + '/gratis/');
-    const metricsConsent = page.getByRole('button', { name: 'Rechazar métricas', exact: true });
+    const metricsConsent = page.getByRole('button', { name: /^(Rechazar métricas|Solo obligatorias)$/, exact: false });
     if (await metricsConsent.isVisible()) await metricsConsent.click();
     const widget = page.locator('#kc-feedback');
     await widget.getByRole('heading', { name: 'Opiniones de nuestra comunidad', exact: true }).waitFor();

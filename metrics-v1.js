@@ -355,6 +355,7 @@
   }
 
   function setMetricsChoice(choice) {
+    if (choice !== "yes" && choice !== "no") return;
     metricsChoice = choice;
     try { localStorage.setItem(METRICS_CHOICE_KEY, choice); } catch { /* In-memory fallback. */ }
     if (choice === "no") removeOptionalSession();
@@ -369,14 +370,15 @@
   function mountMetricsPreferences() {
     const css = document.createElement("link");
     css.rel = "stylesheet";
-    css.href = "/assets/metrics-privacy-v1.css?v=20261021-global-center";
+    css.href = "/assets/metrics-privacy-v1.css?v=20261029-library-consent";
     document.head.appendChild(css);
 
     const panel = document.createElement("section");
     panel.id = "kc-metrics-panel";
-    panel.setAttribute("role", "region");
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-modal", "false");
     panel.setAttribute("aria-label", "Preferencias de medición");
-    panel.innerHTML = '<h2>Preferencias de medición</h2>'
+    panel.innerHTML = '<h2>Tu privacidad es importante</h2>'
       + '<p>El almacenamiento necesario mantiene tu sesión, seguridad y progreso. '
       + 'Las métricas opcionales nos ayudan a entender el uso del sitio: páginas visitadas, '
       + 'tipo de dispositivo, identificador aleatorio de sesión y, si iniciaste sesión, '
@@ -385,14 +387,14 @@
       + 'Puedes cambiar tu elección cuando quieras. '
       + '<a href="/legal/privacidad.html#almacenamiento">Más información sobre privacidad y almacenamiento</a>.</p>'
       + '<div class="kc-metrics-actions">'
-      + '<button type="button" data-kc-metrics="no">Rechazar métricas</button>'
-      + '<button type="button" data-kc-metrics="yes">Aceptar métricas</button>'
+      + '<button type="button" data-kc-metrics="no">Solo obligatorias</button>'
+      + '<button type="button" data-kc-metrics="yes">Aceptar opcionales</button>'
       + '</div>';
 
     const toggle = document.createElement("button");
     toggle.type = "button";
     toggle.id = "kc-metrics-toggle";
-    toggle.textContent = "Preferencias de métricas";
+    toggle.textContent = "Administrar privacidad";
     toggle.setAttribute("aria-controls", "kc-metrics-panel");
     toggle.setAttribute("aria-expanded", "false");
     toggle.hidden = true;
@@ -412,7 +414,8 @@
       toggle.focus();
     });
     document.body.append(panel, toggle);
-    const inLibrary = location.pathname === "/gratis" || location.pathname.startsWith("/gratis/");
+    const inLibrary = location.pathname === "/gratis" || location.pathname.startsWith("/gratis/")
+      || location.pathname === "/academy" || location.pathname.startsWith("/academy/");
     if (inLibrary) document.body.classList.add("kc-library-metrics");
     if (inLibrary) {
       // Mantener centrado hasta elegir; ambas opciones registran una decisión.
@@ -425,6 +428,17 @@
     }
     if (location.hash === "#preferencias-metricas") showPanel();
   }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== METRICS_CHOICE_KEY) return;
+    metricsChoice = event.newValue === "yes" || event.newValue === "no" ? event.newValue : null;
+    const panel = document.querySelector("#kc-metrics-panel");
+    const toggle = document.querySelector("#kc-metrics-toggle");
+    if (panel) panel.hidden = metricsChoice !== null;
+    if (toggle) toggle.hidden = metricsChoice === null;
+    if (metricsChoice === "no") removeOptionalSession();
+    if (metricsChoice === "yes") startMetrics();
+  });
 
   function init() {
     // Cargar audioguía solamente en páginas de la biblioteca gratuita.
