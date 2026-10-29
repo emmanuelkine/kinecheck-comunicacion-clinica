@@ -3,6 +3,7 @@
 **Fecha:** 2026-10-29  
 **Rama evaluada:** `audit/security-privacy-followup-2026-10-29` (PR #294)  
 **Base inicial:** `64f5883b525405c7b47cd76c207aee143219f40d`  
+**Commit de evidencia CI:** `cc68ff8cc867c35379ab221a9837551ab34aae82`
 **Decisión:** técnicamente preparado para ejecutar los casos reales restantes; lanzamiento comercial real y pruebas humanas aún no certificados.
 
 ## Regla de interpretación
@@ -14,7 +15,7 @@ Una simulación controlada demuestra lógica y regresión, pero **no equivale** 
 - **BLOQUEADO:** existe una dependencia externa o autorización que esta ejecución no puede suplir.
 - **NO EJECUTADO:** requiere una persona, dispositivo o transacción real y no existe evidencia de ejecución.
 
-No se hicieron pagos, reembolsos, chargebacks, despliegues, merges, cambios de secretos ni modificaciones de licencias reales.
+No se hicieron pagos, reembolsos, chargebacks, despliegues, integración del PR a `main`, cambios de secretos ni modificaciones de licencias reales.
 
 ## Resumen ejecutivo
 
@@ -31,11 +32,14 @@ La suite existente ya cubría idempotencia, compras duplicadas, orden temporal, 
 
 La documentación oficial de Hotmart enumera `PURCHASE_PROTEST` entre los eventos de compra. El webhook general lo ignoraba, aunque el webhook específico de Evidencia ya lo trataba como revocación. Se incorporó `PURCHASE_PROTEST`/`PROTEST` a `REVOKE_EVENTS` en `supabase/functions/hotmart-webhook/index.ts` y se agregaron regresiones en `tests/hotmart-access-regression.test.mjs`.
 
+Al sincronizar con `main`, la política de referencias inmutables detectó tres usos `@v4` en el workflow SEO recién incorporado. Se fijaron `actions/checkout`, `actions/setup-node` y `actions/upload-artifact` a los mismos SHA ya validados en el repositorio; la regresión pasó después de la corrección.
+
 Fuentes de contrato consultadas: [eventos de webhook Hotmart 2.0.0](https://developers.hotmart.com/docs/en/2.0.0/webhook/purchase-webhook/) y [autenticación de webhooks externos en Supabase Edge Functions](https://supabase.com/docs/guides/functions/auth).
 
 ## Evidencia reutilizada, sin repetir pruebas
 
 - PR #294, commit base `64f5883b`: CI registró **166/166 pruebas Node** y **58/58 Playwright**, sin fallos, omitidas ni inestables; el detalle y sus límites están en `docs/audits/2026-10-29-hardening-follow-up.md`.
+- PR #294, commit `cc68ff8`: CI final registró **173/173 pruebas Node** y aprobó `hotmart-access`, `browser-regressions`, `campus-browser`, `campus-unit-security`, `binary-audit`, `source-validators`, integridad de marca, SEO estático y cuatro Lighthouse móviles. `campus-public-https` fue omitido explícitamente y no se contabiliza como prueba aprobada. Ejecuciones: [regresiones/binarios](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40919608291), [Hotmart](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40919608680), [Campus](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40919608507) y [SEO/Lighthouse](https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40919608472).
 - La prueba SQL previa con `SET ROLE anon/authenticated` y UUID sintéticos devolvió cero filas en `course_access` y en las tablas de Horas Disponibles. Es evidencia RLS a nivel SQL, no una sesión REST/JWT real.
 - `tests/hotmart-access-regression.test.mjs` usa PGlite, carga las migraciones versionadas y prueba el mismo `process_hotmart_event` que materializa `hotmart_purchases` y `course_access`.
 - `tests/tester-p0-access-sso.spec.mjs`, `tests/lumbar-authorization.test.mjs` y `tests/clinico-buttons.spec.mjs` cubren handoff vencido, autenticación inválida, licencia expirada y contenido protegido no publicado para una cuenta sin licencia.
@@ -151,7 +155,7 @@ Fuentes de contrato consultadas: [eventos de webhook Hotmart 2.0.0](https://deve
 
 - **Evidencia concreta:** se realizó revisión defensiva de fuente y pruebas no destructivas existentes; los tres revisores de reconocimiento independientes solicitados no devolvieron resultados por límite de ejecución, por lo que no se afirma auditoría exhaustiva ni pentest.
 - **Entorno:** código fuente/CI; sin tráfico ofensivo a producción.
-- **Correcciones:** sólo la brecha Hotmart demostrada.
+- **Correcciones:** brecha Hotmart demostrada y referencias inmutables del workflow SEO incorporado desde `main`.
 - **Riesgo residual:** configuración desplegada, secretos, gateway, Auth, CORS, Storage, rutas no versionadas y abuso de negocio requieren observación autorizada.
 - **Intervención humana:** contratar/autorizar un tercero independiente con alcance, ventana, contactos, datos sintéticos y reglas de detención.
 
@@ -208,7 +212,7 @@ Para cada dispositivo registrar modelo, sistema, navegador/versión, fecha/hora 
 
 ## Gate de comercialización
 
-- **Preparación técnica automatizada:** apta cuando los checks del PR actualizado estén verdes.
+- **Preparación técnica automatizada:** **APTA** en el commit de evidencia `cc68ff8`; todos los checks ejecutados aprobaron y `campus-public-https` quedó omitido, no aprobado.
 - **Compra/webhook/licencia reales:** bloqueados hasta autorización y evidencia de los controles 01–03.
 - **Lanzamiento comercial real:** no certificado mientras 01–03 sigan bloqueados.
 - **Lanzamiento humano/multidispositivo:** no certificado mientras 10–14 no tengan evidencia.
