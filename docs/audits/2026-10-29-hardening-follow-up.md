@@ -137,3 +137,9 @@ No se crearon cuentas nuevas durante esta etapa. La captura aportada por el titu
 
 La evidencia aportada por el titular permitió identificar y comprobar dos cuentas sintéticas ya existentes en staging. El análisis usó solo sus identidades de prueba, sin extraer nombres, direcciones de correo, credenciales ni otros datos personales. La cuenta señalada como “licensed” conserva dos registros sintéticos, pero ambos fueron revocados y están vencidos; no sirve para validar el camino positivo de licencia activa. La cuenta “unlicensed” no tiene registros. Los registros no se modificaron.
 
+
+
+### Ajuste de fiabilidad de la prueba Academy
+
+En la primera ejecución de CI sobre esta revisión, 57 de 58 casos Playwright pasaron; falló la aserción de inicialización de aplicaciones porque el texto transitorio seguía visible al límite predeterminado de 5 s. Al reintentar solo el job fallido, aprobaron los 58 casos. Se amplió únicamente el timeout de esa aserción a 15 s, conservando la condición de que el estado “Verificando” desaparezca. No se modificó Academy ni el comportamiento productivo. La nueva ejecución de CI debe validar este ajuste antes de considerar el PR listo para integración.
+
