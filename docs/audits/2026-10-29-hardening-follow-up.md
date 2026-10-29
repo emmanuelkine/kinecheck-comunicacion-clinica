@@ -93,3 +93,41 @@ Este documento está propuesto como PR de seguimiento técnico/documental. No ca
 **Vulnerabilidades críticas/altas demostradas corregidas:** ninguna identificada en el alcance ejecutado; siguen abiertos los controles de autenticación y las pruebas de roles completas.  
 **Cumplimiento legal certificado:** no afirmado.  
 **Producción:** sin cambios.
+
+
+## Actualización de ejecución y CI — 2026-10-29
+
+Esta sección actualiza el estado de pruebas registrado arriba. Las pruebas automatizadas sí se ejecutaron en GitHub Actions sobre el commit del PR; la limitación de clon local impide ejecutarlas manualmente en esta sesión, pero no impidió el CI remoto.
+
+| Superficie | Resultado verificado | Límite |
+|---|---|---|
+| Suite Node `npm test` | 166 aprobadas; 0 fallidas, omitidas o inestables | Tests con fixtures/repositorio; no equivalen a sesiones autenticadas contra staging |
+| Navegador Playwright | 58 esperadas; 0 fallidas, omitidas o inestables. Incluyó regresiones visuales y funcionales en móvil/tablet/escritorio y layout productivo | Casos instrumentados por el repo; no valida los roles Auth reales de staging |
+| Validadores de fuente/arquitectura | Workflow completado con éxito | No sustituye prueba de integración con credenciales reales |
+| Identidad de marca y activos binarios | Workflows completados con éxito | Sin cambios funcionales en este PR |
+| Horas Disponibles | Pruebas automatizadas incluidas: enlaces HTTPS, WhatsApp con clic del paciente, horas, sesiones y denegación de lectura/escritura docente no autorizada | Se prueba el comportamiento de pruebas del repo, no la autorización real con dos cuentas institucionales en Supabase |
+| Hotmart y licencias | Pruebas automatizadas de webhook, reembolso, duplicados, revocación, expiración, reintentos y conciliación aprobadas | Simulaciones del repo; no se hizo una compra real ni una prueba del checkout |
+| Metrics y biblioteca | Pruebas automatizadas de consentimiento, rechazo de métricas, feedback sintético/anónimo, moderación, paginación y privacidad aprobadas | El envío del feedback se simuló con storage/KV de prueba; no se consultaron métricas personales de producción |
+| Exercise | Pruebas del endpoint licenciado, entitlements, cálculos y contenido protegido aprobadas | Sin sesión de usuario real en staging |
+| Campus | Pruebas automatizadas de migración/autorización multi-tenant aprobadas; consulta SQL con usuario sintético a `private.campus_profiles` fue denegada por permiso de esquema | No se crearon usuarios Auth ni se probaron dos membresías válidas en el Supabase de staging |
+| Academy | Pruebas de estado académico, respuestas y claves aprobadas; `course_access` no devolvió filas a `anon` ni a una identidad SQL sintética | Sin inicio/recuperación de sesión por Auth ni flujo completo de licencia en staging |
+| Storage | Bucket `course-assets` privado, límite de 100 KB y MIME `text/javascript`; `anon` y autenticado sintético vieron 0 metadatos de objetos | No se intentó cargar/bajar archivo de prueba vía sesión Auth válida |
+| Edge Functions | 13 funciones activas reportan `verify_jwt=true`; las 13 rechazaron GET sin sesión con `UNAUTHORIZED_NO_AUTH_HEADER` | No se probó un token válido con licencia activa/inactiva ni los payloads POST autenticados |
+| Certificado público | RPC anónimo con UUID sintético desconocido devolvió `found:false`, sin nombre ni correo | No se probó certificado válido de fixture por REST ni la página pública con certificado conocido |
+
+El log de la suite Node emitió advertencias Node `MODULE_TYPELESS_PACKAGE_JSON` en ciertos módulos ES; no afectaron el resultado. Los logs de correo 502/503/403 corresponden a respuestas simuladas para comprobar que el sistema no afirme envíos fallidos como exitosos; las pruebas finalizaron aprobadas.
+
+### Checks del PR
+
+En la corrida del PR #294:
+
+- `KineCheck Binary Asset Audit`: todos sus jobs terminaron exitosamente; incluyó regresiones Playwright, suite Node, análisis binario y validadores de fuente.
+- `KineCheck Brand Integrity`: finalizó exitosamente.
+- Suite completa: `166 pass / 0 fail`; Playwright: `58 expected / 0 unexpected / 0 flaky`.
+
+Los reportes de Actions se conservaron como artefactos de CI. No se publicó el PR ni se desplegó su contenido.
+
+### Estado de creación de cuentas de prueba
+
+No se crearon cuentas en Supabase Auth. El panel de staging redirige a la pantalla de inicio de sesión y esta sesión no cuenta con Auth Admin API ni una sesión autenticada del Dashboard. No se intentó crear filas manualmente en `auth.users`, enviar correos a terceros ni almacenar contraseñas de prueba. Para seguir, la persona responsable debe iniciar sesión en Dashboard; después se crearán cuentas de prueba con correos ficticios controlados y verificación de correo desactivada solo para staging, o mediante el flujo administrativo que el responsable autorice.
+
