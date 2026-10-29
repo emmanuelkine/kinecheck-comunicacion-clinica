@@ -54,20 +54,6 @@ h1 {
 h1 span {
   color: #59dfd1;
 }
-.patient-notice {
-  max-width: 800px;
-  margin: 18px 0 22px;
-  padding: 14px 16px;
-  border: 1px solid #a87922;
-  border-radius: 10px;
-  background: #332b19;
-  color: #fae8bc;
-  font-size: 15px;
-  line-height: 1.55;
-}
-.patient-notice strong {
-  color: #ffe3a0;
-}
 p {
   color: #9eb7c0;
   line-height: 1.6;
