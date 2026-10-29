@@ -1,9 +1,11 @@
-const API='https://eqhcdclyeoapmqtlduwf.supabase.co';
-const KEY='sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_';
+const isPagesPreview=location.hostname.endsWith('.pages.dev');
+const API=isPagesPreview?'https://mhnqtyvwxytppekktvxb.supabase.co':'https://eqhcdclyeoapmqtlduwf.supabase.co';
+const KEY=isPagesPreview?'sb_publishable_JLWKq6m0g4yB30iIQLE4bg_AkspSDYD':'sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_';
 const $=id=>document.getElementById(id);
 const norm=s=>String(s??'').trim().toLocaleLowerCase('es');
 // Dedicated facility_type and modality columns; legacy KCLOC records remain readable.
 const types=["Consulta particular","Centro médico o centro de salud","Clínica","Hospital","Centro odontológico","Clínica veterinaria","Otro establecimiento"];
+const DECLARATION_VERSION='2026-10-29-v1';
 const parseLocation=s=>{const m=String(s||'').match(/^\[KCLOC:([^|\]]+)\|([^\]]+)\] (.*)$/s);return m?{facility:m[1],modality:m[2],address:m[3]}:{facility:'No especificado',modality:'No especificada',address:String(s||'')};};
 const slotLocation=x=>{const legacy=parseLocation(x.location_text);return {facility:x.facility_type||legacy.facility,modality:x.modality||legacy.modality,address:legacy.address};};
 const safeBookingUrl=s=>{try{const u=new URL(String(s||''));return u.protocol==='https:'&&!u.username&&!u.password&&u.hostname.includes('.')?u.href:null;}catch{return null;}};
@@ -24,9 +26,16 @@ async function loadSlots(){
 }
 async function refreshUser(){
  if(!token)return;
- try{user=await request('/auth/v1/user',{auth:true});const data=await request('/rest/v1/kc_health_professionals?select=full_name,profession,verification_status&user_id=eq.'+user.id,{auth:true});profile=data[0]||null;
- $('authPanel').classList.add('hidden');$('profilePanel').classList.toggle('hidden',!!profile);
- $('verificationMessage').textContent=profile?(profile.verification_status==='verified'?'Credencial profesional verificada. Ya puedes publicar y administrar tus horas.':profile.verification_status==='pending'?'Credencial pendiente de verificación oficial. No podrás publicar hasta que una fuente autorizada confirme tu habilitación. KineCheck no aprueba registros manualmente ni acepta documentos por canales inseguros.':'La verificación no pudo confirmarse. No puedes publicar horas.'):'Completa tus datos profesionales. La publicación requiere verificación oficial.';
+ try{user=await request('/auth/v1/user',{auth:true});const [data,acceptances]=await Promise.all([
+  request('/rest/v1/kc_health_professionals?select=full_name,profession,verification_status&user_id=eq.'+user.id,{auth:true}),
+  request('/rest/v1/kc_health_responsibility_acceptances?select=user_id&user_id=eq.'+user.id,{auth:true})
+ ]);profile=data[0]||null;const accepted=acceptances.some(x=>x.user_id===user.id);
+ $('authPanel').classList.add('hidden');$('profilePanel').classList.toggle('hidden',accepted);
+ $('profileFields').classList.toggle('hidden',!!profile);$('existingProfileMessage').classList.toggle('hidden',!profile);
+ $('verificationMessage').textContent=profile?(profile.verification_status==='verified'?'El sistema registra una verificación independiente de credenciales.':profile.verification_status==='pending'?'Tu perfil está pendiente. KineCheck no ha comprobado tus credenciales y no habilita publicaciones sin una validación independiente.':'No se pudo confirmar la habilitación; las publicaciones están desactivadas.'):'Completa los datos mínimos. La declaración de responsabilidad es obligatoria antes de continuar.';
+ if(accepted)$('verificationMessage').textContent+=' Declaración aceptada y registrada.';
+ $('profileBtn').textContent=profile?'Aceptar declaración':'Guardar perfil y declaración';
+ $('profileBtn').dataset.accepted=String(accepted);
  $('publishForm').classList.toggle('hidden',profile?.verification_status!=='verified');
  $('mySlotsPanel').classList.toggle('hidden',profile?.verification_status!=='verified');
  if(profile?.verification_status==='verified')loadMySlots();
@@ -58,7 +67,7 @@ $('institutionForm').onsubmit=async e=>{
  catch(err){$('institutionFormMessage').textContent='No se pudo registrar la institución: '+err.message;}
 };
 $('authBtn').onclick=async()=>{const email=$('authEmail').value.trim();if(!email)return;$('authBtn').disabled=true;try{const redirectTo=new URL('/horas-disponibles/',location.origin).toString();await request('/auth/v1/otp?redirect_to='+encodeURIComponent(redirectTo),{method:'POST',body:{email,create_user:true}});$('authMessage').textContent='Revisa tu correo y abre el enlace de acceso.';}catch(e){$('authMessage').textContent='No se pudo enviar el enlace: '+e.message;}finally{$('authBtn').disabled=false;}};
-$('profileBtn').onclick=async()=>{if(!user)return;const name=$('profileName').value.trim(),profession=$('profileProfession').value.trim();if(name.length<3||profession.length<3){$('profileMessage').textContent='Completa nombre y profesión.';return;}try{await request('/rest/v1/kc_health_professionals',{method:'POST',auth:true,body:{user_id:user.id,full_name:name,profession,registration_number:$('profileRegistry').value.trim()||null}});$('profileMessage').textContent='Registro enviado. Tu estado permanecerá pendiente hasta una verificación oficial; no se aprobará automáticamente ni por revisión manual rutinaria.';await refreshUser();}catch(e){$('profileMessage').textContent='No se pudo registrar: '+e.message;}};
+$('profileBtn').onclick=async()=>{if(!user)return;if(!$('responsibilityAccepted').checked){$('profileMessage').textContent='Debes aceptar la declaración para continuar.';return;}const name=$('profileName').value.trim(),profession=$('profileProfession').value.trim();if(!profile&&(name.length<3||profession.length<3)){$('profileMessage').textContent='Completa nombre y profesión.';return;}const button=$('profileBtn');button.disabled=true;try{if(!profile)await request('/rest/v1/kc_health_professionals',{method:'POST',auth:true,body:{user_id:user.id,full_name:name,profession}});await request('/rest/v1/kc_health_responsibility_acceptances',{method:'POST',auth:true,body:{user_id:user.id,accepted:true,declaration_version:DECLARATION_VERSION}});$('profileMessage').textContent='Declaración registrada. La verificación de credenciales y la habilitación para publicar son procesos distintos.';await refreshUser();}catch(e){$('profileMessage').textContent='No se pudo guardar. Si el perfil ya se creó, vuelve a aceptar la declaración para completar el registro.';}finally{button.disabled=false;}};
 $('publishForm').onsubmit=async e=>{e.preventDefault();if(profile?.verification_status!=='verified')return;const f=Object.fromEntries(new FormData(e.target).entries());const starts=chileDateTime(f.date,f.time);if(!safeBookingUrl(f.booking_url)){$('message').textContent='Ingresa un enlace HTTPS válido al sistema oficial de agendamiento.';return;}if(!types.includes(f.facility_type)){$('message').textContent='Selecciona un tipo de establecimiento válido.';return;}if(!Number.isFinite(starts.getTime())||starts<=new Date()){$('message').textContent='Selecciona una fecha y hora futuras.';return;}try{await request('/rest/v1/kc_health_slots',{method:'POST',auth:true,body:{professional_id:user.id,specialty:f.specialty,region:f.region,comuna:f.city,starts_at:starts.toISOString(),location_text:f.address,facility_type:f.facility_type,modality:f.modality,public_contact:f.contact,booking_url:safeBookingUrl(f.booking_url),expires_at:starts.toISOString()}});$('message').textContent='Hora publicada para todos los visitantes.';e.target.reset();loadSlots();}catch(err){$('message').textContent='No se pudo publicar: '+err.message;}};
 
 function chileDateTime(date,time){

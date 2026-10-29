@@ -112,6 +112,26 @@ label {
   color: #a6c9cd;
   margin: 0 0 7px;
 }
+.declaration-check {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid #315460;
+  border-radius: 12px;
+  background: #0b202a;
+  line-height: 1.55;
+}
+.declaration-check input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #4bdbc9;
+}
+.declaration-check span { color: #d5e7e8; }
+.declaration-check strong { color: #77eadb; }
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
