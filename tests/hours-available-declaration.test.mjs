@@ -16,9 +16,10 @@ test('professional declaration is unchecked by default and matches the approved 
   assert.doesNotMatch(html, /profileRegistry|Número de registro profesional/);
 });
 
-test('client records acceptance under authenticated user and never supplies its timestamp', () => {
-  assert.match(app, /kc_health_responsibility_acceptances/);
-  assert.match(app, /user_id:user\.id,accepted:true,declaration_version:DECLARATION_VERSION/);
+test('client uses the authenticated atomic profile RPC and never supplies acceptance identity or timestamp', () => {
+  assert.match(app, /rpc\('profile',\{full_name:/);
+  assert.match(app, /accepted:true/);
+  assert.doesNotMatch(app, /user_id:user\.id,accepted:true/);
   assert.doesNotMatch(app, /accepted_at\s*:/);
   assert.match(app, /if\(!\$\('responsibilityAccepted'\)\.checked\)/);
 });

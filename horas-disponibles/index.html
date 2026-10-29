@@ -37,8 +37,29 @@
           <div class="tag">CLÍNICAS · HOSPITALES · CENTROS DE SALUD · CENTROS VETERINARIOS</div>
           <h2 id="institutionTitle">Publicación institucional</h2>
           <p>El modelo institucional contempla profesionales contratados, a honorarios con boleta y profesionales independientes que arriendan consultas. Una secretaria podrá gestionar varias agendas solo con autorización específica de cada profesional y del establecimiento.</p>
-          <p class="muted">Puedes solicitar el registro de tu institución. La identidad y representación legal, las credenciales de cada profesional y su autorización para atender en la sede deben verificarse por separado. Trabajar a honorarios o arrendar una consulta no implica subordinación laboral ni autoriza por sí solo a la clínica a publicar horas en su nombre.</p><div id="institutionAuth"><label>Correo de la persona responsable</label><input id="institutionEmail" type="email" autocomplete="email" placeholder="contacto@institucion.cl"><button id="institutionAccessBtn" type="button" style="margin-top:12px">Enviar enlace de acceso institucional</button><p id="institutionAuthMessage" role="status"></p></div><form id="institutionForm" class="hidden"><div class="grid"><div><label>Razón social o nombre legal</label><input name="legal_name" maxlength="180" required></div><div><label>Nombre público del establecimiento</label><input name="public_name" maxlength="180" required></div><div><label>Tipo de establecimiento</label><select name="institution_type" required><option value="">Selecciona el tipo</option><option>Clínica</option><option>Hospital</option><option>Centro médico o centro de salud</option><option>Centro odontológico</option><option>Clínica veterinaria</option><option>Otro establecimiento</option></select></div><div><label>Región</label><input name="region" maxlength="100" required></div><div><label>Comuna</label><input name="comuna" maxlength="100" required></div><div><label>Correo de contacto institucional</label><input name="contact_email" type="email" maxlength="180" required></div></div><button type="submit">Registrar institución (pendiente de verificación)</button><p id="institutionFormMessage" role="status"></p></form><div id="institutionRegistered" class="hidden" role="status"></div><p class="muted">El registro no autoriza a publicar horas ni a vincular profesionales automáticamente. Cada profesional, contratado o a honorarios, conservará su propia cuenta y podrá revocar los permisos de secretarias cuando el sistema de delegación esté habilitado. No envíes escrituras, RUN ni documentos sensibles mediante este formulario.</p>
+          <p class="muted">Puedes solicitar el registro de tu institución. La identidad y representación legal, las credenciales de cada profesional y su autorización para atender en la sede deben verificarse por separado. Trabajar a honorarios o arrendar una consulta no implica subordinación laboral ni autoriza por sí solo a la clínica a publicar horas en su nombre.</p><div id="institutionAuth"><label>Correo de la persona responsable</label><input id="institutionEmail" type="email" autocomplete="email" placeholder="contacto@institucion.cl"><button id="institutionAccessBtn" type="button" style="margin-top:12px">Enviar enlace de acceso institucional</button><p id="institutionAuthMessage" role="status"></p></div><form id="institutionForm" class="hidden"><div class="grid"><div><label>Razón social o nombre legal</label><input name="legal_name" maxlength="180" required></div><div><label>Nombre público del establecimiento</label><input name="public_name" maxlength="180" required></div><div><label>Tipo de establecimiento</label><select name="institution_type" required><option value="">Selecciona el tipo</option><option>Clínica</option><option>Hospital</option><option>Centro médico o centro de salud</option><option>Centro odontológico</option><option>Clínica veterinaria</option><option>Otro establecimiento</option></select></div><div><label>Región</label><input name="region" maxlength="100" required></div><div><label>Comuna</label><input name="comuna" maxlength="100" required></div><div><label>Correo de contacto institucional</label><input name="contact_email" type="email" maxlength="180" required></div></div><button type="submit">Registrar institución (pendiente de verificación)</button><p id="institutionFormMessage" role="status"></p></form><div id="institutionRegistered" class="hidden" role="status"></div><p class="muted">El registro no autoriza a publicar horas ni a vincular profesionales automáticamente. Cada profesional, contratado o a honorarios, conservará su propia cuenta y podrá revocar los permisos de secretarias desde su cuenta. No envíes escrituras, RUN ni documentos sensibles mediante este formulario.</p>
         </section>
+        <section class="panel hidden" id="institutionWorkspace" aria-labelledby="institutionWorkspaceTitle">
+          <h2 id="institutionWorkspaceTitle">Panel institucional</h2>
+          <label for="institutionSelect">Institución</label><select id="institutionSelect"></select>
+          <p id="institutionState" role="status"></p><p id="institutionPilot" class="muted"></p>
+          <div class="actions"><button id="startInstitutionPilot" type="button">Activar piloto gratuito de 60 días</button><button id="institutionActiveBtn" class="secondary" type="button">Desactivar institución</button></div>
+          <div id="institutionAdmin" class="hidden">
+            <h3>Incorporar profesionales y equipo</h3>
+            <form id="inviteForm"><div class="grid"><div><label for="inviteEmail">Correo de la cuenta destinataria</label><input id="inviteEmail" name="email" type="email" maxlength="180" required></div><div><label for="inviteRole">Permiso</label><select id="inviteRole" name="role"><option value="professional">Profesional</option><option value="secretary">Secretaria o secretario</option><option value="admin">Administrador</option></select></div></div><button type="submit">Crear invitación</button></form>
+            <p id="inviteMessage" role="status"></p><label for="inviteLink">Enlace para compartir con la persona autorizada</label><input id="inviteLink" readonly><button id="copyInvite" class="secondary" type="button">Copiar enlace</button>
+            <h3>Métricas de la institución</h3><div id="institutionMetrics" class="cards"></div>
+            <p class="muted">Los contactos son conteos orientativos. Las reservas se confirman fuera de KineCheck. El modelo futuro considera profesionales habilitados; no cobra por horas publicadas.</p>
+            <h3>Invitaciones pendientes</h3><div id="institutionInvitations"></div>
+            <h3>Permisos del equipo</h3><div id="institutionStaff"></div>
+          </div>
+          <h3>Profesionales autorizados</h3><label for="memberSearch">Buscar por nombre o profesión</label><input id="memberSearch" maxlength="100"><button id="memberSearchBtn" class="secondary" type="button">Buscar profesional</button>
+          <div id="institutionMembers" class="cards"></div><div class="actions"><button id="membersPrevious" class="secondary" type="button">Anteriores</button><button id="membersNext" class="secondary" type="button">Siguientes</button></div><p id="memberPage" class="muted"></p>
+          <h3>Publicar para un profesional</h3><p id="selectedProfessional">Selecciona un profesional autorizado en el listado.</p><div id="institutionPublishContainer"></div>
+          <h3>Disponibilidad institucional</h3><div id="institutionSlots" class="cards"></div><div class="actions"><button id="institutionSlotsPrevious" class="secondary" type="button">Horas anteriores</button><button id="institutionSlotsNext" class="secondary" type="button">Más horas</button></div>
+          <p id="institutionMessage" role="status"></p>
+        </section>
+        <section class="panel hidden" id="joinPanel" aria-labelledby="joinTitle"><h2 id="joinTitle">Aceptar una invitación</h2><p>Ingresa con la cuenta a la que se destinó la invitación. Un vínculo profesional permite a los administradores gestionar las horas de esta sede; los permisos de secretaría se autorizan por separado y puedes revocarlos.</p><label class="declaration-check"><input id="joinConsent" type="checkbox"><span>Acepto el vínculo y la gestión de mi disponibilidad en esta institución, cuando corresponda a mi rol.</span></label><button id="acceptInvite" type="button">Aceptar invitación</button><p id="joinMessage" role="status"></p></section>
         <section class="panel" id="searchPanel">
           <h2>Encuentra atención</h2>
           <div class="grid">
@@ -88,7 +109,7 @@
             </div>
             <div><label for="regionFilter">Región</label><select id="regionFilter"><option value="">Todas las regiones</option><option value="Arica y Parinacota">Arica y Parinacota</option><option value="Tarapacá">Tarapacá</option><option value="Antofagasta">Antofagasta</option><option value="Atacama">Atacama</option><option value="Coquimbo">Coquimbo</option><option value="Valparaíso">Valparaíso</option><option value="Metropolitana de Santiago">Metropolitana de Santiago</option><option value="Libertador General Bernardo O’Higgins">Libertador General Bernardo O’Higgins</option><option value="Maule">Maule</option><option value="Ñuble">Ñuble</option><option value="Biobío">Biobío</option><option value="La Araucanía">La Araucanía</option><option value="Los Ríos">Los Ríos</option><option value="Los Lagos">Los Lagos</option><option value="Aysén del General Carlos Ibáñez del Campo">Aysén del General Carlos Ibáñez del Campo</option><option value="Magallanes y de la Antártica Chilena">Magallanes y de la Antártica Chilena</option></select></div><div><label for="facilityFilter">Tipo de establecimiento</label><select id="facilityFilter" ><option value="">Todos los establecimientos</option><option value="Consulta particular">Consulta particular</option><option value="Centro médico o centro de salud">Centro médico o centro de salud</option><option value="Clínica">Clínica</option><option value="Hospital">Hospital</option><option value="Centro odontológico">Centro odontológico</option><option value="Clínica veterinaria">Clínica veterinaria</option><option value="Otro establecimiento">Otro establecimiento</option></select></div>
             <div><label for="modalityFilter">Modalidad</label><select id="modalityFilter"><option value="">Todas</option><option value="Presencial">Presencial</option><option value="Teleconsulta">Teleconsulta</option></select></div>
-            <div><label for="timeWindow">Cuándo necesitas atención</label><select id="timeWindow"><option value="0">Cualquier fecha futura</option><option value="24">Próximas 24 horas</option><option value="48">Próximas 48 horas</option><option value="168">Próximos 7 días</option></select></div><div style="align-self: end">
+            <div><label for="dateFilter">Fecha de atención (Chile)</label><input id="dateFilter" type="date"></div><div><label for="timeWindow">Cuándo necesitas atención</label><select id="timeWindow"><option value="0">Cualquier fecha futura</option><option value="24">Próximas 24 horas</option><option value="48">Próximas 48 horas</option><option value="168">Próximos 7 días</option></select></div><div style="align-self: end">
               <button id="filterBtn" style="width: 100%">
                 Buscar disponibilidad
               </button>
@@ -99,6 +120,7 @@
           </p>
           <div class="actions" style="margin:14px 0"><button class="secondary" id="saveSearchBtn" type="button">Guardar mi búsqueda</button><button class="secondary" id="restoreSearchBtn" type="button">Recuperar búsqueda</button><button class="secondary" id="clearSearchBtn" type="button">Eliminar búsqueda guardada</button></div><p id="savedSearchMessage" class="muted" role="status" aria-live="polite">La búsqueda se guarda únicamente en este navegador. Las alertas automáticas aún no están disponibles.</p><div id="results" class="cards"></div>
         </section>
+        <div class="actions"><button id="resultsPrevious" class="secondary" type="button">Resultados anteriores</button><button id="resultsNext" class="secondary" type="button">Más resultados</button></div>
         <section id="publishPanel" class="panel hidden">
           <div class="tag">REGISTRO DE PROFESIONALES · VERIFICACIÓN PENDIENTE</div>
           <h2>Publica una hora liberada</h2>
@@ -147,32 +169,14 @@
           </form>
           <div id="mySlotsPanel" class="hidden"><h3>Mis horas</h3><div id="mySlots" class="cards"></div></div>
         </section>
+        <section id="accountPanel" class="panel hidden"><h2>Mi cuenta y autorizaciones</h2><p id="professionalPilot" role="status"></p><p>Profesionales e instituciones: 60 días gratuitos desde la activación efectiva. Pacientes: acceso siempre gratuito. Sin cobro automático al finalizar.</p><div class="actions"><button id="startProfessionalPilot" type="button">Activar mi piloto gratuito</button><button id="profileActiveBtn" class="secondary" type="button">Desactivar perfil</button><button id="logoutBtn" class="secondary" type="button">Cerrar sesión</button></div><h3>Mis vínculos y permisos de secretaría</h3><div id="myMemberships" class="cards"></div><p id="accountMessage" role="status"></p></section>
+        <section id="moderationPanel" class="panel hidden"><h2>Moderación</h2><p>Las denuncias requieren revisión antes de suspender. La declaración del profesional no sustituye la verificación independiente.</p><div id="moderationReports"></div><p id="moderationMessage" role="status"></p></section>
       </main>
       <footer>
         KineCheck · Difusión de horas liberadas · Reserva en el sistema oficial del prestador.
+        <p><a href="./condiciones.html">Condiciones del piloto y privacidad</a></p>
       </footer>
     </div>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const button = document.getElementById('institutionBtn');
-        const panel = document.getElementById('institutionPanel');
-        button.addEventListener('click', function () {
-          const willOpen = panel.classList.contains('hidden');
-          panel.classList.toggle('hidden', !willOpen);
-          button.setAttribute('aria-expanded', String(willOpen));
-          if (willOpen) panel.scrollIntoView({behavior:'smooth',block:'start'});
-        });
-      });
-    </script>
-    <script>
-      (function () {
-        const url = new URL(window.location.href);
-        if (url.searchParams.has('utm_source') && url.searchParams.has('utm_source')) {
-          url.searchParams.delete('utm_source');
-          window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
-        }
-      })();
-    </script>
-    <script src="./app.js?v=20261022-9" defer></script>
+    <script src="./app.js?v=20261029-pilot2" defer></script>
   </body>
 </html>

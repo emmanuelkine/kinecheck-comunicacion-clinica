@@ -162,3 +162,7 @@
 
 /assets/library-feedback-v1.js
   Cache-Control: no-cache, must-revalidate
+
+/horas-disponibles/*
+  Cache-Control: no-store, max-age=0, must-revalidate
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://eqhcdclyeoapmqtlduwf.supabase.co https://mhnqtyvwxytppekktvxb.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests
