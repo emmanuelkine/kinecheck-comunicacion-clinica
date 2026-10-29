@@ -355,6 +355,7 @@
   }
 
   function setMetricsChoice(choice) {
+    if (choice !== "yes" && choice !== "no") return;
     metricsChoice = choice;
     try { localStorage.setItem(METRICS_CHOICE_KEY, choice); } catch { /* In-memory fallback. */ }
     if (choice === "no") removeOptionalSession();
@@ -427,6 +428,17 @@
     }
     if (location.hash === "#preferencias-metricas") showPanel();
   }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== METRICS_CHOICE_KEY) return;
+    metricsChoice = event.newValue === "yes" || event.newValue === "no" ? event.newValue : null;
+    const panel = document.querySelector("#kc-metrics-panel");
+    const toggle = document.querySelector("#kc-metrics-toggle");
+    if (panel) panel.hidden = metricsChoice !== null;
+    if (toggle) toggle.hidden = metricsChoice === null;
+    if (metricsChoice === "no") removeOptionalSession();
+    if (metricsChoice === "yes") startMetrics();
+  });
 
   function init() {
     // Cargar audioguía solamente en páginas de la biblioteca gratuita.
