@@ -92,6 +92,8 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
     input.value = "evidencia";
     input.dispatchEvent(new InputEvent("input", { bubbles: true }));
   });
+  const consent = page.getByRole("button", { name: "Solo obligatorias", exact: true });
+  if (await consent.isVisible()) await consent.click();
   await page.locator('.mobile-bottom-nav [data-kc-view-link="biblioteca"]').click();
   await expect(page.locator("body")).toHaveAttribute("data-kc-view", "biblioteca");
   await page.locator('.mobile-bottom-nav [data-kc-view-link="inicio"]').click();
