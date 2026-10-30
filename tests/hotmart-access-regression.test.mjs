@@ -29,6 +29,10 @@ const webhookUrl = new URL(
   "../supabase/functions/hotmart-webhook/index.ts",
   import.meta.url,
 );
+const courseKeyUrl = new URL(
+  "../supabase/functions/course-key/index.ts",
+  import.meta.url,
+);
 const approvedPurchasePageUrl = new URL(
   "../academy/compra-aprobada.html",
   import.meta.url,
@@ -277,12 +281,13 @@ test("approval retry with a new event id never extends the same transaction", as
   assert.deepEqual(after.rows, before.rows);
 });
 
-test("cancel, expiry, refund and chargeback revoke the final active purchase", async (t) => {
+test("cancel, expiry, refund, chargeback and protest revoke the final active purchase", async (t) => {
   for (const eventName of [
     "PURCHASE_CANCELED",
     "PURCHASE_EXPIRED",
     "PURCHASE_REFUNDED",
     "PURCHASE_CHARGEBACK",
+    "PURCHASE_PROTEST",
   ]) {
     const db = await makeDatabase(t);
     await event(db, {
@@ -299,6 +304,65 @@ test("cancel, expiry, refund and chargeback revoke the final active purchase", a
     assert.equal(row.active, false, eventName);
     assert.equal(row.last_event, eventName, eventName);
   }
+});
+
+test("pending or failed payment events cannot create a license", async () => {
+  const source = await readFile(webhookUrl, "utf8");
+  const activeEvents = source.match(/const ACTIVE_EVENTS = new Set\(\[([\s\S]*?)\]\);/)?.[1] || "";
+  const revokeEvents = source.match(/const REVOKE_EVENTS = new Set\(\[([\s\S]*?)\]\);/)?.[1] || "";
+
+  for (const eventName of ["PURCHASE_APPROVED", "PURCHASE_COMPLETE"]) {
+    assert.match(activeEvents, new RegExp(`"${eventName}"`));
+  }
+  for (const eventName of ["PURCHASE_BILLET_PRINTED", "PURCHASE_FAILED"]) {
+    assert.doesNotMatch(activeEvents, new RegExp(`"${eventName}"`));
+    assert.doesNotMatch(revokeEvents, new RegExp(`"${eventName}"`));
+  }
+  assert.match(source, /if \(!status\) \{[\s\S]*?return json\(request,[\s\S]*?status: "ignored"/);
+});
+
+test("purchase protest is classified and applied as a revocation", async () => {
+  const source = await readFile(webhookUrl, "utf8");
+  assert.match(source, /const REVOKE_EVENTS = new Set\(\[[\s\S]*?"PURCHASE_PROTEST"/);
+
+  const db = await makeDatabase({ after() {} });
+  try {
+    await event(db, {
+      id: "protest-approved", name: "PURCHASE_APPROVED", transaction: "tx-protest",
+      status: "active", at: "2026-02-08T10:00:00Z",
+    });
+    assert.equal(await event(db, {
+      id: "protest-revoked", name: "PURCHASE_PROTEST", transaction: "tx-protest",
+      status: "revoked", at: "2026-02-09T10:00:00Z",
+    }), "revoked");
+    assert.deepEqual(await access(db), {
+      active: false,
+      transaction_id: "tx-protest",
+      access_source: "hotmart",
+      last_event: "PURCHASE_PROTEST",
+    });
+  } finally {
+    await db.close();
+  }
+});
+
+test("purchase email A never grants Academy access to account email B", async (t) => {
+  const db = await makeDatabase(t);
+  const purchaseEmail = "buyer-a@customer.test";
+  const accountEmail = "account-b@customer.test";
+  await event(db, {
+    id: "email-a-approved", name: "PURCHASE_APPROVED", transaction: "tx-email-a",
+    email: purchaseEmail, status: "active", at: "2026-02-10T10:00:00Z",
+  });
+
+  assert.equal((await access(db, purchaseEmail)).active, true);
+  assert.equal(await access(db, accountEmail), null);
+
+  const courseKey = await readFile(courseKeyUrl, "utf8");
+  assert.match(courseKey, /userClient\.auth\.getUser\(\)/);
+  assert.match(courseKey, /const email = String\(user\?\.email \|\| ""\)\.trim\(\)\.toLowerCase\(\)/);
+  assert.match(courseKey, /\.eq\("email", email\)/);
+  assert.match(courseKey, /No encontramos una compra activa asociada a este correo/);
 });
 
 test("production grant snapshot contains 12 products with explicit access terms", async (t) => {

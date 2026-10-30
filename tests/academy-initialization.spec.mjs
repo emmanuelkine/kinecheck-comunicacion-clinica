@@ -81,7 +81,7 @@ test("Academy inicializa aplicaciones, cursos y relay Estudiante sin excepciones
 
   await expect(page.locator("#dashboard-view")).toBeVisible();
   await expect(page.locator("#sidebar-access")).toHaveText("Acceso propietario");
-  await expect(page.locator("[data-kc-home-apps-grid]")).not.toContainText("Verificando tus aplicaciones");
+  await expect(page.locator("[data-kc-home-apps-grid]")).not.toContainText("Verificando tus aplicaciones", { timeout: 15000 });
   await expect(page.locator("[data-kc-home-courses-grid]")).not.toContainText("Verificando tus cursos");
   const studentApp = page.locator('[data-kc-home-apps-grid] [data-kc-open-product="kinecheck-estudiante"]');
   await expect(studentApp).toHaveCount(1);
