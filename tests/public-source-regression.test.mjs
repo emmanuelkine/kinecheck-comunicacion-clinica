@@ -310,7 +310,8 @@ test("el cierre de validación conserva los 14 controles y separa simulación de
   ]) assert.ok(report.includes(control), `informe: falta ${control}`);
   assert.ok(report.includes("Una simulación controlada demuestra lógica y regresión"));
   assert.ok(report.includes("no equivale"));
-  assert.ok(report.includes("No se hicieron pagos, reembolsos, chargebacks, despliegues, merges"));
+  assert.ok(report.includes("No se hicieron pagos, reembolsos, chargebacks, despliegues"));
+  assert.ok(report.includes("integración del PR a `main`"));
 });
 
 test("los estilos y el menú conservan foco visible y teclado", async () => {
