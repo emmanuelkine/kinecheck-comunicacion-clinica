@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071d22"><meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Microapps clínicas KineCheck: simulaciones educativas con casos completamente ficticios, sin ingreso de datos de pacientes.">
+<link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png" type="image/png">
+<title>Clinical MicroApps · KineCheck</title>
+<style>
+:root{color-scheme:dark;--bg:#071d22;--panel:#10313a;--edge:#326e77;--ink:#eef9f9;--muted:#bfd6d8;--accent:#69e0db;--focus:#ffd37a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#174451 0,transparent 39%),var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--accent)}.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:8px;background:#fff;color:#000;padding:10px;z-index:3}.shell{max-width:1040px;margin:auto;padding:24px 20px 80px}.top{border-bottom:1px solid var(--edge);background:#0a252c}.top-inner{max-width:1040px;margin:auto;padding:15px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}.brand{text-decoration:none;font-weight:850;font-size:1.22rem}.tag{font-size:.75rem;letter-spacing:.13em;font-weight:800;color:var(--accent);text-transform:uppercase}.hero{padding:52px 0 24px}h1{font-size:clamp(2.25rem,6vw,4rem);line-height:1.12;margin:.35rem 0 1rem}h2{line-height:1.2}h3{margin:.3rem 0}.lead{font-size:1.13rem;max-width:780px;color:#d4e5e7}.notice{border-left:4px solid var(--focus);background:#23343b;padding:13px 17px;border-radius:8px;color:#faf5e4}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px;margin:28px 0}.card,.workspace{border:1px solid var(--edge);border-radius:18px;background:var(--panel);padding:22px}.card p,.muted{color:var(--muted)}.pill{display:inline-block;border:1px solid #5db7b7;border-radius:30px;padding:4px 10px;color:#aff3ef;font-size:.79rem;font-weight:700}.btn{border:1px solid var(--accent);background:var(--accent);color:#092329;border-radius:12px;padding:12px 18px;font:inherit;font-weight:800;cursor:pointer;display:inline-block;text-decoration:none}.btn.secondary{background:#163841;color:#e5fbfa}.btn:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.btn:disabled{opacity:.5;cursor:not-allowed}.workspace{margin-top:24px}.scenario{background:#0c242b;border:1px solid #275b62;border-radius:12px;padding:18px;margin:18px 0}.question{font-weight:800;font-size:1.1rem;margin:20px 0 10px}.options{display:grid;gap:10px}.option{display:flex;align-items:flex-start;gap:12px;background:#173c45;border:1px solid #42838b;border-radius:12px;padding:13px;cursor:pointer}.option:has(input:checked){border-color:var(--accent);background:#20515a}.option input{margin-top:6px;accent-color:var(--accent)}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.feedback{margin-top:20px;border:1px solid #589e9e;background:#0b3539;padding:18px;border-radius:12px}.feedback strong{color:#9ff3ed}.hidden,[hidden]{display:none!important}.foot{margin-top:44px;border-top:1px solid var(--edge);padding-top:18px;color:var(--muted);font-size:.9rem}small{color:var(--muted)}@media(max-width:500px){.shell{padding:16px 14px 50px}.hero{padding-top:26px}.card,.workspace{padding:17px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="top"><div class="top-inner"><a class="brand" href="/gratis/profesionales/">KineCheck <span style="color:#69e0db">/ Clinical MicroApps</span></a><a href="/gratis/profesionales/">← Biblioteca profesional</a></div></header>
+<main id="contenido" class="shell">
+<section class="hero"><p class="tag">Laboratorio interactivo · versión educativa 1.0</p><h1>Razonamiento clínico, sin datos de pacientes.</h1><p class="lead">Practica la interpretación de hallazgos, el triaje y la justificación de decisiones con escenarios musculoesqueléticos completamente ficticios.</p><div class="notice"><strong>Privacidad por diseño:</strong> no ingreses datos de pacientes. Esta microapp no solicita nombres, RUT, edades reales, historias clínicas, archivos ni texto libre. Las selecciones del ejercicio se procesan únicamente en esta página y no se envían ni guardan por la microapp. No se requiere iniciar sesión.</div></section>
+<section aria-label="Catálogo de microapps"><div class="grid"><article class="card"><span class="pill">Disponible · simulación</span><h2>01 · MSK Clinical Reasoning</h2><p>Dos casos ficticios, preguntas de decisión clínica y retroalimentación explicativa al finalizar.</p><a class="btn" href="#simulador">Comenzar simulación</a></article><article class="card"><span class="pill">Próximamente</span><h2>02 · Clinical Triage</h2><p>Escenarios de señales de alerta y priorización de derivación. En revisión de contenido.</p></article><article class="card"><span class="pill">Próximamente</span><h2>03 · Exercise Decision Lab</h2><p>Progresión y regresión de ejercicio mediante casos ficticios, sin prescripciones individualizadas.</p></article></div></section>
+<section id="simulador" class="workspace" aria-labelledby="sim-title"><p class="tag">Microapp 01</p><h2 id="sim-title">MSK Clinical Reasoning</h2><p class="muted">Responde las cuatro decisiones del caso. Es una evaluación formativa, no una herramienta de diagnóstico ni de derivación para pacientes reales.</p>
+<div class="actions"><button class="btn secondary" id="lumbar" type="button" aria-pressed="true">Caso ficticio: lumbar</button><button class="btn secondary" id="hombro" type="button" aria-pressed="false">Caso ficticio: hombro</button></div>
+<div class="scenario" id="case-description"></div>
+<form id="quiz" autocomplete="off"><div id="questions"></div><div class="actions"><button class="btn" type="submit">Revisar razonamiento</button><button class="btn secondary" type="button" id="reset">Reiniciar caso</button></div></form>
+<div id="result" class="feedback" role="status" aria-live="polite" hidden></div>
+</section>
+<footer class="foot"><p>© KineCheck · Herramienta educativa, sin integración con fichas clínicas, base de datos, analítica propia ni identificadores de paciente. No sustituye evaluación, juicio profesional o protocolos locales. Los casos y sus respuestas son ilustrativos y requieren revisión docente antes de una aplicación evaluativa.</p><p><a href="/gratis/profesionales/">Volver a recursos profesionales</a></p></footer>
+</main>
+<script>
+"use strict";
+(() => {
+  const cases = {
+    lumbar: {
+      title: "Caso A · Dolor lumbar persistente inespecífico",
+      story: "Persona adulta ficticia con dolor lumbar de seis meses, fluctuante, sin trauma reciente, con temor al movimiento y dificultad para permanecer sentada en actividades laborales. En el relato simulado no se informan síntomas sistémicos ni alteraciones neurológicas progresivas. Los antecedentes son deliberadamente incompletos.",
+      questions: [
+        {q:"¿Cuál es la primera prioridad del razonamiento?",options:["Confirmar una estructura lesionada mediante una prueba aislada.","Completar anamnesis, examinar señales de alarma y comprender la limitación funcional.","Indicar reposo absoluto durante varias semanas."],correct:1,why:"Antes de formular hipótesis se requiere evaluación suficiente, incluida la búsqueda de señales de alarma y el contexto funcional."},
+        {q:"¿Cuál es una hipótesis de trabajo proporcionada?",options:["Dolor lumbar persistente inespecífico con factores conductuales y funcionales por explorar.","Hernia discal confirmada por el tiempo de evolución.","Inestabilidad vertebral confirmada."],correct:0,why:"La descripción permite una hipótesis provisional, no una etiqueta estructural confirmada."},
+        {q:"¿Cómo abordar el temor al movimiento?",options:["Ignorarlo porque no es un hallazgo físico.","Afirmar que todo el dolor es psicológico.","Explorar expectativas, creencias, objetivos y exposición graduada de forma individualizada."],correct:2,why:"El razonamiento biopsicosocial incorpora creencias y objetivos sin invalidar el dolor ni imponer una pauta."},
+        {q:"¿Qué situación modificaría la conducta inicial?",options:["La presencia de signos nuevos compatibles con compromiso neurológico grave u otra señal de alarma.","Un cambio leve en el dolor de un día a otro.","Una preferencia por moverse lentamente."],correct:0,why:"Las señales de alarma justifican valoración o derivación según urgencia y protocolos; no se interpretan mediante un único dato aislado."}
+      ]
+    },
+    hombro: {
+      title:"Caso B · Dolor de hombro persistente inespecífico",
+      story:"Persona adulta ficticia con dolor de hombro de cuatro meses al elevar el brazo y durante tareas sobre la cabeza. Mantiene autonomía en actividades básicas. No hay mecanismo traumático informado ni signos sistémicos descritos. El caso no aporta examen neurológico ni pruebas funcionales completas.",
+      questions:[
+        {q:"¿Qué información falta antes de elegir intervención?",options:["Solo una imagen para asignar un diagnóstico anatómico.","Patrón de síntomas, examen clínico pertinente, función, objetivos y cribado de alertas.","Únicamente el nivel de dolor numérico."],correct:1,why:"La valoración debe integrar historia, examen, función y seguridad. Una imagen aislada no sustituye el razonamiento clínico."},
+        {q:"¿Qué conclusión es defendible?",options:["Rotura completa confirmada.","Dolor de origen exclusivamente cervical confirmado.","Problema de hombro persistente por caracterizar, con hipótesis abiertas."],correct:2,why:"La información es insuficiente para establecer una lesión específica o excluir otras fuentes."},
+        {q:"¿Cuál sería una decisión inicial razonable tras completar la evaluación pertinente?",options:["Explicar hallazgos, acordar objetivos funcionales y valorar opciones activas según tolerancia.","Evitar toda actividad hasta ausencia completa de dolor.","Realizar automáticamente una misma técnica para todos."],correct:0,why:"La planificación compartida e individualizada depende de valoración y respuesta, no de una receta universal."},
+        {q:"¿Qué hallazgo haría reconsiderar la ruta habitual?",options:["Preferencia por ejercicios breves.","Síntomas sistémicos o signos neurológicos progresivos no explicados.","Dolor al alcanzar un estante."],correct:1,why:"Los hallazgos potencialmente graves requieren evaluación adicional y eventual derivación, acorde al contexto clínico."}
+      ]
+    }
+  };
+  const $ = id => document.getElementById(id);
+  let active="lumbar";
+  function render(){
+    const data=cases[active];
+    $("lumbar").setAttribute("aria-pressed",String(active==="lumbar"));
+    $("hombro").setAttribute("aria-pressed",String(active==="hombro"));
+    $("case-description").replaceChildren();
+    const title=document.createElement("h3");title.textContent=data.title;
+    const story=document.createElement("p");story.textContent=data.story;
+    $("case-description").append(title,story);
+    const box=$("questions");box.replaceChildren();
+    data.questions.forEach((item,i)=>{
+      const field=document.createElement("fieldset");
+      field.style.cssText="border:0;padding:0;margin:20px 0";
+      const legend=document.createElement("legend");legend.className="question";legend.textContent=(i+1)+". "+item.q;field.append(legend);
+      const options=document.createElement("div");options.className="options";
+      item.options.forEach((value,j)=>{
+        const label=document.createElement("label");label.className="option";
+        const radio=document.createElement("input");radio.type="radio";radio.name="q"+i;radio.value=String(j);radio.required=true;
+        const span=document.createElement("span");span.textContent=value;label.append(radio,span);options.append(label);
+      });
+      field.append(options);box.append(field);
+    });
+    $("result").hidden=true;$("result").replaceChildren();
+  }
+  $("lumbar").addEventListener("click",()=>{active="lumbar";render()});
+  $("hombro").addEventListener("click",()=>{active="hombro";render()});
+  $("reset").addEventListener("click",render);
+  $("quiz").addEventListener("submit",event=>{
+    event.preventDefault();
+    const selected=cases[active].questions.map((_,i)=>$("quiz").querySelector('input[name="q'+i+'"]:checked'));
+    if(selected.some(x=>!x)){ $("quiz").reportValidity();return; }
+    let score=0;const result=$("result");result.replaceChildren();
+    const heading=document.createElement("h3");
+    selected.forEach((node,i)=>{if(Number(node.value)===cases[active].questions[i].correct)score++});
+    heading.textContent="Resultado formativo: "+score+" de "+selected.length+" decisiones alineadas con el caso.";result.append(heading);
+    cases[active].questions.forEach((item,i)=>{
+      const p=document.createElement("p");const ok=Number(selected[i].value)===item.correct;
+      const strong=document.createElement("strong");strong.textContent="Pregunta "+(i+1)+": "+(ok?"coherente. ":"revisar. ");
+      p.append(strong,document.createTextNode(item.why));result.append(p);
+    });
+    const note=document.createElement("p");note.textContent="Este puntaje no acredita competencias ni constituye orientación clínica para pacientes reales.";result.append(note);
+    result.hidden=false;result.scrollIntoView({behavior:"smooth",block:"nearest"});
+  });
+  render();
+})();
+</script>
+</body></html>
