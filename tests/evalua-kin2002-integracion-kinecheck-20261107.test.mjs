@@ -38,7 +38,7 @@ test('No fictitious final grade when report is unapproved (execution)',()=>{
  const start=script.indexOf('const uniqueBy='),end=script.indexOf('function csvCell(');
  assert.ok(start>=0&&end>start);
  const block=script.slice(start,end).replace('let output=[];','let output=[];');
- const els={stats:{replaceChildren(){}},tablebody:{replaceChildren(){}},result:{classList:{remove(){}}}};
+ const els={stats:{replaceChildren(){}},tablebody:{replaceChildren(){},append(){}},result:{classList:{remove(){}}}};
  const document={getElementById:id=>els[id],createElement:()=>({children:[],append(...items){this.children.push(...items)},set textContent(v){this.text=String(v)},set className(v){this.cls=v}})};
  const context={document,Math,Set,Map,String,Array,Number,normalize:s=>String(s).toLowerCase(),f:x=>String(x),$:(id)=>els[id]};vm.createContext(context);
  vm.runInContext(block+';globalThis.__render=render;globalThis.__data=()=>output;',context);
