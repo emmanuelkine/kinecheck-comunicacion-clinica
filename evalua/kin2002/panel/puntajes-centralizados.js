@@ -14,6 +14,7 @@ const route='/rest/v1/kc_kin2002_sim_scores';
 const staff=new Set(['emmanuelkine@gmail.com','jorge.miranda@docencia.uoh.cl','jmarceloma@gmail.com','constanzaa.correa@pregrado.uoh.cl']);
 const revisions=new Map(),conflicts=new Set(),legacy=new Set(),queues=new Map();
 let ready=false,fetching=false,lastFetch=0;
+const dirtyLocal=new Set();
 const key=(g,slot)=>[g.section,g.id,slot].join('|');
 function status(msg,kind='info'){if(label){label.textContent=msg;label.dataset.state=kind;label.style.color=kind==='error'?'#ffd18b':kind==='success'?'#a5ffcf':'#c3e9ed';}}
 function session(){try{return JSON.parse(sessionStorage.getItem(TOKEN)||localStorage.getItem(TOKEN)||'null')}catch{return null}}
@@ -57,7 +58,7 @@ function syncCounts(){
  if(migrateButton)migrateButton.disabled=!legacy.size;
 }
 async function refresh(){
- if(fetching)return;
+ if(fetching||queues.size)return;
  fetching=true;ready=false;
  if(refreshButton)refreshButton.disabled=true;
  status('Verificando sesión y recuperando evaluaciones desde Supabase…');
@@ -69,8 +70,8 @@ async function refresh(){
    const k=[r.section,r.pair_code,Number(r.slot)].join('|'),target=seat(k);
    if(!target||!validLevels(r.levels))continue;
    revisions.set(k,Number(r.revision));
-   if(equal(target.s,r))continue;
-   if(empty(target.s)){
+   if(equal(target.s,r)&&!dirtyLocal.has(k))continue;
+   if(empty(target.s)&&!dirtyLocal.has(k)){
     target.s.levels=[...r.levels];target.s.note=String(r.note||'');
    }else{
     conflicts.add(k);
@@ -92,7 +93,7 @@ async function submit(k){
  if(conflicts.has(k))throw Error('Conflicto no resuelto con la evaluación del servidor. Usa «Actualizar puntajes»');
  if(legacy.has(k))throw Error('Este cupo contiene puntajes antiguos locales: migra el respaldo antes de editarlo en el servidor');
  const payload=dataOf(target.s);
- const common={levels:payload.levels,note:payload.note,modified_by:null,updated_at:new Date().toISOString()};
+ const common={levels:payload.levels,note:payload.note,updated_at:new Date().toISOString()};
  // El servidor toma modified_by del JWT; el cliente envía el UID comprobado más abajo.
  const current=await auth();
  const u=await fetch(base+'/auth/v1/user',{headers:{apikey:anon,authorization:'Bearer '+current.access_token},cache:'no-store'});
@@ -110,19 +111,19 @@ async function submit(k){
  if(!Array.isArray(returned)||returned.length!==1){
   conflicts.add(k);throw Error('Otro docente modificó este cupo. No se sobrescribió su evaluación');
  }
- revisions.set(k,Number(returned[0].revision));
+ revisions.set(k,Number(returned[0].revision));dirtyLocal.delete(k);
  syncCounts();
 }
 function saveSeat(group,student){
  const slot=group.students.indexOf(student)+1,k=key(group,slot);
  if(slot<=0)return;
- if(!ready){status('Solo respaldo local: servidor aún no disponible. No se ha sincronizado este puntaje.','error');return;}
+ if(!ready){dirtyLocal.add(k);status('Solo respaldo local: servidor aún no disponible. No se ha sincronizado este puntaje.','error');return;}
  const previous=queues.get(k)||Promise.resolve();
  const next=previous.catch(()=>{}).then(()=>submit(k));
  queues.set(k,next);
  void next.then(()=>{if(queues.get(k)===next)syncCounts()}).catch(e=>{
   status('GUARDADO CENTRAL NO CONFIRMADO · '+group.section+' '+group.id+' cupo '+slot+': '+String(e?.message||e)+'. Conserva el respaldo local y resuelve el conflicto.','error');
- });
+ }).finally(()=>{if(queues.get(k)===next)queues.delete(k);});
 }
 async function migrateLegacy(){
  if(!ready||!legacy.size)return;
