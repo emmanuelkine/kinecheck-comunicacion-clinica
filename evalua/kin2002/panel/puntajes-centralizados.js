@@ -6,6 +6,7 @@
 const label=document.getElementById('centralScoresStatus');
 const refreshButton=document.getElementById('centralScoresRefresh');
 const migrateButton=document.getElementById('centralScoresMigrate');
+const resolveButton=document.getElementById('centralScoresResolve');
 const config=window.KINECHECK_CONFIG||{};
 const base=String(config.supabaseUrl||'');
 const anon=String(config.supabaseAnonKey||'');
@@ -56,6 +57,7 @@ function syncCounts(){
  status('Sincronización activa · '+revisions.size+' registros en servidor · '+legacy.size+' respaldos locales por migrar · '+conflicts.size+' diferencias por revisar.',
   conflicts.size?'error':legacy.size?'info':'success');
  if(migrateButton)migrateButton.disabled=!legacy.size;
+ if(resolveButton)resolveButton.disabled=!conflicts.size;
 }
 async function refresh(){
  if(fetching||queues.size)return;
@@ -125,6 +127,19 @@ function saveSeat(group,student){
   status('GUARDADO CENTRAL NO CONFIRMADO · '+group.section+' '+group.id+' cupo '+slot+': '+String(e?.message||e)+'. Conserva el respaldo local y resuelve el conflicto.','error');
  }).finally(()=>{if(queues.get(k)===next)queues.delete(k);});
 }
+async function resolveConflicts(){
+ if(!ready||!conflicts.size)return;
+ if(!confirm('Hay '+conflicts.size+' registros con diferencias frente al servidor. Descarga primero el respaldo local. ¿Reemplazar SOLO las copias locales discrepantes con las evaluaciones ya guardadas en Supabase? No se modifica ningún puntaje del servidor.'))return;
+ const saved=await request('GET',route+'?select=section,pair_code,slot,levels,note,revision');
+ let changed=0;
+ for(const r of saved){const k=[r.section,r.pair_code,Number(r.slot)].join('|');if(!conflicts.has(k)||!validLevels(r.levels))continue;
+ const target=seat(k);if(!target)continue;
+ target.s.levels=[...r.levels];target.s.note=String(r.note||'');
+ revisions.set(k,Number(r.revision));conflicts.delete(k);dirtyLocal.delete(k);changed++;
+ }
+ save();renderAll();syncCounts();
+ status(changed+' diferencias resueltas usando datos confirmados del servidor. Conserva el respaldo previo si necesitas comparar.','success');
+}
 async function migrateLegacy(){
  if(!ready||!legacy.size)return;
  const names=[...legacy];
@@ -142,6 +157,7 @@ async function migrateLegacy(){
 }
 refreshButton?.addEventListener('click',()=>void refresh());
 migrateButton?.addEventListener('click',()=>void migrateLegacy());
+resolveButton?.addEventListener('click',()=>void resolveConflicts().catch(e=>status('No se resolvieron las diferencias: '+String(e),'error')));
 window.KineCheckScores={saveSeat,refresh,get ready(){return ready},get conflicts(){return conflicts.size},get legacy(){return legacy.size}};
 window.addEventListener('focus',()=>{if(!fetching&&Date.now()-lastFetch>60000&&!queues.size)void refresh()});
 void refresh();
