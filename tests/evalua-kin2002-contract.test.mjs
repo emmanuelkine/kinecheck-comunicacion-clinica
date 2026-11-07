@@ -20,7 +20,7 @@ test('KIN2002 pilot does not store or transmit student records', () => {
   assert.doesNotMatch(js, /(?:navigator\.sendBeacon|\bfetch\s*\(|\bXMLHttpRequest\s*\()/);
   assert.match(js, /new DOMParser\(\)/);
   assert.match(js, /URL\.createObjectURL/);
-  assert.match(ui, /no envío de datos al servidor/);
+  assert.match(ui, /sin envío de datos al servidor/i);
   assert.match(ui, /no se han migrado usuarios/i);
 });
 
