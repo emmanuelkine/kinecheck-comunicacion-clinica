@@ -69,7 +69,7 @@ async function loadPrivateRoster(){
   for(const row of rows) {
    const g=groups.find(x=>x.section===row.section&&x.id===row.pair_code&&String(x.station)===String(row.station));
    const slot=Number(row.slot)-1;
-   if(!g||slot<0||slot>=g.students.length||typeof row.student_name!=='string'){conflicts.push('Cupo no encontrado');continue;}
+   if(!g||slot<0||slot>=4||typeof row.student_name!=='string'){conflicts.push('Cupo no encontrado');continue;}while(g.students.length<=slot){const n=g.students.length+1;g.students.push({id:g.id+'-'+n+'-privado',name:'',levels:Array(8).fill(null),note:'',report:null,reportPoints:null,reportFeedback:''});}
    const student=g.students[slot],existing=String(student.name||'').trim(),name=row.student_name.trim();
    if(!existing)pending.push({student,name});
    else if(clean(existing)!==clean(name))conflicts.push(row.pair_code+' · cupo '+row.slot);
