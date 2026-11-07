@@ -1,17 +1,9 @@
+import { rubricOfficial } from './rubrica.js';
 /* KIN2002 · Simulación local. Sin servidor, sin almacenamiento de calificaciones. */
 const $ = id => document.getElementById(id);
 const weights=[8,16,16,12,20,12,8,8];
 const labels=['Comunicación, consentimiento y trato','Anamnesis y contexto','Seguridad clínica','Hipótesis y razonamiento','Selección y ejecución del examen','Integración diagnóstica y derivación','Objetivos y educación','Síntesis y contribución individual'];
-const guides=[
-['Sin consentimiento o relación profesional','Explica poco y genera confusión','Trato correcto, escucha o explicaciones incompletas','Comunica y solicita permiso; omisión menor','Escucha activamente, consiente continuamente y comunica sin alarmismo'],
-['Sin historia útil','Anamnesis fragmentada','Explora síntomas, omite función/contexto relevante','Recoge datos relevantes con omisiones menores','Prioriza evolución, función, carga, contexto y expectativas'],
-['Conducta insegura o ignora señal de alarma','Omite riesgos relevantes','Pesquisa incompleta, aunque generalmente segura','Pesquisa y actúa de manera segura; omisión menor','Identifica riesgos, decide suspensión/derivación y adapta conductas'],
-['Sin hipótesis coherente','Etiqueta sin fundamento','Hipótesis plausible con justificación parcial','Hipótesis coherente con contraste limitado','Contrasta alternativas, reconoce incertidumbre y adapta decisiones'],
-['Examen inexistente o inseguro','Pruebas sin propósito y técnica deficiente','Parte del examen pertinente; ejecución o interpretación parcial','Examen pertinente y seguro; errores menores','Selecciona, ejecuta, adapta e interpreta pruebas justificadas'],
-['Conclusión incompatible con datos','Enumera hallazgos sin integrar','Integración parcial y pronóstico débil','Síntesis coherente, omisión menor','Integra función, examen, pronóstico y decisiones de derivación'],
-['Plan ausente o contraindicado','Conducta vaga o descontextualizada','Objetivos y educación poco operativos','Conducta inicial segura con omisión menor','Objetivo funcional, educación, progresión y reevaluación razonados'],
-['Sin aporte individual observable','Dependencia casi total del compañero','Participación irregular, síntesis parcial','Contribución individual competente','Colabora y sintetiza autónomamente con fundamentos']
-];
+const guides=rubricOfficial.map(row=>row.slice(2));
 let groups=[],active=null,seq=0,remaining=720,running=false,lastTick=0;
 const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/\s+/g,' ');
 const student=()=>({name:'',levels:Array(8).fill(null),notes:''});
@@ -27,7 +19,7 @@ function parseCSV(input) {
 }
 function addGroup(section,pair,evaluator,day,time,number=2){
  if(!['S1','S2'].includes(section)||!pair||groups.some(g=>g.section===section&&norm(g.pair)===norm(pair)))throw Error('Pareja duplicada o sección inválida: '+section+' '+pair);
- const g={id:'g'+(++seq),section,pair,evaluator,day,time,ready:false,members:Array.from({length:Math.max(1,Math.min(3,number))},student)};groups.push(g);active=g.id;return g;
+ const g={id:'g'+(++seq),section,pair,evaluator,day,time,ready:false,members:Array.from({length:Math.max(1,Math.min(4,number))},student)};groups.push(g);active=g.id;return g;
 }
 function complete(g){const named=g.members.filter(m=>m.name.trim());return named.length>0&&named.every(m=>points(m)!==null);}
 function labelInput(label,value,update){const container=el('label',label),input=document.createElement('input');input.value=value;input.maxLength=140;input.addEventListener('input',()=>update(input.value));container.append(input);return container;}
@@ -46,7 +38,7 @@ function render(){
  const p=$('pairs');p.replaceChildren();
  for(const g of shown){const done=g.members.filter(m=>m.name&&points(m)!==null).length,number=g.members.filter(m=>m.name).length;const b=el('button',g.section+' · '+g.pair+' · E'+g.evaluator+' · '+done+'/'+number+' evaluados'+(g.ready?' · LISTA':''),'pair'+(active===g.id?' active':'')+(g.ready?' ready':''));b.type='button';b.addEventListener('click',()=>{active=g.id;render();});p.append(b);}
  const g=groups.find(x=>x.id===active),members=$('members');members.replaceChildren();
- $('addmember').disabled=!g||g.members.length>=3;$('ready').disabled=!g||(!g.ready&&!complete(g));$('remove').disabled=!g;
+ $('addmember').disabled=!g||g.members.length>=4;$('ready').disabled=!g||(!g.ready&&!complete(g));$('remove').disabled=!g;
  if(!g){$('selected-title').textContent='Selecciona o crea una pareja';$('selected-info').textContent='Rúbrica individual por estudiante.';summary();return;}
  $('selected-title').textContent=g.section+' · '+g.pair+' · Evaluador '+g.evaluator;
  $('selected-info').textContent=g.day+' '+g.time+' · '+(g.section==='S1'?'Paciente lumbar':'Paciente hombro')+' · '+g.members.length+' integrantes';
@@ -90,7 +82,7 @@ $('importcsv').addEventListener('change',async e=>{
    const id=s+'|'+norm(p);if(!pending.has(id))pending.set(id,[]);pending.get(id).push({row,s,p,n});}
   if(!pending.size)throw Error('No hay estudiantes válidos');
   if(pending.size>180)throw Error('Demasiadas parejas');
-  const next=[];for(const entries of pending.values()){if(entries.length>3)throw Error('Pareja con más de 3 integrantes');
+  const next=[];for(const entries of pending.values()){if(entries.length>4)throw Error('Pareja con más de 4 integrantes');
    const first=entries[0];if(groups.some(x=>x.section===first.s&&norm(x.pair)===norm(first.p)))throw Error('Pareja ya existente: '+first.s+' '+first.p);
    const g={id:'g'+(++seq),section:first.s,pair:first.p,evaluator:evalCol<0?'1':String(first.row[evalCol]||'1').replace(/^E/i,''),day:day<0?'Martes':first.row[day]||'Martes',time:time<0?'':first.row[time]||'',ready:false,members:entries.map(x=>({...student(),name:x.n}))};
    const cols=Array.from({length:8},(_,i)=>col('C'+(i+1)));const notes=col('Observaciones');
@@ -105,6 +97,25 @@ $('timer12').addEventListener('click',()=>{running=false;remaining=720;clockDraw
 $('timer3').addEventListener('click',()=>{running=false;remaining=180;clockDraw();});
 $('timerstart').addEventListener('click',()=>{running=!running;lastTick=performance.now();$('timerstart').textContent=running?'Pausar':'Iniciar';});
 setInterval(()=>{if(!running)return;const now=performance.now();if(now-lastTick>=1000){remaining=Math.max(0,remaining-Math.floor((now-lastTick)/1000));lastTick=now;clockDraw();if(!remaining){running=false;$('timerstart').textContent='Iniciar';}}},400);
+// Importa solamente la nómina de la estación elegida. No copia niveles previos ni toca parejas existentes.
+window.KC_SIM_importRoster=(rows, station)=>{
+ if(!['1','2'].includes(String(station)))throw Error('Estación no válida');
+ if(!Array.isArray(rows)||rows.length>200)throw Error('Nómina inválida o demasiado extensa');
+ const picked=rows.filter(r=>['S1','S2'].includes(r.section)&&String(r.station)===String(station)&&/^P\d+$/i.test(r.pair));
+ const groupsByKey=new Map();
+ for(const r of picked){const key=r.section+'|'+norm(r.pair);if(!groupsByKey.has(key))groupsByKey.set(key,[]);groupsByKey.get(key).push(r);}
+ let created=0,skipped=0;
+ for(const members of groupsByKey.values()){
+  const first=members[0];
+  if(members.length>4)throw Error('Pareja excede cuatro cupos: '+first.pair);
+  if(groups.some(g=>g.section===first.section&&norm(g.pair)===norm(first.pair))){skipped++;continue;}
+  const g=addGroup(first.section,first.pair,station,first.day||'',first.time||'',members.length);
+  g.members=members.map(r=>({...student(),name:r.name||''}));
+  created++;
+ }
+ render();
+ return {created,skipped,records:picked.length};
+};
 window.KC_SIM_read=()=>groups.map(g=>({...g,members:g.members.map(m=>({...m,levels:[...m.levels]}))}));
 window.KC_SIM_points=points;
 window.KC_SIM_grade=grade;
