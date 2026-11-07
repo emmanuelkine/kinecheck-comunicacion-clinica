@@ -3,6 +3,8 @@ const rosterStatus=document.getElementById('privateRosterStatus');
 const rosterRetry=document.getElementById('retryPrivateRoster');
 const rosterSignIn=document.getElementById('signinPrivateRoster');
 const privacyNote='La nómina se obtiene desde un servidor privado, solo con una sesión docente autorizada.';
+let rosterLoading=false;
+let lastRosterSuccess=0;
 const conf=window.KINECHECK_CONFIG||{};
 const base=String(conf.supabaseUrl||'');
 const apiKey=String(conf.supabaseAnonKey||'');
@@ -45,9 +47,11 @@ async function refreshToken(session) {
  return next;
 }
 async function loadPrivateRoster(){
+ if(rosterLoading)return;
  if(!base.startsWith('https://')||!apiKey){showRosterStatus('Configuración de autenticación no disponible.','error');return;}
+ rosterLoading=true;
  rosterRetry.disabled=true;
- showRosterStatus('Verificando acceso docente y cargando los nombres…');
+ showRosterStatus('Verificando acceso docente y recuperando nombres desde la nómina privada…');
  try {
   let session=sessionCandidate();
   if(!session){
@@ -76,12 +80,25 @@ async function loadPrivateRoster(){
   }
   for(const {student,name} of pending)student.name=name;
   renderAll();
-  showRosterStatus(rows.length+' nombres cargados desde la nómina privada.'+(conflicts.length?' Revisa '+conflicts.length+' diferencias con el registro local.':''),'success');
+  const named=groups.reduce((sum,g)=>sum+g.students.filter(s=>String(s.name||'').trim()).length,0);
+  const loadedNames=rows.filter(row=>String(row.student_name||'').trim()).length;
+  const status=loadedNames+' registros de nómina privada consultados · '+named+' nombres visibles en este panel.';
+  lastRosterSuccess=Date.now();
+  showRosterStatus(status+(conflicts.length?' Hay '+conflicts.length+' conflictos de identidad/cupo: no se modificaron nombres discrepantes ni puntajes.':''),'success');
   rosterSignIn.hidden=true;
  }catch(err){
   showRosterStatus('No se pudo acceder a la nómina privada. '+(err?.message||'Error desconocido')+'. Revisa tu sesión docente e inténtalo de nuevo.','error');
- }finally{rosterRetry.disabled=false;}
+ }finally{rosterLoading=false;rosterRetry.disabled=false;}
 }
 rosterRetry?.addEventListener('click',loadPrivateRoster);
 if(rosterSignIn)rosterSignIn.href='/academy/';
 loadPrivateRoster();
+// Los nombres se almacenan únicamente en la base privada y se recuperan al volver al panel.
+// Si la pestaña se reanuda y faltan nombres, reintentar con sesión docente; jamás guardar nombres en localStorage.
+function retryMissingRoster(){
+ if(rosterLoading || Date.now()-lastRosterSuccess<30000 || !sessionCandidate())return;
+ if(groups.some(g=>g.students.some(s=>!String(s.name||'').trim())))void loadPrivateRoster();
+}
+window.addEventListener('pageshow',event=>{if(event.persisted)retryMissingRoster();});
+window.addEventListener('focus',retryMissingRoster);
+window.addEventListener('online',retryMissingRoster);
