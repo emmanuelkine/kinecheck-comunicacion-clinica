@@ -61,7 +61,7 @@ function render(){
 }
 $('create').addEventListener('click',()=>{try{const g=addGroup($('section').value,$('pairname').value.trim(),$('evaluator').value,$('day').value,$('time').value);render();tell('Pareja '+g.pair+' creada.');}catch(e){tell(e.message);}});
 for(const field of ['search','filtersection','filtereval','filterstate'])$(field).addEventListener(field==='search'?'input':'change',render);
-$('addmember').addEventListener('click',()=>{const g=groups.find(x=>x.id===active);if(!g||g.members.length>=3)return;g.members.push(student());g.ready=false;render();});
+$('addmember').addEventListener('click',()=>{const g=groups.find(x=>x.id===active);if(!g||g.members.length>=4)return;if(g.members.length===3&&!window.confirm('Agregar un cuarto integrante excepcional. ¿Confirmas su evaluación individual?'))return;g.members.push(student());g.ready=false;render();tell('Se agregó un nuevo estudiante a '+g.section+' '+g.pair+'. Completa su nombre y rúbrica individual.');});
 $('ready').addEventListener('click',()=>{const g=groups.find(x=>x.id===active);if(!g)return;if(!g.ready&&!complete(g)){tell('Completa ocho criterios de cada estudiante con nombre.');return;}g.ready=!g.ready;render();});
 $('remove').addEventListener('click',()=>{const g=groups.find(x=>x.id===active);if(!g||!window.confirm('¿Quitar '+g.section+' '+g.pair+' de esta sesión?'))return;groups=groups.filter(x=>x.id!==g.id);active=groups[0]?.id??null;render();});
 $('reset').addEventListener('click',()=>{if(!window.confirm('¿Descartar los datos de esta sesión? Exporta un respaldo antes.'))return;groups=[];active=null;render();tell('Sesión vaciada.');});
