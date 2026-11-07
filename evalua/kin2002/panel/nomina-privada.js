@@ -97,10 +97,10 @@ async function loadPrivateRoster(){
 // Save student names only to the protected roster. No browser persistence of names.
 async function savePrivateStudentName(group,student,newName,oldName){
  const slot=group.students.indexOf(student)+1;
- const name=String(newName||'').trim().replace(/\\s+/g,' ');
+ const name=String(newName||'').trim().replace(/\s+/g,' ');
  const key=rosterKey(group.section,group.id,slot);
  const rollback=()=>{student.name=oldName;renderAll();};
- if(!/^[\\p{L}\\p{M}0-9.'’ -]{2,140}$/u.test(name)){rollback();showRosterStatus('Nombre inválido (2 a 140 caracteres). No se guardó.','error');return false;}
+ if(!/^[\p{L}\p{M}0-9.'’ -]{2,140}$/u.test(name)){rollback();showRosterStatus('Nombre inválido (2 a 140 caracteres). No se guardó.','error');return false;}
  if(!/^[12]$/.test(String(group.station))||!/^P[0-9]{2}$/.test(group.id)||!/^(S1|S2)$/.test(group.section)){rollback();showRosterStatus('Cupo no válido para la nómina privada.','error');return false;}
  try{
   let session=sessionCandidate();
