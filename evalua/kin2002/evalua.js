@@ -130,8 +130,9 @@ function render(sim,reports){
     if(b.length===1&&!b[0].approved)reason.push('Informe pendiente de validación docente');
     const matched=a.length===1&&b.length===1&&a[0].complete&&b[0].complete;
     const official=matched&&b[0].approved&&reason.length===0;
-    const cert=matched?Math.round((b[0].note*.3+a[0].note*.7)*10)/10:null;
-    return {section:sample.section,name:sample.name,source:a.map(x=>x.source).join(', '),simPoints:a.length===1?a[0].points:null,simNote:a.length===1?a[0].note:null,repPoints:b.length===1?b[0].points:null,repNote:b.length===1?b[0].note:null,cert,contribution:official?Math.round(cert*.5*100)/100:null,state:reason.length?reason.join('; '):'Listo para revisión docente',official};
+    // Only render a certamen grade when every component is complete, unambiguous and the report is teacher-validated.
+    const cert=official?Math.round((b[0].note*.3+a[0].note*.7)*10)/10:null;
+    return {section:sample.section,name:sample.name,source:a.map(x=>x.source).join(', '),simPoints:a.length===1?a[0].points:null,simNote:a.length===1?a[0].note:null,repPoints:b.length===1&&b[0].approved?b[0].points:null,repNote:b.length===1&&b[0].approved?b[0].note:null,cert,contribution:official?Math.round(cert*.5*100)/100:null,state:reason.length?reason.join('; '):'Listo para revisión docente',official};
   });
   const stats=[['Registros',output.length],['Con ambos componentes',output.filter(x=>x.cert!==null).length],['Con incidencias',output.filter(x=>x.state!=='Listo para revisión docente').length],['Validaciones completas',output.filter(x=>x.official).length]];
   $('stats').replaceChildren(...stats.map(([name,val])=>{const div=document.createElement('div');div.className='stat';const label=document.createElement('span');label.textContent=name;const number=document.createElement('b');number.textContent=String(val);div.append(label,number);return div;}));
