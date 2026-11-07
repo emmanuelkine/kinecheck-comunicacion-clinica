@@ -22,7 +22,7 @@ test('Master import selects own station, checks eight rubric descriptors and doe
  assert.match(js,/KC_SIM_importRoster/);
  assert.match(importer,/assigned!==String\(station\)/);
  assert.match(importer,/rubricOfficial\[i\]/);
- assert.match(importer,/Sin|sin|no se copian/);
+ assert.match(importer,/No copia niveles previos|rúbrica/i);
  assert.doesNotMatch(importer,/levels\s*:\s*r\[/);
  assert.match(js,/skipped\+\+/);
 });
