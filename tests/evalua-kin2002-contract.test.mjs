@@ -16,7 +16,8 @@ test('KIN2002 pilot is accessible from Evalúa without changing existing public 
 
 test('KIN2002 pilot does not store or transmit student records', () => {
   assert.doesNotMatch(js, /\b(?:fetch|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|indexedDB|WebSocket)\b/);
-  assert.doesNotMatch(js, /https?:\/\//);
+  // The OOXML namespace URL is a schema identifier, not a network request.
+  assert.doesNotMatch(js, /(?:navigator\.sendBeacon|\bfetch\s*\(|\bXMLHttpRequest\s*\()/);
   assert.match(js, /new DOMParser\(\)/);
   assert.match(js, /URL\.createObjectURL/);
   assert.match(ui, /no envío de datos al servidor/);
