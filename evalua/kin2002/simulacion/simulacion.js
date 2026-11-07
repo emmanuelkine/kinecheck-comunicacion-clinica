@@ -32,6 +32,7 @@ function addGroup(section,pair,evaluator,day,time,number=2){
 function complete(g){const named=g.members.filter(m=>m.name.trim());return named.length>0&&named.every(m=>points(m)!==null);}
 function labelInput(label,value,update){const container=el('label',label),input=document.createElement('input');input.value=value;input.maxLength=140;input.addEventListener('input',()=>update(input.value));container.append(input);return container;}
 function summary(){
+ document.dispatchEvent(new Event('kinecheck-simulacion-cambio'));
  const all=groups.flatMap(g=>g.members.filter(m=>m.name.trim()).map(m=>({g,m,score:points(m)}))),finished=all.filter(x=>x.score!==null);
  $('stats').replaceChildren(...[['Parejas',groups.length],['Estudiantes',all.length],['Evaluados',finished.length],['Parejas listas',groups.filter(g=>g.ready).length],['Pendientes',all.length-finished.length]].map(([label,value])=>{const d=el('div','','stat');d.append(el('span',label),el('strong',String(value)));return d;}));
  const body=$('grades');body.replaceChildren();
@@ -104,4 +105,7 @@ $('timer12').addEventListener('click',()=>{running=false;remaining=720;clockDraw
 $('timer3').addEventListener('click',()=>{running=false;remaining=180;clockDraw();});
 $('timerstart').addEventListener('click',()=>{running=!running;lastTick=performance.now();$('timerstart').textContent=running?'Pausar':'Iniciar';});
 setInterval(()=>{if(!running)return;const now=performance.now();if(now-lastTick>=1000){remaining=Math.max(0,remaining-Math.floor((now-lastTick)/1000));lastTick=now;clockDraw();if(!remaining){running=false;$('timerstart').textContent='Iniciar';}}},400);
+window.KC_SIM_read=()=>groups.map(g=>({...g,members:g.members.map(m=>({...m,levels:[...m.levels]}))}));
+window.KC_SIM_points=points;
+window.KC_SIM_grade=grade;
 clockDraw();render();
