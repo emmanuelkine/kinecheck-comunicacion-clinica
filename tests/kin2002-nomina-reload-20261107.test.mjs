@@ -22,3 +22,17 @@ test('Student names are never persisted in unprotected browser storage',()=>{
  assert.match(js,/kc_kin2002_sim_roster/);
  assert.match(js,/auth\/v1\/user/);
 });
+
+test('Name field uses authorized server write and does not silently persist locally',()=>{
+ const js=readFileSync(roster,'utf8'),html=readFileSync(panel,'utf8');
+ assert.match(html,/window\.KineCheckRosterSaveName\(g,s,s\.name,previous\)/);
+ assert.match(js,/window\.KineCheckRosterSaveName=savePrivateStudentName/);
+ assert.match(js,/sessionCandidate\(\)/);
+ assert.match(js,/method,session,body,prefer/);
+ assert.match(js,/student_name=eq\./);
+ assert.match(js,/PATCH/);
+ assert.match(js,/POST/);
+ assert.match(js,/return=representation/);
+ assert.match(js,/verifiedSlots\.set\(key,name\)/);
+ assert.match(js,/Se restauró el nombre anterior/);
+});
