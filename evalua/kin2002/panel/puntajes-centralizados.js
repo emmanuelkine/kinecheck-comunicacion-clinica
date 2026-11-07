@@ -12,7 +12,7 @@ const base=String(config.supabaseUrl||'');
 const anon=String(config.supabaseAnonKey||'');
 const TOKEN='kinecheck_secure_session_v1';
 const route='/rest/v1/kc_kin2002_sim_scores';
-const staff=new Set(['emmanuelkine@gmail.com','jorge.miranda@docencia.uoh.cl','jmarceloma@gmail.com','constanzaa.correa@pregrado.uoh.cl']);
+const staff=new Set(['emmanuelkine@gmail.com','jorge.miranda@docencia.uoh.cl','jmarceloma@gmail.com','constanzaa.correa@pregrado.uoh.cl','emmanuel.zuniga@edu.ipchile.cl']);
 const revisions=new Map(),conflicts=new Set(),legacy=new Set(),queues=new Map();
 let ready=false,fetching=false,lastFetch=0;
 const dirtyLocal=new Set();
