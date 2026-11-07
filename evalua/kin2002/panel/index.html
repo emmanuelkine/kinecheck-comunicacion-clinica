@@ -29,7 +29,7 @@ $('rosterCsv').onchange=async e=>{
  try{
    if(file.size>1024*1024)throw Error('CSV demasiado grande (1 MB máximo).');
    const rows=parseCsv(await file.text());if(rows.length<2||rows.length>250)throw Error('Nómina CSV vacía o excesiva.');
-   const clean=s=>String(s??'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().trim();
+   const clean=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
    const headers=rows.shift().map(clean);
    const locate=name=>headers.indexOf(clean(name));
    const sec=locate('Sección'),pair=locate('Pareja'),evaluator=locate('Evaluador'),student=locate('Estudiante');
@@ -38,7 +38,7 @@ $('rosterCsv').onchange=async e=>{
    for(const row of rows){
      const section=String(row[sec]||'').toUpperCase().trim(),id=String(row[pair]||'').toUpperCase().trim(),ev=String(row[evaluator]||'').trim(),name=String(row[student]||'').trim();
      if(!name)continue;
-     if(!['S1','S2'].includes(section)||!/^P\\d{2}$/.test(id)||!['1','2'].includes(ev)||name.length>120)throw Error('Nómina contiene sección, pareja, evaluador o nombre inválido.');
+     if(!['S1','S2'].includes(section)||!/^P\d{2}$/.test(id)||!['1','2'].includes(ev)||name.length>120)throw Error('Nómina contiene sección, pareja, evaluador o nombre inválido.');
      const key=section+'|'+id+'|'+ev;grouped.set(key,[...(grouped.get(key)||[]),name]);
    }
    if(!grouped.size)throw Error('No se encontraron estudiantes.');
