@@ -107,7 +107,7 @@ async function savePrivateStudentName(group,student,newName,oldName){
   if(!session)throw Error('Inicia sesión docente de KineCheck para guardar nombres.');
   session=await refreshToken(session);
   const email=String((await api('/auth/v1/user','GET',session))?.email||'').toLowerCase();
-  if(!['emmanuelkine@gmail.com','jorge.miranda@docencia.uoh.cl','jmarceloma@gmail.com','constanzaa.correa@pregrado.uoh.cl'].includes(email))throw Error('Cuenta sin autorización de escritura en nómina.');
+  if(!['emmanuelkine@gmail.com','jorge.miranda@docencia.uoh.cl','jmarceloma@gmail.com','constanzaa.correa@pregrado.uoh.cl','emmanuel.zuniga@edu.ipchile.cl'].includes(email))throw Error('Cuenta sin autorización de escritura en nómina.');
   const old=verifiedSlots.get(key);
   if(old===name){student.name=name;renderAll();showRosterStatus('Nombre ya confirmado en la nómina privada.','success');return true;}
   const basePath='/rest/v1/kc_kin2002_sim_roster';
