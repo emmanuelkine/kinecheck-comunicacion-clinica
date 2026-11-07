@@ -28,4 +28,6 @@ Fecha: 2026-11-07
 8. Revisar privacidad institucional aplicable antes de mover información real de estudiantes; no mostrar listas ni documentos en rutas públicas.
 
 ## Criterio de publicación
-La rama se propone en **PR de revisión**. No fusionar ni publicar en `kinecheck.cl` hasta aprobar las pruebas y los controles. El piloto local no contiene notas reales.
+- **Se autoriza publicar solo el piloto de conciliación local** `/evalua/kin2002/`, una vez que CI y controles de privacidad pasen. Los archivos se procesan en memoria del navegador, sin persistir ni enviar información; no incorpora calificaciones reales por sí solo.
+- **No se autoriza activar la migración académica completa** hasta contar con exportación verificable de AppDeploy, autenticación, RLS, almacenamiento privado, conciliación de registros y pruebas de recuperación. El sitio debe señalar claramente esta distinción.
+- La operación anterior de AppDeploy permanece en paralelo, sin redirección automática ni modificación de registros; un despliegue del piloto no acredita que el sistema antiguo pueda retirarse.
