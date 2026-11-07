@@ -118,8 +118,8 @@ async function submit(k){
 }
 function saveSeat(group,student){
  const slot=group.students.indexOf(student)+1,k=key(group,slot);
- if(slot<=0)return;
- if(!ready){dirtyLocal.add(k);status('Solo respaldo local: servidor aún no disponible. No se ha sincronizado este puntaje.','error');return;}
+ if(slot<=0)return Promise.reject(Error('Cupo no encontrado'));
+ if(!ready){dirtyLocal.add(k);status('Solo respaldo local: servidor aún no disponible. No se ha sincronizado este puntaje.','error');return Promise.reject(Error('Sin conexión al guardado central'));}
  const previous=queues.get(k)||Promise.resolve();
  status('Guardando en KineCheck · '+group.section+' '+group.id+' cupo '+slot+'…');
  const next=previous.catch(()=>{}).then(()=>submit(k));
@@ -128,6 +128,7 @@ function saveSeat(group,student){
   dirtyLocal.add(k);
   status('GUARDADO CENTRAL NO CONFIRMADO · '+group.section+' '+group.id+' cupo '+slot+': '+String(e?.message||e)+'. Conserva el respaldo local y resuelve el conflicto.','error');
  }).finally(()=>{if(queues.get(k)===next)queues.delete(k);});
+ return next;
 }
 async function resolveConflicts(){
  if(!ready||!conflicts.size)return;
