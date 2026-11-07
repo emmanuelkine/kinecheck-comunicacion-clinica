@@ -108,7 +108,18 @@ window.KC_SIM_importRoster=(rows, station)=>{
  for(const members of groupsByKey.values()){
   const first=members[0];
   if(members.length>4)throw Error('Pareja excede cuatro cupos: '+first.pair);
-  if(groups.some(g=>g.section===first.section&&norm(g.pair)===norm(first.pair))){skipped++;continue;}
+  const existing=groups.find(g=>g.section===first.section&&norm(g.pair)===norm(first.pair));
+  if(existing){
+    // Completar solo cupos vacíos de la pareja precargada. Nunca sustituir notas ni nombres ya escritos.
+    const untouched=existing.members.every(m=>!m.name.trim()&&m.levels.every(v=>v===null)&&!m.notes.trim());
+    if(untouched&&!existing.ready&&existing.evaluator===String(station)){
+      existing.members=members.map(r=>({...student(),name:r.name||''}));
+      existing.day=first.day||existing.day;
+      existing.time=first.time||existing.time;
+      created++;
+    } else skipped++;
+    continue;
+  }
   const g=addGroup(first.section,first.pair,station,first.day||'',first.time||'',members.length);
   g.members=members.map(r=>({...student(),name:r.name||''}));
   created++;
