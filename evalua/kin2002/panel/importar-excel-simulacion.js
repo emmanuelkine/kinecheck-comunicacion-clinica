@@ -148,7 +148,8 @@ async function apply(){
   if((s.levels||[]).some(x=>x!==null&&x!==undefined&&x!=='')){item.status='Conflicto posterior';failed++;continue}
   s.levels=[...item.levels];save();renderAll();
   try{
-   await window.KineCheckScores.saveSeat(item.target.g,s);
+   const confirmed=await window.KineCheckScores.saveSeat(item.target.g,s);
+   if(confirmed!==true)throw Error('Supabase no confirmó el guardado');
    item.status='Guardada en servidor';saved++;
   }catch(err){
    // Se conserva el respaldo local nuevo para investigar, pero nunca se afirma guardado exitoso.
