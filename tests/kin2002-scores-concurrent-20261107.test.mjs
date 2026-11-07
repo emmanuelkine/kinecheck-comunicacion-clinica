@@ -14,7 +14,7 @@ test('Validación de código y controles de sincronización',()=>{
  assert.match(html,/KineCheckScores\.saveSeat\(g,s\)/);
  assert.match(code,/revision=eq\./);
  assert.match(code,/if\(!Array\.isArray\(returned\)\|\|returned\.length!==1\)/);
- assert.match(code,/no se sobrescribió su evaluación/);
+ assert.match(code,/[Nn]o se sobrescribió su evaluación/);
  assert.match(code,/No se modifica ningún puntaje del servidor/);
 });
 test('Dos sesiones simuladas: registros distintos y bloqueo de actualización conflictiva',async()=>{
@@ -23,7 +23,7 @@ test('Dos sesiones simuladas: registros distintos y bloqueo de actualización co
  const respond=(status,data)=>({ok:status>=200&&status<300,status,json:async()=>data});
  function engine(user){
   const messages={};
-  const elements=Object.fromEntries(['centralScoresStatus','centralScoresRefresh','centralScoresMigrate','centralScoresResolve'].map(id=>[id,{disabled:false,style:{},addEventListener(_type,fn){this.click=fn},set textContent(v){messages[id]=v;},get textContent(){return messages[id]||'';}}]));
+  const elements=Object.fromEntries(['centralScoresStatus','centralScoresRefresh','centralScoresMigrate','centralScoresResolve'].map(id=>[id,{disabled:false,style:{},dataset:{},addEventListener(_type,fn){this.click=fn},set textContent(v){messages[id]=v;},get textContent(){return messages[id]||'';}}]));
   const groups=[{id:'P01',section:'S1',day:'Miércoles',time:'11:35',students:[1,2].map(slot=>({id:'P01-'+slot,name:'Ficticio '+slot,levels:Array(8).fill(null),note:''}))}];
   const local={getItem(name){return name==='kinecheck_secure_session_v1'?JSON.stringify({access_token:'test',expires_at:9999999999}):null}};
   const fetch=async (url,opt={})=>{
