@@ -54,7 +54,7 @@ function seat(k){
 }
 function syncCounts(){
  if(!ready)return;
- status('Sincronización activa · '+revisions.size+' registros en servidor · '+legacy.size+' respaldos locales por migrar · '+conflicts.size+' diferencias por revisar.',
+ status('Sincronización activa · '+revisions.size+' registros en servidor · '+legacy.size+' respaldos locales por migrar · '+conflicts.size+' diferencias por revisar · '+dirtyLocal.size+' cambios pendientes.',
   conflicts.size?'error':legacy.size?'info':'success');
  if(migrateButton)migrateButton.disabled=!legacy.size;
  if(resolveButton)resolveButton.disabled=!conflicts.size;
@@ -125,6 +125,7 @@ function saveSeat(group,student){
  const next=previous.catch(()=>{}).then(()=>submit(k));
  queues.set(k,next);
  void next.then(()=>{if(queues.get(k)===next)syncCounts()}).catch(e=>{
+  dirtyLocal.add(k);
   status('GUARDADO CENTRAL NO CONFIRMADO · '+group.section+' '+group.id+' cupo '+slot+': '+String(e?.message||e)+'. Conserva el respaldo local y resuelve el conflicto.','error');
  }).finally(()=>{if(queues.get(k)===next)queues.delete(k);});
 }
