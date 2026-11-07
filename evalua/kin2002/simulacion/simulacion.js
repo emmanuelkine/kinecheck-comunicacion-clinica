@@ -82,13 +82,31 @@ $('importcsv').addEventListener('change',async e=>{
    const id=s+'|'+norm(p);if(!pending.has(id))pending.set(id,[]);pending.get(id).push({row,s,p,n});}
   if(!pending.size)throw Error('No hay estudiantes válidos');
   if(pending.size>180)throw Error('Demasiadas parejas');
-  const next=[];for(const entries of pending.values()){if(entries.length>4)throw Error('Pareja con más de 4 integrantes');
-   const first=entries[0];if(groups.some(x=>x.section===first.s&&norm(x.pair)===norm(first.p)))throw Error('Pareja ya existente: '+first.s+' '+first.p);
-   const g={id:'g'+(++seq),section:first.s,pair:first.p,evaluator:evalCol<0?'1':String(first.row[evalCol]||'1').replace(/^E/i,''),day:day<0?'Martes':first.row[day]||'Martes',time:time<0?'':first.row[time]||'',ready:false,members:entries.map(x=>({...student(),name:x.n}))};
-   const cols=Array.from({length:8},(_,i)=>col('C'+(i+1)));const notes=col('Observaciones');
-   entries.forEach(({row},i)=>{if(cols.every(c=>c>=0))g.members[i].levels=cols.map(c=>row[c]===''?null:/^[0-4]$/.test(row[c])?Number(row[c]):null);if(notes>=0)g.members[i].notes=String(row[notes]||'').slice(0,2500);});
-   next.push(g);
-  }groups.push(...next);active=next[0].id;render();tell('Importadas '+next.length+' parejas; revisa y valida los resultados.');
+  const next=[],updates=[];
+  for(const entries of pending.values()){
+   if(entries.length>4)throw Error('Pareja con más de cuatro integrantes');
+   const first=entries[0],existing=groups.find(x=>x.section===first.s&&norm(x.pair)===norm(first.p));
+   const importedMembers=entries.map(({row,n})=>{
+     const m={...student(),name:n};
+     const cols=Array.from({length:8},(_,i)=>col('C'+(i+1))),notes=col('Observaciones');
+     if(cols.every(c=>c>=0))m.levels=cols.map(c=>row[c]===''?null:/^[0-4]$/.test(row[c])?Number(row[c]):null);
+     if(notes>=0)m.notes=String(row[notes]||'').slice(0,2500);
+     return m;
+   });
+   if(existing){
+     const pristine=!existing.ready&&existing.members.every(m=>!m.name.trim()&&m.levels.every(x=>x===null)&&!m.notes.trim());
+     if(!pristine)throw Error('La pareja '+first.s+' '+first.p+' ya contiene datos. Se protege contra sobrescrituras.');
+     if(evalCol>=0&&String(first.row[evalCol]).replace(/^E/i,'')!==existing.evaluator)throw Error('Evaluador incompatible: '+first.p);
+     updates.push({existing,members:importedMembers});
+   }else{
+     const evaluatorValue=evalCol<0?'1':String(first.row[evalCol]||'1').replace(/^E/i,'');
+     if(!['1','2'].includes(evaluatorValue))throw Error('Evaluador inválido: '+first.p);
+     next.push({id:'g'+(++seq),section:first.s,pair:first.p,evaluator:evaluatorValue,day:day<0?'Martes':first.row[day]||'Martes',time:time<0?'':first.row[time]||'',ready:false,members:importedMembers});
+   }
+  }
+  for(const {existing,members} of updates)existing.members=members;
+  groups.push(...next);active=updates[0]?.existing.id||next[0]?.id||active;render();
+  tell('Nómina importada: '+updates.length+' parejas precargadas completadas, '+next.length+' parejas nuevas. Ninguna evaluación previa se sobrescribió.');
  }catch(error){tell('No se pudo importar: '+error.message);}
  finally{e.target.value='';}
 });
