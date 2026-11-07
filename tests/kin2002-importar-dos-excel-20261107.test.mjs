@@ -46,11 +46,13 @@ test('Excel: filas vacías, parcial y completa se distinguen sin publicar notas 
  const state={document:{getElementById:id=>elements[id]},window:{KineCheckScores:{ready:true,async saveSeat(){call.saves++;return true},async refresh(){}}},groups,save(){},renderAll(){},confirm:()=>true,console,TextDecoder,DOMParser:class{},Map,Set,Array,Number,String,JSON,Promise,Error,Date,Blob,Response,DecompressionStream};
  state.testRows1=rows;state.testRows2=rows2;
  vm.runInNewContext(adapted,state);
- await elements.excelImportReview.click();
+ elements.excelImportReview.click();
+ for(let i=0;i<100&&!elements.excelImportStatus.textContent;i++)await new Promise(r=>setTimeout(r,2));
  assert.match(elements.excelImportStatus.textContent,/1 listas para importar/);
  assert.match(elements.excelImportIssues.textContent,/pendiente, no se asigna nota/);
  assert.equal(elements.excelImportApply.disabled,false);
- await elements.excelImportApply.click();
+ elements.excelImportApply.click();
+ for(let i=0;i<100&&call.saves!==1;i++)await new Promise(r=>setTimeout(r,2));
  assert.equal(call.saves,1);
  assert.equal(groups[1].students[0].levels[0],4);
  assert.equal(groups[0].students[0].levels[0],null);
