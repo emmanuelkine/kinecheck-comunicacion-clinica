@@ -121,6 +121,7 @@ function saveSeat(group,student){
  if(slot<=0)return;
  if(!ready){dirtyLocal.add(k);status('Solo respaldo local: servidor aún no disponible. No se ha sincronizado este puntaje.','error');return;}
  const previous=queues.get(k)||Promise.resolve();
+ status('Guardando en KineCheck · '+group.section+' '+group.id+' cupo '+slot+'…');
  const next=previous.catch(()=>{}).then(()=>submit(k));
  queues.set(k,next);
  void next.then(()=>{if(queues.get(k)===next)syncCounts()}).catch(e=>{
@@ -160,5 +161,6 @@ migrateButton?.addEventListener('click',()=>void migrateLegacy());
 resolveButton?.addEventListener('click',()=>void resolveConflicts().catch(e=>status('No se resolvieron las diferencias: '+String(e),'error')));
 window.KineCheckScores={saveSeat,refresh,get ready(){return ready},get conflicts(){return conflicts.size},get legacy(){return legacy.size}};
 window.addEventListener('focus',()=>{if(!fetching&&Date.now()-lastFetch>60000&&!queues.size)void refresh()});
+window.addEventListener('beforeunload',event=>{if(queues.size||dirtyLocal.size||legacy.size||conflicts.size){event.preventDefault();event.returnValue='';}});
 void refresh();
 })();
