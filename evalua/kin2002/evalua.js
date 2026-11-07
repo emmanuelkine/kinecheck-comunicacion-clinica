@@ -15,7 +15,7 @@ function grade(value) {
   if (value === null) return null;
   return Math.round((value <= 60 ? 1 + value*3/60 : 4 + (value-60)*3/40)*10)/10;
 }
-function text(node,tag){return node.getElementsByTagName(tag)[0]?.textContent || '';}
+function text(node,tag){return node.getElementsByTagNameNS('*',tag)[0]?.textContent || '';}
 function joinPath(base,target) {
   const tokens = (target.startsWith('/')?target.slice(1):base+'/'+target).split('/');
   const path=[];
@@ -57,25 +57,25 @@ async function openXlsx(file) {
   const parser=new DOMParser();
   const parse=xml=>{const doc=parser.parseFromString(xml,'application/xml');if(doc.querySelector('parsererror'))throw Error('XML Excel mal formado');return doc;};
   const shared=entries.has('xl/sharedStrings.xml')?
-    [...parse(await read('xl/sharedStrings.xml')).getElementsByTagName('si')].map(node=>[...node.getElementsByTagName('t')].map(x=>x.textContent).join('')):[];
+    [...parse(await read('xl/sharedStrings.xml')).getElementsByTagNameNS('*','si')].map(node=>[...node.getElementsByTagNameNS('*','t')].map(x=>x.textContent).join('')):[];
   const workbook=parse(await read('xl/workbook.xml'));
   const rels=parse(await read('xl/_rels/workbook.xml.rels'));
-  const map=new Map([...rels.getElementsByTagName('Relationship')].map(r=>[r.getAttribute('Id'),r.getAttribute('Target')]));
+  const map=new Map([...rels.getElementsByTagNameNS('*','Relationship')].map(r=>[r.getAttribute('Id'),r.getAttribute('Target')]));
   const sheets={};
-  for(const sheet of workbook.getElementsByTagName('sheet')){
+  for(const sheet of workbook.getElementsByTagNameNS('*','sheet')){
     const title=sheet.getAttribute('name'),rid=sheet.getAttribute('r:id')||sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id');
     const target=map.get(rid);if(!target)continue;
     const doc=parse(await read(joinPath('xl',target)));
     const rows=[];
-    for(const row of doc.getElementsByTagName('row')){
+    for(const row of doc.getElementsByTagNameNS('*','row')){
       const n=Number(row.getAttribute('r'));if(!Number.isSafeInteger(n)||n<1||n>30000)continue;
       const values=[];
-      for(const cell of row.getElementsByTagName('c')){
+      for(const cell of row.getElementsByTagNameNS('*','c')){
         const ref=cell.getAttribute('r')||'',letters=ref.match(/^[A-Z]+/)?.[0];if(!letters)continue;
         let column=0;for(const char of letters)column=column*26+char.charCodeAt(0)-64;
         const type=cell.getAttribute('t');let value=text(cell,'v');
         if(type==='s')value=shared[Number(value)]??'';
-        else if(type==='inlineStr')value=[...cell.getElementsByTagName('t')].map(x=>x.textContent).join('');
+        else if(type==='inlineStr')value=[...cell.getElementsByTagNameNS('*','t')].map(x=>x.textContent).join('');
         else if(type==='n'||(!type&&value!==''))value=Number.isFinite(Number(value))?Number(value):value;
         values[column-1]=value;
       }
@@ -90,7 +90,7 @@ function parseSimulation(sheets,source){
   if(!String(data[4]?.[9]??'').toLowerCase().includes('estudiante'))throw Error(source+': encabezado de estudiante incompatible');
   return data.slice(5).flatMap((row,i)=>{
     if(!row||!String(row[9]??'').trim())return [];
-    const levels=row.slice(11,19).map(safeNum);
+    const levels=Array.from({length:8},(_,index)=>safeNum(row[11+index]));
     const name=String(row[9]).trim();
     if(isTest(name))return [];
     const section=String(row[1]??'').trim().toUpperCase();
@@ -104,7 +104,7 @@ function parseReport(sheets,section){
   return data.slice(4).flatMap((row,i)=>{
     if(!row||!String(row[0]??'').trim())return [];
     const name=String(row[0]).trim();if(isTest(name))return [];
-    const levels=row.slice(5,13).map(safeNum);
+    const levels=Array.from({length:8},(_,index)=>safeNum(row[5+index]));
     const pts=points(levels,weightsReport);
     const validation=normalize(row[17]);
     const approved=validation==='confirmado'||validation==='aprobado'||validation==='validado';
