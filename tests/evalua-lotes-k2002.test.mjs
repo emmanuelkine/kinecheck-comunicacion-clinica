@@ -23,3 +23,12 @@ test('Bulk archive imposes limits, rejects malformed PDF and duplicate names',()
  assert.match(js,/Duplicado: verificar/);
  assert.match(js,/SHA-256/);
 });
+
+test('Uploading reports is independent from Excel inputs and simulations',()=>{
+ const upload=html.slice(html.indexOf('id="carga-secciones"'),html.indexOf('</section>',html.indexOf('id="carga-secciones"')));
+ assert.match(upload,/sin Excel de simulación/i);
+ assert.doesNotMatch(upload, /id="(?:sim1|sim2|rep1|rep2)"/);
+ assert.match(js, /readFiles\('S1',s1\)/);
+ assert.match(js, /readFiles\('S2',s2\)/);
+ assert.doesNotMatch(js, /document\.getElementById\(['"]sim[12]/);
+});
