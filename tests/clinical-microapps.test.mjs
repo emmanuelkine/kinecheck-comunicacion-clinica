@@ -4,6 +4,7 @@ import { test } from "node:test";
 
 const html = readFileSync(new URL("../microapps/index.html", import.meta.url), "utf8");
 const library = readFileSync(new URL("../gratis/index.html", import.meta.url), "utf8");
+const professionalLibrary = readFileSync(new URL("../gratis/profesionales/index.html", import.meta.url), "utf8");
 
 test("Clinical MicroApps has a complete free fictional lateral elbow case", () => {
   assert.match(html, /tendinopatía lateral de codo/i);
@@ -28,8 +29,9 @@ test("No patient personal data fields or client storage in MicroApps", () => {
   assert.doesNotMatch(html, /<script[^>]*src=/i);
 });
 
-test("KineCheck free library links to the clinical microapps catalogue", () => {
-  assert.match(library, /href="\/microapps\/"/);
-  assert.match(library, /Tendinopatía lateral de codo/i);
-  assert.doesNotMatch(library, /href=["'][^"']*chatgpt/i);
+test("Professional library links to the clinical microapps catalogue", () => {
+  assert.match(professionalLibrary, /href="\/microapps\/"/);
+  assert.match(professionalLibrary, /Tendinopatía lateral de codo/i);
+  assert.doesNotMatch(library, /href="\/microapps\/"/);
+  assert.doesNotMatch(professionalLibrary, /href=["'][^"']*chatgpt/i);
 });
