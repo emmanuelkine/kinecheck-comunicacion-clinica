@@ -31,7 +31,7 @@ test('Client-only import is syntax-valid',()=>{
  assert.doesNotThrow(()=>execFileSync(process.execPath,['--check',path]));
  const html=read('evalua/kin2002/index.html');
  assert.match(html,/No se han migrado usuarios/);
- assert.match(html,/sin envío de datos al servidor/);
+ assert.match(html,/sin subirlos al servidor|sin envío de datos al servidor/);
 });
 test('No fictitious final grade when report is unapproved (execution)',()=>{
  const script=read('evalua/kin2002/evalua.js');
