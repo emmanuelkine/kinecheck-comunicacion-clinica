@@ -20,3 +20,11 @@
 - Se verificó por SQL que `anon` no puede ejecutar el gateway y `authenticated` sí tiene permiso de ejecución.
 - La invocación del gateway sin sesión autenticada devolvió `42501 Autenticación requerida` (esperado).
 - No se ha realizado prueba de acceso autenticado por cuenta de prueba, delegación real, revocación ni E2E del navegador.
+
+## Actualización de staging: registro de atenciones
+- Se creó `kc_hours_private.recovery_confirmations`, con RLS y sin privilegios directos para usuarios anónimos/autenticados.
+- Se creó `public.kc_hours_recovery_api` con acceso solo authenticated y comprobación de administrador institucional mediante `is_admin`.
+- La confirmación requiere una hora de la misma institución, previamente marcada como reservada y cuyo horario ya transcurrió; una confirmación por hora, sin duplicados.
+- La referencia de respaldo es un identificador interno no personal; no ingresar datos de pacientes. La declaración no prueba que KineCheck haya causado la ocupación.
+- El laboratorio incorpora operaciones de invitación, delegación, revocación, métricas y confirmación de atención, todas contra staging y sujetas a autorización de servidor.
+- **No se han ejecutado pruebas autenticadas de extremo a extremo**. No aplicar la migración a producción ni habilitar lanzamiento hasta probarlas. El esquema de staging es la fuente de esta migración; extraer SQL versionado y revisar dependencias antes de desplegar.
