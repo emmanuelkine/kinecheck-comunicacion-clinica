@@ -23,6 +23,7 @@ async function loadSlots(page=0){
  const windowHours=Number($('timeWindow').value)||0, now=Date.now();
  const params=new URLSearchParams({select:'id,specialty,region,comuna,starts_at,location_text,facility_type,modality,public_contact,booking_url,expires_at',status:'eq.active',order:'starts_at.asc,id.asc',limit:String(PAGE_SIZE+1),offset:String(page*PAGE_SIZE)});
  params.set('starts_at','gt.'+new Date(now).toISOString());
+ params.set('or','(expires_at.is.null,expires_at.gt.'+new Date(now).toISOString()+')');
  if(windowHours)params.set('and','(starts_at.lte.'+new Date(now+windowHours*3600000).toISOString()+')');
  if(specialty)params.set('specialty','ilike.*'+specialty+'*');
  if(city)params.set('comuna','ilike.*'+city+'*');
@@ -33,7 +34,7 @@ async function loadSlots(page=0){
  if(serial!==searchSerial)return;
  searchPage=page;
  const hasMore=data.length>PAGE_SIZE;
- const rows=data.slice(0,PAGE_SIZE).filter(x=>!x.expires_at||new Date(x.expires_at).getTime()>now);
+ const rows=data.slice(0,PAGE_SIZE);
  $('results').innerHTML=rows.length?rows.map(x=>'<article class="card"><div class="tag">HORA DISPONIBLE</div><h3>'+esc(x.specialty)+'</h3><p>'+esc(x.comuna)+' · '+esc(x.region)+'</p><p>'+esc(new Date(x.starts_at).toLocaleString('es-CL',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Santiago'}))+'</p><p>'+esc(slotLocation(x).address)+'</p><p>Reserva y confirma en el sistema oficial.</p>'+(safeBookingUrl(x.booking_url)?'<p><a href="'+esc(safeBookingUrl(x.booking_url))+'" target="_blank" rel="noopener noreferrer nofollow">Agendar en el centro ↗</a></p>':'<p>Enlace de reserva pendiente.</p>')+'+(safeBookingUrl(x.booking_url)?'<p><a target="_blank" rel="noopener noreferrer" href="https://wa.me/?text='+encodeURIComponent('Hora disponible: '+x.specialty+' en '+x.comuna+', '+new Date(x.starts_at).toLocaleString('es-CL',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Santiago'})+'. Reserva y confirma directamente en el centro: '+safeBookingUrl(x.booking_url))+'">Compartir por WhatsApp</a></p>':'')+'</article>').join(''):'<p>No hay horas verificadas disponibles con estos filtros.</p>';
  const nav=$('searchPagination');
  nav.innerHTML='<span>Resultados · página '+(page+1)+'</span> <button type="button" class="secondary" id="prevSearchPage" '+(page===0?'disabled':'')+'>Anterior</button> <button type="button" class="secondary" id="nextSearchPage" '+(!hasMore?'disabled':'')+'>Siguiente</button>';
