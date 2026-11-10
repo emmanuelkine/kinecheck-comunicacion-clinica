@@ -1,0 +1,79 @@
+{
+  "titulo": "Cómics KineCheck",
+  "temporada": 1,
+  "semana": 1,
+  "frecuencia_objetivo": "10 capítulos nuevos por semana; requiere creación y publicación editorial",
+  "acceso": "libre",
+  "capitulos": [
+    {
+      "numero": 1,
+      "titulo": "El dolor no siempre significa daño",
+      "sinopsis": "Martín siente dolor en la rodilla y teme dañarla más.",
+      "mensaje": "Dolor e intensidad del daño no siempre coinciden.",
+      "imagen": "img/01.webp"
+    },
+    {
+      "numero": 2,
+      "titulo": "Movimiento gradual y seguro",
+      "sinopsis": "Martín aprende a distinguir molestia tolerable de señales preocupantes.",
+      "mensaje": "El movimiento se ajusta según la respuesta de cada persona.",
+      "imagen": "img/02.webp"
+    },
+    {
+      "numero": 3,
+      "titulo": "El ejercicio debe adaptarse a ti",
+      "sinopsis": "Un amigo le recomienda copiar sus ejercicios.",
+      "mensaje": "Dos personas con síntomas parecidos pueden necesitar planes diferentes.",
+      "imagen": "img/03.webp"
+    },
+    {
+      "numero": 4,
+      "titulo": "Mejorar no siempre es en línea recta",
+      "sinopsis": "Martín amanece con más molestias y piensa que retrocedió.",
+      "mensaje": "Observa la tendencia de varias semanas y los cambios en función.",
+      "imagen": "img/04.webp"
+    },
+    {
+      "numero": 5,
+      "titulo": "Descansar ayuda, pero moverte también",
+      "sinopsis": "Martín quiere hacer reposo completo durante muchos días.",
+      "mensaje": "En muchos casos conviene equilibrar descanso relativo y actividad tolerable.",
+      "imagen": "img/05.webp"
+    },
+    {
+      "numero": 6,
+      "titulo": "Ganar fuerza también da confianza",
+      "sinopsis": "Martín teme que su rodilla esté frágil.",
+      "mensaje": "La capacidad y la confianza pueden crecer de manera gradual.",
+      "imagen": "img/06.webp"
+    },
+    {
+      "numero": 7,
+      "titulo": "Si el dolor persiste, aún puedes mejorar",
+      "sinopsis": "Tras varios meses de dolor, Martín siente desesperanza.",
+      "mensaje": "El dolor persistente merece evaluación y no excluye la recuperación funcional.",
+      "imagen": "img/07.webp"
+    },
+    {
+      "numero": 8,
+      "titulo": "Más imágenes no siempre son la respuesta",
+      "sinopsis": "Martín pregunta por una resonancia antes de empezar.",
+      "mensaje": "Los estudios se indican cuando sus resultados pueden cambiar las decisiones clínicas.",
+      "imagen": "img/08.webp"
+    },
+    {
+      "numero": 9,
+      "titulo": "Lo que haces en casa también suma",
+      "sinopsis": "Martín olvida sus ejercicios entre sesiones.",
+      "mensaje": "Pequeñas acciones sostenidas también forman parte de la rehabilitación.",
+      "imagen": "img/09.webp"
+    },
+    {
+      "numero": 10,
+      "titulo": "Consulta si aparecen señales de alerta",
+      "sinopsis": "Martín aprende a identificar cuándo buscar ayuda.",
+      "mensaje": "Debilidad progresiva o pérdida nueva del control de esfínteres requieren atención urgente.",
+      "imagen": "img/10.webp"
+    }
+  ]
+}
