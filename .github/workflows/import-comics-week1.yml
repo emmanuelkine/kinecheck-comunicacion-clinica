@@ -1,0 +1,41 @@
+name: Importar imágenes de Cómics KineCheck (semana 1)
+on:
+  push:
+    branches:
+      - feature/comics-kinecheck-semana-01
+    paths:
+      - .github/workflows/import-comics-week1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Descargar paquete y comprobar formatos
+        shell: bash
+        env:
+          PACKAGE_URL: "https://at.adobe.com/h2kseHBW92w80EKJ"
+        run: |
+          set -euo pipefail
+          curl -fL --retry 2 --max-time 90 --output /tmp/comics-week1.zip "$PACKAGE_URL"
+          file /tmp/comics-week1.zip
+          unzip -t /tmp/comics-week1.zip > /tmp/unzip-test.txt
+          mkdir -p gratis/comics/img
+          unzip -j -o /tmp/comics-week1.zip 'gratis/comics/img/*.webp' -d gratis/comics/img
+          for n in $(seq -w 1 10); do
+            test -s "gratis/comics/img/$n.webp" || { echo "Falta $n.webp"; exit 1; }
+            file "gratis/comics/img/$n.webp" | grep -q 'Web/P image' || { echo "Formato erróneo $n"; exit 1; }
+          done
+      - name: Incorporar las 10 imágenes en rama de trabajo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gratis/comics/img/
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(comics): agregar ilustraciones optimizadas semana 1"
+            git push
+          fi
