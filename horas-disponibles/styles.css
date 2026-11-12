@@ -1,5 +1,6 @@
 
 :root {
+  color-scheme: dark;
   font-family: Inter, system-ui, sans-serif;
   color: #e9f6f5;
   background: #07141c;
@@ -54,20 +55,6 @@ h1 {
 h1 span {
   color: #59dfd1;
 }
-.patient-notice {
-  max-width: 800px;
-  margin: 18px 0 22px;
-  padding: 14px 16px;
-  border: 1px solid #a87922;
-  border-radius: 10px;
-  background: #332b19;
-  color: #fae8bc;
-  font-size: 15px;
-  line-height: 1.55;
-}
-.patient-notice strong {
-  color: #ffe3a0;
-}
 p {
   color: #9eb7c0;
   line-height: 1.6;
@@ -112,6 +99,26 @@ label {
   color: #a6c9cd;
   margin: 0 0 7px;
 }
+.declaration-check {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid #315460;
+  border-radius: 12px;
+  background: #0b202a;
+  line-height: 1.55;
+}
+.declaration-check input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #4bdbc9;
+}
+.declaration-check span { color: #d5e7e8; }
+.declaration-check strong { color: #77eadb; }
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -126,6 +133,14 @@ select {
   color: #eefafa;
   border-radius: 10px;
   font: inherit;
+}
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath d='m2 2 5 5 5-5' fill='none' stroke='%2377eadb' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
 }
 .cards {
   display: grid;
@@ -168,6 +183,23 @@ select {
 .hidden {
   display: none;
 }
+header { gap: 12px; flex-wrap: wrap; }
+.grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.grid > *, .cards > *, .card, input, select { min-width: 0; }
+.card, p, a, button { overflow-wrap: anywhere; }
+.card .grid { grid-template-columns: 1fr; }
+.card .actions { margin: 18px 0; }
+button { min-height: 44px; max-width: 100%; }
+button:disabled { opacity: .6; cursor: default; }
+button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid #8df5e4; outline-offset: 3px; }
+a { color: #8df5e4; }
+details { margin-top: 20px; }
+summary { cursor: pointer; padding: 10px 0; }
+#accountPanel, #moderationPanel { margin-top: 24px; }
+#institutionMetrics strong { font-size: 28px; color: #77eadb; }
+.muted { color: #b0c6ce; }
+label { color: #bdd9df; }
 footer {
   padding: 32px;
   text-align: center;
