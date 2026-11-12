@@ -92,6 +92,7 @@ async function refresh(){
 async function submit(k){
  const target=seat(k);if(!target)throw Error('Cupo inexistente');
  if(!validLevels(target.s.levels))throw Error('Niveles fuera de rango: el servidor no recibió el cambio');
+ if(target.s.levels.slice(5).some(x=>x!==null&&x!==undefined&&x!==''))throw Error('Registro histórico de rúbrica de ocho criterios: no se permite reescritura automática con los cinco hitos del Excel');
  if(conflicts.has(k))throw Error('Conflicto no resuelto con la evaluación del servidor. Usa «Actualizar puntajes»');
  if(legacy.has(k))throw Error('Este cupo contiene puntajes antiguos locales: migra el respaldo antes de editarlo en el servidor');
  const payload=dataOf(target.s);
