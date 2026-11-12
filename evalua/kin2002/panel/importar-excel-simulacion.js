@@ -70,7 +70,7 @@ async function openXlsx(file) {
   return sheets;
 }
 const normalize=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/\s+/g,' ');
-const validLevels=arr=>arr.length===8&&arr.every(x=>Number.isInteger(x)&&x>=0&&x<=4);
+const validLevels=arr=>arr.length===5&&arr.every(x=>Number.isInteger(x)&&x>=0&&x<=4);
 const slots=()=>groups.flatMap(g=>g.students.map((s,i)=>({g,s,slot:i+1,key:g.section+'|'+g.id+'|'+(i+1)})));
 let candidate=[],issues=[],summary=[];
 function show(message,kind='info'){const e=el('excelImportStatus');if(e){e.textContent=message;e.dataset.state=kind;e.style.color=kind==='error'?'#ffd1a0':kind==='success'?'#9df1c8':'#b8d4df';}}
@@ -78,7 +78,7 @@ function preview(){
  const body=el('excelImportPreview');
  if(!body)return;
  const clean=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const lines=candidate.map(x=>'<tr><td>'+clean(x.source)+'</td><td>'+clean(x.section)+'</td><td>'+clean(x.pair)+'</td><td>'+clean(x.name)+'</td><td>'+x.count+'/8</td><td>'+clean(x.status)+'</td></tr>');
+ const lines=candidate.map(x=>'<tr><td>'+clean(x.source)+'</td><td>'+clean(x.section)+'</td><td>'+clean(x.pair)+'</td><td>'+clean(x.name)+'</td><td>'+x.count+'/5</td><td>'+clean(x.status)+'</td></tr>');
  body.innerHTML=lines.length?lines.join(''):'<tr><td colspan="6">Ninguna evaluación completa importable</td></tr>';
  const details=el('excelImportIssues');
  if(details)details.textContent=issues.slice(0,30).join(' · ')+(issues.length>30?' · …':'');
@@ -97,20 +97,20 @@ async function review(){
   const station=i+1,file=files[i],source='Evaluador '+station;
   try{
    const workbook=await openXlsx(file);
-   const rows=workbook['Evaluación individual'];
-   if(!Array.isArray(rows))throw Error('No existe la hoja «Evaluación individual»');
-   const header=rows[4]||[];
-   if(normalize(header[0])!=='pareja'||normalize(header[1])!=='seccion'||normalize(header[9])!=='estudiante'||!String(header[11]||'').toLowerCase().includes('nivel'))throw Error('Encabezados de la fila 5 incompatibles');
+   const rows=workbook['Evaluación'];
+   if(!Array.isArray(rows))throw Error('No existe la hoja «Evaluación» del Excel oficial de cinco hitos');
+   const header=rows[5]||[];
+   if(normalize(header[0])!=='pareja'||normalize(header[1])!=='seccion'||normalize(header[8])!=='estudiante'||!String(header[10]||'').toLowerCase().includes('h1'))throw Error('Encabezados de la fila 6 incompatibles con rúbrica oficial H1–H5');
    let complete=0,partial=0,empty=0,wrongStation=0;
-   for(let n=5;n<rows.length;n++){
+   for(let n=6;n<rows.length;n++){
     const row=rows[n]||[];
     const section=String(row[1]||'').trim().toUpperCase(),pair=String(row[0]||'').trim().toUpperCase(),actualStation=String(row[4]??'').trim();
     if(!/^S[12]$/.test(section)||!/^P[0-9]{2}$/.test(pair))continue;
-    const raw=row.slice(11,19),filled=raw.filter(x=>x!==null&&x!==undefined&&String(x).trim()!=='');
+    const raw=row.slice(10,15),filled=raw.filter(x=>x!==null&&x!==undefined&&String(x).trim()!=='');
     if(actualStation!==String(station)){if(filled.length)wrongStation++;continue}
     if(filled.length===0){empty++;continue}
-    const id=String(row[7]||'').trim(),seatMatch=id.match(/^P[0-9]{2}-([1-4])$/i),slot=seatMatch?Number(seatMatch[1]):0;
-    const key=section+'|'+pair+'|'+slot,name=String(row[9]||'').trim();
+    const id=String(row[6]||'').trim(),seatMatch=id.match(/^P[0-9]{2}-([1-4])$/i),slot=seatMatch?Number(seatMatch[1]):0;
+    const key=section+'|'+pair+'|'+slot,name=String(row[8]||'').trim();
     if(!slot||id.toUpperCase()!==pair+'-'+slot){issues.push(source+' fila '+(n+1)+': ID/cupo incorrecto');continue}
     if(seen.has(key)){issues.push(source+' fila '+(n+1)+': estudiante repetido en ambos Excel');continue}
     seen.add(key);
@@ -118,15 +118,15 @@ async function review(){
     if(!target||String(target.g.station)!==actualStation||!name||!target.s.name||normalize(target.s.name)!==normalize(name)){
      issues.push(source+' fila '+(n+1)+': identidad distinta o estudiante sin nombre confirmado ('+section+' '+pair+' cupo '+slot+')');continue
     }
-    if(filled.length!==8){partial++;issues.push(source+' '+pair+' '+name+': '+filled.length+'/8 criterios; pendiente, no se asigna nota');continue}
+    if(filled.length!==5){partial++;issues.push(source+' '+pair+' '+name+': '+filled.length+'/5 hitos; pendiente, no se asigna nota');continue}
     const levels=raw.map(x=>typeof x==='number'?x:Number(String(x).trim()));
     if(!validLevels(levels)){issues.push(source+' '+pair+' '+name+': niveles fuera de la escala 0–4');continue}
     complete++;
     const existing=target.s.levels||[],existingFilled=existing.some(x=>x!==null&&x!==undefined&&x!=='');
     let status='Lista';
-    if(existingFilled)status=JSON.stringify(existing)===JSON.stringify(levels)?'Ya coincide':'Conflicto: puntajes existentes';
+    if(existingFilled)status=JSON.stringify(existing)===JSON.stringify([...levels,null,null,null])?'Ya coincide':'Conflicto: puntajes existentes (revisar rúbrica anterior)';
     if(status.startsWith('Conflicto'))issues.push(source+' '+pair+' '+name+': existen puntajes distintos; no se sobrescribirán');
-    candidate.push({key,section,pair,name,levels,source,count:8,status,target});
+    candidate.push({key,section,pair,name,levels:[...levels,null,null,null],source,count:5,status,target});
    }
    if(wrongStation)issues.push(source+': '+wrongStation+' registros calificados de otra estación no importados; revisa si se usó el archivo correcto');
    summary.push(source+': '+complete+' completas, '+partial+' parciales, '+empty+' sin evaluar');
