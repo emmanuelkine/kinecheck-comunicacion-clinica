@@ -1,0 +1,86 @@
+{
+  "titulo": "Cómics KineCheck",
+  "temporada": 2,
+  "capitulos": [
+    {
+      "numero": 11,
+      "titulo": "La primera caminata",
+      "etiqueta": "Volver a caminar",
+      "sinopsis": "Martín sale a caminar con una meta pequeña y ajustable.",
+      "mensaje": "Caminar puede retomarse gradualmente según tu situación.",
+      "imagen": "img/11.svg"
+    },
+    {
+      "numero": 12,
+      "titulo": "El desafío de las escaleras",
+      "etiqueta": "Actividades cotidianas",
+      "sinopsis": "Practicar un peldaño con apoyo ayuda a Martín a ganar capacidad.",
+      "mensaje": "La práctica se adapta a la capacidad y seguridad de cada persona.",
+      "imagen": "img/12.svg"
+    },
+    {
+      "numero": 13,
+      "titulo": "¿Cuánto ejercicio es suficiente?",
+      "etiqueta": "Dosis personalizada",
+      "sinopsis": "Martín aprende que más ejercicio no significa siempre más beneficio.",
+      "mensaje": "La dosis de ejercicio se ajusta a tus objetivos y respuesta.",
+      "imagen": "img/13.svg"
+    },
+    {
+      "numero": 14,
+      "titulo": "Dormí mal, ¿y ahora?",
+      "etiqueta": "Sueño y síntomas",
+      "sinopsis": "Una noche difícil puede cambiar cómo Martín percibe las molestias.",
+      "mensaje": "El sueño puede influir en el dolor y la recuperación.",
+      "imagen": "img/14.svg"
+    },
+    {
+      "numero": 15,
+      "titulo": "Volver a hacer lo que te gusta",
+      "etiqueta": "Metas significativas",
+      "sinopsis": "Martín quiere jugar con su hija: esa será una meta de su plan.",
+      "mensaje": "Las metas funcionales deben importar a la persona.",
+      "imagen": "img/15.svg"
+    },
+    {
+      "numero": 16,
+      "titulo": "¿Y si vuelve a doler?",
+      "etiqueta": "Manejo de recaídas",
+      "sinopsis": "Después de un día exigente, Martín aprende a ajustar la carga.",
+      "mensaje": "Un aumento de síntomas puede requerir ajustar el plan y reevaluar.",
+      "imagen": "img/16.svg"
+    },
+    {
+      "numero": 17,
+      "titulo": "Tu cuerpo no es frágil",
+      "etiqueta": "Confianza en movimiento",
+      "sinopsis": "Martín practica cargar una bolsa mientras recupera confianza.",
+      "mensaje": "La práctica progresiva puede ayudar a recuperar capacidad.",
+      "imagen": "img/17.svg"
+    },
+    {
+      "numero": 18,
+      "titulo": "El dolor y las emociones",
+      "etiqueta": "Experiencia multidimensional",
+      "sinopsis": "Martín descubre cómo el estrés y su contexto pueden influir en el dolor.",
+      "mensaje": "Las emociones pueden modular la experiencia dolorosa; el dolor es real.",
+      "imagen": "img/18.svg"
+    },
+    {
+      "numero": 19,
+      "titulo": "¿Cómo sé que mejoro?",
+      "etiqueta": "Progreso funcional",
+      "sinopsis": "Martín compara sus actividades con las de semanas anteriores.",
+      "mensaje": "Función, participación y metas también reflejan progreso.",
+      "imagen": "img/19.svg"
+    },
+    {
+      "numero": 20,
+      "titulo": "El próximo capítulo lo eliges tú",
+      "etiqueta": "Autonomía y decisiones",
+      "sinopsis": "Martín participa en las decisiones sobre sus próximos objetivos.",
+      "mensaje": "La rehabilitación es compartida y centrada en la persona.",
+      "imagen": "img/20.svg"
+    }
+  ]
+}
