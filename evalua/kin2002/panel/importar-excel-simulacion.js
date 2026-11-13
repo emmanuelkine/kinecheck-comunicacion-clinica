@@ -69,97 +69,114 @@ async function openXlsx(file) {
   }
   return sheets;
 }
+
 const normalize=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/\s+/g,' ');
-const validLevels=arr=>arr.length===5&&arr.every(x=>Number.isInteger(x)&&x>=0&&x<=4);
+const empty=v=>v===undefined||v===null||String(v).trim()==='';
+const readLevel=v=>{if(empty(v))return null;const n=Number(String(v).trim().replace(',','.'));return Number.isInteger(n)&&n>=0&&n<=4?n:NaN;};
+const validLevels=a=>a.length===5&&a.every(x=>x===null||Number.isInteger(x)&&x>=0&&x<=4);
 const slots=()=>groups.flatMap(g=>g.students.map((s,i)=>({g,s,slot:i+1,key:g.section+'|'+g.id+'|'+(i+1)})));
-let candidate=[],issues=[],summary=[];
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const weights=[10,25,25,30,10];
+const grade=p=>p<=60?1+3*p/60:4+3*(p-60)/40;
+const decimals=n=>n===null?'—':Number(n).toFixed(1).replace('.',',');
+let candidate=[],issues=[],summary=[],busy=false;
 function show(message,kind='info'){const e=el('excelImportStatus');if(e){e.textContent=message;e.dataset.state=kind;e.style.color=kind==='error'?'#ffd1a0':kind==='success'?'#9df1c8':'#b8d4df';}}
+const selectedFiles=()=>[el('excelEvaluator1')?.files?.[0],el('excelEvaluator2')?.files?.[0]];
+function selectedCaption(){
+ const files=selectedFiles();
+ el('excelFilesSelected').textContent=files.map((f,i)=>f?'Evaluador '+(i+1)+': '+f.name:'').filter(Boolean).join(' · ')||'Ningún archivo seleccionado';
+ candidate=[];issues=[];summary=[];preview();
+}
 function preview(){
- const body=el('excelImportPreview');
- if(!body)return;
- const clean=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const lines=candidate.map(x=>'<tr><td>'+clean(x.source)+'</td><td>'+clean(x.section)+'</td><td>'+clean(x.pair)+'</td><td>'+clean(x.name)+'</td><td>'+x.count+'/5</td><td>'+clean(x.status)+'</td></tr>');
- body.innerHTML=lines.length?lines.join(''):'<tr><td colspan="6">Ninguna evaluación completa importable</td></tr>';
- const details=el('excelImportIssues');
- if(details)details.textContent=issues.slice(0,30).join(' · ')+(issues.length>30?' · …':'');
- const button=el('excelImportApply');
- if(button)button.disabled=!candidate.some(x=>x.status==='Lista');
+ const body=el('excelImportPreview');if(!body)return;
+ const lines=candidate.map(x=>{
+  const complete=x.count===5;
+  const points=complete?x.levels.slice(0,5).reduce((s,n,i)=>s+n*weights[i]/4,0):null;
+  return '<tr><td>'+esc(x.source)+'</td><td>'+esc(x.section)+'</td><td>'+esc(x.pair)+'</td><td>'+esc(x.name)+'</td><td>'+x.count+'/5</td><td>'+decimals(points)+'</td><td>'+decimals(complete?grade(points):null)+'</td><td>'+esc(x.status)+'</td></tr>';
+ });
+ body.innerHTML=lines.length?lines.join(''):'<tr><td colspan="8">No hay puntajes asociados a estudiantes verificables</td></tr>';
+ el('excelImportIssues').textContent=issues.slice(0,80).join('\n')+(issues.length>80?'\n…':'');
+ el('excelImportApply').disabled=busy||!candidate.some(x=>x.status==='Lista');
 }
 async function review(){
- candidate=[];issues=[];summary=[];
- el('excelImportApply').disabled=true;
- const files=[el('excelEvaluator1').files?.[0],el('excelEvaluator2').files?.[0]];
- if(files.some(x=>!x)){show('Selecciona los dos Excel antes de revisar.','error');return}
- if(!window.KineCheckScores?.ready){show('Primero ingresa a KineCheck y espera a que se sincronicen los puntajes.','error');return}
- const index=new Map(slots().map(x=>[x.key,x]));
- const seen=new Set();
- for(let i=0;i<2;i++){
-  const station=i+1,file=files[i],source='Evaluador '+station;
-  try{
-   const workbook=await openXlsx(file);
-   const rows=workbook['Evaluación'];
-   if(!Array.isArray(rows))throw Error('No existe la hoja «Evaluación» del Excel oficial de cinco hitos');
-   const header=rows[5]||[];
-   if(normalize(header[0])!=='pareja'||normalize(header[1])!=='seccion'||normalize(header[8])!=='estudiante'||!String(header[10]||'').toLowerCase().includes('h1'))throw Error('Encabezados de la fila 6 incompatibles con rúbrica oficial H1–H5');
-   let complete=0,partial=0,empty=0,wrongStation=0;
-   for(let n=6;n<rows.length;n++){
-    const row=rows[n]||[];
-    const section=String(row[1]||'').trim().toUpperCase(),pair=String(row[0]||'').trim().toUpperCase(),actualStation=String(row[4]??'').trim();
-    if(!/^S[12]$/.test(section)||!/^P[0-9]{2}$/.test(pair))continue;
-    const raw=row.slice(10,15),filled=raw.filter(x=>x!==null&&x!==undefined&&String(x).trim()!=='');
-    if(actualStation!==String(station)){if(filled.length)wrongStation++;continue}
-    if(filled.length===0){empty++;continue}
-    const id=String(row[6]||'').trim(),seatMatch=id.match(/^P[0-9]{2}-([1-4])$/i),slot=seatMatch?Number(seatMatch[1]):0;
-    const key=section+'|'+pair+'|'+slot,name=String(row[8]||'').trim();
-    if(!slot||id.toUpperCase()!==pair+'-'+slot){issues.push(source+' fila '+(n+1)+': ID/cupo incorrecto');continue}
-    if(seen.has(key)){issues.push(source+' fila '+(n+1)+': estudiante repetido en ambos Excel');continue}
-    seen.add(key);
-    const target=index.get(key);
-    if(!target||String(target.g.station)!==actualStation||!name||!target.s.name||normalize(target.s.name)!==normalize(name)){
-     issues.push(source+' fila '+(n+1)+': identidad distinta o estudiante sin nombre confirmado ('+section+' '+pair+' cupo '+slot+')');continue
+ if(busy)return;
+ busy=true;candidate=[];issues=[];summary=[];preview();
+ const files=selectedFiles();
+ try{
+  if(!files.some(Boolean)){show('Adjunta al menos un Excel maestro de simulación.','error');return;}
+  if(!window.KineCheckScores?.ready){show('Inicia sesión docente y espera que aparezca «Sincronización activa».','error');return;}
+  const index=new Map(slots().map(x=>[x.key,x])),seen=new Map();
+  for(let i=0;i<2;i++){
+   const file=files[i];if(!file)continue;
+   const station=i+1,source='Evaluador '+station+' · '+file.name;
+   try{
+    const workbook=await openXlsx(file),rows=workbook['Evaluación'];
+    if(!Array.isArray(rows))throw Error('Falta la hoja «Evaluación» del maestro oficial');
+    const header=rows[5]||[];
+    if(normalize(header[0])!=='pareja'||normalize(header[1])!=='seccion'||normalize(header[8])!=='estudiante'||!String(header[10]||'').toLowerCase().includes('h1')||!String(header[14]||'').toLowerCase().includes('h5'))
+      throw Error('Encabezados incompatibles en fila 6. Se necesita el maestro con cinco hitos H1–H5, no la rúbrica antigua de ocho criterios');
+    let complete=0,partial=0,blank=0,otherStation=0,mismatch=0;
+    for(let n=6;n<rows.length;n++){
+     const row=rows[n]||[],section=String(row[1]||'').trim().toUpperCase(),pair=String(row[0]||'').trim().toUpperCase();
+     if(!/^S[12]$/.test(section)||!/^P[0-9]{2}$/.test(pair))continue;
+     const raw=row.slice(10,15),filled=raw.filter(x=>!empty(x));
+     if(!filled.length){blank++;continue;}
+     const actualStation=String(row[4]??'').trim();
+     if(actualStation!==String(station)){otherStation++;continue;}
+     const id=String(row[6]||'').trim().toUpperCase(),seatMatch=id.match(/^P[0-9]{2}-([1-4])$/),slot=seatMatch?Number(seatMatch[1]):0;
+     const name=String(row[8]||'').trim(),key=section+'|'+pair+'|'+slot;
+     if(!slot||id!==pair+'-'+slot){mismatch++;issues.push(source+' fila '+(n+1)+': ID/cupo no coincide');continue;}
+     const target=index.get(key);
+     if(!target||String(target.g.station)!==actualStation||!name||!target.s.name||normalize(target.s.name)!==normalize(name)){
+      mismatch++;issues.push(source+' fila '+(n+1)+': estudiante sin coincidencia verificada ('+section+' '+pair+' · '+name+'). No importado');continue;
+     }
+     const levels=raw.map(readLevel);
+     if(!validLevels(levels)){issues.push(source+' fila '+(n+1)+' ('+name+'): niveles inválidos fuera de 0–4');continue;}
+     const count=levels.filter(x=>x!==null).length;
+     if(!count)continue;
+     if(count===5)complete++;else partial++;
+     const padded=[...levels,null,null,null],existing=target.s.levels||[],existingFilled=existing.some(x=>!empty(x)),existingNote=String(target.s.note||'').trim();
+     let status='Lista';
+     if(existingFilled||existingNote){
+      status=JSON.stringify(existing)===JSON.stringify(padded)?'Ya coincide':'Conflicto: evaluación guardada';
+      if(status.startsWith('Conflicto'))issues.push(source+' '+pair+' '+name+': hay datos guardados; no se sobrescriben');
+     }
+     if(seen.has(key)){status='Duplicado entre archivos';seen.get(key).status='Duplicado entre archivos';issues.push(source+' '+pair+' '+name+': fila duplicada; ninguna versión se importará');}
+     const comment=String(row[20]||'').trim().slice(0,3000);
+     const item={key,section,pair,name,levels:padded,source,count,status,target,comment};
+     candidate.push(item);if(!seen.has(key))seen.set(key,item);
     }
-    if(filled.length!==5){partial++;issues.push(source+' '+pair+' '+name+': '+filled.length+'/5 hitos; pendiente, no se asigna nota');continue}
-    const levels=raw.map(x=>typeof x==='number'?x:Number(String(x).trim()));
-    if(!validLevels(levels)){issues.push(source+' '+pair+' '+name+': niveles fuera de la escala 0–4');continue}
-    complete++;
-    const existing=target.s.levels||[],existingFilled=existing.some(x=>x!==null&&x!==undefined&&x!=='');
-    let status='Lista';
-    if(existingFilled)status=JSON.stringify(existing)===JSON.stringify([...levels,null,null,null])?'Ya coincide':'Conflicto: puntajes existentes (revisar rúbrica anterior)';
-    if(status.startsWith('Conflicto'))issues.push(source+' '+pair+' '+name+': existen puntajes distintos; no se sobrescribirán');
-    candidate.push({key,section,pair,name,levels:[...levels,null,null,null],source,count:5,status,target});
-   }
-   if(wrongStation)issues.push(source+': '+wrongStation+' registros calificados de otra estación no importados; revisa si se usó el archivo correcto');
-   summary.push(source+': '+complete+' completas, '+partial+' parciales, '+empty+' sin evaluar');
-  }catch(err){issues.push(source+': '+(err?.message||String(err)))}
- }
- preview();
- show(summary.join(' · ')+'. '+candidate.filter(x=>x.status==='Lista').length+' listas para importar; '+issues.length+' advertencias. Los archivos no se enviaron al servidor.','info');
+    summary.push('Evaluador '+station+': '+complete+' completas, '+partial+' parciales, '+blank+' sin puntaje, '+otherStation+' de otra estación, '+mismatch+' sin coincidencia');
+   }catch(error){issues.push(source+': '+String(error.message||error));}
+  }
+  show(summary.join(' · ')+'. '+candidate.filter(x=>x.status==='Lista').length+' registros listos para importar. '+issues.length+' advertencias.','info');
+ }finally{busy=false;preview();}
 }
 async function apply(){
+ if(busy)return;
  const selected=candidate.filter(x=>x.status==='Lista');
  if(!selected.length)return;
- if(!window.KineCheckScores?.ready){show('Sincronización no disponible; no se importó nada.','error');return}
- if(!confirm('¿Guardar en Supabase '+selected.length+' evaluaciones completas? No se reemplazarán notas anteriores ni se importarán criterios incompletos.'))return;
- const button=el('excelImportApply');button.disabled=true;
- let saved=0,failed=0;
- for(const item of selected){
-  const s=item.target.s,prior=[...(s.levels||[])];
-  // No sobrescribir datos incorporados después de la revisión.
-  if((s.levels||[]).some(x=>x!==null&&x!==undefined&&x!=='')){item.status='Conflicto posterior';failed++;continue}
-  s.levels=[...item.levels];save();renderAll();
-  try{
+ if(!window.KineCheckScores?.ready){show('La sincronización no está disponible. No se importó ningún puntaje.','error');return;}
+ if(!confirm('Se importarán '+selected.length+' evaluaciones con coincidencia de identidad verificada. Los resultados anteriores no se sobrescribirán. ¿Continuar?'))return;
+ busy=true;preview();let saved=0,failed=0;
+ try{
+  for(const item of selected){
+   const s=item.target.s;
+   if((s.levels||[]).some(x=>!empty(x))||String(s.note||'').trim()){
+    item.status='Conflicto posterior';failed++;continue;
+   }
+   s.levels=[...item.levels];
+   if(item.comment&&!String(s.note||'').trim())s.note=item.comment;
+   save();renderAll();
    const confirmed=await window.KineCheckScores.saveSeat(item.target.g,s);
-   if(confirmed!==true)throw Error('Supabase no confirmó el guardado');
-   item.status='Guardada en servidor';saved++;
-  }catch(err){
-   // Se conserva el respaldo local nuevo para investigar, pero nunca se afirma guardado exitoso.
-   item.status='Pendiente de verificar';failed++;issues.push(item.source+' '+item.pair+' '+item.name+': servidor no confirmó el guardado. Revisa los puntajes antes de reintentar.');
+   if(confirmed===true){item.status='Guardado en Supabase';saved++;}
+   else{item.status='Guardado no confirmado';failed++;issues.push(item.section+' '+item.pair+' '+item.name+': conservar respaldo local y verificar en servidor');}
   }
- }
- preview();
- show(saved+' evaluaciones confirmadas en Supabase; '+failed+' pendientes de revisión. No se modificaron notas de informe.',''+(failed?'error':'success'));
- if(saved&&!failed)await window.KineCheckScores.refresh();
+  if(saved&&!failed)await window.KineCheckScores.refresh();
+  show(saved+' evaluaciones guardadas en Supabase; '+failed+' pendientes. Los puntajes completos ya se calculan en Simulación y Registro y notas.',''+(failed?'error':'success'));
+ }finally{busy=false;preview();}
 }
-el('excelImportReview')?.addEventListener('click',()=>void review().catch(e=>show('Error revisando Excel: '+String(e),'error')));
-el('excelImportApply')?.addEventListener('click',()=>void apply().catch(e=>show('Error guardando Excel: '+String(e),'error')));
+for(const id of ['excelEvaluator1','excelEvaluator2'])el(id)?.addEventListener('change',selectedCaption);
+el('excelImportReview')?.addEventListener('click',()=>void review().catch(e=>{busy=false;preview();show('Error al revisar Excel: '+String(e.message||e),'error');}));
+el('excelImportApply')?.addEventListener('click',()=>void apply().catch(e=>{busy=false;preview();show('No se completó la importación: '+String(e.message||e),'error');}));
 })();
