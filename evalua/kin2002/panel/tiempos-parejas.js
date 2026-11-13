@@ -47,6 +47,41 @@ function state(events,phase,now=Date.now()){
  return {started,finished,running:running!==null,secs:Math.round(elapsed/1000)};
 }
 function current(){return groups.find(g=>g.id===selected);}
+
+/* Tiempo de referencia ilustrativo, nunca medición real. Las ediciones se almacenan solo en este navegador. */
+const referenceDefaults={"P22":["09:40","11:45"],"P23":["11:20","10:30"],"P24":["08:20","08:35"],"P25":["12:05","11:20"],"P26":["08:35","10:05"],"P27":["08:15","10:05"],"P28":["11:10","08:00"],"P29":["11:45","10:40"],"P30":["08:00"],"P02":["12:00","08:35"],"P03":["09:50","10:50"],"P04":["09:50","10:50"],"P05":["09:50","11:10"],"P06":["09:40","09:15"],"P32":["09:00","08:30"],"P33":["10:35","11:25"],"P34":["10:55","09:05"],"P35":["08:25","11:30"],"P36":["10:10","09:55"],"P37":["11:50","09:30"]};
+const refStoreKey='kin2002_illustrative_individual_times_v1';
+function referenceOverrides(){try{const o=JSON.parse(localStorage.getItem(refStoreKey)||'{}');return o&&typeof o==='object'?o:{};}catch{return {};}}
+function referenceSeconds(t){const m=/^(\d{1,2}):(\d{2})$/.exec(String(t||''));return m&&Number(m[2])<60?Number(m[1])*60+Number(m[2]):null;}
+function referenceFor(g,i){const saved=referenceOverrides(),k=g.section+'|'+g.id+'|'+g.station+'|'+i;return Object.prototype.hasOwnProperty.call(saved,k)?saved[k]:(referenceDefaults[g.id]||[])[i]||null;}
+function referenceSet(g,i,v){const o=referenceOverrides();o[g.section+'|'+g.id+'|'+g.station+'|'+i]=v;localStorage.setItem(refStoreKey,JSON.stringify(o));}
+function renderReference(g){
+ if(!['Martes','Miércoles','Jueves'].includes(g.day))return '';
+ const rows=g.students.map((st,i)=>{
+  const v=referenceFor(g,i),sec=referenceSeconds(v),time=sec===null?'Sin medición':seconds(sec);
+  return '<tr><td>'+esc(st.name||('Estudiante '+(i+1)))+'</td><td><strong>'+esc(time)+'</strong></td>'+
+   '<td><button type="button" class="btn" data-ref-index="'+i+'" data-ref-change="-5" aria-label="Restar cinco segundos al tiempo de referencia">− 5 s</button> '+
+   '<button type="button" class="btn" data-ref-index="'+i+'" data-ref-change="5" aria-label="Sumar cinco segundos al tiempo de referencia">+ 5 s</button></td>'+
+   '<td><input aria-label="Tiempo de referencia en minutos y segundos" style="max-width:90px" data-ref-input="'+i+'" value="'+esc(v||'')+'" placeholder="mm:ss"></td>'+
+   '<td>Referencial · sin medición'+(sec!==null&&sec>720?' · supera 12:00':'')+'</td></tr>';
+ }).join('');
+ return '<section style="margin-top:18px"><h3>Tiempo individual referencial · no medido</h3>'+
+ '<p class="help">Valores ilustrativos entre 8 y 12 minutos (algunos pueden superar el límite). NO son tiempos cronometrados ni prueba de cumplimiento. Puedes ajustarlos con +/− 5 s o escribir mm:ss. Los cambios se guardan solo en este navegador y nunca reemplazan la bitácora real ni las calificaciones.</p>'+
+ '<div class="tablebox"><table><thead><tr><th>Estudiante</th><th>Tiempo referencial</th><th>Ajustar</th><th>Editar</th><th>Origen</th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
+}
+function wireReference(panel,g){
+ panel.querySelectorAll('[data-ref-change]').forEach(b=>b.addEventListener('click',()=>{
+  const i=Number(b.dataset.refIndex),step=Number(b.dataset.refChange),old=referenceSeconds(referenceFor(g,i));
+  if(old===null)return;
+  referenceSet(g,i,seconds(Math.max(0,old+step)));render();
+ }));
+ panel.querySelectorAll('[data-ref-input]').forEach(input=>input.addEventListener('change',()=>{
+  const i=Number(input.dataset.refInput),raw=input.value.trim(),sec=referenceSeconds(raw);
+  if(raw&&sec===null){alert('Formato inválido. Usa mm:ss.');render();return;}
+  referenceSet(g,i,sec===null?null:seconds(sec));render();
+ }));
+}
+
 function render(){
  const panel=document.getElementById('pairTimePanel');if(!panel)return;
  const g=current();if(!g){panel.innerHTML='<p>Selecciona una pareja para registrar su tiempo.</p>';return;}
@@ -69,6 +104,8 @@ function render(){
  '<div class="toolbar">'+nextAttention+endAttention+nextComplement+endComplement+'</div>'+
  '<p id="timeStatus" class="help" role="status" aria-live="polite">'+esc(notice)+'</p>'+
  '<p class="help">Cada acción se guarda con fecha y hora en la base privada. Los períodos de pausa se excluyen del tiempo real. El cronómetro no modifica notas ni rúbricas y no recupera duraciones de evaluaciones anteriores.</p>';
+ panel.insertAdjacentHTML('beforeend',renderReference(g));
+ wireReference(panel,g);
  panel.querySelectorAll('[data-time-action]').forEach(btn=>btn.addEventListener('click',()=>void recordAction(g,btn.dataset.timeAction)));
  panel.querySelector('#timeRefresh')?.addEventListener('click',()=>void refresh());
 }
