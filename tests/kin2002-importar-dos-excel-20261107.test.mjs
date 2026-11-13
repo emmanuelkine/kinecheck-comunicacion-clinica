@@ -18,7 +18,7 @@ test('importador KIN2002 presenta dos Excel con confirmación y aislación por e
  assert.match(js,/if\(!validLevels\(levels\)\)/);
  assert.match(js,/Conflicto: evaluación guardada/);
  assert.match(js,/window\.KineCheckScores\.saveSeat/);
- assert.match(js,/if\(confirmed!==true\)/);
+ assert.match(js,/if\(confirmed===true\)/);
  assert.doesNotMatch(js,/localStorage\.setItem|sessionStorage\.setItem/);
 });
 
