@@ -179,7 +179,7 @@ function renderRegisterTimes(){
  if(avgHead&&!avgHead.querySelector('[data-pair-time-average]')){
   const th=document.createElement('th');th.dataset.pairTimeAverage='';th.textContent='Promedio tiempo registrado';avgHead.appendChild(th);
  }
- const all=typeof students==='function'?students():[];
+ const all=[];for(const g of window.KineCheckTimesGroups||[])for(const s of g.students)all.push({group:g,student:s});
  const section=document.getElementById('regSection')?.value||'all';
  const day=document.getElementById('regDay')?.value||'all';
  const evaluator=document.getElementById('regEvaluator')?.value||'all';
@@ -212,10 +212,15 @@ function renderRegisterTimes(){
   averages.closest('.pane')?.appendChild(note);
  }
 }
-const originalRegister=typeof renderRegister==='function'?renderRegister:null;
-if(originalRegister){
- renderRegister=function(){originalRegister();renderRegisterTimes();};
+const registerBody=document.getElementById('registerBody');
+if(registerBody){
+ let active=false;
+ const observer=new MutationObserver(()=>{if(active)return;active=true;observer.disconnect();renderRegisterTimes();observer.observe(registerBody,{childList:true});active=false;});
+ observer.observe(registerBody,{childList:true});
+ document.querySelectorAll('#regSection,#regDay,#regEvaluator').forEach(el=>el.addEventListener('change',()=>setTimeout(renderRegisterTimes,0)));
+ document.querySelector('[data-tab="register"]')?.addEventListener('click',()=>setTimeout(renderRegisterTimes,0));
 }
+
 
 window.KineCheckTimes={render,refresh,renderRegisterTimes};
 setInterval(()=>{if(document.getElementById('simulation')&&!document.getElementById('simulation').classList.contains('hidden')&&ready)render();},1000);
