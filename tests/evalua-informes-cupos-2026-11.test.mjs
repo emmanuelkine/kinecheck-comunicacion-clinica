@@ -6,9 +6,9 @@ const privateLoader=readFileSync(new URL('../evalua/kin2002/panel/nomina-privada
 const match=panel.match(/const INITIAL=(\{[\s\S]*?\});const KEY=/);
 assert.ok(match,'Datos de estructura del panel');
 const initial=JSON.parse(match[1]);
-test('37 parejas y 8 criterios sin nombres ni notas en HTML público',()=>{
+test('37 parejas y 5 hitos sin nombres ni notas en HTML público',()=>{
  assert.equal(initial.groups.length,37);
- assert.equal(initial.criteria.length,8);
+ assert.equal(initial.criteria.length,5);
  for(const g of initial.groups)for(const s of g.students){assert.equal(s.name,'');assert.equal(s.report,null);}
 });
 test('Botones para estudiantes segundo, tercero y excepcional cuarto',()=>{

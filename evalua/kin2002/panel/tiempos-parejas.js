@@ -117,7 +117,7 @@ async function refresh(){
   records.clear();for(const r of rows)if(Array.isArray(r.events))records.set([r.section,r.pair_code,r.station].join('|'),r);
   ready=true;notice=rows.length+' parejas con registro de tiempos centralizado.';
  }catch(e){ready=false;notice='Registro no disponible: '+String(e.message||e)+'. No se guardarán tiempos sin confirmación.';}
- render();
+ render();renderRegisterTimes();
 }
 async function recordAction(g,command){
  const k=key(g);if(pending.has(k)||!ready)return;
@@ -141,7 +141,7 @@ async function recordAction(g,command){
   if(!Array.isArray(result)||result.length!==1)throw Error('Conflicto de edición: otro docente modificó el registro');
   records.set(k,result[0]);notice='Registro confirmado en servidor · '+g.id+'.';
  }catch(e){notice='No se confirmó el guardado: '+String(e.message||e)+'. Actualiza los tiempos antes de continuar.';ready=false;}
- finally{pending.delete(k);render();}
+ finally{pending.delete(k);render();renderRegisterTimes();}
 }
 function downloadCSV(){
  const rows=[['Sección','Día','Hora programada','Pareja','Estación','Inicio real','Fin real','Simulación real (segundos)','Briefing/debriefing real (segundos)','Total real (segundos)','Planificado (segundos)','Diferencia (segundos)','Estado']];
@@ -162,7 +162,67 @@ if(sim){
  const exportBtn=document.createElement('button');exportBtn.className='btn';exportBtn.type='button';exportBtn.textContent='Exportar tiempos CSV';exportBtn.addEventListener('click',downloadCSV);
  sim.querySelector('.controls')?.appendChild(exportBtn);
 }
-window.KineCheckTimes={render,refresh};
+
+/* Vista de tiempos confirmados en Registro y notas. La medición es por pareja,
+   no individual: se muestra como tiempo compartido, sin atribuir cronometrajes
+   individuales ni incluir referencias ilustrativas en los promedios. */
+function renderRegisterTimes(){
+ const register=document.getElementById('register');
+ const table=document.getElementById('registerBody');
+ const averages=document.getElementById('sectionAveragesBody');
+ if(!register||!table||!averages)return;
+ const head=table.closest('table')?.querySelector('thead tr');
+ if(head&&!head.querySelector('[data-pair-time-head]')){
+  const th=document.createElement('th');th.dataset.pairTimeHead='';th.textContent='Tiempo registrado (pareja)';head.appendChild(th);
+ }
+ const avgHead=averages.closest('table')?.querySelector('thead tr');
+ if(avgHead&&!avgHead.querySelector('[data-pair-time-average]')){
+  const th=document.createElement('th');th.dataset.pairTimeAverage='';th.textContent='Promedio tiempo registrado';avgHead.appendChild(th);
+ }
+ const all=[];for(const g of window.KineCheckTimesGroups||[])for(const s of g.students)all.push({group:g,student:s});
+ const section=document.getElementById('regSection')?.value||'all';
+ const day=document.getElementById('regDay')?.value||'all';
+ const evaluator=document.getElementById('regEvaluator')?.value||'all';
+ const visible=all.filter(s=>(section==='all'||s.group.section===section)&&(day==='all'||s.group.day===day)&&(evaluator==='all'||String(s.group.station)===evaluator));
+ const trs=[...table.children];
+ trs.forEach((tr,i)=>{
+  tr.querySelector('[data-pair-time-cell]')?.remove();
+  const td=document.createElement('td');td.dataset.pairTimeCell='';
+  const g=visible[i]?.group;
+  const a=g?state(records.get(key(g))?.events||[],'attention'):null;
+  td.textContent=a?.finished?seconds(a.secs):'—';
+  td.title=a?.finished?'Cronometraje confirmado para la pareja; no es medición individual':'Sin cronometraje finalizado y confirmado';
+  tr.appendChild(td);
+ });
+ const valid=all.filter(s=>state(records.get(key(s.group))?.events||[],'attention').finished);
+ for(const [i,rows] of [valid.filter(s=>s.group.section==='S1'),valid.filter(s=>s.group.section==='S2'),valid].entries()){
+  const tr=averages.children[i];if(!tr)continue;
+  tr.querySelector('[data-pair-time-mean]')?.remove();
+  const td=document.createElement('td');td.dataset.pairTimeMean='';
+  if(rows.length){
+   const avg=Math.round(rows.reduce((sum,s)=>sum+state(records.get(key(s.group)).events,'attention').secs,0)/rows.length);
+   td.innerHTML='<b>'+seconds(avg)+'</b><span class="muted" style="display:block;font-size:12px">'+rows.length+' estudiantes con tiempo de pareja confirmado</span>';
+  }else td.textContent='—';
+  tr.appendChild(td);
+ }
+ let note=document.getElementById('pairTimeRegisterNote');
+ if(!note){
+  note=document.createElement('p');note.id='pairTimeRegisterNote';note.className='help';
+  note.textContent='Los tiempos corresponden al cronómetro confirmado de cada pareja, no a mediciones individuales. Los promedios ponderan por estudiante y excluyen registros sin finalización. Los valores ilustrativos no se incluyen.';
+  averages.closest('.pane')?.appendChild(note);
+ }
+}
+const registerBody=document.getElementById('registerBody');
+if(registerBody){
+ let active=false;
+ const observer=new MutationObserver(()=>{if(active)return;active=true;observer.disconnect();renderRegisterTimes();observer.observe(registerBody,{childList:true});active=false;});
+ observer.observe(registerBody,{childList:true});
+ document.querySelectorAll('#regSection,#regDay,#regEvaluator').forEach(el=>el.addEventListener('change',()=>setTimeout(renderRegisterTimes,0)));
+ document.querySelector('[data-tab="register"]')?.addEventListener('click',()=>setTimeout(renderRegisterTimes,0));
+}
+
+
+window.KineCheckTimes={render,refresh,renderRegisterTimes};
 setInterval(()=>{if(document.getElementById('simulation')&&!document.getElementById('simulation').classList.contains('hidden')&&ready)render();},1000);
 void refresh();
 })();
