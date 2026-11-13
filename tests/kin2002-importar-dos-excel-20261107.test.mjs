@@ -16,7 +16,7 @@ test('importador KIN2002 presenta dos Excel con confirmación y aislación por e
  assert.match(js,/actualStation!==String\(station\)/);
  assert.match(js,/if\(count===5\)/);
  assert.match(js,/if\(!validLevels\(levels\)\)/);
- assert.match(js,/Conflicto: puntajes existentes/);
+ assert.match(js,/Conflicto: evaluación guardada/);
  assert.match(js,/window\.KineCheckScores\.saveSeat/);
  assert.match(js,/if\(confirmed!==true\)/);
  assert.doesNotMatch(js,/localStorage\.setItem|sessionStorage\.setItem/);
@@ -46,7 +46,7 @@ test('Excel: filas vacías, parcial y completa se distinguen sin publicar notas 
  elements.excelImportReview.click();
  for(let i=0;i<100&&!elements.excelImportStatus.textContent;i++)await new Promise(r=>setTimeout(r,2));
  assert.match(elements.excelImportStatus.textContent,/2 registros listos para importar/);
- assert.match(elements.excelImportIssues.textContent,/\bparciales\b/);
+ assert.match(elements.excelImportStatus.textContent,/1 parciales/);
  assert.equal(elements.excelImportApply.disabled,false);
  elements.excelImportApply.click();
  for(let i=0;i<100&&call.saves!==2;i++)await new Promise(r=>setTimeout(r,2));
