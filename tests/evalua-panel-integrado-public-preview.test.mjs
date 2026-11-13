@@ -9,7 +9,7 @@ const initial=JSON.parse(match[1]);
 test("Review panel preserves the approved structure and 37 scheduled pairs",()=>{
   assert.equal(initial.groups.length,37);
   assert.equal(initial.groups.reduce((n,g)=>n+g.students.length,0),74);
-  assert.equal(initial.criteria.length,8);
+  assert.equal(initial.criteria.length,5);
   assert.equal(initial.criteria.reduce((s,c)=>s+c.maximum,0),100);
   assert.match(page,/data-tab="reports"/);
   assert.match(page,/data-tab="simulation"/);
