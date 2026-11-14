@@ -106,7 +106,7 @@ el('reportsExcelReview').addEventListener('click',async()=>{
    if((target.report!=null&&Math.abs(Number(target.report)-grade)>0.05)||(target.reportPoints!=null&&Math.abs(Number(target.reportPoints)-points)>0.05)){issues.push('Fila '+(i+1)+': calificación existente diferente; no se sobrescribe');continue;}
    pending.push({target,points,grade});
   }
-  el('reportsExcelApply').disabled=!pending.length;
+  el('reportsExcelApply').disabled=!pending.length||issues.length>0;
   const named=api.students().filter(s=>normalize(s.name)).length;
   status(pending.length+' coincidencias válidas para importar; '+issues.length+' filas omitidas. Nómina visible: '+named+' estudiantes. '+issues.slice(0,4).join('; ')+'. '+(issues.length?'No confirmes hasta revisar las omisiones.':'Revisa y confirma.'));
  }catch(e){status('No se pudo revisar Excel: '+e.message);}
