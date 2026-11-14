@@ -70,6 +70,7 @@ async function openXlsx(file) {
 
 const el=id=>document.getElementById(id);
 const normalize=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/\s+/g,' ');
+const nameKey=v=>normalize(v).replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim().split(' ').filter(Boolean).sort().join(' ');
 const numeric=v=>{const s=String(v??'').trim().replace(',','.');return s===''?null:Number(s)};
 const bridge=()=>window.KineCheckReportsExcelBridge;
 let pending=[],issues=[],file=null;
@@ -92,8 +93,11 @@ el('reportsExcelReview').addEventListener('click',async()=>{
    if(!sec&&!name)continue;
    const key=sec+'|'+name;
    if(seen.has(key)){issues.push('Fila '+(i+1)+': duplicado');continue;}seen.add(key);
-   const match=api.students().filter(s=>s.group.section===sec&&normalize(s.name)===name&&name);
-   if(match.length!==1){issues.push('Fila '+(i+1)+': sin coincidencia única ('+sec+' / '+String(row[nameIx]||'')+')');continue;}
+   const roster=api.students().filter(s=>s.group.section===sec&&normalize(s.name));
+   const match=roster.filter(s=>nameKey(s.name)===nameKey(name));
+   const sectionNamed=roster.length;
+   if(!sectionNamed){issues.push('Fila '+(i+1)+': nómina de '+sec+' sin nombres; inicia sesión docente y carga la nómina');continue;}
+   if(match.length!==1){issues.push('Fila '+(i+1)+': '+(match.length?'nombre ambiguo':'nombre no encontrado')+' ('+sec+' / '+String(row[nameIx]||'')+')');continue;}
    const points=numeric(row[pointIx]),grade=numeric(row[gradeIx]);
    if(points===null||grade===null||!Number.isFinite(points)||points<0||points>100||!Number.isFinite(grade)||grade<1||grade>7){issues.push('Fila '+(i+1)+': puntaje o nota inválidos');continue;}
    const expected=Math.round(api.grade(points)*10)/10;
@@ -103,7 +107,8 @@ el('reportsExcelReview').addEventListener('click',async()=>{
    pending.push({target,points,grade});
   }
   el('reportsExcelApply').disabled=!pending.length;
-  status(pending.length+' coincidencias válidas para importar; '+issues.length+' filas omitidas. '+issues.slice(0,4).join('; ')+'. Revisa y confirma.');
+  const named=api.students().filter(s=>normalize(s.name)).length;
+  status(pending.length+' coincidencias válidas para importar; '+issues.length+' filas omitidas. Nómina visible: '+named+' estudiantes. '+issues.slice(0,4).join('; ')+'. '+(issues.length?'No confirmes hasta revisar las omisiones.':'Revisa y confirma.'));
  }catch(e){status('No se pudo revisar Excel: '+e.message);}
 });
 el('reportsExcelApply').addEventListener('click',()=>{
