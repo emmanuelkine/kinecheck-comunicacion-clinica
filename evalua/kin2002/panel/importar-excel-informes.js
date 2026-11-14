@@ -73,8 +73,9 @@ const normalize=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
 const nameKey=v=>normalize(v).replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim().split(' ').filter(Boolean).sort().join(' ');
 const numeric=v=>{const s=String(v??'').trim().replace(',','.');return s===''?null:Number(s)};
 const bridge=()=>window.KineCheckReportsExcelBridge;
-let pending=[],issues=[],file=null;
+let pending=[],issues=[],file=null,mappingFile=null;
 function status(message){el('reportsExcelStatus').textContent=message;}
+el('reportsMapping').addEventListener('change',e=>{mappingFile=e.target.files?.[0]||null;pending=[];el('reportsExcelApply').disabled=true;el('reportsMappingStatus').textContent=mappingFile?'Conciliación seleccionada: '+mappingFile.name+'. Revisa nuevamente el Excel.':'Sin conciliación adjunta.';});
 el('reportsExcel').addEventListener('change',e=>{file=e.target.files?.[0]||null;pending=[];issues=[];el('reportsExcelReview').disabled=!file;el('reportsExcelApply').disabled=true;status(file?'Seleccionado: '+file.name+'. Presiona «Revisar Excel».':'Selecciona el Excel de informes.');});
 el('reportsExcelReview').addEventListener('click',async()=>{
  pending=[];issues=[];el('reportsExcelApply').disabled=true;
@@ -87,6 +88,20 @@ el('reportsExcelReview').addEventListener('click',async()=>{
   const index=(...names)=>names.map(n=>headers.indexOf(normalize(n))).find(i=>i>=0)??-1;
   const secIx=index('Sección','Seccion'),nameIx=index('Estudiante'),pointIx=index('Puntaje /100'),gradeIx=index('Nota /7');
   if([secIx,nameIx,pointIx,gradeIx].some(i=>i<0))throw Error('Se requieren columnas Sección, Estudiante, Puntaje /100 y Nota /7.');
+  const approved=new Map(),usedMappings=new Set();
+  if(mappingFile){
+   const mbook=await openXlsx(mappingFile),mrows=mbook['Conciliación'];
+   if(!Array.isArray(mrows)||mrows.length<2)throw Error('La conciliación debe incluir la hoja «Conciliación».');
+   const mh=mrows[0].map(normalize),ix=(n)=>mh.indexOf(normalize(n));
+   const ms=ix('Sección'),mp=ix('Pareja'),mn=ix('Nombre en plataforma'),mf=ix('Nombre en informe'),mpt=ix('Puntaje informe'),mgr=ix('Nota informe'),mv=ix('Validado docente (SI/NO)');
+   if([ms,mp,mn,mf,mpt,mgr,mv].some(x=>x<0))throw Error('Faltan columnas de conciliación o «Validado docente (SI/NO)».');
+   for(let k=1;k<mrows.length;k++){
+    const mr=mrows[k]||[];if(normalize(mr[mv])!=='si')continue;
+    const key=String(mr[ms]||'').toUpperCase().trim()+'|'+nameKey(mr[mf]);
+    if(approved.has(key)){issues.push('Conciliación fila '+(k+1)+': informe duplicado');continue;}
+    approved.set(key,{section:String(mr[ms]||'').toUpperCase().trim(),pair:String(mr[mp]||'').trim().toUpperCase(),platform:nameKey(mr[mn]),points:numeric(mr[mpt]),grade:numeric(mr[mgr]),row:k+1});
+   }
+  }
   const seen=new Set();
   for(let i=1;i<rows.length;i++){
    const row=rows[i]||[],sec=String(row[secIx]||'').trim().toUpperCase(),name=normalize(row[nameIx]);
@@ -94,7 +109,13 @@ el('reportsExcelReview').addEventListener('click',async()=>{
    const key=sec+'|'+name;
    if(seen.has(key)){issues.push('Fila '+(i+1)+': duplicado');continue;}seen.add(key);
    const roster=api.students().filter(s=>s.group.section===sec&&normalize(s.name));
-   const match=roster.filter(s=>nameKey(s.name)===nameKey(name));
+   let match=roster.filter(s=>nameKey(s.name)===nameKey(name));
+   const mapped=approved.get(sec+'|'+nameKey(name));
+   if(!match.length&&mapped){
+    if(mapped.points!==numeric(row[pointIx])||mapped.grade!==numeric(row[gradeIx])){issues.push('Fila '+(i+1)+': puntaje/nota difiere de conciliación validada');continue;}
+    match=roster.filter(s=>s.group.id===mapped.pair&&nameKey(s.name)===mapped.platform);
+    if(match.length===1)usedMappings.add(sec+'|'+nameKey(name));
+   }
    const sectionNamed=roster.length;
    if(!sectionNamed){issues.push('Fila '+(i+1)+': nómina de '+sec+' sin nombres; inicia sesión docente y carga la nómina');continue;}
    if(match.length!==1){issues.push('Fila '+(i+1)+': '+(match.length?'nombre ambiguo':'nombre no encontrado')+' ('+sec+' / '+String(row[nameIx]||'')+')');continue;}
@@ -106,6 +127,7 @@ el('reportsExcelReview').addEventListener('click',async()=>{
    if((target.report!=null&&Math.abs(Number(target.report)-grade)>0.05)||(target.reportPoints!=null&&Math.abs(Number(target.reportPoints)-points)>0.05)){issues.push('Fila '+(i+1)+': calificación existente diferente; no se sobrescribe');continue;}
    pending.push({target,points,grade});
   }
+  for(const [key,entry] of approved)if(!usedMappings.has(key)&&!rows.slice(1).some(r=>String(r[secIx]||'').toUpperCase().trim()+'|'+nameKey(r[nameIx])===key))issues.push('Conciliación fila '+entry.row+': informe no presente en Excel');
   el('reportsExcelApply').disabled=!pending.length||issues.length>0;
   const named=api.students().filter(s=>normalize(s.name)).length;
   status(pending.length+' coincidencias válidas para importar; '+issues.length+' filas omitidas. Nómina visible: '+named+' estudiantes. '+issues.slice(0,4).join('; ')+'. '+(issues.length?'No confirmes hasta revisar las omisiones.':'Revisa y confirma.'));
