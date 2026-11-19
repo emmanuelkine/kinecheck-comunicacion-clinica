@@ -1,6 +1,6 @@
 "use strict";
 
-function cleanAddress(){try{const u=new URL(location.href);if(/^chatgpt(?:\.com)?$/i.test(u.searchParams.get("utm_source")||"")){u.searchParams.delete("utm_source");history.replaceState(history.state,"",u.pathname+u.search+u.hash)}}catch{}}
+function cleanAddress(){try{const u=new URL(location.href);if(u.searchParams.has("utm_source")){u.searchParams.delete("utm_source");history.replaceState(history.state,"",u.pathname+u.search+u.hash)}}catch{}}
 cleanAddress();
 function illustration(i){
  const line=(p)=>'<polyline points="'+p+'" fill="none" stroke="#315975" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>';
