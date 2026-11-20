@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>KineCheck Academy — Validación académica privada</title>
+  <link rel="icon" href="/assets/brand/kinecheck-3d-favicon.png">
+  <link rel="stylesheet" href="/academy-validation-panel/styles.css?v=20261119-admin1">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand" aria-label="KineCheck Academy">
+        <span class="brand-mark">K</span>
+        <span><strong>KineCheck</strong><small>Validación académica</small></span>
+      </div>
+      <nav id="main-nav" aria-label="Secciones del panel"></nav>
+      <div class="lock-card">
+        <span class="status-dot"></span>
+        <div><strong>OTEC bloqueada</strong><small>Certificados desactivados</small></div>
+      </div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <button id="menu-button" class="icon-button" type="button" aria-label="Abrir navegación">☰</button>
+        <div><p class="eyebrow">Panel privado · administración</p><h1 id="page-title">Resumen</h1></div>
+        <div class="reviewer"><a href="/admin/">Volver a administración</a><strong id="reviewer-name">Cargando…</strong></div>
+      </header>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <section id="app" class="content" aria-busy="true">
+        <div class="loading"><span></span><p>Verificando autorización y cargando instrumentos privados…</p></div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="/academy-validation-panel/app.js?v=20261119-admin1"></script>
+</body>
+</html>
