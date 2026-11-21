@@ -45,23 +45,48 @@ test("password recovery refuses a valid token belonging to a non-owner", async (
   assert.equal(calls[0].options.method, "GET");
 });
 
-test("password recovery updates only the staging owner then revalidates Academy", async (t) => {
+test("password recovery updates only the staging owner, proves the new password and opens an owner session", async (t) => {
   const calls = [];
   t.mock.method(globalThis, "fetch", async (url, options) => {
     calls.push({ url: String(url), options });
     if (options.method === "GET") return Response.json({ email: "emmanuelkine@gmail.com" });
     if (String(url).includes("/academy-admin-review")) return Response.json({ owner: true, otec: { status: "BLOQUEADA", certificatesEnabled: false } });
+    if (String(url).includes("/auth/v1/token")) return Response.json({ access_token: "updated-password-session", token_type: "bearer" });
     return Response.json({ email: "emmanuelkine@gmail.com" });
   });
   const response = await onRequestPost({ request: request() });
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { ok: true, owner: true, academy: true, otec: "BLOQUEADA", certificatesEnabled: false });
-  assert.equal(calls.length, 3);
+  assert.deepEqual(await response.json(), {
+    ok: true,
+    owner: true,
+    academy: true,
+    project: "staging",
+    session: { access_token: "updated-password-session", token_type: "bearer" },
+    otec: "BLOQUEADA",
+    certificatesEnabled: false,
+  });
+  assert.equal(response.headers.get("X-KineCheck-Auth-Project"), "staging");
+  assert.equal(calls.length, 5);
   assert.ok(calls.every((call) => call.url.startsWith("https://mhnqtyvwxytppekktvxb.supabase.co/")));
   assert.deepEqual(JSON.parse(calls[1].options.body), { operation: "authorization_probe" });
   assert.equal(JSON.parse(calls[2].options.body).password, strongPassword);
+  assert.deepEqual(JSON.parse(calls[3].options.body), { email: "emmanuelkine@gmail.com", password: strongPassword });
+  assert.deepEqual(JSON.parse(calls[4].options.body), { operation: "authorization_probe" });
   assert.equal(calls[0].options.headers.Authorization, "Bearer recovery-token");
   assert.equal(calls[1].options.headers.Authorization, "Bearer recovery-token");
+  assert.equal(calls[4].options.headers.Authorization, "Bearer updated-password-session");
+});
+
+test("password recovery does not report success when the updated password cannot authenticate", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url, options) => {
+    if (options.method === "GET") return Response.json({ email: "emmanuelkine@gmail.com" });
+    if (String(url).includes("/academy-admin-review")) return Response.json({ owner: true, otec: { status: "BLOQUEADA", certificatesEnabled: false } });
+    if (String(url).includes("/auth/v1/token")) return Response.json({ error: "invalid_credentials" }, { status: 400 });
+    return Response.json({ email: "emmanuelkine@gmail.com" });
+  });
+  const response = await onRequestPost({ request: request() });
+  assert.equal(response.status, 502);
+  assert.match((await response.json()).message, /no pudo validar el nuevo acceso/);
 });
 
 test("password recovery fails closed when Academy authorization is not proven", async (t) => {

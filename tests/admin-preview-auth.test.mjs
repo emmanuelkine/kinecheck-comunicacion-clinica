@@ -23,3 +23,11 @@ test("admin Preview loads and controls the dashboard through its owner-checked s
   assert.match(source, /JSON\.stringify\(\{ operation: "status" \}\)/);
   assert.match(source, /JSON\.stringify\(preview \? \{ operation: "control", payload \} : payload\)/);
 });
+
+test("password recovery requires a verified Staging session before opening the dashboard", () => {
+  assert.match(source, /result\?\.project !== "staging"/);
+  assert.match(source, /!result\?\.session\?\.access_token/);
+  assert.match(source, /saveSession\(result\.session\);/);
+  assert.match(source, /await loadDashboard\(\);/);
+  assert.doesNotMatch(source, /Contraseña actualizada y acceso Academy verificado\. Ya puedes ingresar\./);
+});

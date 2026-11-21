@@ -411,15 +411,17 @@
     button.disabled = true;
     button.textContent = "Verificando…";
     try {
-      await updateRecoveredPassword(password);
+      const result = await updateRecoveredPassword(password);
+      if (result?.project !== "staging" || !result?.session?.access_token) {
+        throw new Error("Staging no confirmó la nueva sesión de propietario.");
+      }
+      saveSession(result.session);
       state.recoveryToken = "";
       $("#admin-new-password").value = "";
       $("#admin-confirm-password").value = "";
       $("#recovery-view").hidden = true;
-      $("#login-view").hidden = false;
-      const loginMessage = $("#admin-login-message");
-      loginMessage.textContent = "Contraseña actualizada y acceso Academy verificado. Ya puedes ingresar.";
-      loginMessage.hidden = false;
+      await loadDashboard();
+      setMessage("Contraseña actualizada. Acceso de propietario validado en KineCheck Staging.");
     } catch (error) {
       message.textContent = error.message;
       message.hidden = false;

@@ -11,6 +11,7 @@ function json(payload, status = 200) {
     headers: {
       "Cache-Control": "private, no-store, max-age=0",
       "X-Content-Type-Options": "nosniff",
+      "X-KineCheck-Auth-Project": "staging",
     },
   });
 }
@@ -76,6 +77,21 @@ async function proveAcademyOwner(authorization) {
     && access.otec?.certificatesEnabled === false;
 }
 
+async function authenticateUpdatedPassword(password) {
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      apikey: SUPABASE_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email: OWNER_EMAIL, password }),
+    signal: AbortSignal.timeout(10000),
+  });
+  const session = await response.json().catch(() => ({}));
+  return response.ok && session?.access_token ? session : null;
+}
+
 export async function onRequestPost({ request }) {
   if (!isPreview(request)) return json({ message: "Ruta no disponible." }, 404);
   if (!hasSameOrigin(request)) return json({ message: "Origen no permitido." }, 403);
@@ -105,7 +121,26 @@ export async function onRequestPost({ request }) {
       signal: AbortSignal.timeout(10000),
     });
     if (!update.ok) return json({ message: "No fue posible actualizar la contraseña. Solicita un enlace nuevo." }, 422);
-    return json({ ok: true, owner: true, academy: true, otec: "BLOQUEADA", certificatesEnabled: false });
+
+    // Do not report success until the new password itself authenticates against
+    // Staging and the resulting session proves Academy owner authorization.
+    const session = await authenticateUpdatedPassword(password);
+    if (!session) {
+      return json({ message: "La contraseña se actualizó, pero Staging no pudo validar el nuevo acceso. Solicita un enlace nuevo." }, 502);
+    }
+    if (!(await proveAcademyOwner(`Bearer ${session.access_token}`))) {
+      return json({ message: "La contraseña se actualizó, pero la cuenta no conserva autorización de propietario en Academy." }, 403);
+    }
+
+    return json({
+      ok: true,
+      owner: true,
+      academy: true,
+      project: "staging",
+      session,
+      otec: "BLOQUEADA",
+      certificatesEnabled: false,
+    });
   } catch {
     return json({ message: "No fue posible completar la recuperación segura." }, 502);
   }
