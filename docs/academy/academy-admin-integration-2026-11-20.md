@@ -70,3 +70,15 @@ Preview inmutable del despliegue: `https://a8cd152e.kinecheck-comunicacion-clini
 - La prueba autenticada positiva en navegador requiere que el propietario ingrese su contraseña de Staging; no se leyó, cambió ni simuló ninguna credencial.
 
 No hubo merge, despliegue productivo, emisión de certificados ni cambio de calificaciones. `origin/main` y Supabase producción permanecen sin cambios. OTEC continúa bloqueada.
+
+## Recuperación segura del propietario — 21 de noviembre de 2026
+
+- La identidad propietaria autorizada existe en Staging, está confirmada, usa proveedor email, tiene contraseña y no está bloqueada ni eliminada.
+- La autorización `academy-admin-review-staging` permanece activa con `access_source=owner`, `last_event=OWNER_ACCESS` y `access_grandfathered=true`.
+- El Preview incorpora una pantalla de recuperación que elimina inmediatamente el token del fragmento visible, exige contraseña de 12–128 caracteres con complejidad y usa una función same-origin con `no-store`.
+- La función comprueba el token con Auth Staging, exige el correo propietario exacto y prueba `academy-admin-review` antes de actualizar la contraseña. No está disponible como función en producción.
+- Pruebas enfocadas: **22/22 aprobadas**. En vivo: página `200`, solicitud sin token `401`, contraseña débil `400` y producción sin endpoint funcional.
+- Supabase Staging aceptó una única solicitud de recuperación para el Preview (`200`) y `auth.users` confirmó `recovery_sent_at` más token emitido. El token y el identificador interno de la solicitud no fueron publicados.
+- Commit de implementación: `32b4ab4`. Cloudflare Pages: **despliegue aprobado**.
+
+La comprobación final de acceso interactivo requiere que el destinatario abra el correo, defina su nueva contraseña y luego ingrese al panel. Esta acción humana no se suplanta ni se automatiza con acceso al buzón.
