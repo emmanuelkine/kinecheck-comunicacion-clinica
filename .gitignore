@@ -8,3 +8,6 @@ qa-*-report.json
 /academy/dolor-lumbar-persistente/app-v6.js
 /academy/preview-dolor-lumbar/data-v6.js
 /academy/preview-dolor-lumbar/app-v6.js
+
+/qa-hours-browser/
+/supabase/.temp/
