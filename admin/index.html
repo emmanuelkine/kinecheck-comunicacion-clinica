@@ -28,6 +28,19 @@
     </form>
   </section>
 
+  <section id="recovery-view" class="login-view" hidden>
+    <form id="admin-recovery" class="login-card">
+      <img src="../assets/brand/kinecheck-3d-symbol-192.png" alt="">
+      <span>RECUPERACIÓN SEGURA · STAGING</span>
+      <h1>Crear nueva contraseña</h1>
+      <p>El enlace es temporal y sólo habilita la cuenta propietaria verificada.</p>
+      <label>Nueva contraseña<input id="admin-new-password" type="password" autocomplete="new-password" required minlength="12" maxlength="128"></label>
+      <label>Confirmar contraseña<input id="admin-confirm-password" type="password" autocomplete="new-password" required minlength="12" maxlength="128"></label>
+      <button id="admin-recovery-button" type="submit">Actualizar contraseña</button>
+      <div id="admin-recovery-message" class="message" hidden></div>
+    </form>
+  </section>
+
   <section id="dashboard-view" hidden>
     <header class="topbar">
       <a class="kc-brand-3d brand" href="../"><picture><source media="(max-width: 620px)" srcset="../assets/brand/kinecheck-3d-compact.webp"><img src="../assets/brand/kinecheck-3d-header.webp" alt="KineCheck — Salud musculoesquelética" width="900" height="183" decoding="async"></picture><span><strong>KineCheck</strong><small>CENTRO DE AUTOMATIZACIÓN</small></span></a>

@@ -6,7 +6,7 @@
   const SESSION_KEY = "kinecheck_admin_session_v1";
   const PAGES_PROJECT_HOST = "kinecheck-comunicacion-clinica.pages.dev";
 
-  const state = { session: null, data: null };
+  const state = { session: null, data: null, recoveryToken: "" };
   const $ = (selector) => document.querySelector(selector);
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
 
@@ -52,6 +52,35 @@
   function isCloudflarePreview() {
     const hostname = location.hostname.toLowerCase();
     return hostname.endsWith(`.${PAGES_PROJECT_HOST}`) && hostname !== PAGES_PROJECT_HOST;
+  }
+
+  function beginRecovery() {
+    if (!isCloudflarePreview()) return false;
+    const params = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const token = params.get("access_token") || "";
+    if (params.get("type") !== "recovery" || !token) return false;
+    state.recoveryToken = token;
+    history.replaceState(null, "", `${location.pathname}${location.search}`);
+    clearSession();
+    $("#login-view").hidden = true;
+    $("#dashboard-view").hidden = true;
+    $("#recovery-view").hidden = false;
+    return true;
+  }
+
+  async function updateRecoveredPassword(password) {
+    const response = await fetch("/api/admin-preview-password", {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${state.recoveryToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data?.message || "No fue posible actualizar la contraseña.");
+    return data;
   }
 
   async function login(email, password) {
@@ -367,6 +396,39 @@
     }
   });
 
+  $("#admin-recovery")?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const password = $("#admin-new-password").value;
+    const confirmation = $("#admin-confirm-password").value;
+    const button = $("#admin-recovery-button");
+    const message = $("#admin-recovery-message");
+    message.hidden = true;
+    if (password !== confirmation) {
+      message.textContent = "Las contraseñas no coinciden.";
+      message.hidden = false;
+      return;
+    }
+    button.disabled = true;
+    button.textContent = "Verificando…";
+    try {
+      await updateRecoveredPassword(password);
+      state.recoveryToken = "";
+      $("#admin-new-password").value = "";
+      $("#admin-confirm-password").value = "";
+      $("#recovery-view").hidden = true;
+      $("#login-view").hidden = false;
+      const loginMessage = $("#admin-login-message");
+      loginMessage.textContent = "Contraseña actualizada y acceso Academy verificado. Ya puedes ingresar.";
+      loginMessage.hidden = false;
+    } catch (error) {
+      message.textContent = error.message;
+      message.hidden = false;
+    } finally {
+      button.disabled = false;
+      button.textContent = "Actualizar contraseña";
+    }
+  });
+
   document.querySelectorAll("[data-action]").forEach((button) => button.addEventListener("click", async () => {
     const action = button.dataset.action;
     button.disabled = true;
@@ -385,6 +447,8 @@
   $("#refresh-button")?.addEventListener("click", () => loadDashboard().catch((error) => setMessage(error.message, true)));
   $("#logout-button")?.addEventListener("click", () => { clearSession(); location.reload(); });
 
-  state.session = readSession();
-  if (state.session?.access_token) loadDashboard().catch(() => clearSession());
+  if (!beginRecovery()) {
+    state.session = readSession();
+    if (state.session?.access_token) loadDashboard().catch(() => clearSession());
+  }
 })();
