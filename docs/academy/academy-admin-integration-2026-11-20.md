@@ -6,7 +6,7 @@ Rama local de publicación segura: `codex/academy-admin-release-2026-11-20`
 
 Ruta objetivo: `https://kinecheck.cl/admin/academy/`
 
-Estado: **implementada y verificada localmente; no publicada**.
+Estado: **publicada en Preview aislado; producción no modificada**.
 
 ## Resultado
 
@@ -27,7 +27,7 @@ Esta rama limpia fue creada desde `origin/main` con sólo la integración públi
 
 ## Persistencia
 
-La migración local `20261119173000_academy_admin_review.sql`, no aplicada, prepara:
+La migración `20261119173000_academy_admin_review.sql` fue aplicada sólo a `KineCheck Staging` como `academy_admin_review_staging` y prepara:
 
 - paquete privado con checksum, ocho cursos, 80 variantes y controles fail-closed;
 - estado versionado de decisiones;
@@ -40,7 +40,7 @@ Las tablas usan RLS forzado, revocan acceso de clientes y conceden sólo lo nece
 
 | Verificación | Resultado |
 |---|---|
-| Integración, permisos, persistencia, exportaciones y panel previo | **54/54 aprobadas** |
+| Integración, permisos, persistencia, exportaciones y panel previo | **65/65 aprobadas** |
 | Navegador integrado, red externa bloqueada | **Aprobada** |
 | Móvil / computador | **390×844 / 1440×1000** |
 | Sin sesión / cuenta sin privilegio | Redirección / `403`, aprobados |
@@ -51,17 +51,22 @@ Las tablas usan RLS forzado, revocan acceso de clientes y conceden sólo lo nece
 
 La regresión global ejecutó 237 pruebas: 230 aprobaron, una quedó omitida y seis no aprobaron. Ninguna corresponde a archivos modificados por esta integración: cuatro aserciones académicas previas no coinciden con el paquete local y Campus/Hotmart no iniciaron porque `@electric-sql/pglite` no está instalado. No se instaló software sin autorización ni se declaran aprobadas esas pruebas.
 
-Las pruebas Supabase reales quedan pendientes: no existen Supabase CLI, Deno ni Docker locales y no se autorizó usar producción.
+Las pruebas Supabase se ejecutaron en el proyecto Staging existente, sin crear recursos. La Edge Function `academy-admin-review` quedó `ACTIVE`, versión 1 y `verify_jwt=true`. Las pruebas transaccionales comprobaron un commit válido, rechazo de revisión obsoleta (`40001`) y rechazo de activación de certificados (`22023`); el `ROLLBACK` dejó revisión y eventos en cero.
 
-## Publicación pendiente de autorización
+## Publicación de pruebas
 
-1. Rama limpia desde `origin/main`: **preparada localmente**; no publicar la rama académica fuente.
-2. Aplicar la migración en un entorno Supabase seguro existente, sin recursos facturables.
-3. Instalar el paquete privado y verificar su checksum sin incluirlo en Git.
-4. Desplegar `academy-admin-review` con verificación JWT activa.
-5. Publicar en Preview de Pages y repetir autenticación, permisos, concurrencia, exportaciones y móvil.
-6. Revisar Advisors/RLS y logs sin datos sensibles.
-7. Sólo con autorización expresa, desplegar en producción.
-8. Verificar la URL objetivo con propietario y no autorizado; recién entonces puede declararse enlace definitivo.
+Preview de rama: `https://codex-academy-admin-release.kinecheck-comunicacion-clinica.pages.dev/admin/academy/`
 
-No se ejecutaron migraciones, push, merge, despliegues, certificados ni cambios productivos.
+Preview inmutable del despliegue: `https://a8cd152e.kinecheck-comunicacion-clinica.pages.dev/admin/academy/`
+
+- Cloudflare Pages y GitHub Actions: **aprobados** para `41354da`.
+- Página Academy y recursos públicos permitidos: `200`.
+- Biblioteca del panel y código Supabase: `404`.
+- API sin sesión: `401`; origen no permitido: `403`; método no permitido: `405`.
+- Las tres tablas privadas tienen RLS habilitada y forzada. `anon`/`authenticated` no tienen `SELECT`; sólo `service_role` puede leer.
+- La RPC no es ejecutable por `anon` ni `authenticated`; sólo por `service_role`.
+- Advisors sólo asocia a estas tres tablas el aviso informativo `rls_enabled_no_policy`, esperado porque el diseño es denegar todo a clientes. No relaciona advertencias ni errores nuevos con la función o las tablas Academy.
+- Siguen existiendo avisos generales previos de Staging: funciones `SECURITY DEFINER` de otros módulos y protección de contraseñas filtradas desactivada. No se modificaron en esta entrega.
+- La prueba autenticada positiva en navegador requiere que el propietario ingrese su contraseña de Staging; no se leyó, cambió ni simuló ninguna credencial.
+
+No hubo merge, despliegue productivo, emisión de certificados ni cambio de calificaciones. `origin/main` y Supabase producción permanecen sin cambios. OTEC continúa bloqueada.
