@@ -1,0 +1,36 @@
+▶ isolated Academy v2 workflow on real PostgreSQL semantics
+  ✔ anonymous, revoked session, spoofed role and direct bank access denied (19.217507ms)
+  ✔ academic approval and activation are separate and disabled by default (14.347661ms)
+  ✔ opt-in enrollment requires entitlement and explicit purchase terms evidence (4.540739ms)
+  ✔ course completion is independent from approval and OTEC (12.741976ms)
+  ✔ published versions and banks are immutable and evidence cannot be omitted (6.246686ms)
+  ✔ start is idempotent and reveals one stage without keys or future information (14.176061ms)
+  ✔ stages reject jumps, invalid options and duplicates cannot rewrite prior answers (18.810042ms)
+  ✔ review queue and dashboard are academic-only and expose no marking keys (8.845321ms)
+  ✔ 69 fails and a written answer has no automatic or AI-only approval (10.502704ms)
+  ✔ 100 points cannot compensate a critical safety failure (14.628374ms)
+  ✔ 70 passes only after all human rubric and safety criteria are satisfied (23.023655ms)
+  ✔ OTEC issuance requires formal settings, approval, administration and real document metadata (20.764279ms)
+  ✔ monthly export includes real issuance only, has no duplicate billing and is permissioned (30.882475ms)
+  ✔ certificate verification returns authenticity without exposing learner identity (3.759679ms)
+  ✔ annulment preserves audit, hides download and marks the reconciliation credit (9.179546ms)
+  ✔ expired starts consume all three attempts and 100 can pass a separate valid submission (47.193406ms)
+  ✔ operational rollback disables the new RPC and preserves all academic evidence (8.114717ms)
+✔ isolated Academy v2 workflow on real PostgreSQL semantics (2250.920356ms)
+✔ monthly Excel input uses Chile issuance month, numeric cost and no duplicates (15.837431ms)
+(node:14) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file://<checkout>/functions/api/academy-workflow.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to <checkout>/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ competency pilot is unavailable by default and enforces origin, session and body bounds (7.5013ms)
+✔ verified bearer is forwarded; supplied user and role cannot replace database identity (2.537953ms)
+✔ upstream permissions and outages fail closed without leaking database details (3.107263ms)
+✔ student states and dashboard never equate completed, passed and issued (0.536981ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2408.019873

@@ -1,0 +1,409 @@
+{
+  "reviewDate": "2026-10-28",
+  "baseCommit": "0c2fd083c6759ff8ba638298419a13c56bf9928a",
+  "scope": "Read-only production metadata; excludes student identities and answer keys",
+  "bank": [
+    {
+      "items": 15,
+      "course_slug": "comunicacion-clinica",
+      "active_items": 15,
+      "safety_items": 3,
+      "content_version": "2026.09.30-academic-load-1"
+    },
+    {
+      "items": 15,
+      "course_slug": "dolor-lumbar-persistente",
+      "active_items": 15,
+      "safety_items": 3,
+      "content_version": "2026.09.30-academic-load-1"
+    },
+    {
+      "items": 15,
+      "course_slug": "dolor-musculoesqueletico",
+      "active_items": 15,
+      "safety_items": 3,
+      "content_version": "2026.09.30-academic-load-1"
+    },
+    {
+      "items": 15,
+      "course_slug": "ejercicio-terapeutico",
+      "active_items": 15,
+      "safety_items": 2,
+      "content_version": "edge-course-key-v21"
+    },
+    {
+      "items": 15,
+      "course_slug": "evidencia-aplicada",
+      "active_items": 15,
+      "safety_items": 2,
+      "content_version": "2026.09.30-academic-load-1"
+    },
+    {
+      "items": 15,
+      "course_slug": "kinecheck-clinico-curso",
+      "active_items": 15,
+      "safety_items": 2,
+      "content_version": "2026.08.06-profesional-1"
+    },
+    {
+      "items": 15,
+      "course_slug": "mas-alla-del-dolor",
+      "active_items": 15,
+      "safety_items": 3,
+      "content_version": "2026-08-current"
+    },
+    {
+      "items": 15,
+      "course_slug": "traumatologia-ortopedia-clinica",
+      "active_items": 15,
+      "safety_items": 5,
+      "content_version": "2026-07-course07"
+    }
+  ],
+  "flags": [
+    {
+      "key": "otec_certification_active",
+      "config": {
+        "note": "Do not enable until OTEC agreement, approved programs and official certificate template are active.",
+        "status": "preparation"
+      },
+      "enabled": false
+    },
+    {
+      "key": "academic_assessment_pilot",
+      "config": {
+        "mode": "kinecheck_academic_only",
+        "note": "Evaluación final académica KineCheck activa. No habilita certificado OTEC ni condición SENCE.",
+        "status": "internal_active",
+        "otecCertification": false
+      },
+      "enabled": true
+    }
+  ],
+  "loads": [
+    {
+      "title": "Comunicación Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "comunicacion-clinica",
+      "payload_key": "title",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Comunicación Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "comunicacion-clinica",
+      "payload_key": "prompt",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Comunicación Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "comunicacion-clinica",
+      "payload_key": "criteria",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Comunicación Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "comunicacion-clinica",
+      "payload_key": "durationMinutes",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Comunicación Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "comunicacion-clinica",
+      "payload_key": "otecPreparation",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Comunicación Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "comunicacion-clinica",
+      "payload_key": "assessmentStatus",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Comunicación Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "comunicacion-clinica",
+      "payload_key": "minimumCharacters",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-lumbar-persistente",
+      "payload_key": "title",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-lumbar-persistente",
+      "payload_key": "prompt",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-lumbar-persistente",
+      "payload_key": "criteria",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-lumbar-persistente",
+      "payload_key": "durationMinutes",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-lumbar-persistente",
+      "payload_key": "otecPreparation",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-lumbar-persistente",
+      "payload_key": "assessmentStatus",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-lumbar-persistente",
+      "payload_key": "minimumCharacters",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Musculoesquelético: del mecanismo a la decisión clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-musculoesqueletico",
+      "payload_key": "otecPreparation",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Dolor Musculoesquelético: del mecanismo a la decisión clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "dolor-musculoesqueletico",
+      "payload_key": "assessmentStatus",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Ejercicio Terapéutico",
+      "audit_date": "2026-10-01",
+      "course_slug": "ejercicio-terapeutico",
+      "payload_key": "otecPreparation",
+      "content_version": "edge-course-key-v21",
+      "certificate_ready": false
+    },
+    {
+      "title": "Ejercicio Terapéutico",
+      "audit_date": "2026-10-01",
+      "course_slug": "ejercicio-terapeutico",
+      "payload_key": "assessmentStatus",
+      "content_version": "edge-course-key-v21",
+      "certificate_ready": false
+    },
+    {
+      "title": "KineCheck Evidencia Aplicada",
+      "audit_date": "2026-09-30",
+      "course_slug": "evidencia-aplicada",
+      "payload_key": "otecPreparation",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "KineCheck Evidencia Aplicada",
+      "audit_date": "2026-09-30",
+      "course_slug": "evidencia-aplicada",
+      "payload_key": "assessmentStatus",
+      "content_version": "2026.09.30-academic-load-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "KineCheck Clínico",
+      "audit_date": "2026-09-30",
+      "course_slug": "kinecheck-clinico-curso",
+      "payload_key": "otecPreparation",
+      "content_version": "2026.08.06-profesional-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "KineCheck Clínico",
+      "audit_date": "2026-09-30",
+      "course_slug": "kinecheck-clinico-curso",
+      "payload_key": "assessmentStatus",
+      "content_version": "2026.08.06-profesional-1",
+      "certificate_ready": false
+    },
+    {
+      "title": "Más allá del dolor",
+      "audit_date": "2026-09-30",
+      "course_slug": "mas-alla-del-dolor",
+      "payload_key": "otecPreparation",
+      "content_version": "2026-08-current",
+      "certificate_ready": false
+    },
+    {
+      "title": "Más allá del dolor",
+      "audit_date": "2026-09-30",
+      "course_slug": "mas-alla-del-dolor",
+      "payload_key": "assessmentStatus",
+      "content_version": "2026-08-current",
+      "certificate_ready": false
+    },
+    {
+      "title": "Traumatología y Ortopedia Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "traumatologia-ortopedia-clinica",
+      "payload_key": "otecPreparation",
+      "content_version": "2026-07-course07",
+      "certificate_ready": false
+    },
+    {
+      "title": "Traumatología y Ortopedia Clínica",
+      "audit_date": "2026-09-30",
+      "course_slug": "traumatologia-ortopedia-clinica",
+      "payload_key": "assessmentStatus",
+      "content_version": "2026-07-course07",
+      "certificate_ready": false
+    }
+  ],
+  "catalog": [
+    {
+      "title": "Dolor Musculoesquelético: del mecanismo a la decisión clínica",
+      "modules": 6,
+      "version": "2026.09.30-academic-load-1",
+      "published": true,
+      "updated_at": "2026-10-01T16:58:55.78782+00:00",
+      "course_slug": "dolor-musculoesqueletico"
+    },
+    {
+      "title": "Ejercicio terapéutico",
+      "modules": 5,
+      "version": "edge-course-key-v21",
+      "published": true,
+      "updated_at": "2026-10-01T18:52:20.938858+00:00",
+      "course_slug": "ejercicio-terapeutico"
+    },
+    {
+      "title": "KineCheck Evidencia Aplicada",
+      "modules": 10,
+      "version": "2026.09.30-academic-load-1",
+      "published": true,
+      "updated_at": "2026-10-01T16:58:53.122684+00:00",
+      "course_slug": "evidencia-aplicada"
+    }
+  ],
+  "configs": [
+    {
+      "title": "Comunicación Clínica",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "comunicacion-clinica",
+      "content_version": "2026.09.30-academic-load-1",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    },
+    {
+      "title": "Dolor Lumbar Persistente",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "dolor-lumbar-persistente",
+      "content_version": "2026.09.30-academic-load-1",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    },
+    {
+      "title": "Dolor Musculoesquelético",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "dolor-musculoesqueletico",
+      "content_version": "2026.09.30-academic-load-1",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    },
+    {
+      "title": "Ejercicio Terapéutico",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "ejercicio-terapeutico",
+      "content_version": "edge-course-key-v21",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    },
+    {
+      "title": "KineCheck Evidencia Aplicada",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "evidencia-aplicada",
+      "content_version": "2026.09.30-academic-load-1",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    },
+    {
+      "title": "KineCheck Clínico",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "kinecheck-clinico-curso",
+      "content_version": "2026.08.06-profesional-1",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    },
+    {
+      "title": "Más allá del dolor",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "mas-alla-del-dolor",
+      "content_version": "2026-08-current",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    },
+    {
+      "title": "Traumatología y Ortopedia Clínica",
+      "status": "active",
+      "updated_at": "2026-10-03T12:03:42.798427+00:00",
+      "case_points": 0,
+      "course_slug": "traumatologia-ortopedia-clinica",
+      "content_version": "2026-07-course07",
+      "proposed_pass_score": 80,
+      "objective_item_count": 15,
+      "proposed_max_attempts": 2
+    }
+  ]
+}

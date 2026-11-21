@@ -1,0 +1,5 @@
+{"kind":"region","sheet":"Emisiones","address":"A3:D3","rows":1,"cols":4,"nonEmpty":4,"text":4,"maxTextLength":16,"preview":[["Mes","2026-10","Zona horaria","America/Santiago"]],"previewAddress":"A3:D3","previewRows":1,"previewCols":4}
+{"kind":"region","sheet":"Emisiones","address":"A5:D5","rows":1,"cols":4,"nonEmpty":4,"text":4,"maxTextLength":20,"preview":[["Emisiones brutas CLP","1500","Anulaciones CLP","500"]],"previewAddress":"A5:D5","previewRows":1,"previewCols":4}
+{"kind":"notice","message":"Cell search matched 0 entries."}
+Inspect result written to file: <temporary-test-directory>/monthly-smoke.xlsx.inspect.ndjson
+{"saved":true,"month":"2026-10","issued":2,"net":1000}
