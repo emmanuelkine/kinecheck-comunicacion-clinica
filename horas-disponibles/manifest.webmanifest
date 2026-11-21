@@ -1,0 +1,26 @@
+{
+  "id": "/horas-disponibles/",
+  "name": "KineCheck Horas Disponibles",
+  "short_name": "KineCheck Horas",
+  "description": "Consulta oportunidades de atención y contacta al prestador para confirmar la reserva.",
+  "start_url": "/horas-disponibles/",
+  "scope": "/horas-disponibles/",
+  "display": "standalone",
+  "background_color": "#07141c",
+  "theme_color": "#073c4a",
+  "lang": "es-CL",
+  "icons": [
+    {
+      "src": "/assets/brand/kinecheck-3d-symbol-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/brand/kinecheck-3d-symbol-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
