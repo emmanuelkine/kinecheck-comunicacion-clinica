@@ -1,5 +1,6 @@
 node_modules/
 qa-*-report.json
+/academy-validation-panel/.local/
 
 # Premium course payloads belong in private Supabase Storage/Edge Functions.
 /kinecheck-clinico-curso/course-data.js
