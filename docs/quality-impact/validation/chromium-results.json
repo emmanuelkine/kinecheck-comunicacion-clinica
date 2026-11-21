@@ -1,0 +1,34 @@
+[
+  {
+    "engine": "chromium",
+    "width": 360,
+    "authFixtureOnly": true,
+    "realDatabase": true,
+    "passed": true,
+    "axeViolations": 0
+  },
+  {
+    "engine": "chromium",
+    "width": 390,
+    "authFixtureOnly": true,
+    "realDatabase": true,
+    "passed": true,
+    "axeViolations": 0
+  },
+  {
+    "engine": "chromium",
+    "width": 768,
+    "authFixtureOnly": true,
+    "realDatabase": true,
+    "passed": true,
+    "axeViolations": 0
+  },
+  {
+    "engine": "chromium",
+    "width": 1280,
+    "authFixtureOnly": true,
+    "realDatabase": true,
+    "passed": true,
+    "axeViolations": 0
+  }
+]

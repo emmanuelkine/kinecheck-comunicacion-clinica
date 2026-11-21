@@ -1,0 +1,17 @@
+{
+  "commit": "afd099ca7179be0bd32f7c2f332cd9c521a3bde7",
+  "github_actions": "21 workflows success",
+  "quality_run": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/actions/runs/40771148582",
+  "cloudflare_check": "failure",
+  "cloudflare_check_url": "https://github.com/emmanuelkine/kinecheck-comunicacion-clinica/runs/123108405879",
+  "cloudflare_log_url": "https://dash.cloudflare.com/?to=/db227be8b6673c950fb8e51566335c4d/pages/view/kinecheck-comunicacion-clinica/8515b997-ba37-457c-85fa-d63af2220b74",
+  "staging": {
+    "private_tables": 14,
+    "all_rls": true,
+    "client_schema_access": false,
+    "public_api": null,
+    "maintenance": null,
+    "client_executable_helpers": 0
+  },
+  "production_modified": false
+}

@@ -1,4 +1,8 @@
 node_modules/
+supabase/.temp/
+qa-quality-browser/
+qa-quality-live/
+qa-quality-*.log
 qa-*-report.json
 
 # Premium course payloads belong in private Supabase Storage/Edge Functions.
