@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://eqhcdclyeoapmqtlduwf.supabase.co";
-const SUPABASE_KEY = "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_";
+const SUPABASE_URL = "https://mhnqtyvwxytppekktvxb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_JLWKq6m0g4yB30iIQLE4bg_AkspSDYD";
 const PAGES_PROJECT_HOST = "kinecheck-comunicacion-clinica.pages.dev";
 const MAX_BODY_BYTES = 4096;
 const MAX_AUTHORIZATION_BYTES = 4096;
@@ -53,7 +53,7 @@ async function readInput(request) {
 }
 
 async function isOwner(authorization) {
-  const response = await fetch(`${SUPABASE_URL}/functions/v1/platform-context`, {
+  const response = await fetch(`${SUPABASE_URL}/functions/v1/academy-admin-review`, {
     method: "POST",
     cache: "no-store",
     headers: {
@@ -61,7 +61,7 @@ async function isOwner(authorization) {
       Authorization: authorization,
       "Content-Type": "application/json",
     },
-    body: "{}",
+    body: JSON.stringify({ operation: "authorization_probe" }),
     signal: AbortSignal.timeout(8000),
   });
   if (!response.ok) return false;

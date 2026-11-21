@@ -34,7 +34,7 @@ test("Preview status proves owner authorization before forwarding the bearer tok
   const calls = [];
   t.mock.method(globalThis, "fetch", async (url, options) => {
     calls.push({ url: String(url), options });
-    if (String(url).endsWith("/platform-context")) return Response.json({ owner: true });
+    if (String(options?.body || "").includes("authorization_probe")) return Response.json({ owner: true, environment: "staging" });
     return Response.json({ generatedAt: "2026-10-20T00:00:00.000Z", email: "owner@example.test" });
   });
 
@@ -43,7 +43,8 @@ test("Preview status proves owner authorization before forwarding the bearer tok
   assert.equal(response.headers.get("cache-control"), "private, no-store, max-age=0");
   assert.equal((await response.json()).email, "owner@example.test");
   assert.equal(calls.length, 2);
-  assert.match(calls[0].url, /\/platform-context$/);
+  assert.match(calls[0].url, /\/academy-admin-review$/);
+  assert.deepEqual(JSON.parse(calls[0].options.body), { operation: "authorization_probe" });
   assert.match(calls[1].url, /\/automation-status$/);
   assert.equal(calls[1].options.headers.Authorization, "Bearer synthetic-owner-token");
   assert.equal(calls[1].options.body, "{}");
@@ -66,7 +67,7 @@ test("Preview control forwards only allowlisted administrative actions", async (
   const calls = [];
   t.mock.method(globalThis, "fetch", async (url, options) => {
     calls.push({ url: String(url), options });
-    return String(url).endsWith("/platform-context")
+    return String(options?.body || "").includes("authorization_probe")
       ? Response.json({ owner: true })
       : Response.json({ ok: true });
   });

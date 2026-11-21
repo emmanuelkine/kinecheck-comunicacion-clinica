@@ -251,6 +251,14 @@ Deno.serve(async (req: Request) => {
   try {
     const input = await readInput(req);
     const { admin, user } = await authorizeOwner(req);
+    if (input.operation === "authorization_probe") {
+      return json(origin, {
+        owner: true,
+        authorized: true,
+        environment: "staging",
+        otec: { status: "BLOQUEADA", certificatesEnabled: false },
+      });
+    }
     return await handleOperation(input, admin, user.id, origin);
   } catch (error) {
     const status = error instanceof ApiError ? error.status

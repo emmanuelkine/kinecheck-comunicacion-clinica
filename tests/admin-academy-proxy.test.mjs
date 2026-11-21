@@ -29,7 +29,7 @@ test('Academy preview proxy verifies owner and forwards the existing bearer sess
   const calls = [];
   globalThis.fetch = async (url, options) => {
     calls.push({ url: String(url), options });
-    if (String(url).endsWith('/platform-context')) return Response.json({ owner: true });
+    if (calls.length === 1) return Response.json({ owner: true, environment: 'staging' });
     return new Response('course,decision\r\nExample,pending\r\n', {
       headers: { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="kinecheck-academy-pairs.csv"' },
     });
@@ -37,7 +37,8 @@ test('Academy preview proxy verifies owner and forwards the existing bearer sess
   const response = await onRequestPost({ request: request({ body: { operation: 'export', kind: 'pairs.csv' } }) });
   assert.equal(response.status, 200);
   assert.equal(calls.length, 2);
-  assert.match(calls[0].url, /platform-context$/);
+  assert.match(calls[0].url, /academy-admin-review$/);
+  assert.deepEqual(JSON.parse(calls[0].options.body), { operation: 'authorization_probe' });
   assert.match(calls[1].url, /academy-admin-review$/);
   assert.equal(calls[1].options.headers.Authorization, 'Bearer token');
   assert.equal(calls[1].options.headers.Origin, 'https://academy-panel.kinecheck-comunicacion-clinica.pages.dev');

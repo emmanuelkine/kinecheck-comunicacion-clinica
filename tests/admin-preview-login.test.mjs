@@ -31,7 +31,7 @@ test("preview login returns a session only after owner verification", async (t) 
     if (String(url).includes("/auth/v1/token")) {
       return Response.json({ access_token: "synthetic-owner-token", refresh_token: "synthetic-refresh" });
     }
-    return Response.json({ owner: true });
+    return Response.json({ owner: true, environment: "staging" });
   });
 
   const response = await onRequestPost({ request: request() });
@@ -42,6 +42,8 @@ test("preview login returns a session only after owner verification", async (t) 
   assert.match(calls[0].url, /\/auth\/v1\/token\?grant_type=password$/);
   assert.equal(JSON.parse(calls[0].options.body).email, "owner@example.test");
   assert.equal(calls[1].options.headers.Authorization, "Bearer synthetic-owner-token");
+  assert.match(calls[1].url, /\/academy-admin-review$/);
+  assert.deepEqual(JSON.parse(calls[1].options.body), { operation: "authorization_probe" });
 });
 
 test("preview login does not return a session to a non-owner", async (t) => {

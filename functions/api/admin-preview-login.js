@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://eqhcdclyeoapmqtlduwf.supabase.co";
-const SUPABASE_KEY = "sb_publishable_FTwhDZYCF3zf7W9rB7bFwQ_rF9Y7OX_";
+const SUPABASE_URL = "https://mhnqtyvwxytppekktvxb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_JLWKq6m0g4yB30iIQLE4bg_AkspSDYD";
 const PAGES_PROJECT_HOST = "kinecheck-comunicacion-clinica.pages.dev";
 const MAX_BODY_BYTES = 4096;
 
@@ -61,14 +61,14 @@ export async function onRequestPost({ request }) {
       return json({ message: "Correo o contraseña incorrectos." }, 401);
     }
 
-    const ownerResponse = await fetch(`${SUPABASE_URL}/functions/v1/platform-context`, {
+    const ownerResponse = await fetch(`${SUPABASE_URL}/functions/v1/academy-admin-review`, {
       method: "POST",
       headers: {
         apikey: SUPABASE_KEY,
         Authorization: `Bearer ${session.access_token}`,
         "Content-Type": "application/json",
       },
-      body: "{}",
+      body: JSON.stringify({ operation: "authorization_probe" }),
     });
     const account = await ownerResponse.json().catch(() => ({}));
     if (!ownerResponse.ok || account.owner !== true) {
