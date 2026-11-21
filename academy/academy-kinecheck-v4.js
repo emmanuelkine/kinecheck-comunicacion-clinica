@@ -285,8 +285,11 @@ function handleLocationNavigation(source) {
   }
 
   function refreshAll() {
-    window.clearTimeout(renderTimer);
+    // Keep the pending render: frequent core-card mutations must not postpone
+    // the verified Home summary indefinitely.
+    if (renderTimer) return;
     renderTimer = window.setTimeout(() => {
+      renderTimer = 0;
       const welcome = $("#kc-welcome-name");
       if (welcome) welcome.textContent = `Bienvenido, ${displayName()}`;
       renderHomeApplications();
