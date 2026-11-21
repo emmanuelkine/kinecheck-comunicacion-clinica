@@ -43,7 +43,7 @@
       } else {
         button.setAttribute("aria-label", `${condition.name}, bloqueada hasta activar Pro`);
         button.addEventListener("click", () => {
-          refs.proMessage.textContent = `Pro para ${condition.name}: resúmenes clínicos ampliados, referencias con límites de aplicabilidad y calculadoras con acceso verificado. Compra pendiente de configuración.`;
+          refs.proMessage.textContent = `Pro para ${condition.name}: resúmenes clínicos ampliados, referencias con límites de aplicabilidad y calculadoras con acceso verificado. Estamos preparando el acceso mediante Hotmart.`;
           $("#pro-access").scrollIntoView({ behavior: "smooth", block: "center" });
         });
       }
